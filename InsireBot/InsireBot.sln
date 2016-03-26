@@ -1,0 +1,76 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25029.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsireBot", "InsireBot\InsireBot.csproj", "{FBD5595B-6859-4E8E-BDFA-C3169EF34985}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaterialDesignThemes.MahApps", "..\..\MaterialDesignInXamlToolkit-master\MaterialDesignInXamlToolkit-master\MaterialDesignThemes.MahApps\MaterialDesignThemes.MahApps.csproj", "{81556A2D-D467-43E7-945B-FD987C676CF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaterialDesignColors.Wpf", "..\..\MaterialDesignInXamlToolkit-master\MaterialDesignInXamlToolkit-master\MaterialDesignColors.Wpf\MaterialDesignColors.Wpf.csproj", "{90B53209-C60C-4655-B28D-A1B3E1044BA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaterialDesignThemes.Wpf", "..\..\MaterialDesignInXamlToolkit-master\MaterialDesignInXamlToolkit-master\MaterialDesignThemes.Wpf\MaterialDesignThemes.Wpf.csproj", "{F079FB0A-A8ED-4216-B6A5-345756751A04}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		AppVeyor|Any CPU = AppVeyor|Any CPU
+		AppVeyor|x86 = AppVeyor|x86
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.AppVeyor|Any CPU.ActiveCfg = Release|Any CPU
+		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.AppVeyor|Any CPU.Build.0 = Release|Any CPU
+		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.AppVeyor|x86.ActiveCfg = Release|x86
+		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.AppVeyor|x86.Build.0 = Release|x86
+		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.Debug|x86.ActiveCfg = Debug|x86
+		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.Debug|x86.Build.0 = Debug|x86
+		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.Release|x86.ActiveCfg = Release|x86
+		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.Release|x86.Build.0 = Release|x86
+		{81556A2D-D467-43E7-945B-FD987C676CF6}.AppVeyor|Any CPU.ActiveCfg = Release|Any CPU
+		{81556A2D-D467-43E7-945B-FD987C676CF6}.AppVeyor|Any CPU.Build.0 = Release|Any CPU
+		{81556A2D-D467-43E7-945B-FD987C676CF6}.AppVeyor|x86.ActiveCfg = Debug|Any CPU
+		{81556A2D-D467-43E7-945B-FD987C676CF6}.AppVeyor|x86.Build.0 = Debug|Any CPU
+		{81556A2D-D467-43E7-945B-FD987C676CF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81556A2D-D467-43E7-945B-FD987C676CF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81556A2D-D467-43E7-945B-FD987C676CF6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{81556A2D-D467-43E7-945B-FD987C676CF6}.Debug|x86.Build.0 = Debug|Any CPU
+		{81556A2D-D467-43E7-945B-FD987C676CF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81556A2D-D467-43E7-945B-FD987C676CF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81556A2D-D467-43E7-945B-FD987C676CF6}.Release|x86.ActiveCfg = Release|Any CPU
+		{81556A2D-D467-43E7-945B-FD987C676CF6}.Release|x86.Build.0 = Release|Any CPU
+		{90B53209-C60C-4655-B28D-A1B3E1044BA3}.AppVeyor|Any CPU.ActiveCfg = AppVeyor|Any CPU
+		{90B53209-C60C-4655-B28D-A1B3E1044BA3}.AppVeyor|Any CPU.Build.0 = AppVeyor|Any CPU
+		{90B53209-C60C-4655-B28D-A1B3E1044BA3}.AppVeyor|x86.ActiveCfg = AppVeyor|Any CPU
+		{90B53209-C60C-4655-B28D-A1B3E1044BA3}.AppVeyor|x86.Build.0 = AppVeyor|Any CPU
+		{90B53209-C60C-4655-B28D-A1B3E1044BA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90B53209-C60C-4655-B28D-A1B3E1044BA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90B53209-C60C-4655-B28D-A1B3E1044BA3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{90B53209-C60C-4655-B28D-A1B3E1044BA3}.Debug|x86.Build.0 = Debug|Any CPU
+		{90B53209-C60C-4655-B28D-A1B3E1044BA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90B53209-C60C-4655-B28D-A1B3E1044BA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90B53209-C60C-4655-B28D-A1B3E1044BA3}.Release|x86.ActiveCfg = Release|Any CPU
+		{90B53209-C60C-4655-B28D-A1B3E1044BA3}.Release|x86.Build.0 = Release|Any CPU
+		{F079FB0A-A8ED-4216-B6A5-345756751A04}.AppVeyor|Any CPU.ActiveCfg = AppVeyor|Any CPU
+		{F079FB0A-A8ED-4216-B6A5-345756751A04}.AppVeyor|Any CPU.Build.0 = AppVeyor|Any CPU
+		{F079FB0A-A8ED-4216-B6A5-345756751A04}.AppVeyor|x86.ActiveCfg = AppVeyor|Any CPU
+		{F079FB0A-A8ED-4216-B6A5-345756751A04}.AppVeyor|x86.Build.0 = AppVeyor|Any CPU
+		{F079FB0A-A8ED-4216-B6A5-345756751A04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F079FB0A-A8ED-4216-B6A5-345756751A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F079FB0A-A8ED-4216-B6A5-345756751A04}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F079FB0A-A8ED-4216-B6A5-345756751A04}.Debug|x86.Build.0 = Debug|Any CPU
+		{F079FB0A-A8ED-4216-B6A5-345756751A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F079FB0A-A8ED-4216-B6A5-345756751A04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F079FB0A-A8ED-4216-B6A5-345756751A04}.Release|x86.ActiveCfg = Release|Any CPU
+		{F079FB0A-A8ED-4216-B6A5-345756751A04}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
