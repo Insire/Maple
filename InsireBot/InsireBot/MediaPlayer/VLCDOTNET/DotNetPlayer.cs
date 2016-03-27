@@ -56,13 +56,32 @@ namespace InsireBot.MediaPlayer
             {
                 if (vlcMediaPlayer.Audio.Volume != value)
                 {
-                    vlcMediaPlayer.Audio.Volume = value;
+                    var newValue = value;
+
+                    if (newValue > 100)
+                        newValue = 100;
+
+                    if (newValue < 0)
+                        newValue = 0;
+
+                    vlcMediaPlayer.Audio.Volume = newValue;
+
                     RaisePropertyChanged(nameof(Volume));
                 }
             }
         }
 
-        public DotNetPlayer(DotNetPlayerSettings settings)
+        public int VolumeMax { get; }
+
+        public int VolumeMin { get; }
+
+        public DotNetPlayer(IDataService dataService) : base(dataService)
+        {
+            VolumeMin = 0;
+            VolumeMax = 100;
+        }
+
+        public DotNetPlayer(IDataService dataService, DotNetPlayerSettings settings) : this(dataService)
         {
             Settings = settings;
 
@@ -73,7 +92,7 @@ namespace InsireBot.MediaPlayer
             Initialize();
         }
 
-        public DotNetPlayer(DotNetPlayerSettings settings, AudioDevice audioDevice) : this(settings)
+        public DotNetPlayer(IDataService dataService, DotNetPlayerSettings settings, AudioDevice audioDevice) : this(dataService, settings)
         {
             AudioDevice = audioDevice;
             Initialize();
@@ -84,7 +103,7 @@ namespace InsireBot.MediaPlayer
             if (AudioDevice == null)
                 throw new ArgumentNullException(nameof(AudioDevice));
 
-            Settings.Options[2] = string.Format(Settings.Options[2], AudioDevice);
+            Settings.Options[1] = string.Format(Settings.Options[1], AudioDevice);
             vlcMediaPlayer = new VlcMediaPlayer(Settings.VlcLibDirectory, Settings.Options);
         }
 
@@ -107,6 +126,7 @@ namespace InsireBot.MediaPlayer
 
             if (!Settings.VlcLibDirectory.Exists)
                 throw new DotNetPlayerException("VlcLibDirectory in DotNetPlayerSettings doesn't exist");
+
 
             //TODO more checks on VlcLibDirectory
         }

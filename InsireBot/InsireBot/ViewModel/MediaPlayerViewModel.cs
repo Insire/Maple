@@ -4,42 +4,42 @@ using InsireBot.MediaPlayer;
 
 namespace InsireBot.ViewModel
 {
-    /// <summary>
-    /// This class contains properties that the main View can data bind to.
-    /// <para>
-    /// Use the <strong>mvvminpc</strong> snippet to add bindable properties to this ViewModel.
-    /// </para>
-    /// <para>
-    /// You can also use Blend to data bind with the tool's support.
-    /// </para>
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
     public class MediaPlayerViewModel : BotViewModelBase<MediaItem>, IPlaying
     {
         public IMediaPlayer<IMediaItem> MediaPlayer { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the MainViewModel class.
-        /// </summary>
-        public MediaPlayerViewModel()
+        public MediaPlayerViewModel(IDataService dataService) : base(dataService)
         {
             if (IsInDesignMode)
             {
-                var item = new MediaItem("test", "");
+                var item = new MediaItem("Rusko - Somebody To Love (Sigma Remix)", @"https://www.youtube.com/watch?v=nF7wa3j57j0", new TimeSpan(0, 5, 47));
+                Items.Add(item);
+
+                item = new MediaItem("Armin van Buuren feat. Sophie - Virtual Friend", @"https://www.youtube.com/watch?v=0ypeOKp0x3k", new TimeSpan(0, 7, 12));
+                Items.Add(item);
 
                 Items.Add(item);
             }
             else
             {
                 // Code runs "for real"
-                //MediaPlayer = MediaPlayerFactory.Create(MediaPlayerType.VLCDOTNET);
+                MediaPlayer = MediaPlayerFactory.Create(dataService, MediaPlayerType.VLCDOTNET);
+                var item = new MediaItem("Rusko - Somebody To Love (Sigma Remix)", @"https://www.youtube.com/watch?v=nF7wa3j57j0", new TimeSpan(0, 5, 47));
+                Items.Add(item);
+
+                item = new MediaItem("Armin van Buuren feat. Sophie - Virtual Friend", @"https://www.youtube.com/watch?v=0ypeOKp0x3k", new TimeSpan(0, 7, 12));
+                Items.Add(item);
+
+                Messenger.Default.Register<MediaItem>(this, (mediaItem) =>
+                 {
+                     Items.Add(mediaItem);
+                 });
             }
         }
 
         public void Next()
         {
+            SelectedIndex++;
             var contract = new MediaItemContract
             {
                 MediaItem = SelectedItem,
@@ -51,6 +51,7 @@ namespace InsireBot.ViewModel
 
         public void Previous()
         {
+            SelectedIndex--;
             var contract = new MediaItemContract
             {
                 MediaItem = SelectedItem,

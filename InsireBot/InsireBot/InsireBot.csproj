@@ -9,11 +9,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>InsireBot</RootNamespace>
     <AssemblyName>InsireBot</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -107,14 +108,6 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Vlc.DotNet.Core, Version=2.1.122.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
-      <HintPath>..\packages\Vlc.DotNet.Core.2.1.122\lib\net45\x86\Vlc.DotNet.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Vlc.DotNet.Core.Interops, Version=2.1.122.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
-      <HintPath>..\packages\Vlc.DotNet.Core.Interops.2.1.122\lib\net45\x86\Vlc.DotNet.Core.Interops.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -125,26 +118,41 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Core\AudioDevice.cs" />
+    <Compile Include="Core\DesignTimeDataService.cs" />
+    <Compile Include="Core\Interfaces\IDataService.cs" />
     <Compile Include="Core\RangeObservableCollection.cs" />
+    <Compile Include="Core\RuntimeDataService.cs" />
+    <Compile Include="MediaPlayer\MediaItemFactory.cs" />
+    <Compile Include="Util\EnumBindingSourceExtension.cs" />
     <Compile Include="Feature\WinmmService.cs" />
+    <Compile Include="View\MediaPlayerView.xaml.cs">
+      <DependentUpon>MediaPlayerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MediaPlayer\BasePlayer.cs" />
     <Compile Include="MediaPlayer\VLCDOTNET\DotNetPlayerException.cs" />
     <Compile Include="MediaPlayer\MediaItemAction.cs" />
     <Compile Include="MediaPlayer\MediaItemContract.cs" />
-    <Compile Include="MediaPlayer\IMediaPlayer.cs" />
-    <Compile Include="Core\ISettings.cs" />
+    <Compile Include="MediaPlayer\Interfaces\IMediaPlayer.cs" />
+    <Compile Include="Core\Interfaces\ISettings.cs" />
     <Compile Include="Core\ObjectSerializer.cs" />
-    <Compile Include="MediaPlayer\IPlaying.cs" />
+    <Compile Include="MediaPlayer\Interfaces\IPlaying.cs" />
     <Compile Include="MediaPlayer\MediaPlayerFactory.cs" />
-    <Compile Include="MediaPlayer\MediaPlayerType.cs" />
-    <Compile Include="MediaPlayer\MediaPlayPlaybackType.cs" />
+    <Compile Include="MediaPlayer\Enums\MediaPlayerType.cs" />
+    <Compile Include="MediaPlayer\Enums\MediaPlayPlaybackType.cs" />
     <Compile Include="MediaPlayer\VLCDOTNET\DotNetPlayer.cs" />
     <Compile Include="MediaPlayer\VLCDOTNET\DotNetPlayerSettings.cs" />
-    <Compile Include="MediaPlayer\IMediaItem.cs" />
+    <Compile Include="MediaPlayer\Interfaces\IMediaItem.cs" />
     <Compile Include="MediaPlayer\MediaItem.cs" />
     <Compile Include="ViewModel\MediaPlayerViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Page Include="MainWindow.xaml">
+    <Compile Include="View\PlaylistView.xaml.cs">
+      <DependentUpon>PlaylistView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Resources\Style.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -153,13 +161,21 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\BotViewModelBase.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\MediaPlayerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\PlaylistView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +217,14 @@
     <ProjectReference Include="..\..\..\MaterialDesignInXamlToolkit-master\MaterialDesignInXamlToolkit-master\MaterialDesignThemes.MahApps\MaterialDesignThemes.MahApps.csproj">
       <Project>{81556a2d-d467-43e7-945b-fd987c676cf6}</Project>
       <Name>MaterialDesignThemes.MahApps</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Vlc.DotNet-master\Vlc.DotNet-master\src\Vlc.DotNet.Core.Interops\Vlc.DotNet.Core.Interops - CLR 4 - .Net 4.5.csproj">
+      <Project>{47e251ae-a5ee-4526-bdc1-3c008936e80a}</Project>
+      <Name>Vlc.DotNet.Core.Interops - CLR 4 - .Net 4.5</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Vlc.DotNet-master\Vlc.DotNet-master\src\Vlc.DotNet.Core\Vlc.DotNet.Core - CLR 4 - .Net 4.5.csproj">
+      <Project>{24860783-a729-4a14-98c0-9a34bf138bdb}</Project>
+      <Name>Vlc.DotNet.Core - CLR 4 - .Net 4.5</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

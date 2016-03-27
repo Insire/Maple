@@ -7,7 +7,7 @@ namespace InsireBot.MediaPlayer
         string Title { get; }
         string Location { get; }
 
-        double Duration { get; }
+        TimeSpan Duration { get; }
 
         bool IsRestricted { get; }
 

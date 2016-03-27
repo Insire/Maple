@@ -49,17 +49,18 @@ namespace InsireBot.MediaPlayer
             }
         }
 
-        public BasePlayer()
+        public BasePlayer(IDataService dataService) : base(dataService)
         {
             AudioDevices = new RangeObservableCollection<AudioDevice>();
+            MediaPlayPlaybackType = MediaPlayPlaybackType.Play;
 
             if (IsInDesignMode)
             {
-                AudioDevices.AddRange(WinmmService.GetMockPlaybackDevices());
+                AudioDevices.AddRange(_dataService.GetPlaybackDevices());
             }
             else
             {
-                AudioDevices.AddRange(WinmmService.GetPlaybackDevices());
+                AudioDevices.AddRange(_dataService.GetPlaybackDevices());
             }
 
             Messenger.Default.Register<MediaItemContract>(this, (mediaItemContract) =>

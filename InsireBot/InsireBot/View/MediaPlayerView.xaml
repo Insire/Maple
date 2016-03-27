@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="InsireBot.MediaPlayerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:mediaPlayer="clr-namespace:InsireBot.MediaPlayer"
+             xmlns:local="clr-namespace:InsireBot"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid  DataContext="{Binding Source={StaticResource Locator}, Path=MediaPlayerViewModel.MediaPlayer}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <!-- Previous, Play, Next-->
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource PreviousButtonStyle}"/>
+            <Button Grid.Row="0" Grid.Column="1" Style="{StaticResource PlayButtonStyle}" />
+            <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource NextButtonStyle}"/>
+        </Grid>
+
+        <Grid Grid.Row="0" Grid.Column="2" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Slider Grid.Row="0" 
+                    Grid.Column="1" 
+                    MinWidth="200"
+                    Value="{Binding Volume}"
+                    Maximum="{Binding VolumeMax}"
+                    Minimum="{Binding VolumeMin}"
+                    TickFrequency="1" 
+                    TickPlacement="None" 
+                    AutoToolTipPlacement="BottomRight" />
+            
+            <ComboBox ItemsSource="{Binding Source={local:EnumBindingSource {x:Type mediaPlayer:MediaPlayPlaybackType}}}" 
+                      SelectedValue="{Binding MediaPlayPlaybackType}"
+                      Grid.Row="0" 
+                      Grid.Column="3" />
+
+        </Grid>
+    </Grid>
+</UserControl>

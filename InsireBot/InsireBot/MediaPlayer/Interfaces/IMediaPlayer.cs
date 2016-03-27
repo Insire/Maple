@@ -12,5 +12,8 @@
         MediaPlayPlaybackType MediaPlayPlaybackType { get; set; }
         int Volume { get; set; }
         bool Silent { get; set; }
+
+        int VolumeMax { get; }
+        int VolumeMin { get; }
     }
 }

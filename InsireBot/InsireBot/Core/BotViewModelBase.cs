@@ -8,6 +8,8 @@ namespace InsireBot
 {
     public class BotViewModelBase<T> : ViewModelBase
     {
+        protected readonly IDataService _dataService;
+
         private object _ItemsLock;
         private object _FilteredItemsLock;
 
@@ -20,21 +22,15 @@ namespace InsireBot
                 if (value != _SelectedIndex)
                 {
                     _SelectedIndex = value;
-                    RaisePropertyChanged(nameof(SelectedIndex));
-                }
-            }
-        }
 
-        private int _SelectedIndexFilteredItems = -1;
-        public int SelectedIndexFilteredItems
-        {
-            get { return _SelectedIndexFilteredItems; }
-            set
-            {
-                if (value != _SelectedIndexFilteredItems)
-                {
-                    _SelectedIndexFilteredItems = value;
-                    RaisePropertyChanged(nameof(SelectedIndexFilteredItems));
+                    if (_SelectedIndex >= Items.Count)
+                        SelectedIndex = 0;
+
+                    if (_SelectedIndex < 0)
+                        SelectedIndex = Items.Count - 1;
+
+                    RaisePropertyChanged(nameof(SelectedIndex));
+                    RaisePropertyChanged(nameof(SelectedItem));
                 }
             }
         }
@@ -82,8 +78,10 @@ namespace InsireBot
             }
         }
 
-        public BotViewModelBase()
+        public BotViewModelBase(IDataService dataService)
         {
+            _dataService = dataService;
+
             _ItemsLock = new object();
             _FilteredItemsLock = new object();
 

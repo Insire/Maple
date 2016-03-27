@@ -1,25 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace InsireBot
 {
     internal class WinmmService
     {
-        internal static IEnumerable<AudioDevice> GetMockPlaybackDevices()
-        {
-            yield return new AudioDevice(2, 2, 2, "TestDevice #1", 2, 2, 2, 2);
-            yield return new AudioDevice(2, 2, 2, "TestDevice #2", 2, 2, 2, 2);
-        }
-
-        internal static IEnumerable<AudioDevice> GetPlaybackDevices()
-        {
-            var _devices = GetDevCapsPlayback();
-            for (int i = 0; i < _devices.Length; i++)
-                yield return new AudioDevice(_devices[i].wMid, _devices[i].wPid, _devices[i].vDriverVersion, _devices[i].ToString(), _devices[i].dwFormats, _devices[i].wChannels, _devices[i].wReserved, _devices[i].dwSupport);
-        }
-
-        private static WAVEOUTCAPS[] GetDevCapsPlayback()
+        internal static WAVEOUTCAPS[] GetDevCapsPlayback()
         {
             uint waveOutDevicesCount = waveOutGetNumDevs();
             if (waveOutDevicesCount > 0)
@@ -39,7 +25,7 @@ namespace InsireBot
             }
         }
 
-        private static WAVEINCAPS[] GetDevCapsRecording()
+        internal static WAVEINCAPS[] GetDevCapsRecording()
         {
             uint waveInDevicesCount = waveInGetNumDevs();
             if (waveInDevicesCount > 0)
@@ -60,7 +46,7 @@ namespace InsireBot
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 4, CharSet = CharSet.Auto)]
-        private struct WAVEOUTCAPS
+        internal struct WAVEOUTCAPS
         {
             public short wMid;
             public short wPid;
@@ -82,7 +68,7 @@ namespace InsireBot
 
 
         [StructLayout(LayoutKind.Sequential, Pack = 4, CharSet = CharSet.Auto)]
-        private struct WAVEINCAPS
+        internal struct WAVEINCAPS
         {
             public short wMid;
             public short wPid;

@@ -5,17 +5,17 @@ namespace InsireBot.MediaPlayer
 {
     public static class MediaPlayerFactory
     {
-        public static IMediaPlayer<IMediaItem> Create(MediaPlayerType mediaPlayerType)
+        public static IMediaPlayer<IMediaItem> Create(IDataService dataService, MediaPlayerType mediaPlayerType)
         {
             switch (mediaPlayerType)
             {
                 case MediaPlayerType.VLCDOTNET:
                     var settings = new DotNetPlayerSettings
                     {
-                        Directory = "",
-                        Extension = "",
-                        FileName = "",
-                        VlcLibDirectory = new DirectoryInfo("C:"),
+                        Directory = "C:",
+                        Extension = "exe",
+                        FileName = "vlc",
+                        VlcLibDirectory = new DirectoryInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "VideoLAN\\VLC")),
                         Options = new[]
                         {
                             "--aout=waveout",
@@ -26,7 +26,7 @@ namespace InsireBot.MediaPlayer
                         MediaPlayPlaybackType = MediaPlayPlaybackType.Play
 
                     };
-                    return new DotNetPlayer(settings);
+                    return new DotNetPlayer(dataService, settings);
 
                 default:
                     throw new NotImplementedException();

@@ -1,24 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using GalaSoft.MvvmLight;
 
 namespace InsireBot.MediaPlayer
 {
     public class MediaItem : ObservableObject, IMediaItem
     {
-        private double _duration;
-        public double Duration
-        {
-            get { return _duration; }
-            private set
-            {
-                if (_duration != value)
-                {
-                    _duration = value;
-                    RaisePropertyChanged(nameof(Duration));
-                }
-            }
-        }
-
         private Guid _id;
         public Guid ID
         {
@@ -29,6 +16,34 @@ namespace InsireBot.MediaPlayer
                 {
                     _id = value;
                     RaisePropertyChanged(nameof(ID));
+                }
+            }
+        }
+
+        private string _title;
+        public string Title
+        {
+            get { return _title; }
+            private set
+            {
+                if (_title != value)
+                {
+                    _title = value;
+                    RaisePropertyChanged(nameof(Title));
+                }
+            }
+        }
+
+        private TimeSpan _duration;
+        public TimeSpan Duration
+        {
+            get { return _duration; }
+            private set
+            {
+                if (_duration != value)
+                {
+                    _duration = value;
+                    RaisePropertyChanged(nameof(Duration));
                 }
             }
         }
@@ -51,7 +66,7 @@ namespace InsireBot.MediaPlayer
         public string Location
         {
             get { return _location; }
-            private set
+            set
             {
                 if (_location != value)
                 {
@@ -61,29 +76,20 @@ namespace InsireBot.MediaPlayer
             }
         }
 
-        private string _title;
-        public string Title
-        {
-            get { return _title; }
-            private set
-            {
-                if (_title != value)
-                {
-                    _title = value;
-                    RaisePropertyChanged(nameof(Title));
-                }
-            }
-        }
-
         private MediaItem()
         {
             ID = Guid.NewGuid();
         }
 
-        public MediaItem(string title,string location)
+        public MediaItem(string title, string location)
         {
             Title = title;
             Location = location;
+        }
+
+        public MediaItem(string title, string location, TimeSpan duration) : this(title, location)
+        {
+            Duration = duration;
         }
     }
 }
