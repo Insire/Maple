@@ -18,13 +18,19 @@
         <Setter Property="CanUserSortColumns" Value="True" />
     </Style>
 
-    <Style x:Key="BaseWindowStyle" TargetType="Window">
+    <Style x:Key="BaseWindowStyle" TargetType="{x:Type Window}" BasedOn="{StaticResource {x:Type Window}}">
         <Setter Property="Width" Value="900" />
         <Setter Property="MinWidth" Value="900" />
         <Setter Property="Height" Value=" 506" />
         <Setter Property="MinHeight" Value="506" />
     </Style>
 
+    <Style x:Key="BaseDialogWindowStyle" TargetType="{x:Type Window}" BasedOn="{StaticResource BaseWindowStyle}">
+        <Setter Property="ShowInTaskbar" Value="False" />
+        <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
+        <Setter Property="WindowStartupLocation" Value="CenterOwner" />
+    </Style>
+    
     <Style x:Key="IconStyle" TargetType="{x:Type Rectangle}" >
         <Setter Property="Width" Value="20" />
         <Setter Property="Height" Value="20" />

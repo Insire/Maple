@@ -38,7 +38,10 @@
                 <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/materialdesign.xaml">
                     <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
                 </ResourceDictionary>
+                
+                <!-- other stuff-->
                 <ResourceDictionary Source="Resources/Style.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <!-- MahApps Brushes -->
             <SolidColorBrush x:Key="HighlightBrush" Color="{DynamicResource Primary700}" />

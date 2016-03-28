@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using GalaSoft.MvvmLight;
 
 namespace InsireBot.MediaPlayer
@@ -90,6 +89,11 @@ namespace InsireBot.MediaPlayer
         public MediaItem(string title, string location, TimeSpan duration) : this(title, location)
         {
             Duration = duration;
+        }
+
+        public MediaItem(string title, string location, TimeSpan duration, bool? allowed) : this(title, location, duration)
+        {
+            IsRestricted = allowed == null ? false : !(bool)allowed;
         }
     }
 }

@@ -94,7 +94,7 @@ namespace InsireBot
             ClearCommand = new RelayCommand(() => Items.Clear(), CanClear);
         }
 
-        internal bool CanRemove()
+        public bool CanRemove()
         {
             return IsItemSelected() && Items.Contains(SelectedItem);
         }

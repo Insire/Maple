@@ -56,6 +56,10 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
+      <HintPath>..\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Dapper, Version=1.40.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
       <Private>True</Private>
@@ -76,6 +80,34 @@
       <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Google.Apis, Version=1.11.1.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.1.11.1\lib\net45\Google.Apis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Auth, Version=1.11.1.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Auth.1.11.1\lib\net45\Google.Apis.Auth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Auth.PlatformServices, Version=1.11.1.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Auth.1.11.1\lib\net45\Google.Apis.Auth.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Core, Version=1.11.1.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Core.1.11.1\lib\net45\Google.Apis.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.PlatformServices, Version=1.11.1.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.1.11.1\lib\net45\Google.Apis.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.YouTube.v3, Version=1.11.1.417, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.YouTube.v3.1.11.1.417\lib\portable-net45+sl50+netcore45+wpa81+wp8\Google.Apis.YouTube.v3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MahApps.Metro, Version=1.2.4.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.2.4.0\lib\net45\MahApps.Metro.dll</HintPath>
       <Private>True</Private>
@@ -92,11 +124,15 @@
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.2.4.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml" />
@@ -111,6 +147,10 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Zlib.Portable, Version=1.11.0.0, Culture=neutral, PublicKeyToken=431cba815f6a8b5b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zlib.Portable.Signed.1.11.0\lib\portable-net4+sl5+wp8+win8+wpa81+MonoTouch+MonoAndroid\Zlib.Portable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -118,36 +158,45 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Core\AudioDevice.cs" />
+    <Compile Include="Core\BotViewModelBase.cs" />
     <Compile Include="Core\DesignTimeDataService.cs" />
     <Compile Include="Core\Interfaces\IDataService.cs" />
+    <Compile Include="Core\Interfaces\ISettings.cs" />
+    <Compile Include="Core\ObjectSerializer.cs" />
     <Compile Include="Core\RangeObservableCollection.cs" />
     <Compile Include="Core\RuntimeDataService.cs" />
-    <Compile Include="MediaPlayer\MediaItemFactory.cs" />
-    <Compile Include="Util\EnumBindingSourceExtension.cs" />
+    <Compile Include="Dialogs\NewMediaItemDialog.xaml.cs">
+      <DependentUpon>NewMediaItemDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Feature\MediaPlayer\BasePlayer.cs" />
+    <Compile Include="Feature\MediaPlayer\Enums\MediaPlayerType.cs" />
+    <Compile Include="Feature\MediaPlayer\Enums\MediaPlayPlaybackType.cs" />
+    <Compile Include="Feature\MediaPlayer\Interfaces\IMediaItem.cs" />
+    <Compile Include="Feature\MediaPlayer\Interfaces\IMediaPlayer.cs" />
+    <Compile Include="Feature\MediaPlayer\Interfaces\IPlaying.cs" />
+    <Compile Include="Feature\MediaPlayer\MediaItem.cs" />
+    <Compile Include="Feature\MediaPlayer\Enums\MediaItemAction.cs" />
+    <Compile Include="Feature\MediaPlayer\MediaItemContract.cs" />
+    <Compile Include="Feature\MediaPlayer\MediaItemFactory.cs" />
+    <Compile Include="Feature\MediaPlayer\MediaPlayerFactory.cs" />
+    <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayer.cs" />
+    <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayerException.cs" />
+    <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayerSettings.cs" />
     <Compile Include="Feature\WinmmService.cs" />
+    <Compile Include="Feature\Youtube\Youtube.cs" />
+    <Compile Include="Util\EnumBindingSourceExtension.cs" />
     <Compile Include="View\MediaPlayerView.xaml.cs">
       <DependentUpon>MediaPlayerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MediaPlayer\BasePlayer.cs" />
-    <Compile Include="MediaPlayer\VLCDOTNET\DotNetPlayerException.cs" />
-    <Compile Include="MediaPlayer\MediaItemAction.cs" />
-    <Compile Include="MediaPlayer\MediaItemContract.cs" />
-    <Compile Include="MediaPlayer\Interfaces\IMediaPlayer.cs" />
-    <Compile Include="Core\Interfaces\ISettings.cs" />
-    <Compile Include="Core\ObjectSerializer.cs" />
-    <Compile Include="MediaPlayer\Interfaces\IPlaying.cs" />
-    <Compile Include="MediaPlayer\MediaPlayerFactory.cs" />
-    <Compile Include="MediaPlayer\Enums\MediaPlayerType.cs" />
-    <Compile Include="MediaPlayer\Enums\MediaPlayPlaybackType.cs" />
-    <Compile Include="MediaPlayer\VLCDOTNET\DotNetPlayer.cs" />
-    <Compile Include="MediaPlayer\VLCDOTNET\DotNetPlayerSettings.cs" />
-    <Compile Include="MediaPlayer\Interfaces\IMediaItem.cs" />
-    <Compile Include="MediaPlayer\MediaItem.cs" />
     <Compile Include="ViewModel\MediaPlayerViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\PlaylistView.xaml.cs">
       <DependentUpon>PlaylistView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Dialogs\NewMediaItemDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Resources\Style.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -160,7 +209,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\BotViewModelBase.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -202,6 +250,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Resources\client_secret.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Resource Include="Resources\Entypo.ttf" />
   </ItemGroup>
   <ItemGroup>
