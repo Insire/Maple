@@ -61,11 +61,6 @@
                       Grid.Row="0" 
                       Grid.Column="3" />
 
-            <Button Grid.Row="0" 
-                    Grid.Column="4"
-                    Content="Test"
-                    Command="{Binding TestCommand}" />
-
         </Grid>
     </Grid>
 </UserControl>

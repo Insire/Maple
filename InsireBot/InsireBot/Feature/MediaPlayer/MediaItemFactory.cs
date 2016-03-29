@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using System.Windows;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace InsireBot.MediaPlayer
 {
@@ -6,12 +7,12 @@ namespace InsireBot.MediaPlayer
     {
         public static async void Create(string url)
         {
-            var yt = new Youtube();
 
-            var videos = await yt.GetVideo(url);
+        }
 
-            foreach (var video in videos)
-                Messenger.Default.Send(video);
+        public static async void Create()
+        {
+
         }
     }
 }

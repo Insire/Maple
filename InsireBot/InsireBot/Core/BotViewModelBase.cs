@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows.Data;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -10,23 +11,23 @@ namespace InsireBot
     {
         protected readonly IDataService _dataService;
 
-        private object _ItemsLock;
+        private object _itemsLock;
         private object _FilteredItemsLock;
 
-        private int _SelectedIndex = -1;
+        private int _selectedIndex = -1;
         public int SelectedIndex
         {
-            get { return _SelectedIndex; }
+            get { return _selectedIndex; }
             set
             {
-                if (value != _SelectedIndex)
+                if (value != _selectedIndex)
                 {
-                    _SelectedIndex = value;
+                    _selectedIndex = value;
 
-                    if (_SelectedIndex >= Items.Count)
+                    if (_selectedIndex >= Items.Count)
                         SelectedIndex = 0;
 
-                    if (_SelectedIndex < 0)
+                    if (_selectedIndex < 0)
                         SelectedIndex = Items.Count - 1;
 
                     RaisePropertyChanged(nameof(SelectedIndex));
@@ -35,17 +36,17 @@ namespace InsireBot
             }
         }
 
-        private RangeObservableCollection<T> _Items;
+        private RangeObservableCollection<T> _items;
         public RangeObservableCollection<T> Items
         {
-            get { return _Items; }
+            get { return _items; }
             set
             {
-                _Items = value;
+                _items = value;
                 RaisePropertyChanged(nameof(Items));
             }
         }
-
+        public ICommand NewCommand { get; protected set; }
         public ICommand RemoveCommand { get; private set; }
         public ICommand ClearCommand { get; private set; }
 
@@ -82,14 +83,15 @@ namespace InsireBot
         {
             _dataService = dataService;
 
-            _ItemsLock = new object();
+            _itemsLock = new object();
             _FilteredItemsLock = new object();
 
             Items = new RangeObservableCollection<T>();
             FilteredItemsView = CollectionViewSource.GetDefaultView(Items);
 
-            BindingOperations.EnableCollectionSynchronization(Items, _ItemsLock);
+            BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
 
+            NewCommand = new RelayCommand(() => Debug.WriteLine("test"));
             RemoveCommand = new RelayCommand(() => Items.Remove(Items[SelectedIndex]), CanRemove);
             ClearCommand = new RelayCommand(() => Items.Clear(), CanClear);
         }

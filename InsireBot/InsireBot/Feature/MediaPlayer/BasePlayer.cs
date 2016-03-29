@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 
 namespace InsireBot.MediaPlayer
@@ -50,14 +48,9 @@ namespace InsireBot.MediaPlayer
                 }
             }
         }
-        private void Test()
-        {
-            MediaItemFactory.Create(@"i2n0e6vyziY");
-        }
-        public ICommand TestCommand { get; }
+
         public BasePlayer(IDataService dataService) : base(dataService)
         {
-            TestCommand = new RelayCommand(Test);
             AudioDevices = new RangeObservableCollection<AudioDevice>();
             MediaPlayPlaybackType = MediaPlayPlaybackType.Play;
 

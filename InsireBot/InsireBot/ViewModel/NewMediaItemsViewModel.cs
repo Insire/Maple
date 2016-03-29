@@ -1,0 +1,188 @@
+﻿using System;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows.Input;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
+using InsireBot.MediaPlayer;
+using System.Web;
+using GalaSoft.MvvmLight.Messaging;
+
+namespace InsireBot.ViewModel
+{
+    public class NewMediaItemsViewModel : ViewModelBase
+    {
+        private RangeObservableCollection<MediaItem> _mediaItems;
+        public RangeObservableCollection<MediaItem> MediaItems
+        {
+            get { return _mediaItems; }
+            set
+            {
+                _mediaItems = value;
+                RaisePropertyChanged(nameof(MediaItems));
+            }
+        }
+
+        private string _sourceText;
+        public string SourceText
+        {
+            get { return _sourceText; }
+            set
+            {
+                _sourceText = value;
+                RaisePropertyChanged(nameof(SourceText));
+            }
+        }
+
+        private MediaItemParseMode _mode;
+        public MediaItemParseMode Mode
+        {
+            get { return _mode; }
+            set
+            {
+                _mode = value;
+                RaisePropertyChanged(nameof(Mode));
+            }
+        }
+
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            private set
+            {
+                _isBusy = value;
+                RaisePropertyChanged(nameof(IsBusy));
+            }
+        }
+
+        private Action _closeAction;
+        public Action CloseAction
+        {
+            get { return _closeAction; }
+            set
+            {
+                _closeAction = value;
+                RaisePropertyChanged(nameof(CloseAction));
+            }
+        }
+
+        public ICommand ParseCommand { get; }
+        public ICommand AddCommand { get; }
+        public ICommand CancelCommand { get; }
+
+        public NewMediaItemsViewModel()
+        {
+            MediaItems = new RangeObservableCollection<MediaItem>();
+            Mode = MediaItemParseMode.Multiple;
+
+            ParseCommand = new RelayCommand(() =>
+            {
+                var url = new Uri(SourceText.Trim());
+                switch (url.DnsSafeHost)
+                {
+                    case "youtu.be":
+                        url = new Uri(url.AbsoluteUri.Replace(@"youtu.be/", @"youtube.com/watch?v="));
+                        Parse(url);
+                        break;
+                    case "www.youtube.com":
+                        Parse(url);
+                        break;
+                }
+            });
+
+            AddCommand = new RelayCommand(() =>
+            {
+                switch (Mode)
+                {
+                    case MediaItemParseMode.Multiple:
+                        foreach (var item in MediaItems)
+                            Messenger.Default.Send(item);
+
+                        break;
+                    case MediaItemParseMode.Playlist:
+                        //TODO
+                        break;
+
+                    default: throw new NotImplementedException();
+                }
+            }, CanAdd);
+
+            CancelCommand = new RelayCommand(() =>
+            {
+                CloseAction();
+            }, CanCancel);
+        }
+
+        private bool CanAdd()
+        {
+            return MediaItems != null && MediaItems.Any();
+        }
+
+        private bool CanParse()
+        {
+            return !string.IsNullOrEmpty(SourceText);
+        }
+
+        private bool CanCancel()
+        {
+            return !IsBusy && CloseAction != null;
+        }
+
+        private async void Parse(Uri url)
+        {
+            var regex = @"(?:http|https|)(?::\/\/|)(?:www.|m.|)(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\|\/feeds\/api\/videos\/|\/user\S*[^\w\-\s]|\S*[^\w\-\s]))([\w\-]*)[a-z0-9;:@?&%=+\/\$_.-]*";
+            var rx = Regex.Match(url.AbsoluteUri, regex);
+            var youtube = new Youtube();
+
+            while (rx.Success)
+            {
+                var keys = HttpUtility.ParseQueryString(url.Query).AllKeys;
+
+                foreach (var key in keys)
+                {
+                    string id = HttpUtility.ParseQueryString(url.Query).Get(key);
+
+                    if (key == "v")
+                    {
+                        try
+                        {
+                            IsBusy = true;
+                            var video = await youtube.GetVideo(id);
+                            MediaItems.AddRange(video);
+                        }
+                        finally
+                        {
+                            IsBusy = false;
+                        }
+                        continue;
+                    }
+
+                    if (key == "list")
+                    {
+                        try
+                        {
+                            IsBusy = true;
+                            // TODO
+                            //var video = await youtube.GetVideo(id);
+                            //MediaItems.AddRange(video);
+                        }
+                        finally
+                        {
+                            IsBusy = false;
+                        }
+                        continue;
+                    }
+                }
+
+                rx = rx.NextMatch();
+            }
+        }
+    }
+
+    public enum MediaItemParseMode
+    {
+        Multiple,
+        Playlist
+    }
+}

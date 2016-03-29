@@ -8,9 +8,15 @@
 
     <!-- Remember: the order of these styles matters, since they depend on each other. If one references a style not yet declared, you get random RuntimeErrors-->
 
+    <Style x:Key="BaseButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="MinWidth" Value="60" />
+        <Setter Property="Height" Value="33.75" />
+        <Setter Property="Margin" Value="2" />
+    </Style>
+    
     <Style x:Key="BaseDataGridStyle" TargetType="{x:Type DataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}">
         <Setter Property="AutoGenerateColumns" Value="False" />
-        <Setter Property="CanUserAddRows" Value="True" />
+        <Setter Property="CanUserAddRows" Value="False" />
         <Setter Property="CanUserDeleteRows" Value="True" />
         <Setter Property="CanUserReorderColumns" Value="True" />
         <Setter Property="CanUserResizeColumns" Value="True" />
@@ -28,15 +34,43 @@
     <Style x:Key="BaseDialogWindowStyle" TargetType="{x:Type Window}" BasedOn="{StaticResource BaseWindowStyle}">
         <Setter Property="ShowInTaskbar" Value="False" />
         <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
-        <Setter Property="WindowStartupLocation" Value="CenterOwner" />
+        <!--<Setter Property="WindowStartupLocation" Value="CenterOwner" /> cant be set inside a resource dictionary since the property isnt a dependency property-->
     </Style>
-    
+
     <Style x:Key="IconStyle" TargetType="{x:Type Rectangle}" >
         <Setter Property="Width" Value="20" />
         <Setter Property="Height" Value="20" />
     </Style>
 
-    <Style x:Key="PlayButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+    <Style x:Key="ComputeButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Rectangle Style="{StaticResource IconStyle}">
+                        <Rectangle.Fill>
+                            <VisualBrush Visual="{StaticResource appbar_globe}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="AddButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Rectangle Style="{StaticResource IconStyle}">
+                        <Rectangle.Fill>
+                            <VisualBrush Visual="{StaticResource appbar_add}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PlayButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -50,7 +84,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="PauseButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+    <Style x:Key="PauseButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -64,7 +98,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="StopButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+    <Style x:Key="StopButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -78,7 +112,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="PreviousButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+    <Style x:Key="PreviousButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -92,7 +126,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="NextButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+    <Style x:Key="NextButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>

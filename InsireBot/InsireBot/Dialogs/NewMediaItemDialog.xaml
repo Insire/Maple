@@ -4,40 +4,67 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InsireBot"
+        xmlns:viewModels="clr-namespace:InsireBot.ViewModel"
+        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
         Style="{StaticResource BaseDialogWindowStyle}"
-        Title="NewMediaItemDialog">
+        WindowStartupLocation="CenterOwner"
+        Title="Add a Video or Playlist">
+    <!-- setting ViewModel as DataContext in CodeBehind to enable closing this Window via Command of the ViewModel-->
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
+
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TabControl Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
-            <!-- single MediaItem-->
-            <TabItem >
-                <Grid>
-                    <Label /> <!-- description-->
-                    <TextBox /> <!-- content-->
-                </Grid>
-            </TabItem>
+        <TextBox Grid.Column="0"
+                 Grid.Row="0"
+                 Grid.ColumnSpan="3"
+                 
 
-            <!-- multiple MediaItems-->
-            <TabItem >
-                <Grid>
-                    <TextBox />
-                </Grid>
-            </TabItem>
+                 controls:TextBoxHelper.ClearTextButton="True"
+                 controls:TextBoxHelper.Watermark="Paste your links here"
+                 Text="{Binding SourceText}" />
+        
+        <Button Grid.Column="2"
+                Grid.Row="1"
+                Style="{StaticResource ComputeButtonStyle}"
+                Command="{Binding ParseCommand}"/>
+        
+        <DataGrid Grid.Column="0"
+                  Grid.Row="2"
+                  Grid.ColumnSpan="3"
+                  ItemsSource="{Binding MediaItems}" Style="{StaticResource BaseDataGridStyle}">
+            <DataGrid.Columns>
+                <!-- Title -->
+                <DataGridTemplateColumn Header="Title" SortMemberPath="Title">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding Title}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
-            <!-- Playlist-->
-            <TabItem />
-        </TabControl>
-        <Button Grid.Column="1" Grid.Row="1"/>
-        <Button Grid.Column="2" Grid.Row="1"/>
+                <!-- Duration -->
+                <DataGridTemplateColumn Header="Duration" SortMemberPath="Duration">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding Duration, StringFormat={}{0:c}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button Grid.Column="1" Grid.Row="3" Content="Add" Command="{Binding AddCommand}" Style="{StaticResource BaseButtonStyle}" />
+        <Button Grid.Column="2" Grid.Row="3" Content="Cancel"  Command="{Binding CancelCommand}" Style="{StaticResource BaseButtonStyle}"/>
     </Grid>
 </Window>

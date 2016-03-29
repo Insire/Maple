@@ -10,6 +10,7 @@
     <UserControl.Resources>
         <ResourceDictionary Source="../Resources/Style.xaml" />
     </UserControl.Resources>
+    
     <Grid  DataContext="{Binding Source={StaticResource Locator}, Path=MediaPlayerViewModel}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -17,8 +18,19 @@
         <Grid.RowDefinitions>
             <RowDefinition />
         </Grid.RowDefinitions>
-
-        <DataGrid Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Items}" Style="{StaticResource BaseDataGridStyle}" CanUserAddRows="True">
+        
+        <Grid Grid.Column="0" Grid.Row="0" Panel.ZIndex="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Column="1" Grid.Row="1" Command="{Binding NewCommand}" Style="{StaticResource AddButtonStyle}"/> 
+        </Grid>
+        <DataGrid Panel.ZIndex="1" Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Items}" Style="{StaticResource BaseDataGridStyle}">
             <DataGrid.Columns>
                 
                 <!-- Title -->

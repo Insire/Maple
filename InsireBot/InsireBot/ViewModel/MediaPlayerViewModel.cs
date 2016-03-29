@@ -1,4 +1,6 @@
 using System;
+using System.Windows;
+using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using InsireBot.MediaPlayer;
 
@@ -34,7 +36,17 @@ namespace InsireBot.ViewModel
                  {
                      Items.Add(mediaItem);
                  });
+
+                NewCommand = new RelayCommand(New);
             }
+        }
+
+        private void New()
+        {
+            var dialog = new NewMediaItemDialog();
+            dialog.Owner = Application.Current.MainWindow;
+
+            var result = dialog.ShowDialog();
         }
 
         public void Next()

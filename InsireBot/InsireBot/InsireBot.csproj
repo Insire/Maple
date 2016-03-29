@@ -130,6 +130,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -185,6 +186,7 @@
     <Compile Include="Feature\WinmmService.cs" />
     <Compile Include="Feature\Youtube\Youtube.cs" />
     <Compile Include="Util\EnumBindingSourceExtension.cs" />
+    <Compile Include="ViewModel\NewMediaItemsViewModel.cs" />
     <Compile Include="View\MediaPlayerView.xaml.cs">
       <DependentUpon>MediaPlayerView.xaml</DependentUpon>
     </Compile>
