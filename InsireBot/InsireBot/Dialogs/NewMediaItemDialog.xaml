@@ -9,6 +9,7 @@
         mc:Ignorable="d"
         Style="{StaticResource BaseDialogWindowStyle}"
         WindowStartupLocation="CenterOwner"
+        DataContext="{Binding Source={StaticResource Locator}, Path=NewMediaItemsViewModel}"
         Title="Add a Video or Playlist">
     <!-- setting ViewModel as DataContext in CodeBehind to enable closing this Window via Command of the ViewModel-->
     <Grid>
@@ -28,17 +29,13 @@
         <TextBox Grid.Column="0"
                  Grid.Row="0"
                  Grid.ColumnSpan="3"
-                 
+                 Text="{Binding SourceText, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, NotifyOnValidationError=True, Mode=TwoWay}" />
 
-                 controls:TextBoxHelper.ClearTextButton="True"
-                 controls:TextBoxHelper.Watermark="Paste your links here"
-                 Text="{Binding SourceText}" />
-        
         <Button Grid.Column="2"
                 Grid.Row="1"
                 Style="{StaticResource ComputeButtonStyle}"
                 Command="{Binding ParseCommand}"/>
-        
+
         <DataGrid Grid.Column="0"
                   Grid.Row="2"
                   Grid.ColumnSpan="3"

@@ -108,17 +108,13 @@
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MahApps.Metro, Version=1.2.4.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.2.4.0\lib\net45\MahApps.Metro.dll</HintPath>
+    <Reference Include="MaterialDesignColors, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignColors.1.1.2\lib\net45\MaterialDesignColors.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MaterialDesignColors, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\MaterialDesignInXamlToolkit-master\MaterialDesignInXamlToolkit-master\MaterialDesignColors.Wpf\bin\Release\MaterialDesignColors.dll</HintPath>
-    </Reference>
-    <Reference Include="MaterialDesignThemes.Wpf, Version=1.2.0.339, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\MaterialDesignInXamlToolkit-master\MaterialDesignInXamlToolkit-master\MaterialDesignThemes.MahApps\bin\Release\MaterialDesignThemes.Wpf.dll</HintPath>
+    <Reference Include="MaterialDesignThemes.Wpf, Version=1.5.0.523, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignThemes.1.5.0.523\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -132,10 +128,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -179,6 +171,7 @@
     <Compile Include="Feature\MediaPlayer\Enums\MediaItemAction.cs" />
     <Compile Include="Feature\MediaPlayer\MediaItemContract.cs" />
     <Compile Include="Feature\MediaPlayer\MediaItemFactory.cs" />
+    <Compile Include="Feature\MediaPlayer\MediaItems.cs" />
     <Compile Include="Feature\MediaPlayer\MediaPlayerFactory.cs" />
     <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayer.cs" />
     <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayerException.cs" />
@@ -187,6 +180,7 @@
     <Compile Include="Feature\Youtube\Youtube.cs" />
     <Compile Include="Util\EnumBindingSourceExtension.cs" />
     <Compile Include="ViewModel\NewMediaItemsViewModel.cs" />
+    <Compile Include="ViewModel\PlaylistsViewModel.cs" />
     <Compile Include="View\MediaPlayerView.xaml.cs">
       <DependentUpon>MediaPlayerView.xaml</DependentUpon>
     </Compile>
@@ -218,10 +212,6 @@
     <Page Include="View\MediaPlayerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Icons.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\PlaylistView.xaml">
       <SubType>Designer</SubType>
@@ -255,7 +245,6 @@
     <None Include="Resources\client_secret.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Resource Include="Resources\Entypo.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -263,14 +252,8 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="MaterialDesignThemes.MahApps.csproj" />
-    <Resource Include="Resources\Entypo-license.txt" />
-    <Resource Include="Resources\WindowsIcons-license.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MaterialDesignInXamlToolkit-master\MaterialDesignInXamlToolkit-master\MaterialDesignThemes.MahApps\MaterialDesignThemes.MahApps.csproj">
-      <Project>{81556a2d-d467-43e7-945b-fd987c676cf6}</Project>
-      <Name>MaterialDesignThemes.MahApps</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Vlc.DotNet-master\Vlc.DotNet-master\src\Vlc.DotNet.Core.Interops\Vlc.DotNet.Core.Interops - CLR 4 - .Net 4.5.csproj">
       <Project>{47e251ae-a5ee-4526-bdc1-3c008936e80a}</Project>
       <Name>Vlc.DotNet.Core.Interops - CLR 4 - .Net 4.5</Name>

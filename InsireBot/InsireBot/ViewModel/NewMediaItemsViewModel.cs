@@ -23,6 +23,17 @@ namespace InsireBot.ViewModel
             }
         }
 
+        private RangeObservableCollection<Playlist> _playlists;
+        public RangeObservableCollection<Playlist> Playlists
+        {
+            get { return _playlists; }
+            set
+            {
+                _playlists = value;
+                RaisePropertyChanged(nameof(Playlists));
+            }
+        }
+
         private string _sourceText;
         public string SourceText
         {
@@ -89,7 +100,7 @@ namespace InsireBot.ViewModel
                         Parse(url);
                         break;
                 }
-            });
+            }, CanParse);
 
             AddCommand = new RelayCommand(() =>
             {
@@ -101,7 +112,9 @@ namespace InsireBot.ViewModel
 
                         break;
                     case MediaItemParseMode.Playlist:
-                        //TODO
+                        foreach (var item in Playlists)
+                            Messenger.Default.Send(item);
+
                         break;
 
                     default: throw new NotImplementedException();
@@ -143,35 +156,31 @@ namespace InsireBot.ViewModel
                 {
                     string id = HttpUtility.ParseQueryString(url.Query).Get(key);
 
-                    if (key == "v")
+                    try
                     {
-                        try
+                        if (key == "v")
                         {
                             IsBusy = true;
+
                             var video = await youtube.GetVideo(id);
                             MediaItems.AddRange(video);
-                        }
-                        finally
-                        {
-                            IsBusy = false;
-                        }
-                        continue;
-                    }
 
-                    if (key == "list")
-                    {
-                        try
+                            continue;
+                        }
+
+                        if (key == "list")
                         {
                             IsBusy = true;
-                            // TODO
-                            //var video = await youtube.GetVideo(id);
-                            //MediaItems.AddRange(video);
+
+                            var playlists = await youtube.GetPlaylist(id);
+                            Playlists.AddRange(playlists);
+
+                            continue;
                         }
-                        finally
-                        {
-                            IsBusy = false;
-                        }
-                        continue;
+                    }
+                    finally
+                    {
+                        IsBusy = false;
                     }
                 }
 

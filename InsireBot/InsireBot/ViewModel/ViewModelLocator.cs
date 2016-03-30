@@ -28,6 +28,7 @@ namespace InsireBot.ViewModel
                 SimpleIoc.Default.Register<IDataService, RuntimeDataService>();
             }
 
+            SimpleIoc.Default.Register<NewMediaItemsViewModel>();
             SimpleIoc.Default.Register<MediaPlayerViewModel>();
         }
 
@@ -38,7 +39,15 @@ namespace InsireBot.ViewModel
                 return ServiceLocator.Current.GetInstance<MediaPlayerViewModel>();
             }
         }
-        
+
+        public NewMediaItemsViewModel NewMediaItemsViewModel
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<NewMediaItemsViewModel>();
+            }
+        }
+
         public static void Cleanup()
         {
             SimpleIoc.Default.Unregister<MediaPlayerViewModel>();

@@ -89,7 +89,7 @@ namespace InsireBot
             var youtubeService = await GetService();
 
             // Create a new, private playlist in the authorized user's channel.
-            var newPlaylist = new Playlist();
+            var newPlaylist = new Google.Apis.YouTube.v3.Data.Playlist();
             newPlaylist.Snippet = new PlaylistSnippet();
             newPlaylist.Snippet.Title = "Test Playlist";
             newPlaylist.Snippet.Description = "A playlist created with the YouTube API v3";
@@ -109,29 +109,83 @@ namespace InsireBot
             //Console.WriteLine("Playlist item id {0} was added to playlist id {1}.", newPlaylistItem.Id, newPlaylist.Id);
         }
 
-
-        public async Task<IEnumerable<MediaItem>> GetVideo(string id)
+        public async Task<IEnumerable<MediaItem>> GetPlaylistItems(string playlistId)
         {
             var result = new List<MediaItem>();
             var youtubeService = await GetService();
 
-            var videosListRequest = youtubeService.Videos.List("snippet,contentDetails");
-            videosListRequest.Id = id;
+            var request = youtubeService.PlaylistItems.List("snippet,contentDetails");
+            request.PlaylistId = playlistId;
 
+            var response = await request.ExecuteAsync();
 
-            var channelsListResponse = await videosListRequest.ExecuteAsync();
-
-            foreach (var video in channelsListResponse.Items)
+            foreach (var item in response.Items)
             {
                 var nextPageToken = "";
                 while (nextPageToken != null)
                 {
-                    result.Add(new MediaItem(video.Snippet.Title,
-                                            $"{_videoBaseUrl}{id}",
-                                            XmlConvert.ToTimeSpan(video.ContentDetails.Duration),
-                                            video.ContentDetails.CountryRestriction?.Allowed));
+                    var videos = await GetVideo(item.ContentDetails.VideoId);
 
-                    nextPageToken = channelsListResponse.NextPageToken;
+                    foreach (var video in videos)
+                        result.Add(video);
+
+                    nextPageToken = response.NextPageToken;
+                }
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<MediaPlayer.Playlist>> GetPlaylist(string playlistId)
+        {
+            var result = new List<MediaPlayer.Playlist>();
+            var youtubeService = await GetService();
+
+            var request = youtubeService.Playlists.List("snippet,contentDetails");
+            request.Id = playlistId;
+
+            var response = await request.ExecuteAsync();
+
+            foreach (var item in response.Items)
+            {
+                var nextPageToken = "";
+                while (!string.IsNullOrEmpty(nextPageToken))
+                {
+                    var playlist = new MediaPlayer.Playlist(item.Snippet.Title, item.Id);
+                    var videos = await GetPlaylistItems(item.Id);
+
+                    playlist.AddRange(videos);
+                    result.Add(playlist);
+
+                    nextPageToken = response.NextPageToken;
+                }
+            }
+
+            return result;
+        }
+
+        public async Task<IEnumerable<MediaItem>> GetVideo(string videoId)
+        {
+            var result = new List<MediaItem>();
+            var youtubeService = await GetService();
+
+            var request = youtubeService.Videos.List("snippet,contentDetails");
+            request.Id = videoId;
+
+
+            var response = await request.ExecuteAsync();
+
+            foreach (var item in response.Items)
+            {
+                var nextPageToken = "";
+                while (nextPageToken != null)
+                {
+                    var video = new MediaItem(item.Snippet.Title,
+                                            $"{_videoBaseUrl}{videoId}",
+                                            XmlConvert.ToTimeSpan(item.ContentDetails.Duration),
+                                            item.ContentDetails.CountryRestriction?.Allowed);
+                    result.Add(video);
+
+                    nextPageToken = response.NextPageToken;
                 }
             }
             return result;
