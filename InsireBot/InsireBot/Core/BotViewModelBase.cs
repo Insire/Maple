@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows.Data;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -91,7 +90,6 @@ namespace InsireBot
 
             BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
 
-            NewCommand = new RelayCommand(() => Debug.WriteLine("test"));
             RemoveCommand = new RelayCommand(() => Items.Remove(Items[SelectedIndex]), CanRemove);
             ClearCommand = new RelayCommand(() => Items.Clear(), CanClear);
         }

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Data;
 using InsireBot.ViewModel;
 
 namespace InsireBot
@@ -12,10 +13,8 @@ namespace InsireBot
         {
             InitializeComponent();
 
-            var viewModel = DataContext as  NewMediaItemsViewModel;
-
-            if (viewModel.CloseAction == null)
-                viewModel.CloseAction = () => { Close(); };
+            var viewModel = DataContext as NewMediaItemsViewModel;
+            viewModel.CloseAction = () => { Close(); };
         }
     }
 }

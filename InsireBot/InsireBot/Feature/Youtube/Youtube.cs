@@ -20,7 +20,7 @@ namespace InsireBot
         internal async Task<YouTubeService> GetService()
         {
             UserCredential credential;
-            using (var stream = new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(@"Resources\client_secret.json", FileMode.Open, FileAccess.Read))
             {
                 credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,

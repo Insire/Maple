@@ -4,13 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InsireBot"
-        xmlns:viewModels="clr-namespace:InsireBot.ViewModel"
-        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
         Style="{StaticResource BaseDialogWindowStyle}"
         WindowStartupLocation="CenterOwner"
         DataContext="{Binding Source={StaticResource Locator}, Path=NewMediaItemsViewModel}"
-        Title="Add a Video or Playlist">
+        Title="Add a Video or Playlist...">
     <!-- setting ViewModel as DataContext in CodeBehind to enable closing this Window via Command of the ViewModel-->
     <Grid>
         <Grid.ColumnDefinitions>
@@ -29,7 +27,7 @@
         <TextBox Grid.Column="0"
                  Grid.Row="0"
                  Grid.ColumnSpan="3"
-                 Text="{Binding SourceText, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, NotifyOnValidationError=True, Mode=TwoWay}" />
+                 Text="{Binding SourceText, UpdateSourceTrigger=PropertyChanged}" />
 
         <Button Grid.Column="2"
                 Grid.Row="1"
@@ -39,8 +37,9 @@
         <DataGrid Grid.Column="0"
                   Grid.Row="2"
                   Grid.ColumnSpan="3"
-                  ItemsSource="{Binding MediaItems}" Style="{StaticResource BaseDataGridStyle}">
+                  ItemsSource="{Binding MediaItems, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseDataGridStyle}">
             <DataGrid.Columns>
+                
                 <!-- Title -->
                 <DataGridTemplateColumn Header="Title" SortMemberPath="Title">
                     <DataGridTemplateColumn.CellTemplate>
@@ -61,7 +60,7 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Button Grid.Column="1" Grid.Row="3" Content="Add" Command="{Binding AddCommand}" Style="{StaticResource BaseButtonStyle}" />
-        <Button Grid.Column="2" Grid.Row="3" Content="Cancel"  Command="{Binding CancelCommand}" Style="{StaticResource BaseButtonStyle}"/>
+        <Button Grid.Column="1" Grid.Row="3" Command="{Binding AddCommand, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource AddButtonStyle}" />
+        <Button Grid.Column="2" Grid.Row="3" Command="{Binding CancelCommand, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CancelButtonStyle}"/>
     </Grid>
 </Window>

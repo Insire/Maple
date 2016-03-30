@@ -20,6 +20,8 @@ namespace InsireBot.ViewModel
             {
                 _mediaItems = value;
                 RaisePropertyChanged(nameof(MediaItems));
+                RaisePropertyChanged(nameof(CanAdd));
+                RaisePropertyChanged(nameof(CanCancel));
             }
         }
 
@@ -31,6 +33,8 @@ namespace InsireBot.ViewModel
             {
                 _playlists = value;
                 RaisePropertyChanged(nameof(Playlists));
+                RaisePropertyChanged(nameof(CanAdd));
+                RaisePropertyChanged(nameof(CanCancel));
             }
         }
 
@@ -42,6 +46,9 @@ namespace InsireBot.ViewModel
             {
                 _sourceText = value;
                 RaisePropertyChanged(nameof(SourceText));
+                RaisePropertyChanged(nameof(CanParse));
+                RaisePropertyChanged(nameof(CanAdd));
+                RaisePropertyChanged(nameof(CanCancel));
             }
         }
 
@@ -85,6 +92,7 @@ namespace InsireBot.ViewModel
         public NewMediaItemsViewModel()
         {
             MediaItems = new RangeObservableCollection<MediaItem>();
+            Playlists = new RangeObservableCollection<Playlist>();
             Mode = MediaItemParseMode.Multiple;
 
             ParseCommand = new RelayCommand(() =>
@@ -119,6 +127,8 @@ namespace InsireBot.ViewModel
 
                     default: throw new NotImplementedException();
                 }
+
+                CloseAction();
             }, CanAdd);
 
             CancelCommand = new RelayCommand(() =>
@@ -164,6 +174,7 @@ namespace InsireBot.ViewModel
 
                             var video = await youtube.GetVideo(id);
                             MediaItems.AddRange(video);
+                            RaisePropertyChanged(nameof(MediaItems));
 
                             continue;
                         }
@@ -174,6 +185,7 @@ namespace InsireBot.ViewModel
 
                             var playlists = await youtube.GetPlaylist(id);
                             Playlists.AddRange(playlists);
+                            RaisePropertyChanged(nameof(Playlists));
 
                             continue;
                         }
@@ -181,6 +193,10 @@ namespace InsireBot.ViewModel
                     finally
                     {
                         IsBusy = false;
+
+                        RaisePropertyChanged(nameof(CanParse));
+                        RaisePropertyChanged(nameof(CanAdd));
+                        RaisePropertyChanged(nameof(CanCancel));
                     }
                 }
 

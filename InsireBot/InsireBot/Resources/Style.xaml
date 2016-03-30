@@ -4,10 +4,25 @@
                     xmlns:local="clr-namespace:InsireBot.Resources">
 
     <!-- Remember: the order of these styles matters, since they depend on each other. If one references a style not yet declared, you get random RuntimeErrors-->
+    <Style x:Key="IconStyle" TargetType="{x:Type materialDesign:PackIcon}" >
+        <Setter Property="Width" Value="20" />
+        <Setter Property="Height" Value="20" />
+    </Style>
+
+    <Style x:Key="MiniIconStyle" TargetType="{x:Type materialDesign:PackIcon}" >
+        <Setter Property="Width" Value="8" />
+        <Setter Property="Height" Value="8" />
+    </Style>
 
     <Style x:Key="BaseButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="MinWidth" Value="60" />
         <Setter Property="Height" Value="33.75" />
+        <Setter Property="Margin" Value="2" />
+    </Style>
+
+    <Style x:Key="MiniButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="MinWidth" Value="30" />
+        <Setter Property="Height" Value="24" />
         <Setter Property="Margin" Value="2" />
     </Style>
 
@@ -33,12 +48,7 @@
         <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
         <!--<Setter Property="WindowStartupLocation" Value="CenterOwner" /> cant be set inside a resource dictionary since the property isnt a dependency property-->
     </Style>
-
-    <Style x:Key="IconStyle" TargetType="{x:Type materialDesign:PackIcon}" >
-        <Setter Property="Width" Value="20" />
-        <Setter Property="Height" Value="20" />
-    </Style>
-
+    
     <Style x:Key="ComputeButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
@@ -49,11 +59,51 @@
         </Setter>
     </Style>
 
+    <Style x:Key="CancelButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <materialDesign:PackIcon Kind="Close" Style="{Binding IconStyle}" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="AddButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
                     <materialDesign:PackIcon Kind="Plus" Style="{Binding IconStyle}" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MiniAddButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MiniButtonStyle}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <materialDesign:PackIcon Kind="Plus" Style="{Binding MiniIconStyle}" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MiniDeleteButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MiniButtonStyle}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <materialDesign:PackIcon Kind="Delete" Style="{Binding MiniIconStyle}" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DeleteButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <materialDesign:PackIcon Kind="Delete" Style="{Binding IconStyle}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -113,7 +163,7 @@
         <materialDesign:PackIcon Kind="SpeakerOff" Style="{Binding IconStyle}" />
     </ControlTemplate>
 
-    <ControlTemplate x:Key="RecIsMediaPlayerNotSilentTemplate">
+    <ControlTemplate x:Key="IsMediaPlayerNotSilentTemplate">
         <materialDesign:PackIcon Kind="Speaker" Style="{Binding IconStyle}" />
     </ControlTemplate>
 
@@ -129,11 +179,11 @@
     </Style>
 
     <ControlTemplate x:Key="IsRestrictedMediaItemTemplate">
-        <materialDesign:PackIcon Kind="BlockHelper" Style="{Binding IconStyle}" />
+        <materialDesign:PackIcon Kind="BlockHelper" Style="{StaticResource IconStyle}" />
     </ControlTemplate>
 
     <ControlTemplate x:Key="IsNotRestrictedMediaItemTemplate">
-        <materialDesign:PackIcon Kind="Check" Style="{Binding IconStyle}" />
+        <materialDesign:PackIcon Kind="Check" Style="{StaticResource IconStyle}" />
     </ControlTemplate>
 
     <Style x:Key="RestrictedMediaItemStyle" TargetType="{x:Type ContentControl}">
