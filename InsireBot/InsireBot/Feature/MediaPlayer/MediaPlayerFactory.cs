@@ -23,7 +23,7 @@ namespace InsireBot.MediaPlayer
                             "--ffmpeg-hw",
                             "--no-video"
                         },
-                        MediaPlayPlaybackType = MediaPlayPlaybackType.Play
+                        RepeatMode = RepeatMode.None,
 
                     };
                     return new DotNetPlayer(dataService, settings);

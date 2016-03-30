@@ -9,7 +9,7 @@
         IMediaItem Current { get; set; }
 
         AudioDevice AudioDevice { get; set; }
-        MediaPlayPlaybackType MediaPlayPlaybackType { get; set; }
+        RepeatMode RepeatMode { get; set; }
         int Volume { get; set; }
         bool Silent { get; set; }
 

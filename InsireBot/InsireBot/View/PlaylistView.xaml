@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:InsireBot"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -18,7 +19,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         
-        <Grid Grid.Column="0" Grid.Row="0" Panel.ZIndex="2">
+        <Grid Grid.Column="0" Grid.Row="0" Panel.ZIndex="2" Margin="20,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -27,11 +28,21 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
-                <Button  Command="{Binding NewCommand}" Style="{StaticResource MiniAddButtonStyle}"/>
-                <Button  Command="{Binding ClearCommand}" Style="{StaticResource MiniDeleteButtonStyle}"/>
-            </StackPanel>
+            <materialDesign:PopupBox Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
+                                     Grid.Column="1" Grid.Row="1" 
+                                         PlacementMode="LeftAndAlignMiddles"
+                                         ToolTipService.Placement="Right"
+                                         ToolTip="something, something about add and removing items">
+                <materialDesign:PopupBox.ToggleCheckedContent>
+                    <materialDesign:PackIcon Kind="FormatListBulleted" Width="24" Height="24" />
+                </materialDesign:PopupBox.ToggleCheckedContent>
+                <StackPanel>
+                    <Button  Command="{Binding NewCommand}" Style="{StaticResource MiniAddButtonStyle}" ToolTip="New"/>
+                    <Button  Command="{Binding ClearCommand}" Style="{StaticResource MiniDeleteButtonStyle}" ToolTip="Clear"/>
+                </StackPanel>
+            </materialDesign:PopupBox>
         </Grid>
+        
         <DataGrid Panel.ZIndex="1" Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Items}" Style="{StaticResource BaseDataGridStyle}">
             <DataGrid.Columns>
                 

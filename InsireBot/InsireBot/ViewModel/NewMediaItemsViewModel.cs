@@ -20,8 +20,6 @@ namespace InsireBot.ViewModel
             {
                 _mediaItems = value;
                 RaisePropertyChanged(nameof(MediaItems));
-                RaisePropertyChanged(nameof(CanAdd));
-                RaisePropertyChanged(nameof(CanCancel));
             }
         }
 
@@ -33,8 +31,6 @@ namespace InsireBot.ViewModel
             {
                 _playlists = value;
                 RaisePropertyChanged(nameof(Playlists));
-                RaisePropertyChanged(nameof(CanAdd));
-                RaisePropertyChanged(nameof(CanCancel));
             }
         }
 
@@ -70,7 +66,12 @@ namespace InsireBot.ViewModel
             private set
             {
                 _isBusy = value;
+                RaisePropertyChanged(nameof(MediaItems));
+                RaisePropertyChanged(nameof(Playlists));
                 RaisePropertyChanged(nameof(IsBusy));
+                RaisePropertyChanged(nameof(CanParse));
+                RaisePropertyChanged(nameof(CanAdd));
+                RaisePropertyChanged(nameof(CanCancel));
             }
         }
 
@@ -174,7 +175,6 @@ namespace InsireBot.ViewModel
 
                             var video = await youtube.GetVideo(id);
                             MediaItems.AddRange(video);
-                            RaisePropertyChanged(nameof(MediaItems));
 
                             continue;
                         }
@@ -185,7 +185,6 @@ namespace InsireBot.ViewModel
 
                             var playlists = await youtube.GetPlaylist(id);
                             Playlists.AddRange(playlists);
-                            RaisePropertyChanged(nameof(Playlists));
 
                             continue;
                         }
@@ -194,9 +193,9 @@ namespace InsireBot.ViewModel
                     {
                         IsBusy = false;
 
-                        RaisePropertyChanged(nameof(CanParse));
-                        RaisePropertyChanged(nameof(CanAdd));
-                        RaisePropertyChanged(nameof(CanCancel));
+                        // WPF doesn't update command bound controls unless it has a reason to. Clicking on the GUI causes WPF to refresh so the update then works.
+                        //You can manually cause a refresh of any command bound controls by calling
+                        CommandManager.InvalidateRequerySuggested();
                     }
                 }
 

@@ -9,6 +9,6 @@ namespace InsireBot.MediaPlayer
         public string FileName { get; set; }
         public DirectoryInfo VlcLibDirectory { get; set; }
         public string[] Options { get; set; }
-        public MediaPlayPlaybackType MediaPlayPlaybackType { get; set; }
+        public RepeatMode RepeatMode { get; set; }
     }
 }

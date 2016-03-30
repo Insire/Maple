@@ -35,16 +35,30 @@ namespace InsireBot.MediaPlayer
             }
         }
 
-        private MediaPlayPlaybackType _mediaPlayPlaybackType;
-        public MediaPlayPlaybackType MediaPlayPlaybackType
+        private RepeatMode _repeatMode;
+        public RepeatMode RepeatMode
         {
-            get { return _mediaPlayPlaybackType; }
+            get { return _repeatMode; }
             set
             {
-                if (_mediaPlayPlaybackType != value)
+                if (_repeatMode != value)
                 {
-                    _mediaPlayPlaybackType = value;
-                    RaisePropertyChanged(nameof(MediaPlayPlaybackType));
+                    _repeatMode = value;
+                    RaisePropertyChanged(nameof(RepeatMode));
+                }
+            }
+        }
+
+        private bool _shuffle;
+        public bool Shuffle
+        {
+            get { return _shuffle; }
+            set
+            {
+                if (_shuffle != value)
+                {
+                    _shuffle = value;
+                    RaisePropertyChanged(nameof(Shuffle));
                 }
             }
         }
@@ -52,7 +66,7 @@ namespace InsireBot.MediaPlayer
         public BasePlayer(IDataService dataService) : base(dataService)
         {
             AudioDevices = new RangeObservableCollection<AudioDevice>();
-            MediaPlayPlaybackType = MediaPlayPlaybackType.Play;
+            RepeatMode = RepeatMode.None;
 
             if (IsInDesignMode)
             {
