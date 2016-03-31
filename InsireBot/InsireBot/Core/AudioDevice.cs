@@ -2,8 +2,19 @@
 
 namespace InsireBot
 {
-    public class AudioDevice : ObservableObject
+    public class AudioDevice : ObservableObject, IIsSelected
     {
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
+                RaisePropertyChanged(nameof(IsSelected));
+            }
+        }
+
         /// <summary>
         /// Product name in a null-terminated string 
         /// </summary>
@@ -88,6 +99,5 @@ namespace InsireBot
         }
 
         public object Value { get; private set; }
-
     }
 }

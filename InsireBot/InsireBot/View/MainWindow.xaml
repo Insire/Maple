@@ -3,19 +3,73 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:InsireBot"
         mc:Ignorable="d"
-        Title="InsireBot V2" 
+
         Style="{StaticResource BaseWindowStyle}">
-    <Grid Margin="10">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <local:PlaylistView Grid.Row="0" Grid.Column="0"/>
-        <local:MediaPlayerView Grid.Row="1" Grid.Column="0"/>
-    </Grid>
+
+    <materialDesign:DialogHost Identifier="RootDialog">
+        <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <DockPanel MinWidth="212">
+                    <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" 
+                                  DockPanel.Dock="Top"
+                                  HorizontalAlignment="Right" Margin="16"
+                                  IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
+                    <ListBox x:Name="DemoItemsListBox" Margin="0 16 0 16" SelectedIndex="0"                         
+                             PreviewMouseLeftButtonUp="UIElement_OnPreviewMouseLeftButtonUp">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="domain:DemoItem">
+                                <TextBlock Text="{Binding Name}" Margin="32 0 32 0" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+
+
+                    </ListBox>
+                </DockPanel>
+            </materialDesign:DrawerHost.LeftDrawerContent>
+            <DockPanel>
+                <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                          Mode="PrimaryMid" DockPanel.Dock="Top">
+                    <DockPanel>
+                        <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" IsChecked="False"
+                                      x:Name="MenuToggleButton"/>
+                        <materialDesign:PopupBox DockPanel.Dock="Right" PlacementMode="BottomAndAlignRightEdges" StaysOpen="True">
+                            <StackPanel>
+                                <Button Content="Hello World" />
+                                <Button Content="Nice Popup" />
+                                <Button Content="Goodbye" />
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Lorem ipsum dolor sit amet</TextBlock>
+                    </DockPanel>
+                </materialDesign:ColorZone>
+
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="70px"/>
+                    </Grid.RowDefinitions>
+
+                    <local:PlaylistView Grid.Row="0" Grid.Column="0"/>
+
+                    <local:MediaPlayerView Grid.Row="1" Grid.Column="0"/>
+                </Grid>
+
+
+                <!--<ContentControl Margin="16" Content="{Binding ElementName=DemoItemsListBox, Path=SelectedItem.Content}" />-->
+            </DockPanel>
+        </materialDesign:DrawerHost>
+    </materialDesign:DialogHost>
+
+
+
+
+
+
+
 </Window>

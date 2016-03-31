@@ -6,7 +6,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 
 namespace InsireBot
 {
-    public class BotViewModelBase<T> : ViewModelBase
+    public class BotViewModelBase<T> : ViewModelBase where T:IIsSelected
     {
         protected readonly IDataService _dataService;
 

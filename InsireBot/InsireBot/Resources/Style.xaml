@@ -4,7 +4,7 @@
                     xmlns:local="clr-namespace:InsireBot.Resources">
 
     <!-- Remember: the order of these styles matters, since they depend on each other. If one references a style not yet declared, you get random RuntimeErrors-->
-    
+
     <!-- Icon Styles -->
     <Style x:Key="BigIconStyle" TargetType="{x:Type materialDesign:PackIcon}" >
         <Setter Property="Width" Value="30" />
@@ -21,6 +21,11 @@
         <Setter Property="Height" Value="12" />
     </Style>
 
+    <!-- DataGridRow Styles-->
+    <Style x:Key="BaseDataGridRowStyle" TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource {x:Type DataGridRow}}">
+        <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+    </Style>
+
     <!-- DataGrid Styles -->
     <Style x:Key="BaseDataGridStyle" TargetType="{x:Type DataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}">
         <Setter Property="AutoGenerateColumns" Value="False" />
@@ -30,6 +35,7 @@
         <Setter Property="CanUserResizeColumns" Value="True" />
         <Setter Property="CanUserResizeRows" Value="False" />
         <Setter Property="CanUserSortColumns" Value="True" />
+        <Setter Property="RowStyle" Value="{StaticResource BaseDataGridRowStyle}" />
     </Style>
 
     <!-- Window Styles -->
@@ -43,6 +49,8 @@
         <Setter Property="TextElement.Foreground" Value="{DynamicResource MaterialDesignBody}" />
         <Setter Property="TextElement.FontWeight" Value="Regular" />
         <Setter Property="TextElement.FontSize" Value="13" />
+        <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
+        <Setter Property="WindowStyle" Value="SingleBorderWindow" />
     </Style>
 
     <Style x:Key="BaseDialogWindowStyle" TargetType="{x:Type Window}" BasedOn="{StaticResource BaseWindowStyle}">

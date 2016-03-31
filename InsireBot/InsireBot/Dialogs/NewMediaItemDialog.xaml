@@ -40,6 +40,14 @@
                   ItemsSource="{Binding MediaItems, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseDataGridStyle}">
             <DataGrid.Columns>
                 
+                <!-- IsSelected -->
+                <DataGridCheckBoxColumn SortMemberPath="IsSelected">
+                    <DataGridCheckBoxColumn.Header>
+                        <Border Background="Transparent" Padding="6 0 6 0" HorizontalAlignment="Center">
+                            <CheckBox IsChecked="{Binding AreAllItemsSelected}" DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext}"/>
+                        </Border>
+                    </DataGridCheckBoxColumn.Header>
+                </DataGridCheckBoxColumn>
                 <!-- Title -->
                 <DataGridTemplateColumn Header="Title" SortMemberPath="Title">
                     <DataGridTemplateColumn.CellTemplate>
@@ -54,6 +62,15 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Label Content="{Binding Duration, StringFormat={}{0:c}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Restricted -->
+                <DataGridTemplateColumn Header="Restriction" SortMemberPath="IsRestricted">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ContentControl Content="{Binding IsRestricted}" Style="{StaticResource RestrictedMediaItemStyle}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

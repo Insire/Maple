@@ -34,6 +34,17 @@ namespace InsireBot.ViewModel
             }
         }
 
+        private bool _areAllItemsSelected;
+        public bool AreAllItemsSelected
+        {
+            get { return _areAllItemsSelected; }
+            set
+            {
+                _areAllItemsSelected = value;
+                RaisePropertyChanged(nameof(AreAllItemsSelected));
+            }
+        }
+
         private string _sourceText;
         public string SourceText
         {
@@ -116,8 +127,15 @@ namespace InsireBot.ViewModel
                 switch (Mode)
                 {
                     case MediaItemParseMode.Multiple:
-                        foreach (var item in MediaItems)
-                            Messenger.Default.Send(item);
+                        var items = MediaItems.Where(p => p.IsSelected && !p.IsRestricted);
+                        if (items.Any())
+                        {
+                            foreach (var item in MediaItems)
+                                Messenger.Default.Send(item);
+                        }
+                        else
+                            foreach (var item in MediaItems)
+                                Messenger.Default.Send(item);
 
                         break;
                     case MediaItemParseMode.Playlist:
@@ -200,6 +218,26 @@ namespace InsireBot.ViewModel
                 }
 
                 rx = rx.NextMatch();
+            }
+        }
+
+        private void UpdateSelectedItems()
+        {
+            switch(Mode)
+            {
+                case MediaItemParseMode.Multiple:
+                    if (AreAllItemsSelected)
+                        MediaItems.All(p => p.IsSelected = true);
+                    else
+                        MediaItems.All(p => p.IsSelected = false);
+                    break;
+
+                case MediaItemParseMode.Playlist:
+                    if (AreAllItemsSelected)
+                        Playlists.All(p => p.IsSelected = true);
+                    else
+                        Playlists.All(p => p.IsSelected = false);
+                    break;
             }
         }
     }

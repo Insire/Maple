@@ -19,7 +19,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         
-        <Grid Grid.Column="0" Grid.Row="0" Panel.ZIndex="2" Margin="20,0">
+        <!--<Grid Grid.Column="0" Grid.Row="0" Panel.ZIndex="2" Margin="20,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -28,11 +28,12 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <materialDesign:PopupBox Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
-                                     Grid.Column="1" Grid.Row="1" 
-                                         PlacementMode="LeftAndAlignMiddles"
-                                         ToolTipService.Placement="Right"
-                                         ToolTip="something, something about add and removing items">
+            <materialDesign:PopupBox Style="{StaticResource MaterialDesignMultiFloatingActionAccentPopupBox}" Margin="0,0,0,-20" Panel.ZIndex="2"
+                                     Grid.Column="1" 
+                                     Grid.Row="1" 
+                                     PlacementMode="LeftAndAlignMiddles"
+                                     ToolTipService.Placement="Right"
+                                     ToolTip="something, something about add and removing items">
                 <materialDesign:PopupBox.ToggleCheckedContent>
                     <materialDesign:PackIcon Kind="FormatListBulleted" Width="24" Height="24" />
                 </materialDesign:PopupBox.ToggleCheckedContent>
@@ -41,7 +42,7 @@
                     <Button  Command="{Binding ClearCommand}" Style="{StaticResource MiniDeleteButtonStyle}" ToolTip="Clear"/>
                 </StackPanel>
             </materialDesign:PopupBox>
-        </Grid>
+        </Grid>-->
         
         <DataGrid Panel.ZIndex="1" Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Items}" Style="{StaticResource BaseDataGridStyle}">
             <DataGrid.Columns>

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace InsireBot
 {
-    public class RangeObservableCollection<T> : ObservableCollection<T>
+    public class RangeObservableCollection<T> : ObservableCollection<T>, INotifyPropertyChanged where T : IIsSelected
     {
         private bool _suppressNotification = false;
 

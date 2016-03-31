@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GalaSoft.MvvmLight;
 
 namespace InsireBot.MediaPlayer
 {
-    public class Playlist : ObservableObject
+    public class Playlist : ObservableObject, IIsSelected
     {
         private RangeObservableCollection<MediaItem> _items;
         public RangeObservableCollection<MediaItem> Items
@@ -19,17 +20,27 @@ namespace InsireBot.MediaPlayer
             }
         }
 
+
+
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
+                RaisePropertyChanged(nameof(IsSelected));
+            }
+        }
+
         private string _title;
         public string Title
         {
             get { return _title; }
             private set
             {
-                if (_title != value)
-                {
-                    _title = value;
-                    RaisePropertyChanged(nameof(Title));
-                }
+                _title = value;
+                RaisePropertyChanged(nameof(Title));
             }
         }
 
@@ -39,13 +50,12 @@ namespace InsireBot.MediaPlayer
             get { return _id; }
             private set
             {
-                if (_id != value)
-                {
-                    _id = value;
-                    RaisePropertyChanged(nameof(ID));
-                }
+                _id = value;
+                RaisePropertyChanged(nameof(ID));
             }
         }
+
+
 
         public Playlist(string title, string id)
         {
@@ -82,5 +92,7 @@ namespace InsireBot.MediaPlayer
 
             RaisePropertyChanged(nameof(Items));
         }
+
+
     }
 }

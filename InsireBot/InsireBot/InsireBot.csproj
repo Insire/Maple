@@ -154,6 +154,7 @@
     <Compile Include="Core\BotViewModelBase.cs" />
     <Compile Include="Core\DesignTimeDataService.cs" />
     <Compile Include="Core\Interfaces\IDataService.cs" />
+    <Compile Include="Core\Interfaces\IIsSelected.cs" />
     <Compile Include="Core\Interfaces\ISettings.cs" />
     <Compile Include="Core\ObjectSerializer.cs" />
     <Compile Include="Core\RangeObservableCollection.cs" />
@@ -171,7 +172,7 @@
     <Compile Include="Feature\MediaPlayer\Enums\MediaItemAction.cs" />
     <Compile Include="Feature\MediaPlayer\MediaItemContract.cs" />
     <Compile Include="Feature\MediaPlayer\MediaItemFactory.cs" />
-    <Compile Include="Feature\MediaPlayer\MediaItems.cs" />
+    <Compile Include="Feature\MediaPlayer\Playlist.cs" />
     <Compile Include="Feature\MediaPlayer\MediaPlayerFactory.cs" />
     <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayer.cs" />
     <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayerException.cs" />
@@ -188,6 +189,9 @@
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\PlaylistView.xaml.cs">
       <DependentUpon>PlaylistView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PlayModeView.xaml.cs">
+      <DependentUpon>PlayModeView.xaml</DependentUpon>
     </Compile>
     <Page Include="Dialogs\NewMediaItemDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -214,6 +218,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\PlaylistView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PlayModeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

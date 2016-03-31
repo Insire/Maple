@@ -9,9 +9,22 @@
              xmlns:local="clr-namespace:InsireBot"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <materialDesign:ColorZone Mode="PrimaryDark">
-        <Grid  DataContext="{Binding Source={StaticResource Locator}, Path=MediaPlayerViewModel.MediaPlayer}">
+
+    <Grid  DataContext="{Binding Source={StaticResource Locator}, Path=MediaPlayerViewModel.MediaPlayer}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <!-- Previous, Play, Next-->
+        <Grid Grid.Row="0" Grid.Column="1" Margin="10,5">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -20,32 +33,20 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <!-- Previous, Play, Next-->
-            <Grid Grid.Row="0" Grid.Column="1" Margin="10,5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                </Grid.RowDefinitions>
+            <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource PreviousButtonStyle}" Margin="0,0,10,0"/>
+            <Button Grid.Row="0" Grid.Column="1" Style="{StaticResource PlayButtonStyle}" />
+            <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource NextButtonStyle}" Margin="10,0,0,0"/>
+        </Grid>
 
-                <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource PreviousButtonStyle}"/>
-                <Button Grid.Row="0" Grid.Column="1" Style="{StaticResource PlayButtonStyle}" />
-                <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource NextButtonStyle}"/>
-            </Grid>
-
-            <Grid Grid.Row="0" Grid.Column="0" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <materialDesign:PackIcon Kind="VolumeLow" Style="{StaticResource IconStyle}" Grid.Column="0" VerticalAlignment="Center" />
-                <Slider Grid.Column="1" 
+        <!-- Volume Slider -->
+        <Grid Grid.Row="0" Grid.Column="0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <materialDesign:PackIcon Kind="VolumeLow" Style="{StaticResource IconStyle}" Grid.Column="0" VerticalAlignment="Center" />
+            <Slider Grid.Column="1" 
                         VerticalAlignment="Center"
                         Value="{Binding Volume}"
                         Maximum="{Binding VolumeMax}"
@@ -53,31 +54,51 @@
                         TickFrequency="1" 
                         TickPlacement="None" 
                         AutoToolTipPlacement="BottomRight" />
-                <materialDesign:PackIcon Kind="VolumeMedium" Style="{StaticResource BigIconStyle}" Grid.Column="2" VerticalAlignment="Center" />
-            </Grid>
+            <materialDesign:PackIcon Kind="VolumeMedium" Style="{StaticResource BigIconStyle}" Grid.Column="2" VerticalAlignment="Center" />
+        </Grid>
 
-            <!-- Volume Slider, PlayMode Control-->
-            <Grid Grid.Row="0" Grid.Column="3" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                </Grid.RowDefinitions>
+        <!-- PlayMode -->
+        <Grid Grid.Row="0" Grid.Column="3" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-                <ComboBox Grid.Row="0" 
+            <local:PlayModeView Grid.Column="0"/>
+            
+            <!--<ComboBox Grid.Row="0" 
                       Grid.Column="1"
                       MinWidth="150"
                       Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                       ItemsSource="{Binding Source={local:EnumBindingSource {x:Type mediaPlayer:RepeatMode}}}" 
                       SelectedValue="{Binding RepeatMode}"
-                      materialDesign:TextFieldAssist.Hint="ReplayMode"/>
+                      materialDesign:TextFieldAssist.Hint="ReplayMode"/>-->
 
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <materialDesign:PopupBox Style="{StaticResource MaterialDesignMultiFloatingActionAccentPopupBox}" Margin="0,-20,0,0" Panel.ZIndex="2"
+                                     Grid.Column="1" 
+                                     Grid.Row="0" 
+                                     PlacementMode="LeftAndAlignMiddles"
+                                     ToolTipService.Placement="Right"
+                                     ToolTip="something, something about add and removing items">
+                    <materialDesign:PopupBox.ToggleCheckedContent>
+                        <materialDesign:PackIcon Kind="FormatListBulleted" Width="24" Height="24" />
+                    </materialDesign:PopupBox.ToggleCheckedContent>
+                    <StackPanel>
+                        <Button  Command="{Binding NewCommand}" Style="{StaticResource MiniAddButtonStyle}" ToolTip="New"/>
+                        <Button  Command="{Binding ClearCommand}" Style="{StaticResource MiniDeleteButtonStyle}" ToolTip="Clear"/>
+                    </StackPanel>
+                </materialDesign:PopupBox>
             </Grid>
-
-
         </Grid>
-    </materialDesign:ColorZone>
+    </Grid>
 </UserControl>

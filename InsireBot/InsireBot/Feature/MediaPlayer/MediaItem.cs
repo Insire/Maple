@@ -75,6 +75,20 @@ namespace InsireBot.MediaPlayer
             }
         }
 
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                if (_isSelected != value)
+                {
+                    _isSelected = value;
+                    RaisePropertyChanged(nameof(IsSelected));
+                }
+            }
+        }
+
         private MediaItem()
         {
             ID = Guid.NewGuid();
