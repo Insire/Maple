@@ -9,19 +9,122 @@
              xmlns:local="clr-namespace:InsireBot"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
 
-    <Grid  DataContext="{Binding Source={StaticResource Locator}, Path=MediaPlayerViewModel.MediaPlayer}">
+            
+ 
+        
+    </UserControl.Resources>
+    <Grid  DataContext="{Binding Source={StaticResource Locator}, Path=MediaPlayerViewModel}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-        </Grid.RowDefinitions>
+
+        <!-- Playlist -->
+        <!--<materialDesign:Card  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
+            <StackPanel Orientation="Vertical">-->
+
+            <ScrollViewer Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
+            <DataGrid ItemsSource="{Binding Items}" Style="{StaticResource BaseDataGridStyle}" local:DataGridBehavior.DoubleClickCommand="{Binding NewCommand}">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <ContextMenu.Items>
+                            <MenuItem Command="{Binding NewCommand}" Header="Add">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon Kind="PlaylistPlus" Style="{StaticResource IconStyle}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Command="{Binding RemoveCommand}" Header="Remove">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon Kind="PlaylistMinus" Style="{StaticResource IconStyle}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Command="{Binding ClearCommand}" Header="Clear">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon Kind="PlaylistRemove" Style="{StaticResource IconStyle}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu.Items>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+
+                    <!-- Title -->
+                    <DataGridTemplateColumn Header="Title" SortMemberPath="Title">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding Title}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- Duration -->
+                    <DataGridTemplateColumn Header="Duration" SortMemberPath="Duration">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding Duration, StringFormat={}{0:c}}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- Location -->
+                    <DataGridTextColumn Header="Location" SortMemberPath="Location" Binding="{Binding Location}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+
+                    <!-- Restricted -->
+                    <DataGridTemplateColumn Header="Restriction" SortMemberPath="IsRestricted">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ContentControl Content="{Binding IsRestricted}" Style="{StaticResource RestrictedMediaItemStyle}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
+
+        <!--<Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:PopupBox Style="{StaticResource BaseDataGridButtonStyle}" Grid.Row="1" Grid.Column="1">
+                        <materialDesign:PopupBox.ToggleCheckedContent>
+                            <materialDesign:PackIcon Kind="FormatListBulleted" Width="24" Height="24" />
+                        </materialDesign:PopupBox.ToggleCheckedContent>
+                        <StackPanel>
+                            <Button Command="{Binding NewCommand}" Style="{StaticResource MiniAddButtonStyle}" ToolTip="New"/>
+                            <Button Command="{Binding ClearCommand}" Style="{StaticResource MiniDeleteButtonStyle}" ToolTip="Clear"/>
+                        </StackPanel>
+                    </materialDesign:PopupBox>
+                </Grid>-->
+
+
+        <!--</StackPanel>
+        </materialDesign:Card>-->
 
         <!-- Previous, Play, Next-->
-        <Grid Grid.Row="0" Grid.Column="1" Margin="10,5">
+        <Grid Grid.Row="1" Grid.Column="1" Margin="10,5" DataContext="{Binding MediaPlayer}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -39,7 +142,7 @@
         </Grid>
 
         <!-- Volume Slider -->
-        <Grid Grid.Row="0" Grid.Column="0" >
+        <Grid Grid.Row="1" Grid.Column="0" DataContext="{Binding MediaPlayer}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -58,14 +161,27 @@
         </Grid>
 
         <!-- PlayMode -->
-        <Grid Grid.Row="0" Grid.Column="3" >
+        <Grid Grid.Row="1" Grid.Column="3"  DataContext="{Binding MediaPlayer}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <local:PlayModeView Grid.Column="0"/>
-            
+
+            <!--<materialDesign:PopupBox Style="{StaticResource MaterialDesignMultiFloatingActionAccentPopupBox}" Margin="0,0,0,-20" Panel.ZIndex="2"
+                                     Grid.Column="0"
+                                     PlacementMode="LeftAndAlignMiddles"
+                                     ToolTipService.Placement="Right"
+                                     ToolTip="something, something about add and removing items">
+                <materialDesign:PopupBox.ToggleCheckedContent>
+                    <materialDesign:PackIcon Kind="FormatListBulleted" Width="24" Height="24" />
+                </materialDesign:PopupBox.ToggleCheckedContent>
+                <StackPanel>
+                    <local:PlayModeView />
+                </StackPanel>
+            </materialDesign:PopupBox>-->
+
             <!--<ComboBox Grid.Row="0" 
                       Grid.Column="1"
                       MinWidth="150"
@@ -74,31 +190,7 @@
                       SelectedValue="{Binding RepeatMode}"
                       materialDesign:TextFieldAssist.Hint="ReplayMode"/>-->
 
-            <Grid Grid.Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                
-                <materialDesign:PopupBox Style="{StaticResource MaterialDesignMultiFloatingActionAccentPopupBox}" Margin="0,-20,0,0" Panel.ZIndex="2"
-                                     Grid.Column="1" 
-                                     Grid.Row="0" 
-                                     PlacementMode="LeftAndAlignMiddles"
-                                     ToolTipService.Placement="Right"
-                                     ToolTip="something, something about add and removing items">
-                    <materialDesign:PopupBox.ToggleCheckedContent>
-                        <materialDesign:PackIcon Kind="FormatListBulleted" Width="24" Height="24" />
-                    </materialDesign:PopupBox.ToggleCheckedContent>
-                    <StackPanel>
-                        <Button  Command="{Binding NewCommand}" Style="{StaticResource MiniAddButtonStyle}" ToolTip="New"/>
-                        <Button  Command="{Binding ClearCommand}" Style="{StaticResource MiniDeleteButtonStyle}" ToolTip="Clear"/>
-                    </StackPanel>
-                </materialDesign:PopupBox>
-            </Grid>
+
         </Grid>
     </Grid>
 </UserControl>

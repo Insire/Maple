@@ -30,7 +30,12 @@ namespace InsireBot.ViewModel
                 Items.Add(item);
 
                 item = new MediaItem("Armin van Buuren feat. Sophie - Virtual Friend", @"https://www.youtube.com/watch?v=0ypeOKp0x3k", new TimeSpan(0, 7, 12));
-                Items.Add(item);
+                Items.Add(new MediaItem("1","11"));
+                Items.Add(new MediaItem("2", "22"));
+                Items.Add(new MediaItem("3", "33"));
+                Items.Add(new MediaItem("4", "44"));
+                Items.Add(new MediaItem("5", "55"));
+                Items.Add(new MediaItem("6", "66"));
 
                 Messenger.Default.Register<MediaItem>(this, (mediaItem) =>
                  {

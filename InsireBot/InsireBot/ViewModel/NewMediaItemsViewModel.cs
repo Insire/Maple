@@ -97,9 +97,24 @@ namespace InsireBot.ViewModel
             }
         }
 
+        public IEnumerable<T> SelectedItems
+        {
+            get { return Items.Where(p => p.IsSelected); }
+        }
+
+        public T this[int index]
+        {
+            get
+            {
+                return Items[index];
+            }
+        }
+
         public ICommand ParseCommand { get; }
         public ICommand AddCommand { get; }
         public ICommand CancelCommand { get; }
+        public ICommand ClearCommand { get; }
+        public ICommand RemoveCommand { get; }
 
         public NewMediaItemsViewModel()
         {
@@ -154,6 +169,9 @@ namespace InsireBot.ViewModel
             {
                 CloseAction();
             }, CanCancel);
+
+            RemoveCommand = new RelayCommand(() => SelectedItems.ToList().ForEach(p => Items.Remove(p)), CanRemove);
+            ClearCommand = new RelayCommand(() => Items.Clear(), CanClear);
         }
 
         private bool CanAdd()
@@ -169,6 +187,21 @@ namespace InsireBot.ViewModel
         private bool CanCancel()
         {
             return !IsBusy && CloseAction != null;
+        }
+
+        public bool CanRemove()
+        {
+            return AreItemsSelected();
+        }
+
+        private bool CanClear()
+        {
+            return Items?.Count > 0;
+        }
+
+        private bool AreItemsSelected()
+        {
+            return Items.Any(p => p.IsSelected);
         }
 
         private async void Parse(Uri url)

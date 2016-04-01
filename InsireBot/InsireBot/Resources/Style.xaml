@@ -21,6 +21,10 @@
         <Setter Property="Height" Value="12" />
     </Style>
 
+    <Style x:Key="BaseLayoutStyle" TargetType="Control">
+        <Setter Property="Margin" Value="10" />
+    </Style>
+    
     <!-- DataGridRow Styles-->
     <Style x:Key="BaseDataGridRowStyle" TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource {x:Type DataGridRow}}">
         <Setter Property="IsSelected" Value="{Binding IsSelected}" />
@@ -64,6 +68,13 @@
         <Setter Property="MinWidth" Value="60" />
         <Setter Property="Height" Value="33.75" />
         <Setter Property="Margin" Value="2" />
+    </Style>
+
+    <Style x:Key="BaseDataGridButtonStyle" TargetType="{x:Type materialDesign:PopupBox}" BasedOn="{StaticResource MaterialDesignMultiFloatingActionAccentPopupBox}">
+        <Setter Property="Margin" Value="0,-30,10,0"/>
+        <Setter Property="Panel.ZIndex" Value="2" />
+        <Setter Property="PlacementMode" Value="LeftAndAlignMiddles" />
+        <Setter Property="ToolTipService.Placement" Value="Mouse" />
     </Style>
 
     <Style x:Key="ComputeButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">

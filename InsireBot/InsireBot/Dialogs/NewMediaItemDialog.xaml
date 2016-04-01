@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:InsireBot"
         mc:Ignorable="d"
         Style="{StaticResource BaseDialogWindowStyle}"
@@ -10,74 +11,110 @@
         DataContext="{Binding Source={StaticResource Locator}, Path=NewMediaItemsViewModel}"
         Title="Add a Video or Playlist...">
     <!-- setting ViewModel as DataContext in CodeBehind to enable closing this Window via Command of the ViewModel-->
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
+    <materialDesign:TransitioningContent>
+        <materialDesign:TransitioningContent.OpeningEffects>
+            <materialDesign:TransitionEffect Kind="FadeIn" />
+        </materialDesign:TransitioningContent.OpeningEffects>
 
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        <materialDesign:Card Style="{StaticResource BaseLayoutStyle}" VerticalAlignment="Stretch">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-        <TextBox Grid.Column="0"
-                 Grid.Row="0"
-                 Grid.ColumnSpan="3"
-                 Text="{Binding SourceText, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Grid.Column="0"
+                         Grid.Row="0"
+                         Grid.ColumnSpan="3"
+                         Text="{Binding SourceText, UpdateSourceTrigger=PropertyChanged}" />
 
-        <Button Grid.Column="2"
-                Grid.Row="1"
-                Style="{StaticResource ComputeButtonStyle}"
-                Command="{Binding ParseCommand}"/>
+                <Button Grid.Column="2"
+                        Grid.Row="1"
+                        Style="{StaticResource ComputeButtonStyle}"
+                        Command="{Binding ParseCommand}"/>
 
-        <DataGrid Grid.Column="0"
-                  Grid.Row="2"
-                  Grid.ColumnSpan="3"
-                  ItemsSource="{Binding MediaItems, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseDataGridStyle}">
-            <DataGrid.Columns>
-                
-                <!-- IsSelected -->
-                <DataGridCheckBoxColumn SortMemberPath="IsSelected">
-                    <DataGridCheckBoxColumn.Header>
-                        <Border Background="Transparent" Padding="6 0 6 0" HorizontalAlignment="Center">
-                            <CheckBox IsChecked="{Binding AreAllItemsSelected}" DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext}"/>
-                        </Border>
-                    </DataGridCheckBoxColumn.Header>
-                </DataGridCheckBoxColumn>
-                <!-- Title -->
-                <DataGridTemplateColumn Header="Title" SortMemberPath="Title">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Label Content="{Binding Title}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                <DataGrid ItemsSource="{Binding MediaItems, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseDataGridStyle}"
+                          Grid.Column="0"
+                          Grid.Row="2"
+                          Grid.ColumnSpan="3">
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding AddCommand}" Header="Add">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon Kind="PlaylistPlus" Style="{StaticResource IconStyle}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Command="{Binding RemoveCommand}" Header="Remove">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon Kind="PlaylistMinus" Style="{StaticResource IconStyle}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Command="{Binding ClearCommand}" Header="Clear">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon Kind="PlaylistRemove" Style="{StaticResource IconStyle}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
 
-                <!-- Duration -->
-                <DataGridTemplateColumn Header="Duration" SortMemberPath="Duration">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Label Content="{Binding Duration, StringFormat={}{0:c}}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                    <DataGrid.Columns>
+                        <!-- IsSelected -->
+                        <DataGridCheckBoxColumn SortMemberPath="IsSelected">
+                            <DataGridCheckBoxColumn.Header>
+                                <Border Background="Transparent" Padding="6 0 6 0" HorizontalAlignment="Center">
+                                    <CheckBox IsChecked="{Binding AreAllItemsSelected}" DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext}"/>
+                                </Border>
+                            </DataGridCheckBoxColumn.Header>
+                        </DataGridCheckBoxColumn>
 
-                <!-- Restricted -->
-                <DataGridTemplateColumn Header="Restriction" SortMemberPath="IsRestricted">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <ContentControl Content="{Binding IsRestricted}" Style="{StaticResource RestrictedMediaItemStyle}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                        <!-- Title -->
+                        <DataGridTemplateColumn Header="Title" SortMemberPath="Title">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Title}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
 
-        <Button Grid.Column="1" Grid.Row="3" Command="{Binding AddCommand, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource AddButtonStyle}" />
-        <Button Grid.Column="2" Grid.Row="3" Command="{Binding CancelCommand, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CancelButtonStyle}"/>
-    </Grid>
+                        <!-- Duration -->
+                        <DataGridTemplateColumn Header="Duration" SortMemberPath="Duration">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Duration, StringFormat={}{0:c}}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- Restricted -->
+                        <DataGridTemplateColumn Header="Restriction" SortMemberPath="IsRestricted">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl Content="{Binding IsRestricted}" Style="{StaticResource RestrictedMediaItemStyle}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <materialDesign:PopupBox Style="{StaticResource BaseDataGridButtonStyle}"
+                                         Grid.Column="1" 
+                                         Grid.Row="2">
+                    <materialDesign:PopupBox.ToggleCheckedContent>
+                        <materialDesign:PackIcon Kind="FormatListBulleted" Width="24" Height="24" />
+                    </materialDesign:PopupBox.ToggleCheckedContent>
+                    <StackPanel>
+                        <Button Command="{Binding AddCommand, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MiniAddButtonStyle}" />
+                        <Button Command="{Binding ClearCommand}" Style="{StaticResource MiniDeleteButtonStyle}" ToolTip="Clear"/>
+                    </StackPanel>
+                </materialDesign:PopupBox>
+                <!--<Button Grid.Column="2" Grid.Row="3" Command="{Binding CancelCommand, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CancelButtonStyle}"/>-->
+            </Grid>
+        </materialDesign:Card>
+    </materialDesign:TransitioningContent>
 </Window>

@@ -6,7 +6,6 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:InsireBot"
         mc:Ignorable="d"
-
         Style="{StaticResource BaseWindowStyle}">
 
     <materialDesign:DialogHost Identifier="RootDialog">
@@ -17,59 +16,46 @@
                                   DockPanel.Dock="Top"
                                   HorizontalAlignment="Right" Margin="16"
                                   IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
-                    <ListBox x:Name="DemoItemsListBox" Margin="0 16 0 16" SelectedIndex="0"                         
-                             PreviewMouseLeftButtonUp="UIElement_OnPreviewMouseLeftButtonUp">
+                    <ListBox x:Name="DemoItemsListBox" Margin="0 16 0 16" SelectedIndex="0" PreviewMouseLeftButtonUp="UIElement_OnPreviewMouseLeftButtonUp">
                         <ListBox.ItemTemplate>
-                            <DataTemplate DataType="domain:DemoItem">
+                            <DataTemplate DataType="DrawerItem">
                                 <TextBlock Text="{Binding Name}" Margin="32 0 32 0" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
+                        
+                        <local:DrawerItem Name="Home">
+                            <local:DrawerItem.Content>
+                                <local:MediaPlayerPage />
+                            </local:DrawerItem.Content>
+                        </local:DrawerItem>
 
-
+                        <local:DrawerItem Name="Options">
+                            <local:DrawerItem.Content>
+                                <local:OptionsPage />
+                            </local:DrawerItem.Content>
+                        </local:DrawerItem>
+                        
                     </ListBox>
                 </DockPanel>
             </materialDesign:DrawerHost.LeftDrawerContent>
             <DockPanel>
-                <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                                          Mode="PrimaryMid" DockPanel.Dock="Top">
+                <materialDesign:ColorZone Padding="16" 
+                                          materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                          Mode="PrimaryMid" 
+                                          DockPanel.Dock="Top">
                     <DockPanel>
-                        <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" IsChecked="False"
+                        <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" 
+                                      IsChecked="False"
                                       x:Name="MenuToggleButton"/>
-                        <materialDesign:PopupBox DockPanel.Dock="Right" PlacementMode="BottomAndAlignRightEdges" StaysOpen="True">
-                            <StackPanel>
-                                <Button Content="Hello World" />
-                                <Button Content="Nice Popup" />
-                                <Button Content="Goodbye" />
-                            </StackPanel>
-                        </materialDesign:PopupBox>
+
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">Lorem ipsum dolor sit amet</TextBlock>
                     </DockPanel>
                 </materialDesign:ColorZone>
 
-                <Grid Margin="10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="70px"/>
-                    </Grid.RowDefinitions>
-
-                    <local:PlaylistView Grid.Row="0" Grid.Column="0"/>
-
-                    <local:MediaPlayerView Grid.Row="1" Grid.Column="0"/>
-                </Grid>
-
-
-                <!--<ContentControl Margin="16" Content="{Binding ElementName=DemoItemsListBox, Path=SelectedItem.Content}" />-->
+                <ContentControl Style="{StaticResource BaseLayoutStyle}" Content="{Binding ElementName=DemoItemsListBox, Path=SelectedItem.Content}" />
+                
             </DockPanel>
+
         </materialDesign:DrawerHost>
     </materialDesign:DialogHost>
-
-
-
-
-
-
-
 </Window>

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using GalaSoft.MvvmLight;
 
 namespace InsireBot.MediaPlayer
@@ -19,8 +18,6 @@ namespace InsireBot.MediaPlayer
                 }
             }
         }
-
-
 
         private bool _isSelected;
         public bool IsSelected
@@ -54,8 +51,6 @@ namespace InsireBot.MediaPlayer
                 RaisePropertyChanged(nameof(ID));
             }
         }
-
-
 
         public Playlist(string title, string id)
         {
@@ -92,7 +87,5 @@ namespace InsireBot.MediaPlayer
 
             RaisePropertyChanged(nameof(Items));
         }
-
-
     }
 }

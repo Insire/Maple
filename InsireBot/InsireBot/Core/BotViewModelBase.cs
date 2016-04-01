@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -6,7 +8,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 
 namespace InsireBot
 {
-    public class BotViewModelBase<T> : ViewModelBase where T:IIsSelected
+    public class BotViewModelBase<T> : ViewModelBase where T : IIsSelected
     {
         protected readonly IDataService _dataService;
 
@@ -59,6 +61,11 @@ namespace InsireBot
             get { return Items[SelectedIndex]; }
         }
 
+        public IEnumerable<T> SelectedItems
+        {
+            get { return Items.Where(p => p.IsSelected); }
+        }
+
         public T this[int index]
         {
             get
@@ -90,13 +97,13 @@ namespace InsireBot
 
             BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
 
-            RemoveCommand = new RelayCommand(() => Items.Remove(Items[SelectedIndex]), CanRemove);
+            RemoveCommand = new RelayCommand(() => SelectedItems.ToList().ForEach(p=>Items.Remove(p)), CanRemove);
             ClearCommand = new RelayCommand(() => Items.Clear(), CanClear);
         }
 
         public bool CanRemove()
         {
-            return IsItemSelected() && Items.Contains(SelectedItem);
+            return AreItemsSelected();
         }
 
         private bool CanClear()
@@ -104,9 +111,9 @@ namespace InsireBot
             return Items?.Count > 0;
         }
 
-        private bool IsItemSelected()
+        private bool AreItemsSelected()
         {
-            return -1 < SelectedIndex && SelectedIndex < Items.Count;
+            return Items.Any(p => p.IsSelected);
         }
     }
 }
