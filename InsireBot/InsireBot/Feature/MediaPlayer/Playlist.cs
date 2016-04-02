@@ -52,7 +52,14 @@ namespace InsireBot.MediaPlayer
             }
         }
 
-        public Playlist(string title, string id)
+        public Playlist()
+        {
+            Items = new RangeObservableCollection<MediaItem>();
+            Title = string.Empty;
+            ID = string.Empty;
+        }
+
+        public Playlist(string title, string id) : this()
         {
             Title = title;
             ID = id;

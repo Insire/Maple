@@ -9,7 +9,10 @@ using GalaSoft.MvvmLight.Messaging;
 
 namespace InsireBot.ViewModel
 {
-    public class NewMediaItemsViewModel : ViewModelBase
+    /// <summary>
+    ///  This ViewModel will take care of adding Items from the parsed data of NewMediaItemViewModel and NewPlaylistViewModel to the BusinessModels
+    /// </summary>
+    public class NewMediaItemsDialogViewModel : ViewModelBase
     {
         private NewPlaylistViewModel _newPlaylistViewModel;
         public NewPlaylistViewModel NewPlaylistViewModel
@@ -87,7 +90,7 @@ namespace InsireBot.ViewModel
         public ICommand ClearCommand { get; private set; }
         public ICommand RemoveCommand { get; private set; }
 
-        public NewMediaItemsViewModel()
+        public NewMediaItemsDialogViewModel()
         {
             Mode = MediaItemParseMode.MediaItem;
             NewMediaItemViewModel = new NewMediaItemViewModel();

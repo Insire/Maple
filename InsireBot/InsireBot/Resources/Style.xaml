@@ -24,7 +24,15 @@
     <Style x:Key="BaseLayoutStyle" TargetType="Control">
         <Setter Property="Margin" Value="10" />
     </Style>
-    
+
+    <Style x:Key="BaseRowDefinitionStyle" TargetType="{x:Type RowDefinition}">
+        <Setter Property="Height" Value="10" />
+    </Style>
+
+    <Style x:Key="BaseColumnDefinitionStyle" TargetType="{x:Type ColumnDefinition}">
+        <Setter Property="Width" Value="10" />
+    </Style>
+
     <!-- DataGridRow Styles-->
     <Style x:Key="BaseDataGridRowStyle" TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource {x:Type DataGridRow}}">
         <Setter Property="IsSelected" Value="{Binding IsSelected}" />
@@ -77,7 +85,7 @@
         <Setter Property="ToolTipService.Placement" Value="Mouse" />
     </Style>
 
-    <Style x:Key="ComputeButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+    <Style x:Key="ComputeButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>

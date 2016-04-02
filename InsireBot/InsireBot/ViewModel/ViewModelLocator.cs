@@ -28,28 +28,37 @@ namespace InsireBot.ViewModel
                 SimpleIoc.Default.Register<IDataService, RuntimeDataService>();
             }
 
-            SimpleIoc.Default.Register<NewMediaItemsViewModel>();
+            SimpleIoc.Default.Register<NewMediaItemsDialogViewModel>();
+            SimpleIoc.Default.Register<NewMediaItemViewModel>();
+            SimpleIoc.Default.Register<NewPlaylistViewModel>();
             SimpleIoc.Default.Register<MediaPlayerViewModel>();
         }
 
         public MediaPlayerViewModel MediaPlayerViewModel
         {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<MediaPlayerViewModel>();
-            }
+            get { return ServiceLocator.Current.GetInstance<MediaPlayerViewModel>(); }
         }
 
-        public NewMediaItemsViewModel NewMediaItemsViewModel
+        public NewMediaItemsDialogViewModel NewMediaItemsDialogViewModel
         {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<NewMediaItemsViewModel>();
-            }
+            get { return ServiceLocator.Current.GetInstance<NewMediaItemsDialogViewModel>(); }
+        }
+
+        public NewPlaylistViewModel NewPlaylistViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<NewPlaylistViewModel>(); }
+        }
+
+        public NewMediaItemViewModel NewMediaItemViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<NewMediaItemViewModel>(); }
         }
 
         public static void Cleanup()
         {
+            SimpleIoc.Default.Unregister<NewMediaItemsDialogViewModel>();
+            SimpleIoc.Default.Unregister<NewMediaItemViewModel>();
+            SimpleIoc.Default.Unregister<NewPlaylistViewModel>();
             SimpleIoc.Default.Unregister<MediaPlayerViewModel>();
         }
     }

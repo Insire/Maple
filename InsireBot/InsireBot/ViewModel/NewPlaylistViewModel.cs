@@ -5,6 +5,9 @@ using InsireBot.MediaPlayer;
 
 namespace InsireBot.ViewModel
 {
+    /// <summary>
+    ///  DataStore ViewModel, when creating new playlists from parsed data
+    /// </summary>
     public class NewPlaylistViewModel : ViewModelBase
     {
         private RangeObservableCollection<Playlist> _items;
@@ -15,6 +18,16 @@ namespace InsireBot.ViewModel
             {
                 _items = value;
                 RaisePropertyChanged(nameof(Items));
+            }
+        }
+
+        public bool AreAllItemsSelected
+        {
+            get { return Items.All(p => p.IsSelected); }
+            set
+            {
+                Items.ToList().ForEach(p => p.IsSelected = value);
+                RaisePropertyChanged(nameof(AreAllItemsSelected));
             }
         }
 
@@ -31,16 +44,6 @@ namespace InsireBot.ViewModel
             }
         }
 
-        public bool AreAllItemsSelected
-        {
-            get { return Items.All(p => p.IsSelected); }
-            set
-            {
-                Items.ToList().ForEach(p => p.IsSelected = value);
-                RaisePropertyChanged(nameof(AreAllItemsSelected));
-            }
-        }
-
         public IEnumerable<Playlist> SelectedItems
         {
             get { return Items.Where(p => p.IsSelected); }
@@ -54,6 +57,28 @@ namespace InsireBot.ViewModel
             }
         }
 
+        public NewPlaylistViewModel()
+        {
+            Items = new RangeObservableCollection<Playlist>();
+
+            if (IsInDesignMode)
+            {
+                var item = new Playlist("Music", "PL5LmATNaGcQxknuhgb_BkCKKIvcZro7iR");
+                Items.Add(item);
+
+                item = new Playlist("Test", "PL5LmATNaGcQxknuhgb_BkCKKIvcZro7iR");
+                Items.Add(item);
+            }
+            else
+            {
+                // Code runs "for real"
+                var item = new Playlist("Music", "PL5LmATNaGcQxknuhgb_BkCKKIvcZro7iR");
+                Items.Add(item);
+
+                item = new Playlist("Test", "PL5LmATNaGcQxknuhgb_BkCKKIvcZro7iR");
+                Items.Add(item);
+            }
+        }
         /// <summary>
         /// Can an Item be added to the Items Collection
         /// </summary>

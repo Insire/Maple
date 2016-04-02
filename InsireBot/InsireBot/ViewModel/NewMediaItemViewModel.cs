@@ -5,6 +5,9 @@ using InsireBot.MediaPlayer;
 
 namespace InsireBot.ViewModel
 {
+    /// <summary>
+    ///  DataStore ViewModel, when creating new playlist entries aka videos from parsed data
+    /// </summary>
     public class NewMediaItemViewModel : ViewModelBase
     {
         private RangeObservableCollection<MediaItem> _items;
@@ -15,6 +18,16 @@ namespace InsireBot.ViewModel
             {
                 _items = value;
                 RaisePropertyChanged(nameof(Items));
+            }
+        }
+
+        public bool AreAllItemsSelected
+        {
+            get { return Items.All(p => p.IsSelected); }
+            set
+            {
+                Items.ToList().ForEach(p => p.IsSelected = value);
+                RaisePropertyChanged(nameof(AreAllItemsSelected));
             }
         }
 
@@ -31,17 +44,6 @@ namespace InsireBot.ViewModel
             }
         }
 
-
-        public bool AreAllItemsSelected
-        {
-            get { return Items.All(p => p.IsSelected); }
-            set
-            {
-                Items.ToList().ForEach(p => p.IsSelected = value);
-                RaisePropertyChanged(nameof(AreAllItemsSelected));
-            }
-        }
-
         public IEnumerable<MediaItem> SelectedItems
         {
             get { return Items.Where(p => p.IsSelected); }
@@ -53,6 +55,11 @@ namespace InsireBot.ViewModel
             {
                 return Items[index];
             }
+        }
+
+        public NewMediaItemViewModel()
+        {
+            Items = new RangeObservableCollection<MediaItem>();
         }
 
         /// <summary>

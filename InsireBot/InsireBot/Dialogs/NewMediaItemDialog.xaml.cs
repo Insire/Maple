@@ -13,7 +13,7 @@ namespace InsireBot
         {
             InitializeComponent();
 
-            var viewModel = DataContext as NewMediaItemsViewModel;
+            var viewModel = DataContext as NewMediaItemsDialogViewModel;
             viewModel.CloseAction = () => { Close(); };
         }
     }
