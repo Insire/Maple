@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using InsireBot.MediaPlayer;
 using System.Web;
 using GalaSoft.MvvmLight.Messaging;
 
@@ -12,36 +11,25 @@ namespace InsireBot.ViewModel
 {
     public class NewMediaItemsViewModel : ViewModelBase
     {
-        private RangeObservableCollection<MediaItem> _mediaItems;
-        public RangeObservableCollection<MediaItem> MediaItems
+        private NewPlaylistViewModel _newPlaylistViewModel;
+        public NewPlaylistViewModel NewPlaylistViewModel
         {
-            get { return _mediaItems; }
+            get { return _newPlaylistViewModel; }
             set
             {
-                _mediaItems = value;
-                RaisePropertyChanged(nameof(MediaItems));
+                _newPlaylistViewModel = value;
+                RaisePropertyChanged(nameof(NewPlaylistViewModel));
             }
         }
 
-        private RangeObservableCollection<Playlist> _playlists;
-        public RangeObservableCollection<Playlist> Playlists
+        private NewMediaItemViewModel _newMediaItemViewModel;
+        public NewMediaItemViewModel NewMediaItemViewModel
         {
-            get { return _playlists; }
+            get { return _newMediaItemViewModel; }
             set
             {
-                _playlists = value;
-                RaisePropertyChanged(nameof(Playlists));
-            }
-        }
-
-        private bool _areAllItemsSelected;
-        public bool AreAllItemsSelected
-        {
-            get { return _areAllItemsSelected; }
-            set
-            {
-                _areAllItemsSelected = value;
-                RaisePropertyChanged(nameof(AreAllItemsSelected));
+                _newMediaItemViewModel = value;
+                RaisePropertyChanged(nameof(NewMediaItemViewModel));
             }
         }
 
@@ -77,12 +65,8 @@ namespace InsireBot.ViewModel
             private set
             {
                 _isBusy = value;
-                RaisePropertyChanged(nameof(MediaItems));
-                RaisePropertyChanged(nameof(Playlists));
                 RaisePropertyChanged(nameof(IsBusy));
-                RaisePropertyChanged(nameof(CanParse));
                 RaisePropertyChanged(nameof(CanAdd));
-                RaisePropertyChanged(nameof(CanCancel));
             }
         }
 
@@ -97,31 +81,23 @@ namespace InsireBot.ViewModel
             }
         }
 
-        public IEnumerable<T> SelectedItems
-        {
-            get { return Items.Where(p => p.IsSelected); }
-        }
-
-        public T this[int index]
-        {
-            get
-            {
-                return Items[index];
-            }
-        }
-
-        public ICommand ParseCommand { get; }
-        public ICommand AddCommand { get; }
-        public ICommand CancelCommand { get; }
-        public ICommand ClearCommand { get; }
-        public ICommand RemoveCommand { get; }
+        public ICommand ParseCommand { get; private set; }
+        public ICommand AddCommand { get; private set; }
+        public ICommand CancelCommand { get; private set; }
+        public ICommand ClearCommand { get; private set; }
+        public ICommand RemoveCommand { get; private set; }
 
         public NewMediaItemsViewModel()
         {
-            MediaItems = new RangeObservableCollection<MediaItem>();
-            Playlists = new RangeObservableCollection<Playlist>();
-            Mode = MediaItemParseMode.Multiple;
+            Mode = MediaItemParseMode.MediaItem;
+            NewMediaItemViewModel = new NewMediaItemViewModel();
+            NewPlaylistViewModel = new NewPlaylistViewModel();
 
+            IntializeCommands();
+        }
+
+        private void IntializeCommands()
+        {
             ParseCommand = new RelayCommand(() =>
             {
                 var url = new Uri(SourceText.Trim());
@@ -141,20 +117,20 @@ namespace InsireBot.ViewModel
             {
                 switch (Mode)
                 {
-                    case MediaItemParseMode.Multiple:
-                        var items = MediaItems.Where(p => p.IsSelected && !p.IsRestricted);
+                    case MediaItemParseMode.MediaItem:
+                        var items = NewMediaItemViewModel.Items.Where(p => p.IsSelected && !p.IsRestricted);
                         if (items.Any())
                         {
-                            foreach (var item in MediaItems)
+                            foreach (var item in NewMediaItemViewModel.Items)
                                 Messenger.Default.Send(item);
                         }
                         else
-                            foreach (var item in MediaItems)
+                            foreach (var item in NewMediaItemViewModel.Items)
                                 Messenger.Default.Send(item);
 
                         break;
                     case MediaItemParseMode.Playlist:
-                        foreach (var item in Playlists)
+                        foreach (var item in NewPlaylistViewModel.Items)
                             Messenger.Default.Send(item);
 
                         break;
@@ -170,13 +146,55 @@ namespace InsireBot.ViewModel
                 CloseAction();
             }, CanCancel);
 
-            RemoveCommand = new RelayCommand(() => SelectedItems.ToList().ForEach(p => Items.Remove(p)), CanRemove);
-            ClearCommand = new RelayCommand(() => Items.Clear(), CanClear);
+            RemoveCommand = new RelayCommand(() =>
+            {
+                switch (Mode)
+                {
+                    case MediaItemParseMode.MediaItem:
+                        NewMediaItemViewModel.SelectedItems.ToList().ForEach(p => NewMediaItemViewModel.Items.Remove(p));
+                        break;
+
+                    case MediaItemParseMode.Playlist:
+                        NewPlaylistViewModel.SelectedItems.ToList().ForEach(p => NewPlaylistViewModel.Items.Remove(p));
+                        break;
+
+                    default:
+                        throw new NotImplementedException();
+                }
+
+
+            }, CanRemove);
+            ClearCommand = new RelayCommand(() =>
+            {
+                switch (Mode)
+                {
+                    case MediaItemParseMode.MediaItem:
+                        NewMediaItemViewModel.Items.Clear();
+                        break;
+
+                    case MediaItemParseMode.Playlist:
+                        NewPlaylistViewModel.Items.Clear();
+                        break;
+
+                    default:
+                        throw new NotImplementedException();
+                }
+            }, CanClear);
         }
 
         private bool CanAdd()
         {
-            return MediaItems != null && MediaItems.Any();
+            switch (Mode)
+            {
+                case MediaItemParseMode.MediaItem:
+                    return NewMediaItemViewModel.CanClear() && !IsBusy;
+
+                case MediaItemParseMode.Playlist:
+                    return NewPlaylistViewModel.CanClear() && !IsBusy;
+
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         private bool CanParse()
@@ -196,12 +214,32 @@ namespace InsireBot.ViewModel
 
         private bool CanClear()
         {
-            return Items?.Count > 0;
+            switch (Mode)
+            {
+                case MediaItemParseMode.MediaItem:
+                    return NewMediaItemViewModel.Items?.Count > 0;
+
+                case MediaItemParseMode.Playlist:
+                    return NewPlaylistViewModel.Items?.Count > 0;
+
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         private bool AreItemsSelected()
         {
-            return Items.Any(p => p.IsSelected);
+            switch (Mode)
+            {
+                case MediaItemParseMode.MediaItem:
+                    return NewMediaItemViewModel.Items.Any(p => p.IsSelected);
+
+                case MediaItemParseMode.Playlist:
+                    return NewPlaylistViewModel.Items.Any(p => p.IsSelected);
+
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         private async void Parse(Uri url)
@@ -225,7 +263,7 @@ namespace InsireBot.ViewModel
                             IsBusy = true;
 
                             var video = await youtube.GetVideo(id);
-                            MediaItems.AddRange(video);
+                            NewMediaItemViewModel.Items.AddRange(video);
 
                             continue;
                         }
@@ -235,7 +273,7 @@ namespace InsireBot.ViewModel
                             IsBusy = true;
 
                             var playlists = await youtube.GetPlaylist(id);
-                            Playlists.AddRange(playlists);
+                            NewPlaylistViewModel.Items.AddRange(playlists);
 
                             continue;
                         }
@@ -256,20 +294,20 @@ namespace InsireBot.ViewModel
 
         private void UpdateSelectedItems()
         {
-            switch(Mode)
+            switch (Mode)
             {
-                case MediaItemParseMode.Multiple:
-                    if (AreAllItemsSelected)
-                        MediaItems.All(p => p.IsSelected = true);
+                case MediaItemParseMode.MediaItem:
+                    if (NewMediaItemViewModel.AreAllItemsSelected)
+                        NewMediaItemViewModel.Items.All(p => p.IsSelected = true);
                     else
-                        MediaItems.All(p => p.IsSelected = false);
+                        NewMediaItemViewModel.Items.All(p => p.IsSelected = false);
                     break;
 
                 case MediaItemParseMode.Playlist:
-                    if (AreAllItemsSelected)
-                        Playlists.All(p => p.IsSelected = true);
+                    if (NewPlaylistViewModel.AreAllItemsSelected)
+                        NewPlaylistViewModel.Items.All(p => p.IsSelected = true);
                     else
-                        Playlists.All(p => p.IsSelected = false);
+                        NewPlaylistViewModel.Items.All(p => p.IsSelected = false);
                     break;
             }
         }
@@ -277,7 +315,7 @@ namespace InsireBot.ViewModel
 
     public enum MediaItemParseMode
     {
-        Multiple,
+        MediaItem,
         Playlist
     }
 }

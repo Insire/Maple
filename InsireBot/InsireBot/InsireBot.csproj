@@ -190,6 +190,8 @@
     <Compile Include="Util\DataGridBehavior.cs" />
     <Compile Include="Util\EnumBindingSourceExtension.cs" />
     <Compile Include="ViewModel\NewMediaItemsViewModel.cs" />
+    <Compile Include="ViewModel\NewMediaItemViewModel.cs" />
+    <Compile Include="ViewModel\NewPlaylistViewModel.cs" />
     <Compile Include="ViewModel\PlaylistsViewModel.cs" />
     <Compile Include="ViewModel\PlayModeViewModel.cs" />
     <Compile Include="View\MediaPlayerView.xaml.cs">
@@ -197,9 +199,6 @@
     </Compile>
     <Compile Include="ViewModel\MediaPlayerViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="View\NewMediaItemView.xaml.cs">
-      <DependentUpon>NewMediaItemView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\PlayModeView.xaml.cs">
       <DependentUpon>PlayModeView.xaml</DependentUpon>
     </Compile>
@@ -232,10 +231,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\MediaPlayerView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\NewMediaItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

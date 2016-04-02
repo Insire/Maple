@@ -37,6 +37,7 @@ namespace InsireBot.ViewModel
                 Items.Add(new MediaItem("5", "55"));
                 Items.Add(new MediaItem("6", "66"));
 
+                // receive MediaItems send to the Messenger
                 Messenger.Default.Register<MediaItem>(this, (mediaItem) =>
                  {
                      Items.Add(mediaItem);

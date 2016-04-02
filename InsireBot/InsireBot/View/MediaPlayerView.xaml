@@ -9,12 +9,6 @@
              xmlns:local="clr-namespace:InsireBot"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.Resources>
-
-            
- 
-        
-    </UserControl.Resources>
     <Grid  DataContext="{Binding Source={StaticResource Locator}, Path=MediaPlayerViewModel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -27,10 +21,7 @@
         </Grid.ColumnDefinitions>
 
         <!-- Playlist -->
-        <!--<materialDesign:Card  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
-            <StackPanel Orientation="Vertical">-->
-
-            <ScrollViewer Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
+        <ScrollViewer Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
             <DataGrid ItemsSource="{Binding Items}" Style="{StaticResource BaseDataGridStyle}" local:DataGridBehavior.DoubleClickCommand="{Binding NewCommand}">
                 <DataGrid.ContextMenu>
                     <ContextMenu>
@@ -118,10 +109,6 @@
                         </StackPanel>
                     </materialDesign:PopupBox>
                 </Grid>-->
-
-
-        <!--</StackPanel>
-        </materialDesign:Card>-->
 
         <!-- Previous, Play, Next-->
         <Grid Grid.Row="1" Grid.Column="1" Margin="10,5" DataContext="{Binding MediaPlayer}">
