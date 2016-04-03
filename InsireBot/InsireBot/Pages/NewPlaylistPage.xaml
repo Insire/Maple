@@ -7,6 +7,7 @@
              xmlns:local="clr-namespace:InsireBot"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    
     <materialDesign:TransitioningContent>
         <materialDesign:TransitioningContent.OpeningEffects>
             <materialDesign:TransitionEffect Kind="FadeIn" />
@@ -66,10 +67,11 @@
                             <!-- IsSelected -->
                             <DataGridCheckBoxColumn SortMemberPath="IsSelected">
                                 <DataGridCheckBoxColumn.Header>
-                                    <Border Background="Transparent" Padding="6 0 6 0" HorizontalAlignment="Center">
-                                        <CheckBox HorizontalAlignment="Center"
-                                                  DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext}"
-                                                  IsChecked="{Binding AreAllItemsSelected, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Border Background="Transparent" 
+                                            Padding="6 0 6 0" 
+                                            HorizontalAlignment="Center" 
+                                            DataContext="{Binding Source={StaticResource Locator}, Path=NewPlaylistViewModel}">
+                                        <CheckBox HorizontalAlignment="Center" IsChecked="{Binding AreAllItemsSelected, UpdateSourceTrigger=PropertyChanged}" />
                                     </Border>
                                 </DataGridCheckBoxColumn.Header>
                             </DataGridCheckBoxColumn>

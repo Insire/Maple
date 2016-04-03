@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace InsireBot
 {
@@ -7,7 +6,7 @@ namespace InsireBot
     {
         internal static WAVEOUTCAPS[] GetDevCapsPlayback()
         {
-            uint waveOutDevicesCount = waveOutGetNumDevs();
+            var waveOutDevicesCount = waveOutGetNumDevs();
             if (waveOutDevicesCount > 0)
             {
                 var list = new WAVEOUTCAPS[waveOutDevicesCount];
@@ -27,7 +26,7 @@ namespace InsireBot
 
         internal static WAVEINCAPS[] GetDevCapsRecording()
         {
-            uint waveInDevicesCount = waveInGetNumDevs();
+            var waveInDevicesCount = waveInGetNumDevs();
             if (waveInDevicesCount > 0)
             {
                 var list = new WAVEINCAPS[waveInDevicesCount];
@@ -89,7 +88,7 @@ namespace InsireBot
         }
 
         [DllImport("winmm.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        private static extern uint waveInGetDevCaps(Int32 hwo, ref WAVEINCAPS pwic, /*uint*/ int cbwic);
+        private static extern uint waveInGetDevCaps(int hwo, ref WAVEINCAPS pwic, /*uint*/ int cbwic);
 
         [DllImport("winmm.dll", SetLastError = true)]
         private static extern uint waveInGetNumDevs();

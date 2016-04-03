@@ -3,8 +3,6 @@
     public enum MediaItemAction
     {
         Play,
-        Next,
-        Previous,
         Pause,
         Stop,
     }

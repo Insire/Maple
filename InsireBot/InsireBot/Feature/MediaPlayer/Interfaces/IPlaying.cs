@@ -2,9 +2,7 @@
 {
     public interface IPlaying
     {
-        void Next();
-        void Previous();
-        void Play();
+        void Play(IMediaItem item);
         void Pause();
         void Stop();
     }

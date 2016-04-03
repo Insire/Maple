@@ -1,5 +1,6 @@
 using System;
 using System.Windows;
+using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using InsireBot.MediaPlayer;
@@ -10,6 +11,11 @@ namespace InsireBot.ViewModel
     {
         public IMediaPlayer<IMediaItem> MediaPlayer { get; }
 
+        public ICommand PlayCommand { get; private set; }
+        public ICommand NextCommand { get; private set; }
+        public ICommand PreviousCommand { get; private set; }
+        public ICommand AddCommand { get; private set; }
+
         public MediaPlayerViewModel(IDataService dataService) : base(dataService)
         {
             if (IsInDesignMode)
@@ -18,9 +24,6 @@ namespace InsireBot.ViewModel
                 Items.Add(item);
 
                 item = new MediaItem("Armin van Buuren feat. Sophie - Virtual Friend", @"https://www.youtube.com/watch?v=0ypeOKp0x3k", new TimeSpan(0, 7, 12));
-                Items.Add(item);
-
-                Items.Add(item);
             }
             else
             {
@@ -30,29 +33,34 @@ namespace InsireBot.ViewModel
                 Items.Add(item);
 
                 item = new MediaItem("Armin van Buuren feat. Sophie - Virtual Friend", @"https://www.youtube.com/watch?v=0ypeOKp0x3k", new TimeSpan(0, 7, 12));
-                Items.Add(new MediaItem("1","11"));
-                Items.Add(new MediaItem("2", "22"));
-                Items.Add(new MediaItem("3", "33"));
-                Items.Add(new MediaItem("4", "44"));
-                Items.Add(new MediaItem("5", "55"));
-                Items.Add(new MediaItem("6", "66"));
+                Items.Add(item);
 
-                // receive MediaItems send to the Messenger
+                item = new MediaItem("Will & Tim ft. Ephixa - Stone Tower Temple", "C:\\Users\\Insire\\Downloads\\Will & Tim ft. Ephixa - Stone Tower Temple.mp3");
+                Items.Add(item);
+                // receive MediaItems and add them to the playlist
                 Messenger.Default.Register<MediaItem>(this, (mediaItem) =>
                  {
                      Items.Add(mediaItem);
                  });
 
-                NewCommand = new RelayCommand(New);
+                InitiliazeCommands();
             }
         }
 
-        private void New()
+        private void InitiliazeCommands()
+        {
+            PlayCommand = new RelayCommand(Play);
+            PreviousCommand = new RelayCommand(Previous, MediaPlayer.CanPrevious);
+            NextCommand = new RelayCommand(Next, MediaPlayer.CanNext);
+            AddCommand = new RelayCommand(Add);
+        }
+
+        private void Add()
         {
             var dialog = new NewMediaItemDialog();
             dialog.Owner = Application.Current.MainWindow;
 
-            var result = dialog.ShowDialog();
+            dialog.ShowDialog();
         }
 
         public void Next()
@@ -61,7 +69,7 @@ namespace InsireBot.ViewModel
             var contract = new MediaItemContract
             {
                 MediaItem = SelectedItem,
-                Action = MediaItemAction.Next,
+                Action = MediaItemAction.Play,
             };
 
             Messenger.Default.Send(contract);
@@ -73,21 +81,27 @@ namespace InsireBot.ViewModel
             var contract = new MediaItemContract
             {
                 MediaItem = SelectedItem,
-                Action = MediaItemAction.Previous,
+                Action = MediaItemAction.Play,
             };
 
             Messenger.Default.Send(contract);
         }
 
+        public void Play(IMediaItem item)
+        {
+            MediaPlayer.Play(item);
+        }
+
         public void Play()
         {
-            var contract = new MediaItemContract
-            {
-                MediaItem = SelectedItem,
-                Action = MediaItemAction.Play,
-            };
+            //var contract = new MediaItemContract
+            //{
+            //    MediaItem = SelectedItem,
+            //    Action = MediaItemAction.Play,
+            //};
 
-            Messenger.Default.Send(contract);
+            //Messenger.Default.Send(contract);
+            MediaPlayer.Play(SelectedItem);
         }
 
         public void Pause()

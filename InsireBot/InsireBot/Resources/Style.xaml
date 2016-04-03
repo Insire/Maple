@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-                    xmlns:local="clr-namespace:InsireBot.Resources">
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" >
 
     <!-- Remember: the order of these styles matters, since they depend on each other. If one references a style not yet declared, you get random RuntimeErrors-->
 

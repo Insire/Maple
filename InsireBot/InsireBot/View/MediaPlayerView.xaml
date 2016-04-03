@@ -22,7 +22,7 @@
 
         <!-- Playlist -->
         <ScrollViewer Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
-            <DataGrid ItemsSource="{Binding Items}" Style="{StaticResource BaseDataGridStyle}" local:DataGridBehavior.DoubleClickCommand="{Binding NewCommand}">
+            <DataGrid ItemsSource="{Binding Items}" Style="{StaticResource BaseDataGridStyle}" local:DataGridBehavior.DoubleClickCommand="{Binding AddCommand}">
                 <DataGrid.ContextMenu>
                     <ContextMenu>
                         <ContextMenu.Items>
@@ -90,28 +90,8 @@
             </DataGrid>
         </ScrollViewer>
 
-        <!--<Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <materialDesign:PopupBox Style="{StaticResource BaseDataGridButtonStyle}" Grid.Row="1" Grid.Column="1">
-                        <materialDesign:PopupBox.ToggleCheckedContent>
-                            <materialDesign:PackIcon Kind="FormatListBulleted" Width="24" Height="24" />
-                        </materialDesign:PopupBox.ToggleCheckedContent>
-                        <StackPanel>
-                            <Button Command="{Binding NewCommand}" Style="{StaticResource MiniAddButtonStyle}" ToolTip="New"/>
-                            <Button Command="{Binding ClearCommand}" Style="{StaticResource MiniDeleteButtonStyle}" ToolTip="Clear"/>
-                        </StackPanel>
-                    </materialDesign:PopupBox>
-                </Grid>-->
-
         <!-- Previous, Play, Next-->
-        <Grid Grid.Row="1" Grid.Column="1" Margin="10,5" DataContext="{Binding MediaPlayer}">
+        <Grid Grid.Row="1" Grid.Column="1" Margin="10,5" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -123,9 +103,9 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource PreviousButtonStyle}" Margin="0,0,10,0"/>
-            <Button Grid.Row="0" Grid.Column="1" Style="{StaticResource PlayButtonStyle}" />
-            <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource NextButtonStyle}" Margin="10,0,0,0"/>
+            <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource PreviousButtonStyle}" Margin="0,0,10,0" Command="{Binding PreviousCommand}"/>
+            <Button Grid.Row="0" Grid.Column="1" Style="{StaticResource PlayButtonStyle}" Command="{Binding PlayCommand}"/>
+            <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource NextButtonStyle}" Margin="10,0,0,0" Command="{Binding NextCommand}"/>
         </Grid>
 
         <!-- Volume Slider -->
@@ -155,19 +135,6 @@
             </Grid.ColumnDefinitions>
 
             <local:PlayModeView Grid.Column="0"/>
-
-            <!--<materialDesign:PopupBox Style="{StaticResource MaterialDesignMultiFloatingActionAccentPopupBox}" Margin="0,0,0,-20" Panel.ZIndex="2"
-                                     Grid.Column="0"
-                                     PlacementMode="LeftAndAlignMiddles"
-                                     ToolTipService.Placement="Right"
-                                     ToolTip="something, something about add and removing items">
-                <materialDesign:PopupBox.ToggleCheckedContent>
-                    <materialDesign:PackIcon Kind="FormatListBulleted" Width="24" Height="24" />
-                </materialDesign:PopupBox.ToggleCheckedContent>
-                <StackPanel>
-                    <local:PlayModeView />
-                </StackPanel>
-            </materialDesign:PopupBox>-->
 
             <!--<ComboBox Grid.Row="0" 
                       Grid.Column="1"

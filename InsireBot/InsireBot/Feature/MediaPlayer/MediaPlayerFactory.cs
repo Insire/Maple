@@ -7,6 +7,12 @@ namespace InsireBot.MediaPlayer
     {
         public static IMediaPlayer<IMediaItem> Create(IDataService dataService, MediaPlayerType mediaPlayerType)
         {
+            // vlc is a 32bit application, so we always want to get the base 32bit install directory, regardless of OS architecture
+            if (Environment.Is64BitOperatingSystem)
+                vlcInstallDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "VideoLAN\\VLC");
+            else
+                vlcInstallDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "VideoLAN\\VLC");
+
             switch (mediaPlayerType)
             {
                 case MediaPlayerType.VLCDOTNET:
@@ -15,7 +21,7 @@ namespace InsireBot.MediaPlayer
                         Directory = "C:",
                         Extension = "exe",
                         FileName = "vlc",
-                        VlcLibDirectory = new DirectoryInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "VideoLAN\\VLC")),
+                        VlcLibDirectory = new DirectoryInfo(vlcInstallDirectory),
                         Options = new[]
                         {
                             "--aout=waveout",

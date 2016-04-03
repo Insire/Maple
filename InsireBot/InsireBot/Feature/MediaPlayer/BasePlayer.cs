@@ -3,10 +3,8 @@ using GalaSoft.MvvmLight.Messaging;
 
 namespace InsireBot.MediaPlayer
 {
-    public abstract class BasePlayer : BotViewModelBase<IMediaItem>, IPlaying
+    public abstract class BasePlayer : BotViewModelBase<AudioDevice>, IPlaying
     {
-        public abstract AudioDevice AudioDevice { get; set; }
-
         private RangeObservableCollection<AudioDevice> _audioDevices;
         public RangeObservableCollection<AudioDevice> AudioDevices
         {
@@ -17,6 +15,20 @@ namespace InsireBot.MediaPlayer
                 {
                     _audioDevices = value;
                     RaisePropertyChanged(nameof(AudioDevices));
+                }
+            }
+        }
+
+        private AudioDevice _audioDevice;
+        public AudioDevice AudioDevice
+        {
+            get { return _audioDevice; }
+            set
+            {
+                if (_audioDevice != value && value != null)
+                {
+                    _audioDevice = value;
+                    RaisePropertyChanged(nameof(AudioDevice));
                 }
             }
         }
@@ -81,25 +93,10 @@ namespace InsireBot.MediaPlayer
             {
                 switch (mediaItemContract.Action)
                 {
-                    case MediaItemAction.Next:
-                        if (mediaItemContract.MediaItem != null)
-                            Next(mediaItemContract.MediaItem);
-
-                        Next();
-                        break;
-
-                    case MediaItemAction.Previous:
-                        if (mediaItemContract.MediaItem != null)
-                            Previous(mediaItemContract.MediaItem);
-
-                        Previous();
-                        break;
-
                     case MediaItemAction.Play:
                         if (mediaItemContract.MediaItem != null)
                             Play(mediaItemContract.MediaItem);
 
-                        Play();
                         break;
 
                     case MediaItemAction.Pause:
@@ -133,26 +130,7 @@ namespace InsireBot.MediaPlayer
             return next > -1 && next < Count();
         }
 
-        public void Add(IMediaItem item)
-        {
-            Items.Add(item);
-        }
-        public void Remove(IMediaItem item)
-        {
-            Items.Remove(item);
-        }
-
-        public abstract void Next(IMediaItem item);
-
-        public abstract void Previous(IMediaItem item);
-
         public abstract void Play(IMediaItem item);
-
-        public abstract void Next();
-
-        public abstract void Previous();
-
-        public abstract void Play();
 
         public abstract void Pause();
 

@@ -58,7 +58,7 @@ namespace InsireBot
 
         public T SelectedItem
         {
-            get { return Items[SelectedIndex]; }
+            get { return SelectedItems.FirstOrDefault(); }
         }
 
         public IEnumerable<T> SelectedItems
