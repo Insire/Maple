@@ -1,7 +1,11 @@
-﻿namespace InsireBot.MediaPlayer
+﻿using System;
+
+namespace InsireBot.MediaPlayer
 {
-    public interface IMediaPlayer<IMediaItem> : IPlaying
+    public interface IMediaPlayer<IMediaItem> : IPlaying, IDisposable
     {
+        bool Disposed { get; }
+
         bool CanPlay();
         bool CanNext();
         bool CanPrevious();

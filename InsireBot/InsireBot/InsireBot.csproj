@@ -79,8 +79,8 @@
       <HintPath>..\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Dragablz, Version=0.0.3.157, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dragablz.0.0.3.157\lib\net45\Dragablz.dll</HintPath>
+    <Reference Include="Dragablz, Version=0.0.3.158, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dragablz.0.0.3.158\lib\net45\Dragablz.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
@@ -154,12 +154,15 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="Vlc.DotNet.Core, Version=2.1.122.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
-      <HintPath>..\packages\Vlc.DotNet.Core.2.1.122\lib\net45\x86\Vlc.DotNet.Core.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\VlcWrapper\Resources\Vlc.DotNet.Core.dll</HintPath>
     </Reference>
     <Reference Include="Vlc.DotNet.Core.Interops, Version=2.1.122.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
-      <HintPath>..\packages\Vlc.DotNet.Core.Interops.2.1.122\lib\net45\x86\Vlc.DotNet.Core.Interops.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\VlcWrapper\Resources\Vlc.DotNet.Core.Interops.dll</HintPath>
+    </Reference>
+    <Reference Include="Vlc.DotNet.Wpf">
+      <HintPath>..\VlcWrapper\Resources\Vlc.DotNet.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -320,6 +323,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MaterialDesignThemes.MahApps.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VlcWrapper\VlcWrapper.csproj">
+      <Project>{dce9bd7c-5111-466c-8e3d-e26d5d31afe3}</Project>
+      <Name>VlcWrapper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
