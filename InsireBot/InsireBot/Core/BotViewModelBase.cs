@@ -106,12 +106,12 @@ namespace InsireBot
             return AreItemsSelected();
         }
 
-        private bool CanClear()
+        protected bool CanClear()
         {
             return Items?.Count > 0;
         }
 
-        private bool AreItemsSelected()
+        protected bool AreItemsSelected()
         {
             return Items.Any(p => p.IsSelected);
         }

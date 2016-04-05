@@ -35,7 +35,7 @@
                 <Button Grid.Column="2"
                         Grid.Row="0"
                         Style="{StaticResource ComputeButtonStyle}"
-                        Command="{Binding ParseCommand}"/>
+                        Command="{Binding SelectCommand}"/>
 
                 <Border DataContext="{Binding Source={StaticResource Locator}, Path=NewMediaItemViewModel}"
                         BorderThickness="0"

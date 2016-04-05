@@ -20,6 +20,11 @@ namespace InsireBot.MediaPlayer
             }
         }
 
+        public bool IsPlaying
+        {
+            get { return _vlcMediaPlayer.IsPlaying; }
+        }
+
         private DotNetPlayerSettings _settings;
         public DotNetPlayerSettings Settings
         {
@@ -115,6 +120,7 @@ namespace InsireBot.MediaPlayer
         private void VlcMediaPlayer_Playing(Vlc.DotNet.Wpf.VlcControl sender, Vlc.DotNet.Core.VlcEventArgs<EventArgs> e)
         {
             Debug.WriteLine("VlcMediaPlayer_Playing");
+            RaisePropertyChanged(nameof(IsPlaying));
         }
 
         private void VlcMediaPlayer_TitleChanged1(Vlc.DotNet.Wpf.VlcControl sender, Vlc.DotNet.Core.VlcEventArgs<long> e)
@@ -125,11 +131,13 @@ namespace InsireBot.MediaPlayer
         private void VlcMediaPlayer_Stopped1(Vlc.DotNet.Wpf.VlcControl sender, Vlc.DotNet.Core.VlcEventArgs<EventArgs> e)
         {
             Debug.WriteLine("VlcMediaPlayer_Stopped");
+            RaisePropertyChanged(nameof(IsPlaying));
         }
 
         private void VlcMediaPlayer_EndReached1(Vlc.DotNet.Wpf.VlcControl sender, Vlc.DotNet.Core.VlcEventArgs<EventArgs> e)
         {
             Debug.WriteLine("VlcMediaPlayer_EndReached");
+            RaisePropertyChanged(nameof(IsPlaying));
         }
 
         private void VlcMediaPlayer_EncounteredError1(Vlc.DotNet.Wpf.VlcControl sender, Vlc.DotNet.Core.VlcEventArgs<EventArgs> e)
@@ -137,11 +145,14 @@ namespace InsireBot.MediaPlayer
             Debug.WriteLine("VlcMediaPlayer_EncounteredError");
             foreach ( var message in _vlcMediaPlayer.LogMessages)
                 Debug.WriteLine($"{message.Message} {message.Header} {message.Name}");
+
+            RaisePropertyChanged(nameof(IsPlaying));
         }
 
         private void VlcMediaPlayer_Buffering1(Vlc.DotNet.Wpf.VlcControl sender, Vlc.DotNet.Core.VlcEventArgs<float> e)
         {
             Debug.WriteLine("Buffering");
+            RaisePropertyChanged(nameof(IsPlaying));
         }
 
         public void ValidateSettings()
@@ -168,17 +179,17 @@ namespace InsireBot.MediaPlayer
             //TODO more checks on VlcLibDirectory
         }
 
-        public override void Pause()
+        public void Pause()
         {
             _vlcMediaPlayer.Pause();
         }
 
-        public override void Stop()
+        public void Stop()
         {
             _vlcMediaPlayer.Stop();
         }
 
-        public override void Play(IMediaItem item)
+        public void Play(IMediaItem item)
         {
             if (item != null)
             {

@@ -5,10 +5,8 @@ namespace InsireBot.MediaPlayer
     public interface IMediaPlayer<IMediaItem> : IPlaying, IDisposable
     {
         bool Disposed { get; }
-
-        bool CanPlay();
-        bool CanNext();
-        bool CanPrevious();
+        bool IsPlaying { get; }
+        void Play(IMediaItem mediaItem);
 
         IMediaItem Current { get; set; }
 

@@ -203,12 +203,12 @@
     <Compile Include="Feature\MediaPlayer\Interfaces\IPlaying.cs" />
     <Compile Include="Feature\MediaPlayer\MediaItem.cs" />
     <Compile Include="Feature\MediaPlayer\Enums\MediaItemAction.cs" />
-    <Compile Include="Feature\MediaPlayer\MediaItemContract.cs" />
     <Compile Include="Feature\MediaPlayer\Playlist.cs" />
     <Compile Include="Feature\MediaPlayer\MediaPlayerFactory.cs" />
     <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayer.cs" />
     <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayerException.cs" />
     <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayerSettings.cs" />
+    <Compile Include="Feature\WinFormsService.cs" />
     <Compile Include="Feature\WinmmService.cs" />
     <Compile Include="Feature\Youtube\Youtube.cs" />
     <Compile Include="Pages\MediaPlayerPage.xaml.cs">
@@ -225,7 +225,7 @@
     </Compile>
     <Compile Include="Util\DataGridBehavior.cs" />
     <Compile Include="Util\EnumBindingSourceExtension.cs" />
-    <Compile Include="ViewModel\NewMediaItemsViewModel.cs" />
+    <Compile Include="ViewModel\NewMediaItemsDialogViewModel.cs" />
     <Compile Include="ViewModel\NewMediaItemViewModel.cs" />
     <Compile Include="ViewModel\NewPlaylistViewModel.cs" />
     <Compile Include="ViewModel\PlaylistsViewModel.cs" />

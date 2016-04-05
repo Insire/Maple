@@ -7,16 +7,16 @@ namespace InsireBot.MediaPlayer
     {
         public static IMediaPlayer<IMediaItem> Create(IDataService dataService, MediaPlayerType mediaPlayerType)
         {
-            var vlcInstallDirectory = string.Empty;
-            // vlc is a 32bit application, so we always want to get the base 32bit install directory, regardless of OS architecture
-            if (Environment.Is64BitOperatingSystem)
-                vlcInstallDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "VideoLAN\\VLC");
-            else
-                vlcInstallDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "VideoLAN\\VLC");
-
             switch (mediaPlayerType)
             {
                 case MediaPlayerType.VLCDOTNET:
+                    var vlcInstallDirectory = string.Empty;
+                    // vlc is a 32bit application, so we always want to get the base 32bit install directory, regardless of OS architecture
+                    if (Environment.Is64BitOperatingSystem)
+                        vlcInstallDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "VideoLAN\\VLC");
+                    else
+                        vlcInstallDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "VideoLAN\\VLC");
+
                     var settings = new DotNetPlayerSettings
                     {
                         Directory = "C:",

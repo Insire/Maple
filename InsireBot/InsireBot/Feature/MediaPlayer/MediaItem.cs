@@ -89,23 +89,41 @@ namespace InsireBot.MediaPlayer
             }
         }
 
+        private bool _isLocalFile;
+        public bool IsLocalFile
+        {
+            get { return _isLocalFile; }
+            set
+            {
+                if (_isLocalFile != value)
+                {
+                    _isLocalFile = value;
+                    RaisePropertyChanged(nameof(IsLocalFile));
+                }
+            }
+        }
+
         private MediaItem()
         {
             ID = Guid.NewGuid();
+            IsRestricted = false;
+            IsSelected = false;
+            IsLocalFile = false;
         }
 
-        public MediaItem(string title, string location)
+        public MediaItem(string title, Uri location) : this()
         {
             Title = title;
-            Location = location;
+            Location = location.OriginalString;
+            IsLocalFile = location.IsFile;
         }
 
-        public MediaItem(string title, string location, TimeSpan duration) : this(title, location)
+        public MediaItem(string title, Uri location, TimeSpan duration) : this(title, location)
         {
             Duration = duration;
         }
 
-        public MediaItem(string title, string location, TimeSpan duration, bool? allowed) : this(title, location, duration)
+        public MediaItem(string title, Uri location, TimeSpan duration, bool? allowed) : this(title, location, duration)
         {
             IsRestricted = allowed == null ? false : !(bool)allowed;
         }

@@ -7,9 +7,11 @@ using InsireBot.MediaPlayer;
 
 namespace InsireBot.ViewModel
 {
-    public class MediaPlayerViewModel : BotViewModelBase<MediaItem>, IPlaying
+    public class MediaPlayerViewModel : BotViewModelBase<MediaItem>
     {
         public IMediaPlayer<IMediaItem> MediaPlayer { get; }
+
+        public bool IsPlaying { get { return MediaPlayer.IsPlaying; } }
 
         public ICommand PlayCommand { get; private set; }
         public ICommand NextCommand { get; private set; }
@@ -20,23 +22,24 @@ namespace InsireBot.ViewModel
         {
             if (IsInDesignMode)
             {
-                var item = new MediaItem("Rusko - Somebody To Love (Sigma Remix)", @"https://www.youtube.com/watch?v=nF7wa3j57j0", new TimeSpan(0, 5, 47));
+                var item = new MediaItem("Rusko - Somebody To Love (Sigma Remix)", new Uri(@"https://www.youtube.com/watch?v=nF7wa3j57j0"), new TimeSpan(0, 5, 47));
                 Items.Add(item);
 
-                item = new MediaItem("Armin van Buuren feat. Sophie - Virtual Friend", @"https://www.youtube.com/watch?v=0ypeOKp0x3k", new TimeSpan(0, 7, 12));
+                item = new MediaItem("Armin van Buuren feat. Sophie - Virtual Friend", new Uri(@"https://www.youtube.com/watch?v=0ypeOKp0x3k"), new TimeSpan(0, 7, 12));
             }
             else
             {
                 // Code runs "for real"
                 MediaPlayer = MediaPlayerFactory.Create(dataService, MediaPlayerType.VLCDOTNET);
-                var item = new MediaItem("Rusko - Somebody To Love (Sigma Remix)", @"https://www.youtube.com/watch?v=nF7wa3j57j0", new TimeSpan(0, 5, 47));
+                var item = new MediaItem("Rusko - Somebody To Love (Sigma Remix)", new Uri(@"https://www.youtube.com/watch?v=nF7wa3j57j0"), new TimeSpan(0, 5, 47));
                 Items.Add(item);
 
-                item = new MediaItem("Armin van Buuren feat. Sophie - Virtual Friend", @"https://www.youtube.com/watch?v=0ypeOKp0x3k", new TimeSpan(0, 7, 12));
+                item = new MediaItem("Armin van Buuren feat. Sophie - Virtual Friend", new Uri(@"https://www.youtube.com/watch?v=0ypeOKp0x3k"), new TimeSpan(0, 7, 12));
                 Items.Add(item);
 
-                item = new MediaItem("Will & Tim ft. Ephixa - Stone Tower Temple", "C:\\Users\\Insire\\Downloads\\Will & Tim ft. Ephixa - Stone Tower Temple.mp3");
+                item = new MediaItem("Will & Tim ft. Ephixa - Stone Tower Temple", new Uri("C:\\Users\\Insire\\Downloads\\Will & Tim ft. Ephixa - Stone Tower Temple.mp3"));
                 Items.Add(item);
+
                 // receive MediaItems and add them to the playlist
                 Messenger.Default.Register<MediaItem>(this, (mediaItem) =>
                  {
@@ -50,8 +53,8 @@ namespace InsireBot.ViewModel
         private void InitiliazeCommands()
         {
             PlayCommand = new RelayCommand(Play);
-            PreviousCommand = new RelayCommand(Previous, MediaPlayer.CanPrevious);
-            NextCommand = new RelayCommand(Next, MediaPlayer.CanNext);
+            PreviousCommand = new RelayCommand(Previous, CanClear);
+            NextCommand = new RelayCommand(Next, CanClear);
             AddCommand = new RelayCommand(Add);
         }
 
@@ -65,26 +68,14 @@ namespace InsireBot.ViewModel
 
         public void Next()
         {
-            SelectedIndex++;
-            var contract = new MediaItemContract
-            {
-                MediaItem = SelectedItem,
-                Action = MediaItemAction.Play,
-            };
-
-            Messenger.Default.Send(contract);
+            // TODO
+            MediaPlayer.Play(SelectedItem);
         }
 
         public void Previous()
         {
-            SelectedIndex--;
-            var contract = new MediaItemContract
-            {
-                MediaItem = SelectedItem,
-                Action = MediaItemAction.Play,
-            };
-
-            Messenger.Default.Send(contract);
+            // TODO
+            MediaPlayer.Play(SelectedItem);
         }
 
         public void Play(IMediaItem item)
@@ -94,36 +85,17 @@ namespace InsireBot.ViewModel
 
         public void Play()
         {
-            //var contract = new MediaItemContract
-            //{
-            //    MediaItem = SelectedItem,
-            //    Action = MediaItemAction.Play,
-            //};
-
-            //Messenger.Default.Send(contract);
             MediaPlayer.Play(SelectedItem);
         }
 
         public void Pause()
         {
-            var contract = new MediaItemContract
-            {
-                MediaItem = SelectedItem,
-                Action = MediaItemAction.Pause,
-            };
-
-            Messenger.Default.Send(contract);
+            MediaPlayer.Pause();
         }
 
         public void Stop()
         {
-            var contract = new MediaItemContract
-            {
-                MediaItem = SelectedItem,
-                Action = MediaItemAction.Stop,
-            };
-
-            Messenger.Default.Send(contract);
+            MediaPlayer.Stop();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.IO;
 using System.Threading;
+using System;
 
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
@@ -75,7 +76,8 @@ namespace InsireBot
                     foreach (var playlistItem in playlistItemsListResponse.Items)
                     {
                         // Print information about each video.
-                        result.Add(new MediaItem(playlistItem.Snippet.Title, playlistItem.Snippet.ResourceId.VideoId));
+                        var location = new Uri($"{_videoBaseUrl}{playlistItem.Snippet.ResourceId.VideoId}");
+                        result.Add(new MediaItem(playlistItem.Snippet.Title, location));
                     }
 
                     nextPageToken = playlistItemsListResponse.NextPageToken;
@@ -180,7 +182,7 @@ namespace InsireBot
                 while (nextPageToken != null)
                 {
                     var video = new MediaItem(item.Snippet.Title,
-                                            $"{_videoBaseUrl}{videoId}",
+                                            new Uri($"{_videoBaseUrl}{videoId}"),
                                             XmlConvert.ToTimeSpan(item.ContentDetails.Duration),
                                             item.ContentDetails.CountryRestriction?.Allowed);
                     result.Add(video);
