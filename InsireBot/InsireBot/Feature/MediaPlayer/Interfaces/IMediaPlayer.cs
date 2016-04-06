@@ -4,8 +4,11 @@ namespace InsireBot.MediaPlayer
 {
     public interface IMediaPlayer<IMediaItem> : IPlaying, IDisposable
     {
+        event CompletedMediaItemEventHandler CompletedMediaItem;
+
         bool Disposed { get; }
         bool IsPlaying { get; }
+        bool IsShuffling { get; set; }
         void Play(IMediaItem mediaItem);
 
         IMediaItem Current { get; set; }

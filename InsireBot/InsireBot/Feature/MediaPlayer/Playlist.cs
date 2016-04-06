@@ -3,7 +3,7 @@ using GalaSoft.MvvmLight;
 
 namespace InsireBot.MediaPlayer
 {
-    public class Playlist : ObservableObject, IIsSelected
+    public class Playlist : ObservableObject, IIsSelected, IIndex
     {
         private RangeObservableCollection<MediaItem> _items;
         public RangeObservableCollection<MediaItem> Items
@@ -16,6 +16,17 @@ namespace InsireBot.MediaPlayer
                     _items = value;
                     RaisePropertyChanged(nameof(Items));
                 }
+            }
+        }
+
+        private int _index;
+        public int Index
+        {
+            get { return _index; }
+            set
+            {
+                _index = value;
+                RaisePropertyChanged(nameof(Index));
             }
         }
 

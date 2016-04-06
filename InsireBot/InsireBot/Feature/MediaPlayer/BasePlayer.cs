@@ -1,4 +1,6 @@
-﻿namespace InsireBot.MediaPlayer
+﻿using System.Linq;
+
+namespace InsireBot.MediaPlayer
 {
     public abstract class BasePlayer : BotViewModelBase<AudioDevice>
     {
@@ -85,23 +87,6 @@
             {
                 AudioDevices.AddRange(_dataService.GetPlaybackDevices());
             }
-        }
-
-        public bool CanNext()
-        {
-            var next = SelectedIndex++;
-            return next > -1 && next < Count();
-        }
-
-        public bool CanPlay()
-        {
-            return CanRemove();
-        }
-
-        public bool CanPrevious()
-        {
-            var next = SelectedIndex--;
-            return next > -1 && next < Count();
         }
     }
 }

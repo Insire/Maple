@@ -42,6 +42,7 @@
                         Grid.Column="0"
                         Grid.Row="2"
                         Grid.ColumnSpan="3">
+                    
                     <DataGrid ItemsSource="{Binding Items, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseDataGridStyle}" >
                         <DataGrid.ContextMenu>
                             <ContextMenu>

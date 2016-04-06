@@ -1,4 +1,4 @@
-﻿namespace InsireBot.MediaPlayer
+﻿namespace InsireBot
 {
     public enum RepeatMode
     {

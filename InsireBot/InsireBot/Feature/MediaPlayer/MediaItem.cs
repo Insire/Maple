@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using GalaSoft.MvvmLight;
 
 namespace InsireBot.MediaPlayer
 {
-    public class MediaItem : ObservableObject, IMediaItem
+    public class MediaItem : ObservableObject, IMediaItem, IIndex
     {
         private Guid _id;
         public Guid ID
@@ -16,6 +17,20 @@ namespace InsireBot.MediaPlayer
                     _id = value;
                     RaisePropertyChanged(nameof(ID));
                 }
+            }
+        }
+
+        private int _index;
+        /// <summary>
+        /// An Index managed by the collection an item is inside of
+        /// </summary>
+        public int Index
+        {
+            get { return _index; }
+            set
+            {
+                _index = value;
+                RaisePropertyChanged(nameof(Index));
             }
         }
 
@@ -109,6 +124,12 @@ namespace InsireBot.MediaPlayer
             IsRestricted = false;
             IsSelected = false;
             IsLocalFile = false;
+            Index = -1;
+        }
+
+        ~MediaItem()
+        {
+            Debug.WriteLine($"{Title} was disposed");
         }
 
         public MediaItem(string title, Uri location) : this()

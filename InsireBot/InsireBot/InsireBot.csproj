@@ -186,6 +186,7 @@
     <Compile Include="Core\DemoItem.cs" />
     <Compile Include="Core\DesignTimeDataService.cs" />
     <Compile Include="Core\Interfaces\IDataService.cs" />
+    <Compile Include="Core\Interfaces\IIndex.cs" />
     <Compile Include="Core\Interfaces\IIsSelected.cs" />
     <Compile Include="Core\Interfaces\ISettings.cs" />
     <Compile Include="Core\NotifyPropertyChangedExtension.cs" />
@@ -223,8 +224,10 @@
     <Compile Include="Pages\OptionsPage.xaml.cs">
       <DependentUpon>OptionsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Util\CompletedMediaItemEventHandler.cs" />
     <Compile Include="Util\DataGridBehavior.cs" />
     <Compile Include="Util\EnumBindingSourceExtension.cs" />
+    <Compile Include="Util\RadioButtonCheckedConverter.cs" />
     <Compile Include="ViewModel\NewMediaItemsDialogViewModel.cs" />
     <Compile Include="ViewModel\NewMediaItemViewModel.cs" />
     <Compile Include="ViewModel\NewPlaylistViewModel.cs" />
