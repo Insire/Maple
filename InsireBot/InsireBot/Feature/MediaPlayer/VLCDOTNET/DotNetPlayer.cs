@@ -99,6 +99,7 @@ namespace InsireBot.MediaPlayer
         {
             VolumeMin = 0;
             VolumeMax = 100;
+
         }
 
         public DotNetPlayer(IDataService dataService, DotNetPlayerSettings settings) : this(dataService)
@@ -117,7 +118,6 @@ namespace InsireBot.MediaPlayer
             AudioDevice = audioDevice;
 
             InitializeProperties();
-            InitializeEvents();
         }
 
         private void InitializeProperties()
@@ -127,6 +127,8 @@ namespace InsireBot.MediaPlayer
 
             Settings.Options[1] = string.Format(Settings.Options[1], AudioDevice);
             _vlcMediaPlayer = new VlcMediaPlayer(Settings.VlcLibDirectory, Settings.Options);
+
+            InitializeEvents();
         }
 
         private void InitializeEvents()
