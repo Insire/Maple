@@ -45,13 +45,13 @@ namespace InsireBot.ViewModel
                 MediaPlayer.CompletedMediaItem += MediaPlayer_CompletedMediaItem;
 
                 var item = new MediaItem("Rusko - Somebody To Love (Sigma Remix)", new Uri(@"https://www.youtube.com/watch?v=nF7wa3j57j0"), new TimeSpan(0, 5, 47));
-                Items.Add(item);
+                Add(item);
 
                 item = new MediaItem("Armin van Buuren feat. Sophie - Virtual Friend", new Uri(@"https://www.youtube.com/watch?v=0ypeOKp0x3k"), new TimeSpan(0, 7, 12));
-                Items.Add(item);
+                Add(item);
 
                 item = new MediaItem("Will & Tim ft. Ephixa - Stone Tower Temple", new Uri("C:\\Users\\Insire\\Downloads\\Will & Tim ft. Ephixa - Stone Tower Temple.mp3"));
-                Items.Add(item);
+                Add(item);
 
                 // receive MediaItems and add them to the playlist
                 Messenger.Default.Register<MediaItem>(this, (mediaItem) =>
@@ -79,13 +79,21 @@ namespace InsireBot.ViewModel
             AddCommand = new RelayCommand(AddWithDialog);
         }
 
-        private void Add(MediaItem mediaItem)
+        private void Add(IMediaItem mediaItem)
         {
-            var maxIndex = Items.Max(p => p.Index) + 1;
-            if (maxIndex < 0)
-                maxIndex = 0;
+            if (Items.Any())
+            {
+                var maxIndex = Items.Max(p => p.Index) + 1;
+                if (maxIndex < 0)
+                    maxIndex = 0;
 
-            mediaItem.Index = maxIndex;
+                mediaItem.Index = maxIndex;
+            }
+            else
+            {
+                mediaItem.Index = 0;
+            }
+
             Items.Add(mediaItem);
         }
 
@@ -132,7 +140,7 @@ namespace InsireBot.ViewModel
         public void Previous()
         {
             SelectPrevious();
-            MediaPlayer.Play(SelectedItem);
+            Play(SelectedItem);
         }
 
         private bool CanNext()
@@ -144,6 +152,11 @@ namespace InsireBot.ViewModel
         {
             if (Items != null && Items.Any())
             {
+                if (MediaPlayer.Current == null)
+                {
+                    MediaPlayer.Current = SelectedItem;
+                }
+
                 if (MediaPlayer.IsShuffling)
                 {
                     if (Items.Count > 1) // if there is more than one item on the playlist
@@ -175,7 +188,7 @@ namespace InsireBot.ViewModel
                                     if (nextPossibleItems.Any()) // try to find items after the current one
                                     {
                                         Items.ToList().ForEach(p => p.IsSelected = false);
-                                        NextMediaItem = nextPossibleItems.Min();
+                                        NextMediaItem = nextPossibleItems.Where(q => q.Index == nextPossibleItems.Select(p => p.Index).Min()).First();
                                         NextMediaItem.IsSelected = true;
                                     }
                                     else // if there are none, use the first item in the list
@@ -199,7 +212,7 @@ namespace InsireBot.ViewModel
                                     if (nextPossibleItems.Any()) // try to find items after the current one
                                     {
                                         Items.ToList().ForEach(p => p.IsSelected = false);
-                                        NextMediaItem = nextPossibleItems.Min();
+                                        NextMediaItem = nextPossibleItems.Where(q => q.Index == nextPossibleItems.Select(p => p.Index).Min()).First();
                                         NextMediaItem.IsSelected = true;
                                     }
                                     // we dont repeat, so there is nothing to do here
@@ -224,7 +237,7 @@ namespace InsireBot.ViewModel
 
         public void Next()
         {
-            MediaPlayer.Play(SelectedItem);
+            Play(SelectedItem);
         }
 
         public void Play(IMediaItem item)
@@ -237,7 +250,8 @@ namespace InsireBot.ViewModel
         {
             if (!MediaPlayer.IsPlaying)
             {
-                MediaPlayer.Play(SelectedItem);
+                if (SelectedItem != null)
+                    Play(SelectedItem);
 
             }
             else

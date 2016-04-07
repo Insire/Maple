@@ -133,17 +133,11 @@ namespace InsireBot.MediaPlayer
 
         private void InitializeEvents()
         {
-            _vlcMediaPlayer.Buffering += _vlcMediaPlayer_Buffering;
+            _vlcMediaPlayer.Buffering += Buffering;
             _vlcMediaPlayer.EncounteredError += EncounteredError;
             _vlcMediaPlayer.EndReached += EndReached;
             _vlcMediaPlayer.Playing += Playing;
             _vlcMediaPlayer.Stopped += Stopped; ;
-            _vlcMediaPlayer.TitleChanged += TitleChanged;
-        }
-
-        private void _vlcMediaPlayer_Buffering(VlcControl sender, VlcEventArgs<float> e)
-        {
-            Debug.WriteLine("Buffering");
         }
 
         private void Playing(VlcControl sender, VlcEventArgs<EventArgs> e)
@@ -151,11 +145,6 @@ namespace InsireBot.MediaPlayer
             Debug.WriteLine("VlcMediaPlayer_Playing");
             RaisePropertyChanged(nameof(IsPlaying));
 
-        }
-
-        private void TitleChanged(VlcControl sender, VlcEventArgs<long> e)
-        {
-            Debug.WriteLine("VlcMediaPlayer_TitleChanged");
         }
 
         private void Stopped(VlcControl sender, VlcEventArgs<EventArgs> e)
@@ -267,7 +256,6 @@ namespace InsireBot.MediaPlayer
                 _vlcMediaPlayer.EndReached -= EndReached;
                 _vlcMediaPlayer.Playing -= Playing;
                 _vlcMediaPlayer.Stopped -= Stopped;
-                _vlcMediaPlayer.TitleChanged -= TitleChanged;
 
                 _vlcMediaPlayer.Dispose();
                 // Free any other managed objects here.
