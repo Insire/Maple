@@ -2,7 +2,7 @@
 
 namespace InsireBot.MediaPlayer
 {
-    public interface IMediaItem : IIsSelected
+    public interface IMediaItem : IIsSelected, IIndex
     {
         string Title { get; }
         string Location { get; }

@@ -33,6 +33,7 @@ namespace InsireBot.MediaPlayer
                         RepeatMode = RepeatMode.None,
 
                     };
+                    
                     return new DotNetPlayer(dataService, settings);
 
                 default:

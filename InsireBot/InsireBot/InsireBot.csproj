@@ -189,6 +189,7 @@
     <Compile Include="Core\Interfaces\IIndex.cs" />
     <Compile Include="Core\Interfaces\IIsSelected.cs" />
     <Compile Include="Core\Interfaces\ISettings.cs" />
+    <Compile Include="Core\LinqExtensions.cs" />
     <Compile Include="Core\NotifyPropertyChangedExtension.cs" />
     <Compile Include="Core\ObjectSerializer.cs" />
     <Compile Include="Core\RangeObservableCollection.cs" />

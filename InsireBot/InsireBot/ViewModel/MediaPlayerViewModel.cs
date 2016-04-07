@@ -4,13 +4,16 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+
+using InsireBot.Core;
 using InsireBot.MediaPlayer;
 
 namespace InsireBot.ViewModel
 {
-    public class MediaPlayerViewModel : BotViewModelBase<MediaItem>
+    public class MediaPlayerViewModel : BotViewModelBase<IMediaItem>
     {
         public Stack<int> PlayedList { get; private set; } // contains indices of played mediaItems
         public IMediaPlayer<IMediaItem> MediaPlayer { get; }
@@ -58,12 +61,14 @@ namespace InsireBot.ViewModel
 
                 InitiliazeCommands();
             }
+
+            Debug.WriteLine("Initialization complete");
         }
 
         private void MediaPlayer_CompletedMediaItem(object sender, CompletedMediaItemEventEventArgs e)
         {
-            // TODO continous playback
-            throw new NotImplementedException();
+            PlayedList.Push(e.MediaItem.Index);
+            Play();
         }
 
         private void InitiliazeCommands()
@@ -112,7 +117,8 @@ namespace InsireBot.ViewModel
                         {
 
                             Items.ToList().ForEach(p => p.IsSelected = false);      // deselect all items in the list
-                            previousItems.First().IsSelected = true;                // select the one we just found
+                            PreviousMediaItem = previousItems.First();
+                            PreviousMediaItem.IsSelected = true;                    // select the one we just found
                             foundItemInPlaylist = true;                             // set flag to leave this
 
                             if (previousItems.Count() > 1)
@@ -136,18 +142,94 @@ namespace InsireBot.ViewModel
 
         private void SelectNext()
         {
-            // TODO
+            if (Items != null && Items.Any())
+            {
+                if (MediaPlayer.IsShuffling)
+                {
+                    if (Items.Count > 1) // if there is more than one item on the playlist
+                    {
+                        var nextItems = Items.Where(p => p.Index != MediaPlayer.Current.Index); // get all items besides the current one
+                        Items.ToList().ForEach(p => p.IsSelected = false);
+                        NextMediaItem = nextItems.Random();
+                        NextMediaItem.IsSelected = true;
+                    }
+                    else
+                    {
+                        if (MediaPlayer.RepeatMode == RepeatMode.Single || MediaPlayer.RepeatMode == RepeatMode.All)
+                            NextMediaItem = MediaPlayer.Current;
+                        else
+                            NextMediaItem = null;
+                    }
+                }
+                else
+                {
+                    switch (MediaPlayer.RepeatMode)
+                    {
+                        case RepeatMode.All:
+                            {
+                                if (Items.Count > 1) // if there is more than one item on the playlist
+                                {
+                                    var currentIndex = MediaPlayer.Current.Index;
+                                    var nextPossibleItems = Items.Where(p => p.Index > currentIndex);
 
+                                    if (nextPossibleItems.Any()) // try to find items after the current one
+                                    {
+                                        Items.ToList().ForEach(p => p.IsSelected = false);
+                                        NextMediaItem = nextPossibleItems.Min();
+                                        NextMediaItem.IsSelected = true;
+                                    }
+                                    else // if there are none, use the first item in the list
+                                    {
+                                        Items.ToList().ForEach(p => p.IsSelected = false);
+                                        NextMediaItem = Items.First();
+                                        NextMediaItem.IsSelected = true;
+                                    }
+                                }
+                                else
+                                    NextMediaItem = MediaPlayer.Current;
+                            }
+                            break;
+                        case RepeatMode.None:
+                            {
+                                if (Items.Count > 1) // if there is more than one item on the playlist
+                                {
+                                    var currentIndex = MediaPlayer.Current.Index;
+                                    var nextPossibleItems = Items.Where(p => p.Index > currentIndex);
+
+                                    if (nextPossibleItems.Any()) // try to find items after the current one
+                                    {
+                                        Items.ToList().ForEach(p => p.IsSelected = false);
+                                        NextMediaItem = nextPossibleItems.Min();
+                                        NextMediaItem.IsSelected = true;
+                                    }
+                                    // we dont repeat, so there is nothing to do here
+                                }
+                                else
+                                    NextMediaItem = null; // we dont repeat
+
+                            }
+                            break;
+                        case RepeatMode.Single:
+                            {
+                                NextMediaItem = MediaPlayer.Current;
+                            }
+                            break;
+
+                        default:
+                            throw new NotImplementedException(nameof(MediaPlayer.RepeatMode));
+                    }
+                }
+            }
         }
 
         public void Next()
         {
-            SelectNext();
             MediaPlayer.Play(SelectedItem);
         }
 
         public void Play(IMediaItem item)
         {
+            SelectNext();
             MediaPlayer.Play(item);
         }
 
