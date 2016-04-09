@@ -156,16 +156,12 @@ namespace InsireBot.MediaPlayer
         private void EndReached(VlcControl sender, VlcEventArgs<EventArgs> e)
         {
             CompletedMediaItem?.Invoke(this, new CompletedMediaItemEventEventArgs(Current));
-            Debug.WriteLine("VlcMediaPlayer_EndReached");
             RaisePropertyChanged(nameof(IsPlaying));
         }
 
         private void EncounteredError(VlcControl sender, VlcEventArgs<EventArgs> e)
         {
             Debug.WriteLine("VlcMediaPlayer_EncounteredError");
-            foreach (var message in _vlcMediaPlayer.LogMessages)
-                Debug.WriteLine($"{message.Message} {message.Header} {message.Name}");
-
             RaisePropertyChanged(nameof(IsPlaying));
         }
 

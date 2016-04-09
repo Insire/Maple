@@ -37,7 +37,7 @@ namespace InsireBot.ViewModel
 
                 item = new MediaItem("Armin van Buuren feat. Sophie - Virtual Friend", new Uri(@"https://www.youtube.com/watch?v=0ypeOKp0x3k"), new TimeSpan(0, 7, 12));
             }
-            else                 // Code runs "for real"
+            else // Code runs "for real"
             {
                 PlayedList = new Stack<int>();
 
@@ -237,7 +237,7 @@ namespace InsireBot.ViewModel
 
         public void Next()
         {
-            Play(SelectedItem);
+            Play(NextMediaItem);
         }
 
         public void Play(IMediaItem item)
@@ -252,7 +252,6 @@ namespace InsireBot.ViewModel
             {
                 if (SelectedItem != null)
                     Play(SelectedItem);
-
             }
             else
                 Stop();
