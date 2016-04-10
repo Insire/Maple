@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace InsireBot.MediaPlayer
+namespace InsireBotCore
 {
-    public interface IMediaItem : IIsSelected
+    public interface IMediaItem : IIsSelected, IIndex
     {
         string Title { get; }
         string Location { get; }

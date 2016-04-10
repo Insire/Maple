@@ -6,6 +6,8 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using System.Web;
 using GalaSoft.MvvmLight.Messaging;
+using InsireBot.MediaPlayer;
+using System.IO;
 
 namespace InsireBot.ViewModel
 {
@@ -86,6 +88,7 @@ namespace InsireBot.ViewModel
 
         public ICommand ParseCommand { get; private set; }
         public ICommand AddCommand { get; private set; }
+        public ICommand SelectCommand { get; private set; }
         public ICommand CancelCommand { get; private set; }
         public ICommand ClearCommand { get; private set; }
         public ICommand RemoveCommand { get; private set; }
@@ -101,6 +104,20 @@ namespace InsireBot.ViewModel
 
         private void IntializeCommands()
         {
+            SelectCommand = new RelayCommand(() =>
+            {
+                var dialog = WinFormsService.GetOpenFileDialog();
+
+                var result = dialog.ShowDialog();
+
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    var fileName = dialog.FileName;
+                    var mediaItem = new MediaItem(Path.GetFileNameWithoutExtension(fileName), new Uri(fileName));
+                    NewMediaItemViewModel.Items.Add(mediaItem);
+                }
+            });
+
             ParseCommand = new RelayCommand(() =>
             {
                 var url = new Uri(SourceText.Trim());
@@ -140,7 +157,6 @@ namespace InsireBot.ViewModel
 
                     default: throw new NotImplementedException();
                 }
-
                 CloseAction();
             }, CanAdd);
 
@@ -164,9 +180,8 @@ namespace InsireBot.ViewModel
                     default:
                         throw new NotImplementedException();
                 }
-
-
             }, CanRemove);
+
             ClearCommand = new RelayCommand(() =>
             {
                 switch (Mode)

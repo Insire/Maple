@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using GalaSoft.MvvmLight;
+using InsireBotCore;
 
 namespace InsireBot.MediaPlayer
 {
-    public class MediaItem : ObservableObject, IMediaItem
+    public class MediaItem : ObservableObject, IMediaItem, IIndex
     {
         private Guid _id;
         public Guid ID
@@ -16,6 +18,20 @@ namespace InsireBot.MediaPlayer
                     _id = value;
                     RaisePropertyChanged(nameof(ID));
                 }
+            }
+        }
+
+        private int _index;
+        /// <summary>
+        /// An Index managed by the collection an item is inside of
+        /// </summary>
+        public int Index
+        {
+            get { return _index; }
+            set
+            {
+                _index = value;
+                RaisePropertyChanged(nameof(Index));
             }
         }
 
@@ -89,23 +105,47 @@ namespace InsireBot.MediaPlayer
             }
         }
 
+        private bool _isLocalFile;
+        public bool IsLocalFile
+        {
+            get { return _isLocalFile; }
+            set
+            {
+                if (_isLocalFile != value)
+                {
+                    _isLocalFile = value;
+                    RaisePropertyChanged(nameof(IsLocalFile));
+                }
+            }
+        }
+
         private MediaItem()
         {
             ID = Guid.NewGuid();
+            IsRestricted = false;
+            IsSelected = false;
+            IsLocalFile = false;
+            Index = -1;
         }
 
-        public MediaItem(string title, string location)
+        ~MediaItem()
+        {
+            Debug.WriteLine($"{Title} was disposed");
+        }
+
+        public MediaItem(string title, Uri location) : this()
         {
             Title = title;
-            Location = location;
+            Location = location.OriginalString;
+            IsLocalFile = location.IsFile;
         }
 
-        public MediaItem(string title, string location, TimeSpan duration) : this(title, location)
+        public MediaItem(string title, Uri location, TimeSpan duration) : this(title, location)
         {
             Duration = duration;
         }
 
-        public MediaItem(string title, string location, TimeSpan duration, bool? allowed) : this(title, location, duration)
+        public MediaItem(string title, Uri location, TimeSpan duration, bool? allowed) : this(title, location, duration)
         {
             IsRestricted = allowed == null ? false : !(bool)allowed;
         }

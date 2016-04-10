@@ -1,8 +1,8 @@
 ﻿using GalaSoft.MvvmLight;
 
-namespace InsireBot
+namespace InsireBotCore
 {
-    public class AudioDevice : ObservableObject, IIsSelected
+    public class AudioDevice : ObservableObject, IIsSelected, IIndex
     {
         private bool _isSelected;
         public bool IsSelected
@@ -12,6 +12,17 @@ namespace InsireBot
             {
                 _isSelected = value;
                 RaisePropertyChanged(nameof(IsSelected));
+            }
+        }
+
+        private int _index;
+        public int Index
+        {
+            get { return _index; }
+            set
+            {
+                _index = value;
+                RaisePropertyChanged(nameof(Index));
             }
         }
 

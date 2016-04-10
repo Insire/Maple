@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using GalaSoft.MvvmLight;
-using InsireBot.MediaPlayer;
+
+using InsireBotCore;
 
 namespace InsireBot.ViewModel
 {
@@ -10,8 +12,8 @@ namespace InsireBot.ViewModel
     /// </summary>
     public class NewMediaItemViewModel : ViewModelBase
     {
-        private RangeObservableCollection<MediaItem> _items;
-        public RangeObservableCollection<MediaItem> Items
+        private RangeObservableCollection<IMediaItem> _items;
+        public RangeObservableCollection<IMediaItem> Items
         {
             get { return _items; }
             set
@@ -44,12 +46,12 @@ namespace InsireBot.ViewModel
             }
         }
 
-        public IEnumerable<MediaItem> SelectedItems
+        public IEnumerable<IMediaItem> SelectedItems
         {
             get { return Items.Where(p => p.IsSelected); }
         }
 
-        public MediaItem this[int index]
+        public IMediaItem this[int index]
         {
             get
             {
@@ -59,7 +61,7 @@ namespace InsireBot.ViewModel
 
         public NewMediaItemViewModel()
         {
-            Items = new RangeObservableCollection<MediaItem>();
+            Items = new RangeObservableCollection<IMediaItem>();
         }
 
         /// <summary>

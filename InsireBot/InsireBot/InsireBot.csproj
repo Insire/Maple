@@ -79,8 +79,8 @@
       <HintPath>..\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Dragablz, Version=0.0.3.157, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dragablz.0.0.3.157\lib\net45\Dragablz.dll</HintPath>
+    <Reference Include="Dragablz, Version=0.0.3.158, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dragablz.0.0.3.158\lib\net45\Dragablz.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
@@ -154,12 +154,15 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="Vlc.DotNet.Core, Version=2.1.122.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
-      <HintPath>..\packages\Vlc.DotNet.Core.2.1.122\lib\net45\x86\Vlc.DotNet.Core.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\VlcWrapper\Resources\Vlc.DotNet.Core.dll</HintPath>
     </Reference>
     <Reference Include="Vlc.DotNet.Core.Interops, Version=2.1.122.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
-      <HintPath>..\packages\Vlc.DotNet.Core.Interops.2.1.122\lib\net45\x86\Vlc.DotNet.Core.Interops.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\VlcWrapper\Resources\Vlc.DotNet.Core.Interops.dll</HintPath>
+    </Reference>
+    <Reference Include="Vlc.DotNet.Wpf">
+      <HintPath>..\VlcWrapper\Resources\Vlc.DotNet.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -178,35 +181,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Core\AudioDevice.cs" />
-    <Compile Include="Core\BotViewModelBase.cs" />
-    <Compile Include="Core\DemoItem.cs" />
-    <Compile Include="Core\DesignTimeDataService.cs" />
-    <Compile Include="Core\Interfaces\IDataService.cs" />
-    <Compile Include="Core\Interfaces\IIsSelected.cs" />
-    <Compile Include="Core\Interfaces\ISettings.cs" />
-    <Compile Include="Core\NotifyPropertyChangedExtension.cs" />
-    <Compile Include="Core\ObjectSerializer.cs" />
-    <Compile Include="Core\RangeObservableCollection.cs" />
-    <Compile Include="Core\RuntimeDataService.cs" />
+    <Compile Include="Util\BotViewModelBase.cs" />
+    <Compile Include="Util\DrawerItem.cs" />
+    <Compile Include="Util\LinqExtensions.cs" />
+    <Compile Include="Util\NotifyPropertyChangedExtension.cs" />
     <Compile Include="Dialogs\NewMediaItemDialog.xaml.cs">
       <DependentUpon>NewMediaItemDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Feature\MediaPlayer\BasePlayer.cs" />
-    <Compile Include="Feature\MediaPlayer\Enums\MediaPlayerType.cs" />
-    <Compile Include="Feature\MediaPlayer\Enums\MediaPlayPlaybackType.cs" />
-    <Compile Include="Feature\MediaPlayer\Interfaces\IMediaItem.cs" />
-    <Compile Include="Feature\MediaPlayer\Interfaces\IMediaPlayer.cs" />
-    <Compile Include="Feature\MediaPlayer\Interfaces\IPlaying.cs" />
     <Compile Include="Feature\MediaPlayer\MediaItem.cs" />
-    <Compile Include="Feature\MediaPlayer\Enums\MediaItemAction.cs" />
-    <Compile Include="Feature\MediaPlayer\MediaItemContract.cs" />
     <Compile Include="Feature\MediaPlayer\Playlist.cs" />
     <Compile Include="Feature\MediaPlayer\MediaPlayerFactory.cs" />
     <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayer.cs" />
     <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayerException.cs" />
     <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayerSettings.cs" />
-    <Compile Include="Feature\WinmmService.cs" />
+    <Compile Include="Feature\WinFormsService.cs" />
     <Compile Include="Feature\Youtube\Youtube.cs" />
     <Compile Include="Pages\MediaPlayerPage.xaml.cs">
       <DependentUpon>MediaPlayerPage.xaml</DependentUpon>
@@ -222,7 +211,8 @@
     </Compile>
     <Compile Include="Util\DataGridBehavior.cs" />
     <Compile Include="Util\EnumBindingSourceExtension.cs" />
-    <Compile Include="ViewModel\NewMediaItemsViewModel.cs" />
+    <Compile Include="Util\RadioButtonCheckedConverter.cs" />
+    <Compile Include="ViewModel\NewMediaItemsDialogViewModel.cs" />
     <Compile Include="ViewModel\NewMediaItemViewModel.cs" />
     <Compile Include="ViewModel\NewPlaylistViewModel.cs" />
     <Compile Include="ViewModel\PlaylistsViewModel.cs" />
@@ -320,6 +310,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MaterialDesignThemes.MahApps.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InsireBotCore\InsireBotCore.csproj">
+      <Project>{4e52ff0e-06fd-49c3-b362-595db8070531}</Project>
+      <Name>InsireBotCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VlcWrapper\VlcWrapper.csproj">
+      <Project>{dce9bd7c-5111-466c-8e3d-e26d5d31afe3}</Project>
+      <Name>VlcWrapper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace InsireBot
+namespace InsireBotCore
 {
     internal class WinmmService
     {

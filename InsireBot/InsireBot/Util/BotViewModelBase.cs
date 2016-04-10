@@ -3,39 +3,19 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
+
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 
+using InsireBotCore;
+
 namespace InsireBot
 {
-    public class BotViewModelBase<T> : ViewModelBase where T : IIsSelected
+    public class BotViewModelBase<T> : ViewModelBase where T : IIsSelected, IIndex
     {
         protected readonly IDataService _dataService;
 
         private object _itemsLock;
-        private object _FilteredItemsLock;
-
-        private int _selectedIndex = -1;
-        public int SelectedIndex
-        {
-            get { return _selectedIndex; }
-            set
-            {
-                if (value != _selectedIndex)
-                {
-                    _selectedIndex = value;
-
-                    if (_selectedIndex >= Items.Count)
-                        SelectedIndex = 0;
-
-                    if (_selectedIndex < 0)
-                        SelectedIndex = Items.Count - 1;
-
-                    RaisePropertyChanged(nameof(SelectedIndex));
-                    RaisePropertyChanged(nameof(SelectedItem));
-                }
-            }
-        }
 
         private RangeObservableCollection<T> _items;
         public RangeObservableCollection<T> Items
@@ -56,6 +36,9 @@ namespace InsireBot
             return Items.Count;
         }
 
+        /// <summary>
+        /// evaluates based on the items which have the property IsSelected set to true
+        /// </summary>
         public T SelectedItem
         {
             get { return SelectedItems.FirstOrDefault(); }
@@ -90,14 +73,13 @@ namespace InsireBot
             _dataService = dataService;
 
             _itemsLock = new object();
-            _FilteredItemsLock = new object();
 
             Items = new RangeObservableCollection<T>();
             FilteredItemsView = CollectionViewSource.GetDefaultView(Items);
 
             BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
 
-            RemoveCommand = new RelayCommand(() => SelectedItems.ToList().ForEach(p=>Items.Remove(p)), CanRemove);
+            RemoveCommand = new RelayCommand(() => SelectedItems.ToList().ForEach(p => Items.Remove(p)), CanRemove);
             ClearCommand = new RelayCommand(() => Items.Clear(), CanClear);
         }
 
@@ -106,12 +88,12 @@ namespace InsireBot
             return AreItemsSelected();
         }
 
-        private bool CanClear()
+        protected bool CanClear()
         {
             return Items?.Count > 0;
         }
 
-        private bool AreItemsSelected()
+        protected bool AreItemsSelected()
         {
             return Items.Any(p => p.IsSelected);
         }

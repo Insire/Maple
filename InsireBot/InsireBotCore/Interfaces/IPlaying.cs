@@ -1,4 +1,4 @@
-﻿namespace InsireBot.MediaPlayer
+﻿namespace InsireBotCore
 {
     public interface IPlaying
     {

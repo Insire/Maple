@@ -1,4 +1,4 @@
-﻿namespace InsireBot
+﻿namespace InsireBotCore
 {
     public interface ISettings
     {

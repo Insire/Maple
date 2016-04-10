@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace InsireBot
+namespace InsireBotCore
 {
     public class DesignTimeDataService : IDataService
     {
