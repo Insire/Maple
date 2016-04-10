@@ -181,37 +181,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Core\AudioDevice.cs" />
-    <Compile Include="Core\BotViewModelBase.cs" />
-    <Compile Include="Core\DemoItem.cs" />
-    <Compile Include="Core\DesignTimeDataService.cs" />
-    <Compile Include="Core\Interfaces\IDataService.cs" />
-    <Compile Include="Core\Interfaces\IIndex.cs" />
-    <Compile Include="Core\Interfaces\IIsSelected.cs" />
-    <Compile Include="Core\Interfaces\ISettings.cs" />
-    <Compile Include="Core\LinqExtensions.cs" />
-    <Compile Include="Core\NotifyPropertyChangedExtension.cs" />
-    <Compile Include="Core\ObjectSerializer.cs" />
-    <Compile Include="Core\RangeObservableCollection.cs" />
-    <Compile Include="Core\RuntimeDataService.cs" />
+    <Compile Include="Util\BotViewModelBase.cs" />
+    <Compile Include="Util\DrawerItem.cs" />
+    <Compile Include="Util\LinqExtensions.cs" />
+    <Compile Include="Util\NotifyPropertyChangedExtension.cs" />
     <Compile Include="Dialogs\NewMediaItemDialog.xaml.cs">
       <DependentUpon>NewMediaItemDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Feature\MediaPlayer\BasePlayer.cs" />
-    <Compile Include="Feature\MediaPlayer\Enums\MediaPlayerType.cs" />
-    <Compile Include="Feature\MediaPlayer\Enums\MediaPlayPlaybackType.cs" />
-    <Compile Include="Feature\MediaPlayer\Interfaces\IMediaItem.cs" />
-    <Compile Include="Feature\MediaPlayer\Interfaces\IMediaPlayer.cs" />
-    <Compile Include="Feature\MediaPlayer\Interfaces\IPlaying.cs" />
     <Compile Include="Feature\MediaPlayer\MediaItem.cs" />
-    <Compile Include="Feature\MediaPlayer\Enums\MediaItemAction.cs" />
     <Compile Include="Feature\MediaPlayer\Playlist.cs" />
     <Compile Include="Feature\MediaPlayer\MediaPlayerFactory.cs" />
     <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayer.cs" />
     <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayerException.cs" />
     <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayerSettings.cs" />
     <Compile Include="Feature\WinFormsService.cs" />
-    <Compile Include="Feature\WinmmService.cs" />
     <Compile Include="Feature\Youtube\Youtube.cs" />
     <Compile Include="Pages\MediaPlayerPage.xaml.cs">
       <DependentUpon>MediaPlayerPage.xaml</DependentUpon>
@@ -225,7 +209,6 @@
     <Compile Include="Pages\OptionsPage.xaml.cs">
       <DependentUpon>OptionsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Util\CompletedMediaItemEventHandler.cs" />
     <Compile Include="Util\DataGridBehavior.cs" />
     <Compile Include="Util\EnumBindingSourceExtension.cs" />
     <Compile Include="Util\RadioButtonCheckedConverter.cs" />
@@ -329,6 +312,10 @@
     <Content Include="MaterialDesignThemes.MahApps.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\InsireBotCore\InsireBotCore.csproj">
+      <Project>{4e52ff0e-06fd-49c3-b362-595db8070531}</Project>
+      <Name>InsireBotCore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VlcWrapper\VlcWrapper.csproj">
       <Project>{dce9bd7c-5111-466c-8e3d-e26d5d31afe3}</Project>
       <Name>VlcWrapper</Name>

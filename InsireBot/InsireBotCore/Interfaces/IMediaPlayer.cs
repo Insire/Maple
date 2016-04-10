@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InsireBot.MediaPlayer
+namespace InsireBotCore
 {
     public interface IMediaPlayer<IMediaItem> : IPlaying, IDisposable
     {

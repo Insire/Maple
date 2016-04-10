@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using GalaSoft.MvvmLight;
+using InsireBotCore;
 
 namespace InsireBot.MediaPlayer
 {

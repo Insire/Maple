@@ -1,8 +1,9 @@
-﻿namespace InsireBot.MediaPlayer
+﻿namespace InsireBotCore
 {
     public enum MediaPlayerType
     {
         VLCDOTNET,
-        ZUNEVLC
+        ZUNEVLC,
+        FFMPEG,
     }
 }

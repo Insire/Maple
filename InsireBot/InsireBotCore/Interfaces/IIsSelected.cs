@@ -1,4 +1,4 @@
-﻿namespace InsireBot
+﻿namespace InsireBotCore
 {
     /// <summary>
     ///  provides a property for an instance of a class to tell, if the instance has been selected via the UI

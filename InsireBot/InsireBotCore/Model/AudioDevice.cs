@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 
-namespace InsireBot
+namespace InsireBotCore
 {
     public class AudioDevice : ObservableObject, IIsSelected, IIndex
     {

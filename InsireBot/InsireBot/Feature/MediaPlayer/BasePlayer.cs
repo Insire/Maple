@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using InsireBotCore;
 
 namespace InsireBot.MediaPlayer
 {

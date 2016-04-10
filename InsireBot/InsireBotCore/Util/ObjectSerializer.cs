@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace InsireBot
+namespace InsireBotCore
 {
     public static class ObjectSerializer
     {

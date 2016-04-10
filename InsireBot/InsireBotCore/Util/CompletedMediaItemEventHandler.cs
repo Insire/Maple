@@ -1,7 +1,6 @@
 ﻿using System;
-using InsireBot.MediaPlayer;
 
-namespace InsireBot
+namespace InsireBotCore
 {
     public delegate void CompletedMediaItemEventHandler(object sender, CompletedMediaItemEventEventArgs e);
 

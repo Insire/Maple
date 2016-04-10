@@ -4,6 +4,7 @@ using System.Linq;
 using VlcWrapper;
 using Vlc.DotNet.Wpf;
 using Vlc.DotNet.Core;
+using InsireBotCore;
 
 namespace InsireBot.MediaPlayer
 {
