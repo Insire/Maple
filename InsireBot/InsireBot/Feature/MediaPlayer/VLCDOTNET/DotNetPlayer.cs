@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using VlcWrapper;
-using Vlc.DotNet.Wpf;
-using Vlc.DotNet.Core;
 using InsireBotCore;
+using VlcWrapper;
+using Vlc.DotNet.Core;
 
 namespace InsireBot.MediaPlayer
 {
     public sealed class DotNetPlayer : BasePlayer, IMediaPlayer<IMediaItem>
     {
-        private VlcMediaPlayer _vlcMediaPlayer;
+        private NewVlcMediaPlayer _vlcMediaPlayer;
 
         public event CompletedMediaItemEventHandler CompletedMediaItem;
 
@@ -100,7 +99,6 @@ namespace InsireBot.MediaPlayer
         {
             VolumeMin = 0;
             VolumeMax = 100;
-
         }
 
         public DotNetPlayer(IDataService dataService, DotNetPlayerSettings settings) : this(dataService)
@@ -127,7 +125,7 @@ namespace InsireBot.MediaPlayer
                 throw new ArgumentNullException(nameof(AudioDevice));
 
             Settings.Options[1] = string.Format(Settings.Options[1], AudioDevice);
-            _vlcMediaPlayer = new VlcMediaPlayer(Settings.VlcLibDirectory, Settings.Options);
+            _vlcMediaPlayer = new NewVlcMediaPlayer(Settings.VlcLibDirectory, Settings.Options);
 
             InitializeEvents();
         }
@@ -138,35 +136,34 @@ namespace InsireBot.MediaPlayer
             _vlcMediaPlayer.EncounteredError += EncounteredError;
             _vlcMediaPlayer.EndReached += EndReached;
             _vlcMediaPlayer.Playing += Playing;
-            _vlcMediaPlayer.Stopped += Stopped; ;
+            _vlcMediaPlayer.Stopped += Stopped;
         }
 
-        private void Playing(VlcControl sender, VlcEventArgs<EventArgs> e)
-        {
-            Debug.WriteLine("VlcMediaPlayer_Playing");
-            RaisePropertyChanged(nameof(IsPlaying));
-
-        }
-
-        private void Stopped(VlcControl sender, VlcEventArgs<EventArgs> e)
+        private void Stopped(object sender, VlcMediaPlayerStoppedEventArgs e)
         {
             Debug.WriteLine("VlcMediaPlayer_Stopped");
             RaisePropertyChanged(nameof(IsPlaying));
         }
 
-        private void EndReached(VlcControl sender, VlcEventArgs<EventArgs> e)
+        private void Playing(object sender, VlcMediaPlayerPlayingEventArgs e)
+        {
+            Debug.WriteLine("VlcMediaPlayer_Playing");
+            RaisePropertyChanged(nameof(IsPlaying));
+        }
+
+        private void EndReached(object sender, VlcMediaPlayerEndReachedEventArgs e)
         {
             CompletedMediaItem?.Invoke(this, new CompletedMediaItemEventEventArgs(Current));
             RaisePropertyChanged(nameof(IsPlaying));
         }
 
-        private void EncounteredError(VlcControl sender, VlcEventArgs<EventArgs> e)
+        private void EncounteredError(object sender, VlcMediaPlayerEncounteredErrorEventArgs e)
         {
             Debug.WriteLine("VlcMediaPlayer_EncounteredError");
             RaisePropertyChanged(nameof(IsPlaying));
         }
 
-        private void Buffering(VlcControl sender, VlcEventArgs<float> e)
+        private void Buffering(object sender, Vlc.DotNet.Core.VlcMediaPlayerBufferingEventArgs e)
         {
             Debug.WriteLine("Buffering");
             RaisePropertyChanged(nameof(IsPlaying));

@@ -4,6 +4,8 @@ namespace InsireBot.MediaPlayer
 {
     public abstract class BasePlayer : BotViewModelBase<AudioDevice>
     {
+        public event RepeatModeChangedEventHandler RepeatModeChanged;
+
         private RangeObservableCollection<AudioDevice> _audioDevices;
         public RangeObservableCollection<AudioDevice> AudioDevices
         {
@@ -56,6 +58,7 @@ namespace InsireBot.MediaPlayer
                 {
                     _repeatMode = value;
                     RaisePropertyChanged(nameof(RepeatMode));
+                    RepeatModeChanged?.Invoke(this, new RepeatModeChangedEventEventArgs(RepeatMode));
                 }
             }
         }

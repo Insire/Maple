@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:core="clr-namespace:InsireBotCore;assembly=InsireBotCore"
              xmlns:local="clr-namespace:InsireBot"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -91,17 +92,17 @@
             <RadioButton Style="{StaticResource NoneRepeatModeStyle}" 
                       Grid.Column="0"
                       ToolTip="Repeat none" 
-                      IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static local:RepeatMode.None}, UpdateSourceTrigger=PropertyChanged}" />
+                      IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static core:RepeatMode.None}, UpdateSourceTrigger=PropertyChanged}" />
 
             <RadioButton Style="{StaticResource OneRepeatModeStyle}"
                       Grid.Column="1"
                       ToolTip="Repeat one"
-                      IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static local:RepeatMode.Single}, UpdateSourceTrigger=PropertyChanged}" />
+                      IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static core:RepeatMode.Single}, UpdateSourceTrigger=PropertyChanged}" />
 
             <RadioButton Style="{StaticResource AllRepeatModeStyle}" 
                          Grid.Column="2"
                          ToolTip="Repeat all"
-                         IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static local:RepeatMode.All}, UpdateSourceTrigger=PropertyChanged}" />
+                         IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static core:RepeatMode.All}, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
     </Grid>
 

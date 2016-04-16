@@ -5,6 +5,7 @@ namespace InsireBotCore
     public interface IMediaPlayer<IMediaItem> : IPlaying, IDisposable
     {
         event CompletedMediaItemEventHandler CompletedMediaItem;
+        event RepeatModeChangedEventHandler RepeatModeChanged;
 
         bool Disposed { get; }
         bool IsPlaying { get; }

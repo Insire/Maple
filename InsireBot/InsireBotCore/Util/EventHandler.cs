@@ -13,4 +13,16 @@ namespace InsireBotCore
             MediaItem = mediaItem;
         }
     }
+
+    public delegate void RepeatModeChangedEventHandler(object sender, RepeatModeChangedEventEventArgs e);
+
+    public class RepeatModeChangedEventEventArgs : EventArgs
+    {
+        public RepeatMode RepeatMode { get; private set; }
+
+        public RepeatModeChangedEventEventArgs(RepeatMode repeatMode)
+        {
+            RepeatMode = repeatMode;
+        }
+    }
 }

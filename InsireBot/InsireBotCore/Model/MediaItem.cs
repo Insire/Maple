@@ -3,7 +3,7 @@ using System.Diagnostics;
 using GalaSoft.MvvmLight;
 using InsireBotCore;
 
-namespace InsireBot.MediaPlayer
+namespace InsireBotCore
 {
     public class MediaItem : ObservableObject, IMediaItem, IIndex
     {

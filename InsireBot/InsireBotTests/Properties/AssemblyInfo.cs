@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("VlcWrapper")]
+[assembly: AssemblyTitle("InsireBotTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("VlcWrapper")]
+[assembly: AssemblyProduct("InsireBotTests")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("dce9bd7c-5111-466c-8e3d-e26d5d31afe3")]
+[assembly: Guid("161b76d6-52e4-4842-924b-1d3f1019f6be")]
 
 // Version information for an assembly consists of the following four values:
 //

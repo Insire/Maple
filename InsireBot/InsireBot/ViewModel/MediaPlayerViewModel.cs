@@ -30,12 +30,10 @@ namespace InsireBot.ViewModel
 
         public MediaPlayerViewModel(IDataService dataService) : base(dataService)
         {
+            Add(dataService.GetMediaItems()); // populate the playlist
+
             if (IsInDesignMode)
             {
-                var item = new MediaItem("Rusko - Somebody To Love (Sigma Remix)", new Uri(@"https://www.youtube.com/watch?v=nF7wa3j57j0"), new TimeSpan(0, 5, 47));
-                Items.Add(item);
-
-                item = new MediaItem("Armin van Buuren feat. Sophie - Virtual Friend", new Uri(@"https://www.youtube.com/watch?v=0ypeOKp0x3k"), new TimeSpan(0, 7, 12));
             }
             else // Code runs "for real"
             {
@@ -43,15 +41,8 @@ namespace InsireBot.ViewModel
 
                 MediaPlayer = MediaPlayerFactory.Create(dataService, MediaPlayerType.VLCDOTNET);
                 MediaPlayer.CompletedMediaItem += MediaPlayer_CompletedMediaItem;
+                MediaPlayer.RepeatModeChanged += MediaPlayer_RepeatModeChanged;
 
-                var item = new MediaItem("Rusko - Somebody To Love (Sigma Remix)", new Uri(@"https://www.youtube.com/watch?v=nF7wa3j57j0"), new TimeSpan(0, 5, 47));
-                Add(item);
-
-                item = new MediaItem("Armin van Buuren feat. Sophie - Virtual Friend", new Uri(@"https://www.youtube.com/watch?v=0ypeOKp0x3k"), new TimeSpan(0, 7, 12));
-                Add(item);
-
-                item = new MediaItem("Will & Tim ft. Ephixa - Stone Tower Temple", new Uri("C:\\Users\\Insire\\Downloads\\Will & Tim ft. Ephixa - Stone Tower Temple.mp3"));
-                Add(item);
 
                 // receive MediaItems and add them to the playlist
                 Messenger.Default.Register<MediaItem>(this, (mediaItem) =>
@@ -65,10 +56,15 @@ namespace InsireBot.ViewModel
             Debug.WriteLine("Initialization complete");
         }
 
+        private void MediaPlayer_RepeatModeChanged(object sender, RepeatModeChangedEventEventArgs e)
+        {
+            SelectNext();
+        }
+
         private void MediaPlayer_CompletedMediaItem(object sender, CompletedMediaItemEventEventArgs e)
         {
             PlayedList.Push(e.MediaItem.Index);
-            Play();
+            Next();
         }
 
         private void InitiliazeCommands()
@@ -77,6 +73,12 @@ namespace InsireBot.ViewModel
             PreviousCommand = new RelayCommand(Previous, CanPrevious);
             NextCommand = new RelayCommand(Next, CanNext);
             AddCommand = new RelayCommand(AddWithDialog);
+        }
+
+        private void Add(IEnumerable<IMediaItem> mediaItems)
+        {
+            foreach (var item in mediaItems)
+                Items.Add(item);
         }
 
         private void Add(IMediaItem mediaItem)
@@ -148,7 +150,7 @@ namespace InsireBot.ViewModel
             return NextMediaItem != null;
         }
 
-        private void SelectNext()
+        public void SelectNext()
         {
             if (Items != null && Items.Any())
             {
@@ -176,13 +178,16 @@ namespace InsireBot.ViewModel
                 }
                 else
                 {
+                    var currentIndex = 0;
+                    if (MediaPlayer?.Current?.Index != null)
+                        currentIndex = MediaPlayer.Current.Index;
+
                     switch (MediaPlayer.RepeatMode)
                     {
                         case RepeatMode.All:
                             {
                                 if (Items.Count > 1) // if there is more than one item on the playlist
                                 {
-                                    var currentIndex = MediaPlayer.Current.Index;
                                     var nextPossibleItems = Items.Where(p => p.Index > currentIndex);
 
                                     if (nextPossibleItems.Any()) // try to find items after the current one
@@ -206,7 +211,6 @@ namespace InsireBot.ViewModel
                             {
                                 if (Items.Count > 1) // if there is more than one item on the playlist
                                 {
-                                    var currentIndex = MediaPlayer.Current.Index;
                                     var nextPossibleItems = Items.Where(p => p.Index > currentIndex);
 
                                     if (nextPossibleItems.Any()) // try to find items after the current one
@@ -252,6 +256,8 @@ namespace InsireBot.ViewModel
             {
                 if (SelectedItem != null)
                     Play(SelectedItem);
+                if (NextMediaItem == null)
+                    SelectNext();
             }
             else
                 Stop();

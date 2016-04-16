@@ -8,9 +8,8 @@ using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using Google.Apis.YouTube.v3;
 using System.Collections.Generic;
-using Google.Apis.YouTube.v3.Data;
 using System.Xml;
-using InsireBot.MediaPlayer;
+using InsireBotCore;
 
 namespace InsireBot
 {

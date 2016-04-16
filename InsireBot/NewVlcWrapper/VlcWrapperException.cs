@@ -24,5 +24,10 @@ namespace VlcWrapper
         {
 
         }
+
+        public VlcWrapperException(Exception exception) : base("An error occured", exception)
+        {
+
+        }
     }
 }

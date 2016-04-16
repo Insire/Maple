@@ -8,6 +8,7 @@ using System.Web;
 using GalaSoft.MvvmLight.Messaging;
 using InsireBot.MediaPlayer;
 using System.IO;
+using InsireBotCore;
 
 namespace InsireBot.ViewModel
 {
