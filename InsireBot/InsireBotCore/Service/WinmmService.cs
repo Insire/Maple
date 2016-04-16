@@ -2,9 +2,9 @@
 
 namespace InsireBotCore
 {
-    internal class WinmmService
+    public class WinmmService
     {
-        internal static WAVEOUTCAPS[] GetDevCapsPlayback()
+        public static WAVEOUTCAPS[] GetDevCapsPlayback()
         {
             var waveOutDevicesCount = waveOutGetNumDevs();
             if (waveOutDevicesCount > 0)
@@ -24,7 +24,7 @@ namespace InsireBotCore
             }
         }
 
-        internal static WAVEINCAPS[] GetDevCapsRecording()
+        public static WAVEINCAPS[] GetDevCapsRecording()
         {
             var waveInDevicesCount = waveInGetNumDevs();
             if (waveInDevicesCount > 0)
@@ -45,7 +45,7 @@ namespace InsireBotCore
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 4, CharSet = CharSet.Auto)]
-        internal struct WAVEOUTCAPS
+        public struct WAVEOUTCAPS
         {
             public short wMid;
             public short wPid;
@@ -67,7 +67,7 @@ namespace InsireBotCore
 
 
         [StructLayout(LayoutKind.Sequential, Pack = 4, CharSet = CharSet.Auto)]
-        internal struct WAVEINCAPS
+        public struct WAVEINCAPS
         {
             public short wMid;
             public short wPid;

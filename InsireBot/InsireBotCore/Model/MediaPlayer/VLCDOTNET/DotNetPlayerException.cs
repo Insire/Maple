@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace InsireBot.MediaPlayer
+namespace InsireBotCore
 {
     [Serializable()]
     public class DotNetPlayerException : Exception

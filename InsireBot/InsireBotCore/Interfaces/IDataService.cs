@@ -4,8 +4,10 @@ namespace InsireBotCore
 {
     public interface IDataService
     {
-       IEnumerable<AudioDevice> GetPlaybackDevices();
+        IEnumerable<AudioDevice> GetPlaybackDevices();
 
         IEnumerable<IMediaItem> GetMediaItems();
+
+        IMediaPlayer<IMediaItem> GetMediaPlayer();
     }
 }

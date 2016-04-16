@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using InsireBotCore;
-using VlcWrapper;
 using Vlc.DotNet.Core;
 
-namespace InsireBot.MediaPlayer
+namespace InsireBotCore
 {
     public sealed class DotNetPlayer : BasePlayer, IMediaPlayer<IMediaItem>
     {
-        private NewVlcMediaPlayer _vlcMediaPlayer;
+        private VlcMediaPlayer _vlcMediaPlayer;
 
         public event CompletedMediaItemEventHandler CompletedMediaItem;
 
@@ -125,7 +123,7 @@ namespace InsireBot.MediaPlayer
                 throw new ArgumentNullException(nameof(AudioDevice));
 
             Settings.Options[1] = string.Format(Settings.Options[1], AudioDevice);
-            _vlcMediaPlayer = new NewVlcMediaPlayer(Settings.VlcLibDirectory, Settings.Options);
+            _vlcMediaPlayer = new VlcMediaPlayer(Settings.VlcLibDirectory, Settings.Options);
 
             InitializeEvents();
         }

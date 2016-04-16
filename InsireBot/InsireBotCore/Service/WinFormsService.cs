@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace InsireBot
+namespace InsireBotCore
 {
-    internal static class WinFormsService
+    public static class WinFormsService
     {
         public static OpenFileDialog GetOpenFileDialog()
         {

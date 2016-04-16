@@ -1,6 +1,4 @@
-﻿using InsireBotCore;
-
-namespace InsireBot.MediaPlayer
+﻿namespace InsireBotCore
 {
     public abstract class BasePlayer : BotViewModelBase<AudioDevice>
     {

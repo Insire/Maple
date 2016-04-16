@@ -174,7 +174,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayer.cs" />
     <Compile Include="Util\BotViewModelBase.cs" />
     <Compile Include="Util\DrawerItem.cs" />
     <Compile Include="Util\LinqExtensions.cs" />
@@ -182,13 +181,6 @@
     <Compile Include="Dialogs\NewMediaItemDialog.xaml.cs">
       <DependentUpon>NewMediaItemDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Feature\MediaPlayer\BasePlayer.cs" />
-    <Compile Include="Feature\MediaPlayer\Playlist.cs" />
-    <Compile Include="Feature\MediaPlayer\MediaPlayerFactory.cs" />
-    <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayerException.cs" />
-    <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayerSettings.cs" />
-    <Compile Include="Feature\WinFormsService.cs" />
-    <Compile Include="Feature\Youtube\Youtube.cs" />
     <Compile Include="Pages\MediaPlayerPage.xaml.cs">
       <DependentUpon>MediaPlayerPage.xaml</DependentUpon>
     </Compile>
@@ -307,10 +299,6 @@
     <ProjectReference Include="..\InsireBotCore\InsireBotCore.csproj">
       <Project>{4e52ff0e-06fd-49c3-b362-595db8070531}</Project>
       <Name>InsireBotCore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NewVlcWrapper\VlcWrapper.csproj">
-      <Project>{748cb1a7-f2bd-4ddb-a0ba-040a8a04952a}</Project>
-      <Name>VlcWrapper</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

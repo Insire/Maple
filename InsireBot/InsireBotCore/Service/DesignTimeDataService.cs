@@ -11,6 +11,11 @@ namespace InsireBotCore
             yield return new MediaItem("Armin van Buuren feat. Sophie - Virtual Friend", new Uri(@"https://www.youtube.com/watch?v=0ypeOKp0x3k"), new TimeSpan(0, 7, 12));
         }
 
+        public IMediaPlayer<IMediaItem> GetMediaPlayer()
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<AudioDevice> GetPlaybackDevices()
         {
             yield return new AudioDevice(2, 2, 2, "TestDevice #1", 2, 2, 2, 2);

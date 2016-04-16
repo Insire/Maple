@@ -1,7 +1,6 @@
 ﻿using System.IO;
-using InsireBotCore;
 
-namespace InsireBot.MediaPlayer
+namespace InsireBotCore
 {
     public class DotNetPlayerSettings : ISettings
     {

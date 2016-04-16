@@ -136,9 +136,9 @@ namespace InsireBot
             return result;
         }
 
-        public async Task<IEnumerable<MediaPlayer.Playlist>> GetPlaylist(string playlistId)
+        public async Task<IEnumerable<Playlist>> GetPlaylist(string playlistId)
         {
-            var result = new List<MediaPlayer.Playlist>();
+            var result = new List<Playlist>();
             var youtubeService = await GetService();
 
             var request = youtubeService.Playlists.List("snippet,contentDetails");
@@ -151,7 +151,7 @@ namespace InsireBot
                 var nextPageToken = "";
                 while (!string.IsNullOrEmpty(nextPageToken))
                 {
-                    var playlist = new MediaPlayer.Playlist(item.Snippet.Title, item.Id);
+                    var playlist = new Playlist(item.Snippet.Title, item.Id);
                     var videos = await GetPlaylistItems(item.Id);
 
                     playlist.AddRange(videos);

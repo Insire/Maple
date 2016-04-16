@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using InsireBotCore;
+using InsireBotTests;
 
 namespace InsireBot.ViewModel.Tests
 {

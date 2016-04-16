@@ -2,9 +2,7 @@
 
 using GalaSoft.MvvmLight;
 
-using InsireBotCore;
-
-namespace InsireBot.MediaPlayer
+namespace InsireBotCore
 {
     public class Playlist : ObservableObject, IIsSelected, IIndex
     {
