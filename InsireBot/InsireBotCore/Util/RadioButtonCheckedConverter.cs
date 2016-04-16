@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Data;
 
-namespace InsireBot
+namespace InsireBotCore
 {
     public class RadioButtonCheckedConverter : IValueConverter
     {

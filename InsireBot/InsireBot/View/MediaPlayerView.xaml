@@ -7,6 +7,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:mediaPlayer="clr-namespace:InsireBot.MediaPlayer"
              xmlns:local="clr-namespace:InsireBot"
+             xmlns:core ="clr-namespace:InsireBotCore;assembly=InsireBotCore"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     
@@ -23,7 +24,7 @@
 
         <!-- Playlist -->
         <ScrollViewer Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
-            <DataGrid ItemsSource="{Binding Items}" Style="{StaticResource BaseDataGridStyle}" local:DataGridBehavior.DoubleClickCommand="{Binding AddCommand}">
+            <DataGrid ItemsSource="{Binding Items}" Style="{StaticResource BaseDataGridStyle}" core:DataGridBehavior.DoubleClickCommand="{Binding AddCommand}">
                 <DataGrid.ContextMenu>
                     <ContextMenu>
                         <ContextMenu.Items>

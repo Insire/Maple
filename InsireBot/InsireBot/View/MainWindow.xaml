@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:InsireBot"
+        xmlns:core ="clr-namespace:InsireBotCore;assembly=InsireBotCore"
         mc:Ignorable="d"
         Style="{StaticResource BaseWindowStyle}">
 
@@ -23,17 +24,17 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                         
-                        <local:DrawerItem Name="Home">
-                            <local:DrawerItem.Content>
+                        <core:DrawerItem Name="Home">
+                            <core:DrawerItem.Content>
                                 <local:MediaPlayerPage />
-                            </local:DrawerItem.Content>
-                        </local:DrawerItem>
+                            </core:DrawerItem.Content>
+                        </core:DrawerItem>
 
-                        <local:DrawerItem Name="Options">
-                            <local:DrawerItem.Content>
+                        <core:DrawerItem Name="Options">
+                            <core:DrawerItem.Content>
                                 <local:OptionsPage />
-                            </local:DrawerItem.Content>
-                        </local:DrawerItem>
+                            </core:DrawerItem.Content>
+                        </core:DrawerItem>
                         
                     </ListBox>
                 </DockPanel>

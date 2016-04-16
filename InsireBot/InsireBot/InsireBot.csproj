@@ -174,10 +174,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Util\BotViewModelBase.cs" />
-    <Compile Include="Util\DrawerItem.cs" />
-    <Compile Include="Util\LinqExtensions.cs" />
-    <Compile Include="Util\NotifyPropertyChangedExtension.cs" />
     <Compile Include="Dialogs\NewMediaItemDialog.xaml.cs">
       <DependentUpon>NewMediaItemDialog.xaml</DependentUpon>
     </Compile>
@@ -193,9 +189,6 @@
     <Compile Include="Pages\OptionsPage.xaml.cs">
       <DependentUpon>OptionsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Util\DataGridBehavior.cs" />
-    <Compile Include="Util\EnumBindingSourceExtension.cs" />
-    <Compile Include="Util\RadioButtonCheckedConverter.cs" />
     <Compile Include="ViewModel\NewMediaItemsDialogViewModel.cs" />
     <Compile Include="ViewModel\NewMediaItemViewModel.cs" />
     <Compile Include="ViewModel\NewPlaylistViewModel.cs" />
@@ -278,9 +271,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="Resources\client_secret.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
