@@ -9,7 +9,8 @@
              xmlns:local="clr-namespace:InsireBot"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid  DataContext="{Binding Source={StaticResource Locator}, Path=MediaPlayerViewModel}">
+    
+    <Grid DataContext="{Binding Source={StaticResource Locator}, Path=MediaPlayerViewModel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
@@ -128,23 +129,14 @@
         </Grid>
 
         <!-- PlayMode -->
-        <Grid Grid.Row="1" Grid.Column="3"  DataContext="{Binding MediaPlayer}">
+        <Grid Grid.Row="1" Grid.Column="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <local:PlayModeView Grid.Column="0"/>
-
-            <!--<ComboBox Grid.Row="0" 
-                      Grid.Column="1"
-                      MinWidth="150"
-                      Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                      ItemsSource="{Binding Source={local:EnumBindingSource {x:Type mediaPlayer:RepeatMode}}}" 
-                      SelectedValue="{Binding RepeatMode}"
-                      materialDesign:TextFieldAssist.Hint="ReplayMode"/>-->
-
-
+            
         </Grid>
     </Grid>
 </UserControl>

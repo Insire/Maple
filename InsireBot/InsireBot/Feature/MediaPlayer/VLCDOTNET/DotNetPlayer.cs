@@ -1,14 +1,36 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
+using InsireBotCore;
+using VlcWrapper;
 using Vlc.DotNet.Core;
 
 namespace InsireBot.MediaPlayer
 {
     public sealed class DotNetPlayer : BasePlayer, IMediaPlayer<IMediaItem>
     {
-        private VlcMediaPlayer vlcMediaPlayer;
+        private NewVlcMediaPlayer _vlcMediaPlayer;
+
+        public event CompletedMediaItemEventHandler CompletedMediaItem;
+
+        public int VolumeMax { get; }
+        public int VolumeMin { get; }
+
+        private bool _disposed;
+        public bool Disposed
+        {
+            get { return _disposed; }
+            private set
+            {
+                _disposed = value;
+                RaisePropertyChanged(nameof(Disposed));
+            }
+        }
+
+        public bool IsPlaying
+        {
+            get { return _vlcMediaPlayer.IsPlaying; }
+        }
 
         private DotNetPlayerSettings _settings;
         public DotNetPlayerSettings Settings
@@ -26,12 +48,12 @@ namespace InsireBot.MediaPlayer
 
         public bool Silent
         {
-            get { return vlcMediaPlayer.Audio.IsMute; }
+            get { return _vlcMediaPlayer.IsMute; }
             set
             {
-                if (vlcMediaPlayer.Audio.IsMute != value)
+                if (_vlcMediaPlayer.IsMute != value)
                 {
-                    vlcMediaPlayer.Audio.IsMute = value;
+                    _vlcMediaPlayer.IsMute = value;
                     RaisePropertyChanged(nameof(Silent));
                 }
             }
@@ -39,29 +61,39 @@ namespace InsireBot.MediaPlayer
 
         public int Volume
         {
-            get { return vlcMediaPlayer.Audio.Volume; }
+            get { return _vlcMediaPlayer.Volume; }
             set
             {
-                if (vlcMediaPlayer.Audio.Volume != value)
+                if (_vlcMediaPlayer.Volume != value)
                 {
                     var newValue = value;
 
-                    if (newValue > 100)
-                        newValue = 100;
+                    if (newValue > VolumeMax)
+                        newValue = VolumeMax;
 
-                    if (newValue < 0)
-                        newValue = 0;
+                    if (newValue < VolumeMin)
+                        newValue = VolumeMin;
 
-                    vlcMediaPlayer.Audio.Volume = newValue;
+                    _vlcMediaPlayer.Volume = newValue;
 
                     RaisePropertyChanged(nameof(Volume));
                 }
             }
         }
 
-        public int VolumeMax { get; }
-
-        public int VolumeMin { get; }
+        private bool _isShuffling;
+        public bool IsShuffling
+        {
+            get { return _isShuffling; }
+            set
+            {
+                if (_isShuffling != value)
+                {
+                    _isShuffling = value;
+                    RaisePropertyChanged(nameof(IsShuffling));
+                }
+            }
+        }
 
         public DotNetPlayer(IDataService dataService) : base(dataService)
         {
@@ -77,71 +109,64 @@ namespace InsireBot.MediaPlayer
 
             AudioDevice = AudioDevices?.FirstOrDefault();
 
-            Initialize();
+            InitializeProperties();
         }
 
         public DotNetPlayer(IDataService dataService, DotNetPlayerSettings settings, AudioDevice audioDevice) : this(dataService, settings)
         {
             AudioDevice = audioDevice;
-            Initialize();
+
+            InitializeProperties();
         }
 
-        private void Initialize()
+        private void InitializeProperties()
         {
             if (AudioDevice == null)
                 throw new ArgumentNullException(nameof(AudioDevice));
 
             Settings.Options[1] = string.Format(Settings.Options[1], AudioDevice);
-            vlcMediaPlayer = new VlcMediaPlayer(Settings.VlcLibDirectory,Settings.Options);
+            _vlcMediaPlayer = new NewVlcMediaPlayer(Settings.VlcLibDirectory, Settings.Options);
 
-            vlcMediaPlayer.Buffering += VlcMediaPlayer_Buffering;
-            vlcMediaPlayer.EncounteredError += VlcMediaPlayer_EncounteredError;
-            vlcMediaPlayer.EndReached += VlcMediaPlayer_EndReached;
-            vlcMediaPlayer.MediaChanged += VlcMediaPlayer_MediaChanged;
-            vlcMediaPlayer.Opening += VlcMediaPlayer_Opening;
-            vlcMediaPlayer.Stopped += VlcMediaPlayer_Stopped;
-            vlcMediaPlayer.TitleChanged += VlcMediaPlayer_TitleChanged;
-            vlcMediaPlayer.VideoOutChanged += VlcMediaPlayer_VideoOutChanged;
+            InitializeEvents();
         }
 
-        private void VlcMediaPlayer_VideoOutChanged(object sender, VlcMediaPlayerVideoOutChangedEventArgs e)
+        private void InitializeEvents()
         {
-            Debug.WriteLine("VlcMediaPlayer_VideoOutChanged");
+            _vlcMediaPlayer.Buffering += Buffering;
+            _vlcMediaPlayer.EncounteredError += EncounteredError;
+            _vlcMediaPlayer.EndReached += EndReached;
+            _vlcMediaPlayer.Playing += Playing;
+            _vlcMediaPlayer.Stopped += Stopped;
         }
 
-        private void VlcMediaPlayer_TitleChanged(object sender, VlcMediaPlayerTitleChangedEventArgs e)
-        {
-            Debug.WriteLine("VlcMediaPlayer_TitleChanged");
-        }
-
-        private void VlcMediaPlayer_Stopped(object sender, VlcMediaPlayerStoppedEventArgs e)
+        private void Stopped(object sender, VlcMediaPlayerStoppedEventArgs e)
         {
             Debug.WriteLine("VlcMediaPlayer_Stopped");
+            RaisePropertyChanged(nameof(IsPlaying));
         }
 
-        private void VlcMediaPlayer_Opening(object sender, VlcMediaPlayerOpeningEventArgs e)
+        private void Playing(object sender, VlcMediaPlayerPlayingEventArgs e)
         {
-            Debug.WriteLine("VlcMediaPlayer_Opening");
+            Debug.WriteLine("VlcMediaPlayer_Playing");
+            RaisePropertyChanged(nameof(IsPlaying));
         }
 
-        private void VlcMediaPlayer_MediaChanged(object sender, VlcMediaPlayerMediaChangedEventArgs e)
+        private void EndReached(object sender, VlcMediaPlayerEndReachedEventArgs e)
         {
-            Debug.WriteLine("VlcMediaPlayer_MediaChanged");
+            CompletedMediaItem?.Invoke(this, new CompletedMediaItemEventEventArgs(Current));
+            RaisePropertyChanged(nameof(IsPlaying));
         }
 
-        private void VlcMediaPlayer_EndReached(object sender, VlcMediaPlayerEndReachedEventArgs e)
-        {
-            Debug.WriteLine("VlcMediaPlayer_EndReached");
-        }
-
-        private void VlcMediaPlayer_EncounteredError(object sender, VlcMediaPlayerEncounteredErrorEventArgs e)
+        private void EncounteredError(object sender, VlcMediaPlayerEncounteredErrorEventArgs e)
         {
             Debug.WriteLine("VlcMediaPlayer_EncounteredError");
+            RaisePropertyChanged(nameof(IsPlaying));
         }
 
-        private void VlcMediaPlayer_Buffering(object sender, VlcMediaPlayerBufferingEventArgs e)
+        private void Buffering(object sender, Vlc.DotNet.Core.VlcMediaPlayerBufferingEventArgs e)
         {
             Debug.WriteLine("Buffering");
+            RaisePropertyChanged(nameof(IsPlaying));
         }
 
         public void ValidateSettings()
@@ -164,29 +189,76 @@ namespace InsireBot.MediaPlayer
             if (!Settings.VlcLibDirectory.Exists)
                 throw new DotNetPlayerException("VlcLibDirectory in DotNetPlayerSettings doesn't exist");
 
-
             //TODO more checks on VlcLibDirectory
         }
 
-        public override void Pause()
+        /// <summary>
+        /// Pauses playback
+        /// </summary>
+        public void Pause()
         {
-            vlcMediaPlayer.OnMediaPlayerPaused();
+            _vlcMediaPlayer.Pause();
+
+            RaisePropertyChanged(nameof(IsPlaying));
         }
 
-        public override void Stop()
+        /// <summary>
+        /// Stops playback, clears current MediaItem
+        /// </summary>
+        public void Stop()
         {
-            vlcMediaPlayer.OnMediaPlayerStopped();
+            _vlcMediaPlayer.Stop();
+            Current = null;
+
+            RaisePropertyChanged(nameof(Current));
+            RaisePropertyChanged(nameof(IsPlaying));
         }
 
-        public override void Play(IMediaItem item)
+        public void Play(IMediaItem item)
         {
-            vlcMediaPlayer.Stop();
+            if (IsPlaying)
+                Stop();
 
             if (item != null)
             {
-                vlcMediaPlayer.SetMedia(new Uri(item.Location), new string[0]);
-                vlcMediaPlayer.Play();
+                _vlcMediaPlayer.Play(new Uri(item.Location));
+                Current = item;
+
+                RaisePropertyChanged(nameof(Current));
+                RaisePropertyChanged(nameof(IsPlaying));
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        public void Dispose(bool disposing)
+        {
+            if (Disposed)
+                return;
+
+            if (_vlcMediaPlayer.IsPlaying)
+                Stop();
+
+            if (disposing)
+            {
+                _vlcMediaPlayer.Buffering -= Buffering; ;
+                _vlcMediaPlayer.EncounteredError -= EncounteredError;
+                _vlcMediaPlayer.EndReached -= EndReached;
+                _vlcMediaPlayer.Playing -= Playing;
+                _vlcMediaPlayer.Stopped -= Stopped;
+
+                _vlcMediaPlayer.Dispose();
+                // Free any other managed objects here.
+                //
+            }
+
+            // Free any unmanaged objects here.
+            //
+            Disposed = true;
         }
     }
 }

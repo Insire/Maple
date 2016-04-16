@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
+
 using GalaSoft.MvvmLight;
+
+using InsireBotCore;
 
 namespace InsireBot.MediaPlayer
 {
-    public class Playlist : ObservableObject, IIsSelected
+    public class Playlist : ObservableObject, IIsSelected, IIndex
     {
-        private RangeObservableCollection<MediaItem> _items;
-        public RangeObservableCollection<MediaItem> Items
+        private RangeObservableCollection<IMediaItem> _items;
+        public RangeObservableCollection<IMediaItem> Items
         {
             get { return _items; }
             private set
@@ -16,6 +19,17 @@ namespace InsireBot.MediaPlayer
                     _items = value;
                     RaisePropertyChanged(nameof(Items));
                 }
+            }
+        }
+
+        private int _index;
+        public int Index
+        {
+            get { return _index; }
+            set
+            {
+                _index = value;
+                RaisePropertyChanged(nameof(Index));
             }
         }
 
@@ -54,7 +68,7 @@ namespace InsireBot.MediaPlayer
 
         public Playlist()
         {
-            Items = new RangeObservableCollection<MediaItem>();
+            Items = new RangeObservableCollection<IMediaItem>();
             Title = string.Empty;
             ID = string.Empty;
         }
@@ -65,13 +79,13 @@ namespace InsireBot.MediaPlayer
             ID = id;
         }
 
-        public void Add(MediaItem item)
+        public void Add(IMediaItem item)
         {
             Items.Add(item);
             RaisePropertyChanged(nameof(Items));
         }
 
-        public void AddRange(IEnumerable<MediaItem> items)
+        public void AddRange(IEnumerable<IMediaItem> items)
         {
             Items.AddRange(items);
             RaisePropertyChanged(nameof(Items));
@@ -87,7 +101,7 @@ namespace InsireBot.MediaPlayer
         /// Removes all occurences of a MediaItem from the internal list
         /// </summary>
         /// <param name="item"></param>
-        public void Remove(MediaItem item)
+        public void Remove(IMediaItem item)
         {
             while (Items.Contains(item))
                 Items.Remove(item);

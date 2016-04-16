@@ -1,10 +1,11 @@
-﻿using System;
-using GalaSoft.MvvmLight.Messaging;
+﻿using InsireBotCore;
 
 namespace InsireBot.MediaPlayer
 {
-    public abstract class BasePlayer : BotViewModelBase<AudioDevice>, IPlaying
+    public abstract class BasePlayer : BotViewModelBase<AudioDevice>
     {
+        public event RepeatModeChangedEventHandler RepeatModeChanged;
+
         private RangeObservableCollection<AudioDevice> _audioDevices;
         public RangeObservableCollection<AudioDevice> AudioDevices
         {
@@ -57,6 +58,7 @@ namespace InsireBot.MediaPlayer
                 {
                     _repeatMode = value;
                     RaisePropertyChanged(nameof(RepeatMode));
+                    RepeatModeChanged?.Invoke(this, new RepeatModeChangedEventEventArgs(RepeatMode));
                 }
             }
         }
@@ -88,52 +90,6 @@ namespace InsireBot.MediaPlayer
             {
                 AudioDevices.AddRange(_dataService.GetPlaybackDevices());
             }
-
-            Messenger.Default.Register<MediaItemContract>(this, (mediaItemContract) =>
-            {
-                switch (mediaItemContract.Action)
-                {
-                    case MediaItemAction.Play:
-                        if (mediaItemContract.MediaItem != null)
-                            Play(mediaItemContract.MediaItem);
-
-                        break;
-
-                    case MediaItemAction.Pause:
-                        Pause();
-                        break;
-
-                    case MediaItemAction.Stop:
-                        Stop();
-                        break;
-
-                    default:
-                        throw new NotImplementedException();
-                }
-            });
         }
-
-        public bool CanNext()
-        {
-            var next = SelectedIndex++;
-            return next > -1 && next < Count();
-        }
-
-        public bool CanPlay()
-        {
-            return CanRemove();
-        }
-
-        public bool CanPrevious()
-        {
-            var next = SelectedIndex--;
-            return next > -1 && next < Count();
-        }
-
-        public abstract void Play(IMediaItem item);
-
-        public abstract void Pause();
-
-        public abstract void Stop();
     }
 }

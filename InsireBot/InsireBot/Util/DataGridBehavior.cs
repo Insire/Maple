@@ -6,9 +6,11 @@ namespace InsireBot
 {
     public static class DataGridBehavior
     {
-        public static readonly DependencyProperty DoubleClickProperty =
-          DependencyProperty.RegisterAttached("DoubleClickCommand", typeof(ICommand), typeof(DataGridBehavior),
-                            new PropertyMetadata(new PropertyChangedCallback(AttachOrRemoveDataGridDoubleClickEvent)));
+        public static readonly DependencyProperty DoubleClickProperty = DependencyProperty
+            .RegisterAttached("DoubleClickCommand",
+            typeof(ICommand),
+            typeof(DataGridBehavior),
+            new PropertyMetadata(new PropertyChangedCallback(AttachOrRemoveDataGridDoubleClickEvent)));
 
         public static ICommand GetDoubleClickCommand(DependencyObject obj)
         {
@@ -22,32 +24,30 @@ namespace InsireBot
 
         public static void AttachOrRemoveDataGridDoubleClickEvent(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
-            DataGrid dataGrid = obj as DataGrid;
+            var dataGrid = obj as DataGrid;
             if (dataGrid != null)
             {
-                ICommand cmd = (ICommand)args.NewValue;
+                var cmd = (ICommand)args.NewValue;
 
                 if (args.OldValue == null && args.NewValue != null)
-                {
                     dataGrid.MouseDoubleClick += ExecuteDataGridDoubleClick;
-                }
-                else if (args.OldValue != null && args.NewValue == null)
+
+                else
                 {
-                    dataGrid.MouseDoubleClick -= ExecuteDataGridDoubleClick;
+                    if (args.OldValue != null && args.NewValue == null)
+                        dataGrid.MouseDoubleClick -= ExecuteDataGridDoubleClick;
                 }
             }
         }
 
         private static void ExecuteDataGridDoubleClick(object sender, MouseButtonEventArgs args)
         {
-            DependencyObject obj = sender as DependencyObject;
-            ICommand cmd = (ICommand)obj.GetValue(DoubleClickProperty);
+            var obj = sender as DependencyObject;
+            var cmd = (ICommand)obj.GetValue(DoubleClickProperty);
             if (cmd != null)
             {
                 if (cmd.CanExecute(obj))
-                {
                     cmd.Execute(obj);
-                }
             }
         }
     }

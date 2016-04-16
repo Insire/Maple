@@ -79,8 +79,8 @@
       <HintPath>..\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Dragablz, Version=0.0.3.157, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dragablz.0.0.3.157\lib\net45\Dragablz.dll</HintPath>
+    <Reference Include="Dragablz, Version=0.0.3.160, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dragablz.0.0.3.160\lib\net45\Dragablz.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
@@ -115,12 +115,12 @@
       <HintPath>..\packages\Google.Apis.1.11.1\lib\net45\Google.Apis.PlatformServices.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Google.Apis.YouTube.v3, Version=1.11.1.417, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Apis.YouTube.v3.1.11.1.417\lib\portable-net45+sl50+netcore45+wpa81+wp8\Google.Apis.YouTube.v3.dll</HintPath>
+    <Reference Include="Google.Apis.YouTube.v3, Version=1.12.0.461, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.YouTube.v3.1.12.0.461\lib\portable-net45+netcore45+wpa81+wp8\Google.Apis.YouTube.v3.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MaterialDesignColors, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -135,8 +135,8 @@
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -153,21 +153,17 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Vlc.DotNet.Core, Version=2.1.122.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
-      <HintPath>..\packages\Vlc.DotNet.Core.2.1.122\lib\net45\x86\Vlc.DotNet.Core.dll</HintPath>
+    <Reference Include="Vlc.DotNet.Core, Version=2.1.124.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
+      <HintPath>..\packages\Vlc.DotNet.Core.2.1.124\lib\net45\x86\Vlc.DotNet.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Vlc.DotNet.Core.Interops, Version=2.1.122.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
-      <HintPath>..\packages\Vlc.DotNet.Core.Interops.2.1.122\lib\net45\x86\Vlc.DotNet.Core.Interops.dll</HintPath>
+    <Reference Include="Vlc.DotNet.Core.Interops, Version=2.1.124.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
+      <HintPath>..\packages\Vlc.DotNet.Core.Interops.2.1.124\lib\net45\x86\Vlc.DotNet.Core.Interops.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="xZune.Vlc, Version=16.3.28.0, Culture=neutral, PublicKeyToken=721a8c5379fa4056, processorArchitecture=x86">
-      <HintPath>..\packages\xZune.Vlc.16.03.31\lib\net45\x86\xZune.Vlc.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Zlib.Portable, Version=1.11.0.0, Culture=neutral, PublicKeyToken=431cba815f6a8b5b, processorArchitecture=MSIL">
       <HintPath>..\packages\Zlib.Portable.Signed.1.11.0\lib\portable-net4+sl5+wp8+win8+wpa81+MonoTouch+MonoAndroid\Zlib.Portable.dll</HintPath>
       <Private>True</Private>
@@ -178,35 +174,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Core\AudioDevice.cs" />
-    <Compile Include="Core\BotViewModelBase.cs" />
-    <Compile Include="Core\DemoItem.cs" />
-    <Compile Include="Core\DesignTimeDataService.cs" />
-    <Compile Include="Core\Interfaces\IDataService.cs" />
-    <Compile Include="Core\Interfaces\IIsSelected.cs" />
-    <Compile Include="Core\Interfaces\ISettings.cs" />
-    <Compile Include="Core\NotifyPropertyChangedExtension.cs" />
-    <Compile Include="Core\ObjectSerializer.cs" />
-    <Compile Include="Core\RangeObservableCollection.cs" />
-    <Compile Include="Core\RuntimeDataService.cs" />
+    <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayer.cs" />
+    <Compile Include="Util\BotViewModelBase.cs" />
+    <Compile Include="Util\DrawerItem.cs" />
+    <Compile Include="Util\LinqExtensions.cs" />
+    <Compile Include="Util\NotifyPropertyChangedExtension.cs" />
     <Compile Include="Dialogs\NewMediaItemDialog.xaml.cs">
       <DependentUpon>NewMediaItemDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Feature\MediaPlayer\BasePlayer.cs" />
-    <Compile Include="Feature\MediaPlayer\Enums\MediaPlayerType.cs" />
-    <Compile Include="Feature\MediaPlayer\Enums\MediaPlayPlaybackType.cs" />
-    <Compile Include="Feature\MediaPlayer\Interfaces\IMediaItem.cs" />
-    <Compile Include="Feature\MediaPlayer\Interfaces\IMediaPlayer.cs" />
-    <Compile Include="Feature\MediaPlayer\Interfaces\IPlaying.cs" />
-    <Compile Include="Feature\MediaPlayer\MediaItem.cs" />
-    <Compile Include="Feature\MediaPlayer\Enums\MediaItemAction.cs" />
-    <Compile Include="Feature\MediaPlayer\MediaItemContract.cs" />
     <Compile Include="Feature\MediaPlayer\Playlist.cs" />
     <Compile Include="Feature\MediaPlayer\MediaPlayerFactory.cs" />
-    <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayer.cs" />
     <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayerException.cs" />
     <Compile Include="Feature\MediaPlayer\VLCDOTNET\DotNetPlayerSettings.cs" />
-    <Compile Include="Feature\WinmmService.cs" />
+    <Compile Include="Feature\WinFormsService.cs" />
     <Compile Include="Feature\Youtube\Youtube.cs" />
     <Compile Include="Pages\MediaPlayerPage.xaml.cs">
       <DependentUpon>MediaPlayerPage.xaml</DependentUpon>
@@ -222,7 +203,8 @@
     </Compile>
     <Compile Include="Util\DataGridBehavior.cs" />
     <Compile Include="Util\EnumBindingSourceExtension.cs" />
-    <Compile Include="ViewModel\NewMediaItemsViewModel.cs" />
+    <Compile Include="Util\RadioButtonCheckedConverter.cs" />
+    <Compile Include="ViewModel\NewMediaItemsDialogViewModel.cs" />
     <Compile Include="ViewModel\NewMediaItemViewModel.cs" />
     <Compile Include="ViewModel\NewPlaylistViewModel.cs" />
     <Compile Include="ViewModel\PlaylistsViewModel.cs" />
@@ -320,6 +302,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MaterialDesignThemes.MahApps.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InsireBotCore\InsireBotCore.csproj">
+      <Project>{4e52ff0e-06fd-49c3-b362-595db8070531}</Project>
+      <Name>InsireBotCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NewVlcWrapper\VlcWrapper.csproj">
+      <Project>{748cb1a7-f2bd-4ddb-a0ba-040a8a04952a}</Project>
+      <Name>VlcWrapper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

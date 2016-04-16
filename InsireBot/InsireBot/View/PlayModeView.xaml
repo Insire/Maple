@@ -4,15 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:core="clr-namespace:InsireBotCore;assembly=InsireBotCore"
              xmlns:local="clr-namespace:InsireBot"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    
     <UserControl.Resources>
+        <local:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
+
         <Style x:Key="BaseRepeatModeStyle" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource MaterialDesignFlatToggleButton}">
             <Setter Property="Margin" Value="2,0" />
         </Style>
 
-        <Style x:Key="NoneRepeatModeStyle" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource BaseRepeatModeStyle}">
+        <Style x:Key="NoneRepeatModeStyle" TargetType="{x:Type RadioButton}" BasedOn="{StaticResource BaseRepeatModeStyle}">
             <Setter Property="ContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
@@ -22,7 +26,7 @@
             </Setter>
         </Style>
 
-        <Style x:Key="OneRepeatModeStyle" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource BaseRepeatModeStyle}">
+        <Style x:Key="OneRepeatModeStyle" TargetType="{x:Type RadioButton}" BasedOn="{StaticResource BaseRepeatModeStyle}">
             <Setter Property="ContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
@@ -32,7 +36,7 @@
             </Setter>
         </Style>
 
-        <Style x:Key="AllRepeatModeStyle" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource BaseRepeatModeStyle}">
+        <Style x:Key="AllRepeatModeStyle" TargetType="{x:Type RadioButton}" BasedOn="{StaticResource BaseRepeatModeStyle}">
             <Setter Property="ContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
@@ -62,45 +66,43 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        
+
     </UserControl.Resources>
-    <Grid>
+    <Grid DataContext="{Binding Source={StaticResource Locator}, Path=MediaPlayerViewModel}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Border   Grid.Column="0">
-
-        </Border>
 
         <ToggleButton ToolTip="MaterialDesignSwitchToggleButton" 
+                      DataContext="{Binding MediaPlayer}"
                       Grid.Column="0"
-                      Style="{StaticResource ShuffleModeStyle}"
-                          IsChecked="True"
-                          Margin="30,0"/>
+                      Style="{StaticResource ShuffleModeStyle}"         
+                      IsChecked="{Binding IsShuffling}"
+                      Margin="30,0"/>
 
-        <Grid Grid.Column="2">
+        <Grid Grid.Column="2" DataContext="{Binding MediaPlayer}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <ToggleButton Style="{StaticResource NoneRepeatModeStyle}" 
+            <RadioButton Style="{StaticResource NoneRepeatModeStyle}" 
                       Grid.Column="0"
                       ToolTip="Repeat none" 
-                      IsChecked="True" />
+                      IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static core:RepeatMode.None}, UpdateSourceTrigger=PropertyChanged}" />
 
-            <ToggleButton Style="{StaticResource AllRepeatModeStyle}"
+            <RadioButton Style="{StaticResource OneRepeatModeStyle}"
                       Grid.Column="1"
                       ToolTip="Repeat one"
-                      IsChecked="True" />
+                      IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static core:RepeatMode.Single}, UpdateSourceTrigger=PropertyChanged}" />
 
-            <ToggleButton Style="{StaticResource OneRepeatModeStyle}" 
-                      Grid.Column="2"
-                      ToolTip="Repeat all"
-                      IsChecked="True" />
+            <RadioButton Style="{StaticResource AllRepeatModeStyle}" 
+                         Grid.Column="2"
+                         ToolTip="Repeat all"
+                         IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static core:RepeatMode.All}, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
     </Grid>
 
