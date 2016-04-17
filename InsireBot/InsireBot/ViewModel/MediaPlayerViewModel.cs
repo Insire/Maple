@@ -8,15 +8,14 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 
-using InsireBot.MediaPlayer;
 using InsireBotCore;
 
 namespace InsireBot.ViewModel
 {
     public class MediaPlayerViewModel : BotViewModelBase<IMediaItem>
     {
-        public Stack<int> PlayedList { get; private set; } // contains indices of played mediaItems
-        public IMediaPlayer<IMediaItem> MediaPlayer { get; }
+        public Stack<int> PlayedList { get; private set; } // contains indices of played IMediaItems
+        public IMediaPlayer<IMediaItem> MediaPlayer { get; private set; }
 
         public bool IsPlaying { get { return MediaPlayer.IsPlaying; } }
 
@@ -30,30 +29,15 @@ namespace InsireBot.ViewModel
 
         public MediaPlayerViewModel(IDataService dataService) : base(dataService)
         {
-            Add(dataService.GetMediaItems()); // populate the playlist
+            PlayedList = new Stack<int>();
 
-            if (IsInDesignMode)
-            {
-            }
-            else // Code runs "for real"
-            {
-                PlayedList = new Stack<int>();
+            // receive MediaItems and add them to the playlist
+            Messenger.Default.Register<MediaItem>(this, (mediaItem) =>
+             {
+                 Add(mediaItem);
+             });
 
-                MediaPlayer = MediaPlayerFactory.Create(dataService, MediaPlayerType.VLCDOTNET);
-                MediaPlayer.CompletedMediaItem += MediaPlayer_CompletedMediaItem;
-                MediaPlayer.RepeatModeChanged += MediaPlayer_RepeatModeChanged;
-
-
-                // receive MediaItems and add them to the playlist
-                Messenger.Default.Register<MediaItem>(this, (mediaItem) =>
-                 {
-                     Add(mediaItem);
-                 });
-
-                InitiliazeCommands();
-            }
-
-            Debug.WriteLine("Initialization complete");
+            Initialize(dataService);
         }
 
         private void MediaPlayer_RepeatModeChanged(object sender, RepeatModeChangedEventEventArgs e)
@@ -67,12 +51,30 @@ namespace InsireBot.ViewModel
             Next();
         }
 
+        private void Initialize(IDataService dataService)
+        {
+            if (MediaPlayer != null)
+            {
+                MediaPlayer.CompletedMediaItem -= MediaPlayer_CompletedMediaItem;
+                MediaPlayer.RepeatModeChanged -= MediaPlayer_RepeatModeChanged;
+                MediaPlayer.Dispose();
+            }
+            if (!Items.Any())
+                Add(dataService.GetMediaItems()); // populate the playlist
+
+            MediaPlayer = dataService.GetMediaPlayer();
+            MediaPlayer.CompletedMediaItem += MediaPlayer_CompletedMediaItem;
+            MediaPlayer.RepeatModeChanged += MediaPlayer_RepeatModeChanged;
+
+            InitiliazeCommands();
+        }
+
         private void InitiliazeCommands()
         {
             PlayCommand = new RelayCommand(Play);
             PreviousCommand = new RelayCommand(Previous, CanPrevious);
             NextCommand = new RelayCommand(Next, CanNext);
-            AddCommand = new RelayCommand(AddWithDialog);
+            AddCommand = new RelayCommand(OpenAddDialog);
         }
 
         private void Add(IEnumerable<IMediaItem> mediaItems)
@@ -99,7 +101,7 @@ namespace InsireBot.ViewModel
             Items.Add(mediaItem);
         }
 
-        private void AddWithDialog()
+        private void OpenAddDialog()
         {
             var dialog = new NewMediaItemDialog();
             dialog.Owner = Application.Current.MainWindow;

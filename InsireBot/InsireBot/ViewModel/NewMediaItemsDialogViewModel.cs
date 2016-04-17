@@ -1,13 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Web;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using System.Web;
 using GalaSoft.MvvmLight.Messaging;
-using InsireBot.MediaPlayer;
-using System.IO;
 using InsireBotCore;
 
 namespace InsireBot.ViewModel

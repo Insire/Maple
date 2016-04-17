@@ -6,6 +6,12 @@ namespace InsireBotCore
 {
     public static class ObjectSerializer
     {
+        static ObjectSerializer()
+        {
+            Extension = "xml";
+        }
+
+        public static string Extension { get; set; }
         public static void SaveCollection<T>(ObservableCollection<T> Items, ISettings settings)
         {
             if (Items.Count > 0)
@@ -67,7 +73,7 @@ namespace InsireBotCore
 
         private static string GetPath(ISettings settings)
         {
-            var result = Path.Combine(new[] { settings.Directory, settings.FileName, settings.Extension });
+            var result = Path.Combine(new[] { settings.Directory.FullName, settings.FileName, Extension });
 
             return result;
         }

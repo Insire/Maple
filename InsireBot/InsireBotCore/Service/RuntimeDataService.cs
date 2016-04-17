@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using InsireBotCore;
 
 namespace InsireBotCore
 {
@@ -9,36 +8,44 @@ namespace InsireBotCore
     {
         public IEnumerable<IMediaItem> GetMediaItems()
         {
-            throw new NotImplementedException();
+            return new IMediaItem[0];
         }
 
-        public IMediaPlayer<IMediaItem> GetMediaPlayer()
+        public ISettings GetMediaPlayerSettings()
         {
-            var vlcInstallDirectory = string.Empty;
-            // vlc is a 32bit application, so we always want to get the base 32bit install directory, regardless of OS architecture
-            if (Environment.Is64BitOperatingSystem)
-                vlcInstallDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "VideoLAN\\VLC");
-            else
-                vlcInstallDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "VideoLAN\\VLC");
-
-            var settings = new DotNetPlayerSettings
+            var mediaPlayerType = GetMediaPlayerType();
+            switch (mediaPlayerType)
             {
-                Directory = "C:",
-                Extension = "exe",
-                FileName = "vlc",
-                VlcLibDirectory = new DirectoryInfo(vlcInstallDirectory),
-                Options = new[]
-                {
+                case MediaPlayerType.VLCDOTNET:
+                    var vlcInstallDirectory = string.Empty;
+                    // vlc is a 32bit application, so we always want to get the base 32bit install directory, regardless of OS architecture
+                    if (Environment.Is64BitOperatingSystem)
+                        vlcInstallDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "VideoLAN\\VLC");
+                    else
+                        vlcInstallDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "VideoLAN\\VLC");
+
+                    return new DotNetPlayerSettings
+                    {
+                        Directory = new DirectoryInfo(vlcInstallDirectory),
+                        FileName = "vlc",
+                        Options = new[]
+                        {
                             "--aout=waveout",
                             "--waveout-audio-device={0}",
                             "--ffmpeg-hw",
                             "--no-video"
                         },
-                RepeatMode = RepeatMode.None,
+                        RepeatMode = RepeatMode.None,
+                    };
 
-            };
+                default:
+                    throw new NotImplementedException(nameof(mediaPlayerType));
+            }
+        }
 
-            return new DotNetPlayer(this, settings);
+        public IMediaPlayer<IMediaItem> GetMediaPlayer()
+        {
+            return new DotNetPlayer(this);
         }
 
         public IEnumerable<AudioDevice> GetPlaybackDevices()
@@ -54,6 +61,11 @@ namespace InsireBotCore
                                             _devices[i].wChannels,
                                             _devices[i].wReserved,
                                             _devices[i].dwSupport);
+        }
+
+        public MediaPlayerType GetMediaPlayerType()
+        {
+            return MediaPlayerType.VLCDOTNET;
         }
     }
 }

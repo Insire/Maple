@@ -19,6 +19,16 @@ namespace InsireBotTests
             return new MockMediaPlayer();
         }
 
+        public ISettings GetMediaPlayerSettings()
+        {
+            throw new NotImplementedException();
+        }
+
+        public MediaPlayerType GetMediaPlayerType()
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<AudioDevice> GetPlaybackDevices()
         {
             var _devices = WinmmService.GetDevCapsPlayback();

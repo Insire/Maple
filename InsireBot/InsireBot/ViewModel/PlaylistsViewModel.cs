@@ -1,5 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
-using InsireBot.MediaPlayer;
+
 using InsireBotCore;
 
 namespace InsireBot.ViewModel

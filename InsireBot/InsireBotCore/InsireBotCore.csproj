@@ -127,7 +127,6 @@
     <Compile Include="Model\MediaItem.cs" />
     <Compile Include="Model\MediaPlayerOptions.cs" />
     <Compile Include="Model\MediaPlayer\BasePlayer.cs" />
-    <Compile Include="Model\MediaPlayer\MediaPlayerFactory.cs" />
     <Compile Include="Model\MediaPlayer\Playlist.cs" />
     <Compile Include="Model\MediaPlayer\VLCDOTNET\DotNetPlayer.cs" />
     <Compile Include="Model\MediaPlayer\VLCDOTNET\DotNetPlayerException.cs" />

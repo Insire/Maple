@@ -27,11 +27,11 @@ namespace InsireBotCore
 
         public bool IsPlaying
         {
-            get { return _vlcMediaPlayer.IsPlaying; }
+            get { return _vlcMediaPlayer?.IsPlaying == true; }
         }
 
-        private DotNetPlayerSettings _settings;
-        public DotNetPlayerSettings Settings
+        private ISettings _settings;
+        public ISettings Settings
         {
             get { return _settings; }
             internal set
@@ -59,7 +59,7 @@ namespace InsireBotCore
 
         public int Volume
         {
-            get { return _vlcMediaPlayer.Volume; }
+            get { return _vlcMediaPlayer?.Volume == null ? 0 : _vlcMediaPlayer.Volume; }
             set
             {
                 if (_vlcMediaPlayer.Volume != value)
@@ -95,11 +95,12 @@ namespace InsireBotCore
 
         public DotNetPlayer(IDataService dataService) : base(dataService)
         {
+            Settings = dataService.GetMediaPlayerSettings();
             VolumeMin = 0;
             VolumeMax = 100;
         }
 
-        public DotNetPlayer(IDataService dataService, DotNetPlayerSettings settings) : this(dataService)
+        public DotNetPlayer(IDataService dataService, ISettings settings) : this(dataService)
         {
             Settings = settings;
 
@@ -110,7 +111,7 @@ namespace InsireBotCore
             InitializeProperties();
         }
 
-        public DotNetPlayer(IDataService dataService, DotNetPlayerSettings settings, AudioDevice audioDevice) : this(dataService, settings)
+        public DotNetPlayer(IDataService dataService, ISettings settings, AudioDevice audioDevice) : this(dataService, settings)
         {
             AudioDevice = audioDevice;
 
@@ -123,7 +124,7 @@ namespace InsireBotCore
                 throw new ArgumentNullException(nameof(AudioDevice));
 
             Settings.Options[1] = string.Format(Settings.Options[1], AudioDevice);
-            _vlcMediaPlayer = new VlcMediaPlayer(Settings.VlcLibDirectory, Settings.Options);
+            _vlcMediaPlayer = new VlcMediaPlayer(Settings.Directory, Settings.Options);
 
             InitializeEvents();
         }
@@ -172,19 +173,13 @@ namespace InsireBotCore
             if (Settings == null)
                 throw new DotNetPlayerException("DotNetPlayerSettings were null", new ArgumentNullException(nameof(Settings)));
 
-            if (string.IsNullOrEmpty(Settings.Directory))
-                throw new DotNetPlayerException("DotNetPlayerSettings.Directory was empty", new ArgumentNullException(nameof(Settings.Directory)));
-
-            if (string.IsNullOrEmpty(Settings.Extension))
-                throw new DotNetPlayerException("DotNetPlayerSettings.Extension was empty", new ArgumentNullException(nameof(Settings.Extension)));
-
             if (string.IsNullOrEmpty(Settings.FileName))
                 throw new DotNetPlayerException("DotNetPlayerSettings.FileName was empty", new ArgumentNullException(nameof(Settings.FileName)));
 
             if (Settings.Options.Any(p => string.IsNullOrEmpty(p)))
                 throw new DotNetPlayerException("DotNetPlayerSettings contained an empty string", new ArgumentNullException(nameof(Settings.FileName)));
 
-            if (!Settings.VlcLibDirectory.Exists)
+            if (!Settings.Directory.Exists)
                 throw new DotNetPlayerException("VlcLibDirectory in DotNetPlayerSettings doesn't exist");
 
             //TODO more checks on VlcLibDirectory

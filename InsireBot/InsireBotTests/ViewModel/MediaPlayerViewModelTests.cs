@@ -29,10 +29,9 @@ namespace InsireBot.ViewModel.Tests
         {
             var vm = new MediaPlayerViewModel(new TestDataService());
 
-            vm.MediaPlayer.RepeatMode = RepeatMode.All;
             vm.SelectNext();
 
-            Assert.IsNotNull(vm.MediaPlayer.Current);
+
             Assert.IsNotNull(vm.NextMediaItem);
         }
     }

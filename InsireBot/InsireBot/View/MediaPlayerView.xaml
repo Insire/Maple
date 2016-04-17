@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:mediaPlayer="clr-namespace:InsireBot.MediaPlayer"
              xmlns:local="clr-namespace:InsireBot"
              xmlns:core ="clr-namespace:InsireBotCore;assembly=InsireBotCore"
              mc:Ignorable="d" 
@@ -28,7 +27,7 @@
                 <DataGrid.ContextMenu>
                     <ContextMenu>
                         <ContextMenu.Items>
-                            <MenuItem Command="{Binding NewCommand}" Header="Add">
+                            <MenuItem Command="{Binding AddCommand}" Header="Add">
                                 <MenuItem.Icon>
                                     <materialDesign:PackIcon Kind="PlaylistPlus" Style="{StaticResource IconStyle}" />
                                 </MenuItem.Icon>

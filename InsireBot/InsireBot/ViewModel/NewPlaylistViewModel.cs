@@ -2,7 +2,6 @@
 using System.Linq;
 using GalaSoft.MvvmLight;
 
-using InsireBot.MediaPlayer;
 using InsireBotCore;
 
 namespace InsireBot.ViewModel

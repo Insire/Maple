@@ -9,5 +9,9 @@ namespace InsireBotCore
         IEnumerable<IMediaItem> GetMediaItems();
 
         IMediaPlayer<IMediaItem> GetMediaPlayer();
+
+        ISettings GetMediaPlayerSettings();
+
+        MediaPlayerType GetMediaPlayerType();
     }
 }
