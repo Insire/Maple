@@ -5,17 +5,17 @@ namespace InsireBotCore
     public interface IMediaPlayer<IMediaItem> : IPlaying, IDisposable
     {
         event CompletedMediaItemEventHandler CompletedMediaItem;
-        event RepeatModeChangedEventHandler RepeatModeChanged;
 
         bool Disposed { get; }
         bool IsPlaying { get; }
-        bool IsShuffling { get; set; }
-        void Play(IMediaItem mediaItem);
 
-        IMediaItem Current { get; set; }
+        void Play();
+        void Next();
+        void Previous();
+
+        IPlaylist Playlist { get;}
 
         AudioDevice AudioDevice { get; set; }
-        RepeatMode RepeatMode { get; set; }
         int Volume { get; set; }
         bool Silent { get; set; }
 

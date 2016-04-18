@@ -5,27 +5,11 @@ using Vlc.DotNet.Core;
 
 namespace InsireBotCore
 {
-    public sealed class DotNetPlayer : BasePlayer, IMediaPlayer<IMediaItem>
+    public sealed class DotNetPlayer : BasePlayer
     {
         private VlcMediaPlayer _vlcMediaPlayer;
 
-        public event CompletedMediaItemEventHandler CompletedMediaItem;
-
-        public int VolumeMax { get; }
-        public int VolumeMin { get; }
-
-        private bool _disposed;
-        public bool Disposed
-        {
-            get { return _disposed; }
-            private set
-            {
-                _disposed = value;
-                RaisePropertyChanged(nameof(Disposed));
-            }
-        }
-
-        public bool IsPlaying
+        public override bool IsPlaying
         {
             get { return _vlcMediaPlayer?.IsPlaying == true; }
         }
@@ -44,7 +28,7 @@ namespace InsireBotCore
             }
         }
 
-        public bool Silent
+        public override bool Silent
         {
             get { return _vlcMediaPlayer.IsMute; }
             set
@@ -57,7 +41,7 @@ namespace InsireBotCore
             }
         }
 
-        public int Volume
+        public override int Volume
         {
             get { return _vlcMediaPlayer?.Volume == null ? 0 : _vlcMediaPlayer.Volume; }
             set
@@ -75,20 +59,6 @@ namespace InsireBotCore
                     _vlcMediaPlayer.Volume = newValue;
 
                     RaisePropertyChanged(nameof(Volume));
-                }
-            }
-        }
-
-        private bool _isShuffling;
-        public bool IsShuffling
-        {
-            get { return _isShuffling; }
-            set
-            {
-                if (_isShuffling != value)
-                {
-                    _isShuffling = value;
-                    RaisePropertyChanged(nameof(IsShuffling));
                 }
             }
         }
@@ -152,7 +122,7 @@ namespace InsireBotCore
 
         private void EndReached(object sender, VlcMediaPlayerEndReachedEventArgs e)
         {
-            CompletedMediaItem?.Invoke(this, new CompletedMediaItemEventEventArgs(Current));
+            Player_CompletedMediaItem(this, new CompletedMediaItemEventEventArgs(Playlist.CurrentItem));
             RaisePropertyChanged(nameof(IsPlaying));
         }
 
@@ -188,7 +158,7 @@ namespace InsireBotCore
         /// <summary>
         /// Pauses playback
         /// </summary>
-        public void Pause()
+        public override void Pause()
         {
             _vlcMediaPlayer.Pause();
 
@@ -198,16 +168,14 @@ namespace InsireBotCore
         /// <summary>
         /// Stops playback, clears current MediaItem
         /// </summary>
-        public void Stop()
+        public override void Stop()
         {
             _vlcMediaPlayer.Stop();
-            Current = null;
 
-            RaisePropertyChanged(nameof(Current));
             RaisePropertyChanged(nameof(IsPlaying));
         }
 
-        public void Play(IMediaItem item)
+        public override void Play(IMediaItem item)
         {
             if (IsPlaying)
                 Stop();
@@ -215,14 +183,12 @@ namespace InsireBotCore
             if (item != null)
             {
                 _vlcMediaPlayer.Play(new Uri(item.Location));
-                Current = item;
 
-                RaisePropertyChanged(nameof(Current));
                 RaisePropertyChanged(nameof(IsPlaying));
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);

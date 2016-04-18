@@ -67,5 +67,10 @@ namespace InsireBotCore
         {
             return MediaPlayerType.VLCDOTNET;
         }
+
+        public IEnumerable<IMediaItem> GetCurrentMediaItems()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

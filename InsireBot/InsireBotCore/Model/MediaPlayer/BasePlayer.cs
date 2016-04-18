@@ -1,8 +1,32 @@
 ﻿namespace InsireBotCore
 {
-    public abstract class BasePlayer : BotViewModelBase<AudioDevice>
+    public abstract class BasePlayer : BotViewModelBase<AudioDevice>, IMediaPlayer<IMediaItem>
     {
-        public event RepeatModeChangedEventHandler RepeatModeChanged;
+        public event CompletedMediaItemEventHandler CompletedMediaItem;
+
+        public bool CanNext
+        {
+            get { return Playlist.CanNext(); }
+        }
+
+        public bool CanPrevious
+        {
+            get { return Playlist.CanPrevious(); }
+        }
+
+        private IPlaylist _playlist;
+        public IPlaylist Playlist
+        {
+            get { return _playlist; }
+            private set
+            {
+                if (_playlist != value && value != null)
+                {
+                    _playlist = value;
+                    RaisePropertyChanged(nameof(Playlist));
+                }
+            }
+        }
 
         private RangeObservableCollection<AudioDevice> _audioDevices;
         public RangeObservableCollection<AudioDevice> AudioDevices
@@ -32,53 +56,32 @@
             }
         }
 
-        private IMediaItem _current;
-        public IMediaItem Current
+        private bool _disposed;
+        public bool Disposed
         {
-            get { return _current; }
-            set
+            get { return _disposed; }
+            protected set
             {
-                if (_current != value)
-                {
-                    _current = value;
-                    RaisePropertyChanged(nameof(Current));
-                }
+                _disposed = value;
+                RaisePropertyChanged(nameof(Disposed));
             }
         }
 
-        private RepeatMode _repeatMode;
-        public RepeatMode RepeatMode
-        {
-            get { return _repeatMode; }
-            set
-            {
-                if (_repeatMode != value)
-                {
-                    _repeatMode = value;
-                    RaisePropertyChanged(nameof(RepeatMode));
-                    RepeatModeChanged?.Invoke(this, new RepeatModeChangedEventEventArgs(RepeatMode));
-                }
-            }
-        }
+        public abstract bool IsPlaying { get; }
 
-        private bool _shuffle;
-        public bool Shuffle
-        {
-            get { return _shuffle; }
-            set
-            {
-                if (_shuffle != value)
-                {
-                    _shuffle = value;
-                    RaisePropertyChanged(nameof(Shuffle));
-                }
-            }
-        }
+        public abstract int Volume { get; set; }
+
+        public abstract bool Silent { get; set; }
+
+        public int VolumeMax { get; protected set; }
+
+        public int VolumeMin { get; protected set; }
 
         public BasePlayer(IDataService dataService) : base(dataService)
         {
             AudioDevices = new RangeObservableCollection<AudioDevice>();
-            RepeatMode = RepeatMode.None;
+            CompletedMediaItem += Player_CompletedMediaItem;
+
 
             if (IsInDesignMode)
             {
@@ -89,5 +92,55 @@
                 AudioDevices.AddRange(_dataService.GetPlaybackDevices());
             }
         }
+
+        protected virtual void Player_CompletedMediaItem(object sender, CompletedMediaItemEventEventArgs e)
+        {
+            CompletedMediaItem?.Invoke(this, e);
+        }
+
+        event CompletedMediaItemEventHandler IMediaPlayer<IMediaItem>.CompletedMediaItem
+        {
+            add { CompletedMediaItem += value; }
+            remove { CompletedMediaItem -= value; }
+        }
+
+        public void Play()
+        {
+            if (IsPlaying)
+                Stop();
+
+            if (Playlist.CurrentItem != null)
+                Play(Playlist.CurrentItem);
+
+            Next();
+        }
+
+        public void Next()
+        {
+            if (IsPlaying)
+                Stop();
+
+            var next = Playlist.Next();
+            if (next != null)
+                Play(next);
+        }
+
+        public void Previous()
+        {
+            if (IsPlaying)
+                Stop();
+
+            var previous = Playlist.Previous();
+            if (previous != null)
+                Play(previous);
+        }
+
+        public abstract void Play(IMediaItem mediaItem);
+
+        public abstract void Pause();
+
+        public abstract void Stop();
+
+        public abstract void Dispose();
     }
 }

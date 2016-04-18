@@ -13,7 +13,7 @@ namespace InsireBot.ViewModel.Tests
             var vm = new MediaPlayerViewModel(new TestDataService());
 
             Assert.IsFalse(vm.IsPlaying);
-            Assert.IsNotNull(vm.PlayedList);
+
             Assert.IsNotNull(vm.MediaPlayer);
             Assert.IsNotNull(vm.MediaPlayer.AudioDevice);
         }
@@ -29,10 +29,10 @@ namespace InsireBot.ViewModel.Tests
         {
             var vm = new MediaPlayerViewModel(new TestDataService());
 
-            vm.SelectNext();
+            vm.Next();
 
 
-            Assert.IsNotNull(vm.NextMediaItem);
+            //Assert.IsNotNull(vm.NextMediaItem);
         }
     }
 }

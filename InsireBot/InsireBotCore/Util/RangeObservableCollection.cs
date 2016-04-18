@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace InsireBotCore
 {
-    public class RangeObservableCollection<T> : ObservableCollection<T>, INotifyPropertyChanged where T : IIsSelected
+    public class RangeObservableCollection<T> : ObservableCollection<T>, INotifyPropertyChanged
     {
         private bool _suppressNotification = false;
 

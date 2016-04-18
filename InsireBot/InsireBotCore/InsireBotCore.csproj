@@ -123,6 +123,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IPlaylist.cs" />
     <Compile Include="Model\AudioDevice.cs" />
     <Compile Include="Model\MediaItem.cs" />
     <Compile Include="Model\MediaPlayerOptions.cs" />
@@ -140,7 +141,7 @@
     <Compile Include="Util\DataGridBehavior.cs" />
     <Compile Include="Util\DrawerItem.cs" />
     <Compile Include="Util\EnumBindingSourceExtension.cs" />
-    <Compile Include="Util\EventHandler.cs" />
+    <Compile Include="Events\EventHandler.cs" />
     <Compile Include="Service\DesignTimeDataService.cs" />
     <Compile Include="Enums\MediaPlayerType.cs" />
     <Compile Include="Enums\RepeatMode.cs" />

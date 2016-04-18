@@ -5,6 +5,11 @@ namespace InsireBotCore
 {
     public class DesignTimeDataService : IDataService
     {
+        public IEnumerable<IMediaItem> GetCurrentMediaItems()
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<IMediaItem> GetMediaItems()
         {
             yield return new MediaItem("Rusko - Somebody To Love (Sigma Remix)", new Uri(@"https://www.youtube.com/watch?v=nF7wa3j57j0"), new TimeSpan(0, 5, 47));
