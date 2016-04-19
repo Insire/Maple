@@ -1,8 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using InsireBotCore;
-using InsireBotTests;
+using InsireBot.ViewModel;
+using System.Linq;
 
-namespace InsireBot.ViewModel.Tests
+namespace InsireBotTests
 {
     [TestClass()]
     public class MediaPlayerViewModelTests
@@ -10,12 +11,19 @@ namespace InsireBot.ViewModel.Tests
         [TestMethod()]
         public void MediaPlayerViewModelTest()
         {
-            var vm = new MediaPlayerViewModel(new TestDataService());
+            var vm = new MediaPlayerViewModel(new RuntimeDataService());
 
+            var playlist = vm.MediaPlayer.Playlist as Playlist;
             Assert.IsFalse(vm.IsPlaying);
 
             Assert.IsNotNull(vm.MediaPlayer);
             Assert.IsNotNull(vm.MediaPlayer.AudioDevice);
+
+            Assert.IsNotNull(playlist);
+            Assert.IsNotNull(playlist.CurrentItem);
+
+            Assert.IsTrue(playlist.Any());
+            Assert.IsTrue(playlist.All(p => p.Index != -1));
         }
 
         [TestMethod()]

@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-
-using GalaSoft.MvvmLight;
+using System.Runtime.CompilerServices;
 
 namespace InsireBotCore
 {
-    public class Playlist : ObservableObject, IPlaylist
+    public class Playlist : RangeObservableCollection<IMediaItem>, IPlaylist<IMediaItem>, IRangeCollection<IMediaItem>, IEnumerable<IMediaItem>
     {
         public event RepeatModeChangedEventHandler RepeatModeChanged;
         public event ShuffleModeChangedEventHandler ShuffleModeChanged;
+        new public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// contains indices of played <see cref="IMediaItem"/>
@@ -28,32 +28,21 @@ namespace InsireBotCore
             get { return _currentItem; }
             private set
             {
-                if (_currentItem.Equals(value))
+                if (_currentItem == null)
                 {
                     _currentItem = value;
-                    RaisePropertyChanged(nameof(CurrentItem));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentItem)));
                 }
-            }
-        }
-
-
-        private RangeObservableCollection<IMediaItem> _items;
-        /// <summary>
-        /// the collection where all <see cref="IMediaItem"/> are stored
-        /// </summary>
-        public RangeObservableCollection<IMediaItem> Items
-        {
-            get { return _items; }
-            private set
-            {
-                if (_items != value)
+                else
                 {
-                    _items = value;
-                    RaisePropertyChanged(nameof(Items));
+                    if (_currentItem.Equals(value))
+                    {
+                        _currentItem = value;
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentItem)));
+                    }
                 }
             }
         }
-
 
         private int _index;
         /// <summary>
@@ -65,7 +54,7 @@ namespace InsireBotCore
             set
             {
                 _index = value;
-                RaisePropertyChanged(nameof(Index));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Index)));
             }
         }
 
@@ -80,7 +69,7 @@ namespace InsireBotCore
             set
             {
                 _isSelected = value;
-                RaisePropertyChanged(nameof(IsSelected));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected)));
             }
         }
 
@@ -97,7 +86,7 @@ namespace InsireBotCore
                 if (_isShuffling != value)
                 {
                     _isShuffling = value;
-                    RaisePropertyChanged(nameof(IsShuffling));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsShuffling)));
                     ShuffleModeChanged?.Invoke(this, new ShuffleModeChangedEventEventArgs(value));
                 }
             }
@@ -114,7 +103,7 @@ namespace InsireBotCore
             private set
             {
                 _title = value;
-                RaisePropertyChanged(nameof(Title));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Title)));
             }
         }
 
@@ -129,7 +118,7 @@ namespace InsireBotCore
             private set
             {
                 _id = value;
-                RaisePropertyChanged(nameof(ID));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ID)));
             }
         }
 
@@ -146,16 +135,10 @@ namespace InsireBotCore
                 if (_repeatMode != value)
                 {
                     _repeatMode = value;
-                    RaisePropertyChanged(nameof(RepeatMode));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RepeatMode)));
                     RepeatModeChanged?.Invoke(this, new RepeatModeChangedEventEventArgs(RepeatMode));
                 }
             }
-        }
-
-
-        public int Count
-        {
-            get { return Items.Count; }
         }
 
         public object SyncRoot
@@ -168,10 +151,19 @@ namespace InsireBotCore
             get { return false; }
         }
 
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
+
+        public bool IsFixedSize
+        {
+            get { return false; }
+        }
+
         public Playlist() : base()
         {
             History = new Stack<int>();
-            Items = new RangeObservableCollection<IMediaItem>();
             Title = string.Empty;
             ID = string.Empty;
         }
@@ -191,34 +183,54 @@ namespace InsireBotCore
         /// Add an <see cref="IMediaItem"/> to <seealso cref="Items"/>
         /// </summary>
         /// <param name="item">the <see cref="IMediaItem"/> to add</param>
-        public void Add(IMediaItem item)
+        new public void Add(IMediaItem item)
         {
-            Items.Add(item);
-            RaisePropertyChanged(nameof(Items));
+            item.Index = Items.Select(p => p.Index).Max() + 1;
+            base.Add(item);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Items)));
+
+            if (CurrentItem == null)
+                CurrentItem = Items.First();
         }
 
-        public void AddRange(IEnumerable<IMediaItem> items)
+        new public void AddRange(IEnumerable<IMediaItem> items)
         {
-            Items.AddRange(items);
-            RaisePropertyChanged(nameof(Items));
+            var currentIndex = -1;
+            if (Items.Any())
+            {
+                var indices = Items.Select(p => p.Index);
+                currentIndex = (indices != null) ? indices.Max() : 0;
+            }            
+
+            foreach (var item in items)
+            {
+                currentIndex++;
+                item.Index = currentIndex;
+            }
+                
+            base.AddRange(items);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Items)));
+
+            if (CurrentItem == null)
+                CurrentItem = Items.First();
         }
 
-        public void Clear()
+        new public void Clear()
         {
-            Items.Clear();
-            RaisePropertyChanged(nameof(Items));
+            base.Clear();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Items)));
         }
 
         /// <summary>
         /// Removes all occurences of an <see cref="IMediaItem"/> from <seealso cref="Items"/>
         /// </summary>
         /// <param name="item"></param>
-        public void Remove(IMediaItem item)
+        new public void Remove(IMediaItem item)
         {
             while (Items.Contains(item))
                 Items.Remove(item);
 
-            RaisePropertyChanged(nameof(Items));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Items)));
         }
         /// <summary>
         /// Returns the next <see cref="IMediaItem"/> after the <seealso cref="CurrentItem"/>
@@ -393,9 +405,41 @@ namespace InsireBotCore
             //TODO
         }
 
-        public IEnumerator GetEnumerator()
+        public int Add(object value)
+        {
+            var item = value as IMediaItem;
+            Items.Add(item);
+            return Items.IndexOf(item);
+        }
+
+        public bool Contains(object value)
+        {
+            return Items.Contains(value as IMediaItem);
+        }
+
+        public int IndexOf(object value)
+        {
+            return Items.IndexOf(value as IMediaItem);
+        }
+
+        public void Insert(int index, object value)
+        {
+            Items.Insert(index, value as IMediaItem);
+        }
+
+        public void Remove(object value)
+        {
+            Items.Remove(value as IMediaItem);
+        }
+
+        IEnumerator<IMediaItem> IEnumerable<IMediaItem>.GetEnumerator()
         {
             return Items.GetEnumerator();
+        }
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

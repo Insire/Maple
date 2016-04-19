@@ -13,7 +13,7 @@ namespace InsireBotCore
         void Next();
         void Previous();
 
-        IPlaylist Playlist { get;}
+        IPlaylist<IMediaItem> Playlist { get;}
 
         AudioDevice AudioDevice { get; set; }
         int Volume { get; set; }

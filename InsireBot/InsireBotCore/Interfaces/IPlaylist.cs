@@ -1,8 +1,9 @@
 ﻿using System.Collections;
+using System.ComponentModel;
 
 namespace InsireBotCore
 {
-    public interface IPlaylist : IIsSelected, IIndex, ICollection
+    public interface IPlaylist<IMediaItem> : IIsSelected, IIndex, IList, IRangeCollection<IMediaItem>, INotifyPropertyChanged
     {
         event RepeatModeChangedEventHandler RepeatModeChanged;
         event ShuffleModeChangedEventHandler ShuffleModeChanged;

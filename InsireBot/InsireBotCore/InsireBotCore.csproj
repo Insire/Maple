@@ -124,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\IPlaylist.cs" />
+    <Compile Include="Interfaces\IRangeCollection.cs" />
     <Compile Include="Model\AudioDevice.cs" />
     <Compile Include="Model\MediaItem.cs" />
     <Compile Include="Model\MediaPlayerOptions.cs" />

@@ -1,8 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace InsireBotCore
 {
-    public interface IMediaItem : IIsSelected, IIndex
+    public interface IMediaItem : IIsSelected, IIndex, INotifyPropertyChanged
     {
         string Title { get; }
         string Location { get; }

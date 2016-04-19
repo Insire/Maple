@@ -65,9 +65,14 @@ namespace InsireBotCore
 
         public DotNetPlayer(IDataService dataService) : base(dataService)
         {
+            Playlist = new Playlist();
+            Playlist.AddRange(dataService.GetCurrentMediaItems());
+
             Settings = dataService.GetMediaPlayerSettings();
             VolumeMin = 0;
             VolumeMax = 100;
+
+            AudioDevice = AudioDevices?.FirstOrDefault();
         }
 
         public DotNetPlayer(IDataService dataService, ISettings settings) : this(dataService)
@@ -75,9 +80,6 @@ namespace InsireBotCore
             Settings = settings;
 
             ValidateSettings();
-
-            AudioDevice = AudioDevices?.FirstOrDefault();
-
             InitializeProperties();
         }
 

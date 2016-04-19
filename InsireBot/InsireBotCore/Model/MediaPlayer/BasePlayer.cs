@@ -14,11 +14,11 @@
             get { return Playlist.CanPrevious(); }
         }
 
-        private IPlaylist _playlist;
-        public IPlaylist Playlist
+        private IPlaylist<IMediaItem> _playlist;
+        public IPlaylist<IMediaItem> Playlist
         {
             get { return _playlist; }
-            private set
+            protected set
             {
                 if (_playlist != value && value != null)
                 {
@@ -81,7 +81,6 @@
         {
             AudioDevices = new RangeObservableCollection<AudioDevice>();
             CompletedMediaItem += Player_CompletedMediaItem;
-
 
             if (IsInDesignMode)
             {

@@ -70,7 +70,11 @@ namespace InsireBotCore
 
         public IEnumerable<IMediaItem> GetCurrentMediaItems()
         {
-            throw new NotImplementedException();
+            //TODO
+            yield return new MediaItem("Rusko - Somebody To Love (Sigma Remix)", new Uri(@"https://www.youtube.com/watch?v=nF7wa3j57j0"), new TimeSpan(0, 5, 47));
+            yield return new MediaItem("Armin van Buuren feat. Sophie - Virtual Friend", new Uri(@"https://www.youtube.com/watch?v=0ypeOKp0x3k"), new TimeSpan(0, 7, 12));
+            yield return new MediaItem("Will & Tim ft. Ephixa - Stone Tower Temple", new Uri("C:\\Users\\Insire\\Downloads\\Will & Tim ft. Ephixa - Stone Tower Temple.mp3"));
+            yield return new MediaItem("1-Foreword.flac", new Uri("C:\\Users\\Insire\\Desktop\\1-Foreword.flac"));
         }
     }
 }
