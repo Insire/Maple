@@ -19,6 +19,8 @@ namespace InsireBot.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
+            SimpleIoc.Default.Register<DrawerItemViewmodel>();
+
             if (ViewModelBase.IsInDesignModeStatic)
             {
                 // Create design time view services and models
@@ -34,6 +36,8 @@ namespace InsireBot.ViewModel
             SimpleIoc.Default.Register<MediaItemsStore>();
             SimpleIoc.Default.Register<PlaylistsViewModel>();
             SimpleIoc.Default.Register<MediaPlayerViewModel>();
+            SimpleIoc.Default.Register<CreateMediaItemViewModel>();
+            
         }
 
         public MediaPlayerViewModel MediaPlayerViewModel
@@ -51,12 +55,25 @@ namespace InsireBot.ViewModel
             get { return ServiceLocator.Current.GetInstance<DataParsingService>(); }
         }
 
+        public CreateMediaItemViewModel CreateMediaItemViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<CreateMediaItemViewModel>(); }
+        }
+
+        public DrawerItemViewmodel DrawerItemViewmodel
+        {
+            get { return ServiceLocator.Current.GetInstance<DrawerItemViewmodel>(); }
+        }
+
         public static void Cleanup()
         {
             SimpleIoc.Default.Unregister<DataParsingService>();
             SimpleIoc.Default.Unregister<MediaItemsStore>();
             SimpleIoc.Default.Unregister<PlaylistsViewModel>();
             SimpleIoc.Default.Unregister<MediaPlayerViewModel>();
+            SimpleIoc.Default.Unregister<CreateMediaItemViewModel>();
+
+            SimpleIoc.Default.Unregister<DrawerItemViewmodel>();
         }
     }
 }

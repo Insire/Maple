@@ -91,7 +91,6 @@
             </DataGrid.Columns>
         </DataGrid>
 
-
         <!--  Previous, Play, Next  -->
         <Grid Grid.Row="1"
               Grid.Column="1"

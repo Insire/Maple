@@ -4,51 +4,49 @@
         xmlns:core="clr-namespace:InsireBotCore;assembly=InsireBotCore"
         xmlns:local="clr-namespace:InsireBot"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        DataContext="{Binding DrawerItemViewmodel, Source={StaticResource Locator}}"
         Style="{StaticResource BaseWindowStyle}">
+    <Window.Resources>
+        <core:DebugConverter x:Key="DebugConverter" />
+        <core:BindingProxy x:Key="SetDrawerItemCommandProxy" Data="{Binding SetDrawerItemCommand}" />
+        
+    </Window.Resources>
 
     <materialDesign:DialogHost Identifier="RootDialog">
         <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
             <materialDesign:DrawerHost.LeftDrawerContent>
-                <DockPanel MinWidth="212">
+                <DockPanel MinWidth="212" >
                     <ToggleButton Margin="16"
                                   HorizontalAlignment="Right"
                                   Style="{StaticResource MaterialDesignHamburgerToggleButton}"
                                   DockPanel.Dock="Top"
                                   IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
-                    <ListBox x:Name="DemoItemsListBox"
-                             Margin="0,16,0,16"
+
+                    <ListBox Grid.IsSharedSizeScope="True"
+                             ItemsSource="{Binding Items}"
                              PreviewMouseLeftButtonUp="UIElement_OnPreviewMouseLeftButtonUp"
-                             SelectedIndex="0">
+                             SelectedItem="{Binding SelectedPage}">
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="DrawerItem">
-                                <TextBlock Margin="32,0,32,0" Text="{Binding Name}" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="16" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Col1" />
+                                        <ColumnDefinition Width="64" />
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Col2" />
+                                        <ColumnDefinition Width="16" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               Text="{Binding Name}" />
+                                    <Button Grid.Column="3"
+                                            Style="{StaticResource OptionsButtonStyle}"
+                                            Command="{Binding Data, Source={StaticResource SetDrawerItemCommandProxy}}"
+                                            CommandParameter="{Binding .}" />
+                                </Grid>
+
                             </DataTemplate>
                         </ListBox.ItemTemplate>
-
-                        <core:DrawerItem Name="Home">
-                            <core:DrawerItem.Content>
-                                <local:MediaPlayerPage />
-                            </core:DrawerItem.Content>
-                        </core:DrawerItem>
-
-                        <core:DrawerItem Name="Add a Playlist">
-                            <core:DrawerItem.Content>
-                                <local:NewPlaylistPage />
-                            </core:DrawerItem.Content>
-                        </core:DrawerItem>
-
-                        <core:DrawerItem Name="Add a Video">
-                            <core:DrawerItem.Content>
-                                <local:NewMediaItemPage />
-                            </core:DrawerItem.Content>
-                        </core:DrawerItem>
-
-                        <core:DrawerItem Name="Options">
-                            <core:DrawerItem.Content>
-                                <local:OptionsPage />
-                            </core:DrawerItem.Content>
-                        </core:DrawerItem>
-
                     </ListBox>
                 </DockPanel>
             </materialDesign:DrawerHost.LeftDrawerContent>
@@ -66,7 +64,7 @@
                     </Grid>
                 </materialDesign:ColorZone>
 
-                <ContentControl Style="{StaticResource BaseLayoutStyle}" Content="{Binding ElementName=DemoItemsListBox, Path=SelectedItem.Content}" />
+                <ContentControl Style="{StaticResource BaseLayoutStyle}" Content="{Binding SelectedPage.Content}" />
 
             </DockPanel>
 

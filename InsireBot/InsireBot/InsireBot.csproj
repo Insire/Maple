@@ -181,10 +181,16 @@
     <Compile Include="Pages\MediaPlayerPage.xaml.cs">
       <DependentUpon>MediaPlayerPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\NewMediaItemPage.xaml.cs">
+    <Compile Include="Pages\NewMediaItem\NewMediaItemOptionsPage.xaml.cs">
+      <DependentUpon>NewMediaItemOptionsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\NewMediaItem\NewMediaItemPage.xaml.cs">
       <DependentUpon>NewMediaItemPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\NewPlaylistPage.xaml.cs">
+    <Compile Include="Pages\NewPlaylist\NewPlaylistOptionsPage.xaml.cs">
+      <DependentUpon>NewPlaylistOptionsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\NewPlaylist\NewPlaylistPage.xaml.cs">
       <DependentUpon>NewPlaylistPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\OptionsPage.xaml.cs">
@@ -195,11 +201,12 @@
     <Compile Include="ViewModel\DataStore\PlaylistsStore.cs" />
     <Compile Include="ViewModel\DataStore\MediaItemsStore.cs" />
     <Compile Include="ViewModel\BusinessLogic\PlaylistsViewModel.cs" />
+    <Compile Include="ViewModel\DrawerItemViewmodel.cs" />
     <Compile Include="View\MediaPlayerView.xaml.cs">
       <DependentUpon>MediaPlayerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\BusinessLogic\MediaPlayerViewModel.cs" />
-    <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="ViewModel\GlobalServiceLocator.cs" />
     <Compile Include="View\PlayModeView.xaml.cs">
       <DependentUpon>PlayModeView.xaml</DependentUpon>
     </Compile>
@@ -207,11 +214,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\NewMediaItemPage.xaml">
+    <Page Include="Pages\NewMediaItem\NewMediaItemOptionsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\NewPlaylistPage.xaml">
+    <Page Include="Pages\NewMediaItem\NewMediaItemPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\NewPlaylist\NewPlaylistOptionsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\NewPlaylist\NewPlaylistPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

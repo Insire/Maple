@@ -114,7 +114,6 @@ namespace InsireBot.ViewModel
 
         public void SetPlaylist(Playlist<IMediaItem> playlist)
         {
-            var p = new Playlist<MediaItem>();
             MediaPlayer.Playlist.Clear();
             var items = MediaPlayer.Playlist.CanAddRange(playlist);
             MediaPlayer.Playlist.AddRange(items);

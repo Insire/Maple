@@ -9,7 +9,9 @@ namespace InsireBotCore
     {
         public static void MutateVerbose<TField>(this INotifyPropertyChanged instance, ref TField field, TField newValue, Action<PropertyChangedEventArgs> raise, [CallerMemberName] string propertyName = null)
         {
-            if (EqualityComparer<TField>.Default.Equals(field, newValue)) return;
+            if (EqualityComparer<TField>.Default.Equals(field, newValue))
+                return;
+
             field = newValue;
             raise?.Invoke(new PropertyChangedEventArgs(propertyName));
         }

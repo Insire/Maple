@@ -139,9 +139,12 @@
     <Compile Include="Service\MrlExtractionService.cs" />
     <Compile Include="Service\WinFormsService.cs" />
     <Compile Include="Service\Youtube\Youtube.cs" />
+    <Compile Include="Util\BindingProxy.cs" />
     <Compile Include="Util\DataViewModelBase.cs" />
     <Compile Include="Util\BusinessViewModelBase.cs" />
     <Compile Include="Util\DataGridBehavior.cs" />
+    <Compile Include="Util\DebugConverter.cs" />
+    <Compile Include="Util\DefaultViewModelBase.cs" />
     <Compile Include="Util\DrawerItem.cs" />
     <Compile Include="Util\EnumBindingSourceExtension.cs" />
     <Compile Include="Events\EventHandler.cs" />

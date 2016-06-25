@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
 
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 
 namespace InsireBotCore
@@ -13,21 +12,8 @@ namespace InsireBotCore
     /// handles storing temporary data in the application
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class DataViewModelBase<T> : ViewModelBase where T : IIsSelected, IIndex, IIdentifier
+    public class DataViewModelBase<T> : DefaultViewModelBase<T> where T : IIndex, IIdentifier, IIsSelected
     {
-        protected object _itemsLock;
-
-        private RangeObservableCollection<T> _items;
-        public RangeObservableCollection<T> Items
-        {
-            get { return _items; }
-            set
-            {
-                _items = value;
-                RaisePropertyChanged(nameof(Items));
-            }
-        }
-
         private bool _isBusy;
         public bool IsBusy
         {
@@ -90,14 +76,9 @@ namespace InsireBotCore
             }
         }
 
-        public DataViewModelBase()
+        public DataViewModelBase():base()
         {
-            _itemsLock = new object();
-
-            Items = new RangeObservableCollection<T>();
             FilteredItemsView = CollectionViewSource.GetDefaultView(Items);
-
-            BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
 
             RemoveCommand = new RelayCommand(() => SelectedItems.ToList().ForEach(p => Items.Remove(p)), CanRemove);
             ClearCommand = new RelayCommand(() => Items.Clear(), CanClear);

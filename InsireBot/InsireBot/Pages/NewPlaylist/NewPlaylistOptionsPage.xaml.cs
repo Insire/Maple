@@ -3,11 +3,11 @@
 namespace InsireBot
 {
     /// <summary>
-    /// Interaction logic for MediaPlayerPage.xaml
+    /// Interaction logic for NewPlaylistOptionsPage.xaml
     /// </summary>
-    public partial class MediaPlayerPage : UserControl
+    public partial class NewPlaylistOptionsPage : UserControl
     {
-        public MediaPlayerPage()
+        public NewPlaylistOptionsPage()
         {
             InitializeComponent();
         }

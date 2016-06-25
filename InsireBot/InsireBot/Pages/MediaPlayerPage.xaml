@@ -5,12 +5,15 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <Grid>
         <materialDesign:TransitioningContent>
+            
             <materialDesign:TransitioningContent.OpeningEffects>
                 <materialDesign:TransitionEffect Kind="FadeIn" />
             </materialDesign:TransitioningContent.OpeningEffects>
+            
             <materialDesign:Card VerticalAlignment="Stretch">
                 <local:MediaPlayerView />
             </materialDesign:Card>
+            
         </materialDesign:TransitioningContent>
 
     </Grid>

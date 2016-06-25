@@ -8,7 +8,8 @@
         <materialDesign:TransitioningContent.OpeningEffects>
             <materialDesign:TransitionEffect Kind="FadeIn" />
         </materialDesign:TransitioningContent.OpeningEffects>
-        <materialDesign:Card VerticalAlignment="Stretch" Style="{StaticResource BaseLayoutStyle}">
+
+        <materialDesign:Card VerticalAlignment="Stretch">
             <Grid Margin="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -36,7 +37,7 @@
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
                         BorderThickness="0"
-                        DataContext="{Binding Source={StaticResource Locator}, Path=NewMediaItemViewModel}">
+                        DataContext="{Binding Source={StaticResource Locator}, Path=CreateMediaItemViewModel}">
 
                     <DataGrid Style="{StaticResource BaseDataGridStyle}" ItemsSource="{Binding Items}">
                         <DataGrid.ContextMenu>

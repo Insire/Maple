@@ -96,6 +96,20 @@
         <Setter Property="ToolTipService.Placement" Value="Mouse" />
     </Style>
 
+    <Style x:Key="OptionsButtonStyle"
+           BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}"
+           TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="30" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <materialDesign:PackIcon Style="{Binding IconStyle}" Kind="Settings" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="ComputeButtonStyle"
            BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}"
            TargetType="{x:Type Button}">
