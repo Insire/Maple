@@ -410,7 +410,7 @@ namespace InsireBotCore
                 index = index + 1;
             }
 
-            //TODO
+            throw new NotImplementedException("TODO: CopyTo in Playlist.cs");
         }
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")

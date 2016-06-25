@@ -11,7 +11,7 @@
 
         <materialDesign:Card VerticalAlignment="Stretch">
             <TextBlock>Options</TextBlock>
-            
+
         </materialDesign:Card>
     </materialDesign:TransitioningContent>
 </UserControl>

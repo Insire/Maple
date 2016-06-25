@@ -3,7 +3,7 @@
 namespace InsireBot.ViewModel
 {
     /// <summary>
-    ///  DataStore, when creating new playlist entries aka videos from parsed data
+    ///  temp DataStore for playlist entries
     /// </summary>
     public class MediaItemsStore : DataViewModelBase<IMediaItem>
     {

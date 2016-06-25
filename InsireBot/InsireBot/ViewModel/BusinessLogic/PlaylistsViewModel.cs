@@ -5,7 +5,7 @@ using InsireBotCore;
 namespace InsireBot.ViewModel
 {
     /// <summary>
-    /// A ViewModel to manage Playlists
+    /// BO ViewModel to manage Playlists
     /// </summary>
     public class PlaylistsViewModel : BusinessViewModelBase<Playlist<MediaItem>>
     {
@@ -21,7 +21,6 @@ namespace InsireBot.ViewModel
             }
             else
             {
-                // Code runs "for real"
                 var item = new Playlist<MediaItem>("Music", "PL5LmATNaGcQxknuhgb_BkCKKIvcZro7iR");
                 Items.Add(item);
 

@@ -4,6 +4,9 @@ using GalaSoft.MvvmLight;
 
 namespace InsireBotCore
 {
+    /// <summary>
+    /// BusyStack will handle notifying a viewmodel on if and how many actions are pending
+    /// </summary>
     public class BusyStack : ObservableObject
     {
         private ConcurrentBag<Guid> _items;

@@ -72,8 +72,8 @@
       <HintPath>..\packages\Google.Apis.1.13.1\lib\net45\Google.Apis.PlatformServices.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Google.Apis.YouTube.v3, Version=1.13.1.511, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Apis.YouTube.v3.1.13.1.511\lib\portable-net45+netcore45+wpa81+wp8\Google.Apis.YouTube.v3.dll</HintPath>
+    <Reference Include="Google.Apis.YouTube.v3, Version=1.13.1.529, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.YouTube.v3.1.13.1.529\lib\portable-net45+netcore45+wpa81+wp8\Google.Apis.YouTube.v3.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
@@ -124,8 +124,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\IIdentifier.cs" />
-    <Compile Include="Interfaces\IPlaylist.cs" />
-    <Compile Include="Interfaces\IRangeCollection.cs" />
     <Compile Include="Model\AudioDevice.cs" />
     <Compile Include="Model\MediaItem.cs" />
     <Compile Include="Model\MediaPlayerOptions.cs" />
@@ -147,7 +145,6 @@
     <Compile Include="Util\DebugConverter.cs" />
     <Compile Include="Util\DefaultViewModelBase.cs" />
     <Compile Include="Util\DrawerItem.cs" />
-    <Compile Include="Util\EnumBindingSourceExtension.cs" />
     <Compile Include="Events\EventHandler.cs" />
     <Compile Include="Service\DesignTimeDataService.cs" />
     <Compile Include="Enums\MediaPlayerType.cs" />
@@ -157,7 +154,6 @@
     <Compile Include="Interfaces\IIsSelected.cs" />
     <Compile Include="Interfaces\IMediaItem.cs" />
     <Compile Include="Interfaces\IMediaPlayer.cs" />
-    <Compile Include="Interfaces\IPlaying.cs" />
     <Compile Include="Interfaces\ISettings.cs" />
     <Compile Include="Util\LinqExtensions.cs" />
     <Compile Include="Util\NotifyPropertyChangedExtension.cs" />

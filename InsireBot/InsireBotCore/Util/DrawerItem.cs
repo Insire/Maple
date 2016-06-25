@@ -3,6 +3,10 @@ using System.ComponentModel;
 
 namespace InsireBotCore
 {
+    /// <summary>
+    /// this class represents a wrapper for 2 ui controls
+    /// fancy stuff for displaying a clickable list with more clickable stuff inside each item
+    /// </summary>
     public class DrawerItem : INotifyPropertyChanged, IIsSelected
     {
         private string _name;

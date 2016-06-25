@@ -38,7 +38,7 @@ namespace InsireBot.Utils
 
         public void Parse(FileInfo file)
         {
-            //assume its a MediaFile aka *.mp3
+            //assume its a MediaFile aka *.mp3 or something similar
             var mediaItem = new MediaItem(Path.GetFileNameWithoutExtension(file.FullName), new Uri(file.FullName));
             Messenger.Default.Send(mediaItem);
         }
@@ -90,7 +90,6 @@ namespace InsireBot.Utils
 
                         continue;
                     }
-
                 }
 
                 rx = rx.NextMatch();

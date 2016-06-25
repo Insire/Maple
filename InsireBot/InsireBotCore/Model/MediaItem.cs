@@ -22,7 +22,7 @@ namespace InsireBotCore
 
         private int _index;
         /// <summary>
-        /// An Index managed by the collection an item is inside of
+        /// An Index managed by the collection this <see cref="MediaItem"/> is part of
         /// </summary>
         public int Index
         {
@@ -80,7 +80,7 @@ namespace InsireBotCore
         public string Location
         {
             get { return _location; }
-            set
+            private set
             {
                 if (_location != value)
                 {
@@ -108,7 +108,7 @@ namespace InsireBotCore
         public bool IsLocalFile
         {
             get { return _isLocalFile; }
-            set
+            private set
             {
                 if (_isLocalFile != value)
                 {

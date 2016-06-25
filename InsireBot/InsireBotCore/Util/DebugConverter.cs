@@ -5,6 +5,9 @@ using System.Windows.Data;
 
 namespace InsireBotCore
 {
+    /// <summary>
+    /// ever wondered why your binding in WPF didn't work? drop this converted inside your binding and check whats wrong
+    /// </summary>
     public class DebugConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

@@ -5,6 +5,9 @@ using InsireBotCore;
 
 namespace InsireBot
 {
+    /// <summary>
+    /// ViewModel that stores and controls which UserControl(Page/View) whatever is displayed in the mainwindow of this app)
+    /// </summary>
     public class DrawerItemViewmodel : DefaultViewModelBase<DrawerItem>
     {
         public ICommand SetDrawerItemCommand { get; private set; }

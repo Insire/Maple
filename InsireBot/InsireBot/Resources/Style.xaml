@@ -99,8 +99,6 @@
     <Style x:Key="OptionsButtonStyle"
            BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}"
            TargetType="{x:Type Button}">
-        <Setter Property="Width" Value="30" />
-        <Setter Property="Height" Value="30" />
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -108,6 +106,8 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Width" Value="30" />
     </Style>
 
     <Style x:Key="ComputeButtonStyle"

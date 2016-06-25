@@ -47,6 +47,7 @@ namespace InsireBot.ViewModel
                 MediaPlayer.CompletedMediaItem -= MediaPlayer_CompletedMediaItem;
                 MediaPlayer.Dispose();
             }
+
             if (!Items.Any())
                 AddRange(dataService.GetMediaItems()); // populate the playlist
 

@@ -3,6 +3,10 @@ using GalaSoft.MvvmLight;
 
 namespace InsireBotCore
 {
+    /// <summary>
+    /// the base of all my listbased viewmodels
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class DefaultViewModelBase<T> : ViewModelBase
     {
         protected object _itemsLock;

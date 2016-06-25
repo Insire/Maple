@@ -1,17 +1,14 @@
-<Application x:Class="InsireBot.App" 
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-             xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz" 
-             xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" 
-             StartupUri="View/MainWindow.xaml" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             d1p1:Ignorable="d" 
-             xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:InsireBot.ViewModel">
+<Application x:Class="InsireBot.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+             xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+             xmlns:vm="clr-namespace:InsireBot.ViewModel"
+             StartupUri="View/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- Material Design -->
+                <!--  Material Design  -->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Teal.xaml" />
@@ -24,15 +21,15 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.RadioButton.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ToggleButton.xaml" />
 
-                <!-- Dragablz Material Design -->
-                <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/materialdesign.xaml"/>
+                <!--  Dragablz Material Design  -->
+                <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/materialdesign.xaml" />
 
-                <!-- other stuff-->
+                <!--  other stuff  -->
                 <ResourceDictionary Source="Resources/Style.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 
-            <!-- MahApps Brushes -->
+            <!--  MahApps Brushes  -->
             <SolidColorBrush x:Key="HighlightBrush" Color="{DynamicResource Primary700}" />
             <SolidColorBrush x:Key="AccentColorBrush" Color="{DynamicResource Primary500}" />
             <SolidColorBrush x:Key="AccentColorBrush2" Color="{DynamicResource Primary400}" />
@@ -40,19 +37,21 @@
             <SolidColorBrush x:Key="AccentColorBrush4" Color="{DynamicResource Primary200}" />
             <SolidColorBrush x:Key="WindowTitleColorBrush" Color="{DynamicResource Primary700}" />
             <SolidColorBrush x:Key="AccentSelectedColorBrush" Color="{DynamicResource Primary500Foreground}" />
-            <LinearGradientBrush x:Key="ProgressBrush" EndPoint="0.001,0.5" StartPoint="1.002,0.5">
-                <GradientStop Color="{DynamicResource Primary700}" Offset="0" />
-                <GradientStop Color="{DynamicResource Primary300}" Offset="1" />
+            <LinearGradientBrush x:Key="ProgressBrush" StartPoint="1.002,0.5" EndPoint="0.001,0.5">
+                <GradientStop Offset="0" Color="{DynamicResource Primary700}" />
+                <GradientStop Offset="1" Color="{DynamicResource Primary300}" />
             </LinearGradientBrush>
             <SolidColorBrush x:Key="CheckmarkFill" Color="{DynamicResource Primary500}" />
             <SolidColorBrush x:Key="RightArrowFill" Color="{DynamicResource Primary500}" />
             <SolidColorBrush x:Key="IdealForegroundColorBrush" Color="{DynamicResource Primary500Foreground}" />
-            <SolidColorBrush x:Key="IdealForegroundDisabledBrush" Color="{DynamicResource Primary500}" Opacity="0.4" />
+            <SolidColorBrush x:Key="IdealForegroundDisabledBrush"
+                             Opacity="0.4"
+                             Color="{DynamicResource Primary500}" />
 
-            <!-- Dragablz Material Design -->
-            <Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" />
+            <!--  Dragablz Material Design  -->
+            <Style BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" TargetType="{x:Type dragablz:TabablzControl}" />
 
-            <x:StaticExtension Member="vm:GlobalServiceLocator.Instance" x:Key="Locator" d:IsDataSource="True" />
+            <x:StaticExtension x:Key="Locator" Member="vm:GlobalServiceLocator.Instance" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

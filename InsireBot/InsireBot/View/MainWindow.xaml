@@ -4,23 +4,23 @@
         xmlns:core="clr-namespace:InsireBotCore;assembly=InsireBotCore"
         xmlns:local="clr-namespace:InsireBot"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        DataContext="{Binding DrawerItemViewmodel, Source={StaticResource Locator}}"
-        Style="{StaticResource BaseWindowStyle}">
+        Style="{StaticResource BaseWindowStyle}"
+        DataContext="{Binding DrawerItemViewmodel, Source={StaticResource Locator}}">
     <Window.Resources>
         <core:DebugConverter x:Key="DebugConverter" />
         <core:BindingProxy x:Key="SetDrawerItemCommandProxy" Data="{Binding SetDrawerItemCommand}" />
-        
     </Window.Resources>
 
     <materialDesign:DialogHost Identifier="RootDialog">
-        <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+        <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding Path=IsChecked, ElementName=MenuToggleButton}">
             <materialDesign:DrawerHost.LeftDrawerContent>
-                <DockPanel MinWidth="212" >
+                <DockPanel MinWidth="212">
+
                     <ToggleButton Margin="16"
                                   HorizontalAlignment="Right"
                                   Style="{StaticResource MaterialDesignHamburgerToggleButton}"
                                   DockPanel.Dock="Top"
-                                  IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
+                                  IsChecked="{Binding Path=IsChecked, ElementName=MenuToggleButton, Mode=TwoWay}" />
 
                     <ListBox Grid.IsSharedSizeScope="True"
                              ItemsSource="{Binding Items}"
@@ -36,6 +36,7 @@
                                         <ColumnDefinition Width="Auto" SharedSizeGroup="Col2" />
                                         <ColumnDefinition Width="16" />
                                     </Grid.ColumnDefinitions>
+
                                     <TextBlock Grid.Column="1"
                                                VerticalAlignment="Center"
                                                Text="{Binding Name}" />
@@ -55,13 +56,12 @@
                                           materialDesign:ShadowAssist.ShadowDepth="Depth2"
                                           DockPanel.Dock="Top"
                                           Mode="PrimaryMid">
-                    <Grid>
-                        <ToggleButton x:Name="MenuToggleButton"
-                                      HorizontalAlignment="Left"
-                                      Style="{StaticResource MaterialDesignHamburgerToggleButton}"
-                                      IsChecked="False" />
 
-                    </Grid>
+                    <ToggleButton x:Name="MenuToggleButton"
+                                  HorizontalAlignment="Left"
+                                  Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                                  IsChecked="False" />
+
                 </materialDesign:ColorZone>
 
                 <ContentControl Style="{StaticResource BaseLayoutStyle}" Content="{Binding SelectedPage.Content}" />

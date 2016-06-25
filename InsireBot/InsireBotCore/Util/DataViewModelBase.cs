@@ -70,13 +70,10 @@ namespace InsireBotCore
 
         public T this[int index]
         {
-            get
-            {
-                return Items[index];
-            }
+            get { return Items[index]; }
         }
 
-        public DataViewModelBase():base()
+        public DataViewModelBase() : base()
         {
             FilteredItemsView = CollectionViewSource.GetDefaultView(Items);
 

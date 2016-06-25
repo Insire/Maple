@@ -2,6 +2,9 @@
 
 namespace InsireBotCore
 {
+    /// <summary>
+    /// Windows Multi Media Service aka recording- and playback devices
+    /// </summary>
     public class WinmmService
     {
         public static WAVEOUTCAPS[] GetDevCapsPlayback()
