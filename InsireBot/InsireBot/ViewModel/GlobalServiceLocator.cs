@@ -3,6 +3,8 @@ using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 using InsireBotCore;
 using InsireBot.Utils;
+using System.Windows;
+using System;
 
 namespace InsireBot.ViewModel
 {
@@ -12,10 +14,23 @@ namespace InsireBot.ViewModel
     /// </summary>
     public class GlobalServiceLocator
     {
+        private static GlobalServiceLocator instance;
+        public static GlobalServiceLocator Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new GlobalServiceLocator();
+                }
+                return instance;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the ViewModelLocator class.
         /// </summary>
-        public GlobalServiceLocator()
+        private GlobalServiceLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
@@ -37,7 +52,7 @@ namespace InsireBot.ViewModel
             SimpleIoc.Default.Register<PlaylistsViewModel>();
             SimpleIoc.Default.Register<MediaPlayerViewModel>();
             SimpleIoc.Default.Register<CreateMediaItemViewModel>();
-            
+
         }
 
         public MediaPlayerViewModel MediaPlayerViewModel
@@ -74,6 +89,16 @@ namespace InsireBot.ViewModel
             SimpleIoc.Default.Unregister<CreateMediaItemViewModel>();
 
             SimpleIoc.Default.Unregister<DrawerItemViewmodel>();
+        }
+
+        public void InvokeActionOnUiThread(Action action)
+        {
+            var dispatcher = Application.Current.Dispatcher;
+
+            if (dispatcher.CheckAccess())
+                action();
+            else
+                dispatcher.Invoke(action);
         }
     }
 }

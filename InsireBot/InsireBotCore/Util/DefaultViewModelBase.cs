@@ -7,6 +7,17 @@ namespace InsireBotCore
     {
         protected object _itemsLock;
 
+        private BusyStack _busyStack;
+        public BusyStack BusyStack
+        {
+            get { return _busyStack; }
+            set
+            {
+                _busyStack = value;
+                RaisePropertyChanged(nameof(BusyStack));
+            }
+        }
+
         private RangeObservableCollection<T> _items;
         public RangeObservableCollection<T> Items
         {
@@ -23,6 +34,7 @@ namespace InsireBotCore
             _itemsLock = new object();
 
             Items = new RangeObservableCollection<T>();
+            BusyStack = new BusyStack();
 
             BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
         }

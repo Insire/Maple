@@ -140,6 +140,7 @@
     <Compile Include="Service\WinFormsService.cs" />
     <Compile Include="Service\Youtube\Youtube.cs" />
     <Compile Include="Util\BindingProxy.cs" />
+    <Compile Include="Util\BusyStack.cs" />
     <Compile Include="Util\DataViewModelBase.cs" />
     <Compile Include="Util\BusinessViewModelBase.cs" />
     <Compile Include="Util\DataGridBehavior.cs" />
