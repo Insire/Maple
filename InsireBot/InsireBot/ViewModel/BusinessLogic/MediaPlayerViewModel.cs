@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 
 using GalaSoft.MvvmLight.CommandWpf;
@@ -11,7 +9,7 @@ using InsireBotCore;
 
 namespace InsireBot.ViewModel
 {
-    public class MediaPlayerViewModel : BotViewModelBase<IMediaItem>
+    public class MediaPlayerViewModel : BusinessViewModelBase<IMediaItem>
     {
         public IMediaPlayer<IMediaItem> MediaPlayer { get; private set; }
 
@@ -20,7 +18,11 @@ namespace InsireBot.ViewModel
         public ICommand PlayCommand { get; private set; }
         public ICommand NextCommand { get; private set; }
         public ICommand PreviousCommand { get; private set; }
-        public ICommand AddCommand { get; private set; }
+
+        public Playlist<IMediaItem> Playlist
+        {
+            get { return MediaPlayer.Playlist; }
+        }
 
         public MediaPlayerViewModel(IDataService dataService) : base(dataService)
         {
@@ -46,7 +48,7 @@ namespace InsireBot.ViewModel
                 MediaPlayer.Dispose();
             }
             if (!Items.Any())
-                Add(dataService.GetMediaItems()); // populate the playlist
+                AddRange(dataService.GetMediaItems()); // populate the playlist
 
             MediaPlayer = dataService.GetMediaPlayer();
             MediaPlayer.CompletedMediaItem += MediaPlayer_CompletedMediaItem;
@@ -59,16 +61,15 @@ namespace InsireBot.ViewModel
             PlayCommand = new RelayCommand(Play);
             PreviousCommand = new RelayCommand(Previous, MediaPlayer.Playlist.CanPrevious);
             NextCommand = new RelayCommand(Next, MediaPlayer.Playlist.CanNext);
-            AddCommand = new RelayCommand(OpenAddDialog);
         }
 
-        private void Add(IEnumerable<IMediaItem> mediaItems)
+        public override void AddRange(IEnumerable<IMediaItem> mediaItems)
         {
             foreach (var item in mediaItems)
                 MediaPlayer.Playlist.Add(item);
         }
 
-        private void Add(IMediaItem mediaItem)
+        public override void Add(IMediaItem mediaItem)
         {
             if (Items.Any())
             {
@@ -84,14 +85,6 @@ namespace InsireBot.ViewModel
             }
 
             Items.Add(mediaItem);
-        }
-
-        private void OpenAddDialog()
-        {
-            var dialog = new NewMediaItemDialog();
-            dialog.Owner = Application.Current.MainWindow;
-
-            dialog.ShowDialog();
         }
 
         public void Previous()
@@ -117,6 +110,14 @@ namespace InsireBot.ViewModel
         public void Stop()
         {
             MediaPlayer.Stop();
+        }
+
+        public void SetPlaylist(Playlist<IMediaItem> playlist)
+        {
+            var p = new Playlist<MediaItem>();
+            MediaPlayer.Playlist.Clear();
+            var items = MediaPlayer.Playlist.CanAddRange(playlist);
+            MediaPlayer.Playlist.AddRange(items);
         }
     }
 }

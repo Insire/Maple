@@ -1,23 +1,23 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" >
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
-    <!-- Remember: the order of these styles matters, since they depend on each other. If one references a style not yet declared, you get random RuntimeErrors-->
+    <!--  Remember: the order of these styles matters, since they depend on each other. If one references a style not yet declared, you get random RuntimeErrors  -->
 
-    <!-- Icon Styles -->
-    <Style x:Key="BigIconStyle" TargetType="{x:Type materialDesign:PackIcon}" >
-        <Setter Property="Width" Value="30" />
+    <!--  Icon Styles  -->
+    <Style x:Key="BigIconStyle" TargetType="{x:Type materialDesign:PackIcon}">
         <Setter Property="Height" Value="30" />
+        <Setter Property="Width" Value="30" />
     </Style>
 
-    <Style x:Key="IconStyle" TargetType="{x:Type materialDesign:PackIcon}" >
-        <Setter Property="Width" Value="24" />
+    <Style x:Key="IconStyle" TargetType="{x:Type materialDesign:PackIcon}">
         <Setter Property="Height" Value="24" />
+        <Setter Property="Width" Value="24" />
     </Style>
 
-    <Style x:Key="MiniIconStyle" TargetType="{x:Type materialDesign:PackIcon}" >
-        <Setter Property="Width" Value="12" />
+    <Style x:Key="MiniIconStyle" TargetType="{x:Type materialDesign:PackIcon}">
         <Setter Property="Height" Value="12" />
+        <Setter Property="Width" Value="12" />
     </Style>
 
     <Style x:Key="BaseLayoutStyle" TargetType="Control">
@@ -32,13 +32,17 @@
         <Setter Property="Width" Value="10" />
     </Style>
 
-    <!-- DataGridRow Styles-->
-    <Style x:Key="BaseDataGridRowStyle" TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource {x:Type DataGridRow}}">
+    <!--  DataGridRow Styles  -->
+    <Style x:Key="BaseDataGridRowStyle"
+           BasedOn="{StaticResource {x:Type DataGridRow}}"
+           TargetType="{x:Type DataGridRow}">
         <Setter Property="IsSelected" Value="{Binding IsSelected}" />
     </Style>
 
-    <!-- DataGrid Styles -->
-    <Style x:Key="BaseDataGridStyle" TargetType="{x:Type DataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}">
+    <!--  DataGrid Styles  -->
+    <Style x:Key="BaseDataGridStyle"
+           BasedOn="{StaticResource {x:Type DataGrid}}"
+           TargetType="{x:Type DataGrid}">
         <Setter Property="AutoGenerateColumns" Value="False" />
         <Setter Property="CanUserAddRows" Value="False" />
         <Setter Property="CanUserDeleteRows" Value="True" />
@@ -49,106 +53,128 @@
         <Setter Property="RowStyle" Value="{StaticResource BaseDataGridRowStyle}" />
     </Style>
 
-    <!-- Window Styles -->
-    <Style x:Key="BaseWindowStyle" TargetType="{x:Type Window}" BasedOn="{StaticResource {x:Type Window}}">
-        <Setter Property="Width" Value="900" />
-        <Setter Property="MinWidth" Value="900" />
-        <Setter Property="Height" Value=" 506" />
-        <Setter Property="MinHeight" Value="506" />
+    <!--  Window Styles  -->
+    <Style x:Key="BaseWindowStyle"
+           BasedOn="{StaticResource {x:Type Window}}"
+           TargetType="{x:Type Window}">
         <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
         <Setter Property="FontFamily" Value="{StaticResource MaterialDesignFont}" />
-        <Setter Property="TextElement.Foreground" Value="{DynamicResource MaterialDesignBody}" />
-        <Setter Property="TextElement.FontWeight" Value="Regular" />
-        <Setter Property="TextElement.FontSize" Value="13" />
+        <Setter Property="Height" Value=" 506" />
+        <Setter Property="MinHeight" Value="506" />
+        <Setter Property="MinWidth" Value="900" />
         <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
+        <Setter Property="TextElement.FontSize" Value="13" />
+        <Setter Property="TextElement.FontWeight" Value="Regular" />
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource MaterialDesignBody}" />
+        <Setter Property="Width" Value="900" />
         <Setter Property="WindowStyle" Value="SingleBorderWindow" />
     </Style>
 
-    <Style x:Key="BaseDialogWindowStyle" TargetType="{x:Type Window}" BasedOn="{StaticResource BaseWindowStyle}">
-        <Setter Property="ShowInTaskbar" Value="False" />
+    <Style x:Key="BaseDialogWindowStyle"
+           BasedOn="{StaticResource BaseWindowStyle}"
+           TargetType="{x:Type Window}">
         <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
+        <Setter Property="ShowInTaskbar" Value="False" />
         <!--<Setter Property="WindowStartupLocation" Value="CenterOwner" /> cant be set inside a resource dictionary since the property isnt a dependency property-->
     </Style>
 
-    <!-- Button Styles -->
-    <Style x:Key="BaseButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-        <Setter Property="MinWidth" Value="60" />
+    <!--  Button Styles  -->
+    <Style x:Key="BaseButtonStyle"
+           BasedOn="{StaticResource {x:Type Button}}"
+           TargetType="{x:Type Button}">
         <Setter Property="Height" Value="33.75" />
         <Setter Property="Margin" Value="2" />
+        <Setter Property="MinWidth" Value="60" />
     </Style>
 
-    <Style x:Key="BaseDataGridButtonStyle" TargetType="{x:Type materialDesign:PopupBox}" BasedOn="{StaticResource MaterialDesignMultiFloatingActionAccentPopupBox}">
-        <Setter Property="Margin" Value="0,-30,10,0"/>
+    <Style x:Key="BaseDataGridButtonStyle"
+           BasedOn="{StaticResource MaterialDesignMultiFloatingActionAccentPopupBox}"
+           TargetType="{x:Type materialDesign:PopupBox}">
+        <Setter Property="Margin" Value="0,-30,10,0" />
         <Setter Property="Panel.ZIndex" Value="2" />
         <Setter Property="PlacementMode" Value="LeftAndAlignMiddles" />
         <Setter Property="ToolTipService.Placement" Value="Mouse" />
     </Style>
 
-    <Style x:Key="ComputeButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}">
+    <Style x:Key="ComputeButtonStyle"
+           BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}"
+           TargetType="{x:Type Button}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <materialDesign:PackIcon Kind="Magnify" Style="{Binding IconStyle}" />
+                    <materialDesign:PackIcon Style="{Binding IconStyle}" Kind="Magnify" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style x:Key="CancelButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+    <Style x:Key="CancelButtonStyle"
+           BasedOn="{StaticResource BaseButtonStyle}"
+           TargetType="{x:Type Button}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <materialDesign:PackIcon Kind="Close" Style="{Binding IconStyle}" />
+                    <materialDesign:PackIcon Style="{Binding IconStyle}" Kind="Close" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style x:Key="AddButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+    <Style x:Key="AddButtonStyle"
+           BasedOn="{StaticResource BaseButtonStyle}"
+           TargetType="{x:Type Button}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <materialDesign:PackIcon Kind="Plus" Style="{Binding IconStyle}" />
+                    <materialDesign:PackIcon Style="{Binding IconStyle}" Kind="Plus" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style x:Key="MiniAddButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}">
+    <Style x:Key="MiniAddButtonStyle"
+           BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}"
+           TargetType="{x:Type Button}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <materialDesign:PackIcon Kind="Plus" Style="{Binding MiniIconStyle}" />
+                    <materialDesign:PackIcon Style="{Binding MiniIconStyle}" Kind="Plus" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style x:Key="MiniDeleteButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}">
+    <Style x:Key="MiniDeleteButtonStyle"
+           BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}"
+           TargetType="{x:Type Button}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <materialDesign:PackIcon Kind="Delete" Style="{Binding MiniIconStyle}" />
+                    <materialDesign:PackIcon Style="{Binding MiniIconStyle}" Kind="Delete" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style x:Key="DeleteButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+    <Style x:Key="DeleteButtonStyle"
+           BasedOn="{StaticResource BaseButtonStyle}"
+           TargetType="{x:Type Button}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <materialDesign:PackIcon Kind="Delete" Style="{Binding IconStyle}" />
+                    <materialDesign:PackIcon Style="{Binding IconStyle}" Kind="Delete" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style x:Key="PlayButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionButton}">
+    <Style x:Key="PlayButtonStyle"
+           BasedOn="{StaticResource MaterialDesignFloatingActionButton}"
+           TargetType="{x:Type Button}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <materialDesign:PackIcon Kind="Play" Style="{Binding IconStyle}" />
+                    <materialDesign:PackIcon Style="{Binding IconStyle}" Kind="Play" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -157,7 +183,7 @@
                 <Setter Property="ContentTemplate">
                     <Setter.Value>
                         <DataTemplate>
-                            <materialDesign:PackIcon Kind="Stop" Style="{Binding IconStyle}" />
+                            <materialDesign:PackIcon Style="{Binding IconStyle}" Kind="Stop" />
                         </DataTemplate>
                     </Setter.Value>
                 </Setter>
@@ -165,43 +191,49 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="PauseButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+    <Style x:Key="PauseButtonStyle"
+           BasedOn="{StaticResource BaseButtonStyle}"
+           TargetType="{x:Type Button}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <materialDesign:PackIcon Kind="Pause" Style="{Binding IconStyle}" />
+                    <materialDesign:PackIcon Style="{Binding IconStyle}" Kind="Pause" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style x:Key="PreviousButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}">
+    <Style x:Key="PreviousButtonStyle"
+           BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}"
+           TargetType="{x:Type Button}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <materialDesign:PackIcon Kind="SkipPrevious" Style="{Binding IconStyle}" />
+                    <materialDesign:PackIcon Style="{Binding IconStyle}" Kind="SkipPrevious" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style x:Key="NextButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}">
+    <Style x:Key="NextButtonStyle"
+           BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}"
+           TargetType="{x:Type Button}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <materialDesign:PackIcon Kind="SkipNext" Style="{Binding IconStyle}" />
+                    <materialDesign:PackIcon Style="{Binding IconStyle}" Kind="SkipNext" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <!-- ToggleButton Styles -->
+    <!--  ToggleButton Styles  -->
     <ControlTemplate x:Key="IsMediaPlayerSilentTemplate">
-        <materialDesign:PackIcon Kind="SpeakerOff" Style="{Binding IconStyle}" />
+        <materialDesign:PackIcon Style="{Binding IconStyle}" Kind="SpeakerOff" />
     </ControlTemplate>
 
     <ControlTemplate x:Key="IsMediaPlayerNotSilentTemplate">
-        <materialDesign:PackIcon Kind="Speaker" Style="{Binding IconStyle}" />
+        <materialDesign:PackIcon Style="{Binding IconStyle}" Kind="Speaker" />
     </ControlTemplate>
 
     <Style x:Key="MutedPlayerToggleButtonStyle" TargetType="{x:Type ContentControl}">
@@ -216,11 +248,11 @@
     </Style>
 
     <ControlTemplate x:Key="IsRestrictedMediaItemTemplate">
-        <materialDesign:PackIcon Kind="BlockHelper" Style="{StaticResource IconStyle}" />
+        <materialDesign:PackIcon Style="{StaticResource IconStyle}" Kind="BlockHelper" />
     </ControlTemplate>
 
     <ControlTemplate x:Key="IsNotRestrictedMediaItemTemplate">
-        <materialDesign:PackIcon Kind="Check" Style="{StaticResource IconStyle}" />
+        <materialDesign:PackIcon Style="{StaticResource IconStyle}" Kind="Check" />
     </ControlTemplate>
 
     <Style x:Key="RestrictedMediaItemStyle" TargetType="{x:Type ContentControl}">

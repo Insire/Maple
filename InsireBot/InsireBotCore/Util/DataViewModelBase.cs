@@ -9,11 +9,13 @@ using GalaSoft.MvvmLight.CommandWpf;
 
 namespace InsireBotCore
 {
-    public class BotViewModelBase<T> : ViewModelBase where T : IIsSelected, IIndex
+    /// <summary>
+    /// handles storing temporary data in the application
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class DataViewModelBase<T> : ViewModelBase where T : IIsSelected, IIndex, IIdentifier
     {
-        protected readonly IDataService _dataService;
-
-        private object _itemsLock;
+        protected object _itemsLock;
 
         private RangeObservableCollection<T> _items;
         public RangeObservableCollection<T> Items
@@ -25,6 +27,39 @@ namespace InsireBotCore
                 RaisePropertyChanged(nameof(Items));
             }
         }
+
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            protected set
+            {
+                _isBusy = value;
+                RaisePropertyChanged(nameof(IsBusy));
+            }
+        }
+
+        private ICollectionView _filteredUsertasksView;
+        public ICollectionView FilteredItemsView
+        {
+            get { return _filteredUsertasksView; }
+            private set
+            {
+                _filteredUsertasksView = value;
+                RaisePropertyChanged(nameof(FilteredItemsView));
+            }
+        }
+
+        public bool AreAllItemsSelected
+        {
+            get { return Items.All(p => p.IsSelected); }
+            set
+            {
+                Items.ToList().ForEach(p => p.IsSelected = value);
+                RaisePropertyChanged(nameof(AreAllItemsSelected));
+            }
+        }
+
         public ICommand NewCommand { get; protected set; }
         public ICommand RemoveCommand { get; private set; }
         public ICommand ClearCommand { get; private set; }
@@ -55,21 +90,8 @@ namespace InsireBotCore
             }
         }
 
-        private ICollectionView _filteredUsertasksView;
-        public ICollectionView FilteredItemsView
+        public DataViewModelBase()
         {
-            get { return _filteredUsertasksView; }
-            private set
-            {
-                _filteredUsertasksView = value;
-                RaisePropertyChanged(nameof(FilteredItemsView));
-            }
-        }
-
-        public BotViewModelBase(IDataService dataService)
-        {
-            _dataService = dataService;
-
             _itemsLock = new object();
 
             Items = new RangeObservableCollection<T>();
@@ -81,19 +103,45 @@ namespace InsireBotCore
             ClearCommand = new RelayCommand(() => Items.Clear(), CanClear);
         }
 
+        /// <summary>
+        /// Can an Item be added to the Items Collection
+        /// </summary>
+        /// <returns></returns>
+        protected virtual bool CanAdd()
+        {
+            return Items != null;
+        }
+
         public bool CanRemove()
         {
-            return AreItemsSelected();
+            return CanClear() && AreItemsSelected();
         }
 
         protected bool CanClear()
         {
-            return Items?.Count > 0;
+            return Items?.Any() == true;
         }
 
         protected bool AreItemsSelected()
         {
             return Items.Any(p => p.IsSelected);
+        }
+
+        public virtual void Add(T item)
+        {
+            if (CanAdd())
+                Items.Add(item);
+        }
+
+        public virtual void AddRange(IEnumerable<T> items)
+        {
+            if (CanAdd())
+                Items.AddRange(items);
+        }
+
+        public void Clear()
+        {
+            Items?.Clear();
         }
     }
 }

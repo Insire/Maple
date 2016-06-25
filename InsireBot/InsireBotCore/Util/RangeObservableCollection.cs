@@ -16,7 +16,7 @@ namespace InsireBotCore
                 base.OnCollectionChanged(e);
         }
 
-        public void AddRange(IEnumerable<T> items)
+        public virtual void AddRange(IEnumerable<T> items)
         {
             if (items == null)
                 throw new ArgumentNullException(nameof(items));

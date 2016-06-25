@@ -11,7 +11,7 @@ namespace InsireBotTests
 
         public bool IsPlaying { get; set; }
 
-        public IPlaylist<IMediaItem> Playlist { get; set; }
+        public Playlist<IMediaItem> Playlist { get; set; }
 
         public bool Silent { get; set; }
 

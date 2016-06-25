@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -137,9 +138,9 @@ namespace InsireBot
             return result;
         }
 
-        public async Task<IEnumerable<Playlist>> GetPlaylist(string playlistId)
+        public async Task<IEnumerable<Playlist<MediaItem>>> GetPlaylist(string playlistId)
         {
-            var result = new List<Playlist>();
+            var result = new List<Playlist<MediaItem>>();
             var youtubeService = await GetService();
 
             var request = youtubeService.Playlists.List("snippet,contentDetails");
@@ -152,7 +153,7 @@ namespace InsireBot
                 var nextPageToken = "";
                 while (!string.IsNullOrEmpty(nextPageToken))
                 {
-                    var playlist = new Playlist(item.Snippet.Title, item.Id);
+                    var playlist = new InsireBotCore.Playlist<MediaItem>(item.Snippet.Title, item.Id);
                     var videos = await GetPlaylistItems(item.Id);
 
                     playlist.AddRange(videos);

@@ -2,6 +2,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 using InsireBotCore;
+using InsireBot.Utils;
 
 namespace InsireBot.ViewModel
 {
@@ -9,12 +10,12 @@ namespace InsireBot.ViewModel
     /// This class contains static references to all the view models in the
     /// application and provides an entry point for the bindings.
     /// </summary>
-    public class ViewModelLocator
+    public class GlobalServiceLocator
     {
         /// <summary>
         /// Initializes a new instance of the ViewModelLocator class.
         /// </summary>
-        public ViewModelLocator()
+        public GlobalServiceLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
@@ -29,9 +30,9 @@ namespace InsireBot.ViewModel
                 SimpleIoc.Default.Register<IDataService, RuntimeDataService>();
             }
 
-            SimpleIoc.Default.Register<NewMediaItemsDialogViewModel>();
-            SimpleIoc.Default.Register<NewMediaItemViewModel>();
-            SimpleIoc.Default.Register<NewPlaylistViewModel>();
+            SimpleIoc.Default.Register<DataParsingService>();
+            SimpleIoc.Default.Register<MediaItemsStore>();
+            SimpleIoc.Default.Register<PlaylistsViewModel>();
             SimpleIoc.Default.Register<MediaPlayerViewModel>();
         }
 
@@ -40,26 +41,21 @@ namespace InsireBot.ViewModel
             get { return ServiceLocator.Current.GetInstance<MediaPlayerViewModel>(); }
         }
 
-        public NewMediaItemsDialogViewModel NewMediaItemsDialogViewModel
+        public PlaylistsViewModel PlaylistsViewModel
         {
-            get { return ServiceLocator.Current.GetInstance<NewMediaItemsDialogViewModel>(); }
+            get { return ServiceLocator.Current.GetInstance<PlaylistsViewModel>(); }
         }
 
-        public NewPlaylistViewModel NewPlaylistViewModel
+        public DataParsingService DataParsingService
         {
-            get { return ServiceLocator.Current.GetInstance<NewPlaylistViewModel>(); }
-        }
-
-        public NewMediaItemViewModel NewMediaItemViewModel
-        {
-            get { return ServiceLocator.Current.GetInstance<NewMediaItemViewModel>(); }
+            get { return ServiceLocator.Current.GetInstance<DataParsingService>(); }
         }
 
         public static void Cleanup()
         {
-            SimpleIoc.Default.Unregister<NewMediaItemsDialogViewModel>();
-            SimpleIoc.Default.Unregister<NewMediaItemViewModel>();
-            SimpleIoc.Default.Unregister<NewPlaylistViewModel>();
+            SimpleIoc.Default.Unregister<DataParsingService>();
+            SimpleIoc.Default.Unregister<MediaItemsStore>();
+            SimpleIoc.Default.Unregister<PlaylistsViewModel>();
             SimpleIoc.Default.Unregister<MediaPlayerViewModel>();
         }
     }

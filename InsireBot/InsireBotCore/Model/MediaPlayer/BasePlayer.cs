@@ -1,6 +1,6 @@
 ﻿namespace InsireBotCore
 {
-    public abstract class BasePlayer : BotViewModelBase<AudioDevice>, IMediaPlayer<IMediaItem>
+    public abstract class BasePlayer : BusinessViewModelBase<AudioDevice>, IMediaPlayer<IMediaItem>
     {
         public event CompletedMediaItemEventHandler CompletedMediaItem;
 
@@ -14,8 +14,8 @@
             get { return Playlist.CanPrevious(); }
         }
 
-        private IPlaylist<IMediaItem> _playlist;
-        public IPlaylist<IMediaItem> Playlist
+        private Playlist<IMediaItem> _playlist;
+        public Playlist<IMediaItem> Playlist
         {
             get { return _playlist; }
             protected set

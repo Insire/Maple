@@ -52,7 +52,7 @@
             <!-- Dragablz Material Design -->
             <Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" />
 
-            <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
+            <vm:GlobalServiceLocator x:Key="Locator" d:IsDataSource="True" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

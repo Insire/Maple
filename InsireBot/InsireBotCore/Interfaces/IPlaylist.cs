@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace InsireBotCore
 {
-    public interface IPlaylist<IMediaItem> : IIsSelected, IIndex, IList, IRangeCollection<IMediaItem>, INotifyPropertyChanged
+    public interface IPlaylist<T> : IList, IIsSelected, IIndex, IIdentifier, IRangeCollection<T>, INotifyPropertyChanged where T: IMediaItem
     {
         event RepeatModeChangedEventHandler RepeatModeChanged;
         event ShuffleModeChangedEventHandler ShuffleModeChanged;

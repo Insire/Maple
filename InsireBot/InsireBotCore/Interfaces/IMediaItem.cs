@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace InsireBotCore
 {
-    public interface IMediaItem : IIsSelected, IIndex, INotifyPropertyChanged
+    public interface IMediaItem : IIsSelected, IIndex, INotifyPropertyChanged, IIdentifier
     {
         string Title { get; }
         string Location { get; }
@@ -11,7 +11,5 @@ namespace InsireBotCore
         TimeSpan Duration { get; }
 
         bool IsRestricted { get; }
-
-        Guid ID { get; }
     }
 }

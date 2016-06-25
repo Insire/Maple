@@ -2,6 +2,7 @@
 using InsireBotCore;
 using InsireBot.ViewModel;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace InsireBotTests
 {
@@ -11,9 +12,31 @@ namespace InsireBotTests
         [TestMethod()]
         public void MediaPlayerViewModelTest()
         {
-            var vm = new MediaPlayerViewModel(new RuntimeDataService());
+            var service = new RuntimeDataService();
+            var vm = new MediaPlayerViewModel(service);
 
-            var playlist = vm.MediaPlayer.Playlist as Playlist;
+            var playlist = vm.MediaPlayer.Playlist;
+            var list = (List<MediaItem>)service.GetCurrentMediaItems();
+            playlist.AddRange(list);
+            var distinctIndices = playlist.Select(p => p.Index).Distinct().Count();
+
+            Assert.IsTrue(distinctIndices == playlist.Count);
+            var previous = playlist.CurrentItem;
+            var next = playlist.Next();
+            Assert.IsTrue(previous == playlist.CurrentItem);
+            playlist.Set(next);
+            Assert.IsTrue(previous != playlist.CurrentItem);
+            Assert.IsTrue(previous.Index == playlist.CurrentItem.Index - 1);
+
+        }
+
+        [TestMethod()]
+        public void InitTest()
+        {
+            var service = new RuntimeDataService();
+            var vm = new MediaPlayerViewModel(service);
+
+            var playlist = vm.MediaPlayer.Playlist;
             Assert.IsFalse(vm.IsPlaying);
 
             Assert.IsNotNull(vm.MediaPlayer);
@@ -22,8 +45,22 @@ namespace InsireBotTests
             Assert.IsNotNull(playlist);
             Assert.IsNotNull(playlist.CurrentItem);
 
+            Assert.IsNotNull(playlist.RepeatMode);
+
             Assert.IsTrue(playlist.Any());
             Assert.IsTrue(playlist.All(p => p.Index != -1));
+        }
+
+        [TestMethod()]
+        public void ClearTest()
+        {
+            var service = new RuntimeDataService();
+            var vm = new MediaPlayerViewModel(service);
+
+            var playlist = vm.MediaPlayer.Playlist;
+
+            playlist.Clear();
+            Assert.IsFalse(playlist.Any());
         }
 
         [TestMethod()]

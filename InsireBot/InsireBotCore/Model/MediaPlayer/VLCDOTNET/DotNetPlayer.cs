@@ -65,7 +65,7 @@ namespace InsireBotCore
 
         public DotNetPlayer(IDataService dataService) : base(dataService)
         {
-            Playlist = new Playlist();
+            Playlist = new Playlist<IMediaItem>();
             Playlist.AddRange(dataService.GetCurrentMediaItems());
 
             Settings = dataService.GetMediaPlayerSettings();

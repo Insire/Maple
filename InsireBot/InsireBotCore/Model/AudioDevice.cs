@@ -1,8 +1,9 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System;
+using GalaSoft.MvvmLight;
 
 namespace InsireBotCore
 {
-    public class AudioDevice : ObservableObject, IIsSelected, IIndex
+    public class AudioDevice : ObservableObject, IIsSelected, IIndex, IIdentifier
     {
         private bool _isSelected;
         public bool IsSelected
@@ -110,5 +111,13 @@ namespace InsireBotCore
         }
 
         public object Value { get; private set; }
+
+        public Guid ID
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

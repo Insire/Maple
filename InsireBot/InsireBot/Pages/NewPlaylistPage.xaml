@@ -29,7 +29,6 @@
                          Grid.Row="0"
                          VerticalAlignment="Center"
                          VerticalContentAlignment="Center"
-                         materialDesign:TextFieldAssist.Hint="paste your URL here" 
                          Text="{Binding SourceText, UpdateSourceTrigger=PropertyChanged}" />
 
                 <Button Grid.Column="2"

@@ -1,142 +1,164 @@
 ﻿<UserControl x:Class="InsireBot.MediaPlayerView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:core="clr-namespace:InsireBotCore;assembly=InsireBotCore"
              xmlns:local="clr-namespace:InsireBot"
-             xmlns:core ="clr-namespace:InsireBotCore;assembly=InsireBotCore"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    
+             xmlns:themes="http://materialdesigninxaml.net/winfx/xaml/themes">
+
     <Grid DataContext="{Binding Source={StaticResource Locator}, Path=MediaPlayerViewModel}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <!-- Playlist -->
-        <ScrollViewer Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
-            <DataGrid ItemsSource="{Binding Items}" Style="{StaticResource BaseDataGridStyle}" core:DataGridBehavior.DoubleClickCommand="{Binding AddCommand}">
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <ContextMenu.Items>
-                            <MenuItem Command="{Binding AddCommand}" Header="Add">
-                                <MenuItem.Icon>
-                                    <materialDesign:PackIcon Kind="PlaylistPlus" Style="{StaticResource IconStyle}" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <MenuItem Command="{Binding RemoveCommand}" Header="Remove">
-                                <MenuItem.Icon>
-                                    <materialDesign:PackIcon Kind="PlaylistMinus" Style="{StaticResource IconStyle}" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <MenuItem Command="{Binding ClearCommand}" Header="Clear">
-                                <MenuItem.Icon>
-                                    <materialDesign:PackIcon Kind="PlaylistRemove" Style="{StaticResource IconStyle}" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                        </ContextMenu.Items>
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
-                <DataGrid.Columns>
+        <!--  Playlist  -->
+        <DataGrid Grid.Row="0"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="3"
+                  Style="{StaticResource BaseDataGridStyle}"
+                  core:DataGridBehavior.DoubleClickCommand="{Binding AddCommand}"
+                  ItemsSource="{Binding Items}">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <ContextMenu.Items>
+                        <MenuItem Command="{Binding AddCommand}" Header="Add">
+                            <MenuItem.Icon>
+                                <themes:PackIcon Style="{StaticResource IconStyle}" Kind="PlaylistPlus" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Command="{Binding RemoveCommand}" Header="Remove">
+                            <MenuItem.Icon>
+                                <themes:PackIcon Style="{StaticResource IconStyle}" Kind="PlaylistMinus" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Command="{Binding ClearCommand}" Header="Clear">
+                            <MenuItem.Icon>
+                                <themes:PackIcon Style="{StaticResource IconStyle}" Kind="PlaylistRemove" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu.Items>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <DataGrid.Columns>
 
-                    <!-- Title -->
-                    <DataGridTemplateColumn Header="Title" SortMemberPath="Title">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Label Content="{Binding Title}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                <!--  Title  -->
+                <DataGridTemplateColumn Header="Title" SortMemberPath="Title">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding Title}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
-                    <!-- Duration -->
-                    <DataGridTemplateColumn Header="Duration" SortMemberPath="Duration">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Label Content="{Binding Duration, StringFormat={}{0:c}}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                <!--  Duration  -->
+                <DataGridTemplateColumn Header="Duration" SortMemberPath="Duration">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding Duration, StringFormat={}{0:c}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
-                    <!-- Location -->
-                    <DataGridTextColumn Header="Location" SortMemberPath="Location" Binding="{Binding Location}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
-                                <Setter Property="VerticalAlignment" Value="Center" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                        <DataGridTextColumn.EditingElementStyle>
-                            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                                <Setter Property="VerticalAlignment" Value="Center" />
-                            </Style>
-                        </DataGridTextColumn.EditingElementStyle>
-                    </DataGridTextColumn>
+                <!--  Location  -->
+                <DataGridTextColumn Binding="{Binding Location}"
+                                    Header="Location"
+                                    SortMemberPath="Location">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="{x:Type TextBox}">
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
 
-                    <!-- Restricted -->
-                    <DataGridTemplateColumn Header="Restriction" SortMemberPath="IsRestricted">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <ContentControl Content="{Binding IsRestricted}" Style="{StaticResource RestrictedMediaItemStyle}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-        </ScrollViewer>
+                <!--  Restricted  -->
+                <DataGridTemplateColumn Header="Restriction" SortMemberPath="IsRestricted">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ContentControl Style="{StaticResource RestrictedMediaItemStyle}" Content="{Binding IsRestricted}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
 
-        <!-- Previous, Play, Next-->
-        <Grid Grid.Row="1" Grid.Column="1" Margin="10,5" >
+
+        <!--  Previous, Play, Next  -->
+        <Grid Grid.Row="1"
+              Grid.Column="1"
+              Margin="10,5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource PreviousButtonStyle}" Margin="0,0,10,0" Command="{Binding PreviousCommand}"/>
-            <Button Grid.Row="0" Grid.Column="1" Style="{StaticResource PlayButtonStyle}" Command="{Binding PlayCommand}"/>
-            <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource NextButtonStyle}" Margin="10,0,0,0" Command="{Binding NextCommand}"/>
+            <Button Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,10,0"
+                    Style="{StaticResource PreviousButtonStyle}"
+                    Command="{Binding PreviousCommand}" />
+            <Button Grid.Row="0"
+                    Grid.Column="1"
+                    Style="{StaticResource PlayButtonStyle}"
+                    Command="{Binding PlayCommand}" />
+            <Button Grid.Row="0"
+                    Grid.Column="2"
+                    Margin="10,0,0,0"
+                    Style="{StaticResource NextButtonStyle}"
+                    Command="{Binding NextCommand}" />
         </Grid>
 
-        <!-- Volume Slider -->
-        <Grid Grid.Row="1" Grid.Column="0" DataContext="{Binding MediaPlayer}">
+        <!--  Volume Slider  -->
+        <Grid Grid.Row="1"
+              Grid.Column="0"
+              DataContext="{Binding MediaPlayer}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <materialDesign:PackIcon Kind="VolumeLow" Style="{StaticResource IconStyle}" Grid.Column="0" VerticalAlignment="Center" />
-            <Slider Grid.Column="1" 
-                        VerticalAlignment="Center"
-                        Value="{Binding Volume}"
-                        Maximum="{Binding VolumeMax}"
-                        Minimum="{Binding VolumeMin}"
-                        TickFrequency="1" 
-                        TickPlacement="None" 
-                        AutoToolTipPlacement="BottomRight" />
-            <materialDesign:PackIcon Kind="VolumeMedium" Style="{StaticResource BigIconStyle}" Grid.Column="2" VerticalAlignment="Center" />
+            <themes:PackIcon Grid.Column="0"
+                             VerticalAlignment="Center"
+                             Style="{StaticResource IconStyle}"
+                             Kind="VolumeLow" />
+            <Slider Grid.Column="1"
+                    VerticalAlignment="Center"
+                    AutoToolTipPlacement="BottomRight"
+                    Maximum="{Binding VolumeMax}"
+                    Minimum="{Binding VolumeMin}"
+                    TickFrequency="1"
+                    TickPlacement="None"
+                    Value="{Binding Volume}" />
+            <themes:PackIcon Grid.Column="2"
+                             VerticalAlignment="Center"
+                             Style="{StaticResource BigIconStyle}"
+                             Kind="VolumeMedium" />
         </Grid>
 
-        <!-- PlayMode -->
+        <!--  PlayMode  -->
         <Grid Grid.Row="1" Grid.Column="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <local:PlayModeView Grid.Column="0"/>
-            
+            <local:PlayModeView Grid.Column="0" />
+
         </Grid>
     </Grid>
 </UserControl>

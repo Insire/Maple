@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace InsireBotCore
 {
-    public class Playlist : RangeObservableCollection<IMediaItem>, IPlaylist<IMediaItem>, IRangeCollection<IMediaItem>, IEnumerable<IMediaItem>
+    public class Playlist<T> : RangeObservableCollection<T>, IEnumerable<T>, IList<T>, IIsSelected, IIndex, IIdentifier, INotifyPropertyChanged where T: IMediaItem
     {
         public event RepeatModeChangedEventHandler RepeatModeChanged;
         public event ShuffleModeChangedEventHandler ShuffleModeChanged;
@@ -107,12 +107,20 @@ namespace InsireBotCore
             }
         }
 
+        private string _webId;
+        public string WebID
+        {
+            get { return _webId; }
+            private set
+            {
+                _webId = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(WebID)));
+            }
+        }
 
-        private string _id;
-        /// <summary>
-        /// some kind of identifier for code related access
-        /// </summary>
-        public string ID
+
+        private Guid _id;
+        public Guid ID
         {
             get { return _id; }
             private set
@@ -165,25 +173,25 @@ namespace InsireBotCore
         {
             History = new Stack<int>();
             Title = string.Empty;
-            ID = string.Empty;
+            ID = Guid.NewGuid();
         }
 
-        public Playlist(IEnumerable<IMediaItem> items) : this()
+        public Playlist(IEnumerable<T> items) : this()
         {
             AddRange(items);
         }
 
-        public Playlist(string title, string id) : this()
+        public Playlist(string title, string webId) : this()
         {
             Title = title;
-            ID = id;
+            WebID = webId;
         }
 
         /// <summary>
         /// Add an <see cref="IMediaItem"/> to <seealso cref="Items"/>
         /// </summary>
         /// <param name="item">the <see cref="IMediaItem"/> to add</param>
-        new public void Add(IMediaItem item)
+        new public void Add(T item)
         {
             item.Index = Items.Select(p => p.Index).Max() + 1;
             base.Add(item);
@@ -193,22 +201,22 @@ namespace InsireBotCore
                 CurrentItem = Items.First();
         }
 
-        new public void AddRange(IEnumerable<IMediaItem> items)
+        public override void AddRange(IEnumerable<T> items)
         {
             var currentIndex = -1;
             if (Items.Any())
             {
                 var indices = Items.Select(p => p.Index);
                 currentIndex = (indices != null) ? indices.Max() : 0;
-            }            
+            }
 
             foreach (var item in items)
             {
                 currentIndex++;
                 item.Index = currentIndex;
+                base.Add(item);
             }
-                
-            base.AddRange(items);
+
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Items)));
 
             if (CurrentItem == null)
@@ -225,7 +233,7 @@ namespace InsireBotCore
         /// Removes all occurences of an <see cref="IMediaItem"/> from <seealso cref="Items"/>
         /// </summary>
         /// <param name="item"></param>
-        new public void Remove(IMediaItem item)
+        new public void Remove(T item)
         {
             while (Items.Contains(item))
                 Items.Remove(item);
@@ -403,38 +411,6 @@ namespace InsireBotCore
             }
 
             //TODO
-        }
-
-        public int Add(object value)
-        {
-            var item = value as IMediaItem;
-            Items.Add(item);
-            return Items.IndexOf(item);
-        }
-
-        public bool Contains(object value)
-        {
-            return Items.Contains(value as IMediaItem);
-        }
-
-        public int IndexOf(object value)
-        {
-            return Items.IndexOf(value as IMediaItem);
-        }
-
-        public void Insert(int index, object value)
-        {
-            Items.Insert(index, value as IMediaItem);
-        }
-
-        public void Remove(object value)
-        {
-            Items.Remove(value as IMediaItem);
-        }
-
-        IEnumerator<IMediaItem> IEnumerable<IMediaItem>.GetEnumerator()
-        {
-            return Items.GetEnumerator();
         }
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")

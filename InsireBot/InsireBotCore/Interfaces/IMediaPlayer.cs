@@ -2,7 +2,7 @@
 
 namespace InsireBotCore
 {
-    public interface IMediaPlayer<IMediaItem> : IPlaying, IDisposable
+    public interface IMediaPlayer<T> : IPlaying, IDisposable where T : IMediaItem
     {
         event CompletedMediaItemEventHandler CompletedMediaItem;
 
@@ -13,7 +13,7 @@ namespace InsireBotCore
         void Next();
         void Previous();
 
-        IPlaylist<IMediaItem> Playlist { get;}
+        Playlist<T> Playlist { get;}
 
         AudioDevice AudioDevice { get; set; }
         int Volume { get; set; }

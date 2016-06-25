@@ -4,7 +4,7 @@ using GalaSoft.MvvmLight;
 
 namespace InsireBotCore
 {
-    public class MediaItem : ObservableObject, IMediaItem, IIndex
+    public class MediaItem : ObservableObject, IMediaItem, IIndex, IIdentifier
     {
         private Guid _id;
         public Guid ID
