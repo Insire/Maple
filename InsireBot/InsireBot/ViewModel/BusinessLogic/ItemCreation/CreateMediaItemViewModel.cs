@@ -32,14 +32,13 @@ namespace InsireBot
                 {
                     _result = value;
                     RaisePropertyChanged(nameof(Result));
-                    Items.AddRange(value.MediaItems);
                 }
             }
         }
 
         public ICommand ParseCommand { get; private set; }
 
-        public CreateMediaItemViewModel()
+        public CreateMediaItemViewModel() : base()
         {
             InitializeCommands();
         }
@@ -50,16 +49,24 @@ namespace InsireBot
             {
                 BusyStack.Push();
                 Result = await GlobalServiceLocator.Instance.DataParsingService
-                                                            .Parse(Source)
+                                                            .Parse(Source, DataParsingServiceResultType.MediaItems)
                                                             .ContinueWith((task) =>
                                                             {
                                                                 if (!BusyStack.Pull())
-                                                                    throw new InsireBotException($"Couldn't pull from BusyStack. ({GetType()})");
+                                                                    App.Log.Warn("Couldn't pull from BusyStack");
 
                                                                 if (task.Exception != null)
-                                                                    throw task.Exception;
+                                                                    App.Log.Error(this, task.Exception);
 
-                                                                return task.Result;
+                                                                var result = task.Result;
+
+                                                                if (result.Count > 0)
+                                                                {
+                                                                    if (result.MediaItems?.Count > 0)
+                                                                        Items.AddRange(result.MediaItems);
+                                                                }
+
+                                                                return result;
                                                             });
             });
         }

@@ -36,6 +36,12 @@ namespace InsireBot.Utils
             }
         }
 
+        public DataParsingService()
+        {
+            PlaylistsCache = new PlaylistsStore();
+            MediaItemsCache = new MediaItemsStore();
+        }
+
         public DataParsingServiceResult Parse(FileInfo file)
         {
             //assume its a MediaFile aka *.mp3 or something similar
@@ -46,26 +52,34 @@ namespace InsireBot.Utils
             return result;
         }
 
-        public async Task<DataParsingServiceResult> Parse(string data)
+        public async Task<DataParsingServiceResult> Parse(string data, DataParsingServiceResultType type)
         {
             var url = new Uri(data.Trim());
-            switch (url.DnsSafeHost)
+            try
             {
-                case "youtu.be":
-                    url = new Uri(url.AbsoluteUri.Replace(@"youtu.be/", @"youtube.com/watch?v="));
-                    return await Parse(url);
+                switch (url.DnsSafeHost)
+                {
+                    case "youtu.be":
+                        url = new Uri(url.AbsoluteUri.Replace(@"youtu.be/", @"youtube.com/watch?v="));
+                        return await Parse(url, type);
 
-                case "www.youtube.com":
-                    return await Parse(url);
+                    case "www.youtube.com":
+                        return await Parse(url, type);
 
-                default:
-                    return new DataParsingServiceResult();
+                    default:
+                        return new DataParsingServiceResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                App.Log.Error(this, ex);
+                return new DataParsingServiceResult();
             }
         }
 
-        private async Task<DataParsingServiceResult> Parse(Uri url)
+        private async Task<DataParsingServiceResult> Parse(Uri url, DataParsingServiceResultType type = DataParsingServiceResultType.None)
         {
-            DataParsingServiceResult result;
+            var result = new DataParsingServiceResult(type);
             var regex = @"(?:http|https|)(?::\/\/|)(?:www.|m.|)(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\|\/feeds\/api\/videos\/|\/user\S*[^\w\-\s]|\S*[^\w\-\s]))([\w\-]*)[a-z0-9;:@?&%=+\/\$_.-]*";
             var match = Regex.Match(url.AbsoluteUri, regex);
             var youtubeService = new Youtube();
@@ -81,59 +95,49 @@ namespace InsireBot.Utils
                     switch (key)
                     {
                         case "v":
-                            result = await youtubeService
-                                                .GetVideo(id)
+                            await youtubeService.GetVideo(id)
                                                 .ContinueWith((task) =>
                                                 {
                                                     if (task.Exception != null)
-                                                        throw task.Exception;
+                                                        App.Log.Error(task.Exception);
 
                                                     var videos = task.Result;
-                                                    var tempResult = new DataParsingServiceResult(videos);
 
                                                     MediaItemsCache.Items.AddRange(videos);
 
                                                     foreach (var video in videos)
+                                                    {
+                                                        result.MediaItems.Add(video);
                                                         Messenger.Default.Send(video);
-
-                                                    return tempResult;
+                                                    }
                                                 });
-
-                            if (result != null)
-                                return result;
-
-                            continue;
+                            break;
 
                         case "list":
-                            result = await youtubeService
-                                                .GetPlaylist(id)
+                            await youtubeService.GetPlaylist(id)
                                                 .ContinueWith((task) =>
                                                 {
                                                     if (task.Exception != null)
-                                                        throw task.Exception;
+                                                        App.Log.Error(task.Exception);
 
                                                     var playlists = task.Result;
-                                                    var tempResult = new DataParsingServiceResult(playlists);
 
-                                                    PlaylistsCache.AddRange(playlists);
+                                                    PlaylistsCache.Items.AddRange(playlists);
 
                                                     foreach (var playlist in playlists)
+                                                    {
+                                                        result.Playlists.Add(playlist);
                                                         Messenger.Default.Send(playlist);
-
-                                                    return tempResult;
+                                                    }
                                                 });
-
-                            if (result != null)
-                                return result;
-
-                            continue;
+                            break;
                     }
                 }
 
                 match = match.NextMatch();
             }
 
-            return new DataParsingServiceResult();
+            return result;
         }
     }
 }

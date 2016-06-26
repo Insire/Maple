@@ -86,6 +86,7 @@ namespace InsireBotCore
                 if (_isShuffling != value)
                 {
                     _isShuffling = value;
+                    NotifyPropertyChanged(nameof(IsShuffling));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsShuffling)));
                     ShuffleModeChanged?.Invoke(this, new ShuffleModeChangedEventEventArgs(value));
                 }
@@ -103,6 +104,7 @@ namespace InsireBotCore
             private set
             {
                 _title = value;
+                NotifyPropertyChanged(nameof(Title));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Title)));
             }
         }
@@ -114,6 +116,7 @@ namespace InsireBotCore
             private set
             {
                 _webId = value;
+                NotifyPropertyChanged(nameof(WebID));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(WebID)));
             }
         }
@@ -126,6 +129,7 @@ namespace InsireBotCore
             private set
             {
                 _id = value;
+                NotifyPropertyChanged(nameof(ID));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ID)));
             }
         }
@@ -143,6 +147,7 @@ namespace InsireBotCore
                 if (_repeatMode != value)
                 {
                     _repeatMode = value;
+                    NotifyPropertyChanged(nameof(RepeatMode));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RepeatMode)));
                     RepeatModeChanged?.Invoke(this, new RepeatModeChangedEventEventArgs(RepeatMode));
                 }

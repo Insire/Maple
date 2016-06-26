@@ -29,5 +29,21 @@ namespace InsireBotCore
             _suppressNotification = false;
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
+
+        public virtual void AddRange(IList<T> items)
+        {
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
+
+            _suppressNotification = true;
+
+            foreach (T item in items)
+                Add(item);
+
+            Console.WriteLine(Items.Count);
+
+            _suppressNotification = false;
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
     }
 }

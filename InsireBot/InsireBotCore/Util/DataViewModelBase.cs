@@ -94,18 +94,6 @@ namespace InsireBotCore
             return Items.Any(p => p.IsSelected);
         }
 
-        public virtual void Add(T item)
-        {
-            if (CanAdd())
-                Items.Add(item);
-        }
-
-        public virtual void AddRange(IEnumerable<T> items)
-        {
-            if (CanAdd())
-                Items.AddRange(items);
-        }
-
         public void Clear()
         {
             Items?.Clear();

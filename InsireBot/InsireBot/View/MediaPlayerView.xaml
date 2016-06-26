@@ -21,16 +21,16 @@
                   Grid.Column="0"
                   Grid.ColumnSpan="3"
                   Style="{StaticResource BaseDataGridStyle}"
-                  core:DataGridBehavior.DoubleClickCommand="{Binding AddCommand}"
+                  
                   ItemsSource="{Binding Items}">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <ContextMenu.Items>
-                        <MenuItem Command="{Binding AddCommand}" Header="Add">
+                        <!--<MenuItem Command="{Binding AddCommand}" Header="Add">
                             <MenuItem.Icon>
                                 <themes:PackIcon Style="{StaticResource IconStyle}" Kind="PlaylistPlus" />
                             </MenuItem.Icon>
-                        </MenuItem>
+                        </MenuItem>-->
                         <MenuItem Command="{Binding RemoveCommand}" Header="Remove">
                             <MenuItem.Icon>
                                 <themes:PackIcon Style="{StaticResource IconStyle}" Kind="PlaylistMinus" />

@@ -43,7 +43,7 @@ namespace InsireBot
 
                 new DrawerItem
                 {
-                    Content = new NewMediaItemPage(),
+                    Content = new NewPlaylistPage(),
                     Name = "Add a Playlist",
                     Detail = new NewPlaylistOptionsPage(),
                 },

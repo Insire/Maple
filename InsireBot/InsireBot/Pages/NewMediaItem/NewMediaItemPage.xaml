@@ -42,11 +42,11 @@
                     <DataGrid Style="{StaticResource BaseDataGridStyle}" ItemsSource="{Binding Items}">
                         <DataGrid.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Command="{Binding AddCommand}" Header="Add">
+                                <!--<MenuItem Command="{Binding AddCommand}" Header="Add">
                                     <MenuItem.Icon>
                                         <materialDesign:PackIcon Style="{StaticResource IconStyle}" Kind="PlaylistPlus" />
                                     </MenuItem.Icon>
-                                </MenuItem>
+                                </MenuItem>-->
                                 <MenuItem Command="{Binding RemoveCommand}" Header="Remove">
                                     <MenuItem.Icon>
                                         <materialDesign:PackIcon Style="{StaticResource IconStyle}" Kind="PlaylistMinus" />
@@ -63,14 +63,13 @@
                         <DataGrid.Columns>
                             <!--  IsSelected  -->
                             <DataGridCheckBoxColumn SortMemberPath="IsSelected">
-                                <DataGridCheckBoxColumn.Header>
+                                <!--<DataGridCheckBoxColumn.Header>
                                     <Border Padding="6,0,6,0"
                                             HorizontalAlignment="Center"
-                                            Background="Transparent"
-                                            DataContext="{Binding Source={StaticResource Locator}, Path=NewMediaItemViewModel}">
+                                            Background="Transparent">
                                         <CheckBox HorizontalAlignment="Center" IsChecked="{Binding AreAllItemsSelected}" />
                                     </Border>
-                                </DataGridCheckBoxColumn.Header>
+                                </DataGridCheckBoxColumn.Header>-->
                             </DataGridCheckBoxColumn>
 
                             <!--  Title  -->

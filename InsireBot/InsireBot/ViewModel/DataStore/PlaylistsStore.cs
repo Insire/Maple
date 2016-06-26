@@ -5,8 +5,7 @@ namespace InsireBot
     /// <summary>
     ///  temp DataStore for playlists
     /// </summary>
-    public class PlaylistsStore : DataViewModelBase<Playlist<MediaItem>>
+    public class PlaylistsStore : DataViewModelBase<Playlist<IMediaItem>>
     {
-
     }
 }

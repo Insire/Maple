@@ -56,11 +56,15 @@
                                           materialDesign:ShadowAssist.ShadowDepth="Depth2"
                                           DockPanel.Dock="Top"
                                           Mode="PrimaryMid">
-
-                    <ToggleButton x:Name="MenuToggleButton"
+                    <DockPanel>
+                        <ToggleButton x:Name="MenuToggleButton"
                                   HorizontalAlignment="Left"
                                   Style="{StaticResource MaterialDesignHamburgerToggleButton}"
                                   IsChecked="False" />
+
+                        <TextBlock HorizontalAlignment="Center" FontSize="22" VerticalAlignment="Center" Text="{Binding SelectedPage.Name}" />
+                    </DockPanel>
+
 
                 </materialDesign:ColorZone>
 

@@ -1,5 +1,7 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
+using InsireBotCore;
 
 namespace InsireBot
 {
@@ -32,14 +34,13 @@ namespace InsireBot
                 {
                     _result = value;
                     RaisePropertyChanged(nameof(Result));
-                    Items.AddRange(value.Playlists);
                 }
             }
         }
 
         public ICommand ParseCommand { get; private set; }
 
-        public CreatePlaylistViewModel()
+        public CreatePlaylistViewModel() : base()
         {
             InitializeCommands();
         }
@@ -49,17 +50,23 @@ namespace InsireBot
             ParseCommand = new RelayCommand(async () =>
             {
                 BusyStack.Push();
-                Result = await GlobalServiceLocator.Instance.DataParsingService
-                                                            .Parse(Source)
+                await GlobalServiceLocator.Instance.DataParsingService
+                                                            .Parse(Source, DataParsingServiceResultType.Playlists)
                                                             .ContinueWith((task) =>
                                                             {
                                                                 if (!BusyStack.Pull())
-                                                                    throw new InsireBotException($"Couldn't pull from BusyStack. ({GetType()})");
+                                                                    App.Log.Warn("Couldn't pull from BusyStack");
 
                                                                 if (task.Exception != null)
-                                                                    throw task.Exception;
+                                                                    App.Log.Error(this, task.Exception);
 
-                                                                return task.Result;
+                                                                var result = task.Result;
+
+                                                                if (result.Count > 0)
+                                                                {
+                                                                    if (result.Playlists?.Count > 0)
+                                                                        Items.AddRange(result.Playlists);
+                                                                }
                                                             });
             });
         }

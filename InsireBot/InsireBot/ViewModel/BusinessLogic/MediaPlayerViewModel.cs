@@ -29,7 +29,7 @@ namespace InsireBot
             // receive MediaItems and add them to the playlist
             Messenger.Default.Register<MediaItem>(this, (mediaItem) =>
              {
-                 Add(mediaItem);
+                 Items.Add(mediaItem);
              });
 
             Initialize(dataService);
@@ -49,7 +49,7 @@ namespace InsireBot
             }
 
             if (!Items.Any())
-                AddRange(dataService.GetMediaItems()); // populate the playlist
+                Items.AddRange(dataService.GetMediaItems()); // populate the playlist
 
             MediaPlayer = dataService.GetMediaPlayer();
             MediaPlayer.CompletedMediaItem += MediaPlayer_CompletedMediaItem;
@@ -64,13 +64,13 @@ namespace InsireBot
             NextCommand = new RelayCommand(Next, MediaPlayer.Playlist.CanNext);
         }
 
-        public override void AddRange(IEnumerable<IMediaItem> mediaItems)
+        public void AddRange(IEnumerable<IMediaItem> mediaItems)
         {
             foreach (var item in mediaItems)
                 MediaPlayer.Playlist.Add(item);
         }
 
-        public override void Add(IMediaItem mediaItem)
+        public void Add(IMediaItem mediaItem)
         {
             if (Items.Any())
             {

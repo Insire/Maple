@@ -112,9 +112,9 @@ namespace InsireBot
         //    //Console.WriteLine("Playlist item id {0} was added to playlist id {1}.", newPlaylistItem.Id, newPlaylist.Id);
         //}
 
-        public async Task<IEnumerable<MediaItem>> GetPlaylistItems(string playlistId)
+        public async Task<IList<IMediaItem>> GetPlaylistItems(string playlistId)
         {
-            var result = new List<MediaItem>();
+            var result = new List<IMediaItem>();
             var youtubeService = await GetService();
 
             var request = youtubeService.PlaylistItems.List("snippet,contentDetails");
@@ -135,12 +135,13 @@ namespace InsireBot
                     nextPageToken = response.NextPageToken;
                 }
             }
+
             return result;
         }
 
-        public async Task<IEnumerable<Playlist<MediaItem>>> GetPlaylist(string playlistId)
+        public async Task<IList<Playlist<IMediaItem>>> GetPlaylist(string playlistId)
         {
-            var result = new List<Playlist<MediaItem>>();
+            var result = new List<Playlist<IMediaItem>>();
             var youtubeService = await GetService();
 
             var request = youtubeService.Playlists.List("snippet,contentDetails");
@@ -151,12 +152,9 @@ namespace InsireBot
             foreach (var item in response.Items)
             {
                 var nextPageToken = "";
-                while (!string.IsNullOrEmpty(nextPageToken))
+                while (nextPageToken != null)
                 {
-                    var playlist = new InsireBotCore.Playlist<MediaItem>(item.Snippet.Title, item.Id);
-                    var videos = await GetPlaylistItems(item.Id);
-
-                    playlist.AddRange(videos);
+                    var playlist = new Playlist<IMediaItem>(item.Snippet.Title, item.Id);
                     result.Add(playlist);
 
                     nextPageToken = response.NextPageToken;
@@ -166,14 +164,13 @@ namespace InsireBot
             return result;
         }
 
-        public async Task<IEnumerable<MediaItem>> GetVideo(string videoId)
+        public async Task<IList<IMediaItem>> GetVideo(string videoId)
         {
-            var result = new List<MediaItem>();
+            var result = new List<IMediaItem>();
             var youtubeService = await GetService();
 
             var request = youtubeService.Videos.List("snippet,contentDetails");
             request.Id = videoId;
-
 
             var response = await request.ExecuteAsync();
 
