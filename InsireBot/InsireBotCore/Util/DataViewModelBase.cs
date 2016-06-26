@@ -14,17 +14,6 @@ namespace InsireBotCore
     /// <typeparam name="T"></typeparam>
     public class DataViewModelBase<T> : DefaultViewModelBase<T> where T : IIndex, IIdentifier, IIsSelected
     {
-        private bool _isBusy;
-        public bool IsBusy
-        {
-            get { return _isBusy; }
-            protected set
-            {
-                _isBusy = value;
-                RaisePropertyChanged(nameof(IsBusy));
-            }
-        }
-
         private ICollectionView _filteredUsertasksView;
         public ICollectionView FilteredItemsView
         {

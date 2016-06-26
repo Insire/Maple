@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using InsireBotCore;
-using InsireBot.ViewModel;
 using System.Linq;
 using System.Collections.Generic;
+using InsireBot;
 
 namespace InsireBotTests
 {

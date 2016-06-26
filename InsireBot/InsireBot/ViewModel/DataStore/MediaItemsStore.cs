@@ -1,6 +1,6 @@
 ﻿using InsireBotCore;
 
-namespace InsireBot.ViewModel
+namespace InsireBot
 {
     /// <summary>
     ///  temp DataStore for playlist entries

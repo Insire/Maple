@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
              xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-             xmlns:vm="clr-namespace:InsireBot.ViewModel"
+             xmlns:local="clr-namespace:InsireBot"
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -51,7 +51,7 @@
             <!--  Dragablz Material Design  -->
             <Style BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" TargetType="{x:Type dragablz:TabablzControl}" />
 
-            <x:StaticExtension x:Key="Locator" Member="vm:GlobalServiceLocator.Instance" />
+            <x:StaticExtension x:Key="Locator" Member="local:GlobalServiceLocator.Instance" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

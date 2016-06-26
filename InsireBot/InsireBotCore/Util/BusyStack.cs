@@ -9,6 +9,8 @@ namespace InsireBotCore
     /// </summary>
     public class BusyStack : ObservableObject
     {
+        public EventHandler StackCountChanged;
+
         private ConcurrentBag<Guid> _items;
         public ConcurrentBag<Guid> Items
         {
@@ -25,10 +27,19 @@ namespace InsireBotCore
             Items = new ConcurrentBag<Guid>();
         }
 
+        /// <summary>
+        /// Tries to take an item from the stack and returns if that action was successful
+        /// </summary>
+        /// <returns></returns>
         public bool Pull()
         {
-            Guid result;
-            return Items.TryTake(out result);
+            Guid guid;
+            var result = Items.TryTake(out guid);
+
+            if (result)
+                StackCountChanged?.Invoke(this, new EventArgs());
+
+            return result;
         }
 
         /// <summary>
@@ -42,12 +53,13 @@ namespace InsireBotCore
             return Items.TryPeek(out result);
         }
         /// <summary>
-        /// adds a new item on the stack and returns a reference to it
+        /// adds a new item on the stack
         /// </summary>
         /// <returns></returns>
         public void Push()
         {
             Items.Add(Guid.NewGuid());
+            StackCountChanged?.Invoke(this, new EventArgs());
         }
 
         public bool IsEmpty()

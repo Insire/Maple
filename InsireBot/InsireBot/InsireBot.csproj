@@ -197,7 +197,10 @@
       <DependentUpon>OptionsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\DataParsingService.cs" />
+    <Compile Include="Utils\DataParsingServiceResult.cs" />
+    <Compile Include="Utils\InsireBotException.cs" />
     <Compile Include="ViewModel\BusinessLogic\ItemCreation\CreateMediaItemViewModel.cs" />
+    <Compile Include="ViewModel\BusinessLogic\ItemCreation\CreatePlaylistViewModel.cs" />
     <Compile Include="ViewModel\DataStore\PlaylistsStore.cs" />
     <Compile Include="ViewModel\DataStore\MediaItemsStore.cs" />
     <Compile Include="ViewModel\BusinessLogic\PlaylistsViewModel.cs" />

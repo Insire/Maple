@@ -4,9 +4,9 @@ using GalaSoft.MvvmLight.CommandWpf;
 namespace InsireBot
 {
     /// <summary>
-    /// viewmodel for creating mediaitem from a string (path/url)
+    /// viewmodel for creating playlists from a input string (path/url)
     /// </summary>
-    public class CreateMediaItemViewModel : MediaItemsStore
+    public class CreatePlaylistViewModel : PlaylistsStore
     {
         private string _source;
         public string Source
@@ -32,14 +32,14 @@ namespace InsireBot
                 {
                     _result = value;
                     RaisePropertyChanged(nameof(Result));
-                    Items.AddRange(value.MediaItems);
+                    Items.AddRange(value.Playlists);
                 }
             }
         }
 
         public ICommand ParseCommand { get; private set; }
 
-        public CreateMediaItemViewModel()
+        public CreatePlaylistViewModel()
         {
             InitializeCommands();
         }

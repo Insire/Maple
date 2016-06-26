@@ -7,7 +7,7 @@ using GalaSoft.MvvmLight.Messaging;
 
 using InsireBotCore;
 
-namespace InsireBot.ViewModel
+namespace InsireBot
 {
     public class MediaPlayerViewModel : BusinessViewModelBase<IMediaItem>
     {

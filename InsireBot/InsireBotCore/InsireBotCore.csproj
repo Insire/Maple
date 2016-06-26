@@ -155,6 +155,7 @@
     <Compile Include="Interfaces\IMediaItem.cs" />
     <Compile Include="Interfaces\IMediaPlayer.cs" />
     <Compile Include="Interfaces\ISettings.cs" />
+    <Compile Include="Util\InsireBotException.cs" />
     <Compile Include="Util\LinqExtensions.cs" />
     <Compile Include="Util\NotifyPropertyChangedExtension.cs" />
     <Compile Include="Util\ObjectSerializer.cs" />

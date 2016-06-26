@@ -6,7 +6,7 @@ using InsireBot.Utils;
 using System.Windows;
 using System;
 
-namespace InsireBot.ViewModel
+namespace InsireBot
 {
     /// <summary>
     /// This class contains static references to all relevant ViewModels in the
@@ -49,6 +49,7 @@ namespace InsireBot.ViewModel
             SimpleIoc.Default.Register<PlaylistsViewModel>();
             SimpleIoc.Default.Register<MediaPlayerViewModel>();
             SimpleIoc.Default.Register<CreateMediaItemViewModel>();
+            SimpleIoc.Default.Register<CreatePlaylistViewModel>();
 
         }
 
@@ -72,6 +73,11 @@ namespace InsireBot.ViewModel
             get { return ServiceLocator.Current.GetInstance<CreateMediaItemViewModel>(); }
         }
 
+        public CreatePlaylistViewModel CreatePlaylistViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<CreatePlaylistViewModel>(); }
+        }
+
         public DrawerItemViewmodel DrawerItemViewmodel
         {
             get { return ServiceLocator.Current.GetInstance<DrawerItemViewmodel>(); }
@@ -84,6 +90,7 @@ namespace InsireBot.ViewModel
             SimpleIoc.Default.Unregister<PlaylistsViewModel>();
             SimpleIoc.Default.Unregister<MediaPlayerViewModel>();
             SimpleIoc.Default.Unregister<CreateMediaItemViewModel>();
+            SimpleIoc.Default.Unregister<CreatePlaylistViewModel>();
 
             SimpleIoc.Default.Unregister<DrawerItemViewmodel>();
         }

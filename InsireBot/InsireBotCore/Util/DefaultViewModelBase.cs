@@ -11,6 +11,8 @@ namespace InsireBotCore
     {
         protected object _itemsLock;
 
+        public bool IsBusy => BusyStack.Items.Count > 0;
+
         private BusyStack _busyStack;
         public BusyStack BusyStack
         {
@@ -39,6 +41,10 @@ namespace InsireBotCore
 
             Items = new RangeObservableCollection<T>();
             BusyStack = new BusyStack();
+            BusyStack.StackCountChanged += (o, e) =>
+              {
+                  RaisePropertyChanged(nameof(IsBusy));
+              };
 
             BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
         }
