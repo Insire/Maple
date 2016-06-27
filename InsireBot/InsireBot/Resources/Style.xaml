@@ -4,6 +4,21 @@
 
     <!--  Remember: the order of these styles matters, since they depend on each other. If one references a style not yet declared, you get random RuntimeErrors  -->
 
+    <ControlTemplate x:Key="BusyTemplate">
+        <materialDesign:TransitioningContent>
+            <materialDesign:TransitioningContent.OpeningEffects>
+                <materialDesign:TransitionEffect Kind="FadeIn" />
+            </materialDesign:TransitioningContent.OpeningEffects>
+            <Grid>
+                <ProgressBar HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"
+                                         Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                         IsIndeterminate="True"
+                                         Value="0" />
+            </Grid>
+        </materialDesign:TransitioningContent>
+    </ControlTemplate>
+
     <!--  Icon Styles  -->
     <Style x:Key="BigIconStyle" TargetType="{x:Type materialDesign:PackIcon}">
         <Setter Property="Height" Value="30" />

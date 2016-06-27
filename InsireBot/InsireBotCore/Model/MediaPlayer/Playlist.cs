@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace InsireBotCore
 {
-    public class Playlist<T> : RangeObservableCollection<T>, IEnumerable<T>, IList<T>, IIsSelected, IIndex, IIdentifier, INotifyPropertyChanged where T: IMediaItem
+    public class Playlist<T> : RangeObservableCollection<T>, IEnumerable<T>, IList<T>, IIsSelected, IIndex, IIdentifier, INotifyPropertyChanged where T : IMediaItem
     {
         public event RepeatModeChangedEventHandler RepeatModeChanged;
         public event ShuffleModeChangedEventHandler ShuffleModeChanged;
@@ -55,6 +55,36 @@ namespace InsireBotCore
             {
                 _index = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Index)));
+            }
+        }
+
+
+        private string _privacyStatus;
+        /// <summary>
+        /// Youtube Property
+        /// </summary>
+        public string PrivacyStatus
+        {
+            get { return _privacyStatus; }
+            set
+            {
+                _privacyStatus = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PrivacyStatus)));
+            }
+        }
+
+
+        private long _itemCount;
+        /// <summary>
+        /// Youtube Property
+        /// </summary>
+        public long ItemCount
+        {
+            get { return _itemCount; }
+            set
+            {
+                _itemCount = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ItemCount)));
             }
         }
 
@@ -186,10 +216,12 @@ namespace InsireBotCore
             AddRange(items);
         }
 
-        public Playlist(string title, string webId) : this()
+        public Playlist(string title, string webId,  long itemCount, string privacyStatus= "none") : this()
         {
             Title = title;
             WebID = webId;
+            PrivacyStatus = privacyStatus;
+            ItemCount = itemCount;
         }
 
         /// <summary>

@@ -29,8 +29,8 @@ namespace InsireBotCore
             }
         }
 
-        private object _detail;
-        public object Detail
+        private DrawerItem _detail;
+        public DrawerItem Detail
         {
             get { return _detail; }
             set

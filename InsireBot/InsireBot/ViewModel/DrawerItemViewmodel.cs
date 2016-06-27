@@ -31,42 +31,66 @@ namespace InsireBot
                 {
                     Content = new MediaPlayerPage(),
                     Name = "Home",
-                    Detail = new OptionsPage()
+                    Detail = new DrawerItem
+                    {
+                        Content = new OptionsPage(),
+                        Name = "Options"
+                    }
                 },
 
                 new DrawerItem
                 {
                     Content = new NewMediaItemPage(),
                     Name = "Add a Video",
-                    Detail = new NewMediaItemOptionsPage(),
+                    Detail = new DrawerItem
+                    {
+                        Content = new NewMediaItemOptionsPage(),
+                        Name = "NewMediaItemOptionsPage"
+                    }
                 },
 
                 new DrawerItem
                 {
                     Content = new NewPlaylistPage(),
                     Name = "Add a Playlist",
-                    Detail = new NewPlaylistOptionsPage(),
+                    Detail = new DrawerItem
+                    {
+                        Content = new NewPlaylistOptionsPage(),
+                        Name = "NewPlaylistOptionsPage"
+                    }
                 },
 
                 new DrawerItem
                 {
                     Content = new NewMediaItemPage(),
                     Name = "Discord",
-                    Detail = new OptionsPage(),
+                    Detail = new DrawerItem
+                    {
+                        Content = new OptionsPage(),
+                        Name = "Options"
+                    }
                 },
 
                 new DrawerItem
                 {
                     Content = new NewMediaItemPage(),
                     Name = "Twitch",
-                    Detail = new OptionsPage(),
+                    Detail = new DrawerItem
+                    {
+                        Content = new OptionsPage(),
+                        Name = "Options"
+                    }
                 },
 
                 new DrawerItem
                 {
                     Content = new NewMediaItemPage(),
                     Name = "Log",
-                    Detail = new OptionsPage(),
+                    Detail = new DrawerItem
+                    {
+                        Content = new OptionsPage(),
+                        Name = "Options"
+                    }
                 },
             };
 

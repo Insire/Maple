@@ -154,7 +154,8 @@ namespace InsireBot
                 var nextPageToken = "";
                 while (nextPageToken != null)
                 {
-                    var playlist = new Playlist<IMediaItem>(item.Snippet.Title, item.Id);
+                    var playlist = new Playlist<IMediaItem>(item.Snippet.Title, item.Id, item.ContentDetails.ItemCount ?? 0, item.Status?.PrivacyStatus ?? "none");
+
                     result.Add(playlist);
 
                     nextPageToken = response.NextPageToken;
