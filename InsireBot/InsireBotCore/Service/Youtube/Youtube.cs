@@ -17,10 +17,13 @@ namespace InsireBot
 {
     public class Youtube
     {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private string _videoBaseUrl = @"https://www.youtube.com/watch?v=";
 
         internal async Task<YouTubeService> GetService()
         {
+            _log.Info("Connect to Youtube");
+
             UserCredential credential;
             using (var stream = new FileStream(@"Resources\client_secret.json", FileMode.Open, FileAccess.Read))
             {

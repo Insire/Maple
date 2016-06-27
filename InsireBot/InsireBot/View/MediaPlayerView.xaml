@@ -3,9 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:core="clr-namespace:InsireBotCore;assembly=InsireBotCore"
              xmlns:local="clr-namespace:InsireBot"
-             xmlns:themes="http://materialdesigninxaml.net/winfx/xaml/themes">
+             xmlns:themes="http://materialdesigninxaml.net/winfx/xaml/themes"
+             DataContext="{Binding Source={StaticResource Locator}, Path=MediaPlayerViewModel}">
 
-    <Grid DataContext="{Binding Source={StaticResource Locator}, Path=MediaPlayerViewModel}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -21,16 +22,10 @@
                   Grid.Column="0"
                   Grid.ColumnSpan="3"
                   Style="{StaticResource BaseDataGridStyle}"
-                  
-                  ItemsSource="{Binding Items}">
+                  ItemsSource="{Binding Playlist}">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <ContextMenu.Items>
-                        <!--<MenuItem Command="{Binding AddCommand}" Header="Add">
-                            <MenuItem.Icon>
-                                <themes:PackIcon Style="{StaticResource IconStyle}" Kind="PlaylistPlus" />
-                            </MenuItem.Icon>
-                        </MenuItem>-->
                         <MenuItem Command="{Binding RemoveCommand}" Header="Remove">
                             <MenuItem.Icon>
                                 <themes:PackIcon Style="{StaticResource IconStyle}" Kind="PlaylistMinus" />

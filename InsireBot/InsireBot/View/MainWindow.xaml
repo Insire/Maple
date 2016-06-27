@@ -6,8 +6,8 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Style="{StaticResource BaseWindowStyle}"
         DataContext="{Binding DrawerItemViewmodel, Source={StaticResource Locator}}">
+    
     <Window.Resources>
-        <core:DebugConverter x:Key="DebugConverter" />
         <core:BindingProxy x:Key="SetDrawerItemCommandProxy" Data="{Binding SetDrawerItemCommand}" />
     </Window.Resources>
 

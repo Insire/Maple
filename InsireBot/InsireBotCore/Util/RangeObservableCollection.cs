@@ -40,8 +40,6 @@ namespace InsireBotCore
             foreach (T item in items)
                 Add(item);
 
-            Console.WriteLine(Items.Count);
-
             _suppressNotification = false;
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }

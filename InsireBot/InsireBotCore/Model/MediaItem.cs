@@ -127,11 +127,6 @@ namespace InsireBotCore
             Index = -1;
         }
 
-        ~MediaItem()
-        {
-            Debug.WriteLine($"{Title} was disposed");
-        }
-
         public MediaItem(string title, Uri location) : this()
         {
             Title = title;

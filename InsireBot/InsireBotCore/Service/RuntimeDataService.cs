@@ -6,6 +6,7 @@ namespace InsireBotCore
 {
     public class RuntimeDataService : IDataService
     {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public IEnumerable<IMediaItem> GetMediaItems()
         {
             return new IMediaItem[0];
@@ -25,9 +26,13 @@ namespace InsireBotCore
                     else
                         vlcInstallDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "VideoLAN\\VLC");
 
+                    var directory = new DirectoryInfo(vlcInstallDirectory);
+                    if (!directory.Exists)
+                        _log.Error($"Invalid path for VLC installation {directory.FullName}");
+
                     return new DotNetPlayerSettings
                     {
-                        Directory = new DirectoryInfo(vlcInstallDirectory),
+                        Directory = directory,
                         FileName = "vlc",
                         Options = new[]
                         {
@@ -46,7 +51,7 @@ namespace InsireBotCore
 
         public IMediaPlayer<IMediaItem> GetMediaPlayer()
         {
-            return new DotNetPlayer(this);
+            return new DotNetPlayer(this, GetMediaPlayerSettings());
         }
 
         public IEnumerable<AudioDevice> GetPlaybackDevices()

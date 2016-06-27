@@ -25,6 +25,8 @@ namespace InsireBot
 
         public DrawerItemViewmodel()
         {
+            App.Log.Info("Loading Navigation");
+
             var content = new[]
             {
                 new DrawerItem

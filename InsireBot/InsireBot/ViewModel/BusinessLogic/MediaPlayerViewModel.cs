@@ -42,6 +42,7 @@ namespace InsireBot
 
         private void Initialize(IDataService dataService)
         {
+            App.Log.Info("Loading MediaPlayer");
             if (MediaPlayer != null)
             {
                 MediaPlayer.CompletedMediaItem -= MediaPlayer_CompletedMediaItem;
@@ -59,7 +60,7 @@ namespace InsireBot
 
         private void InitiliazeCommands()
         {
-            PlayCommand = new RelayCommand(Play);
+            PlayCommand = new RelayCommand(Play, () => MediaPlayer.CanPlay);
             PreviousCommand = new RelayCommand(Previous, MediaPlayer.Playlist.CanPrevious);
             NextCommand = new RelayCommand(Next, MediaPlayer.Playlist.CanNext);
         }

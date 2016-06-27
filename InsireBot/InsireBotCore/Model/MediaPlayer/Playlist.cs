@@ -9,6 +9,7 @@ namespace InsireBotCore
 {
     public class Playlist<T> : RangeObservableCollection<T>, IEnumerable<T>, IList<T>, IIsSelected, IIndex, IIdentifier, INotifyPropertyChanged where T : IMediaItem
     {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public event RepeatModeChangedEventHandler RepeatModeChanged;
         public event ShuffleModeChangedEventHandler ShuffleModeChanged;
         new public event PropertyChangedEventHandler PropertyChanged;
@@ -413,7 +414,7 @@ namespace InsireBotCore
                             foundItem.IsSelected = true;
 
                             if (previousItems.Count() > 1)
-                                Debug.WriteLine("Warning SelectPrevious returned more than one value, when it should only return one");
+                                _log.Warn("Warning SelectPrevious returned more than one value, when it should only return one");
 
                             return foundItem;
                         }

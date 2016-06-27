@@ -14,6 +14,8 @@
             get { return Playlist.CanPrevious(); }
         }
 
+        public abstract bool CanPlay { get; }
+
         private Playlist<IMediaItem> _playlist;
         public Playlist<IMediaItem> Playlist
         {

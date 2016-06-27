@@ -29,6 +29,8 @@ namespace InsireBot
 
         private GlobalServiceLocator()
         {
+            App.Log.Info("Load Services");
+
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             SimpleIoc.Default.Register<DrawerItemViewmodel>();
@@ -50,7 +52,11 @@ namespace InsireBot
             SimpleIoc.Default.Register<MediaPlayerViewModel>();
             SimpleIoc.Default.Register<CreateMediaItemViewModel>();
             SimpleIoc.Default.Register<CreatePlaylistViewModel>();
+        }
 
+        public IDataService DataService
+        {
+            get { return ServiceLocator.Current.GetInstance<IDataService>(); }
         }
 
         public MediaPlayerViewModel MediaPlayerViewModel
@@ -85,6 +91,7 @@ namespace InsireBot
 
         public static void Cleanup()
         {
+            App.Log.Info("UnLoad Services");
             SimpleIoc.Default.Unregister<DataParsingService>();
             SimpleIoc.Default.Unregister<MediaItemsStore>();
             SimpleIoc.Default.Unregister<PlaylistsViewModel>();

@@ -8,13 +8,14 @@ namespace InsireBotCore
 
         bool Disposed { get; }
         bool IsPlaying { get; }
+        bool CanPlay { get; }
 
         void Play();
         void Next();
         void Previous();
 
         void Pause();
-        void Stop();
+        void Stop();       
 
         Playlist<T> Playlist { get;}
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using Vlc.DotNet.Core;
 
@@ -7,11 +6,23 @@ namespace InsireBotCore
 {
     public sealed class DotNetPlayer : BasePlayer
     {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private VlcMediaPlayer _vlcMediaPlayer;
 
         public override bool IsPlaying
         {
             get { return _vlcMediaPlayer?.IsPlaying == true; }
+        }
+
+        public override bool CanPlay
+        {
+            get
+            {
+                return _vlcMediaPlayer != null
+                        && !_vlcMediaPlayer.Disposed
+                        && _vlcMediaPlayer.IsPaused
+                        && !_vlcMediaPlayer.IsPlaying;
+            }
         }
 
         private ISettings _settings;
@@ -93,7 +104,7 @@ namespace InsireBotCore
         private void InitializeProperties()
         {
             if (AudioDevice == null)
-                throw new ArgumentNullException(nameof(AudioDevice));
+                _log.Error("no suitable AudioDevice found", new ArgumentNullException(nameof(AudioDevice)));
 
             Settings.Options[1] = string.Format(Settings.Options[1], AudioDevice);
             _vlcMediaPlayer = new VlcMediaPlayer(Settings.Directory, Settings.Options);
@@ -112,47 +123,48 @@ namespace InsireBotCore
 
         private void Stopped(object sender, VlcMediaPlayerStoppedEventArgs e)
         {
-            Debug.WriteLine("VlcMediaPlayer_Stopped");
+            _log.Info("VlcMediaPlayer_Stopped");
             RaisePropertyChanged(nameof(IsPlaying));
         }
 
         private void Playing(object sender, VlcMediaPlayerPlayingEventArgs e)
         {
-            Debug.WriteLine("VlcMediaPlayer_Playing");
+            _log.Info("VlcMediaPlayer_Playing");
             RaisePropertyChanged(nameof(IsPlaying));
         }
 
         private void EndReached(object sender, VlcMediaPlayerEndReachedEventArgs e)
         {
             Player_CompletedMediaItem(this, new CompletedMediaItemEventEventArgs(Playlist.CurrentItem));
+            _log.Info("VlcMediaPlayer_EndReached");
             RaisePropertyChanged(nameof(IsPlaying));
         }
 
         private void EncounteredError(object sender, VlcMediaPlayerEncounteredErrorEventArgs e)
         {
-            Debug.WriteLine("VlcMediaPlayer_EncounteredError");
+            _log.Info("VlcMediaPlayer_EncounteredError");
             RaisePropertyChanged(nameof(IsPlaying));
         }
 
         private void Buffering(object sender, Vlc.DotNet.Core.VlcMediaPlayerBufferingEventArgs e)
         {
-            Debug.WriteLine("Buffering");
+            _log.Info("Buffering");
             RaisePropertyChanged(nameof(IsPlaying));
         }
 
         public void ValidateSettings()
         {
             if (Settings == null)
-                throw new DotNetPlayerException("DotNetPlayerSettings were null", new ArgumentNullException(nameof(Settings)));
+                _log.Error("DotNetPlayerSettings were null", new ArgumentNullException(nameof(Settings)));
 
             if (string.IsNullOrEmpty(Settings.FileName))
-                throw new DotNetPlayerException("DotNetPlayerSettings.FileName was empty", new ArgumentNullException(nameof(Settings.FileName)));
+                _log.Error("DotNetPlayerSettings.FileName was empty", new ArgumentNullException(nameof(Settings.FileName)));
 
             if (Settings.Options.Any(p => string.IsNullOrEmpty(p)))
-                throw new DotNetPlayerException("DotNetPlayerSettings contained an empty string", new ArgumentNullException(nameof(Settings.FileName)));
+                _log.Error("DotNetPlayerSettings contained an empty string", new ArgumentNullException(nameof(Settings.FileName)));
 
             if (!Settings.Directory.Exists)
-                throw new DotNetPlayerException("VlcLibDirectory in DotNetPlayerSettings doesn't exist");
+                _log.Error("VlcLibDirectory in DotNetPlayerSettings doesn't exist", new DotNetPlayerException("VlcLibDirectory in DotNetPlayerSettings doesn't exist"));
 
             //TODO more checks on VlcLibDirectory
         }

@@ -65,6 +65,7 @@
         <Setter Property="CanUserResizeColumns" Value="True" />
         <Setter Property="CanUserResizeRows" Value="False" />
         <Setter Property="CanUserSortColumns" Value="True" />
+        <Setter Property="IsReadOnly" Value="True" />
         <Setter Property="RowStyle" Value="{StaticResource BaseDataGridRowStyle}" />
     </Style>
 

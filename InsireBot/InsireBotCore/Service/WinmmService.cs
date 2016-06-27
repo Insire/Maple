@@ -68,7 +68,6 @@ namespace InsireBotCore
             }
         }
 
-
         [StructLayout(LayoutKind.Sequential, Pack = 4, CharSet = CharSet.Auto)]
         public struct WAVEINCAPS
         {

@@ -13,5 +13,11 @@ namespace InsireBot
             Log.Info("InsireBot started");
             base.OnStartup(e);
         }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            Log.Info("InsireBot closed");
+            base.OnExit(e);
+        }
     }
 }
