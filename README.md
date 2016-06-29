@@ -1,4 +1,4 @@
-# InsireBot-V2
+# InsireBot-V2 [![Build status](https://ci.appveyor.com/api/projects/status/2bgiexw53ktd5lhp?svg=true)](https://ci.appveyor.com/project/Insire/insirebot-v2)
 This is a rewrite of the original InsireBot.
 
 Things are very in flux at the moment. So downloading the repo might give you a working player or just a bunch of code.
