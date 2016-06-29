@@ -6,6 +6,7 @@ namespace InsireBotCore
 {
     public sealed class DotNetPlayer : BasePlayer
     {
+        private bool _buffering;
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private VlcMediaPlayer _vlcMediaPlayer;
 
@@ -20,8 +21,7 @@ namespace InsireBotCore
             {
                 return _vlcMediaPlayer != null
                         && !_vlcMediaPlayer.Disposed
-                        && _vlcMediaPlayer.IsPaused
-                        && !_vlcMediaPlayer.IsPlaying;
+                        && (_vlcMediaPlayer.IsPaused || !_vlcMediaPlayer.IsPlaying);
             }
         }
 
@@ -76,6 +76,7 @@ namespace InsireBotCore
 
         public DotNetPlayer(IDataService dataService) : base(dataService)
         {
+            _buffering = false;
             Playlist = new Playlist<IMediaItem>();
             Playlist.AddRange(dataService.GetCurrentMediaItems());
 
@@ -103,6 +104,8 @@ namespace InsireBotCore
 
         private void InitializeProperties()
         {
+            _log.Info("initializing VlcMediaPlayer");
+
             if (AudioDevice == null)
                 _log.Error("no suitable AudioDevice found", new ArgumentNullException(nameof(AudioDevice)));
 
@@ -129,13 +132,18 @@ namespace InsireBotCore
 
         private void Playing(object sender, VlcMediaPlayerPlayingEventArgs e)
         {
-            _log.Info("VlcMediaPlayer_Playing");
+            if (_vlcMediaPlayer.IsPlaying)
+                _buffering = false; // Playback has begun, so we can uncheck the buffering flag
+            _log.Info($"VlcMediaPlayer_Playing ({_vlcMediaPlayer.IsPlaying})");
             RaisePropertyChanged(nameof(IsPlaying));
         }
 
         private void EndReached(object sender, VlcMediaPlayerEndReachedEventArgs e)
         {
-            Player_CompletedMediaItem(this, new CompletedMediaItemEventEventArgs(Playlist.CurrentItem));
+            // VLC throws this event, when its still buffering and didnt  start playback yet
+            if (!_buffering)
+                Player_CompletedMediaItem(this, new CompletedMediaItemEventEventArgs(Playlist.CurrentItem));
+
             _log.Info("VlcMediaPlayer_EndReached");
             RaisePropertyChanged(nameof(IsPlaying));
         }
@@ -146,9 +154,9 @@ namespace InsireBotCore
             RaisePropertyChanged(nameof(IsPlaying));
         }
 
-        private void Buffering(object sender, Vlc.DotNet.Core.VlcMediaPlayerBufferingEventArgs e)
+        private void Buffering(object sender, VlcMediaPlayerBufferingEventArgs e)
         {
-            _log.Info("Buffering");
+            _log.Info($"Buffering {e.NewCache}");
             RaisePropertyChanged(nameof(IsPlaying));
         }
 
@@ -174,9 +182,14 @@ namespace InsireBotCore
         /// </summary>
         public override void Pause()
         {
-            _vlcMediaPlayer.Pause();
+            if (IsPlaying)
+            {
+                _log.Info($"pausing Playback");
+                _vlcMediaPlayer.Pause();
+                _log.Info($"paused Playback");
 
-            RaisePropertyChanged(nameof(IsPlaying));
+                RaisePropertyChanged(nameof(IsPlaying));
+            }
         }
 
         /// <summary>
@@ -184,9 +197,14 @@ namespace InsireBotCore
         /// </summary>
         public override void Stop()
         {
-            _vlcMediaPlayer.Stop();
+            if (IsPlaying)
+            {
+                _log.Info($"stopping Playback");
+                _vlcMediaPlayer.Stop();
+                _log.Info($"stopped Playback");
 
-            RaisePropertyChanged(nameof(IsPlaying));
+                RaisePropertyChanged(nameof(IsPlaying));
+            }
         }
 
         public override void Play(IMediaItem item)
@@ -196,6 +214,9 @@ namespace InsireBotCore
 
             if (item != null)
             {
+                _log.Info($"Playing: {item}");
+                _buffering = true;
+                Playlist.Set(item);
                 _vlcMediaPlayer.Play(new Uri(item.Location));
 
                 RaisePropertyChanged(nameof(IsPlaying));

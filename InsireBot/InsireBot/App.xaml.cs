@@ -16,6 +16,7 @@ namespace InsireBot
 
         protected override void OnExit(ExitEventArgs e)
         {
+            GlobalServiceLocator.Cleanup();
             Log.Info("InsireBot closed");
             base.OnExit(e);
         }

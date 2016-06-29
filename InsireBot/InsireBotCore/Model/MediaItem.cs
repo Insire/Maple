@@ -143,5 +143,11 @@ namespace InsireBotCore
         {
             IsRestricted = allowed == null ? false : !(bool)allowed;
         }
+
+        public override string ToString()
+        {
+            var result = Title == string.Empty ? Location : Title;
+            return result;
+        }
     }
 }

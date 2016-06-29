@@ -7,6 +7,14 @@ namespace InsireBotTests
     {
         public AudioDevice AudioDevice { get; set; }
 
+        public bool CanPlay
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public bool Disposed { get; set; }
 
         public bool IsPlaying { get; set; }

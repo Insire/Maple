@@ -42,15 +42,17 @@ namespace InsireBot
 
         private void Initialize(IDataService dataService)
         {
-            App.Log.Info("Loading MediaPlayer");
+
             if (MediaPlayer != null)
             {
                 MediaPlayer.CompletedMediaItem -= MediaPlayer_CompletedMediaItem;
                 MediaPlayer.Dispose();
             }
 
-            if (!Items.Any())
+            if (Items?.Any() != true)
+            {
                 Items.AddRange(dataService.GetMediaItems()); // populate the playlist
+            }
 
             MediaPlayer = dataService.GetMediaPlayer();
             MediaPlayer.CompletedMediaItem += MediaPlayer_CompletedMediaItem;

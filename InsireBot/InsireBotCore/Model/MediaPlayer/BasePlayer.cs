@@ -105,7 +105,7 @@
             remove { CompletedMediaItem -= value; }
         }
 
-        public void Play()
+        public virtual void Play()
         {
             if (IsPlaying)
                 Stop();
@@ -116,23 +116,23 @@
             Next();
         }
 
-        public void Next()
+        public virtual void Next()
         {
             if (IsPlaying)
                 Stop();
 
             var next = Playlist.Next();
-            if (next != null)
+            if (!string.IsNullOrEmpty(next?.Location))
                 Play(next);
         }
 
-        public void Previous()
+        public virtual void Previous()
         {
             if (IsPlaying)
                 Stop();
 
             var previous = Playlist.Previous();
-            if (previous != null)
+            if (!string.IsNullOrEmpty(previous?.Location))
                 Play(previous);
         }
 

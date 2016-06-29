@@ -29,11 +29,12 @@ namespace InsireBot
 
         private GlobalServiceLocator()
         {
-            App.Log.Info("Load Services");
+            App.Log.Info("Loading Services");
 
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             SimpleIoc.Default.Register<DrawerItemViewmodel>();
+            SimpleIoc.Default.Register<UIColorsViewModel>();
 
             if (ViewModelBase.IsInDesignModeStatic)
             {
@@ -89,9 +90,15 @@ namespace InsireBot
             get { return ServiceLocator.Current.GetInstance<DrawerItemViewmodel>(); }
         }
 
+        public UIColorsViewModel UIColorsViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<UIColorsViewModel>(); }
+        }
+        
+
         public static void Cleanup()
         {
-            App.Log.Info("UnLoad Services");
+            App.Log.Info("UnLoading Services");
             SimpleIoc.Default.Unregister<DataParsingService>();
             SimpleIoc.Default.Unregister<MediaItemsStore>();
             SimpleIoc.Default.Unregister<PlaylistsViewModel>();
@@ -99,6 +106,7 @@ namespace InsireBot
             SimpleIoc.Default.Unregister<CreateMediaItemViewModel>();
             SimpleIoc.Default.Unregister<CreatePlaylistViewModel>();
 
+            SimpleIoc.Default.Unregister<UIColorsViewModel>();
             SimpleIoc.Default.Unregister<DrawerItemViewmodel>();
         }
 

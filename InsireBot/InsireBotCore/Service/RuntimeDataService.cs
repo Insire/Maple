@@ -14,6 +14,8 @@ namespace InsireBotCore
 
         public ISettings GetMediaPlayerSettings()
         {
+            _log.Info("Loading MediaPlayer Settings");
+
             var mediaPlayerType = GetMediaPlayerType();
             switch (mediaPlayerType)
             {
@@ -21,10 +23,10 @@ namespace InsireBotCore
                     var vlcInstallDirectory = string.Empty;
                     // TODO change this depending on app architecture
                     // vlc is a 32bit application, so we always want to get the base 32bit install directory, regardless of OS architecture
-                    if (Environment.Is64BitOperatingSystem)
-                        vlcInstallDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "VideoLAN\\VLC");
-                    else
-                        vlcInstallDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "VideoLAN\\VLC");
+                    //if (Environment.Is64BitOperatingSystem)
+                    vlcInstallDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "VideoLAN\\VLC");
+                    //else
+                    //vlcInstallDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "VideoLAN\\VLC");
 
                     var directory = new DirectoryInfo(vlcInstallDirectory);
                     if (!directory.Exists)
@@ -51,11 +53,13 @@ namespace InsireBotCore
 
         public IMediaPlayer<IMediaItem> GetMediaPlayer()
         {
+            _log.Info("Loading MediaPlayer");
             return new DotNetPlayer(this, GetMediaPlayerSettings());
         }
 
         public IEnumerable<AudioDevice> GetPlaybackDevices()
         {
+            _log.Info("Loading PlaybackDevices");
             var _devices = WinmmService.GetDevCapsPlayback();
 
             for (int i = 0; i < _devices.Length; i++)
@@ -76,6 +80,7 @@ namespace InsireBotCore
 
         public IEnumerable<IMediaItem> GetCurrentMediaItems()
         {
+            _log.Info("Loading Playlist");
             //TODO add DB access
             yield return new MediaItem("Rusko - Somebody To Love (Sigma Remix)", new Uri(@"https://www.youtube.com/watch?v=nF7wa3j57j0"), new TimeSpan(0, 5, 47));
             yield return new MediaItem("Armin van Buuren feat. Sophie - Virtual Friend", new Uri(@"https://www.youtube.com/watch?v=0ypeOKp0x3k"), new TimeSpan(0, 7, 12));

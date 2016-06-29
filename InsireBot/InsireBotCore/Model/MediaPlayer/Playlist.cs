@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -19,7 +18,6 @@ namespace InsireBotCore
         /// </summary>
         public Stack<int> History { get; private set; }
 
-
         private IMediaItem _currentItem;
         /// <summary>
         /// is <see cref="Set"/> when a IMediaPlayer picks a <see cref="IMediaItem"/> from this
@@ -36,7 +34,7 @@ namespace InsireBotCore
                 }
                 else
                 {
-                    if (_currentItem.Equals(value))
+                    if (!_currentItem.Equals(value))
                     {
                         _currentItem = value;
                         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentItem)));
@@ -217,7 +215,7 @@ namespace InsireBotCore
             AddRange(items);
         }
 
-        public Playlist(string title, string webId,  long itemCount, string privacyStatus= "none") : this()
+        public Playlist(string title, string webId, long itemCount, string privacyStatus = "none") : this()
         {
             Title = title;
             WebID = webId;
@@ -316,7 +314,7 @@ namespace InsireBotCore
             {
                 var nextPossibleItems = Items.Where(p => p.Index > currentIndex);
 
-                if (nextPossibleItems.Any()) // try to find items after the current one
+                if (nextPossibleItems?.Any() == true) // try to find items after the current one
                 {
                     Items.ToList().ForEach(p => p.IsSelected = false);
                     var foundItem = nextPossibleItems.Where(q => q.Index == nextPossibleItems.Select(p => p.Index).Min()).First();
