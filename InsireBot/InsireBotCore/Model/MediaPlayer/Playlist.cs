@@ -208,6 +208,8 @@ namespace InsireBotCore
             History = new Stack<int>();
             Title = string.Empty;
             ID = Guid.NewGuid();
+            RepeatMode = RepeatMode.None;
+            IsShuffling = false;
         }
 
         public Playlist(IEnumerable<T> items) : this()
@@ -229,7 +231,14 @@ namespace InsireBotCore
         /// <param name="item">the <see cref="IMediaItem"/> to add</param>
         new public void Add(T item)
         {
-            item.Index = Items.Select(p => p.Index).Max() + 1;
+            if (Items?.Any() == true)
+                item.Index = Items.Select(p => p.Index).Max() + 1;
+            else
+                item.Index = 0;
+
+            if (this.Any() != true)
+                History.Push(item.Index);
+
             base.Add(item);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Items)));
 
@@ -250,7 +259,7 @@ namespace InsireBotCore
             {
                 currentIndex++;
                 item.Index = currentIndex;
-                base.Add(item);
+                Add(item);
             }
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Items)));
@@ -387,8 +396,11 @@ namespace InsireBotCore
         /// <param name="mediaItem"></param>
         public void Set(IMediaItem mediaItem)
         {
-            History.Push(mediaItem.Index);
-            CurrentItem = mediaItem;
+            if (mediaItem != null)
+            {
+                History.Push(mediaItem.Index);
+                CurrentItem = mediaItem;
+            }
         }
 
         /// <summary>
@@ -397,12 +409,16 @@ namespace InsireBotCore
         /// <returns>returns the last <see cref="IMediaItem"/> from <seealso cref="History"/></returns>
         public IMediaItem Previous()
         {
-            if (History != null && History.Any())
+            if (History?.Any() == true)
             {
                 Items.ToList().ForEach(p => p.IsSelected = false);      // deselect all items in the list
                 while (History.Any())
                 {
                     var previous = History.Pop();
+
+                    if (previous == CurrentItem.Index) // the most recent item in the history, is the just played item, so we wanna skip that
+                        continue;
+
                     if (previous > -1)
                     {
                         var previousItems = Items.Where(p => p.Index == previous); // try to get the last played item

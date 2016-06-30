@@ -93,7 +93,7 @@ namespace InsireBot
 
         public void Previous()
         {
-            Play();
+            MediaPlayer.Previous();
         }
 
         public void Next()
