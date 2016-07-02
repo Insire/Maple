@@ -58,49 +58,6 @@ namespace InsireBotCore
             }
         }
 
-        //public async Task<IEnumerable<MediaItem>> GetUploads()
-        //{
-        //    var result = new List<MediaItem>();
-        //    var youtubeService = await GetService();
-
-        //    var channelsListRequest = youtubeService.Channels.List("contentDetails");
-        //    channelsListRequest.Mine = true;
-
-        //    // Retrieve the contentDetails part of the channel resource for the authenticated user's channel.
-        //    var channelsListResponse = await channelsListRequest.ExecuteAsync();
-
-        //    foreach (var channel in channelsListResponse.Items)
-        //    {
-        //        // From the API response, extract the playlist ID that identifies the list
-        //        // of videos uploaded to the authenticated user's channel.
-        //        var uploadsListId = channel.ContentDetails.RelatedPlaylists.Uploads;
-
-        //        //Console.WriteLine("Videos in list {0}", uploadsListId);
-
-        //        var nextPageToken = "";
-        //        while (nextPageToken != null)
-        //        {
-        //            var playlistItemsListRequest = youtubeService.PlaylistItems.List("snippet");
-        //            playlistItemsListRequest.PlaylistId = uploadsListId;
-        //            playlistItemsListRequest.MaxResults = 50;
-        //            playlistItemsListRequest.PageToken = nextPageToken;
-
-        //            // Retrieve the list of videos uploaded to the authenticated user's channel.
-        //            var playlistItemsListResponse = await playlistItemsListRequest.ExecuteAsync();
-
-        //            foreach (var playlistItem in playlistItemsListResponse.Items)
-        //            {
-        //                // Print information about each video.
-        //                var location = new Uri($"{_videoBaseUrl}{playlistItem.Snippet.ResourceId.VideoId}");
-        //                result.Add(new MediaItem(playlistItem.Snippet.Title, location));
-        //            }
-
-        //            nextPageToken = playlistItemsListResponse.NextPageToken;
-        //        }
-        //    }
-        //    return result;
-        //}
-
         public async Task<IList<Playlist<IMediaItem>>> GetPlaylists(string playlistId)
         {
             var result = new List<Playlist<IMediaItem>>();

@@ -7,7 +7,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 using InsireBotCore;
 
-namespace InsireBot.Utils
+namespace InsireBot
 {
     /// <summary>
     /// generates MediaItems and  Playlists from input

@@ -2,7 +2,6 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 using InsireBotCore;
-using InsireBot.Utils;
 using System.Windows;
 using System;
 
