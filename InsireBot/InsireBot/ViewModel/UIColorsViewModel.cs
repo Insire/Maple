@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -20,6 +21,7 @@ namespace InsireBot
         public UIColorsViewModel()
         {
             Swatches = new SwatchesProvider().Swatches;
+
             _paletteHelper = new PaletteHelper();
 
             RaisePropertyChanged(nameof(Swatches));

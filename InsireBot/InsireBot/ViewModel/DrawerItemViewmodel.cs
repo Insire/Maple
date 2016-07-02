@@ -35,8 +35,8 @@ namespace InsireBot
                     Name = "Home",
                     Detail = new DrawerItem
                     {
-                        Content = new OptionsPage(),
-                        Name = "Options"
+                        Content = new ColorOptionsPage(),
+                        Name = "Color Options"
                     }
                 },
 

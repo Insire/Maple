@@ -257,6 +257,8 @@
         </Setter>
     </Style>
 
+
+
     <!--  ToggleButton Styles  -->
     <ControlTemplate x:Key="IsMediaPlayerSilentTemplate">
         <materialDesign:PackIcon Style="{Binding IconStyle}" Kind="SpeakerOff" />
