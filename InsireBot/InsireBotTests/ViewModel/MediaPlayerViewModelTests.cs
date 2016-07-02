@@ -1,7 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using InsireBotCore;
 using System.Linq;
-using System.Collections.Generic;
 using InsireBot;
 
 namespace InsireBotTests
@@ -12,7 +10,7 @@ namespace InsireBotTests
         [TestMethod()]
         public void MediaPlayerViewModelTest()
         {
-            var service = new RuntimeDataService();
+            var service = new TestDataService();
             var vm = new MediaPlayerViewModel(service);
 
             var playlist = vm.MediaPlayer.Playlist;
@@ -24,14 +22,13 @@ namespace InsireBotTests
         [TestMethod()]
         public void InitTest()
         {
-            var service = new RuntimeDataService();
+            var service = new TestDataService();
             var vm = new MediaPlayerViewModel(service);
 
             var playlist = vm.MediaPlayer.Playlist;
             Assert.IsFalse(vm.IsPlaying);
 
             Assert.IsNotNull(vm.MediaPlayer);
-            Assert.IsNotNull(vm.MediaPlayer.AudioDevice);
 
             Assert.IsNotNull(playlist);
             Assert.IsNotNull(playlist.CurrentItem);
@@ -45,7 +42,7 @@ namespace InsireBotTests
         [TestMethod()]
         public void ClearTest()
         {
-            var service = new RuntimeDataService();
+            var service = new TestDataService();
             var vm = new MediaPlayerViewModel(service);
 
             var playlist = vm.MediaPlayer.Playlist;
@@ -53,24 +50,5 @@ namespace InsireBotTests
             playlist.Clear();
             Assert.IsFalse(playlist.Any());
         }
-
-        //[TestMethod()]
-        //public void PreviousTest()
-        //{
-        //    var vm = new MediaPlayerViewModel(new TestDataService());
-        //    vm.Previous();
-        //    Assert.IsNotNull(vm.Playlist.CurrentItem);
-        //}
-
-        //[TestMethod()]
-        //public void NextTest()
-        //{
-        //    var vm = new MediaPlayerViewModel(new TestDataService());
-
-        //    vm.Next();
-
-
-        //    Assert.IsNotNull(vm.Playlist.CurrentItem);
-        //}
     }
 }

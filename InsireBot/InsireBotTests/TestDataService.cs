@@ -21,7 +21,7 @@ namespace InsireBotTests
 
         public IMediaPlayer<IMediaItem> GetMediaPlayer()
         {
-            return new MockMediaPlayer();
+            return new MockMediaPlayer(this);
         }
 
         public ISettings GetMediaPlayerSettings()

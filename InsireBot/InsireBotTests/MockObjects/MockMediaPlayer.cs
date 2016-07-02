@@ -31,14 +31,26 @@ namespace InsireBotTests
 
         public event CompletedMediaItemEventHandler CompletedMediaItem;
 
+        public MockMediaPlayer(IDataService dataService)
+        {
+            Playlist = new Playlist<IMediaItem>();
+            Playlist.AddRange(dataService.GetMediaItems());
+
+            VolumeMin = 0;
+            VolumeMax = 100;
+
+
+        }
+
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Disposed = true;
         }
 
         public void Next()
         {
-            throw new NotImplementedException();
+            var next = Playlist.Next();
+            Playlist.Set(next);
         }
 
         public void Pause()
@@ -48,17 +60,18 @@ namespace InsireBotTests
 
         public void Play()
         {
-            throw new NotImplementedException();
+            CompletedMediaItem?.Invoke(this, new CompletedMediaItemEventEventArgs(Playlist.CurrentItem));
         }
 
         public void Play(IMediaItem mediaItem)
         {
-            throw new NotImplementedException();
+            Playlist.Set(mediaItem);
         }
 
         public void Previous()
         {
-            throw new NotImplementedException();
+            var previous = Playlist.Previous();
+            Playlist.Set(previous);
         }
 
         public void Stop()
