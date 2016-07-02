@@ -114,7 +114,7 @@ namespace InsireBot.Utils
                             break;
 
                         case "list":
-                            await youtubeService.GetPlaylist(id)
+                            await youtubeService.GetPlaylists(id)
                                                 .ContinueWith((task) =>
                                                 {
                                                     if (task.Exception != null)

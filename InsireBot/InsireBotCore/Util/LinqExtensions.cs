@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace InsireBotCore
 {
@@ -51,6 +52,23 @@ namespace InsireBotCore
 
             var excludedIDs = new HashSet<Guid>(baseCollection.Select(p => p.ID));
             return newItems.Where(p => !excludedIDs.Contains(p.ID));
+        }
+
+        public static string GetPlaylistItems(this Playlist<IMediaItem> playlist)
+        {
+            var builder = new StringBuilder();
+            var ids = playlist.Select(p => Youtube.GetVideoId(p));
+            var last = ids.Last();
+
+            foreach (var id in ids)
+            {
+                if (id != last)
+                    builder.Append($"{id},");
+            }
+
+            builder.Append(last);
+
+            return builder.ToString();
         }
     }
 }

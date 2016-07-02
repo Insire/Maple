@@ -140,7 +140,7 @@ namespace InsireBotCore
 
         private void EndReached(object sender, VlcMediaPlayerEndReachedEventArgs e)
         {
-            // VLC throws this event, when its still buffering and didnt  start playback yet
+            // VLC throws this event, when its still buffering and didnt start playback yet
             if (!_buffering)
                 Player_CompletedMediaItem(this, new CompletedMediaItemEventEventArgs(Playlist.CurrentItem));
 

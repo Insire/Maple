@@ -138,15 +138,30 @@ namespace InsireBotCore
             }
         }
 
-        private string _webId;
-        public string WebID
+        private string _description;
+        /// <summary>
+        /// the description of this playlist
+        /// </summary>
+        public string Description
         {
-            get { return _webId; }
+            get { return _description; }
             private set
             {
-                _webId = value;
-                NotifyPropertyChanged(nameof(WebID));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(WebID)));
+                _description = value;
+                NotifyPropertyChanged(nameof(Description));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Description)));
+            }
+        }
+
+        private string _location;
+        public string Location
+        {
+            get { return _location; }
+            private set
+            {
+                _location = value;
+                NotifyPropertyChanged(nameof(Location));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Location)));
             }
         }
 
@@ -217,10 +232,10 @@ namespace InsireBotCore
             AddRange(items);
         }
 
-        public Playlist(string title, string webId, long itemCount, string privacyStatus = "none") : this()
+        public Playlist(string title, string location, long itemCount, string privacyStatus = "none") : this()
         {
             Title = title;
-            WebID = webId;
+            Location = location;
             PrivacyStatus = privacyStatus;
             ItemCount = itemCount;
         }
