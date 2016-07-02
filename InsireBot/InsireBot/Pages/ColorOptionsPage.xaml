@@ -11,9 +11,7 @@
         </materialDesign:TransitioningContent.OpeningEffects>
 
         <materialDesign:Card VerticalAlignment="Stretch">
-            <Grid>
-                
-            </Grid>
+            <Grid />
 
         </materialDesign:Card>
     </materialDesign:TransitioningContent>

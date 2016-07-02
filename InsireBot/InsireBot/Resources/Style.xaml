@@ -11,10 +11,10 @@
             </materialDesign:TransitioningContent.OpeningEffects>
             <Grid>
                 <ProgressBar HorizontalAlignment="Center"
-                                         VerticalAlignment="Center"
-                                         Style="{StaticResource MaterialDesignCircularProgressBar}"
-                                         IsIndeterminate="True"
-                                         Value="0" />
+                             VerticalAlignment="Center"
+                             Style="{StaticResource MaterialDesignCircularProgressBar}"
+                             IsIndeterminate="True"
+                             Value="0" />
             </Grid>
         </materialDesign:TransitioningContent>
     </ControlTemplate>

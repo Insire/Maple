@@ -12,7 +12,7 @@
 
         <materialDesign:Card VerticalAlignment="Stretch">
             <materialDesign:Card.Resources>
-                
+
                 <ControlTemplate x:Key="DefaultTemplate">
                     <materialDesign:TransitioningContent>
                         <materialDesign:TransitioningContent.OpeningEffects>

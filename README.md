@@ -23,6 +23,7 @@ Requirements:
 - [YoutubeExtractor](https://github.com/flagbug/YoutubeExtractor)
 - [MVVM Light Toolkit](https://mvvmlight.codeplex.com)
 - [Googles Youtube Api v3](https://www.nuget.org/packages/Google.Apis.youtube.v3/)
+- [MaterialDesign](https://github.com/Templarian/MaterialDesign)
 
 ## Libraries to be used
 - [Dapper](https://github.com/StackExchange/dapper-dot-net)

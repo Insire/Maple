@@ -6,7 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Style="{StaticResource BaseWindowStyle}"
         DataContext="{Binding DrawerItemViewmodel, Source={StaticResource Locator}}">
-    
+
     <Window.Resources>
         <core:BindingProxy x:Key="SetDrawerItemCommandProxy" Data="{Binding SetDrawerItemCommand}" />
     </Window.Resources>
@@ -58,11 +58,14 @@
                                           Mode="PrimaryMid">
                     <DockPanel>
                         <ToggleButton x:Name="MenuToggleButton"
-                                  HorizontalAlignment="Left"
-                                  Style="{StaticResource MaterialDesignHamburgerToggleButton}"
-                                  IsChecked="False" />
+                                      HorizontalAlignment="Left"
+                                      Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                                      IsChecked="False" />
 
-                        <TextBlock HorizontalAlignment="Center" FontSize="22" VerticalAlignment="Center" Text="{Binding SelectedPage.Name}" />
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontSize="22"
+                                   Text="{Binding SelectedPage.Name}" />
                     </DockPanel>
 
 
