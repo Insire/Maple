@@ -1,6 +1,4 @@
 ﻿using System.Linq;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.CommandWpf;
 using InsireBotCore;
 
 namespace InsireBot
@@ -10,8 +8,6 @@ namespace InsireBot
     /// </summary>
     public class DrawerItemViewmodel : DefaultViewModelBase<DrawerItem>
     {
-        public ICommand SetDrawerItemCommand { get; private set; }
-
         private object _selectedPage;
         public object SelectedPage
         {
@@ -33,81 +29,69 @@ namespace InsireBot
                 {
                     Content = new MediaPlayerPage(),
                     Name = "Home",
-                    Detail = new DrawerItem
-                    {
-                        Content = new ColorOptionsPage(),
-                        Name = "Color Options"
-                    }
+
+                    GetDataContext = ()=>GlobalServiceLocator.Instance.MediaPlayerViewModel,
+                },
+
+                new DrawerItem
+                {
+                    Content = new ColorOptionsPage(),
+                    Name = "Color Options",
+                    GetDataContext =()=>GlobalServiceLocator.Instance.UIColorsViewModel,
+                },
+
+                new DrawerItem
+                {
+                    Content = new NewMediaItemOptionsPage(),
+                    Name = "NewMediaItemOptionsPage"
                 },
 
                 new DrawerItem
                 {
                     Content = new NewMediaItemPage(),
                     Name = "Add a Video",
-                    Detail = new DrawerItem
-                    {
-                        Content = new NewMediaItemOptionsPage(),
-                        Name = "NewMediaItemOptionsPage"
-                    }
+                    GetDataContext =()=>GlobalServiceLocator.Instance.CreateMediaItemViewModel,
+                },
+
+                new DrawerItem
+                {
+                    Content = new NewPlaylistOptionsPage(),
+                    Name = "NewPlaylistOptionsPage"
                 },
 
                 new DrawerItem
                 {
                     Content = new NewPlaylistPage(),
                     Name = "Add a Playlist",
-                    Detail = new DrawerItem
-                    {
-                        Content = new NewPlaylistOptionsPage(),
-                        Name = "NewPlaylistOptionsPage"
-                    }
+                },
+
+                new DrawerItem
+                {
+                    Content = new OptionsPage(),
+                    Name = "Options"
                 },
 
                 new DrawerItem
                 {
                     Content = new NewMediaItemPage(),
                     Name = "Discord",
-                    Detail = new DrawerItem
-                    {
-                        Content = new OptionsPage(),
-                        Name = "Options"
-                    }
                 },
 
                 new DrawerItem
                 {
                     Content = new NewMediaItemPage(),
                     Name = "Twitch",
-                    Detail = new DrawerItem
-                    {
-                        Content = new OptionsPage(),
-                        Name = "Options"
-                    }
                 },
 
                 new DrawerItem
                 {
                     Content = new NewMediaItemPage(),
                     Name = "Log",
-                    Detail = new DrawerItem
-                    {
-                        Content = new OptionsPage(),
-                        Name = "Options"
-                    }
                 },
             };
 
             Items.AddRange(content);
             SelectedPage = Items.First().Content;
-            InitializeCommands();
-        }
-
-        private void InitializeCommands()
-        {
-            SetDrawerItemCommand = new RelayCommand<DrawerItem>((page) =>
-            {
-                if (page != null)
-                    SelectedPage = page.Detail;
-            });
         }
     }
 }

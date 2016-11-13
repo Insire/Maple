@@ -13,16 +13,15 @@ namespace InsireBot
     /// </summary>
     public class GlobalServiceLocator
     {
-        private static GlobalServiceLocator instance;
+        private static GlobalServiceLocator _instance;
         public static GlobalServiceLocator Instance
         {
             get
             {
-                if (instance == null)
-                {
-                    instance = new GlobalServiceLocator();
-                }
-                return instance;
+                if (_instance == null)
+                    _instance = new GlobalServiceLocator();
+
+                return _instance;
             }
         }
 
@@ -93,7 +92,7 @@ namespace InsireBot
         {
             get { return ServiceLocator.Current.GetInstance<UIColorsViewModel>(); }
         }
-        
+
 
         public static void Cleanup()
         {

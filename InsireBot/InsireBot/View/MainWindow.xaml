@@ -26,25 +26,18 @@
                              ItemsSource="{Binding Items}"
                              PreviewMouseLeftButtonUp="UIElement_OnPreviewMouseLeftButtonUp"
                              SelectedItem="{Binding SelectedPage}">
+                        <ListBox.ItemContainerStyle>
+                            <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="DrawerItem">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="16" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Col1" />
-                                        <ColumnDefinition Width="64" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="Col2" />
-                                        <ColumnDefinition Width="16" />
-                                    </Grid.ColumnDefinitions>
-
+                                <DockPanel LastChildFill="True">
                                     <TextBlock Grid.Column="1"
                                                VerticalAlignment="Center"
                                                Text="{Binding Name}" />
-                                    <Button Grid.Column="3"
-                                            Style="{StaticResource OptionsButtonStyle}"
-                                            Command="{Binding Data, Source={StaticResource SetDrawerItemCommandProxy}}"
-                                            CommandParameter="{Binding .}" />
-                                </Grid>
+                                </DockPanel>
 
                             </DataTemplate>
                         </ListBox.ItemTemplate>

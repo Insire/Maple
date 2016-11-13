@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:core="clr-namespace:InsireBotCore;assembly=InsireBotCore"
              xmlns:local="clr-namespace:InsireBot"
-             xmlns:themes="http://materialdesigninxaml.net/winfx/xaml/themes"
-             DataContext="{Binding Source={StaticResource Locator}, Path=MediaPlayerViewModel}">
+             xmlns:themes="http://materialdesigninxaml.net/winfx/xaml/themes">
 
     <Grid>
         <Grid.RowDefinitions>

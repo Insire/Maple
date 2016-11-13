@@ -4,8 +4,7 @@
              xmlns:colors="clr-namespace:MaterialDesignColors;assembly=MaterialDesignColors"
              xmlns:core="clr-namespace:InsireBotCore;assembly=InsireBotCore"
              xmlns:local="clr-namespace:InsireBot"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             DataContext="{Binding Source={StaticResource Locator}, Path=UIColorsViewModel}">
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -92,9 +91,10 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <ScrollViewer Grid.RowSpan="2" VerticalScrollBarVisibility="Auto"
+                <ScrollViewer Grid.RowSpan="2"
                               Grid.Column="0"
-                              Grid.ColumnSpan="2">
+                              Grid.ColumnSpan="2"
+                              VerticalScrollBarVisibility="Auto">
                     <ItemsControl ItemTemplate="{StaticResource SwatchDataTemplate}" ItemsSource="{Binding Swatches}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -106,8 +106,8 @@
 
                 <ToggleButton Grid.Row="1"
                               Grid.Column="1"
-                              Panel.ZIndex="5"
                               Margin="0,0,5,20"
+                              Panel.ZIndex="5"
                               Style="{StaticResource MaterialDesignActionAccentToggleButton}"
                               Command="{Binding Data, Source={StaticResource ToggleBaseCommandProxy}}"
                               CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}">

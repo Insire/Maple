@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows;
 
 namespace InsireBotCore
 {
@@ -19,23 +20,13 @@ namespace InsireBotCore
             }
         }
 
-        private object _content;
-        public object Content
+        private FrameworkElement _content;
+        public FrameworkElement Content
         {
             get { return _content; }
             set
             {
                 this.MutateVerbose(ref _content, value, RaisePropertyChanged());
-            }
-        }
-
-        private DrawerItem _detail;
-        public DrawerItem Detail
-        {
-            get { return _detail; }
-            set
-            {
-                this.MutateVerbose(ref _detail, value, RaisePropertyChanged());
             }
         }
 
@@ -46,8 +37,17 @@ namespace InsireBotCore
             set
             {
                 this.MutateVerbose(ref _isSelected, value, RaisePropertyChanged());
+
+                if (_isSelected)
+                {
+                    var datacontext = GetDataContext?.Invoke();
+                    if (datacontext != null)
+                        Content.DataContext = datacontext;
+                }
             }
         }
+
+        public Func<object> GetDataContext { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
