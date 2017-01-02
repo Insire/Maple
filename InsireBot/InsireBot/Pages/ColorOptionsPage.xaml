@@ -1,17 +1,18 @@
-﻿<UserControl x:Class="InsireBot.ColorOptionsPage"
+﻿<UserControl x:Class="InsireBotWPF.ColorOptionsPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:colors="clr-namespace:MaterialDesignColors;assembly=MaterialDesignColors"
              xmlns:core="clr-namespace:InsireBotCore;assembly=InsireBotCore"
-             xmlns:local="clr-namespace:InsireBot"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+             xmlns:local="clr-namespace:InsireBotWPF"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:toolkit="clr-namespace:MvvmScarletToolkit;assembly=MvvmScarletToolkit">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <core:DebugConverter x:Key="DebugConverter" />
-        <core:BindingProxy x:Key="ApplyPrimaryProxy" Data="{Binding ApplyPrimaryCommand}" />
-        <core:BindingProxy x:Key="ApplyAccentProxy" Data="{Binding ApplyAccentCommand}" />
-        <core:BindingProxy x:Key="ToggleBaseCommandProxy" Data="{Binding ToggleBaseCommand}" />
+        <toolkit:DebugConverter x:Key="DebugConverter" />
+        <toolkit:BindingProxy x:Key="ApplyPrimaryProxy" Data="{Binding ApplyPrimaryCommand}" />
+        <toolkit:BindingProxy x:Key="ApplyAccentProxy" Data="{Binding ApplyAccentCommand}" />
+        <toolkit:BindingProxy x:Key="ToggleBaseCommandProxy" Data="{Binding ToggleBaseCommand}" />
 
         <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="Button">
             <Setter Property="Foreground">
@@ -108,9 +109,9 @@
                               Grid.Column="1"
                               Margin="0,0,5,20"
                               Panel.ZIndex="5"
-                              Style="{StaticResource MaterialDesignActionAccentToggleButton}"
                               Command="{Binding Data, Source={StaticResource ToggleBaseCommandProxy}}"
-                              CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}">
+                              CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
+                              Style="{StaticResource MaterialDesignActionAccentToggleButton}">
                     <ToggleButton.Content>
                         <materialDesign:PackIcon Kind="InvertColors" />
                     </ToggleButton.Content>

@@ -1,13 +1,11 @@
+using GalaSoft.MvvmLight.Messaging;
+using InsireBotCore;
+using MvvmScarletToolkit;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 
-using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
-
-using InsireBotCore;
-
-namespace InsireBot
+namespace InsireBotWPF
 {
     public class MediaPlayerViewModel : BusinessViewModelBase<IMediaItem>
     {
@@ -63,17 +61,17 @@ namespace InsireBot
         private void InitiliazeCommands()
         {
             PlayCommand = new RelayCommand(Play, () => MediaPlayer.CanPlay);
-            PreviousCommand = new RelayCommand(Previous, MediaPlayer.Playlist.CanPrevious);
-            NextCommand = new RelayCommand(Next, MediaPlayer.Playlist.CanNext);
+            PreviousCommand = new RelayCommand(Previous, () => MediaPlayer.Playlist?.CanPrevious() == true);
+            NextCommand = new RelayCommand(Next, () => MediaPlayer.Playlist?.CanNext() == true);
         }
 
-        public void AddRange(IEnumerable<IMediaItem> mediaItems)
+        public override void AddRange(IEnumerable<IMediaItem> mediaItems)
         {
             foreach (var item in mediaItems)
                 MediaPlayer.Playlist.Add(item);
         }
 
-        public void Add(IMediaItem mediaItem)
+        public override void Add(IMediaItem mediaItem)
         {
             if (Items.Any())
             {

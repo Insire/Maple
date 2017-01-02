@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace InsireBot
+namespace InsireBotWPF
 {
     public partial class OptionsPage : UserControl
     {

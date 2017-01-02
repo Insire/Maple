@@ -5,5 +5,6 @@
         VLCDOTNET,
         ZUNEVLC,
         FFMPEG,
+        NAUDIO,
     }
 }

@@ -81,6 +81,10 @@
     <Compile Include="ViewModel\MediaPlayerViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\MvvmScarletToolkit\MvvmScarletToolkit\MvvmScarletToolkit.csproj">
+      <Project>{D555C0FD-335D-4C64-B80B-8999E66402B8}</Project>
+      <Name>MvvmScarletToolkit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InsireBotCore\InsireBotCore.csproj">
       <Project>{4E52FF0E-06FD-49C3-B362-595DB8070531}</Project>
       <Name>InsireBotCore</Name>

@@ -1,7 +1,7 @@
-﻿<UserControl x:Class="InsireBot.OptionsPage"
+﻿<UserControl x:Class="InsireBotWPF.OptionsPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:InsireBot"
+             xmlns:local="clr-namespace:InsireBotWPF"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
     <materialDesign:TransitioningContent>

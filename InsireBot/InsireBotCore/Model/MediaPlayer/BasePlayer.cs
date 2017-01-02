@@ -1,4 +1,6 @@
-﻿namespace InsireBotCore
+﻿using MvvmScarletToolkit;
+
+namespace InsireBotCore
 {
     public abstract class BasePlayer : BusinessViewModelBase<AudioDevice>, IMediaPlayer<IMediaItem>
     {
@@ -20,53 +22,28 @@
         public Playlist<IMediaItem> Playlist
         {
             get { return _playlist; }
-            protected set
-            {
-                if (_playlist != value && value != null)
-                {
-                    _playlist = value;
-                    RaisePropertyChanged(nameof(Playlist));
-                }
-            }
+            protected set { SetValue(ref _playlist, value); }
         }
 
         private RangeObservableCollection<AudioDevice> _audioDevices;
         public RangeObservableCollection<AudioDevice> AudioDevices
         {
             get { return _audioDevices; }
-            set
-            {
-                if (_audioDevices != value && value != null)
-                {
-                    _audioDevices = value;
-                    RaisePropertyChanged(nameof(AudioDevices));
-                }
-            }
+            set { SetValue(ref _audioDevices, value); }
         }
 
         private AudioDevice _audioDevice;
         public AudioDevice AudioDevice
         {
             get { return _audioDevice; }
-            set
-            {
-                if (_audioDevice != value && value != null)
-                {
-                    _audioDevice = value;
-                    RaisePropertyChanged(nameof(AudioDevice));
-                }
-            }
+            set { SetValue(ref _audioDevice, value); }
         }
 
         private bool _disposed;
         public bool Disposed
         {
             get { return _disposed; }
-            protected set
-            {
-                _disposed = value;
-                RaisePropertyChanged(nameof(Disposed));
-            }
+            protected set { SetValue(ref _disposed, value); }
         }
 
         public abstract bool IsPlaying { get; }

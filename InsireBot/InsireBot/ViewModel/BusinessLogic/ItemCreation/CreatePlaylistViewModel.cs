@@ -1,9 +1,7 @@
-﻿using System;
+﻿using MvvmScarletToolkit;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.CommandWpf;
-using InsireBotCore;
 
-namespace InsireBot
+namespace InsireBotWPF
 {
     /// <summary>
     /// viewmodel for creating playlists from a input string (path/url)
@@ -14,28 +12,14 @@ namespace InsireBot
         public string Source
         {
             get { return _source; }
-            set
-            {
-                if (_source != value)
-                {
-                    _source = value;
-                    RaisePropertyChanged(nameof(Source));
-                }
-            }
+            set { SetValue(ref _source, value); }
         }
 
         private DataParsingServiceResult _result;
         public DataParsingServiceResult Result
         {
             get { return _result; }
-            private set
-            {
-                if (_result != value)
-                {
-                    _result = value;
-                    RaisePropertyChanged(nameof(Result));
-                }
-            }
+            private set { SetValue(ref _result, value); }
         }
 
         public ICommand ParseCommand { get; private set; }
@@ -49,25 +33,16 @@ namespace InsireBot
         {
             ParseCommand = new RelayCommand(async () =>
             {
-                BusyStack.Push();
-                await GlobalServiceLocator.Instance.DataParsingService
-                                                            .Parse(Source, DataParsingServiceResultType.Playlists)
-                                                            .ContinueWith((task) =>
-                                                            {
-                                                                if (!BusyStack.Pull())
-                                                                    App.Log.Warn("Couldn't pull from BusyStack");
+                using (BusyStack.GetToken())
+                {
+                    Result = await GlobalServiceLocator.Instance.DataParsingService.Parse(Source, DataParsingServiceResultType.Playlists);
 
-                                                                if (task.Exception != null)
-                                                                    App.Log.Error(this, task.Exception);
-
-                                                                var result = task.Result;
-
-                                                                if (result.Count > 0)
-                                                                {
-                                                                    if (result.Playlists?.Count > 0)
-                                                                        Items.AddRange(result.Playlists);
-                                                                }
-                                                            });
+                    if (Result.Count > 0)
+                    {
+                        if (Result.Playlists?.Count > 0)
+                            Items.AddRange(Result.Playlists);
+                    }
+                }
             });
         }
     }

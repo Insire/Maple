@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using MaterialDesignColors;
+﻿using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
+using MvvmScarletToolkit;
+using System.Collections.Generic;
+using System.Windows.Input;
 
-namespace InsireBot
+namespace InsireBotWPF
 {
     public class UIColorsViewModel : ObservableObject
     {
@@ -23,7 +22,7 @@ namespace InsireBot
 
             _paletteHelper = new PaletteHelper();
 
-            RaisePropertyChanged(nameof(Swatches));
+            OnPropertyChanged(nameof(Swatches));
             InitializeCommands();
         }
 

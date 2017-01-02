@@ -1,11 +1,12 @@
 ﻿using InsireBotCore;
+using MvvmScarletToolkit;
 
-namespace InsireBot
+namespace InsireBotWPF
 {
     /// <summary>
     ///  temp DataStore for playlist entries
     /// </summary>
-    public class MediaItemsStore : DataViewModelBase<IMediaItem>
+    public class MediaItemsStore : ViewModelBase<IMediaItem>
     {
     }
 }

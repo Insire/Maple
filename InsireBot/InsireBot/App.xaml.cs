@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using log4net;
 
-namespace InsireBot
+namespace InsireBotWPF
 {
     public partial class App : Application
     {

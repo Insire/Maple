@@ -29,14 +29,7 @@ namespace InsireBotCore
         public ISettings Settings
         {
             get { return _settings; }
-            internal set
-            {
-                if (_settings != value && value != null)
-                {
-                    _settings = value;
-                    RaisePropertyChanged(nameof(Settings));
-                }
-            }
+            internal set { SetValue(ref _settings, value); }
         }
 
         public override bool Silent
@@ -47,7 +40,7 @@ namespace InsireBotCore
                 if (_vlcMediaPlayer.IsMute != value)
                 {
                     _vlcMediaPlayer.IsMute = value;
-                    RaisePropertyChanged(nameof(Silent));
+                    OnPropertyChanged(nameof(Silent));
                 }
             }
         }
@@ -69,7 +62,7 @@ namespace InsireBotCore
 
                     _vlcMediaPlayer.Volume = newValue;
 
-                    RaisePropertyChanged(nameof(Volume));
+                    OnPropertyChanged(nameof(Volume));
                 }
             }
         }
@@ -127,7 +120,7 @@ namespace InsireBotCore
         private void Stopped(object sender, VlcMediaPlayerStoppedEventArgs e)
         {
             _log.Info("VlcMediaPlayer_Stopped");
-            RaisePropertyChanged(nameof(IsPlaying));
+            OnPropertyChanged(nameof(IsPlaying));
         }
 
         private void Playing(object sender, VlcMediaPlayerPlayingEventArgs e)
@@ -135,7 +128,7 @@ namespace InsireBotCore
             if (_vlcMediaPlayer.IsPlaying)
                 _buffering = false; // Playback has begun, so we can uncheck the buffering flag
             _log.Info($"VlcMediaPlayer_Playing ({_vlcMediaPlayer.IsPlaying})");
-            RaisePropertyChanged(nameof(IsPlaying));
+            OnPropertyChanged(nameof(IsPlaying));
         }
 
         private void EndReached(object sender, VlcMediaPlayerEndReachedEventArgs e)
@@ -145,19 +138,19 @@ namespace InsireBotCore
                 Player_CompletedMediaItem(this, new CompletedMediaItemEventEventArgs(Playlist.CurrentItem));
 
             _log.Info("VlcMediaPlayer_EndReached");
-            RaisePropertyChanged(nameof(IsPlaying));
+            OnPropertyChanged(nameof(IsPlaying));
         }
 
         private void EncounteredError(object sender, VlcMediaPlayerEncounteredErrorEventArgs e)
         {
             _log.Info("VlcMediaPlayer_EncounteredError");
-            RaisePropertyChanged(nameof(IsPlaying));
+            OnPropertyChanged(nameof(IsPlaying));
         }
 
         private void Buffering(object sender, VlcMediaPlayerBufferingEventArgs e)
         {
             _log.Info($"Buffering {e.NewCache}");
-            RaisePropertyChanged(nameof(IsPlaying));
+            OnPropertyChanged(nameof(IsPlaying));
         }
 
         public void ValidateSettings()
@@ -188,7 +181,7 @@ namespace InsireBotCore
                 _vlcMediaPlayer.Pause();
                 _log.Info($"paused Playback");
 
-                RaisePropertyChanged(nameof(IsPlaying));
+                OnPropertyChanged(nameof(IsPlaying));
             }
         }
 
@@ -203,7 +196,7 @@ namespace InsireBotCore
                 _vlcMediaPlayer.Stop();
                 _log.Info($"stopped Playback");
 
-                RaisePropertyChanged(nameof(IsPlaying));
+                OnPropertyChanged(nameof(IsPlaying));
             }
         }
 
@@ -219,7 +212,7 @@ namespace InsireBotCore
                 Playlist.Set(item);
                 _vlcMediaPlayer.Play(new Uri(item.Location));
 
-                RaisePropertyChanged(nameof(IsPlaying));
+                OnPropertyChanged(nameof(IsPlaying));
             }
         }
 

@@ -1,11 +1,11 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
-using Microsoft.Practices.ServiceLocation;
 using InsireBotCore;
-using System.Windows;
+using Microsoft.Practices.ServiceLocation;
 using System;
+using System.Windows;
 
-namespace InsireBot
+namespace InsireBotWPF
 {
     /// <summary>
     /// This class contains static references to all relevant ViewModels in the
@@ -31,7 +31,7 @@ namespace InsireBot
 
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
-            SimpleIoc.Default.Register<DrawerItemViewmodel>();
+            SimpleIoc.Default.Register<Scenes>();
             SimpleIoc.Default.Register<UIColorsViewModel>();
 
             if (ViewModelBase.IsInDesignModeStatic)
@@ -51,6 +51,8 @@ namespace InsireBot
             SimpleIoc.Default.Register<MediaPlayerViewModel>();
             SimpleIoc.Default.Register<CreateMediaItemViewModel>();
             SimpleIoc.Default.Register<CreatePlaylistViewModel>();
+
+            App.Log.Info("Loaded Services");
         }
 
         public IDataService DataService
@@ -83,9 +85,9 @@ namespace InsireBot
             get { return ServiceLocator.Current.GetInstance<CreatePlaylistViewModel>(); }
         }
 
-        public DrawerItemViewmodel DrawerItemViewmodel
+        public Scenes Scenes
         {
-            get { return ServiceLocator.Current.GetInstance<DrawerItemViewmodel>(); }
+            get { return ServiceLocator.Current.GetInstance<Scenes>(); }
         }
 
         public UIColorsViewModel UIColorsViewModel
@@ -96,7 +98,7 @@ namespace InsireBot
 
         public static void Cleanup()
         {
-            App.Log.Info("UnLoading Services");
+            App.Log.Info("Unloading Services");
             SimpleIoc.Default.Unregister<DataParsingService>();
             SimpleIoc.Default.Unregister<MediaItemsStore>();
             SimpleIoc.Default.Unregister<PlaylistsViewModel>();
@@ -105,7 +107,7 @@ namespace InsireBot
             SimpleIoc.Default.Unregister<CreatePlaylistViewModel>();
 
             SimpleIoc.Default.Unregister<UIColorsViewModel>();
-            SimpleIoc.Default.Unregister<DrawerItemViewmodel>();
+            SimpleIoc.Default.Unregister<Scenes>();
         }
 
         public void InvokeActionOnUiThread(Action action)

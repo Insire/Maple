@@ -1,8 +1,8 @@
-﻿<UserControl x:Class="InsireBot.PlayModeView"
+﻿<UserControl x:Class="InsireBotWPF.PlayModeView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:core="clr-namespace:InsireBotCore;assembly=InsireBotCore"
-             xmlns:local="clr-namespace:InsireBot"
+             xmlns:local="clr-namespace:InsireBotWPF"
              xmlns:themes="http://materialdesigninxaml.net/winfx/xaml/themes">
 
     <UserControl.Resources>
@@ -20,7 +20,7 @@
             <Setter Property="ContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <themes:PackIcon Style="{Binding IconStyle}" Kind="RepeatOff" />
+                        <themes:PackIcon Kind="RepeatOff" Style="{Binding IconStyle}" />
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
@@ -32,7 +32,7 @@
             <Setter Property="ContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <themes:PackIcon Style="{Binding IconStyle}" Kind="RepeatOnce" />
+                        <themes:PackIcon Kind="RepeatOnce" Style="{Binding IconStyle}" />
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
@@ -44,7 +44,7 @@
             <Setter Property="ContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <themes:PackIcon Style="{Binding IconStyle}" Kind="Repeat" />
+                        <themes:PackIcon Kind="Repeat" Style="{Binding IconStyle}" />
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
@@ -56,7 +56,7 @@
             <Setter Property="ContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <themes:PackIcon Style="{Binding IconStyle}" Kind="ShuffleDisabled" />
+                        <themes:PackIcon Kind="ShuffleDisabled" Style="{Binding IconStyle}" />
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
@@ -65,7 +65,7 @@
                     <Setter Property="ContentTemplate">
                         <Setter.Value>
                             <DataTemplate>
-                                <themes:PackIcon Style="{Binding IconStyle}" Kind="Shuffle" />
+                                <themes:PackIcon Kind="Shuffle" Style="{Binding IconStyle}" />
                             </DataTemplate>
                         </Setter.Value>
                     </Setter>
@@ -75,41 +75,29 @@
 
     </UserControl.Resources>
 
-    <Grid DataContext="{Binding Source={StaticResource Locator}, Path=MediaPlayerViewModel.MediaPlayer}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
+    <DockPanel DataContext="{Binding Source={StaticResource Locator}, Path=MediaPlayerViewModel.MediaPlayer}" LastChildFill="False">
 
-        <ToggleButton Grid.Column="0"
-                      Margin="30,0"
-                      Style="{StaticResource ShuffleModeStyle}"
+        <ToggleButton DockPanel.Dock="Left"
                       IsChecked="{Binding Playlist.IsShuffling}"
+                      Style="{StaticResource ShuffleModeStyle}"
                       ToolTip="MaterialDesignSwitchToggleButton" />
 
-        <Grid Grid.Column="2" DataContext="{Binding Playlist}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+        <StackPanel DataContext="{Binding Playlist}"
+                    DockPanel.Dock="Right"
+                    Orientation="Horizontal">
 
-            <RadioButton Grid.Column="0"
+            <RadioButton IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static core:RepeatMode.None}, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource NoneRepeatModeStyle}"
-                         IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static core:RepeatMode.None}, UpdateSourceTrigger=PropertyChanged}"
                          ToolTip="Repeat none" />
 
-            <RadioButton Grid.Column="1"
+            <RadioButton IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static core:RepeatMode.Single}, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource OneRepeatModeStyle}"
-                         IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static core:RepeatMode.Single}, UpdateSourceTrigger=PropertyChanged}"
                          ToolTip="Repeat one" />
 
-            <RadioButton Grid.Column="2"
+            <RadioButton IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static core:RepeatMode.All}, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource AllRepeatModeStyle}"
-                         IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static core:RepeatMode.All}, UpdateSourceTrigger=PropertyChanged}"
                          ToolTip="Repeat all" />
-        </Grid>
-    </Grid>
+        </StackPanel>
+    </DockPanel>
 
 </UserControl>

@@ -7,6 +7,7 @@ namespace InsireBotCore
     public class RuntimeDataService : IDataService
     {
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public IEnumerable<IMediaItem> GetMediaItems()
         {
             return new IMediaItem[0];
@@ -46,6 +47,9 @@ namespace InsireBotCore
                         RepeatMode = RepeatMode.None,
                     };
 
+                case MediaPlayerType.NAUDIO:
+                    return new NAudioPlayerSettings();
+
                 default:
                     throw new NotImplementedException(nameof(mediaPlayerType));
             }
@@ -54,12 +58,24 @@ namespace InsireBotCore
         public IMediaPlayer<IMediaItem> GetMediaPlayer()
         {
             _log.Info("Loading MediaPlayer");
-            return new DotNetPlayer(this, GetMediaPlayerSettings());
+
+            var mediaPlayerType = GetMediaPlayerType();
+            switch (mediaPlayerType)
+            {
+                case MediaPlayerType.NAUDIO:
+                    return new NAudioMediaPlayer(this);
+                case MediaPlayerType.VLCDOTNET:
+                    return new DotNetPlayer(this, GetMediaPlayerSettings());
+
+                default:
+                    throw new NotImplementedException(nameof(mediaPlayerType));
+            }
         }
 
         public IEnumerable<AudioDevice> GetPlaybackDevices()
         {
             _log.Info("Loading PlaybackDevices");
+
             var _devices = WinmmService.GetDevCapsPlayback();
 
             for (int i = 0; i < _devices.Length; i++)
@@ -75,7 +91,7 @@ namespace InsireBotCore
 
         public MediaPlayerType GetMediaPlayerType()
         {
-            return MediaPlayerType.VLCDOTNET;
+            return MediaPlayerType.NAUDIO;
         }
 
         public IEnumerable<IMediaItem> GetCurrentMediaItems()

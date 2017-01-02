@@ -2,7 +2,7 @@
 
 using InsireBotCore;
 
-namespace InsireBot
+namespace InsireBotWPF
 {
     /// <summary>
     /// BO ViewModel to manage Playlists

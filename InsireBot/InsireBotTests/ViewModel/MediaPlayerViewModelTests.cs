@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
-using InsireBot;
+using InsireBotWPF;
 
 namespace InsireBotTests
 {

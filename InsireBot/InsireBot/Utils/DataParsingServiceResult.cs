@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using InsireBotCore;
+using System.Collections.Generic;
 
-namespace InsireBot
+namespace InsireBotWPF
 {
     public class DataParsingServiceResult : ObservableObject
     {
