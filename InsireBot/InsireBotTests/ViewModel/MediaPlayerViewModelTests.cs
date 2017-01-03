@@ -1,8 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
-using InsireBotWPF;
 
-namespace InsireBotTests
+namespace InsireBot.Tests
 {
     [TestClass()]
     public class MediaPlayerViewModelTests
@@ -14,9 +13,9 @@ namespace InsireBotTests
             var vm = new MediaPlayerViewModel(service);
 
             var playlist = vm.MediaPlayer.Playlist;
-            var distinctIndices = playlist.Select(p => p.Index).Distinct().Count();
+            var distinctIndices = playlist.Select(p => p.Sequence).Distinct().Count();
 
-            Assert.IsTrue(distinctIndices == playlist.Count);
+            Assert.IsTrue(distinctIndices == playlist.Count());
         }
 
         [TestMethod()]
@@ -36,7 +35,7 @@ namespace InsireBotTests
             Assert.IsNotNull(playlist.RepeatMode);
 
             Assert.IsTrue(playlist.Any());
-            Assert.IsTrue(playlist.All(p => p.Index != -1));
+            Assert.IsTrue(playlist.All(p => p.Sequence != -1));
         }
 
         [TestMethod()]

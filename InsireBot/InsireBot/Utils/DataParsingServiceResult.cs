@@ -1,8 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
-using InsireBotCore;
 using System.Collections.Generic;
 
-namespace InsireBotWPF
+namespace InsireBot
 {
     public class DataParsingServiceResult : ObservableObject
     {
@@ -161,12 +160,5 @@ namespace InsireBotWPF
                     return 0;
             }
         }
-    }
-
-    public enum DataParsingServiceResultType
-    {
-        Playlists,
-        MediaItems,
-        None
     }
 }

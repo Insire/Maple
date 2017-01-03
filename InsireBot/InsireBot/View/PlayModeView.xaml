@@ -1,12 +1,11 @@
-﻿<UserControl x:Class="InsireBotWPF.PlayModeView"
+﻿<UserControl x:Class="InsireBot.PlayModeView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:core="clr-namespace:InsireBotCore;assembly=InsireBotCore"
-             xmlns:local="clr-namespace:InsireBotWPF"
+             xmlns:local="clr-namespace:InsireBot"
              xmlns:themes="http://materialdesigninxaml.net/winfx/xaml/themes">
 
     <UserControl.Resources>
-        <core:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
+        <local:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
 
         <Style x:Key="BaseRepeatModeStyle"
                BasedOn="{StaticResource MaterialDesignFlatToggleButton}"
@@ -86,18 +85,20 @@
                     DockPanel.Dock="Right"
                     Orientation="Horizontal">
 
-            <RadioButton IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static core:RepeatMode.None}, UpdateSourceTrigger=PropertyChanged}"
+            <RadioButton IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static local:RepeatMode.None}, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource NoneRepeatModeStyle}"
                          ToolTip="Repeat none" />
 
-            <RadioButton IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static core:RepeatMode.Single}, UpdateSourceTrigger=PropertyChanged}"
+            <RadioButton IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static local:RepeatMode.Single}, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource OneRepeatModeStyle}"
                          ToolTip="Repeat one" />
 
-            <RadioButton IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static core:RepeatMode.All}, UpdateSourceTrigger=PropertyChanged}"
+            <RadioButton IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static local:RepeatMode.All}, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource AllRepeatModeStyle}"
                          ToolTip="Repeat all" />
+
         </StackPanel>
+
     </DockPanel>
 
 </UserControl>

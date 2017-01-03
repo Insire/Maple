@@ -1,8 +1,8 @@
-﻿<UserControl x:Class="InsireBotWPF.NewMediaItemOptionsPage"
+﻿<UserControl x:Class="InsireBot.NewMediaItemOptionsPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:InsireBotWPF">
-    
+             xmlns:local="clr-namespace:InsireBot">
+
     <Grid>
         <TextBlock>
             NewMediaItemOptionsPage

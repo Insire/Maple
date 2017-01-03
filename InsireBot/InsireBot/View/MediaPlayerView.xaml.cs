@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace InsireBotWPF
+namespace InsireBot
 {
     /// <summary>
     /// Interaction logic for MediaPlayerView.xaml

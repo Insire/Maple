@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace InsireBotWPF
+namespace InsireBot
 {
     public partial class ColorOptionsPage : UserControl
     {

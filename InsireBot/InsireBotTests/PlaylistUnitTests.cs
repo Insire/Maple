@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using InsireBotCore;
+﻿using InsireBot;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
-namespace InsireBotTests
+namespace InsireBot.Tests
 {
     [TestClass]
     public class PlaylistUnitTests
@@ -216,8 +216,8 @@ namespace InsireBotTests
         {
             var service = new TestDataService();
             var playlist = new Playlist<IMediaItem>(service.GetMediaItems());
-            Assert.AreEqual(true, playlist.All(p => p.Index > -1));
-            Assert.AreEqual(true, playlist.GroupBy(p => p.Index).All(p => p.Count() == 1));
+            Assert.AreEqual(true, playlist.All(p => p.Sequence > -1));
+            Assert.AreEqual(true, playlist.GroupBy(p => p.Sequence).All(p => p.Count() == 1));
         }
 
         [TestMethod]

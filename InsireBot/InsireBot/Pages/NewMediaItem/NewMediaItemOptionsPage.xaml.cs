@@ -1,10 +1,7 @@
 ﻿using System.Windows.Controls;
 
-namespace InsireBotWPF
+namespace InsireBot
 {
-    /// <summary>
-    /// Interaction logic for NewMediaItemOptionsPage.xaml
-    /// </summary>
     public partial class NewMediaItemOptionsPage : UserControl
     {
         public NewMediaItemOptionsPage()

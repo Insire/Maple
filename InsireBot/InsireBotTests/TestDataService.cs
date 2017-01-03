@@ -1,8 +1,9 @@
-﻿using System;
+﻿using InsireBot;
+using InsireBot.Core;
+using System;
 using System.Collections.Generic;
-using InsireBotCore;
 
-namespace InsireBotTests
+namespace InsireBot.Tests
 {
     public class TestDataService : IDataService
     {

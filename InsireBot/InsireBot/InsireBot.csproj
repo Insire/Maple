@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>InsireBot</RootNamespace>
-    <AssemblyName>InsireBotWPF</AssemblyName>
+    <AssemblyName>InsireBot</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -72,7 +72,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>InsireBotWPF.App</StartupObject>
+    <StartupObject>InsireBot.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
@@ -263,6 +263,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Enums\DataParsingServiceResultType.cs" />
+    <Compile Include="ViewModel\BusinessViewModelBase.cs" />
+    <Compile Include="Utils\DataGridBehavior.cs" />
+    <Compile Include="DesignTimeDataService.cs" />
+    <Compile Include="Enums\MediaPlayerType.cs" />
+    <Compile Include="Enums\RepeatMode.cs" />
+    <Compile Include="Utils\EventHandler.cs" />
+    <Compile Include="Interfaces\IDataService.cs" />
+    <Compile Include="Interfaces\IIdentifier.cs" />
+    <Compile Include="Interfaces\ISequence.cs" />
+    <Compile Include="Interfaces\IIsSelected.cs" />
+    <Compile Include="Interfaces\IMediaItem.cs" />
+    <Compile Include="Interfaces\IMediaPlayer.cs" />
+    <Compile Include="Interfaces\ISettings.cs" />
+    <Compile Include="Utils\LinqExtensions.cs" />
+    <Compile Include="Utils\RadioButtonCheckedConverter.cs" />
+    <Compile Include="RuntimeDataService.cs" />
+    <Compile Include="ViewModel\MediaPlayer\AudioDevice.cs" />
+    <Compile Include="ViewModel\MediaItems\MediaItem.cs" />
+    <Compile Include="ViewModel\MediaPlayer\MediaPlayerOptions.cs" />
+    <Compile Include="ViewModel\MediaPlayer\BasePlayer.cs" />
+    <Compile Include="ViewModel\MediaPlayer\NAudio\NAudioMediaPlayer.cs" />
+    <Compile Include="ViewModel\MediaPlayer\NAudio\NAudioPlayerSettings.cs" />
+    <Compile Include="ViewModel\MediaPlayer\Playlist.cs" />
+    <Compile Include="ViewModel\MediaPlayer\VLCDOTNET\DotNetPlayer.cs" />
+    <Compile Include="ViewModel\MediaPlayer\VLCDOTNET\DotNetPlayerException.cs" />
+    <Compile Include="ViewModel\MediaPlayer\VLCDOTNET\DotNetPlayerSettings.cs" />
+    <Compile Include="ViewModel\MediaPlayer\VLCDOTNET\VlcMediaPlayer.cs" />
+    <Compile Include="ViewModel\MediaPlayer\VLCDOTNET\VlcWrapperException.cs" />
     <Compile Include="Pages\MediaPlayerPage.xaml.cs">
       <DependentUpon>MediaPlayerPage.xaml</DependentUpon>
     </Compile>
@@ -287,21 +316,22 @@
     <Compile Include="Utils\DataParsingService.cs" />
     <Compile Include="Utils\DataParsingServiceResult.cs" />
     <Compile Include="Utils\InsireBotException.cs" />
-    <Compile Include="ViewModel\BusinessLogic\ItemCreation\CreateMediaItemViewModel.cs" />
-    <Compile Include="ViewModel\BusinessLogic\ItemCreation\CreatePlaylistViewModel.cs" />
+    <Compile Include="ViewModel\MediaItems\CreateMediaItemViewModel.cs" />
+    <Compile Include="ViewModel\MediaItems\CreatePlaylistViewModel.cs" />
     <Compile Include="ViewModel\UIColorsViewModel.cs" />
-    <Compile Include="ViewModel\DataStore\PlaylistsStore.cs" />
-    <Compile Include="ViewModel\DataStore\MediaItemsStore.cs" />
-    <Compile Include="ViewModel\BusinessLogic\PlaylistsViewModel.cs" />
-    <Compile Include="ViewModel\Scenes.cs" />
+    <Compile Include="ViewModel\MediaItems\PlaylistsStore.cs" />
+    <Compile Include="ViewModel\MediaItems\MediaItemsStore.cs" />
+    <Compile Include="ViewModel\MediaItems\PlaylistsViewModel.cs" />
+    <Compile Include="ViewModel\Navigation\Scenes.cs" />
     <Compile Include="View\MediaPlayerView.xaml.cs">
       <DependentUpon>MediaPlayerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\BusinessLogic\MediaPlayerViewModel.cs" />
-    <Compile Include="ViewModel\GlobalServiceLocator.cs" />
+    <Compile Include="ViewModel\MediaItems\MediaPlayerViewModel.cs" />
+    <Compile Include="GlobalServiceLocator.cs" />
     <Compile Include="View\PlayModeView.xaml.cs">
       <DependentUpon>PlayModeView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Youtube\Youtube.cs" />
     <Page Include="Pages\MediaPlayerPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -400,9 +430,13 @@
       <Project>{D555C0FD-335D-4C64-B80B-8999E66402B8}</Project>
       <Name>MvvmScarletToolkit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\InsireBotCore\InsireBotCore.csproj">
-      <Project>{4e52ff0e-06fd-49c3-b362-595db8070531}</Project>
-      <Name>InsireBotCore</Name>
+    <ProjectReference Include="..\InsireBot.Core\InsireBot.Core.csproj">
+      <Project>{21fa5854-0692-42e2-924e-a38cf3c7ff71}</Project>
+      <Name>InsireBot.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InsireBotData\InsireBot.Data.csproj">
+      <Project>{b3cd46be-3c08-4bae-ae60-a6d84a62400c}</Project>
+      <Name>InsireBot.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

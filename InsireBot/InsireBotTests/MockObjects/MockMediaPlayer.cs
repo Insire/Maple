@@ -1,7 +1,7 @@
-﻿using System;
-using InsireBotCore;
+﻿using InsireBot;
+using System;
 
-namespace InsireBotTests
+namespace InsireBot.Tests
 {
     public class MockMediaPlayer : IMediaPlayer<IMediaItem>
     {

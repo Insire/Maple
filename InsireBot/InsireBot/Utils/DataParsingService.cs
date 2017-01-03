@@ -1,13 +1,12 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
-using InsireBotCore;
 
-namespace InsireBotWPF
+namespace InsireBot
 {
     /// <summary>
     /// generates MediaItems and  Playlists from input
