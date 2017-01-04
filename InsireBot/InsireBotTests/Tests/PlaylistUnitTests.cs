@@ -1,5 +1,4 @@
-﻿using InsireBot;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
 namespace InsireBot.Tests
@@ -17,7 +16,7 @@ namespace InsireBot.Tests
             var second = playlist.ElementAt(1);
 
             Assert.AreEqual(RepeatMode.None, playlist.RepeatMode);
-            Assert.AreEqual(false, playlist.IsShuffling);
+            Assert.AreEqual(false, playlist.IsShuffeling);
             Assert.AreEqual(false, playlist.IsSelected);
             Assert.AreEqual(playlist.CurrentItem.Location, first.Location);
             Assert.AreEqual(playlist.Next().Location, second.Location);

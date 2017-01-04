@@ -104,20 +104,20 @@ namespace InsireBot
         }
 
 
-        private bool _isShuffling;
+        private bool _isShuffeling;
         /// <summary>
         /// indicates whether the next item is selected randomly from the list of items on a call of Next()
         /// </summary>
-        public bool IsShuffling
+        public bool IsShuffeling
         {
-            get { return _isShuffling; }
+            get { return _isShuffeling; }
             set
             {
-                if (_isShuffling != value)
+                if (_isShuffeling != value)
                 {
-                    _isShuffling = value;
-                    NotifyPropertyChanged(nameof(IsShuffling));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsShuffling)));
+                    _isShuffeling = value;
+                    NotifyPropertyChanged(nameof(IsShuffeling));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsShuffeling)));
                     ShuffleModeChanged?.Invoke(this, new ShuffleModeChangedEventEventArgs(value));
                 }
             }
@@ -225,7 +225,7 @@ namespace InsireBot
             Title = string.Empty;
             ID = Guid.NewGuid();
             RepeatMode = RepeatMode.None;
-            IsShuffling = false;
+            IsShuffeling = false;
         }
 
         public Playlist(IEnumerable<T> items) : this()
@@ -309,7 +309,7 @@ namespace InsireBot
         {
             if (Items != null && Items.Any())
             {
-                if (IsShuffling)
+                if (IsShuffeling)
                     return NextShuffle();
                 else
                 {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace InsireBot.Data
 {
@@ -12,5 +11,9 @@ namespace InsireBot.Data
         T Read(int id);
         T Update(T item);
         int Delete(int id);
+        int Delete(T item);
+        T Save(T item);
+
+        void CreateTable();
     }
 }

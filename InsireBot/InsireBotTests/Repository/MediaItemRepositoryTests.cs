@@ -8,7 +8,7 @@ namespace InsireBot.Tests
     [TestClass()]
     public class MediaItemRepositoryTests
     {
-        private static IMediaItemRepository _repository;
+        private static MediaItemRepository _repository;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -28,10 +28,19 @@ namespace InsireBot.Tests
         }
 
         [TestMethod()]
-        public void MediaItemRepositoryDeleteTest()
+        public void MediaItemRepositoryDeleteByIdTest()
         {
             var item = CreateOne();
             var result = _repository.Delete(item.Id);
+
+            Assert.IsTrue(result == 1);
+        }
+
+        [TestMethod()]
+        public void MediaItemRepositoryDeleteTest()
+        {
+            var item = CreateOne();
+            var result = _repository.Delete(item);
 
             Assert.IsTrue(result == 1);
         }
@@ -58,25 +67,25 @@ namespace InsireBot.Tests
         public void MediaItemRepositoryUpdateTest()
         {
             var item = CreateOne();
-            item.Title = "Test updated";
+            item.Title = "MediaItemRepositoryUpdateTest";
             _repository.Update(item);
 
             var readItem = _repository.Read(item.Id);
-            Assert.AreEqual("Test updated", readItem.Title);
+            Assert.AreEqual("MediaItemRepositoryUpdateTest", readItem.Title);
         }
 
         [TestMethod()]
         public void MediaItemRepositorySaveUpdateTest()
         {
             var item = CreateOne();
-            item.Title = "Test updated";
+            item.Title = "MediaItemRepositorySaveUpdateTest";
 
             Assert.IsFalse(item.IsNew);
 
             item = _repository.Save(item);
 
             var readItem = _repository.Read(item.Id);
-            Assert.AreEqual("Test updated", readItem.Title);
+            Assert.AreEqual("MediaItemRepositorySaveUpdateTest", readItem.Title);
         }
 
         [TestMethod()]
@@ -86,23 +95,23 @@ namespace InsireBot.Tests
             {
                 Duration = 2,
                 Sequence = 2,
-                Title = "just created",
+                Title = "MediaItemRepositorySaveNewTest",
             };
 
             item = _repository.Save(item);
 
             var readItem = _repository.Read(item.Id);
-            Assert.AreEqual("just created", readItem.Title);
+            Assert.AreEqual("MediaItemRepositorySaveNewTest", readItem.Title);
         }
 
         [TestMethod()]
-        public void MediaItemRepositorySaveDeletedest()
+        public void MediaItemRepositorySaveDeleteTest()
         {
             var item = new Data.MediaItem
             {
                 Duration = 2,
                 Sequence = 2,
-                Title = "just created",
+                Title = "MediaItemRepositorySaveDeleteTest",
                 IsDeleted = true,
             };
 
@@ -119,7 +128,7 @@ namespace InsireBot.Tests
             {
                 Duration = 1,
                 Sequence = 0,
-                Title = "Test",
+                Title = "CreateOne",
             };
 
             _repository.Create(item);
@@ -133,21 +142,21 @@ namespace InsireBot.Tests
             {
                 Duration = 1,
                 Sequence = 0,
-                Title = "Test",
+                Title = "CreateMultiple",
             };
 
             yield return new Data.MediaItem
             {
                 Duration = 1,
                 Sequence = 1,
-                Title = "Test_1",
+                Title = "CreateMultiple_1",
             };
 
             yield return new Data.MediaItem
             {
                 Duration = 1,
                 Sequence = 2,
-                Title = "Test_3",
+                Title = "CreateMultiple_2",
             };
         }
     }

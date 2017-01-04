@@ -77,7 +77,7 @@
     <DockPanel DataContext="{Binding Source={StaticResource Locator}, Path=MediaPlayerViewModel.MediaPlayer}" LastChildFill="False">
 
         <ToggleButton DockPanel.Dock="Left"
-                      IsChecked="{Binding Playlist.IsShuffling}"
+                      IsChecked="{Binding Playlist.IsShuffeling}"
                       Style="{StaticResource ShuffleModeStyle}"
                       ToolTip="MaterialDesignSwitchToggleButton" />
 

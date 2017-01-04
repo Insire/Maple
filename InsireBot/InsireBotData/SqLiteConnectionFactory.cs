@@ -21,12 +21,6 @@ namespace InsireBot.Data
             return connection;
         }
 
-        //public static void Seed<T>()
-        //{
-        //    using (var sqLiteConnection = GetSQLite())
-        //        sqLiteConnection.CreateTable<T>();
-        //}
-
         /*
          * 
          * We deduce the following rules of thumb from the matrix above:

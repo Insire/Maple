@@ -5,16 +5,21 @@ using System.Transactions;
 
 namespace InsireBot.Data
 {
-    public class MediaItemRepository : IMediaItemRepository
+    public class MediaItemRepository : IRepository<MediaItem>
     {
         public MediaItemRepository()
         {
+            CreateTable();
+        }
+
+        public void CreateTable()
+        {
             var sql = $"CREATE TABLE IF NOT EXISTS "
-                + $"{nameof(MediaItem)} "
-                    + $"({nameof(MediaItem.Id)} INT PRIMARY KEY, "
-                    + $"{nameof(MediaItem.Title)} VARCHAR(255), "
-                    + $"{nameof(MediaItem.Sequence)} INT, "
-                    + $"{nameof(MediaItem.Duration)} INT)";
+                    + $"{nameof(MediaItem)} "
+                        + $"({nameof(MediaItem.Id)} INT PRIMARY KEY, "
+                        + $"{nameof(MediaItem.Title)} VARCHAR(255), "
+                        + $"{nameof(MediaItem.Sequence)} INT, "
+                        + $"{nameof(MediaItem.Duration)} INT)";
 
             using (var connection = SqLiteConnectionFactory.Get())
             {
@@ -39,7 +44,8 @@ namespace InsireBot.Data
         /// <returns></returns>
         public MediaItem Create(MediaItem item)
         {
-            var sql = $"INSERT INTO {nameof(MediaItem)} ({nameof(MediaItem.Title)}, {nameof(MediaItem.Sequence)}, {nameof(MediaItem.Duration)}) "
+            var sql = $"INSERT INTO {nameof(MediaItem)} "
+                + $"({nameof(MediaItem.Title)}, {nameof(MediaItem.Sequence)}, {nameof(MediaItem.Duration)}) "
                 + $"VALUES(@{nameof(MediaItem.Title)}, @{nameof(MediaItem.Sequence)}, @{nameof(MediaItem.Duration)}); "
                 + "SELECT last_insert_rowid();";
 
@@ -54,9 +60,9 @@ namespace InsireBot.Data
         /// <summary>
         /// BulkInsert
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="items"></param>
         /// <returns></returns>
-        public int Create(IEnumerable<MediaItem> item)
+        public int Create(IEnumerable<MediaItem> items)
         {
             var sql = $"INSERT INTO {nameof(MediaItem)} ({nameof(MediaItem.Title)}, {nameof(MediaItem.Sequence)}, {nameof(MediaItem.Duration)}) "
                 + $"VALUES (@{nameof(MediaItem.Title)}, @{nameof(MediaItem.Sequence)}, @{nameof(MediaItem.Duration)}); "
@@ -64,7 +70,7 @@ namespace InsireBot.Data
 
             using (var connection = SqLiteConnectionFactory.Get())
             {
-                return connection.Execute(sql, item);
+                return connection.Execute(sql, items);
             }
         }
 
@@ -89,8 +95,7 @@ namespace InsireBot.Data
         public MediaItem Update(MediaItem item)
         {
             var sql = $"UPDATE {nameof(MediaItem)} " +
-                $"SET {nameof(MediaItem.Id)} = @{nameof(MediaItem.Id)}, " +
-                $"{nameof(MediaItem.Title)} = @{nameof(MediaItem.Title)}, " +
+                $"SET {nameof(MediaItem.Title)} = @{nameof(MediaItem.Title)}, " +
                 $"{nameof(MediaItem.Sequence)} = @{nameof(MediaItem.Sequence)}, " +
                 $"{nameof(MediaItem.Duration)} = @{nameof(MediaItem.Duration)} " +
                 $"WHERE ROWID = @{nameof(MediaItem.Id)}";

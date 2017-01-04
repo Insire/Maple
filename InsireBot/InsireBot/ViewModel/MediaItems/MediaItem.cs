@@ -1,5 +1,5 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
+using MvvmScarletToolkit;
 
 namespace InsireBot
 {
@@ -9,14 +9,7 @@ namespace InsireBot
         public Guid ID
         {
             get { return _id; }
-            private set
-            {
-                if (_id != value)
-                {
-                    _id = value;
-                    RaisePropertyChanged(nameof(ID));
-                }
-            }
+            private set { SetValue(ref _id, value); }
         }
 
         private int _index;
@@ -26,95 +19,49 @@ namespace InsireBot
         public int Sequence
         {
             get { return _index; }
-            set
-            {
-                _index = value;
-                RaisePropertyChanged(nameof(Sequence));
-            }
+            set { SetValue(ref _index, value); }
         }
 
         private string _title;
         public string Title
         {
             get { return _title; }
-            private set
-            {
-                if (_title != value)
-                {
-                    _title = value;
-                    RaisePropertyChanged(nameof(Title));
-                }
-            }
+            private set { SetValue(ref _title, value); }
         }
 
         private TimeSpan _duration;
         public TimeSpan Duration
         {
             get { return _duration; }
-            private set
-            {
-                if (_duration != value)
-                {
-                    _duration = value;
-                    RaisePropertyChanged(nameof(Duration));
-                }
-            }
+            private set { SetValue(ref _duration, value); }
         }
 
         private bool _isRestricted;
         public bool IsRestricted
         {
             get { return _isRestricted; }
-            private set
-            {
-                if (_isRestricted != value)
-                {
-                    _isRestricted = value;
-                    RaisePropertyChanged(nameof(IsRestricted));
-                }
-            }
+            private set { SetValue(ref _isRestricted, value); }
         }
 
         private string _location;
         public string Location
         {
             get { return _location; }
-            private set
-            {
-                if (_location != value)
-                {
-                    _location = value;
-                    RaisePropertyChanged(nameof(Location));
-                }
-            }
+            private set { SetValue(ref _location, value); }
         }
 
         private bool _isSelected;
         public bool IsSelected
         {
             get { return _isSelected; }
-            set
-            {
-                if (_isSelected != value)
-                {
-                    _isSelected = value;
-                    RaisePropertyChanged(nameof(IsSelected));
-                }
-            }
+            set { SetValue(ref _isSelected, value); }
         }
 
         private bool _isLocalFile;
         public bool IsLocalFile
         {
             get { return _isLocalFile; }
-            private set
-            {
-                if (_isLocalFile != value)
-                {
-                    _isLocalFile = value;
-                    RaisePropertyChanged(nameof(IsLocalFile));
-                }
-            }
+            private set { SetValue(ref _isLocalFile, value); }
         }
 
         private MediaItem()

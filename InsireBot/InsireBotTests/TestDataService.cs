@@ -1,5 +1,4 @@
-﻿using InsireBot;
-using InsireBot.Core;
+﻿using InsireBot.Core;
 using System;
 using System.Collections.Generic;
 
