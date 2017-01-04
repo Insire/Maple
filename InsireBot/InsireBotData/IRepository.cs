@@ -6,7 +6,7 @@ namespace InsireBot.Data
     public interface IRepository<T>
     {
         IEnumerable<T> GetAll();
-        List<T> GetById(params int[] ids);
+        List<T> GetAllById(params int[] ids);
         T Create(T item);
         int Create(IEnumerable<T> item);
         T Read(int id);

@@ -9,7 +9,17 @@ namespace InsireBot.Data
     {
         public MediaItemRepository()
         {
-            SqLiteConnectionFactory.Seed<MediaItem>();
+            var sql = $"CREATE TABLE IF NOT EXISTS "
+                + $"{nameof(MediaItem)} "
+                    + $"({nameof(MediaItem.Id)} INT PRIMARY KEY, "
+                    + $"{nameof(MediaItem.Title)} VARCHAR(255), "
+                    + $"{nameof(MediaItem.Sequence)} INT, "
+                    + $"{nameof(MediaItem.Duration)} INT)";
+
+            using (var connection = SqLiteConnectionFactory.Get())
+            {
+                connection.Execute(sql);
+            }
         }
 
         public IEnumerable<MediaItem> GetAll()
@@ -18,15 +28,20 @@ namespace InsireBot.Data
 
             using (var connection = SqLiteConnectionFactory.Get())
             {
-                return connection.Query<MediaItem>("SELECT * FROM MediaItem");
+                return connection.Query<MediaItem>(sql);
             }
         }
 
+        /// <summary>
+        /// Insert
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public MediaItem Create(MediaItem item)
         {
-            var sql = $"INSERT INTO {nameof(MediaItem)} ({nameof(MediaItem.Id)}, {nameof(MediaItem.Title)}, {nameof(MediaItem.Sequence)}, {nameof(MediaItem.Duration)}) " +
-                $"VALUES(@{nameof(MediaItem)} @{nameof(MediaItem.Id)}, @{nameof(MediaItem.Title)}, @{nameof(MediaItem.Sequence)}, @{nameof(MediaItem.Duration)}); " +
-                "SELECT CAST(SCOPE_IDENTITY() as int)";
+            var sql = $"INSERT INTO {nameof(MediaItem)} ({nameof(MediaItem.Title)}, {nameof(MediaItem.Sequence)}, {nameof(MediaItem.Duration)}) "
+                + $"VALUES(@{nameof(MediaItem.Title)}, @{nameof(MediaItem.Sequence)}, @{nameof(MediaItem.Duration)}); "
+                + "SELECT last_insert_rowid();";
 
             using (var connection = SqLiteConnectionFactory.Get())
             {
@@ -43,9 +58,9 @@ namespace InsireBot.Data
         /// <returns></returns>
         public int Create(IEnumerable<MediaItem> item)
         {
-            var sql = $"INSERT INTO {nameof(MediaItem)} ({nameof(MediaItem.Id)}, {nameof(MediaItem.Title)}, {nameof(MediaItem.Sequence)}, {nameof(MediaItem.Duration)}) " +
-                $"VALUES(@{nameof(MediaItem)} @{nameof(MediaItem.Id)}, @{nameof(MediaItem.Title)}, @{nameof(MediaItem.Sequence)}, @{nameof(MediaItem.Duration)}); " +
-                "SELECT CAST(SCOPE_IDENTITY() as int)";
+            var sql = $"INSERT INTO {nameof(MediaItem)} ({nameof(MediaItem.Title)}, {nameof(MediaItem.Sequence)}, {nameof(MediaItem.Duration)}) "
+                + $"VALUES (@{nameof(MediaItem.Title)}, @{nameof(MediaItem.Sequence)}, @{nameof(MediaItem.Duration)}); "
+                + "SELECT last_insert_rowid();";
 
             using (var connection = SqLiteConnectionFactory.Get())
             {
@@ -53,9 +68,15 @@ namespace InsireBot.Data
             }
         }
 
+        /// <summary>
+        /// Get by ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public MediaItem Read(int id)
         {
-            var sql = $"SELECT * FROM {nameof(MediaItem)}  WHERE Id= @Id";
+            var sql = $"SELECT * FROM {nameof(MediaItem)} "
+                + $"WHERE ROWID = @{nameof(MediaItem.Id)}";
 
             using (var connection = SqLiteConnectionFactory.Get())
             {
@@ -67,12 +88,12 @@ namespace InsireBot.Data
 
         public MediaItem Update(MediaItem item)
         {
-            var sql = $"Update {nameof(MediaItem)} " +
+            var sql = $"UPDATE {nameof(MediaItem)} " +
                 $"SET {nameof(MediaItem.Id)} = @{nameof(MediaItem.Id)}, " +
                 $"{nameof(MediaItem.Title)} = @{nameof(MediaItem.Title)}, " +
                 $"{nameof(MediaItem.Sequence)} = @{nameof(MediaItem.Sequence)}, " +
                 $"{nameof(MediaItem.Duration)} = @{nameof(MediaItem.Duration)} " +
-                "WHERE Id = @Id";
+                $"WHERE ROWID = @{nameof(MediaItem.Id)}";
 
             using (var connection = SqLiteConnectionFactory.Get())
             {
@@ -88,39 +109,37 @@ namespace InsireBot.Data
 
         public int Delete(int id)
         {
-            var sql = $"DELETE FROM {nameof(MediaItem)} WHERE Id = @Id";
+            var sql = $"DELETE FROM {nameof(MediaItem)} WHERE ROWID = @{nameof(MediaItem.Id)}";
 
             using (var connection = SqLiteConnectionFactory.Get())
             {
-                return connection.Execute("DELETE FROM Contacts WHERE Id = @Id", new { id });
+                return connection.Execute(sql, new { id });
             }
         }
 
-        public void Save(MediaItem item)
+        public MediaItem Save(MediaItem item)
         {
+            var result = item;
             using (var txScope = new TransactionScope())
             {
                 if (item.IsNew)
-                {
-                    Create(item);
-                }
+                    result = Create(item);
                 else
                 {
                     if (item.IsDeleted)
-                    {
                         Delete(item.Id);
-                    }
                     else
-                        Update(item);
+                        result = Update(item);
                 }
 
                 txScope.Complete();
+                return result;
             }
         }
 
-        public List<MediaItem> GetById(params int[] ids)
+        public List<MediaItem> GetAllById(params int[] ids)
         {
-            var sql = $"SELECT * FROM {nameof(MediaItem)}  WHERE Id= @Ids";
+            var sql = $"SELECT * FROM {nameof(MediaItem)}  WHERE ROWID = @Ids";
 
             using (var connection = SqLiteConnectionFactory.Get())
             {

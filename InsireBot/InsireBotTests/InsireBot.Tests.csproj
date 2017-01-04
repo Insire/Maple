@@ -74,12 +74,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="MockObjects\MockMediaPlayer.cs" />
-    <Compile Include="Poco\MediaItemRepositoryTests.cs" />
+    <Compile Include="Mocks\MockMediaPlayer.cs" />
+    <Compile Include="MediaItemRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestDataService.cs" />
     <Compile Include="PlaylistUnitTests.cs" />
-    <Compile Include="ViewModel\MediaPlayerViewModelTests.cs" />
+    <Compile Include="MediaPlayerViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\MvvmScarletToolkit\MvvmScarletToolkit\MvvmScarletToolkit.csproj">

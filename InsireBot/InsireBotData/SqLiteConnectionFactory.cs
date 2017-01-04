@@ -13,14 +13,19 @@ namespace InsireBot.Data
             var dir = new DirectoryInfo(".").FullName;
             var path = Path.Combine(dir, DBFILENAME);
 
-            return new SQLiteConnection(path);
+            var connection =  new SQLiteConnection($"Data Source={path}; Version=3;");
+
+            if (!File.Exists(path))
+                SQLiteConnection.CreateFile(path);
+
+            return connection;
         }
 
-        public static void Seed<T>()
-        {
-            using (var sqLiteConnection = (SQLite.SQLiteConnection)Get())
-                sqLiteConnection.CreateTable<T>();
-        }
+        //public static void Seed<T>()
+        //{
+        //    using (var sqLiteConnection = GetSQLite())
+        //        sqLiteConnection.CreateTable<T>();
+        //}
 
         /*
          * 
