@@ -11,6 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsireBot.Data", "InsireBot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsireBot.Core", "InsireBot.Core\InsireBot.Core.csproj", "{21FA5854-0692-42E2-924E-A38CF3C7FF71}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D65C950A-327A-496D-A49C-B45E8F97C610}"
+	ProjectSection(SolutionItems) = preProject
+		Screenshots\InsireBot_2017-01-08_18-16-13.png = Screenshots\InsireBot_2017-01-08_18-16-13.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		AppVeyor|Any CPU = AppVeyor|Any CPU
