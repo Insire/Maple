@@ -3,8 +3,11 @@ This is a rewrite of the original InsireBot. Which was planned to be a tool for 
 
 After a long hiatus, I'm continuing my rewrite and try to improve on my previously written code.
 
+### MainWindow
 ![Mainscreen](https://github.com/Insire/InsireBot-V2/blob/master/InsireBot/Screenshots/InsireBot_2017-01-08_18-16-13.png)
 
+### MainWindow after updating the theme during runtime
+![changeable theme of the Mainscreen](https://github.com/Insire/InsireBot-V2/blob/master/InsireBot/Screenshots/InsireBot.vshost_2017-01-08_18-35-38.png)
 
 ## Requirements:
  - Visual Studio 2015 Community Edition or better
