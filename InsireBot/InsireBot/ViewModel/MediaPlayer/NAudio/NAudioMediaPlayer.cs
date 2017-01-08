@@ -1,4 +1,6 @@
-﻿namespace InsireBot
+﻿using System;
+
+namespace InsireBot
 {
     public class NAudioMediaPlayer : BasePlayer
     {
@@ -31,7 +33,7 @@
 
             set
             {
-                
+
             }
         }
 
@@ -44,28 +46,35 @@
 
             set
             {
-                
+
             }
         }
 
-        public override void Dispose()
+        public sealed override void Dispose()
         {
-            
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
+
+        public void Dispose(bool disposing)
+        {
+
+        }
+
 
         public override void Pause()
         {
-            
+
         }
 
         public override void Play(IMediaItem mediaItem)
         {
-            
+
         }
 
         public override void Stop()
         {
-            
+
         }
     }
 }

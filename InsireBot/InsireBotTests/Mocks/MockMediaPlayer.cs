@@ -45,6 +45,7 @@ namespace InsireBot.Tests
         public void Dispose()
         {
             Disposed = true;
+            GC.SuppressFinalize(this);
         }
 
         public void Next()

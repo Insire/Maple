@@ -216,7 +216,7 @@ namespace InsireBot
             }
         }
 
-        public override void Dispose()
+        public sealed override void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
