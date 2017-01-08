@@ -86,19 +86,11 @@
         <Setter Property="TextElement.FontWeight" Value="Regular" />
         <Setter Property="TextElement.Foreground" Value="{DynamicResource MaterialDesignBody}" />
         <Setter Property="Width" Value="900" />
-        <Setter Property="WindowStyle" Value="SingleBorderWindow" />
 
         <Setter Property="GlowBrush" Value="Black" />
         <Setter Property="TitleCaps" Value="False" />
         <Setter Property="FontFamily" Value="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto" />
         <Setter Property="SaveWindowPosition" Value="True" />
-    </Style>
-
-    <Style x:Key="BaseDialogWindowStyle"
-           BasedOn="{StaticResource BaseWindowStyle}"
-           TargetType="{x:Type Window}">
-        <Setter Property="ShowInTaskbar" Value="False" />
-        <!--<Setter Property="WindowStartupLocation" Value="CenterOwner" /> cant be set inside a resource dictionary since the property isnt a dependency property-->
     </Style>
 
     <!--  Button Styles  -->
