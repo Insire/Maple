@@ -2,7 +2,7 @@
 
 namespace InsireBot
 {
-    public class IWavePlayerFactory
+    public class WavePlayerFactory
     {
         public static IWavePlayer GetPlayer()
         {

@@ -29,7 +29,7 @@ namespace InsireBot
                 RequestFloatOutput = false,
             };
 
-            _player = IWavePlayerFactory.GetPlayer();
+            _player = WavePlayerFactory.GetPlayer();
             _player.PlaybackStopped += PlaybackStopped;
 
             OnPropertyChanged(nameof(VolumeMin));

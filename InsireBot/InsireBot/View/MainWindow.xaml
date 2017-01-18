@@ -19,58 +19,80 @@
         </metro:WindowCommands>
     </metro:MetroWindow.RightWindowCommands>
 
-    <materialDesign:DialogHost Identifier="RootDialog">
-        <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding Path=IsChecked, ElementName=MenuToggleButton}">
-            <materialDesign:DrawerHost.LeftDrawerContent>
-                <DockPanel MinWidth="212">
-                    <ToggleButton Margin="16"
-                                  HorizontalAlignment="Right"
-                                  DockPanel.Dock="Top"
-                                  IsChecked="{Binding Path=IsChecked, ElementName=MenuToggleButton, Mode=TwoWay}"
-                                  Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
+    <metro:MetroWindow.LeftWindowCommands>
+        <metro:WindowCommands>
+            <Button Command="{Binding OpenGithubPageCommand}">
+                <icons:PackIconMaterial Kind="GithubCircle" />
+            </Button>
+        </metro:WindowCommands>
+    </metro:MetroWindow.LeftWindowCommands>
 
-                    <ListBox Grid.IsSharedSizeScope="True"
-                             ItemsSource="{Binding Items}"
-                             PreviewMouseLeftButtonUp="UIElement_OnPreviewMouseLeftButtonUp"
-                             SelectedItem="{Binding SelectedItem}"
-                             SelectionMode="Single">
-                        <ListBox.ItemContainerStyle>
-                            <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="{x:Type ListBoxItem}">
-                                <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate DataType="Scene">
-                                <TextBlock Grid.Column="1"
-                                           HorizontalAlignment="Stretch"
-                                           VerticalAlignment="Center"
-                                           Text="{Binding DisplayName}" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </DockPanel>
-            </materialDesign:DrawerHost.LeftDrawerContent>
+    <DockPanel>
+        <materialDesign:ColorZone Padding="4"
+                                  materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                  DockPanel.Dock="Bottom"
+                                  Mode="PrimaryMid">
+            <StackPanel HorizontalAlignment="Left"
+                        DataContext="{Binding StatusbarViewModel, Source={StaticResource Locator}}"
+                        Orientation="Vertical">
+                <TextBlock Text="{Binding Version}" />
+            </StackPanel>
+        </materialDesign:ColorZone>
 
-            <DockPanel LastChildFill="True">
-                <materialDesign:ColorZone Padding="16"
-                                          materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                                          DockPanel.Dock="Top"
-                                          Mode="PrimaryMid">
-                    <DockPanel>
-                        <ToggleButton x:Name="MenuToggleButton"
-                                      HorizontalAlignment="Left"
-                                      IsChecked="False"
+        <materialDesign:DialogHost Identifier="RootDialog">
+            <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding Path=IsChecked, ElementName=MenuToggleButton}">
+                <materialDesign:DrawerHost.LeftDrawerContent>
+                    <DockPanel MinWidth="212">
+                        <ToggleButton Margin="16"
+                                      HorizontalAlignment="Right"
+                                      DockPanel.Dock="Top"
+                                      IsChecked="{Binding Path=IsChecked, ElementName=MenuToggleButton, Mode=TwoWay}"
                                       Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
 
-                        <TextBlock HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   FontSize="22"
-                                   Text="{Binding SelectedItem.DisplayName}" />
+                        <ListBox Grid.IsSharedSizeScope="True"
+                                 ItemsSource="{Binding Items}"
+                                 PreviewMouseLeftButtonUp="UIElement_OnPreviewMouseLeftButtonUp"
+                                 SelectedItem="{Binding SelectedItem}"
+                                 SelectionMode="Single">
+                            <ListBox.ItemContainerStyle>
+                                <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="{x:Type ListBoxItem}">
+                                    <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="Scene">
+                                    <TextBlock Grid.Column="1"
+                                               HorizontalAlignment="Stretch"
+                                               VerticalAlignment="Center"
+                                               Text="{Binding DisplayName}" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                     </DockPanel>
-                </materialDesign:ColorZone>
-                <ContentControl Content="{Binding SelectedItem.Content}" Style="{StaticResource BaseLayoutStyle}" />
-            </DockPanel>
+                </materialDesign:DrawerHost.LeftDrawerContent>
 
-        </materialDesign:DrawerHost>
-    </materialDesign:DialogHost>
+                <DockPanel LastChildFill="True">
+                    <materialDesign:ColorZone Padding="16"
+                                              materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                              DockPanel.Dock="Top"
+                                              Mode="PrimaryMid">
+                        <DockPanel>
+                            <ToggleButton x:Name="MenuToggleButton"
+                                          HorizontalAlignment="Left"
+                                          IsChecked="False"
+                                          Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
+
+                            <TextBlock HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       FontSize="22"
+                                       Text="{Binding SelectedItem.DisplayName}" />
+                        </DockPanel>
+                    </materialDesign:ColorZone>
+                    <ContentControl Content="{Binding SelectedItem.Content}" Style="{StaticResource BaseLayoutStyle}" />
+                </DockPanel>
+
+            </materialDesign:DrawerHost>
+        </materialDesign:DialogHost>
+    </DockPanel>
+
 </metro:MetroWindow>

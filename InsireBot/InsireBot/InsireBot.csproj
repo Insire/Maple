@@ -295,7 +295,7 @@
     <Compile Include="ViewModel\MediaPlayer\NAudio\NAudioMediaPlayer.cs" />
     <Compile Include="ViewModel\MediaPlayer\NAudio\NAudioPlayerSettings.cs" />
     <Compile Include="ViewModel\MediaPlayer\NAudio\PlaybackDeviceFactory.cs" />
-    <Compile Include="ViewModel\MediaPlayer\NAudio\IWavePlayerFactory.cs" />
+    <Compile Include="ViewModel\MediaPlayer\NAudio\WavePlayerFactory.cs" />
     <Compile Include="ViewModel\MediaPlayer\Playlist.cs" />
     <Compile Include="Pages\MediaPlayerPage.xaml.cs">
       <DependentUpon>MediaPlayerPage.xaml</DependentUpon>
@@ -323,6 +323,7 @@
     <Compile Include="Utils\InsireBotException.cs" />
     <Compile Include="ViewModel\MediaItems\CreateMediaItemViewModel.cs" />
     <Compile Include="ViewModel\MediaItems\CreatePlaylistViewModel.cs" />
+    <Compile Include="ViewModel\StatusbarViewModel.cs" />
     <Compile Include="ViewModel\UIColorsViewModel.cs" />
     <Compile Include="ViewModel\MediaItems\PlaylistsStore.cs" />
     <Compile Include="ViewModel\MediaItems\MediaItemsStore.cs" />

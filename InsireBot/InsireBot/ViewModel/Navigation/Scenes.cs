@@ -1,5 +1,6 @@
 ﻿using MvvmScarletToolkit;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 
@@ -12,6 +13,7 @@ namespace InsireBot
     {
         public ICommand OpenColorOptionsCommand { get; private set; }
         public ICommand OpenMediaPlayerCommand { get; private set; }
+        public ICommand OpenGithubPageCommand { get; private set; }
 
         public Scenes()
         {
@@ -31,7 +33,7 @@ namespace InsireBot
                 {
                     Content = new NewMediaItemPage(),
                     DisplayName = "Add Video",
-                    GetDataContext =() => GlobalServiceLocator.Instance.CreateMediaItemViewModel,
+                    GetDataContext = () => GlobalServiceLocator.Instance.CreateMediaItemViewModel,
                     IsSelected = false,
                 },
 
@@ -79,6 +81,7 @@ namespace InsireBot
         {
             OpenColorOptionsCommand = new RelayCommand(OpenColorOptionsView, CanOpenColorOptionsView);
             OpenMediaPlayerCommand = new RelayCommand(OpenMediaPlayerView, CanOpenMediaPlayerView);
+            OpenGithubPageCommand = new RelayCommand(OpenGithubPage);
         }
 
         private void OpenColorOptionsView()
@@ -99,6 +102,11 @@ namespace InsireBot
         private bool CanOpenMediaPlayerView()
         {
             return Items?.Any(p => p.Content.GetType() == typeof(ColorOptionsPage)) == true;
+        }
+
+        private void OpenGithubPage()
+        {
+            Process.Start("https://github.com/Insire/InsireBot-V2");
         }
     }
 }

@@ -50,6 +50,7 @@ namespace InsireBot
             SimpleIoc.Default.Register<MediaPlayerViewModel>();
             SimpleIoc.Default.Register<CreateMediaItemViewModel>();
             SimpleIoc.Default.Register<CreatePlaylistViewModel>();
+            SimpleIoc.Default.Register<StatusbarViewModel>();
 
             App.Log.Info("Loaded Services");
         }
@@ -92,6 +93,11 @@ namespace InsireBot
         public UIColorsViewModel UIColorsViewModel
         {
             get { return ServiceLocator.Current.GetInstance<UIColorsViewModel>(); }
+        }
+
+        public StatusbarViewModel StatusbarViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<StatusbarViewModel>(); }
         }
 
 

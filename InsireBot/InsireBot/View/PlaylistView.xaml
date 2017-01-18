@@ -20,7 +20,7 @@
                  AlternationCount="2"
                  ItemsSource="{Binding Items}">
             <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
+                <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                 </Style>
             </ListBox.ItemContainerStyle>
@@ -52,15 +52,18 @@
                             </icons:PackIconMaterial.Style>
                         </icons:PackIconMaterial>
 
-                        <StackPanel Grid.Column="1" Margin="10,0" Orientation="Vertical" VerticalAlignment="Center">
-                            <TextBlock Text="{Binding Title}" FontWeight="DemiBold" FontSize="22"
+                        <StackPanel Grid.Column="1"
+                                    Margin="10,0"
+                                    VerticalAlignment="Center"
+                                    Orientation="Vertical">
+                            <TextBlock FontSize="22"
+                                       FontWeight="DemiBold"
+                                       Text="{Binding Title}"
                                        TextTrimming="CharacterEllipsis"
                                        TextWrapping="NoWrap" />
                             <TextBlock Text="{Binding Description}"
                                        TextTrimming="CharacterEllipsis"
                                        TextWrapping="NoWrap" />
-
-
                         </StackPanel>
 
                         <Button Grid.Column="2"
