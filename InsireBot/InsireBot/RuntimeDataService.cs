@@ -1,7 +1,5 @@
-﻿using InsireBot.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace InsireBot
 {
@@ -21,33 +19,6 @@ namespace InsireBot
             var mediaPlayerType = GetMediaPlayerType();
             switch (mediaPlayerType)
             {
-                case MediaPlayerType.VLCDOTNET:
-                    var vlcInstallDirectory = string.Empty;
-                    // TODO change this depending on app architecture
-                    // vlc is a 32bit application, so we always want to get the base 32bit install directory, regardless of OS architecture
-                    //if (Environment.Is64BitOperatingSystem)
-                    vlcInstallDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "VideoLAN\\VLC");
-                    //else
-                    //vlcInstallDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "VideoLAN\\VLC");
-
-                    var directory = new DirectoryInfo(vlcInstallDirectory);
-                    if (!directory.Exists)
-                        _log.Error($"Invalid path for VLC installation {directory.FullName}");
-
-                    return new DotNetPlayerSettings
-                    {
-                        Directory = directory,
-                        FileName = "vlc",
-                        Options = new[]
-                        {
-                            "--aout=waveout",
-                            "--waveout-audio-device={0}",
-                            "--ffmpeg-hw",
-                            "--no-video"
-                        },
-                        RepeatMode = RepeatMode.None,
-                    };
-
                 case MediaPlayerType.NAUDIO:
                     return new NAudioPlayerSettings();
 
@@ -65,8 +36,6 @@ namespace InsireBot
             {
                 case MediaPlayerType.NAUDIO:
                     return new NAudioMediaPlayer(this);
-                case MediaPlayerType.VLCDOTNET:
-                    return new DotNetPlayer(this, GetMediaPlayerSettings());
 
                 default:
                     throw new NotImplementedException(nameof(mediaPlayerType));
@@ -77,17 +46,16 @@ namespace InsireBot
         {
             _log.Info("Loading PlaybackDevices");
 
-            var _devices = WinmmService.GetDevCapsPlayback();
+            var mediaPlayerType = GetMediaPlayerType();
 
-            for (int i = 0; i < _devices.Length; i++)
-                yield return new AudioDevice(_devices[i].wMid,
-                                            _devices[i].wPid,
-                                            _devices[i].vDriverVersion,
-                                            _devices[i].ToString(),
-                                            _devices[i].dwFormats,
-                                            _devices[i].wChannels,
-                                            _devices[i].wReserved,
-                                            _devices[i].dwSupport);
+            switch (mediaPlayerType)
+            {
+                case MediaPlayerType.NAUDIO:
+                    var devices = PlaybackDeviceFactory.GetAudioDevices();
+                    foreach (var device in devices)
+                        yield return device;
+                    break;
+            }
         }
 
         public MediaPlayerType GetMediaPlayerType()

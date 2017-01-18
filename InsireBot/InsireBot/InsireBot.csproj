@@ -155,6 +155,10 @@
       <HintPath>..\packages\InsireCorp.MvvmScarletToolkit.1.0.0\lib\net452\MvvmScarletToolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NAudio, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.8.0\lib\net35\NAudio.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -250,14 +254,6 @@
       <HintPath>..\packages\System.Xml.XmlDocument.4.3.0\lib\net46\System.Xml.XmlDocument.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Vlc.DotNet.Core, Version=2.1.130.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
-      <HintPath>..\packages\Vlc.DotNet.Core.2.1.130\lib\net45\x86\Vlc.DotNet.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Vlc.DotNet.Core.Interops, Version=2.1.130.0, Culture=neutral, PublicKeyToken=84529da31f4eb963, processorArchitecture=x86">
-      <HintPath>..\packages\Vlc.DotNet.Core.Interops.2.1.130\lib\net45\x86\Vlc.DotNet.Core.Interops.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -271,6 +267,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Enums\AudioFormats.cs" />
     <Compile Include="Enums\DataParsingServiceResultType.cs" />
     <Compile Include="ViewModel\BusinessViewModelBase.cs" />
     <Compile Include="Utils\DataGridBehavior.cs" />
@@ -292,14 +289,12 @@
     <Compile Include="ViewModel\MediaItems\MediaItem.cs" />
     <Compile Include="ViewModel\MediaPlayer\MediaPlayerOptions.cs" />
     <Compile Include="ViewModel\MediaPlayer\BasePlayer.cs" />
+    <Compile Include="ViewModel\MediaPlayer\NAudio\FormatFactory.cs" />
     <Compile Include="ViewModel\MediaPlayer\NAudio\NAudioMediaPlayer.cs" />
     <Compile Include="ViewModel\MediaPlayer\NAudio\NAudioPlayerSettings.cs" />
+    <Compile Include="ViewModel\MediaPlayer\NAudio\PlaybackDeviceFactory.cs" />
+    <Compile Include="ViewModel\MediaPlayer\NAudio\PlayerFactory.cs" />
     <Compile Include="ViewModel\MediaPlayer\Playlist.cs" />
-    <Compile Include="ViewModel\MediaPlayer\VLCDOTNET\DotNetPlayer.cs" />
-    <Compile Include="ViewModel\MediaPlayer\VLCDOTNET\DotNetPlayerException.cs" />
-    <Compile Include="ViewModel\MediaPlayer\VLCDOTNET\DotNetPlayerSettings.cs" />
-    <Compile Include="ViewModel\MediaPlayer\VLCDOTNET\VlcMediaPlayer.cs" />
-    <Compile Include="ViewModel\MediaPlayer\VLCDOTNET\VlcWrapperException.cs" />
     <Compile Include="Pages\MediaPlayerPage.xaml.cs">
       <DependentUpon>MediaPlayerPage.xaml</DependentUpon>
     </Compile>

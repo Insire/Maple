@@ -10,20 +10,20 @@ namespace InsireBot
         bool IsPlaying { get; }
         bool CanPlay { get; }
 
+        bool CanPause { get; }
+        bool CanStop { get; }
+
         void Play();
         void Next();
         void Previous();
 
         void Pause();
-        void Stop();       
+        void Stop();
 
-        Playlist<T> Playlist { get;}
-
-        AudioDevice AudioDevice { get; set; }
+        Playlist<T> Playlist { get; }
         int Volume { get; set; }
-        bool Silent { get; set; }
-
         int VolumeMax { get; }
         int VolumeMin { get; }
+        AudioDevice AudioDevice { get; set; }
     }
 }

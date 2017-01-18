@@ -22,17 +22,17 @@
     </ControlTemplate>
 
     <!--  Icon Styles  -->
-    <Style x:Key="BigIconStyle" TargetType="{x:Type icons:PackIconMaterial}">
+    <Style x:Key="BigIconStyle" TargetType="icons:PackIconMaterial">
         <Setter Property="Height" Value="24" />
         <Setter Property="Width" Value="24" />
     </Style>
 
-    <Style x:Key="IconStyle" TargetType="{x:Type icons:PackIconMaterial}">
+    <Style x:Key="IconStyle" TargetType="icons:PackIconMaterial">
         <Setter Property="Height" Value="20" />
         <Setter Property="Width" Value="20" />
     </Style>
 
-    <Style x:Key="MiniIconStyle" TargetType="{x:Type icons:PackIconMaterial}">
+    <Style x:Key="MiniIconStyle" TargetType="icons:PackIconMaterial">
         <Setter Property="Height" Value="16" />
         <Setter Property="Width" Value="16" />
     </Style>
@@ -41,11 +41,11 @@
         <Setter Property="Margin" Value="10" />
     </Style>
 
-    <Style x:Key="BaseRowDefinitionStyle" TargetType="{x:Type RowDefinition}">
+    <Style x:Key="BaseRowDefinitionStyle" TargetType="RowDefinition">
         <Setter Property="Height" Value="10" />
     </Style>
 
-    <Style x:Key="BaseColumnDefinitionStyle" TargetType="{x:Type ColumnDefinition}">
+    <Style x:Key="BaseColumnDefinitionStyle" TargetType="ColumnDefinition">
         <Setter Property="Width" Value="10" />
     </Style>
 

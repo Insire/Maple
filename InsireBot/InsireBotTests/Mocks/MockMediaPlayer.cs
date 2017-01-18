@@ -29,6 +29,22 @@ namespace InsireBot.Tests
 
         public int VolumeMin { get; set; }
 
+        public bool CanPause
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public bool CanStop
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public event CompletedMediaItemEventHandler CompletedMediaItem;
 
         public MockMediaPlayer(IDataService dataService)
@@ -38,8 +54,6 @@ namespace InsireBot.Tests
 
             VolumeMin = 0;
             VolumeMax = 100;
-
-
         }
 
         public void Dispose()

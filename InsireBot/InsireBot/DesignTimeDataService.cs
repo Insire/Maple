@@ -33,8 +33,8 @@ namespace InsireBot
 
         public IEnumerable<AudioDevice> GetPlaybackDevices()
         {
-            yield return new AudioDevice(2, 2, 2, "TestDevice #1", 2, 2, 2, 2);
-            yield return new AudioDevice(2, 2, 2, "TestDevice #2", 2, 2, 2, 2);
+            yield return new AudioDevice("TestDevice #1", 2);
+            yield return new AudioDevice("TestDevice #2", 2);
         }
     }
 }

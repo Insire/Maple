@@ -1,4 +1,5 @@
-﻿using MvvmScarletToolkit;
+﻿using System;
+using MvvmScarletToolkit;
 
 namespace InsireBot
 {
@@ -16,7 +17,9 @@ namespace InsireBot
             get { return Playlist.CanPrevious(); }
         }
 
-        public abstract bool CanPlay { get; }
+        public virtual bool CanPlay { get { return Playlist?.CurrentItem != null; } }
+        public virtual bool CanPause { get { return Playlist?.CurrentItem != null; } }
+        public virtual bool CanStop { get { return Playlist?.CurrentItem != null; } }
 
         private Playlist<IMediaItem> _playlist;
         public Playlist<IMediaItem> Playlist
@@ -50,25 +53,14 @@ namespace InsireBot
 
         public abstract int Volume { get; set; }
 
-        public abstract bool Silent { get; set; }
+        public abstract int VolumeMax { get; }
 
-        public int VolumeMax { get; protected set; }
-
-        public int VolumeMin { get; protected set; }
+        public abstract int VolumeMin { get; }
 
         public BasePlayer(IDataService dataService) : base(dataService)
         {
             AudioDevices = new RangeObservableCollection<AudioDevice>();
             CompletedMediaItem += Player_CompletedMediaItem;
-
-            if (IsInDesignMode)
-            {
-                AudioDevices.AddRange(_dataService.GetPlaybackDevices());
-            }
-            else
-            {
-                AudioDevices.AddRange(_dataService.GetPlaybackDevices());
-            }
         }
 
         protected virtual void Player_CompletedMediaItem(object sender, CompletedMediaItemEventEventArgs e)
@@ -87,7 +79,7 @@ namespace InsireBot
             if (IsPlaying)
                 Stop();
 
-            if (Playlist.CurrentItem != null)
+            if (Playlist?.CurrentItem != null)
                 Play(Playlist.CurrentItem);
 
             Next();
@@ -98,7 +90,7 @@ namespace InsireBot
             if (IsPlaying)
                 Stop();
 
-            var next = Playlist.Next();
+            var next = Playlist?.Next();
             if (!string.IsNullOrEmpty(next?.Location))
                 Play(next);
         }
@@ -108,7 +100,7 @@ namespace InsireBot
             if (IsPlaying)
                 Stop();
 
-            var previous = Playlist.Previous();
+            var previous = Playlist?.Previous();
             if (!string.IsNullOrEmpty(previous?.Location))
                 Play(previous);
         }

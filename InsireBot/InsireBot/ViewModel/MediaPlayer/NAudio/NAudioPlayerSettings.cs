@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace InsireBot
 {
-    class NAudioPlayerSettings : ISettings
+    public class NAudioPlayerSettings : ISettings
     {
         public DirectoryInfo Directory
         {

@@ -127,8 +127,8 @@
             <Slider Grid.Column="1"
                     VerticalAlignment="Center"
                     AutoToolTipPlacement="BottomRight"
-                    Maximum="{Binding VolumeMax, FallbackValue=100}"
-                    Minimum="{Binding VolumeMin, FallbackValue=0}"
+                    Maximum="100"
+                    Minimum="0"
                     TickFrequency="1"
                     TickPlacement="None"
                     Value="{Binding Volume}" />

@@ -1,5 +1,4 @@
 using GalaSoft.MvvmLight.Messaging;
-using InsireBotCore;
 using MvvmScarletToolkit;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +13,7 @@ namespace InsireBot
         public bool IsPlaying { get { return MediaPlayer.IsPlaying; } }
 
         public ICommand PlayCommand { get; private set; }
+        public ICommand PauseCommand { get; private set; }
         public ICommand NextCommand { get; private set; }
         public ICommand PreviousCommand { get; private set; }
 
@@ -63,6 +63,7 @@ namespace InsireBot
             PlayCommand = new RelayCommand(Play, () => MediaPlayer.CanPlay);
             PreviousCommand = new RelayCommand(Previous, () => MediaPlayer.Playlist?.CanPrevious() == true);
             NextCommand = new RelayCommand(Next, () => MediaPlayer.Playlist?.CanNext() == true);
+            PauseCommand = new RelayCommand(Pause,()=> MediaPlayer.CanPause);
         }
 
         public override void AddRange(IEnumerable<IMediaItem> mediaItems)
