@@ -57,9 +57,9 @@ namespace InsireBot
             }
         }
 
-        public async Task<IList<Playlist<IMediaItem>>> GetPlaylists(string playlistId)
+        public async Task<IList<Playlist>> GetPlaylists(string playlistId)
         {
-            var result = new List<Playlist<IMediaItem>>();
+            var result = new List<Playlist>();
             var youtubeService = await GetService();
 
             var request = youtubeService.Playlists.List("snippet,contentDetails");
@@ -72,7 +72,7 @@ namespace InsireBot
                 var nextPageToken = "";
                 while (nextPageToken != null)
                 {
-                    var playlist = new Playlist<IMediaItem>(item.Snippet.Title, $"https://www.youtube.com/playlist?list={item.Id}", item.ContentDetails.ItemCount ?? 0, item.Status?.PrivacyStatus ?? "none");
+                    var playlist = new Playlist(item.Snippet.Title, $"https://www.youtube.com/playlist?list={item.Id}", item.ContentDetails.ItemCount ?? 0, item.Status?.PrivacyStatus ?? "none");
 
                     result.Add(playlist);
 
@@ -83,11 +83,11 @@ namespace InsireBot
             return result;
         }
 
-        public async Task CreatePlaylist(Playlist<IMediaItem> playlist, bool publicPlaylist = true)
+        public async Task CreatePlaylist(Playlist playlist, bool publicPlaylist = true)
         {
             var youtubeService = await GetService();
 
-            var newPlaylist = new Playlist();
+            var newPlaylist = new Google.Apis.YouTube.v3.Data.Playlist();
             newPlaylist.Snippet = new PlaylistSnippet();
             newPlaylist.Snippet.Title = playlist.Title;
             newPlaylist.Snippet.Description = playlist.Description;
@@ -111,7 +111,7 @@ namespace InsireBot
             }
         }
 
-        public async Task DeletePlaylist(Playlist<IMediaItem> playlist)
+        public async Task DeletePlaylist(Playlist playlist)
         {
             var youtubeService = await GetService();
             var id = GetPlaylistId(playlist);
@@ -125,7 +125,7 @@ namespace InsireBot
             return result;
         }
 
-        public static string GetPlaylistId(Playlist<IMediaItem> list)
+        public static string GetPlaylistId(Playlist list)
         {
             var url = new Uri(list.Location);
             var result = HttpUtility.ParseQueryString(url.Query).Get("list");

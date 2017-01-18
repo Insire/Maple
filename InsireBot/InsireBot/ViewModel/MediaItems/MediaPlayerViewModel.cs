@@ -8,7 +8,7 @@ namespace InsireBot
 {
     public class MediaPlayerViewModel : BusinessViewModelBase<IMediaItem>
     {
-        public IMediaPlayer<IMediaItem> MediaPlayer { get; private set; }
+        public IMediaPlayer MediaPlayer { get; private set; }
 
         public bool IsPlaying { get { return MediaPlayer.IsPlaying; } }
 
@@ -17,7 +17,7 @@ namespace InsireBot
         public ICommand NextCommand { get; private set; }
         public ICommand PreviousCommand { get; private set; }
 
-        public Playlist<IMediaItem> Playlist
+        public Playlist Playlist
         {
             get { return MediaPlayer.Playlist; }
         }
@@ -115,7 +115,7 @@ namespace InsireBot
             MediaPlayer.Stop();
         }
 
-        public void SetPlaylist(Playlist<IMediaItem> playlist)
+        public void SetPlaylist(Playlist playlist)
         {
             MediaPlayer.Playlist.Clear();
             var items = MediaPlayer.Playlist.CanAddRange(playlist);

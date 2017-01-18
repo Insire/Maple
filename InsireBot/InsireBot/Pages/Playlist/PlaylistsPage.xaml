@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="InsireBot.PlaylistsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:InsireBot"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <Grid>
+        <materialDesign:TransitioningContent>
+
+            <materialDesign:TransitioningContent.OpeningEffects>
+                <materialDesign:TransitionEffect Kind="FadeIn" />
+            </materialDesign:TransitioningContent.OpeningEffects>
+
+            <materialDesign:Card VerticalAlignment="Stretch">
+                <local:PlaylistView />
+            </materialDesign:Card>
+
+        </materialDesign:TransitioningContent>
+
+    </Grid>
+</UserControl>

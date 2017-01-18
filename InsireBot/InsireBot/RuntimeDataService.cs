@@ -27,7 +27,7 @@ namespace InsireBot
             }
         }
 
-        public IMediaPlayer<IMediaItem> GetMediaPlayer()
+        public IMediaPlayer GetMediaPlayer()
         {
             _log.Info("Loading MediaPlayer");
 
@@ -71,6 +71,19 @@ namespace InsireBot
             yield return new MediaItem("Armin van Buuren feat. Sophie - Virtual Friend", new Uri(@"https://www.youtube.com/watch?v=0ypeOKp0x3k"), new TimeSpan(0, 7, 12));
             yield return new MediaItem("Will & Tim ft. Ephixa - Stone Tower Temple", new Uri("C:\\Users\\Insire\\Downloads\\Will & Tim ft. Ephixa - Stone Tower Temple.mp3"));
             yield return new MediaItem("1-Foreword.flac", new Uri("C:\\Users\\Insire\\Desktop\\1-Foreword.flac"));
+        }
+
+        public IEnumerable<Playlist> GetPlaylists()
+        {
+            yield return new Playlist(GetCurrentMediaItems(), "Default", "C:\\Users\\Insire\\Desktop")
+            {
+                Description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+            };
+
+            yield return new Playlist(GetCurrentMediaItems(), "Default", "C:\\Users\\Insire\\Desktop")
+            {
+                Description = "Test",
+            };
         }
     }
 }

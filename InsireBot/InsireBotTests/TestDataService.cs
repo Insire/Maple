@@ -19,7 +19,7 @@ namespace InsireBot.Tests
             yield return new MediaItem("1-Foreword.flac", new Uri("C:\\Users\\Insire\\Desktop\\1-Foreword.flac"));
         }
 
-        public IMediaPlayer<IMediaItem> GetMediaPlayer()
+        public IMediaPlayer GetMediaPlayer()
         {
             return new MockMediaPlayer(this);
         }
@@ -40,6 +40,11 @@ namespace InsireBot.Tests
 
             for (int i = 0; i < _devices.Length; i++)
                 yield return new AudioDevice(_devices[i].ToString(), _devices[i].wChannels);
+        }
+
+        public IEnumerable<Playlist> GetPlaylists()
+        {
+            yield return new Playlist(GetMediaItems());
         }
     }
 }

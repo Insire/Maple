@@ -5,27 +5,26 @@ namespace InsireBot
     /// <summary>
     /// BO ViewModel to manage Playlists
     /// </summary>
-    public class PlaylistsViewModel : BusinessViewModelBase<Playlist<MediaItem>>
+    public class PlaylistsViewModel : BusinessViewModelBase<Playlist>
     {
         public PlaylistsViewModel(IDataService dataService) : base(dataService)
         {
             if (IsInDesignMode)
             {
-                var item = new Playlist<MediaItem>("Music", "https://www.youtube.com/playlist?list=PL5LmATNaGcQxknuhgb_BkCKKIvcZro7iR", 2);
+                var item = new Playlist("Music", "https://www.youtube.com/playlist?list=PL5LmATNaGcQxknuhgb_BkCKKIvcZro7iR", 2);
                 Items.Add(item);
 
-                item = new Playlist<MediaItem>("Test", "https://www.youtube.com/playlist?list=PL5LmATNaGcQxknuhgb_BkCKKIvcZro7iR", 5);
+                item = new Playlist("Test", "https://www.youtube.com/playlist?list=PL5LmATNaGcQxknuhgb_BkCKKIvcZro7iR", 5);
                 Items.Add(item);
             }
             else
             {
-                var item = new Playlist<MediaItem>("Music", "https://www.youtube.com/playlist?list=PL5LmATNaGcQxknuhgb_BkCKKIvcZro7iR", 7);
-                Items.Add(item);
+                AddRange(_dataService.GetPlaylists());
 
-                item = new Playlist<MediaItem>("Test", "https://www.youtube.com/playlist?list=PL5LmATNaGcQxknuhgb_BkCKKIvcZro7iR", 12);
-                Items.Add(item);
+                if (SelectedItem == null && Items.Count > 0)
+                    SelectedItem = Items[0];
 
-                Messenger.Default.Register<Playlist<MediaItem>>(this, (playlist) =>
+                Messenger.Default.Register<Playlist>(this, (playlist) =>
                 {
                     Items.Add(playlist);
                 });

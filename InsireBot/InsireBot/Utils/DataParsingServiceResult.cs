@@ -35,8 +35,8 @@ namespace InsireBot
             }
         }
 
-        private IList<Playlist<IMediaItem>> _playlists;
-        public IList<Playlist<IMediaItem>> Playlists
+        private IList<Playlist> _playlists;
+        public IList<Playlist> Playlists
         {
             get { return _playlists; }
             private set
@@ -51,7 +51,7 @@ namespace InsireBot
 
         private DataParsingServiceResult()
         {
-            Playlists = new List<Playlist<IMediaItem>>();
+            Playlists = new List<Playlist>();
             MediaItems = new List<IMediaItem>();
         }
 
@@ -63,23 +63,23 @@ namespace InsireBot
             Type = type;
         }
 
-        public DataParsingServiceResult(IList<Playlist<IMediaItem>> items) : this(DataParsingServiceResultType.Playlists)
+        public DataParsingServiceResult(IList<Playlist> items) : this(DataParsingServiceResultType.Playlists)
         {
             Playlists = items;
 
             Log();
         }
 
-        public DataParsingServiceResult(IList<Playlist<IMediaItem>> items, DataParsingServiceResultType type) : this(type)
+        public DataParsingServiceResult(IList<Playlist> items, DataParsingServiceResultType type) : this(type)
         {
             Playlists = items;
 
             Log();
         }
 
-        public DataParsingServiceResult(Playlist<IMediaItem> item) : this(DataParsingServiceResultType.Playlists)
+        public DataParsingServiceResult(Playlist item) : this(DataParsingServiceResultType.Playlists)
         {
-            Playlists = new List<Playlist<IMediaItem>>()
+            Playlists = new List<Playlist>()
             {
                 item
             };
@@ -87,9 +87,9 @@ namespace InsireBot
             Log();
         }
 
-        public DataParsingServiceResult(Playlist<IMediaItem> item, DataParsingServiceResultType type) : this(type)
+        public DataParsingServiceResult(Playlist item, DataParsingServiceResultType type) : this(type)
         {
-            Playlists = new List<Playlist<IMediaItem>>()
+            Playlists = new List<Playlist>()
             {
                 item
             };

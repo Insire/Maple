@@ -29,14 +29,6 @@ namespace InsireBot
 
                 new Scene
                 {
-                    Content = new ColorOptionsPage(),
-                    DisplayName = "Themes",
-                    GetDataContext =() => GlobalServiceLocator.Instance.UIColorsViewModel,
-                    IsSelected = false,
-                },
-
-                new Scene
-                {
                     Content = new NewMediaItemPage(),
                     DisplayName = "Add Video",
                     GetDataContext =() => GlobalServiceLocator.Instance.CreateMediaItemViewModel,
@@ -45,9 +37,25 @@ namespace InsireBot
 
                 new Scene
                 {
+                    Content = new PlaylistsPage(),
+                    DisplayName = "Playlists",
+                    GetDataContext =() => GlobalServiceLocator.Instance.PlaylistsViewModel,
+                    IsSelected = false,
+                },
+
+                new Scene
+                {
                     Content = new NewPlaylistPage(),
                     DisplayName = "Add Playlist",
                     GetDataContext =() => GlobalServiceLocator.Instance.CreatePlaylistViewModel,
+                    IsSelected = false,
+                },
+
+                new Scene
+                {
+                    Content = new ColorOptionsPage(),
+                    DisplayName = "Themes",
+                    GetDataContext =() => GlobalServiceLocator.Instance.UIColorsViewModel,
                     IsSelected = false,
                 },
             };

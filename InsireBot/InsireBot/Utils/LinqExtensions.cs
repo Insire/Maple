@@ -54,7 +54,7 @@ namespace InsireBot
             return newItems.Where(p => !excludedIDs.Contains(p.ID));
         }
 
-        public static string GetPlaylistItems(this Playlist<IMediaItem> playlist)
+        public static string GetPlaylistItems(this Playlist playlist)
         {
             var builder = new StringBuilder();
             var ids = playlist.Select(p => Youtube.GetVideoId(p));

@@ -3,7 +3,7 @@ using MvvmScarletToolkit;
 
 namespace InsireBot
 {
-    public abstract class BasePlayer : BusinessViewModelBase<AudioDevice>, IMediaPlayer<IMediaItem>
+    public abstract class BasePlayer : BusinessViewModelBase<AudioDevice>, IMediaPlayer
     {
         public event CompletedMediaItemEventHandler CompletedMediaItem;
 
@@ -21,8 +21,8 @@ namespace InsireBot
         public virtual bool CanPause { get { return Playlist?.CurrentItem != null; } }
         public virtual bool CanStop { get { return Playlist?.CurrentItem != null; } }
 
-        private Playlist<IMediaItem> _playlist;
-        public Playlist<IMediaItem> Playlist
+        private Playlist _playlist;
+        public Playlist Playlist
         {
             get { return _playlist; }
             protected set { SetValue(ref _playlist, value); }
@@ -61,6 +61,15 @@ namespace InsireBot
         {
             AudioDevices = new RangeObservableCollection<AudioDevice>();
             CompletedMediaItem += Player_CompletedMediaItem;
+
+            if (IsInDesignMode)
+            {
+                AudioDevices.AddRange(_dataService.GetPlaybackDevices());
+            }
+            else
+            {
+                AudioDevices.AddRange(_dataService.GetPlaybackDevices());
+            }
         }
 
         protected virtual void Player_CompletedMediaItem(object sender, CompletedMediaItemEventEventArgs e)
@@ -68,7 +77,7 @@ namespace InsireBot
             CompletedMediaItem?.Invoke(this, e);
         }
 
-        event CompletedMediaItemEventHandler IMediaPlayer<IMediaItem>.CompletedMediaItem
+        event CompletedMediaItemEventHandler IMediaPlayer.CompletedMediaItem
         {
             add { CompletedMediaItem += value; }
             remove { CompletedMediaItem -= value; }

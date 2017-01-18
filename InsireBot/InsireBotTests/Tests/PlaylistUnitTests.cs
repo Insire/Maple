@@ -10,7 +10,7 @@ namespace InsireBot.Tests
         public void InitializePlaylistTest()
         {
             var service = new TestDataService();
-            var playlist = new Playlist<IMediaItem>(service.GetMediaItems());
+            var playlist = new Playlist(service.GetMediaItems());
 
             var first = playlist.First();
             var second = playlist.ElementAt(1);
@@ -27,7 +27,7 @@ namespace InsireBot.Tests
         public void PlaylistUpdateTest()
         {
             var service = new TestDataService();
-            var playlist = new Playlist<IMediaItem>(service.GetMediaItems());
+            var playlist = new Playlist(service.GetMediaItems());
 
             var first = playlist.First();
             Assert.AreEqual(playlist.CurrentItem.Location, first.Location);
@@ -44,7 +44,7 @@ namespace InsireBot.Tests
         {
             var eventFired = false;
             var service = new TestDataService();
-            var playlist = new Playlist<IMediaItem>(service.GetMediaItems());
+            var playlist = new Playlist(service.GetMediaItems());
             var first = playlist.First();
             var second = playlist.ElementAt(1);
 
@@ -74,7 +74,7 @@ namespace InsireBot.Tests
         public void PlaylistRepeatModeNoneTest()
         {
             var service = new TestDataService();
-            var playlist = new Playlist<IMediaItem>(service.GetMediaItems());
+            var playlist = new Playlist(service.GetMediaItems());
             var first = playlist.ElementAt(0);
             var second = playlist.ElementAt(1);
             var third = playlist.ElementAt(2);
@@ -110,7 +110,7 @@ namespace InsireBot.Tests
         public void PlaylistRepeatModeSingleTest()
         {
             var service = new TestDataService();
-            var playlist = new Playlist<IMediaItem>(service.GetMediaItems());
+            var playlist = new Playlist(service.GetMediaItems());
             var first = playlist.ElementAt(0);
             var second = playlist.ElementAt(1);
             var third = playlist.ElementAt(2);
@@ -131,7 +131,7 @@ namespace InsireBot.Tests
         public void PlaylistRepeatModeSinglePreviousTest()
         {
             var service = new TestDataService();
-            var playlist = new Playlist<IMediaItem>(service.GetMediaItems());
+            var playlist = new Playlist(service.GetMediaItems());
             var first = playlist.ElementAt(0);
             var second = playlist.ElementAt(1);
             var third = playlist.ElementAt(2);
@@ -151,7 +151,7 @@ namespace InsireBot.Tests
         public void PlaylistShuffleTest()
         {
             var service = new TestDataService();
-            var playlist = new Playlist<IMediaItem>(service.GetMediaItems());
+            var playlist = new Playlist(service.GetMediaItems());
             var first = playlist.ElementAt(0);
             var second = playlist.ElementAt(1);
             var third = playlist.ElementAt(2);
@@ -171,7 +171,7 @@ namespace InsireBot.Tests
         public void PlaylistRepeatModeAllTest()
         {
             var service = new TestDataService();
-            var playlist = new Playlist<IMediaItem>(service.GetMediaItems());
+            var playlist = new Playlist(service.GetMediaItems());
             var first = playlist.ElementAt(0);
             var second = playlist.ElementAt(1);
             var third = playlist.ElementAt(2);
@@ -214,7 +214,7 @@ namespace InsireBot.Tests
         public void PlaylistIndexTest()
         {
             var service = new TestDataService();
-            var playlist = new Playlist<IMediaItem>(service.GetMediaItems());
+            var playlist = new Playlist(service.GetMediaItems());
             Assert.AreEqual(true, playlist.All(p => p.Sequence > -1));
             Assert.AreEqual(true, playlist.GroupBy(p => p.Sequence).All(p => p.Count() == 1));
         }
@@ -223,7 +223,7 @@ namespace InsireBot.Tests
         public void PlaylistRepeatModeAllPreviousTest()
         {
             var service = new TestDataService();
-            var playlist = new Playlist<IMediaItem>(service.GetMediaItems());
+            var playlist = new Playlist(service.GetMediaItems());
             var first = playlist.ElementAt(0);
             var second = playlist.ElementAt(1);
             var third = playlist.ElementAt(2);
@@ -296,7 +296,7 @@ namespace InsireBot.Tests
         public void PlaylistRepeatModeNonePreviousTest()
         {
             var service = new TestDataService();
-            var playlist = new Playlist<IMediaItem>(service.GetMediaItems());
+            var playlist = new Playlist(service.GetMediaItems());
             var first = playlist.ElementAt(0);
             var second = playlist.ElementAt(1);
             var third = playlist.ElementAt(2);

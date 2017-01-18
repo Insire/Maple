@@ -15,6 +15,11 @@ namespace InsireBot
         /// <returns></returns>
         IEnumerable<IMediaItem> GetMediaItems();
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<Playlist> GetPlaylists();
+        /// <summary>
         /// returns the mediaitems from the current playlist
         /// </summary>
         /// <returns></returns>
@@ -23,7 +28,7 @@ namespace InsireBot
         /// returns an instance of a mediaplayer
         /// </summary>
         /// <returns></returns>
-        IMediaPlayer<IMediaItem> GetMediaPlayer();
+        IMediaPlayer GetMediaPlayer();
         /// <summary>
         /// returns a settingsobject for configuration of a mediaplayer
         /// </summary>

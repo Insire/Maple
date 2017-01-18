@@ -1,5 +1,4 @@
-﻿using InsireBot.NAudio;
-using NAudio.Wave;
+﻿using NAudio.Wave;
 using System;
 
 namespace InsireBot
@@ -23,15 +22,6 @@ namespace InsireBot
 
         public NAudioMediaPlayer(IDataService dataService) : base(dataService)
         {
-            if (IsInDesignMode)
-            {
-                AudioDevices.AddRange(_dataService.GetPlaybackDevices());
-            }
-            else
-            {
-                AudioDevices.AddRange(_dataService.GetPlaybackDevices());
-            }
-
             _settings = new MediaFoundationReader.MediaFoundationReaderSettings
             {
                 RepositionInRead = true,
@@ -39,7 +29,7 @@ namespace InsireBot
                 RequestFloatOutput = false,
             };
 
-            _player = PlayerFactory.GetPlayer();
+            _player = IWavePlayerFactory.GetPlayer();
             _player.PlaybackStopped += PlaybackStopped;
 
             OnPropertyChanged(nameof(VolumeMin));
@@ -90,7 +80,7 @@ namespace InsireBot
             if (_player?.PlaybackState == PlaybackState.Playing)
                 throw new InvalidOperationException("Can't play a file, when already playing");
 
-
+            var t = new WaveFileReader("");
             _reader = new MediaFoundationReader(mediaItem.Location, _settings);
 
             _volumeProvider = new VolumeWaveProvider16(_reader);
@@ -113,11 +103,10 @@ namespace InsireBot
 
         private void SyncVolumeToVolumeProvider(int value)
         {
-            if (_volumeProvider == null)
+            if (_volumeProvider == null && value <= 100 && value > 0)
                 return;
 
             _volumeProvider.Volume = value / 100;
-
         }
 
         public sealed override void Dispose()

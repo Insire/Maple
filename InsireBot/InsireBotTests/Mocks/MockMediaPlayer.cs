@@ -1,9 +1,8 @@
-﻿using InsireBot;
-using System;
+﻿using System;
 
 namespace InsireBot.Tests
 {
-    public class MockMediaPlayer : IMediaPlayer<IMediaItem>
+    public class MockMediaPlayer : IMediaPlayer
     {
         public AudioDevice AudioDevice { get; set; }
 
@@ -19,7 +18,7 @@ namespace InsireBot.Tests
 
         public bool IsPlaying { get; set; }
 
-        public Playlist<IMediaItem> Playlist { get; set; }
+        public Playlist Playlist { get; set; }
 
         public bool Silent { get; set; }
 
@@ -49,7 +48,7 @@ namespace InsireBot.Tests
 
         public MockMediaPlayer(IDataService dataService)
         {
-            Playlist = new Playlist<IMediaItem>();
+            Playlist = new Playlist();
             Playlist.AddRange(dataService.GetMediaItems());
 
             VolumeMin = 0;

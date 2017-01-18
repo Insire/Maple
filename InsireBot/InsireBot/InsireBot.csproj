@@ -269,6 +269,9 @@
     </ApplicationDefinition>
     <Compile Include="Enums\AudioFormats.cs" />
     <Compile Include="Enums\DataParsingServiceResultType.cs" />
+    <Compile Include="Pages\Playlist\PlaylistsPage.xaml.cs">
+      <DependentUpon>PlaylistsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\BusinessViewModelBase.cs" />
     <Compile Include="Utils\DataGridBehavior.cs" />
     <Compile Include="DesignTimeDataService.cs" />
@@ -287,13 +290,12 @@
     <Compile Include="RuntimeDataService.cs" />
     <Compile Include="ViewModel\MediaPlayer\AudioDevice.cs" />
     <Compile Include="ViewModel\MediaItems\MediaItem.cs" />
-    <Compile Include="ViewModel\MediaPlayer\MediaPlayerOptions.cs" />
     <Compile Include="ViewModel\MediaPlayer\BasePlayer.cs" />
-    <Compile Include="ViewModel\MediaPlayer\NAudio\FormatFactory.cs" />
+    <Compile Include="ViewModel\MediaPlayer\NAudio\WaveFormatFactory.cs" />
     <Compile Include="ViewModel\MediaPlayer\NAudio\NAudioMediaPlayer.cs" />
     <Compile Include="ViewModel\MediaPlayer\NAudio\NAudioPlayerSettings.cs" />
     <Compile Include="ViewModel\MediaPlayer\NAudio\PlaybackDeviceFactory.cs" />
-    <Compile Include="ViewModel\MediaPlayer\NAudio\PlayerFactory.cs" />
+    <Compile Include="ViewModel\MediaPlayer\NAudio\IWavePlayerFactory.cs" />
     <Compile Include="ViewModel\MediaPlayer\Playlist.cs" />
     <Compile Include="Pages\MediaPlayerPage.xaml.cs">
       <DependentUpon>MediaPlayerPage.xaml</DependentUpon>
@@ -331,6 +333,9 @@
     </Compile>
     <Compile Include="ViewModel\MediaItems\MediaPlayerViewModel.cs" />
     <Compile Include="GlobalServiceLocator.cs" />
+    <Compile Include="View\PlaylistView.xaml.cs">
+      <DependentUpon>PlaylistView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\PlayModeView.xaml.cs">
       <DependentUpon>PlayModeView.xaml</DependentUpon>
     </Compile>
@@ -359,6 +364,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\Playlist\PlaylistsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Style.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -380,6 +389,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\MediaPlayerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PlaylistView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

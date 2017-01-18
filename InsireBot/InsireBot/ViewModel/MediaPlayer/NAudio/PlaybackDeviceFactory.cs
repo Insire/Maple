@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Playback = NAudio;
+﻿using NAudio.Wave;
+using System.Collections.Generic;
 
 namespace InsireBot
 {
@@ -7,9 +7,9 @@ namespace InsireBot
     {
         public static IEnumerable<AudioDevice> GetAudioDevices()
         {
-            for (var i = 0; i < Playback.Wave.WaveOut.DeviceCount; i++)
+            for (var i = 0; i < WaveOut.DeviceCount; i++)
             {
-                var cap = Playback.Wave.WaveOut.GetCapabilities(1);
+                var cap = WaveOut.GetCapabilities(1);
 
                 yield return new AudioDevice
                 {

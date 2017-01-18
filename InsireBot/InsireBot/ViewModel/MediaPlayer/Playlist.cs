@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace InsireBot
 {
-    public class Playlist<T> : RangeObservableCollection<T>, IEnumerable<T>, IList<T>, IIsSelected, ISequence, IIdentifier, INotifyPropertyChanged where T : IMediaItem
+    public class Playlist : RangeObservableCollection<IMediaItem>, IEnumerable<IMediaItem>, IList<IMediaItem>, IIsSelected, ISequence, IIdentifier, INotifyPropertyChanged
     {
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public event RepeatModeChangedEventHandler RepeatModeChanged;
@@ -44,20 +45,19 @@ namespace InsireBot
             }
         }
 
-        private int _index;
+        private int _sequence;
         /// <summary>
         /// the index of this item if its part of a collection
         /// </summary>
         public int Sequence
         {
-            get { return _index; }
+            get { return _sequence; }
             set
             {
-                _index = value;
+                _sequence = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sequence)));
             }
         }
-
 
         private string _privacyStatus;
         /// <summary>
@@ -73,7 +73,6 @@ namespace InsireBot
             }
         }
 
-
         private long _itemCount;
         /// <summary>
         /// Youtube Property
@@ -87,7 +86,6 @@ namespace InsireBot
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ItemCount)));
             }
         }
-
 
         private bool _isSelected;
         /// <summary>
@@ -103,6 +101,17 @@ namespace InsireBot
             }
         }
 
+        private bool _isActive;
+
+        public bool IsActive
+        {
+            get { return _isActive; }
+            set
+            {
+                _isActive = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsActive)));
+            }
+        }
 
         private bool _isShuffeling;
         /// <summary>
@@ -123,7 +132,6 @@ namespace InsireBot
             }
         }
 
-
         private string _title;
         /// <summary>
         /// the title/name of this playlist (human readable identifier)
@@ -131,7 +139,7 @@ namespace InsireBot
         public string Title
         {
             get { return _title; }
-            private set
+            set
             {
                 _title = value;
                 NotifyPropertyChanged(nameof(Title));
@@ -146,7 +154,7 @@ namespace InsireBot
         public string Description
         {
             get { return _description; }
-            private set
+            set
             {
                 _description = value;
                 NotifyPropertyChanged(nameof(Description));
@@ -166,7 +174,6 @@ namespace InsireBot
             }
         }
 
-
         private Guid _id;
         public Guid ID
         {
@@ -178,7 +185,6 @@ namespace InsireBot
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ID)));
             }
         }
-
 
         private RepeatMode _repeatMode;
         /// <summary>
@@ -219,16 +225,21 @@ namespace InsireBot
             get { return false; }
         }
 
+        public ICommand SetActiveCommand { get; private set; }
+
         public Playlist() : base()
         {
             History = new Stack<int>();
             Title = string.Empty;
+            Description = string.Empty;
             ID = Guid.NewGuid();
             RepeatMode = RepeatMode.None;
             IsShuffeling = false;
+
+            SetActiveCommand = new RelayCommand(SetActive, CanSetActive);
         }
 
-        public Playlist(IEnumerable<T> items) : this()
+        public Playlist(IEnumerable<IMediaItem> items) : this()
         {
             AddRange(items);
         }
@@ -241,11 +252,18 @@ namespace InsireBot
             ItemCount = itemCount;
         }
 
+        public Playlist(IEnumerable<IMediaItem> items,string title, string location, string privacyStatus = "none") : this(items)
+        {
+            Title = title;
+            Location = location;
+            PrivacyStatus = privacyStatus;
+        }
+
         /// <summary>
         /// Add an <see cref="IMediaItem"/> to <seealso cref="Items"/>
         /// </summary>
         /// <param name="item">the <see cref="IMediaItem"/> to add</param>
-        new public void Add(T item)
+        new public void Add(IMediaItem item)
         {
             if (Items?.Any() == true)
                 item.Sequence = Items.Select(p => p.Sequence).Max() + 1;
@@ -260,9 +278,11 @@ namespace InsireBot
 
             if (CurrentItem == null)
                 CurrentItem = Items.First();
+
+            ItemCount = Items.Count;
         }
 
-        public override void AddRange(IEnumerable<T> items)
+        public override void AddRange(IEnumerable<IMediaItem> items)
         {
             var currentIndex = -1;
             if (Items.Any())
@@ -294,12 +314,13 @@ namespace InsireBot
         /// Removes all occurences of an <see cref="IMediaItem"/> from <seealso cref="Items"/>
         /// </summary>
         /// <param name="item"></param>
-        new public void Remove(T item)
+        new public void Remove(IMediaItem item)
         {
             while (Items.Contains(item))
                 Items.Remove(item);
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Items)));
+            ItemCount = Items.Count;
         }
         /// <summary>
         /// Returns the next <see cref="IMediaItem"/> after the <seealso cref="CurrentItem"/>
@@ -484,6 +505,16 @@ namespace InsireBot
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void SetActive()
+        {
+
+        }
+
+        private bool CanSetActive()
+        {
+            return false;
         }
     }
 }

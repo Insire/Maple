@@ -1,9 +1,9 @@
 ﻿using NAudio.Wave;
 using System.IO;
 
-namespace InsireBot.NAudio
+namespace InsireBot
 {
-    public class FormatFactory
+    public class WaveFormatFactory
     {
         public static WaveFormat GetWaveFormat(string fileName)
         {
