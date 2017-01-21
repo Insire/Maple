@@ -1,5 +1,5 @@
-﻿using DryIoc;
-using System;
+﻿using System;
+using System.Diagnostics;
 using System.Windows.Data;
 using System.Windows.Markup;
 using System.Xaml;
@@ -25,21 +25,19 @@ namespace InsireBot
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
             var provider = serviceProvider.GetService(typeof(IRootObjectProvider)) as IRootObjectProvider;
-            var window = provider.RootObject as IoCWindow;
+            var element = provider.RootObject as IIocFrameworkElement;
 
-            if (window != null)
+            if (element != null)
             {
-                //var manager = GlobalServiceLocator.Instance.TranslationManager;
-                var manager = window.Container.Resolve<ITranslationManager>();
-                if (manager != null)
+                var binding = new Binding("Value")
                 {
-                    var binding = new Binding("Value")
-                    {
-                        Source = new TranslationData(manager, _key)
-                    };
-                    return binding.ProvideValue(serviceProvider);
-                }
+                    Source = new TranslationData(element.TranslationManager, _key)
+                };
+
+                return binding.ProvideValue(serviceProvider);
             }
+
+            Debug.Fail($"ProvideValue {Key} failed");
             return null;
         }
     }

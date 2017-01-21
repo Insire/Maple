@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.ComponentModel;
 
 namespace InsireBot
 {
@@ -23,13 +24,20 @@ namespace InsireBot
         protected override void StartListening(object source)
         {
             var manager = (ITranslationManager)source;
-            manager.LanguageChanged += OnLanguageChanged;
+            //manager.PropertyChanged += OnLanguageChanged;
+            manager.PropertyChanged += PropertyChanged;
+        }
+
+        private void PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ITranslationManager.CurrentLanguage))
+                DeliverEvent(sender, new EventArgs());
         }
 
         protected override void StopListening(object source)
         {
             var manager = (ITranslationManager)source;
-            manager.LanguageChanged -= OnLanguageChanged;
+            manager.PropertyChanged -= PropertyChanged;
         }
 
         private static LanguageChangedEventManager CurrentManager

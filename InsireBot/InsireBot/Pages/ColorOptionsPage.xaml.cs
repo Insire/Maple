@@ -1,10 +1,8 @@
-﻿using System.Windows.Controls;
-
-namespace InsireBot
+﻿namespace InsireBot
 {
-    public partial class ColorOptionsPage : UserControl
+    public partial class ColorOptionsPage 
     {
-        public ColorOptionsPage()
+        public ColorOptionsPage(ITranslationManager manager) : base(manager)
         {
             InitializeComponent();
         }

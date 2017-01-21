@@ -18,9 +18,8 @@ namespace InsireBot
 
             InitIoC();
 
-            //var locator = _container.Resolve<GlobalServiceLocator>();
-
-            var shell = new Shell(_container)
+            var manager = _container.Resolve<ITranslationManager>();
+            var shell = new Shell(manager)
             {
                 DataContext = _container.Resolve<ShellViewModel>(),
             };

@@ -1,10 +1,8 @@
-﻿using System.Windows.Controls;
-
-namespace InsireBot
+﻿namespace InsireBot
 {
-    public partial class OptionsPage : UserControl
+    public partial class OptionsPage
     {
-        public OptionsPage()
+        public OptionsPage(ITranslationManager manager) : base(manager)
         {
             InitializeComponent();
         }

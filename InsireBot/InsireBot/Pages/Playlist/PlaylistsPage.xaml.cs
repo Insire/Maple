@@ -1,8 +1,8 @@
 ﻿namespace InsireBot
 {
-    public partial class PlaylistsPage 
+    public partial class PlaylistsPage
     {
-        public PlaylistsPage()
+        public PlaylistsPage(ITranslationManager manager) : base(manager)
         {
             InitializeComponent();
         }

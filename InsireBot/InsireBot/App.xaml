@@ -54,7 +54,7 @@
             <SolidColorBrush x:Key="IdealForegroundDisabledBrush"
                              Opacity="0.4"
                              Color="{DynamicResource Primary500}" />
-            
+
             <toolkit:DebugConverter x:Key="DebugConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <local:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />

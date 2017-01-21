@@ -1,15 +1,14 @@
-﻿using DryIoc;
-using MahApps.Metro.Controls;
+﻿using MahApps.Metro.Controls;
 
 namespace InsireBot
 {
-    public class IoCWindow : MetroWindow
+    public class IoCWindow : MetroWindow, IIocFrameworkElement
     {
-        public IContainer Container { get; set; }
+        public ITranslationManager TranslationManager { get; private set; }
 
-        public IoCWindow(IContainer container) : base()
+        public IoCWindow(ITranslationManager container) : base()
         {
-            Container = container;
+            TranslationManager = container;
         }
     }
 }

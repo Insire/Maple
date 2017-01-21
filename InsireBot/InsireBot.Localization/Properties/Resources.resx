@@ -145,8 +145,8 @@
     <value>Einstellungen</value>
   </data>
   <data name="ShellTitle" xml:space="preserve">
-    <value>InsireBot</value>
-  <comment>@Invariant</comment></data>
+    <value>InsireBot (de)</value>
+  </data>
   <data name="Languages" xml:space="preserve">
     <value>Sprachen</value>
   </data>

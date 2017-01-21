@@ -273,10 +273,12 @@
     <Compile Include="DryIoc\ImTools.cs" />
     <Compile Include="Enums\AudioFormats.cs" />
     <Compile Include="Enums\DataParsingServiceResultType.cs" />
+    <Compile Include="Interfaces\IIocFrameworkElement.cs" />
     <Compile Include="Interfaces\ITranslationManager.cs" />
     <Compile Include="Pages\Playlist\PlaylistsPage.xaml.cs">
       <DependentUpon>PlaylistsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\IocUserControl.cs" />
     <Compile Include="Utils\IoCWindow.cs" />
     <Compile Include="Utils\Localization\LanguageChangedEventManager.cs" />
     <Compile Include="Utils\Localization\Providers\ITranslationProvider.cs" />

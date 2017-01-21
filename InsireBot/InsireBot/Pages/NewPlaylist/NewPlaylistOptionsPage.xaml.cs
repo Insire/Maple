@@ -1,10 +1,8 @@
-﻿using System.Windows.Controls;
-
-namespace InsireBot
+﻿namespace InsireBot
 {
-    public partial class NewPlaylistOptionsPage : UserControl
+    public partial class NewPlaylistOptionsPage
     {
-        public NewPlaylistOptionsPage()
+        public NewPlaylistOptionsPage(ITranslationManager manager) : base(manager)
         {
             InitializeComponent();
         }

@@ -1,10 +1,8 @@
-﻿using System.Windows.Controls;
-
-namespace InsireBot
+﻿namespace InsireBot
 {
-    public partial class MediaPlayerPage : UserControl
+    public partial class MediaPlayerPage
     {
-        public MediaPlayerPage()
+        public MediaPlayerPage(ITranslationManager manager) : base(manager)
         {
             InitializeComponent();
         }

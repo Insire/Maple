@@ -8,8 +8,8 @@
                  Title="{local:Translation ShellTitle}"
                  Style="{StaticResource BaseWindowStyle}">
 
-    <!-- DataContext ShellViewModel-->
-    
+    <!--  DataContext ShellViewModel  -->
+
     <metro:MetroWindow.RightWindowCommands>
         <metro:WindowCommands ShowSeparators="False">
             <Button Command="{Binding Scenes.OpenColorOptionsCommand}">

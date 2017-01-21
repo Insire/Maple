@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MvvmScarletToolkit;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -7,9 +8,9 @@ using System.Threading;
 
 namespace InsireBot
 {
-    public class TranslationManager : ITranslationManager
+    public class TranslationManager : ObservableObject, ITranslationManager
     {
-        public event EventHandler LanguageChanged;
+        //public event EventHandler LanguageChanged;
 
         public ITranslationProvider TranslationProvider { get; private set; }
 
@@ -21,8 +22,8 @@ namespace InsireBot
                 if (value != Thread.CurrentThread.CurrentUICulture)
                 {
                     Thread.CurrentThread.CurrentUICulture = value;
-                    LanguageChanged?.Invoke(this, EventArgs.Empty);
-                    Debug.WriteLine($"Current Thread Localization has been set to {CurrentLanguage}");
+                    //LanguageChanged?.Invoke(this, EventArgs.Empty);
+                    OnPropertyChanged();
                 }
             }
         }
@@ -42,7 +43,7 @@ namespace InsireBot
         public TranslationManager(ITranslationProvider provider)
         {
             TranslationProvider = provider;
-            Debug.WriteLine($"Current Thread Localization is set to {CurrentLanguage}");
+            Thread.CurrentThread.CurrentCulture = Languages.First(p => p.TwoLetterISOLanguageName == "en");
         }
 
         public string Translate(string key)

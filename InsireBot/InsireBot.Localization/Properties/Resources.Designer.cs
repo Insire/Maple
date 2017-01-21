@@ -133,7 +133,7 @@ namespace InsireBot.Localization.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to InsireBot.
+        ///   Looks up a localized string similar to InsireBot (de).
         /// </summary>
         public static string ShellTitle {
             get {

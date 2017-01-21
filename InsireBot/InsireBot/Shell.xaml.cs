@@ -1,11 +1,10 @@
-﻿using DryIoc;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace InsireBot
 {
     public partial class Shell : IoCWindow
     {
-        public Shell(IContainer container):base(container)
+        public Shell(ITranslationManager manager):base(manager)
         {
             InitializeComponent();
         }

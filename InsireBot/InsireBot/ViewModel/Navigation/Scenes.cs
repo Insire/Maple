@@ -35,7 +35,7 @@ namespace InsireBot
             {
                 new Scene
                 {
-                    Content = new MediaPlayerPage(),
+                    Content = new MediaPlayerPage(_manager),
                     DisplayName =_manager.Translate(nameof(Resources.Playback)),
                     GetDataContext = () => mediaPlayerViewModel,
                     IsSelected = true,
@@ -43,7 +43,7 @@ namespace InsireBot
 
                 new Scene
                 {
-                    Content = new NewMediaItemPage(),
+                    Content = new NewMediaItemPage(_manager),
                     DisplayName = _manager.Translate(nameof(Resources.VideoAdd)),
                     GetDataContext = () => mediaPlayer,
                     IsSelected = false,
@@ -51,7 +51,7 @@ namespace InsireBot
 
                 new Scene
                 {
-                    Content = new PlaylistsPage(),
+                    Content = new PlaylistsPage(_manager),
                     DisplayName = _manager.Translate(nameof(Resources.Playlists)),
                     GetDataContext =() => playlistsViewModel,
                     IsSelected = false,
@@ -59,7 +59,7 @@ namespace InsireBot
 
                 new Scene
                 {
-                    Content = new NewPlaylistPage(),
+                    Content = new NewPlaylistPage(_manager),
                     DisplayName = _manager.Translate(nameof(Resources.PlaylistAdd)),
                     GetDataContext =() => createPlaylistViewModel,
                     IsSelected = false,
@@ -67,7 +67,7 @@ namespace InsireBot
 
                 new Scene
                 {
-                    Content = new ColorOptionsPage(),
+                    Content = new ColorOptionsPage(_manager),
                     DisplayName = _manager.Translate(nameof(Resources.Themes)),
                     GetDataContext =() => uIColorsViewModel,
                     IsSelected = false,
@@ -75,7 +75,7 @@ namespace InsireBot
 
                 new Scene
                 {
-                    Content = new OptionsPage(),
+                    Content = new OptionsPage(_manager),
                     DisplayName = _manager.Translate(nameof(Resources.Options)),
                     GetDataContext =() => optionsViewModel,
                     IsSelected = false,
