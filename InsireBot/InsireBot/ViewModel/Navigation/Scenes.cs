@@ -32,56 +32,56 @@ namespace InsireBot
 
             var content = new[]
             {
-                new Scene
+                new Scene(_manager)
                 {
                     Content = new MediaPlayerPage(_manager),
-                    DisplayName =_manager.Translate(nameof(Resources.Playback)),
+                    Key = nameof(Resources.Playback),
                     GetDataContext = () => mediaPlayerViewModel,
                     IsSelected = true,
                     Sequence = 100,
                 },
 
-                new Scene
+                new Scene(_manager)
                 {
                     Content = new NewMediaItemPage(_manager),
-                    DisplayName = _manager.Translate(nameof(Resources.VideoAdd)),
+                    Key = nameof(Resources.VideoAdd),
                     GetDataContext = () => createMediaItemViewModel,
                     IsSelected = false,
                     Sequence = 200,
                 },
 
-                new Scene
+                new Scene(_manager)
                 {
                     Content = new PlaylistsPage(_manager),
-                    DisplayName = _manager.Translate(nameof(Resources.Playlists)),
-                    GetDataContext =() => playlistsViewModel,
+                    Key = nameof(Resources.Playlists),
+                    GetDataContext = () => playlistsViewModel,
                     IsSelected = false,
                     Sequence = 300,
                 },
 
-                new Scene
+                new Scene(_manager)
                 {
                     Content = new NewPlaylistPage(_manager),
-                    DisplayName = _manager.Translate(nameof(Resources.PlaylistAdd)),
-                    GetDataContext =() => createPlaylistViewModel,
+                    Key = nameof(Resources.PlaylistAdd),
+                    GetDataContext = () => createPlaylistViewModel,
                     IsSelected = false,
                     Sequence = 400,
                 },
 
-                new Scene
+                new Scene(_manager)
                 {
                     Content = new ColorOptionsPage(_manager),
-                    DisplayName = _manager.Translate(nameof(Resources.Themes)),
-                    GetDataContext =() => uIColorsViewModel,
+                    Key = nameof(Resources.Themes),
+                    GetDataContext = () => uIColorsViewModel,
                     IsSelected = false,
                     Sequence = 500,
                 },
 
-                new Scene
+                new Scene(_manager)
                 {
                     Content = new OptionsPage(_manager),
-                    DisplayName = _manager.Translate(nameof(Resources.Options)),
-                    GetDataContext =() => optionsViewModel,
+                    Key = nameof(Resources.Options),
+                    GetDataContext = () => optionsViewModel,
                     IsSelected = false,
                     Sequence = 600,
                 },

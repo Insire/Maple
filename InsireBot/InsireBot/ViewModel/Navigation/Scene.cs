@@ -7,8 +7,8 @@ namespace InsireBot
 {
     public class Scene : ObservableObject, ISequence
     {
+        private ITranslationManager _manager;
         public Func<ObservableObject> GetDataContext { get; set; }
-        public Func<string> GetDisplayName { get; set; }
 
         private BusyStack _busyStack;
         /// <summary>
@@ -38,11 +38,18 @@ namespace InsireBot
             set { SetValue(ref _content, value); }
         }
 
+        private string _key;
+        public string Key
+        {
+            get { return _key; }
+            set { SetValue(ref _key, value, UpdateDisplayName); }
+        }
+
         private string _displayName;
         public string DisplayName
         {
             get { return _displayName; }
-            set { SetValue(ref _displayName, value); }
+            private set { SetValue(ref _displayName, value); }
         }
 
         private bool _isSelected;
@@ -59,13 +66,17 @@ namespace InsireBot
             set { SetValue(ref _sequence, value, UpdateDataContext); }
         }
 
-        public Scene()
+        public Scene(ITranslationManager manager)
         {
+            _manager = manager;
+            _manager.PropertyChanged += (o, e) =>
+                      {
+                          if (e.PropertyName == nameof(_manager.CurrentLanguage))
+                              UpdateDisplayName();
+                      };
+
             BusyStack = new BusyStack();
-            BusyStack.OnChanged = (hasItems) =>
-            {
-                IsBusy = hasItems;
-            };
+            BusyStack.OnChanged = (hasItems) => IsBusy = hasItems;
         }
 
         // TODO fiure out a way to call this async and still maintain order
@@ -89,6 +100,12 @@ namespace InsireBot
 
                 Content.DataContext = newContext;
             }
+        }
+
+        private void UpdateDisplayName()
+        {
+            if (Key != null)
+                DisplayName = _manager.Translate(Key);
         }
     }
 }
