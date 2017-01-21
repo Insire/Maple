@@ -10,7 +10,26 @@
         </materialDesign:TransitioningContent.OpeningEffects>
 
         <materialDesign:Card VerticalAlignment="Stretch">
-            <TextBlock>Options</TextBlock>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="0"
+                               Text="{local:Translation Languages}" />
+                    <ComboBox Grid.Row="0"
+                              Grid.Column="2"
+                              ItemsSource="{Binding Languages}" IsSynchronizedWithCurrentItem="True"/>
+                </Grid>
+            </ScrollViewer>
 
         </materialDesign:Card>
     </materialDesign:TransitioningContent>

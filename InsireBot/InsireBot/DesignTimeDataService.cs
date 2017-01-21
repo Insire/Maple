@@ -21,11 +21,6 @@ namespace InsireBot
             throw new NotImplementedException();
         }
 
-        public ISettings GetMediaPlayerSettings()
-        {
-            throw new NotImplementedException();
-        }
-
         public MediaPlayerType GetMediaPlayerType()
         {
             throw new NotImplementedException();

@@ -267,11 +267,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DryIoc\AsyncExecutionFlowScopeContext.cs" />
+    <Compile Include="DryIoc\Container.cs" />
+    <Compile Include="DryIoc\FactoryCompiler.cs" />
+    <Compile Include="DryIoc\ImTools.cs" />
     <Compile Include="Enums\AudioFormats.cs" />
     <Compile Include="Enums\DataParsingServiceResultType.cs" />
+    <Compile Include="Interfaces\ITranslationManager.cs" />
     <Compile Include="Pages\Playlist\PlaylistsPage.xaml.cs">
       <DependentUpon>PlaylistsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\IoCWindow.cs" />
+    <Compile Include="Utils\Localization\LanguageChangedEventManager.cs" />
+    <Compile Include="Utils\Localization\Providers\ITranslationProvider.cs" />
+    <Compile Include="Utils\Localization\Providers\ResxTranslationProvider.cs" />
+    <Compile Include="Utils\Localization\TranslationData.cs" />
+    <Compile Include="Utils\Localization\TranslationExtension.cs" />
+    <Compile Include="Utils\Localization\TranslationManager.cs" />
     <Compile Include="ViewModel\BusinessViewModelBase.cs" />
     <Compile Include="Utils\DataGridBehavior.cs" />
     <Compile Include="DesignTimeDataService.cs" />
@@ -288,6 +300,7 @@
     <Compile Include="Utils\LinqExtensions.cs" />
     <Compile Include="Utils\RadioButtonCheckedConverter.cs" />
     <Compile Include="RuntimeDataService.cs" />
+    <Compile Include="ViewModel\OptionsViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer\AudioDevice.cs" />
     <Compile Include="ViewModel\MediaItems\MediaItem.cs" />
     <Compile Include="ViewModel\MediaPlayer\BasePlayer.cs" />
@@ -323,6 +336,7 @@
     <Compile Include="Utils\InsireBotException.cs" />
     <Compile Include="ViewModel\MediaItems\CreateMediaItemViewModel.cs" />
     <Compile Include="ViewModel\MediaItems\CreatePlaylistViewModel.cs" />
+    <Compile Include="ViewModel\ShellViewModel.cs" />
     <Compile Include="ViewModel\StatusbarViewModel.cs" />
     <Compile Include="ViewModel\UIColorsViewModel.cs" />
     <Compile Include="ViewModel\MediaItems\PlaylistsStore.cs" />
@@ -377,7 +391,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainWindow.xaml">
+    <Page Include="Shell.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -385,8 +399,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="View\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="Shell.xaml.cs">
+      <DependentUpon>Shell.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\MediaPlayerView.xaml">
@@ -443,6 +457,10 @@
     <ProjectReference Include="..\InsireBot.Core\InsireBot.Core.csproj">
       <Project>{21fa5854-0692-42e2-924e-a38cf3c7ff71}</Project>
       <Name>InsireBot.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InsireBot.Localization\InsireBot.Localization.csproj">
+      <Project>{A073FC92-90E3-4541-8B52-6F7293187871}</Project>
+      <Name>InsireBot.Localization</Name>
     </ProjectReference>
     <ProjectReference Include="..\InsireBotData\InsireBot.Data.csproj">
       <Project>{b3cd46be-3c08-4bae-ae60-a6d84a62400c}</Project>

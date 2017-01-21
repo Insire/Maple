@@ -24,11 +24,6 @@ namespace InsireBot.Tests
             return new MockMediaPlayer(this);
         }
 
-        public ISettings GetMediaPlayerSettings()
-        {
-            throw new NotImplementedException();
-        }
-
         public MediaPlayerType GetMediaPlayerType()
         {
             throw new NotImplementedException();

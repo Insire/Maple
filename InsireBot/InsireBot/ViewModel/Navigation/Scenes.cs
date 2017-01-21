@@ -1,4 +1,5 @@
-﻿using MvvmScarletToolkit;
+﻿using InsireBot.Localization.Properties;
+using MvvmScarletToolkit;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -11,53 +12,72 @@ namespace InsireBot
     /// </summary>
     public class Scenes : ViewModelBase<Scene>
     {
+        private ITranslationManager _manager;
+
         public ICommand OpenColorOptionsCommand { get; private set; }
         public ICommand OpenMediaPlayerCommand { get; private set; }
         public ICommand OpenGithubPageCommand { get; private set; }
 
-        public Scenes()
+        public Scenes(ITranslationManager manager,
+                        MediaPlayerViewModel mediaPlayerViewModel,
+                        CreateMediaItemViewModel createMediaItemViewModel,
+                        PlaylistsViewModel playlistsViewModel,
+                        CreatePlaylistViewModel createPlaylistViewModel,
+                        UIColorsViewModel uIColorsViewModel,
+                        OptionsViewModel optionsViewModel)
         {
-            App.Log.Info("Loading Navigation");
+            _manager = manager;
+            var mediaPlayer = mediaPlayerViewModel;
+
+            App.Log.Info(_manager.Translate(nameof(Resources.NavigationLoad)));
 
             var content = new[]
             {
                 new Scene
                 {
                     Content = new MediaPlayerPage(),
-                    DisplayName = "Playback",
-                    GetDataContext = () => GlobalServiceLocator.Instance.MediaPlayerViewModel,
+                    DisplayName =_manager.Translate(nameof(Resources.Playback)),
+                    GetDataContext = () => mediaPlayerViewModel,
                     IsSelected = true,
                 },
 
                 new Scene
                 {
                     Content = new NewMediaItemPage(),
-                    DisplayName = "Add Video",
-                    GetDataContext = () => GlobalServiceLocator.Instance.CreateMediaItemViewModel,
+                    DisplayName = _manager.Translate(nameof(Resources.VideoAdd)),
+                    GetDataContext = () => mediaPlayer,
                     IsSelected = false,
                 },
 
                 new Scene
                 {
                     Content = new PlaylistsPage(),
-                    DisplayName = "Playlists",
-                    GetDataContext =() => GlobalServiceLocator.Instance.PlaylistsViewModel,
+                    DisplayName = _manager.Translate(nameof(Resources.Playlists)),
+                    GetDataContext =() => playlistsViewModel,
                     IsSelected = false,
                 },
 
                 new Scene
                 {
                     Content = new NewPlaylistPage(),
-                    DisplayName = "Add Playlist",
-                    GetDataContext =() => GlobalServiceLocator.Instance.CreatePlaylistViewModel,
+                    DisplayName = _manager.Translate(nameof(Resources.PlaylistAdd)),
+                    GetDataContext =() => createPlaylistViewModel,
                     IsSelected = false,
                 },
 
                 new Scene
                 {
                     Content = new ColorOptionsPage(),
-                    DisplayName = "Themes",
-                    GetDataContext =() => GlobalServiceLocator.Instance.UIColorsViewModel,
+                    DisplayName = _manager.Translate(nameof(Resources.Themes)),
+                    GetDataContext =() => uIColorsViewModel,
+                    IsSelected = false,
+                },
+
+                new Scene
+                {
+                    Content = new OptionsPage(),
+                    DisplayName = _manager.Translate(nameof(Resources.Options)),
+                    GetDataContext =() => optionsViewModel,
                     IsSelected = false,
                 },
             };
@@ -74,7 +94,7 @@ namespace InsireBot
 
             InitializeCommands();
 
-            App.Log.Info("Loaded Navigation");
+            App.Log.Info(manager.Translate(nameof(Resources.NavigationLoaded)));
         }
 
         private void InitializeCommands()
@@ -106,7 +126,7 @@ namespace InsireBot
 
         private void OpenGithubPage()
         {
-            Process.Start("https://github.com/Insire/InsireBot-V2");
+            Process.Start(_manager.Translate(nameof(Resources.GithubProjectLink)));
         }
     }
 }

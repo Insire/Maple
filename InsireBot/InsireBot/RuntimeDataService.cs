@@ -12,21 +12,6 @@ namespace InsireBot
             return new IMediaItem[0];
         }
 
-        public ISettings GetMediaPlayerSettings()
-        {
-            _log.Info("Loading MediaPlayer Settings");
-
-            var mediaPlayerType = GetMediaPlayerType();
-            switch (mediaPlayerType)
-            {
-                case MediaPlayerType.NAUDIO:
-                    return new NAudioPlayerSettings();
-
-                default:
-                    throw new NotImplementedException(nameof(mediaPlayerType));
-            }
-        }
-
         public IMediaPlayer GetMediaPlayer()
         {
             _log.Info("Loading MediaPlayer");

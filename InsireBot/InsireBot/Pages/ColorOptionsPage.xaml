@@ -8,8 +8,6 @@
              xmlns:toolkit="clr-namespace:MvvmScarletToolkit;assembly=MvvmScarletToolkit">
 
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <toolkit:DebugConverter x:Key="DebugConverter" />
         <toolkit:BindingProxy x:Key="ApplyPrimaryProxy" Data="{Binding ApplyPrimaryCommand}" />
         <toolkit:BindingProxy x:Key="ApplyAccentProxy" Data="{Binding ApplyAccentCommand}" />
         <toolkit:BindingProxy x:Key="ToggleBaseCommandProxy" Data="{Binding ToggleBaseCommand}" />

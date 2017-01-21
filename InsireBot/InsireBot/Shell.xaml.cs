@@ -1,11 +1,11 @@
-﻿using System.Windows.Input;
-using MahApps.Metro.Controls;
+﻿using DryIoc;
+using System.Windows.Input;
 
-namespace InsireBotWPF
+namespace InsireBot
 {
-    public partial class MainWindow : MetroWindow
+    public partial class Shell : IoCWindow
     {
-        public MainWindow()
+        public Shell(IContainer container):base(container)
         {
             InitializeComponent();
         }

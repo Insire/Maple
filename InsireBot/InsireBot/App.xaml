@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:InsireBot"
              xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-             xmlns:toolkit="clr-namespace:MvvmScarletToolkit;assembly=MvvmScarletToolkit"
-             StartupUri="View/MainWindow.xaml">
+             xmlns:toolkit="clr-namespace:MvvmScarletToolkit;assembly=MvvmScarletToolkit">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -55,9 +54,10 @@
             <SolidColorBrush x:Key="IdealForegroundDisabledBrush"
                              Opacity="0.4"
                              Color="{DynamicResource Primary500}" />
-
-            <x:Static x:Key="Locator" Member="local:GlobalServiceLocator.Instance" />
+            
             <toolkit:DebugConverter x:Key="DebugConverter" />
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <local:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

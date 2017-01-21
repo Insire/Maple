@@ -8,6 +8,8 @@ namespace InsireBot
     /// </summary>
     public class CreateMediaItemViewModel : MediaItemsStore
     {
+        private DataParsingService _dataParsingService;
+
         private string _source;
         public string Source
         {
@@ -24,8 +26,9 @@ namespace InsireBot
 
         public ICommand ParseCommand { get; private set; }
 
-        public CreateMediaItemViewModel() : base()
+        public CreateMediaItemViewModel(DataParsingService dataParsingService) : base()
         {
+            _dataParsingService = dataParsingService;
             InitializeCommands();
         }
 
@@ -35,7 +38,7 @@ namespace InsireBot
             {
                 using (BusyStack.GetToken())
                 {
-                    Result = await GlobalServiceLocator.Instance.DataParsingService.Parse(Source, DataParsingServiceResultType.MediaItems);
+                    Result = await _dataParsingService.Parse(Source, DataParsingServiceResultType.MediaItems);
 
                     if (Result.Count > 0)
                     {

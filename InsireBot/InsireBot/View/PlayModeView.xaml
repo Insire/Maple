@@ -5,8 +5,6 @@
              xmlns:themes="http://materialdesigninxaml.net/winfx/xaml/themes">
 
     <UserControl.Resources>
-        <local:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
-
         <Style x:Key="BaseRepeatModeStyle"
                BasedOn="{StaticResource MaterialDesignFlatToggleButton}"
                TargetType="{x:Type ToggleButton}">
@@ -74,7 +72,7 @@
 
     </UserControl.Resources>
 
-    <DockPanel DataContext="{Binding Source={StaticResource Locator}, Path=MediaPlayerViewModel.MediaPlayer}" LastChildFill="False">
+    <DockPanel DataContext="{Binding MediaPlayer}" LastChildFill="False">
         <ToggleButton DockPanel.Dock="Left"
                       IsChecked="{Binding Playlist.IsShuffeling}"
                       Style="{StaticResource ShuffleModeStyle}"
