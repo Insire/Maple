@@ -67,6 +67,7 @@
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Xaml" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -96,8 +97,8 @@
       <Project>{21FA5854-0692-42E2-924E-A38CF3C7FF71}</Project>
       <Name>InsireBot.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\InsireBotData\InsireBot.Data.csproj">
-      <Project>{B3CD46BE-3C08-4BAE-AE60-A6D84A62400C}</Project>
+    <ProjectReference Include="..\InsireBot.Data\InsireBot.Data.csproj">
+      <Project>{b3cd46be-3c08-4bae-ae60-a6d84a62400c}</Project>
       <Name>InsireBot.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\InsireBot\InsireBot.csproj">

@@ -460,13 +460,13 @@
       <Project>{21fa5854-0692-42e2-924e-a38cf3c7ff71}</Project>
       <Name>InsireBot.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\InsireBot.Data\InsireBot.Data.csproj">
+      <Project>{b3cd46be-3c08-4bae-ae60-a6d84a62400c}</Project>
+      <Name>InsireBot.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InsireBot.Localization\InsireBot.Localization.csproj">
       <Project>{A073FC92-90E3-4541-8B52-6F7293187871}</Project>
       <Name>InsireBot.Localization</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\InsireBotData\InsireBot.Data.csproj">
-      <Project>{b3cd46be-3c08-4bae-ae60-a6d84a62400c}</Project>
-      <Name>InsireBot.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
