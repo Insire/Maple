@@ -1,7 +1,5 @@
 ﻿using MvvmScarletToolkit;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -10,7 +8,6 @@ namespace InsireBot
 {
     public class TranslationManager : ObservableObject, ITranslationManager
     {
-        //public event EventHandler LanguageChanged;
 
         public ITranslationProvider TranslationProvider { get; private set; }
 
@@ -22,7 +19,6 @@ namespace InsireBot
                 if (value != Thread.CurrentThread.CurrentUICulture)
                 {
                     Thread.CurrentThread.CurrentUICulture = value;
-                    //LanguageChanged?.Invoke(this, EventArgs.Empty);
                     OnPropertyChanged();
                 }
             }
