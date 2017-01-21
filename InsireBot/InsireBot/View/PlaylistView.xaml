@@ -20,7 +20,7 @@
                  AlternationCount="2"
                  ItemsSource="{Binding Items}">
             <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                 </Style>
             </ListBox.ItemContainerStyle>

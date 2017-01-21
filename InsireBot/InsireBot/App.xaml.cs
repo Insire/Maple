@@ -1,6 +1,8 @@
 ﻿using DryIoc;
+using InsireBot.Properties;
 using log4net;
 using System.Reflection;
+using System.Threading;
 using System.Windows;
 
 namespace InsireBot
@@ -16,7 +18,9 @@ namespace InsireBot
 
             base.OnStartup(e);
 
-            InitIoC();
+            InitializeLocalization();
+            InitializeIocContainer();
+            InitializeTheme();
 
             var manager = _container.Resolve<ITranslationManager>();
             var shell = new Shell(manager)
@@ -33,7 +37,17 @@ namespace InsireBot
             base.OnExit(e);
         }
 
-        private void InitIoC()
+        private void InitializeTheme()
+        {
+            UIColorsViewModel.ApplyColorsFromSettings();
+        }
+
+        private void InitializeLocalization()
+        {
+            Thread.CurrentThread.CurrentCulture = Settings.Default.StartUpCulture;
+        }
+
+        private void InitializeIocContainer()
         {
             _container = new Container(rules: Rules.Default, scopeContext: new AsyncExecutionFlowScopeContext());
             _container.Register<GlobalServiceLocator>(reuse: Reuse.Singleton);

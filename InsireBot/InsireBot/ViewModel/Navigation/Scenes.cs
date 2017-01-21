@@ -27,7 +27,6 @@ namespace InsireBot
                         OptionsViewModel optionsViewModel)
         {
             _manager = manager;
-            var mediaPlayer = mediaPlayerViewModel;
 
             App.Log.Info(_manager.Translate(nameof(Resources.NavigationLoad)));
 
@@ -39,14 +38,16 @@ namespace InsireBot
                     DisplayName =_manager.Translate(nameof(Resources.Playback)),
                     GetDataContext = () => mediaPlayerViewModel,
                     IsSelected = true,
+                    Sequence = 100,
                 },
 
                 new Scene
                 {
                     Content = new NewMediaItemPage(_manager),
                     DisplayName = _manager.Translate(nameof(Resources.VideoAdd)),
-                    GetDataContext = () => mediaPlayer,
+                    GetDataContext = () => createMediaItemViewModel,
                     IsSelected = false,
+                    Sequence = 200,
                 },
 
                 new Scene
@@ -55,6 +56,7 @@ namespace InsireBot
                     DisplayName = _manager.Translate(nameof(Resources.Playlists)),
                     GetDataContext =() => playlistsViewModel,
                     IsSelected = false,
+                    Sequence = 300,
                 },
 
                 new Scene
@@ -63,6 +65,7 @@ namespace InsireBot
                     DisplayName = _manager.Translate(nameof(Resources.PlaylistAdd)),
                     GetDataContext =() => createPlaylistViewModel,
                     IsSelected = false,
+                    Sequence = 400,
                 },
 
                 new Scene
@@ -71,6 +74,7 @@ namespace InsireBot
                     DisplayName = _manager.Translate(nameof(Resources.Themes)),
                     GetDataContext =() => uIColorsViewModel,
                     IsSelected = false,
+                    Sequence = 500,
                 },
 
                 new Scene
@@ -79,6 +83,7 @@ namespace InsireBot
                     DisplayName = _manager.Translate(nameof(Resources.Options)),
                     GetDataContext =() => optionsViewModel,
                     IsSelected = false,
+                    Sequence = 600,
                 },
             };
 
@@ -88,7 +93,7 @@ namespace InsireBot
 
                 using (View.DeferRefresh())
                 {
-                    View.SortDescriptions.Add(new SortDescription(nameof(Scene.DisplayName), ListSortDirection.Ascending));
+                    View.SortDescriptions.Add(new SortDescription(nameof(Scene.Sequence), ListSortDirection.Ascending));
                 }
             }
 

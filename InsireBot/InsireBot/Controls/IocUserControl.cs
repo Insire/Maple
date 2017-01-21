@@ -2,7 +2,7 @@
 
 namespace InsireBot
 {
-    public class IoCUserControl :UserControl, IIocFrameworkElement
+    public class IoCUserControl : UserControl, IIocFrameworkElement
     {
         public ITranslationManager TranslationManager { get; private set; }
 

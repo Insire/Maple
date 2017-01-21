@@ -90,7 +90,7 @@
         <Setter Property="GlowBrush" Value="Black" />
         <Setter Property="TitleCaps" Value="False" />
         <Setter Property="FontFamily" Value="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto" />
-        <Setter Property="SaveWindowPosition" Value="True" />
+        <Setter Property="SaveWindowPosition" Value="False" />
     </Style>
 
     <!--  Button Styles  -->

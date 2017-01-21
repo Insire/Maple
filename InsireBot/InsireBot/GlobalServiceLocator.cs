@@ -1,5 +1,4 @@
 using System;
-using System.Windows;
 
 namespace InsireBot
 {
@@ -24,19 +23,12 @@ namespace InsireBot
                 throw new InvalidOperationException($"can't initalize {nameof(GlobalServiceLocator)} more than once");
         }
 
+        /// <summary>
+        /// hopefully obsolete, if i can figure out how to provide an instance of TranslationManager to nested usercontrols without code behind
+        /// </summary>
         public ITranslationManager TranslationManager
         {
             get { return _shellViewModel.TranslationManager; }
-        }
-
-        public void InvokeActionOnUiThread(Action action)
-        {
-            var dispatcher = Application.Current.Dispatcher;
-
-            if (dispatcher.CheckAccess())
-                action();
-            else
-                dispatcher.Invoke(action);
         }
     }
 }

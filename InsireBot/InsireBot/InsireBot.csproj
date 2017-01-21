@@ -273,19 +273,23 @@
     <Compile Include="DryIoc\ImTools.cs" />
     <Compile Include="Enums\AudioFormats.cs" />
     <Compile Include="Enums\DataParsingServiceResultType.cs" />
+    <Compile Include="Interfaces\IConfigurableWindowSettings.cs" />
     <Compile Include="Interfaces\IIocFrameworkElement.cs" />
     <Compile Include="Interfaces\ITranslationManager.cs" />
     <Compile Include="Pages\Playlist\PlaylistsPage.xaml.cs">
       <DependentUpon>PlaylistsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\IocUserControl.cs" />
-    <Compile Include="Utils\IoCWindow.cs" />
+    <Compile Include="Controls\ConfigurableWindow.cs" />
+    <Compile Include="Controls\ConfigurableWindowSettings.cs" />
+    <Compile Include="Controls\IocUserControl.cs" />
+    <Compile Include="Controls\IoCWindow.cs" />
     <Compile Include="Utils\Localization\LanguageChangedEventManager.cs" />
     <Compile Include="Utils\Localization\Providers\ITranslationProvider.cs" />
     <Compile Include="Utils\Localization\Providers\ResxTranslationProvider.cs" />
     <Compile Include="Utils\Localization\TranslationData.cs" />
     <Compile Include="Utils\Localization\TranslationExtension.cs" />
     <Compile Include="Utils\Localization\TranslationManager.cs" />
+    <Compile Include="Utils\ShellSettings.cs" />
     <Compile Include="ViewModel\BusinessViewModelBase.cs" />
     <Compile Include="Utils\DataGridBehavior.cs" />
     <Compile Include="DesignTimeDataService.cs" />
@@ -302,6 +306,7 @@
     <Compile Include="Utils\LinqExtensions.cs" />
     <Compile Include="Utils\RadioButtonCheckedConverter.cs" />
     <Compile Include="RuntimeDataService.cs" />
+    <Compile Include="ViewModel\Navigation\Scene.cs" />
     <Compile Include="ViewModel\OptionsViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer\AudioDevice.cs" />
     <Compile Include="ViewModel\MediaItems\MediaItem.cs" />
