@@ -72,7 +72,7 @@
 
     </UserControl.Resources>
 
-    <DockPanel DataContext="{Binding MediaPlayer}" LastChildFill="False">
+    <DockPanel LastChildFill="False">
         <ToggleButton DockPanel.Dock="Left"
                       IsChecked="{Binding Playlist.IsShuffeling}"
                       Style="{StaticResource ShuffleModeStyle}"

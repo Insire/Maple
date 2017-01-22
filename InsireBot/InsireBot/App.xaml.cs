@@ -3,7 +3,7 @@ using InsireBot.Core;
 using InsireBot.Data;
 using InsireBot.Properties;
 using InsireBot.Youtube;
-using log4net;
+using System;
 using System.Threading;
 using System.Windows;
 
@@ -15,8 +15,6 @@ namespace InsireBot
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            log4net.Config.XmlConfigurator.Configure();
-
             base.OnStartup(e);
 
             InitializeLocalization();
@@ -50,9 +48,9 @@ namespace InsireBot
 
         private void InitializeIocContainer()
         {
-            _container = new Container(rules: Rules.Default, scopeContext: new AsyncExecutionFlowScopeContext());
+            _container = new Container(rules => rules.WithoutThrowOnRegisteringDisposableTransient());
 
-            _container.Register<IBotLog>(made: Made.Of(() => LogManager.GetLogger(typeof(App))));
+            _container.Register<IBotLog, LoggingService>();
             _container.Register<GlobalServiceLocator>(reuse: Reuse.Singleton);
             _container.Register<Scenes>(reuse: Reuse.Singleton);
             _container.Register<UIColorsViewModel>(reuse: Reuse.Singleton);
@@ -67,13 +65,18 @@ namespace InsireBot
 
             _container.Register<ITranslationProvider, ResxTranslationProvider>(reuse: Reuse.Singleton);
             _container.Register<ITranslationManager, TranslationManager>(reuse: Reuse.Singleton);
-            _container.Register<IMediaPlayer, NAudioMediaPlayer>();
+            _container.Register<IMediaPlayer, NAudioMediaPlayer>(reuse: Reuse.Transient);
             _container.Register<IPlaylistsRepository, PlaylistsRepository>();
             _container.Register<IMediaItemRepository, MediaItemRepository>();
             _container.Register<IMediaItemMapper, MediaItemMapper>();
             _container.Register<IYoutubeUrlParseService, UrlParseService>();
             _container.Register<IPlaylistMapper, PlaylistMapper>();
-            _container.Register<IMediaItemMapper, MediaItemMapper>();
+
+        }
+
+        private Type GetTypeInternal()
+        {
+            return typeof(App);
         }
     }
 }
