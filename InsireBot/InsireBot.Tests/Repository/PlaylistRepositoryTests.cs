@@ -8,12 +8,12 @@ namespace InsireBot.Tests
     [TestClass()]
     public class PlaylistRepositoryTests
     {
-        private static PlaylistRepository _repository;
+        private static PlaylistsRepository _repository;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            _repository = new PlaylistRepository();
+            _repository = new PlaylistsRepository();
         }
 
         [TestMethod()]

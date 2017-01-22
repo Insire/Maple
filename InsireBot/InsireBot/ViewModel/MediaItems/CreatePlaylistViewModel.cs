@@ -1,4 +1,5 @@
-﻿using MvvmScarletToolkit;
+﻿using InsireBot.Core;
+using InsireBot.Youtube;
 using System.Windows.Input;
 
 namespace InsireBot
@@ -6,9 +7,10 @@ namespace InsireBot
     /// <summary>
     /// viewmodel for creating playlists from a input string (path/url)
     /// </summary>
-    public class CreatePlaylistViewModel : PlaylistsStore
+    public class CreatePlaylistViewModel : ViewModelListBase<PlaylistViewModel>
     {
-        private DataParsingService _dataParsingService;
+        private IYoutubeUrlParseService _dataParsingService;
+        private IPlaylistMapper _mapper;
 
         private string _source;
         public string Source
@@ -17,8 +19,8 @@ namespace InsireBot
             set { SetValue(ref _source, value); }
         }
 
-        private DataParsingServiceResult _result;
-        public DataParsingServiceResult Result
+        private UrlParseResult _result;
+        public UrlParseResult Result
         {
             get { return _result; }
             private set { SetValue(ref _result, value); }
@@ -26,9 +28,10 @@ namespace InsireBot
 
         public ICommand ParseCommand { get; private set; }
 
-        public CreatePlaylistViewModel(DataParsingService dataParsingService) : base()
+        public CreatePlaylistViewModel(IYoutubeUrlParseService dataParsingService, IPlaylistMapper mapper) : base()
         {
             _dataParsingService = dataParsingService;
+            _mapper = mapper;
 
             InitializeCommands();
         }
@@ -39,13 +42,10 @@ namespace InsireBot
             {
                 using (BusyStack.GetToken())
                 {
-                    Result = await _dataParsingService.Parse(Source, DataParsingServiceResultType.Playlists);
+                    Result = await _dataParsingService.Parse(Source, ParseResultType.Playlists);
 
-                    if (Result.Count > 0)
-                    {
-                        if (Result.Playlists?.Count > 0)
-                            Items.AddRange(Result.Playlists);
-                    }
+                    if (Result.Count > 0 && Result.Playlists?.Count > 0)
+                        Items.AddRange(_mapper.GetMany(Result.Playlists));
                 }
             });
         }

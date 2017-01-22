@@ -1,4 +1,4 @@
-﻿using MvvmScarletToolkit;
+﻿using InsireBot.Core;
 
 namespace InsireBot
 {

@@ -9,7 +9,7 @@ namespace InsireBot.Data
         public string Location { get; set; }
         public int RepeatMode { get; set; }
         public bool IsShuffeling { get; set; }
-
+        public bool IsRestricted { get; set; }
         public List<MediaItem> MediaItems { get; set; }
     }
 }

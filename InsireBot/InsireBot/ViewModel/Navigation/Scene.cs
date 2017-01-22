@@ -1,4 +1,4 @@
-﻿using MvvmScarletToolkit;
+﻿using InsireBot.Core;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -42,7 +42,7 @@ namespace InsireBot
         public string Key
         {
             get { return _key; }
-            set { SetValue(ref _key, value, UpdateDisplayName); }
+            set { SetValue(ref _key, value, Changed: UpdateDisplayName); }
         }
 
         private string _displayName;
@@ -56,14 +56,14 @@ namespace InsireBot
         public bool IsSelected
         {
             get { return _isSelected; }
-            set { SetValue(ref _isSelected, value, UpdateDataContext); }
+            set { SetValue(ref _isSelected, value, Changed: UpdateDataContext); }
         }
 
         public int _sequence;
         public int Sequence
         {
             get { return _sequence; }
-            set { SetValue(ref _sequence, value, UpdateDataContext); }
+            set { SetValue(ref _sequence, value, Changed: UpdateDataContext); }
         }
 
         public Scene(ITranslationManager manager)

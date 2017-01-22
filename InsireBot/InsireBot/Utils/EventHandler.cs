@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InsireBot.Core;
+using System;
 
 namespace InsireBot
 {
@@ -32,6 +33,16 @@ namespace InsireBot
         public ShuffleModeChangedEventEventArgs(bool isShuffeling)
         {
             IsShuffeling = isShuffeling;
+        }
+    }
+
+    public delegate void PlayingMediaItemEventHandler(object sender, PlayingMediaItemEventArgs e);
+    public class PlayingMediaItemEventArgs : EventArgs
+    {
+        public IMediaItem MediaItem { get; private set; }
+        public PlayingMediaItemEventArgs(IMediaItem item)
+        {
+            MediaItem = item;
         }
     }
 }

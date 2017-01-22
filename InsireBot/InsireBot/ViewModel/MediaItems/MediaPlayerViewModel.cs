@@ -1,36 +1,50 @@
-using GalaSoft.MvvmLight.Messaging;
-using MvvmScarletToolkit;
+using InsireBot.Core;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 
 namespace InsireBot
 {
-    public class MediaPlayerViewModel : BusinessViewModelBase<IMediaItem>
+    public class MediaPlayerViewModel : ViewModelListBase<IMediaItem>
     {
-        public IMediaPlayer MediaPlayer { get; private set; }
+        public IMediaPlayer Player { get; private set; }
 
-        public bool IsPlaying { get { return MediaPlayer.IsPlaying; } }
+        public bool IsPlaying { get { return Player.IsPlaying; } }
 
         public ICommand PlayCommand { get; private set; }
         public ICommand PauseCommand { get; private set; }
         public ICommand NextCommand { get; private set; }
         public ICommand PreviousCommand { get; private set; }
 
-        public Playlist Playlist
+        private PlaylistViewModel _playlist;
+        public PlaylistViewModel Playlist
         {
-            get { return MediaPlayer.Playlist; }
+            get { return _playlist; }
+            set { SetValue(ref _playlist, value, Changing: OnPlaylistChanging, Changed: OnPlaylistChanged); }
         }
 
-        public MediaPlayerViewModel(IDataService dataService) : base(dataService)
+        public MediaPlayerViewModel(IMediaPlayer player) : base()
         {
-            // receive MediaItems and add them to the playlist
-            Messenger.Default.Register<MediaItem>(this, (mediaItem) =>
-             {
-                 Items.Add(mediaItem);
-             });
+            Player = player;
+            Player.PlayingMediaItem += Player_PlayingMediaItem;
+            Player.CompletedMediaItem += MediaPlayer_CompletedMediaItem;
 
-            Initialize(dataService);
+            InitiliazeCommands();
+        }
+
+        private void OnPlaylistChanging()
+        {
+            Stop();
+        }
+
+        private void OnPlaylistChanged()
+        {
+            // TODO: maybe add optional endless playback
+        }
+
+        private void Player_PlayingMediaItem(object sender, PlayingMediaItemEventArgs e)
+        {
+            Playlist.SetActive(e.MediaItem);
         }
 
         private void MediaPlayer_CompletedMediaItem(object sender, CompletedMediaItemEventEventArgs e)
@@ -38,38 +52,18 @@ namespace InsireBot
             Next();
         }
 
-        private void Initialize(IDataService dataService)
-        {
-
-            if (MediaPlayer != null)
-            {
-                MediaPlayer.CompletedMediaItem -= MediaPlayer_CompletedMediaItem;
-                MediaPlayer.Dispose();
-            }
-
-            if (Items?.Any() != true)
-            {
-                Items.AddRange(dataService.GetMediaItems()); // populate the playlist
-            }
-
-            MediaPlayer = dataService.GetMediaPlayer();
-            MediaPlayer.CompletedMediaItem += MediaPlayer_CompletedMediaItem;
-
-            InitiliazeCommands();
-        }
-
         private void InitiliazeCommands()
         {
-            PlayCommand = new RelayCommand(Play, () => MediaPlayer.CanPlay);
-            PreviousCommand = new RelayCommand(Previous, () => MediaPlayer.Playlist?.CanPrevious() == true);
-            NextCommand = new RelayCommand(Next, () => MediaPlayer.Playlist?.CanNext() == true);
-            PauseCommand = new RelayCommand(Pause,()=> MediaPlayer.CanPause);
+            PlayCommand = new RelayCommand<IMediaItem>(Player.Play, CanPlay);
+            PreviousCommand = new RelayCommand(Previous, () => Playlist?.CanPrevious() == true);
+            NextCommand = new RelayCommand(Next, () => Playlist?.CanNext() == true);
+            PauseCommand = new RelayCommand(Pause, () => Player.CanPause());
         }
 
         public override void AddRange(IEnumerable<IMediaItem> mediaItems)
         {
             foreach (var item in mediaItems)
-                MediaPlayer.Playlist.Add(item);
+                Playlist.Add(item);
         }
 
         public override void Add(IMediaItem mediaItem)
@@ -90,36 +84,37 @@ namespace InsireBot
             Items.Add(mediaItem);
         }
 
-        public void Previous()
-        {
-            MediaPlayer.Previous();
-        }
-
-        public void Next()
-        {
-            MediaPlayer.Next();
-        }
-
-        public void Play()
-        {
-            MediaPlayer.Play();
-        }
-
         public void Pause()
         {
-            MediaPlayer.Pause();
+            Player.Pause();
         }
 
         public void Stop()
         {
-            MediaPlayer.Stop();
+            Player.Stop();
         }
 
-        public void SetPlaylist(Playlist playlist)
+        public void Previous()
         {
-            MediaPlayer.Playlist.Clear();
-            var items = MediaPlayer.Playlist.CanAddRange(playlist);
-            MediaPlayer.Playlist.AddRange(items);
+            var item = Playlist.Previous();
+            Player.Play(item);
+        }
+
+        public void Next()
+        {
+            var item = Playlist.Next();
+            Player.Play(item);
+        }
+
+        public void CanNext()
+        {
+            var item = Playlist.Next();
+            Player.CanPlay(item);
+        }
+
+        private bool CanPlay(IMediaItem item)
+        {
+            return false;
         }
     }
 }

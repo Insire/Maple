@@ -1,4 +1,4 @@
-﻿using MvvmScarletToolkit;
+﻿using InsireBot.Core;
 using System;
 using System.ComponentModel;
 using System.Windows;

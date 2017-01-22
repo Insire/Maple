@@ -1,10 +1,12 @@
-﻿using NAudio.Wave;
+﻿using InsireBot.Core;
+using NAudio.Wave;
 using System;
 
 namespace InsireBot
 {
     public class NAudioMediaPlayer : BasePlayer
     {
+        private IBotLog _log;
         private IWavePlayer _player;
         private WaveStream _reader;
         private VolumeWaveProvider16 _volumeProvider;
@@ -17,11 +19,12 @@ namespace InsireBot
         public override int Volume
         {
             get { return _volume; }
-            set { SetValue(ref _volume, value, () => SyncVolumeToVolumeProvider(value)); }
+            set { SetValue(ref _volume, value, Changed: () => SyncVolumeToVolumeProvider(value)); }
         }
 
-        public NAudioMediaPlayer(IDataService dataService) : base(dataService)
+        public NAudioMediaPlayer(IBotLog log) : base()
         {
+            _log = log;
             _settings = new MediaFoundationReader.MediaFoundationReaderSettings
             {
                 RepositionInRead = true,
@@ -44,24 +47,24 @@ namespace InsireBot
             OnPropertyChanged(nameof(CanPause));
         }
 
-        public override bool CanPlay
-        {
-            get { return base.CanPlay && _player?.PlaybackState != null && _player?.PlaybackState != PlaybackState.Playing; }
-        }
-
-        public override bool CanPause
-        {
-            get { return base.CanPlay && _player?.PlaybackState == PlaybackState.Playing; }
-        }
-
         public override bool IsPlaying
         {
-            get { return base.CanPlay && _player?.PlaybackState == PlaybackState.Playing; }
+            get { return _player?.PlaybackState != null && _player.PlaybackState != NAudio.Wave.PlaybackState.Playing; }
         }
 
-        public override bool CanStop
+        public override bool CanPlay(IMediaItem item)
         {
-            get { return base.CanPlay && _player?.PlaybackState == PlaybackState.Playing; }
+            return item!= null && _player?.PlaybackState != null && _player.PlaybackState != NAudio.Wave.PlaybackState.Playing;
+        }
+
+        public override bool CanPause()
+        {
+            return _player?.PlaybackState != null && _player.PlaybackState != NAudio.Wave.PlaybackState.Playing;
+        }
+
+        public override bool CanStop()
+        {
+            return _player?.PlaybackState != null && _player.PlaybackState != NAudio.Wave.PlaybackState.Playing;
         }
 
         public override void Pause()
@@ -69,7 +72,7 @@ namespace InsireBot
             if (_player == null)
                 throw new ArgumentNullException($"{nameof(_player)} is null");
 
-            if (_player?.PlaybackState != PlaybackState.Playing)
+            if (_player?.PlaybackState != NAudio.Wave.PlaybackState.Playing)
                 throw new InvalidOperationException("Can't pause playback of a file, thats not being played back");
 
             _player.Pause();
@@ -77,7 +80,7 @@ namespace InsireBot
 
         public override void Play(IMediaItem mediaItem)
         {
-            if (_player?.PlaybackState == PlaybackState.Playing)
+            if (_player?.PlaybackState == NAudio.Wave.PlaybackState.Playing)
                 throw new InvalidOperationException("Can't play a file, when already playing");
 
             var t = new WaveFileReader("");
@@ -95,7 +98,7 @@ namespace InsireBot
             if (_player == null)
                 throw new ArgumentNullException($"{nameof(_player)} is null");
 
-            if (_player?.PlaybackState != PlaybackState.Playing)
+            if (_player?.PlaybackState != NAudio.Wave.PlaybackState.Playing)
                 throw new InvalidOperationException("Can't stop playback for a file, thats not being played back");
 
             _player.Stop();

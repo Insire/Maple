@@ -1,4 +1,4 @@
-﻿using MvvmScarletToolkit;
+﻿using InsireBot.Core;
 using System.Globalization;
 
 namespace InsireBot
@@ -12,7 +12,7 @@ namespace InsireBot
         public CultureInfo SelectedCulture
         {
             get { return _selectedCulture; }
-            set { SetValue(ref _selectedCulture, value, SyncCulture); }
+            set { SetValue(ref _selectedCulture, value, Changed: SyncCulture); }
         }
 
         public OptionsViewModel(ITranslationManager manager)

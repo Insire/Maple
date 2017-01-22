@@ -1,38 +1,22 @@
-﻿using System;
-using MvvmScarletToolkit;
+﻿using InsireBot.Core;
 
 namespace InsireBot
 {
-    public abstract class BasePlayer : BusinessViewModelBase<AudioDevice>, IMediaPlayer
+    public abstract class BasePlayer : ObservableObject, IMediaPlayer
     {
         public event CompletedMediaItemEventHandler CompletedMediaItem;
+        public event PlayingMediaItemEventHandler PlayingMediaItem;
 
-        public bool CanNext
+        event CompletedMediaItemEventHandler IMediaPlayer.CompletedMediaItem
         {
-            get { return Playlist.CanNext(); }
+            add { CompletedMediaItem += value; }
+            remove { CompletedMediaItem -= value; }
         }
 
-        public bool CanPrevious
+        event PlayingMediaItemEventHandler IMediaPlayer.PlayingMediaItem
         {
-            get { return Playlist.CanPrevious(); }
-        }
-
-        public virtual bool CanPlay { get { return Playlist?.CurrentItem != null; } }
-        public virtual bool CanPause { get { return Playlist?.CurrentItem != null; } }
-        public virtual bool CanStop { get { return Playlist?.CurrentItem != null; } }
-
-        private Playlist _playlist;
-        public Playlist Playlist
-        {
-            get { return _playlist; }
-            protected set { SetValue(ref _playlist, value); }
-        }
-
-        private RangeObservableCollection<AudioDevice> _audioDevices;
-        public RangeObservableCollection<AudioDevice> AudioDevices
-        {
-            get { return _audioDevices; }
-            set { SetValue(ref _audioDevices, value); }
+            add { PlayingMediaItem += value; }
+            remove { PlayingMediaItem -= value; }
         }
 
         private AudioDevice _audioDevice;
@@ -40,6 +24,13 @@ namespace InsireBot
         {
             get { return _audioDevice; }
             set { SetValue(ref _audioDevice, value); }
+        }
+
+        private IMediaItem _current;
+        public IMediaItem Current
+        {
+            get { return _current; }
+            set { SetValue(ref _current, value); }
         }
 
         private bool _disposed;
@@ -57,63 +48,6 @@ namespace InsireBot
 
         public abstract int VolumeMin { get; }
 
-        public BasePlayer(IDataService dataService) : base(dataService)
-        {
-            AudioDevices = new RangeObservableCollection<AudioDevice>();
-            CompletedMediaItem += Player_CompletedMediaItem;
-
-            if (IsInDesignMode)
-            {
-                AudioDevices.AddRange(_dataService.GetPlaybackDevices());
-            }
-            else
-            {
-                AudioDevices.AddRange(_dataService.GetPlaybackDevices());
-            }
-        }
-
-        protected virtual void Player_CompletedMediaItem(object sender, CompletedMediaItemEventEventArgs e)
-        {
-            CompletedMediaItem?.Invoke(this, e);
-        }
-
-        event CompletedMediaItemEventHandler IMediaPlayer.CompletedMediaItem
-        {
-            add { CompletedMediaItem += value; }
-            remove { CompletedMediaItem -= value; }
-        }
-
-        public virtual void Play()
-        {
-            if (IsPlaying)
-                Stop();
-
-            if (Playlist?.CurrentItem != null)
-                Play(Playlist.CurrentItem);
-
-            Next();
-        }
-
-        public virtual void Next()
-        {
-            if (IsPlaying)
-                Stop();
-
-            var next = Playlist?.Next();
-            if (!string.IsNullOrEmpty(next?.Location))
-                Play(next);
-        }
-
-        public virtual void Previous()
-        {
-            if (IsPlaying)
-                Stop();
-
-            var previous = Playlist?.Previous();
-            if (!string.IsNullOrEmpty(previous?.Location))
-                Play(previous);
-        }
-
         public abstract void Play(IMediaItem mediaItem);
 
         public abstract void Pause();
@@ -121,5 +55,17 @@ namespace InsireBot
         public abstract void Stop();
 
         public abstract void Dispose();
+
+        public abstract bool CanPlay(IMediaItem item);
+
+        public virtual bool CanStop()
+        {
+            return false;
+        }
+
+        public virtual bool CanPause()
+        {
+            return false;
+        }
     }
 }

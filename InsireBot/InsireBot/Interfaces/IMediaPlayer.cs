@@ -1,26 +1,24 @@
-﻿using System;
+﻿using InsireBot.Core;
+using System;
 
 namespace InsireBot
 {
     public interface IMediaPlayer: IDisposable
     {
         event CompletedMediaItemEventHandler CompletedMediaItem;
+        event PlayingMediaItemEventHandler PlayingMediaItem;
 
         bool Disposed { get; }
         bool IsPlaying { get; }
-        bool CanPlay { get; }
 
-        bool CanPause { get; }
-        bool CanStop { get; }
-
-        void Play();
-        void Next();
-        void Previous();
-
+        void Play(IMediaItem item);
         void Pause();
         void Stop();
 
-        Playlist Playlist { get; }
+        bool CanStop();
+        bool CanPause();
+        bool CanPlay(IMediaItem item);
+
         int Volume { get; set; }
         int VolumeMax { get; }
         int VolumeMin { get; }

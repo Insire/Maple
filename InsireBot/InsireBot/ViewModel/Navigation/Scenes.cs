@@ -1,5 +1,5 @@
-﻿using InsireBot.Localization.Properties;
-using MvvmScarletToolkit;
+﻿using InsireBot.Core;
+using InsireBot.Localization.Properties;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -10,25 +10,27 @@ namespace InsireBot
     /// <summary>
     /// ViewModel that stores and controls which UserControl(Page/View) whatever is displayed in the mainwindow of this app)
     /// </summary>
-    public class Scenes : ViewModelBase<Scene>
+    public class Scenes : ViewModelListBase<Scene>
     {
         private ITranslationManager _manager;
-
+        private IBotLog _log;
         public ICommand OpenColorOptionsCommand { get; private set; }
         public ICommand OpenMediaPlayerCommand { get; private set; }
         public ICommand OpenGithubPageCommand { get; private set; }
 
         public Scenes(ITranslationManager manager,
+                        IBotLog log,
                         MediaPlayerViewModel mediaPlayerViewModel,
                         CreateMediaItemViewModel createMediaItemViewModel,
-                        PlaylistsViewModel playlistsViewModel,
+                        PlaylistViewModel playlistsViewModel,
                         CreatePlaylistViewModel createPlaylistViewModel,
                         UIColorsViewModel uIColorsViewModel,
                         OptionsViewModel optionsViewModel)
         {
             _manager = manager;
+            _log = log;
 
-            App.Log.Info(_manager.Translate(nameof(Resources.NavigationLoad)));
+            _log.Info(_manager.Translate(nameof(Resources.NavigationLoad)));
 
             var content = new[]
             {
@@ -99,7 +101,7 @@ namespace InsireBot
 
             InitializeCommands();
 
-            App.Log.Info(manager.Translate(nameof(Resources.NavigationLoaded)));
+            _log.Info(manager.Translate(nameof(Resources.NavigationLoaded)));
         }
 
         private void InitializeCommands()

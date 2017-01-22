@@ -2,8 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:InsireBot"
-             xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-             xmlns:toolkit="clr-namespace:MvvmScarletToolkit;assembly=MvvmScarletToolkit">
+             xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -29,7 +28,7 @@
 
                 <!--  Material Design: MahApps Compatibility  -->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Fonts.xaml" />
-                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Flyout.xaml" />-->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Flyout.xaml" />
 
                 <!--  other stuff  -->
                 <ResourceDictionary Source="Resources/Style.xaml" />
@@ -55,7 +54,7 @@
                              Opacity="0.4"
                              Color="{DynamicResource Primary500}" />
 
-            <toolkit:DebugConverter x:Key="DebugConverter" />
+            <local:DebugConverter x:Key="DebugConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <local:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
         </ResourceDictionary>

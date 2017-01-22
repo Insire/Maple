@@ -4,13 +4,12 @@
                       xmlns:colors="clr-namespace:MaterialDesignColors;assembly=MaterialDesignColors"
                       xmlns:core="clr-namespace:InsireBotCore;assembly=InsireBot.Core"
                       xmlns:local="clr-namespace:InsireBot"
-                      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-                      xmlns:toolkit="clr-namespace:MvvmScarletToolkit;assembly=MvvmScarletToolkit">
+                      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
     <UserControl.Resources>
-        <toolkit:BindingProxy x:Key="ApplyPrimaryProxy" Data="{Binding ApplyPrimaryCommand}" />
-        <toolkit:BindingProxy x:Key="ApplyAccentProxy" Data="{Binding ApplyAccentCommand}" />
-        <toolkit:BindingProxy x:Key="ToggleBaseCommandProxy" Data="{Binding ToggleBaseCommand}" />
+        <local:BindingProxy x:Key="ApplyPrimaryProxy" Data="{Binding ApplyPrimaryCommand}" />
+        <local:BindingProxy x:Key="ApplyAccentProxy" Data="{Binding ApplyAccentCommand}" />
+        <local:BindingProxy x:Key="ToggleBaseCommandProxy" Data="{Binding ToggleBaseCommand}" />
 
         <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="Button">
             <Setter Property="Foreground">

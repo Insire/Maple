@@ -5,7 +5,7 @@ using System.Transactions;
 
 namespace InsireBot.Data
 {
-    public class MediaItemRepository : IRepository<MediaItem>
+    public class MediaItemRepository : IMediaItemRepository
     {
         public MediaItemRepository()
         {

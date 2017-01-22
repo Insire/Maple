@@ -1,9 +1,9 @@
-﻿using MaterialDesignColors;
+﻿using InsireBot.Core;
+using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
-using MvvmScarletToolkit;
 using System.Collections.Generic;
-using System.Windows.Input;
 using System.Linq;
+using System.Windows.Input;
 
 namespace InsireBot
 {
