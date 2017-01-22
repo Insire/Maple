@@ -9,26 +9,27 @@ After a long hiatus, I'm continuing my rewrite and try to improve on my previous
 ### MainWindow after updating the theme during runtime
 ![changeable theme of the Mainscreen](https://github.com/Insire/InsireBot-V2/blob/master/InsireBot/Screenshots/InsireBot.vshost_2017-01-08_18-35-38.png)
 
-## Requirements:
+## Compile Requirements:
  - Visual Studio 2015 Community Edition or better
- - .NET Framework 4.6.1
- - ~~[VLC](http://www.videolan.org)~~
+ - .NET Framework 4.5.2
  - Windows 7 or better
 
-## Planned features
-- playback of local audio files and youtube videos, possibly other web sources aswell
-- syncing your playlist with your youtube account
-- deciding on which audio device you playback your music
-- some form of chat integration (discord?, irc?, twitch?)
+## Features
+- AudioPlayback
+- AudioDeviceSelection
+- PlaylistManagement
+- UI ThemeConfiguration
+- Localization (German, English ...)
 
 ## Libraries used
 - [MaterialDesignInXamlToolkit](https://github.com/ButchersBoy/MaterialDesignInXamlToolkit)
 - [MahApps.Metro](https://github.com/MahApps/MahApps.Metro)
-- ~~[Vlc.DotNet](https://github.com/ZeBobo5/Vlc.DotNet)~~
+- [MahApps.Metro.IconPacks](https://github.com/MahApps/MahApps.Metro.IconPacks)
 - [log4net](https://github.com/apache/log4net)
+- [AutoMapper](https://github.com/AutoMapper/AutoMapper)
 - [YoutubeExtractor](https://github.com/flagbug/YoutubeExtractor)
-- [MVVM Light Toolkit](https://mvvmlight.codeplex.com)
-- [Googles Youtube Api v3](https://www.nuget.org/packages/Google.Apis.youtube.v3/)
+- [Google Youtube Api v3](https://www.nuget.org/packages/Google.Apis.youtube.v3/)
 - [NAudio](https://github.com/naudio/NAudio)
 - [Dapper](https://github.com/StackExchange/dapper-dot-net)
+- [System.Data.SQLite](https://system.data.sqlite.org/index.html/doc/trunk/www/index.wiki)
 - [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)

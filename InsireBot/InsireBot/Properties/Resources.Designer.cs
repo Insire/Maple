@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace InsireBotCore.Properties {
+namespace InsireBot.Properties {
     using System;
     
     
