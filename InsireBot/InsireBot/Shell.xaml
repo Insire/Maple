@@ -6,10 +6,13 @@
                  xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                  xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
                  Title="{local:Translation ShellTitle}"
+                 Icon="Resources/maple1.png"
+                 IconEdgeMode="Aliased"
+                 IconOverlayBehavior="Never"
+                 ShowIconOnTitleBar="False"
                  Style="{StaticResource BaseWindowStyle}">
 
     <!--  DataContext ShellViewModel  -->
-
     <metro:MetroWindow.RightWindowCommands>
         <metro:WindowCommands ShowSeparators="False">
             <Button Command="{Binding Scenes.OpenColorOptionsCommand}">

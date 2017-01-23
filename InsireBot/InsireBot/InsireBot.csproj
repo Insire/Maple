@@ -74,6 +74,9 @@
   <PropertyGroup>
     <StartupObject>InsireBot.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>maple1.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper, Version=5.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
@@ -340,6 +343,22 @@
       <Project>{B5BE546F-8D9F-4FB9-B235-AF05FD553F9E}</Project>
       <Name>InsireBot.Youtube</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="maple.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\maple.ico" />
+    <Resource Include="Resources\maple.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="maple1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\maple2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\maple1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

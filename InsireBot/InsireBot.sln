@@ -9,9 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsireBot.Core", "InsireBot
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D65C950A-327A-496D-A49C-B45E8F97C610}"
 	ProjectSection(SolutionItems) = preProject
-		Screenshots\InsireBot.vshost_2017-01-08_18-35-38.png = Screenshots\InsireBot.vshost_2017-01-08_18-35-38.png
-		Screenshots\InsireBot_2017-01-08_18-16-13.png = Screenshots\InsireBot_2017-01-08_18-16-13.png
+		Images\InsireBot.vshost_2017-01-08_18-35-38.png = Images\InsireBot.vshost_2017-01-08_18-35-38.png
+		Images\InsireBot_2017-01-08_18-16-13.png = Images\InsireBot_2017-01-08_18-16-13.png
 		..\license.md = ..\license.md
+		Images\maple.ico = Images\maple.ico
+		Images\maple.png = Images\maple.png
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
