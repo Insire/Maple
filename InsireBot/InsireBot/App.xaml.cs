@@ -3,7 +3,6 @@ using InsireBot.Core;
 using InsireBot.Data;
 using InsireBot.Properties;
 using InsireBot.Youtube;
-using System;
 using System.Threading;
 using System.Windows;
 
@@ -19,14 +18,15 @@ namespace InsireBot
 
             InitializeLocalization();
             InitializeIocContainer();
-            InitializeTheme();
 
             var manager = _container.Resolve<ITranslationManager>();
-            var shell = new Shell(manager)
+            var colorsViewModel = _container.Resolve<UIColorsViewModel>();
+            var shell = new Shell(manager, colorsViewModel)
             {
                 DataContext = _container.Resolve<ShellViewModel>(),
             };
 
+            colorsViewModel.ApplyColorsFromSettings();
             shell.Show();
         }
 
@@ -34,11 +34,6 @@ namespace InsireBot
         {
             _container.Dispose();
             base.OnExit(e);
-        }
-
-        private void InitializeTheme()
-        {
-            UIColorsViewModel.ApplyColorsFromSettings();
         }
 
         private void InitializeLocalization()
@@ -71,12 +66,6 @@ namespace InsireBot
             _container.Register<IMediaItemMapper, MediaItemMapper>();
             _container.Register<IYoutubeUrlParseService, UrlParseService>();
             _container.Register<IPlaylistMapper, PlaylistMapper>();
-
-        }
-
-        private Type GetTypeInternal()
-        {
-            return typeof(App);
         }
     }
 }

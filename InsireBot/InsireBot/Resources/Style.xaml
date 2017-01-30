@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:icons="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                    xmlns:local="clr-namespace:InsireBot"
                     xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls">
 
     <!--  Remember: the order of these styles matters, since they depend on each other. If one references a style not yet declared, you get random RuntimeErrors  -->
@@ -20,6 +21,26 @@
             </Grid>
         </materialDesign:TransitioningContent>
     </ControlTemplate>
+
+    <Style TargetType="{x:Type local:PackIcon}">
+        <Setter Property="Height" Value="16" />
+        <Setter Property="Width" Value="16" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:PackIcon}">
+                    <Viewbox>
+                        <Canvas Width="24" Height="24">
+                            <Path Data="{Binding Data, RelativeSource={RelativeSource TemplatedParent}}"                                  
+                              Fill="{TemplateBinding Foreground}" />
+                        </Canvas>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <!--  Icon Styles  -->
     <Style x:Key="BigIconStyle" TargetType="icons:PackIconMaterial">

@@ -1,6 +1,7 @@
 ﻿using InsireBot.Core;
 using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
@@ -9,7 +10,7 @@ namespace InsireBot
 {
     public class UIColorsViewModel : ObservableObject
     {
-        public static void ApplyColorsFromSettings()
+        public void ApplyColorsFromSettings()
         {
             var swatchName = Properties.Settings.Default.SwatchName;
             var swatch = Swatches.FirstOrDefault(p => p.Name == swatchName);
@@ -17,9 +18,9 @@ namespace InsireBot
             var accentName = Properties.Settings.Default.AccentName;
             var accent = Swatches.FirstOrDefault(p => p.Name == accentName);
 
-            ApplyPrimary(swatch);
-            ApplyAccent(accent);
-            ApplyBase(Properties.Settings.Default.UseDarkTheme);
+            ApplyPrimary(this,swatch);
+            ApplyAccent(this, accent);
+            ApplyBase(this, Properties.Settings.Default.UseDarkTheme);
         }
 
         private static PaletteHelper _paletteHelper = new PaletteHelper();
@@ -27,6 +28,8 @@ namespace InsireBot
         public ICommand ToggleBaseCommand { get; private set; }
         public ICommand ApplyPrimaryCommand { get; private set; }
         public ICommand ApplyAccentCommand { get; private set; }
+
+        public EventHandler<UiPrimaryColorEventArgs> PrimaryColorChanged;
 
         public static IEnumerable<Swatch> Swatches => new SwatchesProvider().Swatches;
 
@@ -38,29 +41,35 @@ namespace InsireBot
 
         private void InitializeCommands()
         {
-            ToggleBaseCommand = new RelayCommand<bool>(o => ApplyBase(o));
-            ApplyPrimaryCommand = new RelayCommand<Swatch>(o => ApplyPrimary(o));
-            ApplyAccentCommand = new RelayCommand<Swatch>(o => ApplyAccent(o));
+            ToggleBaseCommand = new RelayCommand<bool>(o => ApplyBase(this, o));
+            ApplyPrimaryCommand = new RelayCommand<Swatch>(o => ApplyPrimary(this, o));
+            ApplyAccentCommand = new RelayCommand<Swatch>(o => ApplyAccent(this, o));
         }
 
-        private static void ApplyBase(bool isDark = false)
+        private static void ApplyBase(UIColorsViewModel vm, bool isDark = false)
         {
             _paletteHelper.SetLightDark(isDark);
             Properties.Settings.Default.UseDarkTheme = isDark;
             Properties.Settings.Default.Save();
         }
 
-        private static void ApplyPrimary(Swatch swatch)
+        private static void ApplyPrimary(UIColorsViewModel vm, Swatch swatch)
         {
             if (swatch == null)
                 return;
 
+            var oldPalette = _paletteHelper.QueryPalette();
             _paletteHelper.ReplacePrimaryColor(swatch);
+            var newPalette = _paletteHelper.QueryPalette();
+
+            if (newPalette.PrimarySwatch.Name != oldPalette.PrimarySwatch.Name)
+                vm.PrimaryColorChanged?.Invoke(vm, new UiPrimaryColorEventArgs(newPalette.PrimarySwatch.ExemplarHue.Color));
+
             Properties.Settings.Default.SwatchName = swatch.Name;
             Properties.Settings.Default.Save();
         }
 
-        private static void ApplyAccent(Swatch swatch)
+        private static void ApplyAccent(UIColorsViewModel vm, Swatch swatch)
         {
             if (swatch == null)
                 return;

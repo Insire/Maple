@@ -1,5 +1,6 @@
 ﻿using InsireBot.Core;
 using System;
+using System.Windows.Media;
 
 namespace InsireBot
 {
@@ -43,6 +44,16 @@ namespace InsireBot
         public PlayingMediaItemEventArgs(IMediaItem item)
         {
             MediaItem = item;
+        }
+    }
+
+    public delegate void UiPrimaryColorEventHandler(object sender, PlayingMediaItemEventArgs e);
+    public class UiPrimaryColorEventArgs : EventArgs
+    {
+        public Color Color { get; private set; }
+        public UiPrimaryColorEventArgs(Color item)
+        {
+            Color = item;
         }
     }
 }

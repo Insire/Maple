@@ -4,7 +4,7 @@ namespace InsireBot
 {
     public partial class Shell : IoCWindow
     {
-        public Shell(ITranslationManager manager):base(manager)
+        public Shell(ITranslationManager manager, UIColorsViewModel vm) : base(manager, vm)
         {
             InitializeComponent();
         }
