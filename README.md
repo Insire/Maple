@@ -6,7 +6,6 @@ This is a rewrite of the original InsireBot. Which was planned to be a tool for 
 
 After a long hiatus, I'm continuing my rewrite and try to improve on my previously written code.
 
-### MainWindow
 ![Mainwindow](MainWindow.gif)
 
 ## Compile Requirements:
