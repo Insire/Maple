@@ -9,8 +9,14 @@ namespace InsireBot
 {
     public class MediaPlayerViewModel : ObservableObject, IValidatableTrackingObject
     {
-        private readonly MediaPlayer _player;
-        public IMediaPlayer Player { get; private set; }
+        public MediaPlayer Model { get; private set; }
+
+        private IMediaPlayer _player;
+        public IMediaPlayer Player
+        {
+            get { return _player; }
+            private set { SetValue(ref _player, value); }
+        }
 
         public bool IsPlaying { get { return Player.IsPlaying; } }
 
@@ -19,12 +25,11 @@ namespace InsireBot
         public ICommand NextCommand { get; private set; }
         public ICommand PreviousCommand { get; private set; }
 
-
         private AudioDevices _audioDevices;
         public AudioDevices AudioDevices
         {
             get { return _audioDevices; }
-            set { SetValue(ref _audioDevices, value); }
+            private set { SetValue(ref _audioDevices, value); }
         }
 
         private PlaylistViewModel _playlist;
@@ -45,25 +50,28 @@ namespace InsireBot
 
         public bool IsChanged { get; }
 
-        public MediaPlayerViewModel(IMediaPlayer player, media) : base()
+        public MediaPlayerViewModel(IMediaPlayer player, MediaPlayer mediaPlayer) : base()
         {
+            Model = mediaPlayer;
             AudioDevices = new AudioDevices();
 
             Player = player;
             Player.PlayingMediaItem += Player_PlayingMediaItem;
             Player.CompletedMediaItem += MediaPlayer_CompletedMediaItem;
+            Player.AudioDeviceChanged += Player_AudioDeviceChanged;
+            Player.AudioDeviceChanging += Player_AudioDeviceChanging;
 
             InitiliazeCommands();
         }
 
-        private void OnAudioDeviceChanged()
+        private void Player_AudioDeviceChanging(object sender, EventArgs e)
         {
-            // TODO
+
         }
 
-        private void OnAudioDeviceChanging()
+        private void Player_AudioDeviceChanged(object sender, AudioDeviceChangedEventArgs e)
         {
-            // TODO
+            Model.DeviceName = e.AudioDevice.Name;
         }
 
         private void OnPlaylistChanging()

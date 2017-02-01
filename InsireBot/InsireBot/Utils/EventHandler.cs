@@ -56,4 +56,14 @@ namespace InsireBot
             Color = item;
         }
     }
+
+    public delegate void AudioDeviceChangedEventHandler(object sender, AudioDeviceChangedEventArgs e);
+    public class AudioDeviceChangedEventArgs : EventArgs
+    {
+        public AudioDevice AudioDevice { get; private set; }
+        public AudioDeviceChangedEventArgs(AudioDevice item)
+        {
+            AudioDevice = item;
+        }
+    }
 }

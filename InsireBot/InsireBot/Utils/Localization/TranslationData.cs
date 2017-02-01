@@ -32,7 +32,7 @@ namespace InsireBot
 
         public object Value
         {
-            get { return _manager.Translate(_key); }
+            get { return _manager?.Translate(_key); }
         }
 
         public bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e)

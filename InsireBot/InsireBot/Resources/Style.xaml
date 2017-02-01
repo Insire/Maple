@@ -7,6 +7,12 @@
 
     <!--  Remember: the order of these styles matters, since they depend on each other. If one references for a style not yet declared, you get random RuntimeErrors  -->
 
+    <!--#region TextBlock Styles-->
+    <Style TargetType="TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <!--#endregion -->
+    
     <!--#region Control Templates-->
     <ControlTemplate x:Key="BusyTemplate">
         <materialDesign:TransitioningContent>

@@ -24,7 +24,6 @@ namespace InsireBot
         protected override void StartListening(object source)
         {
             var manager = (ITranslationManager)source;
-            //manager.PropertyChanged += OnLanguageChanged;
             manager.PropertyChanged += PropertyChanged;
         }
 

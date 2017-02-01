@@ -121,6 +121,10 @@
       <Project>{21FA5854-0692-42E2-924E-A38CF3C7FF71}</Project>
       <Name>InsireBot.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\InsireBot.Localization\InsireBot.Localization.csproj">
+      <Project>{A073FC92-90E3-4541-8B52-6F7293187871}</Project>
+      <Name>InsireBot.Localization</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.104.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.104.0\build\net451\System.Data.SQLite.Core.targets')" />

@@ -11,6 +11,7 @@ namespace InsireBot.Core
 {
     public abstract class ViewModelListBase<T> : ObservableObject where T : INotifyPropertyChanged
     {
+        //TODO add change tracking
         protected object _itemsLock;
 
         public EventHandler SelectionChanged;

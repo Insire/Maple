@@ -9,7 +9,7 @@ namespace InsireBot
         {
             for (var i = 0; i < WaveOut.DeviceCount; i++)
             {
-                var cap = WaveOut.GetCapabilities(1);
+                var cap = WaveOut.GetCapabilities(i);
 
                 yield return new AudioDevice
                 {

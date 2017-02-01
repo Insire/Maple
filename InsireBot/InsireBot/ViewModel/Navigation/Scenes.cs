@@ -39,7 +39,7 @@ namespace InsireBot
                 {
                     Content = new MediaPlayerPage(_manager),
                     Key = nameof(Resources.Playback),
-                    GetDataContext = () => directorViewModel.MediaPlayers.First(p=>p is MainMediaPlayerViewModel),
+                    GetDataContext = () => directorViewModel.MediaPlayers.First(p => p is MainMediaPlayerViewModel),
                     IsSelected = true,
                     Sequence = 100,
                 },

@@ -32,8 +32,8 @@ namespace InsireBot
 
         protected override void OnExit(ExitEventArgs e)
         {
-            _container.Dispose();
-            base.OnExit(e);
+            SaveState();
+            ExitInternal(e);
         }
 
         private void InitializeLocalization()
@@ -51,7 +51,7 @@ namespace InsireBot
             _container.Register<UIColorsViewModel>(reuse: Reuse.Singleton);
             _container.Register<UrlParseService>();
             _container.Register<PlaylistsViewModel>(reuse: Reuse.Singleton);
-            _container.Register<DirectorViewModel>();
+            _container.Register<DirectorViewModel>(reuse: Reuse.Singleton);
             _container.Register<CreateMediaItemViewModel>();
             _container.Register<CreatePlaylistViewModel>();
             _container.Register<StatusbarViewModel>(reuse: Reuse.Singleton);
@@ -67,6 +67,22 @@ namespace InsireBot
             _container.Register<IMediaItemMapper, MediaItemMapper>();
             _container.Register<IYoutubeUrlParseService, UrlParseService>();
             _container.Register<IPlaylistMapper, PlaylistMapper>();
+
+            _container.Register<ISaveable, DirectorViewModel>();
+        }
+
+        private void SaveState()
+        {
+            var saveables = _container.ResolveMany<ISaveable>();
+
+            foreach (var saveable in saveables)
+                saveable.Save();
+        }
+
+        private void ExitInternal(ExitEventArgs e)
+        {
+            _container.Dispose();
+            base.OnExit(e);
         }
     }
 }

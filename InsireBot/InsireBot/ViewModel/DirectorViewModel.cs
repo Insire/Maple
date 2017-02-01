@@ -12,7 +12,13 @@ namespace InsireBot
         private readonly IBotLog _log;
         private readonly ITranslationManager _manager;
         private readonly IMediaPlayerRepository _mediaPlayerRepository;
-        public ChangeTrackingCollection<MediaPlayerViewModel> MediaPlayers { get; private set; }
+
+        private ChangeTrackingCollection<MediaPlayerViewModel> _mediaPlayers;
+        public ChangeTrackingCollection<MediaPlayerViewModel> MediaPlayers
+        {
+            get { return _mediaPlayers; }
+            private set { SetValue(ref _mediaPlayers, value); }
+        }
 
         private MediaPlayerViewModel _selectedItem;
         public MediaPlayerViewModel SelectedItem
@@ -21,7 +27,12 @@ namespace InsireBot
             set { SetValue(ref _selectedItem, value); }
         }
 
-        public PlaylistsViewModel Playlists { get; private set; }
+        private PlaylistsViewModel _playlists;
+        public PlaylistsViewModel Playlists
+        {
+            get { return _playlists; }
+            private set { SetValue(ref _playlists, value); }
+        }
 
         public ICommand AddCommand { get; private set; }
         public ICommand RemoveCommand { get; private set; }
@@ -36,6 +47,8 @@ namespace InsireBot
             MediaPlayers = new ChangeTrackingCollection<MediaPlayerViewModel>();
             MediaPlayers.Add(InitializeMainMediaPlayerViewModel(playerFactory));
 
+            SelectedItem = MediaPlayers[0];
+
             // host a bunch of mediaplayers
             // main for music
             // follower
@@ -48,9 +61,8 @@ namespace InsireBot
         {
             Playlists.Save();
 
-            // TODO
-            //foreach(var player in MediaPlayers)
-            //    player.
+            foreach (var player in MediaPlayers.Select(p => p.Model))
+                _mediaPlayerRepository.Save(player);
         }
 
         private MainMediaPlayerViewModel InitializeMainMediaPlayerViewModel(Func<IMediaPlayer> playerFactory)
@@ -58,9 +70,15 @@ namespace InsireBot
             var primaries = _mediaPlayerRepository.GetPrimary().ToList();
             var player = playerFactory();
 
+            var mediaPlayer = new MediaPlayer
+            {
+                Name = nameof(Resources.MainMediaplayer),
+                Sequence = 0,
+            };
+
             if ((primaries?.Count ?? 0) == 0)
             {
-                return new MainMediaPlayerViewModel(_manager, player, nameof(Resources.MainMediaplayer))
+                return new MainMediaPlayerViewModel(_manager, player, mediaPlayer, nameof(Resources.MainMediaplayer))
                 {
                     Playlist = Playlists.Items.FirstOrDefault(),
                 };
@@ -68,13 +86,13 @@ namespace InsireBot
 
             if (primaries.Count == 1)
             {
-                return new MainMediaPlayerViewModel(_manager, player, nameof(Resources.MainMediaplayer))
+                return new MainMediaPlayerViewModel(_manager, player, mediaPlayer, nameof(Resources.MainMediaplayer))
                 {
-                    Playlist = Playlists.Items.FirstOrDefault(p=>p.ID == primaries[0].PlaylistId),
+                    Playlist = Playlists.Items.FirstOrDefault(p => p.ID == primaries[0].PlaylistId),
                 };
             }
 
-            throw new InsireBotException(Resources.InvalidMediaplayerCountOnDBException + $"({primaries.Count })");
+            throw new InsireBotException(Resources.InvalidMediaplayerCountOnDBException + $"({primaries.Count})");
         }
     }
 }

@@ -174,4 +174,19 @@
   <data name="InvalidMediaplayerCountOnDBException" xml:space="preserve">
     <value>Auf der Datenbank befinden sich eine ungültige Anzahl an Einträgen für den Standardmediaplayer</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Hinzufügen</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Entfernen</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Leeren</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>Neu</value>
+  </data>
+  <data name="MaxPlaylistCountReachedException" xml:space="preserve">
+    <value>Es können keine weiteren Wiedergabelisten angelegt werden, da die maximale Anzahl erreicht wurde</value>
+  </data>
 </root>

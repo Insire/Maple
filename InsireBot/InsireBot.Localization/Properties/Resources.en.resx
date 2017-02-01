@@ -174,4 +174,19 @@
   <data name="InvalidMediaplayerCountOnDBException" xml:space="preserve">
     <value>There is an invalid amount of entries for the default media player on the database</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="MaxPlaylistCountReachedException" xml:space="preserve">
+    <value>Creating a new playlist failed, because the maximum amount was reached</value>
+  </data>
 </root>

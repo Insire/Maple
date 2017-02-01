@@ -1,4 +1,5 @@
 ﻿using InsireBot.Core;
+using System.Linq;
 
 namespace InsireBot
 {
@@ -6,7 +7,7 @@ namespace InsireBot
     {
         public AudioDevices() : base()
         {
-            Items.AddRange(PlaybackDeviceFactory.GetAudioDevices());
+            Items.AddRange(PlaybackDeviceFactory.GetAudioDevices().ToList());
         }
     }
 }

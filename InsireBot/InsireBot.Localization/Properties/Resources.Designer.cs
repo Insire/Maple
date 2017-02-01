@@ -61,11 +61,29 @@ namespace InsireBot.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hinzufügen.
+        /// </summary>
+        public static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wiedergabegerät.
         /// </summary>
         public static string AudioDevice {
             get {
                 return ResourceManager.GetString("AudioDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Leeren.
+        /// </summary>
+        public static string Clear {
+            get {
+                return ResourceManager.GetString("Clear", resourceCulture);
             }
         }
         
@@ -124,6 +142,15 @@ namespace InsireBot.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Es können keine weiteren Wiedergabelisten angelegt werden, da die maximale Anzahl erreicht wurde.
+        /// </summary>
+        public static string MaxPlaylistCountReachedException {
+            get {
+                return ResourceManager.GetString("MaxPlaylistCountReachedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Navigation wird geladen.
         /// </summary>
         public static string NavigationLoad {
@@ -138,6 +165,15 @@ namespace InsireBot.Localization.Properties {
         public static string NavigationLoaded {
             get {
                 return ResourceManager.GetString("NavigationLoaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Neu.
+        /// </summary>
+        public static string New {
+            get {
+                return ResourceManager.GetString("New", resourceCulture);
             }
         }
         
@@ -201,6 +237,15 @@ namespace InsireBot.Localization.Properties {
         public static string Playlists {
             get {
                 return ResourceManager.GetString("Playlists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entfernen.
+        /// </summary>
+        public static string Remove {
+            get {
+                return ResourceManager.GetString("Remove", resourceCulture);
             }
         }
         

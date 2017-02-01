@@ -1,23 +1,14 @@
-﻿using InsireBot.Core;
+﻿using System;
+using InsireBot.Core;
 
 namespace InsireBot
 {
     public abstract class BasePlayer : ObservableObject, IMediaPlayer
     {
         public event CompletedMediaItemEventHandler CompletedMediaItem;
+        public event AudioDeviceChangedEventHandler AudioDeviceChanged;
+        public event EventHandler AudioDeviceChanging;
         public event PlayingMediaItemEventHandler PlayingMediaItem;
-
-        event CompletedMediaItemEventHandler IMediaPlayer.CompletedMediaItem
-        {
-            add { CompletedMediaItem += value; }
-            remove { CompletedMediaItem -= value; }
-        }
-
-        event PlayingMediaItemEventHandler IMediaPlayer.PlayingMediaItem
-        {
-            add { PlayingMediaItem += value; }
-            remove { PlayingMediaItem -= value; }
-        }
 
         private AudioDevice _audioDevice;
         public AudioDevice AudioDevice

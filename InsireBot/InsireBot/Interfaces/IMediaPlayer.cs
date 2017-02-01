@@ -7,6 +7,8 @@ namespace InsireBot
     {
         event CompletedMediaItemEventHandler CompletedMediaItem;
         event PlayingMediaItemEventHandler PlayingMediaItem;
+        event AudioDeviceChangedEventHandler AudioDeviceChanged;
+        event EventHandler AudioDeviceChanging;
 
         bool Disposed { get; }
         bool IsPlaying { get; }

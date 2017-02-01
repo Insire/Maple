@@ -1,28 +1,19 @@
 ﻿using InsireBot.Core;
 using InsireBot.Data;
+using InsireBot.Localization.Properties;
 using System.Linq;
 using System.Windows.Input;
 
 namespace InsireBot
 {
-    public class PlaylistsViewModel : ObservableObject, ISaveable
+    public class PlaylistsViewModel : ViewModelListBase<PlaylistViewModel>, ISaveable
     {
         private readonly IBotLog _log;
         private readonly IPlaylistsRepository _playlistRepository;
         private readonly IMediaItemRepository _mediaItemRepository;
 
-        public ChangeTrackingCollection<PlaylistViewModel> Items { get; private set; }
-
-        private PlaylistViewModel _selectedItem;
-        public PlaylistViewModel SelectedItem
-        {
-            get { return _selectedItem; }
-            set { SetValue(ref _selectedItem, value); }
-        }
-
         public ICommand SaveCommand { get; private set; }
-        public ICommand DeleteCommand { get; private set; }
-
+        public ICommand AddCommand { get; private set; }
         public ICommand PlayCommand { get; private set; }
 
         public PlaylistsViewModel(IMediaItemRepository mediaItemRepository, IPlaylistsRepository playlistRepository, IBotLog log)
@@ -32,70 +23,36 @@ namespace InsireBot
             _log = log;
 
             var playlists = playlistRepository.GetAll();
-            Items = new ChangeTrackingCollection<PlaylistViewModel>(playlists.Select(p => new PlaylistViewModel(log, p)));
+            Items.AddRange(playlists.Select(p => new PlaylistViewModel(log, p)));
 
             SaveCommand = new RelayCommand<PlaylistViewModel>(Save, CanSave);
-            DeleteCommand = new RelayCommand<PlaylistViewModel>(Delete, CanDelete);
+            AddCommand = new RelayCommand(Add, CanAdd);
         }
 
         // TODO order changing + sync, Commands, UserInteraction, Reset?, async load, save and delete
 
-        /// <summary>
-        /// Sets the <see cref="MediaItemViewModel"/> as the <seealso cref="SelectedItem"/>
-        /// Adds the <see cref="MediaItemViewModel"/> to the <seealso cref="History"/>
-        /// </summary>
-        /// <param name="playlist"></param>
-        public virtual void SetActive(PlaylistViewModel playlist)
+        public void Add()
         {
-            if (playlist != null)
+            var playlist = Data.Playlist.New();
+
+            if (Count > 0)
             {
-                SelectedItem = playlist;
+                var index = 0;
+                var current = Items.Select(p => p.Sequence).ToList();
+                while (current.IndexOf(index) >= 0)
+                {
+                    if (index == int.MaxValue)
+                    {
+                        _log.Error(Resources.MaxPlaylistCountReachedException);
+                        return;
+                    }
+
+                    index++;
+                }
+                playlist.Sequence = index;
             }
-        }
 
-        private bool CanSetActive(PlaylistViewModel item)
-        {
-            return false;
-        }
-
-        public void Delete(PlaylistViewModel item)
-        {
-            if (item == null)
-                DeleteAllInternal();
-            else
-                DeleteInternal(item);
-        }
-
-        public bool CanDelete(PlaylistViewModel item)
-        {
-            if (item == null)
-                return CanDeleteAllInternal();
-
-            return CanDeleteInternal(item);
-        }
-
-        private void DeleteInternal(PlaylistViewModel playlist)
-        {
-            foreach (var item in playlist.Items.Select(p => p.Model))
-                _mediaItemRepository.Delete(item);
-
-            _playlistRepository.Delete(playlist.Model);
-        }
-
-        private bool CanDeleteInternal(PlaylistViewModel item)
-        {
-            return false;
-        }
-
-        private void DeleteAllInternal()
-        {
-            foreach (var playlist in Items)
-                DeleteInternal(playlist);
-        }
-
-        private bool CanDeleteAllInternal()
-        {
-            return false;
+            Items.Add(new PlaylistViewModel(_log, playlist));
         }
 
         public void Save()

@@ -77,16 +77,30 @@
 
                         <ComboBox Grid.Row="0"
                                   Grid.Column="2"
-                                  ItemsSource="{Binding SelectedItem.AudioDevices}"
+                                  DisplayMemberPath="Name"
+                                  ItemsSource="{Binding SelectedItem.AudioDevices.Items}"
                                   SelectedItem="{Binding SelectedItem.Player.AudioDevice}" />
+
                         <ComboBox Grid.Row="2"
                                   Grid.Column="2"
                                   ItemsSource="{Binding SelectedItem.Playlist.RepeatModes}"
-                                  SelectedItem="{Binding SelectedItem.Playlist.RepeatMode}" />
+                                  SelectedItem="{Binding SelectedItem.Playlist.RepeatMode}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="Test" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                         <ComboBox Grid.Row="4"
                                   Grid.Column="2"
-                                  ItemsSource="{Binding Playlists}"
-                                  SelectedItem="{Binding SelectedItem.Playlist}" />
+                                  ItemsSource="{Binding Playlists.Items}"
+                                  SelectedItem="{Binding SelectedItem.Playlist}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Title}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                         <CheckBox Grid.Row="6"
                                   Grid.Column="2"
                                   IsChecked="{Binding SelectedItem.Playlist.IsShuffeling}" />
