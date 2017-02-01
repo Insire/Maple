@@ -1,13 +1,13 @@
-# Maple [![Build status](https://ci.appveyor.com/api/projects/status/2bgiexw53ktd5lhp?svg=true)](https://ci.appveyor.com/project/Insire/insirebot-v2)
+![logo](header.png)
+
+[![Build status](https://ci.appveyor.com/api/projects/status/2bgiexw53ktd5lhp?svg=true)](https://ci.appveyor.com/project/Insire/insirebot-v2)
+
 This is a rewrite of the original InsireBot. Which was planned to be a tool for semi and non professional livestreamers to provide music to them selfs and to their audience with high configureability.
 
 After a long hiatus, I'm continuing my rewrite and try to improve on my previously written code.
 
 ### MainWindow
-![Mainscreen](https://github.com/Insire/Maple/blob/master/InsireBot/Images/InsireBot_2017-01-08_18-16-13.png)
-
-### MainWindow after updating the theme during runtime
-![changeable theme of the Mainscreen](https://github.com/Insire/Maple/blob/master/InsireBot/Images/InsireBot.vshost_2017-01-08_18-35-38.png)
+![Mainwindow](MainWindow.gif)
 
 ## Compile Requirements:
  - Visual Studio 2015 Community Edition or better
