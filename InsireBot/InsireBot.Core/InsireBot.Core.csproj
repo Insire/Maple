@@ -64,6 +64,7 @@
     <Compile Include="DispatcherFactory.cs" />
     <Compile Include="DTO\MediaItem.cs" />
     <Compile Include="DTO\Playlist.cs" />
+    <Compile Include="Enums\PrivacyStatus.cs" />
     <Compile Include="Extensions\EventExtension.cs" />
     <Compile Include="Interfaces\IBotLog.cs" />
     <Compile Include="Interfaces\IIsSelected.cs" />

@@ -6,13 +6,28 @@ using System.Linq;
 
 namespace InsireBot.Core
 {
-    public class ChangeTrackingCollection<T> : ObservableCollection<T>, IValidatableTrackingObject where T : class, IValidatableTrackingObject
+    public class ChangeTrackingCollection<T> : RangeObservableCollection<T>, IValidatableTrackingObject where T : class, IValidatableTrackingObject
     {
         private IList<T> _originalCollection;
 
         private ObservableCollection<T> _addedItems;
         private ObservableCollection<T> _removedItems;
         private ObservableCollection<T> _modifiedItems;
+
+        public ChangeTrackingCollection() : base()
+        {
+            _originalCollection = this.ToList();
+
+            AttachItemPropertyChangedHandler(_originalCollection);
+
+            _addedItems = new ObservableCollection<T>();
+            _removedItems = new ObservableCollection<T>();
+            _modifiedItems = new ObservableCollection<T>();
+
+            AddedItems = new ReadOnlyObservableCollection<T>(_addedItems);
+            RemovedItems = new ReadOnlyObservableCollection<T>(_removedItems);
+            ModifiedItems = new ReadOnlyObservableCollection<T>(_modifiedItems);
+        }
 
         public ChangeTrackingCollection(IEnumerable<T> items)
             : base(items)
@@ -84,8 +99,11 @@ namespace InsireBot.Core
 
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            var added = this.Where(current => _originalCollection.All(orig => orig != current));
-            var removed = _originalCollection.Where(orig => this.All(current => current != orig));
+            var added = this.Where(current => _originalCollection?.All(orig => orig != current) == true);
+            var removed = _originalCollection?.Where(orig => this.All(current => current != orig));
+
+            if (added?.Any() != true || removed?.Any() != true)
+                return;
 
             var modified = this.Except(added).Except(removed).Where(item => item.IsChanged).ToList();
 

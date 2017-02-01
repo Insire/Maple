@@ -86,7 +86,21 @@
                                         <DataGridTemplateColumn Header="Restriction" SortMemberPath="IsRestricted">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <ContentControl Content="{Binding IsRestricted}" Style="{StaticResource RestrictedMediaItemStyle}" />
+                                                    <ContentControl Content="{Binding IsRestricted}">
+                                                        <ContentControl.Style>
+                                                            <Style TargetType="ContentControl">
+                                                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsRestricted}" Value="False">
+                                                                        <Setter Property="Template" Value="{StaticResource IsNotRestrictedMediaItemTemplate}" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding IsRestricted}" Value="True">
+                                                                        <Setter Property="Template" Value="{StaticResource IsNotRestrictedMediaItemTemplate}" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </ContentControl.Style>
+                                                    </ContentControl>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
@@ -98,8 +112,7 @@
                 </ControlTemplate>
 
             </materialDesign:Card.Resources>
-
-
+            
             <ContentControl>
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">

@@ -66,7 +66,6 @@ namespace InsireBot.Data
         public int Delete(int id)
         {
             var sql = $"DELETE FROM {nameof(Playlist)} WHERE ROWID = @{nameof(Playlist.Id)}";
-
             using (var connection = SqLiteConnectionFactory.Get())
             {
                 return connection.Execute(sql, new { id });
@@ -126,7 +125,7 @@ namespace InsireBot.Data
             }
         }
 
-        public Playlist Update(Playlist item)
+        public Playlist Update(Playlist playlist)
         {
             var sql = $"UPDATE {nameof(Playlist)} " +
                 $"SET {nameof(Playlist.Title)} = @{nameof(Playlist.Title)}, " +
@@ -139,8 +138,8 @@ namespace InsireBot.Data
 
             using (var connection = SqLiteConnectionFactory.Get())
             {
-                connection.Execute(sql, item);
-                return item;
+                connection.Execute(sql, playlist);
+                return playlist;
             }
         }
     }

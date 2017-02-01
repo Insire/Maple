@@ -32,7 +32,7 @@ namespace InsireBot.Core
             if (baseCollection == null)
                 throw new ArgumentNullException("CanAddRange can't return a result. There were no valid parameters", nameof(baseCollection));
 
-            var excludedIDs = new HashSet<Guid>(baseCollection.Select(p => p.ID));
+            var excludedIDs = new HashSet<int>(baseCollection.Select(p => p.ID));
             return newItems.Where(p => !excludedIDs.Contains(p.ID));
         }
 
@@ -49,7 +49,7 @@ namespace InsireBot.Core
             if (baseCollection == null)
                 throw new ArgumentNullException("CanAddRange can't return a result. There were no valid parameters", nameof(baseCollection));
 
-            var excludedIDs = new HashSet<Guid>(baseCollection.Select(p => p.ID));
+            var excludedIDs = new HashSet<int>(baseCollection.Select(p => p.ID));
             return newItems.Where(p => !excludedIDs.Contains(p.ID));
         }
 

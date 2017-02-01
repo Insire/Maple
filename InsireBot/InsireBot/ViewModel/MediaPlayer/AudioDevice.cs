@@ -1,9 +1,8 @@
 ﻿using InsireBot.Core;
-using System;
 
 namespace InsireBot
 {
-    public class AudioDevice : ObservableObject, IIsSelected, ISequence, IIdentifier
+    public class AudioDevice : ObservableObject, IIsSelected, ISequence
     {
         private bool _isSelected;
         public bool IsSelected
@@ -20,8 +19,6 @@ namespace InsireBot
         public int Channels { get;  set; }
 
         public int Sequence { get; set; }
-
-        public Guid ID => Guid.NewGuid();
 
         public AudioDevice(string szPname, short wChannels)
         {

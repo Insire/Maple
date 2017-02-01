@@ -4,6 +4,6 @@ namespace InsireBot.Core
 {
     public interface IIdentifier
     {
-        Guid ID { get; }
+        int ID { get; }
     }
 }

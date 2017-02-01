@@ -50,8 +50,8 @@ namespace InsireBot
             _container.Register<Scenes>(reuse: Reuse.Singleton);
             _container.Register<UIColorsViewModel>(reuse: Reuse.Singleton);
             _container.Register<UrlParseService>();
-            _container.Register<PlaylistViewModel>(reuse: Reuse.Singleton);
-            _container.Register<MediaPlayerViewModel>();
+            _container.Register<PlaylistsViewModel>(reuse: Reuse.Singleton);
+            _container.Register<DirectorViewModel>();
             _container.Register<CreateMediaItemViewModel>();
             _container.Register<CreatePlaylistViewModel>();
             _container.Register<StatusbarViewModel>(reuse: Reuse.Singleton);

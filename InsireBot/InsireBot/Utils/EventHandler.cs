@@ -40,8 +40,8 @@ namespace InsireBot
     public delegate void PlayingMediaItemEventHandler(object sender, PlayingMediaItemEventArgs e);
     public class PlayingMediaItemEventArgs : EventArgs
     {
-        public IMediaItem MediaItem { get; private set; }
-        public PlayingMediaItemEventArgs(IMediaItem item)
+        public MediaItemViewModel MediaItem { get; private set; }
+        public PlayingMediaItemEventArgs(MediaItemViewModel item)
         {
             MediaItem = item;
         }

@@ -20,9 +20,9 @@ namespace InsireBot
 
         public Scenes(ITranslationManager manager,
                         IBotLog log,
-                        MediaPlayerViewModel mediaPlayerViewModel,
+                        DirectorViewModel directorViewModel,
                         CreateMediaItemViewModel createMediaItemViewModel,
-                        PlaylistViewModel playlistsViewModel,
+                        PlaylistsViewModel playlistsViewModel,
                         CreatePlaylistViewModel createPlaylistViewModel,
                         UIColorsViewModel uIColorsViewModel,
                         OptionsViewModel optionsViewModel)
@@ -38,7 +38,7 @@ namespace InsireBot
                 {
                     Content = new MediaPlayerPage(_manager),
                     Key = nameof(Resources.Playback),
-                    GetDataContext = () => mediaPlayerViewModel,
+                    GetDataContext = () => directorViewModel.MediaPlayers.First(p=>p is MainMediaPlayerViewModel),
                     IsSelected = true,
                     Sequence = 100,
                 },

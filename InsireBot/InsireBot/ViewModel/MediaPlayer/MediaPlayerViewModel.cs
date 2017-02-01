@@ -2,10 +2,11 @@ using InsireBot.Core;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using System;
 
 namespace InsireBot
 {
-    public class MediaPlayerViewModel : ViewModelListBase<IMediaItem>
+    public class MediaPlayerViewModel : ViewModelListBase<MediaItemViewModel>, IValidatableTrackingObject
     {
         public IMediaPlayer Player { get; private set; }
 
@@ -20,8 +21,12 @@ namespace InsireBot
         public PlaylistViewModel Playlist
         {
             get { return _playlist; }
-            set { SetValue(ref _playlist, value, Changing: OnPlaylistChanging, Changed: OnPlaylistChanged); }
+            private set { SetValue(ref _playlist, value, Changing: OnPlaylistChanging, Changed: OnPlaylistChanged); }
         }
+
+        public bool IsValid { get; }
+
+        public bool IsChanged { get; }
 
         public MediaPlayerViewModel(IMediaPlayer player) : base()
         {
@@ -30,6 +35,11 @@ namespace InsireBot
             Player.CompletedMediaItem += MediaPlayer_CompletedMediaItem;
 
             InitiliazeCommands();
+        }
+
+        public void SetPlaylist(PlaylistViewModel playlist)
+        {
+            // TODO
         }
 
         private void OnPlaylistChanging()
@@ -44,7 +54,7 @@ namespace InsireBot
 
         private void Player_PlayingMediaItem(object sender, PlayingMediaItemEventArgs e)
         {
-            Playlist.SetActive(e.MediaItem);
+            // TODO: sync state to other viewmodels
         }
 
         private void MediaPlayer_CompletedMediaItem(object sender, CompletedMediaItemEventEventArgs e)
@@ -54,19 +64,19 @@ namespace InsireBot
 
         private void InitiliazeCommands()
         {
-            PlayCommand = new RelayCommand<IMediaItem>(Player.Play, CanPlay);
+            PlayCommand = new RelayCommand<MediaItemViewModel>(Player.Play, CanPlay);
             PreviousCommand = new RelayCommand(Previous, () => Playlist?.CanPrevious() == true);
             NextCommand = new RelayCommand(Next, () => Playlist?.CanNext() == true);
             PauseCommand = new RelayCommand(Pause, () => Player.CanPause());
         }
 
-        public override void AddRange(IEnumerable<IMediaItem> mediaItems)
+        public override void AddRange(IEnumerable<MediaItemViewModel> mediaItems)
         {
             foreach (var item in mediaItems)
                 Playlist.Add(item);
         }
 
-        public override void Add(IMediaItem mediaItem)
+        public override void Add(MediaItemViewModel mediaItem)
         {
             if (Items.Any())
             {
@@ -112,9 +122,19 @@ namespace InsireBot
             Player.CanPlay(item);
         }
 
-        private bool CanPlay(IMediaItem item)
+        private bool CanPlay(MediaItemViewModel item)
         {
             return false;
+        }
+
+        public void RejectChanges()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AcceptChanges()
+        {
+            throw new NotImplementedException();
         }
     }
 }

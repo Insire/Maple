@@ -75,7 +75,8 @@
     <StartupObject>InsireBot.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>maple1.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper, Version=5.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
@@ -176,8 +177,10 @@
     <Compile Include="Interfaces\IMediaPlayer.cs" />
     <Compile Include="Utils\LinqExtensions.cs" />
     <Compile Include="Utils\Converters\RadioButtonCheckedConverter.cs" />
+    <Compile Include="ViewModel\DirectorViewModel.cs" />
+    <Compile Include="ViewModel\MediaPlayer\MainMediaPlayerViewModel.cs" />
     <Compile Include="ViewModel\Navigation\Scene.cs" />
-    <Compile Include="ViewModel\OptionsViewModel.cs" />
+    <Compile Include="ViewModel\Settings\OptionsViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer\AudioDevice.cs" />
     <Compile Include="ViewModel\MediaItems\MediaItemViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer\BasePlayer.cs" />
@@ -185,7 +188,8 @@
     <Compile Include="ViewModel\MediaPlayer\NAudio\NAudioMediaPlayer.cs" />
     <Compile Include="ViewModel\MediaPlayer\NAudio\PlaybackDeviceFactory.cs" />
     <Compile Include="ViewModel\MediaPlayer\NAudio\WavePlayerFactory.cs" />
-    <Compile Include="ViewModel\PlaylistViewModel.cs" />
+    <Compile Include="ViewModel\Playlists\PlaylistsViewModel.cs" />
+    <Compile Include="ViewModel\Playlists\PlaylistViewModel.cs" />
     <Compile Include="Pages\MediaPlayerPage.xaml.cs">
       <DependentUpon>MediaPlayerPage.xaml</DependentUpon>
     </Compile>
@@ -209,16 +213,15 @@
     </Compile>
     <Compile Include="Utils\InsireBotException.cs" />
     <Compile Include="ViewModel\MediaItems\CreateMediaItemViewModel.cs" />
-    <Compile Include="ViewModel\MediaItems\CreatePlaylistViewModel.cs" />
+    <Compile Include="ViewModel\Playlists\CreatePlaylistViewModel.cs" />
     <Compile Include="ViewModel\ShellViewModel.cs" />
     <Compile Include="ViewModel\StatusbarViewModel.cs" />
-    <Compile Include="ViewModel\UIColorsViewModel.cs" />
-    <Compile Include="ViewModel\LibraryViewModel.cs" />
+    <Compile Include="ViewModel\Settings\UIColorsViewModel.cs" />
     <Compile Include="ViewModel\Navigation\Scenes.cs" />
     <Compile Include="View\MediaPlayerView.xaml.cs">
       <DependentUpon>MediaPlayerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\MediaItems\MediaPlayerViewModel.cs" />
+    <Compile Include="ViewModel\MediaPlayer\MediaPlayerViewModel.cs" />
     <Compile Include="GlobalServiceLocator.cs" />
     <Compile Include="View\PlaylistView.xaml.cs">
       <DependentUpon>PlaylistView.xaml</DependentUpon>
@@ -343,14 +346,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="maple.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\maple.ico" />
     <Resource Include="Resources\maple.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="maple1.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\maple2.png" />

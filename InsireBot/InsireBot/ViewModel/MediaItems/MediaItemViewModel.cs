@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace InsireBot
 {
-    public class MediaItemViewModel : TrackingBaseViewModel<Core.MediaItem>, IMediaItem, ISequence, IIdentifier, IValidatableTrackingObject, IValidatableObject
+    public class MediaItemViewModel : TrackingBaseViewModel<Data.MediaItem>, IMediaItem, ISequence, IIdentifier, IValidatableTrackingObject, IValidatableObject
     {
-        private Guid _id;
-        public Guid ID
+        private int _id;
+        public int ID
         {
             get { return _id; }
             private set { SetValue(ref _id, value); }
@@ -37,11 +37,11 @@ namespace InsireBot
             private set { SetValue(ref _duration, value); }
         }
 
-        private bool _isRestricted;
-        public bool IsRestricted
+        private PrivacyStatus _privacyStatus;
+        public PrivacyStatus PrivacyStatus
         {
-            get { return _isRestricted; }
-            private set { SetValue(ref _isRestricted, value); }
+            get { return _privacyStatus; }
+            private set { SetValue(ref _privacyStatus, value); }
         }
 
         private string _location;
@@ -58,15 +58,18 @@ namespace InsireBot
             set { SetValue(ref _isSelected, value); }
         }
 
-        private bool _isLocalFile;
-        public bool IsLocalFile
+        public MediaItemViewModel(Data.MediaItem model) : base(model)
         {
-            get { return _isLocalFile; }
-            private set { SetValue(ref _isLocalFile, value); }
         }
 
-        public MediaItemViewModel(MediaItem model) : base(model)
+        protected override void InitializeComplexProperties(Data.MediaItem model)
         {
+            ID = model.Id;
+            Location = model.Location;
+            Title = model.Title;
+            Sequence = model.Sequence;
+            Duration = TimeSpan.FromSeconds(model.Duration);
+            PrivacyStatus = (PrivacyStatus)model.PrivacyStatus;
         }
 
         public override string ToString()

@@ -1,5 +1,4 @@
 ﻿using InsireBot.Core;
-using InsireBot.Data;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,10 +6,9 @@ using System.Linq;
 
 namespace InsireBot
 {
-    public class PlaylistViewModel : ObservableObject, IIsSelected, ISequence, IIdentifier, INotifyPropertyChanged
+    public class PlaylistViewModel : TrackingBaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier, INotifyPropertyChanged
     {
         private IBotLog _log;
-        private IPlaylistsRepository _repository;
         public int ItemCount => Items?.Count ?? 0;
 
         /// <summary>
@@ -18,13 +16,13 @@ namespace InsireBot
         /// </summary>
         public Stack<int> History { get; private set; }
 
-        public RangeObservableCollection<IMediaItem> Items { get; private set; }
+        public ChangeTrackingCollection<MediaItemViewModel> Items { get; private set; }
 
-        private IMediaItem _currentItem;
+        private MediaItemViewModel _currentItem;
         /// <summary>
         /// is <see cref="SetActive"/> when a IMediaPlayer picks a <see cref="IMediaItem"/> from this
         /// </summary>
-        public IMediaItem CurrentItem
+        public MediaItemViewModel CurrentItem
         {
             get { return _currentItem; }
             private set { SetValue(ref _currentItem, value); }
@@ -40,11 +38,11 @@ namespace InsireBot
             set { SetValue(ref _sequence, value); }
         }
 
-        private string _privacyStatus;
+        private PrivacyStatus _privacyStatus;
         /// <summary>
         /// Youtube Property
         /// </summary>
-        public string PrivacyStatus
+        public PrivacyStatus PrivacyStatus
         {
             get { return _privacyStatus; }
             private set { SetValue(ref _privacyStatus, value); }
@@ -64,7 +62,7 @@ namespace InsireBot
         public bool IsActive
         {
             get { return _isActive; }
-            private set { SetValue(ref _isActive, value); }
+            set { SetValue(ref _isActive, value); }
         }
 
         private bool _isShuffeling;
@@ -104,8 +102,8 @@ namespace InsireBot
             private set { SetValue(ref _location, value); }
         }
 
-        private Guid _id;
-        public Guid ID
+        private int _id;
+        public int ID
         {
             get { return _id; }
             private set { SetValue(ref _id, value); }
@@ -121,23 +119,36 @@ namespace InsireBot
             set { SetValue(ref _repeatMode, value); }
         }
 
-        public PlaylistViewModel(IPlaylistsRepository repository, IBotLog log) : base()
+        public PlaylistViewModel(IBotLog log, Data.Playlist model) : base(model)
         {
-            Items = new RangeObservableCollection<IMediaItem>();
-            Items.CollectionChanged += (o, e) =>
-              {
-                  OnPropertyChanged(nameof(ItemCount));
-              };
-
-            _repository = repository;
             _log = log;
 
             History = new Stack<int>();
-            Title = string.Empty;
-            Description = string.Empty;
-            ID = Guid.NewGuid();
-            RepeatMode = RepeatMode.None;
-            IsShuffeling = false;
+        }
+
+        protected override void InitializeComplexProperties(Data.Playlist model)
+        {
+            Title = model.Title;
+            Description = model.Description;
+            ID = model.Id;
+            RepeatMode = (RepeatMode)model.RepeatMode;
+            IsShuffeling = model.IsShuffeling;
+            Location = model.Location;
+        }
+
+        protected override void InitializeCollectionProperties(Data.Playlist model)
+        {
+            if (model.MediaItems == null)
+                throw new ArgumentException($"{model.MediaItems} cannot be null");
+
+            Items = new ChangeTrackingCollection<MediaItemViewModel>();
+            Items.CollectionChanged += (o, e) =>
+            {
+                OnPropertyChanged(nameof(ItemCount));
+            };
+
+            Items.AddRange(model.MediaItems.Select(p => new MediaItemViewModel(p)));
+            RegisterCollection(Items, model.MediaItems);
         }
 
         public virtual void Clear()
@@ -147,11 +158,7 @@ namespace InsireBot
             CurrentItem = null;
         }
 
-        /// <summary>
-        /// Add an <see cref="IMediaItem"/> to <seealso cref="Items"/>
-        /// </summary>
-        /// <param name="item">the <see cref="IMediaItem"/> to add</param>
-        public virtual void Add(IMediaItem item)
+        public virtual void Add(MediaItemViewModel item)
         {
             if (Items?.Any() == true)
                 item.Sequence = Items.Select(p => p.Sequence).Max() + 1;
@@ -167,7 +174,7 @@ namespace InsireBot
                 CurrentItem = Items.First();
         }
 
-        public virtual void AddRange(IEnumerable<IMediaItem> items)
+        public virtual void AddRange(IEnumerable<MediaItemViewModel> items)
         {
             var currentIndex = -1;
             if (Items.Any())
@@ -187,21 +194,13 @@ namespace InsireBot
                 CurrentItem = Items.First();
         }
 
-        /// <summary>
-        /// Removes all occurences of an <see cref="IMediaItem"/> from <seealso cref="Items"/>
-        /// </summary>
-        /// <param name="item"></param>
-        public virtual void Remove(IMediaItem item)
+        public virtual void Remove(MediaItemViewModel item)
         {
             while (Items.Contains(item))
                 Items.Remove(item);
         }
 
-        /// <summary>
-        /// Returns the next <see cref="IMediaItem"/> after the <seealso cref="CurrentItem"/>
-        /// </summary>
-        /// <returns></returns>
-        public virtual IMediaItem Next()
+        public virtual MediaItemViewModel Next()
         {
             if (Items != null && Items.Any())
             {
@@ -225,7 +224,7 @@ namespace InsireBot
             return null;
         }
 
-        private IMediaItem NextRepeatNone()
+        private MediaItemViewModel NextRepeatNone()
         {
             var currentIndex = 0;
             if (CurrentItem?.Sequence != null)
@@ -250,7 +249,7 @@ namespace InsireBot
                 return NextRepeatSingle();
         }
 
-        private IMediaItem NextRepeatSingle()
+        private MediaItemViewModel NextRepeatSingle()
         {
             if (RepeatMode != RepeatMode.None)
                 return CurrentItem;
@@ -258,7 +257,7 @@ namespace InsireBot
                 return null;
         }
 
-        private IMediaItem NextRepeatAll()
+        private MediaItemViewModel NextRepeatAll()
         {
             var currentIndex = 0;
             if (CurrentItem?.Sequence != null)
@@ -287,7 +286,7 @@ namespace InsireBot
                 return NextRepeatSingle();
         }
 
-        private IMediaItem NextShuffle()
+        private MediaItemViewModel NextShuffle()
         {
             if (Items.Count > 1)
             {
@@ -302,10 +301,10 @@ namespace InsireBot
         }
 
         /// <summary>
-        /// Removes the last <see cref="IMediaItem"/> from <seealso cref="History"/> and returns it
+        /// Removes the last <see cref="MediaItemViewModel"/> from <seealso cref="History"/> and returns it
         /// </summary>
-        /// <returns>returns the last <see cref="IMediaItem"/> from <seealso cref="History"/></returns>
-        public virtual IMediaItem Previous()
+        /// <returns>returns the last <see cref="MediaItemViewModel"/> from <seealso cref="History"/></returns>
+        public virtual MediaItemViewModel Previous()
         {
             if (History?.Any() == true)
             {
@@ -344,25 +343,6 @@ namespace InsireBot
         public bool CanPrevious()
         {
             return History != null && History.Any();
-        }
-
-        /// <summary>
-        /// Sets the <see cref="IMediaItem"/> as the <seealso cref="CurrentItem"/>
-        /// Adds the <see cref="IMediaItem"/> to the <seealso cref="History"/>
-        /// </summary>
-        /// <param name="mediaItem"></param>
-        public virtual void SetActive(IMediaItem mediaItem)
-        {
-            if (mediaItem != null)
-            {
-                History.Push(mediaItem.Sequence);
-                CurrentItem = mediaItem;
-            }
-        }
-
-        private bool CanSetActive(IMediaItem item)
-        {
-            return false;
         }
     }
 }
