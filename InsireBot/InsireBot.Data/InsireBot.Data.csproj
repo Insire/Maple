@@ -83,14 +83,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTO\Base\IDatabaseObject.cs" />
+    <Compile Include="DTO\MediaPlayer.cs" />
     <Compile Include="DTO\Playlist.cs" />
     <Compile Include="Repository\Base\IRepository.cs" />
     <Compile Include="DTO\Base\DatabaseObject.cs" />
     <Compile Include="DTO\MediaItem.cs" />
     <Compile Include="Repository\IMediaItemRepository.cs" />
+    <Compile Include="Repository\IMediaPlayerRepository.cs" />
     <Compile Include="Repository\IPlaylistsRepository.cs" />
     <Compile Include="Repository\MediaItemRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\MediaPlayerRepository.cs" />
     <Compile Include="Repository\PlaylistsRepository.cs" />
     <Compile Include="SqLiteConnectionFactory.cs" />
   </ItemGroup>

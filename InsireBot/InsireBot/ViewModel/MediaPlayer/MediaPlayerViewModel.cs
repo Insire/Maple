@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using System;
+using InsireBot.Data;
 
 namespace InsireBot
 {
-    public class MediaPlayerViewModel : ViewModelListBase<MediaItemViewModel>, IValidatableTrackingObject
+    public class MediaPlayerViewModel : ObservableObject, IValidatableTrackingObject
     {
+        private readonly MediaPlayer _player;
         public IMediaPlayer Player { get; private set; }
 
         public bool IsPlaying { get { return Player.IsPlaying; } }
@@ -17,19 +19,36 @@ namespace InsireBot
         public ICommand NextCommand { get; private set; }
         public ICommand PreviousCommand { get; private set; }
 
+
+        private AudioDevices _audioDevices;
+        public AudioDevices AudioDevices
+        {
+            get { return _audioDevices; }
+            set { SetValue(ref _audioDevices, value); }
+        }
+
         private PlaylistViewModel _playlist;
         public PlaylistViewModel Playlist
         {
             get { return _playlist; }
-            private set { SetValue(ref _playlist, value, Changing: OnPlaylistChanging, Changed: OnPlaylistChanged); }
+            set { SetValue(ref _playlist, value, Changing: OnPlaylistChanging, Changed: OnPlaylistChanged); }
+        }
+
+        private string _name;
+        public string Name
+        {
+            get { return _name; }
+            set { SetValue(ref _name, value); }
         }
 
         public bool IsValid { get; }
 
         public bool IsChanged { get; }
 
-        public MediaPlayerViewModel(IMediaPlayer player) : base()
+        public MediaPlayerViewModel(IMediaPlayer player, media) : base()
         {
+            AudioDevices = new AudioDevices();
+
             Player = player;
             Player.PlayingMediaItem += Player_PlayingMediaItem;
             Player.CompletedMediaItem += MediaPlayer_CompletedMediaItem;
@@ -37,7 +56,12 @@ namespace InsireBot
             InitiliazeCommands();
         }
 
-        public void SetPlaylist(PlaylistViewModel playlist)
+        private void OnAudioDeviceChanged()
+        {
+            // TODO
+        }
+
+        private void OnAudioDeviceChanging()
         {
             // TODO
         }
@@ -70,17 +94,17 @@ namespace InsireBot
             PauseCommand = new RelayCommand(Pause, () => Player.CanPause());
         }
 
-        public override void AddRange(IEnumerable<MediaItemViewModel> mediaItems)
+        public void AddRange(IEnumerable<MediaItemViewModel> mediaItems)
         {
             foreach (var item in mediaItems)
                 Playlist.Add(item);
         }
 
-        public override void Add(MediaItemViewModel mediaItem)
+        public void Add(MediaItemViewModel mediaItem)
         {
-            if (Items.Any())
+            if (Playlist.Items.Any())
             {
-                var maxIndex = Items.Max(p => p.Sequence) + 1;
+                var maxIndex = Playlist.Items.Max(p => p.Sequence) + 1;
                 if (maxIndex < 0)
                     maxIndex = 0;
 
@@ -91,7 +115,7 @@ namespace InsireBot
                 mediaItem.Sequence = 0;
             }
 
-            Items.Add(mediaItem);
+            Playlist.Items.Add(mediaItem);
         }
 
         public void Pause()

@@ -63,6 +63,7 @@ namespace InsireBot
             _container.Register<IMediaPlayer, NAudioMediaPlayer>(reuse: Reuse.Transient);
             _container.Register<IPlaylistsRepository, PlaylistsRepository>();
             _container.Register<IMediaItemRepository, MediaItemRepository>();
+            _container.Register<IMediaPlayerRepository, MediaPlayerRepository>();
             _container.Register<IMediaItemMapper, MediaItemMapper>();
             _container.Register<IYoutubeUrlParseService, UrlParseService>();
             _container.Register<IPlaylistMapper, PlaylistMapper>();

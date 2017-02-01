@@ -1,0 +1,98 @@
+﻿<local:IoCUserControl x:Class="InsireBot.MediaPlayers"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:local="clr-namespace:InsireBot"
+                      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+
+    <!--  DataContext: DirectorViewModel  -->
+
+    <materialDesign:TransitioningContent>
+        <materialDesign:TransitioningContent.OpeningEffects>
+            <materialDesign:TransitionEffect Kind="FadeIn" />
+        </materialDesign:TransitioningContent.OpeningEffects>
+
+        <materialDesign:Card VerticalAlignment="Stretch">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="5" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="0.5*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="5" />
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox Grid.Row="1"
+                             Grid.Column="1"
+                             AlternationCount="2"
+                             ItemsSource="{Binding MediaPlayers}"
+                             SelectedItem="{Binding SelectedItem}">
+                        <ListBox.ItemContainerStyle>
+                            <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+
+                    <GridSplitter Grid.Row="1"
+                                  Grid.Column="2"
+                                  Width="5"
+                                  Margin="5,0"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Stretch" />
+
+                    <Grid Grid.Row="1" Grid.Column="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   Text="{local:Translation AudioDevice}" />
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="0"
+                                   Text="{local:Translation PlaybackMode}" />
+                        <TextBlock Grid.Row="4"
+                                   Grid.Column="0"
+                                   Text="{local:Translation Playlist}" />
+                        <TextBlock Grid.Row="6"
+                                   Grid.Column="0"
+                                   Text="{local:Translation PlaybackShuffle}" />
+
+                        <ComboBox Grid.Row="0"
+                                  Grid.Column="2"
+                                  ItemsSource="{Binding SelectedItem.AudioDevices}"
+                                  SelectedItem="{Binding SelectedItem.Player.AudioDevice}" />
+                        <ComboBox Grid.Row="2"
+                                  Grid.Column="2"
+                                  ItemsSource="{Binding SelectedItem.Playlist.RepeatModes}"
+                                  SelectedItem="{Binding SelectedItem.Playlist.RepeatMode}" />
+                        <ComboBox Grid.Row="4"
+                                  Grid.Column="2"
+                                  ItemsSource="{Binding Playlists}"
+                                  SelectedItem="{Binding SelectedItem.Playlist}" />
+                        <CheckBox Grid.Row="6"
+                                  Grid.Column="2"
+                                  IsChecked="{Binding SelectedItem.Playlist.IsShuffeling}" />
+                    </Grid>
+                </Grid>
+            </ScrollViewer>
+        </materialDesign:Card>
+    </materialDesign:TransitioningContent>
+</local:IoCUserControl>

@@ -71,6 +71,7 @@
     <Compile Include="Interfaces\IMediaItem.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Interfaces\IIdentifier.cs" />
+    <Compile Include="Interfaces\ISaveable.cs" />
     <Compile Include="Interfaces\ISequence.cs" />
     <Compile Include="Observables\ChangeTrackingCollection.cs" />
     <Compile Include="Observables\IValidatableTrackingObject.cs" />

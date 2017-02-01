@@ -61,6 +61,24 @@ namespace InsireBot.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wiedergabegerät.
+        /// </summary>
+        public static string AudioDevice {
+            get {
+                return ResourceManager.GetString("AudioDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dirigent.
+        /// </summary>
+        public static string Director {
+            get {
+                return ResourceManager.GetString("Director", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://github.com/Insire/InsireBot-V2.
         /// </summary>
         public static string GithubProjectLink {
@@ -70,11 +88,38 @@ namespace InsireBot.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Auf der Datenbank befinden sich eine ungültige Anzahl an Einträgen für den Standardmediaplayer.
+        /// </summary>
+        public static string InvalidMediaplayerCountOnDBException {
+            get {
+                return ResourceManager.GetString("InvalidMediaplayerCountOnDBException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to darf nicht leer sein.
+        /// </summary>
+        public static string IsRequired {
+            get {
+                return ResourceManager.GetString("IsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sprachen.
         /// </summary>
         public static string Languages {
             get {
                 return ResourceManager.GetString("Languages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Standardmediaplayer.
+        /// </summary>
+        public static string MainMediaplayer {
+            get {
+                return ResourceManager.GetString("MainMediaplayer", resourceCulture);
             }
         }
         
@@ -115,6 +160,33 @@ namespace InsireBot.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wiedergabemodus.
+        /// </summary>
+        public static string PlaybackMode {
+            get {
+                return ResourceManager.GetString("PlaybackMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zufällige Wiedergabe.
+        /// </summary>
+        public static string PlaybackShuffle {
+            get {
+                return ResourceManager.GetString("PlaybackShuffle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wiedergabeliste.
+        /// </summary>
+        public static string Playlist {
+            get {
+                return ResourceManager.GetString("Playlist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wiedergabeliste hinzufügen.
         /// </summary>
         public static string PlaylistAdd {
@@ -133,7 +205,7 @@ namespace InsireBot.Localization.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to InsireBot (de).
+        ///   Looks up a localized string similar to Maple.
         /// </summary>
         public static string ShellTitle {
             get {

@@ -1,12 +1,11 @@
 ﻿using InsireBot.Core;
 using InsireBot.Data;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 
 namespace InsireBot
 {
-    public class PlaylistsViewModel : ObservableObject
+    public class PlaylistsViewModel : ObservableObject, ISaveable
     {
         private readonly IBotLog _log;
         private readonly IPlaylistsRepository _playlistRepository;
@@ -14,11 +13,11 @@ namespace InsireBot
 
         public ChangeTrackingCollection<PlaylistViewModel> Items { get; private set; }
 
-        private PlaylistViewModel _currentItem;
-        public PlaylistViewModel CurrentItem
+        private PlaylistViewModel _selectedItem;
+        public PlaylistViewModel SelectedItem
         {
-            get { return _currentItem; }
-            private set { SetValue(ref _currentItem, value); }
+            get { return _selectedItem; }
+            set { SetValue(ref _selectedItem, value); }
         }
 
         public ICommand SaveCommand { get; private set; }
@@ -34,17 +33,6 @@ namespace InsireBot
 
             var playlists = playlistRepository.GetAll();
             Items = new ChangeTrackingCollection<PlaylistViewModel>(playlists.Select(p => new PlaylistViewModel(log, p)));
-            //var data = new Data.Playlist
-            //{
-            //    Description = "Test",
-            //    Sequence = 0,
-            //    Title = "Test",
-            //    MediaItems = new List<Data.MediaItem>(),
-            //};
-            //var playlist = new PlaylistViewModel(log, data);
-
-            //Items.Add(playlist);
-            //Save(playlist);
 
             SaveCommand = new RelayCommand<PlaylistViewModel>(Save, CanSave);
             DeleteCommand = new RelayCommand<PlaylistViewModel>(Delete, CanDelete);
@@ -53,7 +41,7 @@ namespace InsireBot
         // TODO order changing + sync, Commands, UserInteraction, Reset?, async load, save and delete
 
         /// <summary>
-        /// Sets the <see cref="MediaItemViewModel"/> as the <seealso cref="CurrentItem"/>
+        /// Sets the <see cref="MediaItemViewModel"/> as the <seealso cref="SelectedItem"/>
         /// Adds the <see cref="MediaItemViewModel"/> to the <seealso cref="History"/>
         /// </summary>
         /// <param name="playlist"></param>
@@ -61,7 +49,7 @@ namespace InsireBot
         {
             if (playlist != null)
             {
-                CurrentItem = playlist;
+                SelectedItem = playlist;
             }
         }
 
@@ -108,6 +96,11 @@ namespace InsireBot
         private bool CanDeleteAllInternal()
         {
             return false;
+        }
+
+        public void Save()
+        {
+            SaveAllInternal();
         }
 
         public void Save(PlaylistViewModel viewmodel)

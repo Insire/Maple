@@ -149,6 +149,9 @@
     <Compile Include="Interfaces\IMediaItemMapper.cs" />
     <Compile Include="Interfaces\IPlaylistMapper.cs" />
     <Compile Include="Interfaces\ITranslationManager.cs" />
+    <Compile Include="Pages\MediaPlayers.xaml.cs">
+      <DependentUpon>MediaPlayers.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Playlist\PlaylistsPage.xaml.cs">
       <DependentUpon>PlaylistsPage.xaml</DependentUpon>
     </Compile>
@@ -178,6 +181,7 @@
     <Compile Include="Utils\LinqExtensions.cs" />
     <Compile Include="Utils\Converters\RadioButtonCheckedConverter.cs" />
     <Compile Include="ViewModel\DirectorViewModel.cs" />
+    <Compile Include="ViewModel\MediaPlayer\AudioDevices.cs" />
     <Compile Include="ViewModel\MediaPlayer\MainMediaPlayerViewModel.cs" />
     <Compile Include="ViewModel\Navigation\Scene.cs" />
     <Compile Include="ViewModel\Settings\OptionsViewModel.cs" />
@@ -230,6 +234,10 @@
       <DependentUpon>PlayModeView.xaml</DependentUpon>
     </Compile>
     <Page Include="Pages\MediaPlayerPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\MediaPlayers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -344,16 +352,6 @@
       <Project>{B5BE546F-8D9F-4FB9-B235-AF05FD553F9E}</Project>
       <Name>InsireBot.Youtube</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\maple.ico" />
-    <Resource Include="Resources\maple.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\maple2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\maple1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

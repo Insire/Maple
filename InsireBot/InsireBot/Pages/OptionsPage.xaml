@@ -5,6 +5,8 @@
                       xmlns:local="clr-namespace:InsireBot"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
+    <!-- DataContext: OptionsViewModel-->
+    
     <materialDesign:TransitioningContent>
         <materialDesign:TransitioningContent.OpeningEffects>
             <materialDesign:TransitionEffect Kind="FadeIn" />

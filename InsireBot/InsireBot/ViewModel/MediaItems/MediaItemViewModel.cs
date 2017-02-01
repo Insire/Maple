@@ -1,5 +1,7 @@
 ﻿using InsireBot.Core;
+using InsireBot.Localization.Properties;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace InsireBot
@@ -14,9 +16,6 @@ namespace InsireBot
         }
 
         private int _sequence;
-        /// <summary>
-        /// An Index managed by the collection this <see cref="MediaItemViewModel"/> is part of
-        /// </summary>
         public int Sequence
         {
             get { return _sequence; }
@@ -76,6 +75,15 @@ namespace InsireBot
         {
             var result = Title == string.Empty ? Location : Title;
             return result;
+        }
+
+        public override IEnumerable<ValidationResult> Validate(ValidationContext context)
+        {
+            if (string.IsNullOrWhiteSpace(Title))
+                yield return new ValidationResult($"{nameof(Title)} {Resources.IsRequired}", new[] { nameof(Title) });
+
+            if (string.IsNullOrWhiteSpace(Location))
+                yield return new ValidationResult($"{nameof(Location)} {Resources.IsRequired}",  new[] { nameof(Location) });
         }
     }
 }

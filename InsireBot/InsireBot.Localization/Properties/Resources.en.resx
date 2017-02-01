@@ -145,9 +145,33 @@
     <value>Options</value>
   </data>
   <data name="ShellTitle" xml:space="preserve">
-    <value>InsireBot (en)</value>
+    <value>Maple</value>
   </data>
   <data name="Languages" xml:space="preserve">
     <value>Languages</value>
+  </data>
+  <data name="IsRequired" xml:space="preserve">
+    <value>can not be empty</value>
+  </data>
+  <data name="Playlist" xml:space="preserve">
+    <value>Playlist</value>
+  </data>
+  <data name="AudioDevice" xml:space="preserve">
+    <value>Playback device</value>
+  </data>
+  <data name="PlaybackMode" xml:space="preserve">
+    <value>Playback mode</value>
+  </data>
+  <data name="PlaybackShuffle" xml:space="preserve">
+    <value>Shuffle Playback</value>
+  </data>
+  <data name="Director" xml:space="preserve">
+    <value>Director</value>
+  </data>
+  <data name="MainMediaplayer" xml:space="preserve">
+    <value>Default media player</value>
+  </data>
+  <data name="InvalidMediaplayerCountOnDBException" xml:space="preserve">
+    <value>There is an invalid amount of entries for the default media player on the database</value>
   </data>
 </root>

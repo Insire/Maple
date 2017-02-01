@@ -1,15 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace InsireBot
+﻿namespace InsireBot
 {
     public class MainMediaPlayerViewModel : MediaPlayerViewModel
     {
-        public MainMediaPlayerViewModel(IMediaPlayer player) : base(player)
+        private readonly ITranslationManager _manager;
+        private readonly string _nameKey;
+
+        public MainMediaPlayerViewModel(ITranslationManager manager, IMediaPlayer player, string nameKey) : base(player)
         {
+            _manager = manager;
+            _nameKey = nameKey;
+
+            _manager.PropertyChanged += (o, e) =>
+              {
+                  if (e.PropertyName == nameof(ITranslationManager.CurrentLanguage))
+                      UpdateName();
+              };
+
+            UpdateName();
+        }
+
+        private void UpdateName()
+        {
+            Name = _manager.Translate(_nameKey);
         }
     }
 }

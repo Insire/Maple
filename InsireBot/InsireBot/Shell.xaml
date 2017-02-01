@@ -36,7 +36,10 @@
             <StackPanel HorizontalAlignment="Left"
                         DataContext="{Binding StatusbarViewModel}"
                         Orientation="Vertical">
-                <TextBlock Text="{Binding Version}" />
+                <TextBlock>
+                    <Run Text="{Binding Version, Mode=OneWay}" />
+                    <Run Text="{Binding Language, Mode=OneWay}" />
+                </TextBlock>
             </StackPanel>
         </materialDesign:ColorZone>
 

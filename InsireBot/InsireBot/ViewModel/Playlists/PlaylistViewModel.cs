@@ -1,7 +1,10 @@
 ﻿using InsireBot.Core;
+using InsireBot.Localization.Properties;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace InsireBot
@@ -95,18 +98,18 @@ namespace InsireBot
             private set { SetValue(ref _description, value); }
         }
 
-        private string _location;
-        public string Location
-        {
-            get { return _location; }
-            private set { SetValue(ref _location, value); }
-        }
-
         private int _id;
         public int ID
         {
             get { return _id; }
             private set { SetValue(ref _id, value); }
+        }
+
+        private ObservableCollection<RepeatMode> _repeatModes;
+        public ObservableCollection<RepeatMode> RepeatModes
+        {
+            get { return _repeatModes; }
+            private set { SetValue(ref _repeatModes, value); }
         }
 
         private RepeatMode _repeatMode;
@@ -123,6 +126,7 @@ namespace InsireBot
         {
             _log = log;
 
+            RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
             History = new Stack<int>();
         }
 
@@ -133,7 +137,6 @@ namespace InsireBot
             ID = model.Id;
             RepeatMode = (RepeatMode)model.RepeatMode;
             IsShuffeling = model.IsShuffeling;
-            Location = model.Location;
         }
 
         protected override void InitializeCollectionProperties(Data.Playlist model)
@@ -343,6 +346,12 @@ namespace InsireBot
         public bool CanPrevious()
         {
             return History != null && History.Any();
+        }
+
+        public override IEnumerable<ValidationResult> Validate(ValidationContext context)
+        {
+            if (string.IsNullOrWhiteSpace(Title))
+                yield return new ValidationResult($"{nameof(Title)} {Resources.IsRequired}", new[] { nameof(Title) });
         }
     }
 }

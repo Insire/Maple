@@ -7,7 +7,7 @@ namespace InsireBot.Data
         IEnumerable<T> GetAll();
         List<T> GetAllById(params int[] ids);
         T Create(T item);
-        int Create(IEnumerable<T> item);
+        int Create(IEnumerable<T> items);
         T Read(int id);
         T Update(T item);
         int Delete(int id);

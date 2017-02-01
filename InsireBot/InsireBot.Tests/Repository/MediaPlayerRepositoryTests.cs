@@ -6,18 +6,18 @@ using System.Linq;
 namespace InsireBot.Tests
 {
     [TestClass()]
-    public class PlaylistRepositoryTests
+    public class MediaPlayerRepositoryTests
     {
-        private static PlaylistsRepository _repository;
+        private static MediaPlayerRepository _repository;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            _repository = new PlaylistsRepository();
+            _repository = new MediaPlayerRepository();
         }
 
         [TestMethod()]
-        public void PlaylistRepositoryCreateTest()
+        public void MediaPlayerRepositoryCreateTest()
         {
             var item = CreateOne();
             var item2 = CreateOne();
@@ -28,7 +28,7 @@ namespace InsireBot.Tests
         }
 
         [TestMethod()]
-        public void PlaylistRepositoryDeleteByIdTest()
+        public void MediaPlayerRepositoryDeleteByIdTest()
         {
             var item = CreateOne();
             var result = _repository.Delete(item.Id);
@@ -37,7 +37,7 @@ namespace InsireBot.Tests
         }
 
         [TestMethod()]
-        public void PlaylistRepositoryDeleteTest()
+        public void MediaPlayerRepositoryDeleteTest()
         {
             var item = CreateOne();
             var result = _repository.Delete(item);
@@ -46,7 +46,7 @@ namespace InsireBot.Tests
         }
 
         [TestMethod()]
-        public void PlaylistRepositoryGetAllTest()
+        public void MediaPlayerRepositoryGetAllTest()
         {
             var items = CreateMultiple().ToList();
             var result = _repository.Create(items);
@@ -55,63 +55,63 @@ namespace InsireBot.Tests
         }
 
         [TestMethod()]
-        public void PlaylistRepositoryReadTest()
+        public void MediaPlayerRepositoryReadTest()
         {
             var item = CreateOne();
             var readItem = _repository.Read(item.Id);
 
-            Assert.AreEqual(item.Title, readItem.Title);
+            Assert.AreEqual(item.DeviceName, readItem.DeviceName);
         }
 
         [TestMethod()]
-        public void PlaylistRepositoryUpdateTest()
+        public void MediaPlayerRepositoryUpdateTest()
         {
             var item = CreateOne();
-            item.Title = "PlaylistRepositoryUpdateTest";
+            item.DeviceName = "MediaPlayerRepositoryUpdateTest";
             _repository.Update(item);
 
             var readItem = _repository.Read(item.Id);
-            Assert.AreEqual("PlaylistRepositoryUpdateTest", readItem.Title);
+            Assert.AreEqual("MediaPlayerRepositoryUpdateTest", readItem.DeviceName);
         }
 
         [TestMethod()]
-        public void PlaylistRepositorySaveUpdateTest()
+        public void MediaPlayerRepositorySaveUpdateTest()
         {
             var item = CreateOne();
-            item.Title = "PlaylistRepositorySaveUpdateTest";
+            item.DeviceName = "MediaPlayerRepositorySaveUpdateTest";
 
             Assert.IsFalse(item.IsNew);
 
             item = _repository.Save(item);
 
             var readItem = _repository.Read(item.Id);
-            Assert.AreEqual("PlaylistRepositorySaveUpdateTest", readItem.Title);
+            Assert.AreEqual("MediaPlayerRepositorySaveUpdateTest", readItem.DeviceName);
         }
 
         [TestMethod()]
-        public void PlaylistRepositorySaveNewTest()
+        public void MediaPlayerRepositorySaveNewTest()
         {
-            var item = new Playlist
+            var item = new MediaPlayer
             {
-                RepeatMode = 2,
-                Sequence = 2,
-                Title = "PlaylistRepositorySaveNewTest",
+                DeviceName = "MediaPlayerRepositorySaveNewTest",
+                Sequence = 0,
+                Name = "MediaPlayerRepositorySaveNewTest",
             };
 
             item = _repository.Save(item);
 
             var readItem = _repository.Read(item.Id);
-            Assert.AreEqual("PlaylistRepositorySaveNewTest", readItem.Title);
+            Assert.AreEqual("MediaPlayerRepositorySaveNewTest", readItem.DeviceName);
         }
 
         [TestMethod()]
-        public void PlaylistRepositorySaveDeleteTest()
+        public void MediaPlayerRepositorySaveDeleteTest()
         {
-            var item = new Playlist
+            var item = new MediaPlayer
             {
-                RepeatMode = 2,
-                Sequence = 2,
-                Title = "PlaylistRepositorySaveDeleteTest",
+                DeviceName = "MediaPlayerRepositorySaveDeleteTest",
+                Sequence = 0,
+                Name = "MediaPlayerRepositorySaveDeleteTest",
                 IsDeleted = true,
             };
 
@@ -122,13 +122,13 @@ namespace InsireBot.Tests
             Assert.IsNull(readItem);
         }
 
-        private Playlist CreateOne()
+        private MediaPlayer CreateOne()
         {
-            var item = new Playlist
+            var item = new MediaPlayer
             {
-                RepeatMode = 1,
+                DeviceName = "CreateOne",
                 Sequence = 0,
-                Title = "CreateOne",
+                Name = "CreateOne",
             };
 
             _repository.Create(item);
@@ -136,29 +136,27 @@ namespace InsireBot.Tests
             return item;
         }
 
-        private IEnumerable<Playlist> CreateMultiple()
+        private IEnumerable<MediaPlayer> CreateMultiple()
         {
-            yield return new Playlist
+            yield return new MediaPlayer
             {
-                RepeatMode = 1,
+                DeviceName = "CreateMultiple_1",
                 Sequence = 0,
-                Title = "CreateMultiple",
+                Name = "CreateMultiple_1",
             };
 
-            yield return new Playlist
+            yield return new MediaPlayer
             {
-                RepeatMode = 1,
-                Sequence = 1,
-                Title = "CreateMultiple_1",
+                DeviceName = "CreateMultiple_2",
+                Sequence = 0,
+                Name = "CreateMultiple_2",
             };
 
-            yield return new Playlist
+            yield return new MediaPlayer
             {
-                RepeatMode = 1,
-                Sequence = 2,
-                Description = string.Empty,
-
-                Title = "CreateMultiple_2",
+                DeviceName = "CreateMultiple_3",
+                Sequence = 0,
+                Name = "CreateMultiple_3",
             };
         }
     }

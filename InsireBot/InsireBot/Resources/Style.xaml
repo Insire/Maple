@@ -296,4 +296,110 @@
     </Style>
     <!--#endregion  ToggleButton Styles-->
 
+    <DataTemplate DataType="{x:Type local:PlaylistViewModel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <icons:PackIconMaterial Grid.Column="0"
+                                    Width="32"
+                                    Height="32"
+                                    VerticalAlignment="Center"
+                                    Kind="FormatListBulleted">
+                <icons:PackIconMaterial.Style>
+                    <Style TargetType="icons:PackIconMaterial">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                <Setter Property="Kind" Value="PlaylistPlay" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                <Setter Property="Kind" Value="FormatListBulleted" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </icons:PackIconMaterial.Style>
+            </icons:PackIconMaterial>
+
+            <StackPanel Grid.Column="1"
+                        Margin="10,0"
+                        VerticalAlignment="Center"
+                        Orientation="Vertical">
+                <TextBlock FontSize="22"
+                           FontWeight="DemiBold"
+                           Text="{Binding Title}"
+                           TextTrimming="CharacterEllipsis"
+                           TextWrapping="NoWrap" />
+                <TextBlock Text="{Binding Description}"
+                           TextTrimming="CharacterEllipsis"
+                           TextWrapping="NoWrap" />
+            </StackPanel>
+
+            <Button Grid.Column="2"
+                    Command="{Binding SetActiveCommand}"
+                    Style="{StaticResource PlayButtonStyle}">
+                <icons:PackIconMaterial Kind="Play" />
+            </Button>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type local:MediaItemViewModel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <icons:PackIconMaterial Grid.Column="0"
+                                    Width="32"
+                                    Height="32"
+                                    VerticalAlignment="Center"
+                                    Kind="FormatListBulleted">
+                <icons:PackIconMaterial.Style>
+                    <Style TargetType="icons:PackIconMaterial">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding PrivacyStatus}" Value="None">
+                                <Setter Property="Kind" Value="Eye" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding PrivacyStatus}" Value="Restricted">
+                                <Setter Property="Kind" Value="EyeOff" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </icons:PackIconMaterial.Style>
+            </icons:PackIconMaterial>
+
+            <StackPanel Grid.Column="1"
+                        Margin="10,0"
+                        VerticalAlignment="Center"
+                        Orientation="Vertical">
+                <TextBlock FontSize="22"
+                           FontWeight="DemiBold"
+                           Text="{Binding Title}"
+                           TextTrimming="CharacterEllipsis"
+                           TextWrapping="NoWrap" />
+                <TextBlock Text="{Binding Description}"
+                           TextTrimming="CharacterEllipsis"
+                           TextWrapping="NoWrap" />
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type local:MainMediaPlayerViewModel}">
+        <StackPanel Orientation="Horizontal">
+            <icons:PackIconModern Margin="0,0,5,0" Kind="MonitorPlay" />
+            <TextBlock Text="{Binding Name}" />
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type local:MediaPlayerViewModel}">
+        <StackPanel Orientation="Horizontal">
+            <icons:PackIconOcticons Margin="0,0,5,0" Kind="DeviceDesktop" />
+            <TextBlock Text="{Binding Name}" />
+        </StackPanel>
+    </DataTemplate>
+
 </ResourceDictionary>

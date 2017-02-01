@@ -145,9 +145,33 @@
     <value>Einstellungen</value>
   </data>
   <data name="ShellTitle" xml:space="preserve">
-    <value>InsireBot (de)</value>
+    <value>Maple</value>
   </data>
   <data name="Languages" xml:space="preserve">
     <value>Sprachen</value>
+  </data>
+  <data name="IsRequired" xml:space="preserve">
+    <value>darf nicht leer sein</value>
+  </data>
+  <data name="Playlist" xml:space="preserve">
+    <value>Wiedergabeliste</value>
+  </data>
+  <data name="AudioDevice" xml:space="preserve">
+    <value>Wiedergabegerät</value>
+  </data>
+  <data name="PlaybackMode" xml:space="preserve">
+    <value>Wiedergabemodus</value>
+  </data>
+  <data name="PlaybackShuffle" xml:space="preserve">
+    <value>Zufällige Wiedergabe</value>
+  </data>
+  <data name="Director" xml:space="preserve">
+    <value>Dirigent</value>
+  </data>
+  <data name="MainMediaplayer" xml:space="preserve">
+    <value>Standardmediaplayer</value>
+  </data>
+  <data name="InvalidMediaplayerCountOnDBException" xml:space="preserve">
+    <value>Auf der Datenbank befinden sich eine ungültige Anzahl an Einträgen für den Standardmediaplayer</value>
   </data>
 </root>

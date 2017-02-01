@@ -15,8 +15,8 @@ namespace InsireBot.Data
         public int Create(IEnumerable<Playlist> items)
         {
             var sql = $"INSERT INTO {nameof(Playlist)} "
-                + $"({nameof(Playlist.Title)}, {nameof(Playlist.Sequence)}, {nameof(Playlist.Location)}, {nameof(Playlist.RepeatMode)}, {nameof(Playlist.IsShuffeling)}, {nameof(Playlist.Description)}) "
-                + $"VALUES(@{nameof(Playlist.Title)}, @{nameof(Playlist.Sequence)}, @{nameof(Playlist.Location)}, @{nameof(Playlist.RepeatMode)}, @{nameof(Playlist.IsShuffeling)}, @{nameof(Playlist.Description)}); "
+                + $"({nameof(Playlist.Title)}, {nameof(Playlist.Sequence)}, {nameof(Playlist.RepeatMode)}, {nameof(Playlist.IsShuffeling)}, {nameof(Playlist.Description)}) "
+                + $"VALUES(@{nameof(Playlist.Title)}, @{nameof(Playlist.Sequence)}, @{nameof(Playlist.RepeatMode)}, @{nameof(Playlist.IsShuffeling)}, @{nameof(Playlist.Description)}); "
                 + "SELECT last_insert_rowid();";
 
             using (var connection = SqLiteConnectionFactory.Get())
@@ -28,8 +28,8 @@ namespace InsireBot.Data
         public Playlist Create(Playlist item)
         {
             var sql = $"INSERT INTO {nameof(Playlist)} "
-                + $"({nameof(Playlist.Title)}, {nameof(Playlist.Sequence)}, {nameof(Playlist.Location)}, {nameof(Playlist.RepeatMode)}, {nameof(Playlist.IsShuffeling)}, {nameof(Playlist.Description)}) "
-                + $"VALUES(@{nameof(Playlist.Title)}, @{nameof(Playlist.Sequence)}, @{nameof(Playlist.Location)}, @{nameof(Playlist.RepeatMode)}, @{nameof(Playlist.IsShuffeling)}, @{nameof(Playlist.Description)}); "
+                + $"({nameof(Playlist.Title)}, {nameof(Playlist.Sequence)}, {nameof(Playlist.RepeatMode)}, {nameof(Playlist.IsShuffeling)}, {nameof(Playlist.Description)}) "
+                + $"VALUES(@{nameof(Playlist.Title)}, @{nameof(Playlist.Sequence)}, @{nameof(Playlist.RepeatMode)}, @{nameof(Playlist.IsShuffeling)}, @{nameof(Playlist.Description)}); "
                 + "SELECT last_insert_rowid();";
 
             using (var connection = SqLiteConnectionFactory.Get())
@@ -47,7 +47,6 @@ namespace InsireBot.Data
                         + $"({nameof(Playlist.Id)} INT PRIMARY KEY, "
                         + $"{nameof(Playlist.Title)} VARCHAR(255), "
                         + $"{nameof(Playlist.Sequence)} INT, "
-                        + $"{nameof(Playlist.Location)} VARCHAR(255), "
                         + $"{nameof(Playlist.RepeatMode)} INT, "
                         + $"{nameof(Playlist.IsShuffeling)} BOOL, "
                         + $"{nameof(Playlist.Description)} VARCHAR(255))";
@@ -130,7 +129,6 @@ namespace InsireBot.Data
             var sql = $"UPDATE {nameof(Playlist)} " +
                 $"SET {nameof(Playlist.Title)} = @{nameof(Playlist.Title)}, " +
                 $"{nameof(Playlist.Sequence)} = @{nameof(Playlist.Sequence)}, " +
-                $"{nameof(Playlist.Location)} = @{nameof(Playlist.Location)}, " +
                 $"{nameof(Playlist.RepeatMode)} = @{nameof(Playlist.RepeatMode)}, " +
                 $"{nameof(Playlist.IsShuffeling)} = @{nameof(Playlist.IsShuffeling)}, " +
                 $"{nameof(Playlist.Description)} = @{nameof(Playlist.Description)} " +

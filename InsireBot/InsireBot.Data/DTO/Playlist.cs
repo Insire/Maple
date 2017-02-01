@@ -6,7 +6,6 @@ namespace InsireBot.Data
     {
         public string Title { get; set; }
         public string Description { get; set; }
-        public string Location { get; set; }
         public int RepeatMode { get; set; }
         public bool IsShuffeling { get; set; }
         public bool IsRestricted { get; set; }

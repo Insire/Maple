@@ -1,5 +1,6 @@
 ﻿using InsireBot.Core;
 using InsireBot.Localization.Properties;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -87,6 +88,15 @@ namespace InsireBot
                     IsSelected = false,
                     Sequence = 600,
                 },
+
+                new Scene(_manager)
+                {
+                    Content = new MediaPlayers(_manager),
+                    Key = nameof(Resources.Director),
+                    GetDataContext = () => directorViewModel,
+                    IsSelected = false,
+                    Sequence = 150,
+                },
             };
 
             using (BusyStack.GetToken())
@@ -101,6 +111,8 @@ namespace InsireBot
 
             InitializeCommands();
 
+            SelectionChanging += SelectedSceneChanging;
+
             _log.Info(manager.Translate(nameof(Resources.NavigationLoaded)));
         }
 
@@ -109,6 +121,14 @@ namespace InsireBot
             OpenColorOptionsCommand = new RelayCommand(OpenColorOptionsView, CanOpenColorOptionsView);
             OpenMediaPlayerCommand = new RelayCommand(OpenMediaPlayerView, CanOpenMediaPlayerView);
             OpenGithubPageCommand = new RelayCommand(OpenGithubPage);
+        }
+
+        private void SelectedSceneChanging(object sender, EventArgs e)
+        {
+            var viewmodel = sender as ISaveable;
+
+            if (viewmodel != null)
+                viewmodel.Save();
         }
 
         private void OpenColorOptionsView()
