@@ -1,6 +1,7 @@
 ﻿using Maple.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Maple.Tests
@@ -13,7 +14,13 @@ namespace Maple.Tests
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            _repository = new MediaPlayerRepository(new DBConnection(context.DeploymentDirectory));
+            _repository = new MediaPlayerRepository(new DBConnection(Path.Combine(context.DeploymentDirectory, "MediaPlayerRepositoryTests")));
+        }
+
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+            SqLiteConnectionFactory.DropDatabase(_repository.Path);
         }
 
         [TestMethod()]

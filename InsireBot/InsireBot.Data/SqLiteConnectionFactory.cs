@@ -10,6 +10,8 @@ namespace Maple.Data
 
         public static IDbConnection Get(string path)
         {
+            Directory.CreateDirectory(path);
+
             var fullPath = Path.Combine(path, DBFILENAME);
 
             var connection =  new SQLiteConnection($"Data Source={fullPath}; Version=3;");
@@ -18,6 +20,14 @@ namespace Maple.Data
                 SQLiteConnection.CreateFile(fullPath);
 
             return connection;
+        }
+
+        public static void DropDatabase(string path)
+        {
+            var fullPath = Path.Combine(path, DBFILENAME);
+
+            if (File.Exists(fullPath))
+                File.Delete(fullPath);
         }
 
         /*
