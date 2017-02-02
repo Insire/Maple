@@ -7,8 +7,8 @@
     <ProjectGuid>{B3CD46BE-3C08-4BAE-AE60-A6D84A62400C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>InsireBot.Data</RootNamespace>
-    <AssemblyName>InsireBot.Data</AssemblyName>
+    <RootNamespace>Maple.Data</RootNamespace>
+    <AssemblyName>Maple.Data</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>
@@ -116,13 +116,13 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\InsireBot.Core\InsireBot.Core.csproj">
+    <ProjectReference Include="..\InsireBot.Core\Maple.Core.csproj">
       <Project>{21FA5854-0692-42E2-924E-A38CF3C7FF71}</Project>
-      <Name>InsireBot.Core</Name>
+      <Name>Maple.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\InsireBot.Localization\InsireBot.Localization.csproj">
+    <ProjectReference Include="..\InsireBot.Localization\Maple.Localization.csproj">
       <Project>{A073FC92-90E3-4541-8B52-6F7293187871}</Project>
-      <Name>InsireBot.Localization</Name>
+      <Name>Maple.Localization</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

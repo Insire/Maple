@@ -7,8 +7,8 @@
     <ProjectGuid>{21FA5854-0692-42E2-924E-A38CF3C7FF71}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>InsireBot.Core</RootNamespace>
-    <AssemblyName>InsireBot.Core</AssemblyName>
+    <RootNamespace>Maple.Core</RootNamespace>
+    <AssemblyName>Maple.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

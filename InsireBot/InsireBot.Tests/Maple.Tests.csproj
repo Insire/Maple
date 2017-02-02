@@ -6,8 +6,8 @@
     <ProjectGuid>{161B76D6-52E4-4842-924B-1D3F1019F6BE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>InsireBot.Tests</RootNamespace>
-    <AssemblyName>InsireBot.Tests</AssemblyName>
+    <RootNamespace>Maple.Tests</RootNamespace>
+    <AssemblyName>Maple.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -66,17 +66,17 @@
     <Compile Include="ViewModel\MediaPlayer\MediaPlayerTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\InsireBot.Core\InsireBot.Core.csproj">
+    <ProjectReference Include="..\InsireBot.Core\Maple.Core.csproj">
       <Project>{21FA5854-0692-42E2-924E-A38CF3C7FF71}</Project>
-      <Name>InsireBot.Core</Name>
+      <Name>Maple.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\InsireBot.Data\InsireBot.Data.csproj">
+    <ProjectReference Include="..\InsireBot.Data\Maple.Data.csproj">
       <Project>{b3cd46be-3c08-4bae-ae60-a6d84a62400c}</Project>
-      <Name>InsireBot.Data</Name>
+      <Name>Maple.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\InsireBot\InsireBot.csproj">
+    <ProjectReference Include="..\InsireBot\Maple.csproj">
       <Project>{FBD5595B-6859-4E8E-BDFA-C3169EF34985}</Project>
-      <Name>InsireBot</Name>
+      <Name>Maple</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
