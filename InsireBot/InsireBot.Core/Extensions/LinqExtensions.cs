@@ -32,8 +32,8 @@ namespace InsireBot.Core
             if (baseCollection == null)
                 throw new ArgumentNullException("CanAddRange can't return a result. There were no valid parameters", nameof(baseCollection));
 
-            var excludedIDs = new HashSet<int>(baseCollection.Select(p => p.ID));
-            return newItems.Where(p => !excludedIDs.Contains(p.ID));
+            var excludedIDs = new HashSet<int>(baseCollection.Select(p => p.Id));
+            return newItems.Where(p => !excludedIDs.Contains(p.Id));
         }
 
         /// <summary>
@@ -49,14 +49,20 @@ namespace InsireBot.Core
             if (baseCollection == null)
                 throw new ArgumentNullException("CanAddRange can't return a result. There were no valid parameters", nameof(baseCollection));
 
-            var excludedIDs = new HashSet<int>(baseCollection.Select(p => p.ID));
-            return newItems.Where(p => !excludedIDs.Contains(p.ID));
+            var excludedIDs = new HashSet<int>(baseCollection.Select(p => p.Id));
+            return newItems.Where(p => !excludedIDs.Contains(p.Id));
         }
 
-        public static IEnumerable<TResult> ForEach<TSource, TResult>(this IEnumerable<TSource> sourceItems,  Func<TSource, TResult> action)
+        public static IEnumerable<TResult> ForEach<TSource, TResult>(this IEnumerable<TSource> sourceItems, Func<TSource, TResult> action)
         {
             foreach (var item in sourceItems)
                 yield return action(item);
+        }
+
+        public static void ForEach<TSource>(this IEnumerable<TSource> sourceItems, Action<TSource> action)
+        {
+            foreach (var item in sourceItems)
+                action(item);
         }
     }
 }

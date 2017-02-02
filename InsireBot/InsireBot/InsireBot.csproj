@@ -153,8 +153,8 @@
     <Compile Include="Interfaces\IMediaItemMapper.cs" />
     <Compile Include="Interfaces\IPlaylistMapper.cs" />
     <Compile Include="Interfaces\ITranslationManager.cs" />
-    <Compile Include="Pages\MediaPlayers.xaml.cs">
-      <DependentUpon>MediaPlayers.xaml</DependentUpon>
+    <Compile Include="Pages\MediaPlayersPage.xaml.cs">
+      <DependentUpon>MediaPlayersPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Playlist\PlaylistsPage.xaml.cs">
       <DependentUpon>PlaylistsPage.xaml</DependentUpon>
@@ -186,12 +186,13 @@
     <Compile Include="Utils\Converters\RadioButtonCheckedConverter.cs" />
     <Compile Include="ViewModel\DirectorViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer\AudioDevices.cs" />
-    <Compile Include="ViewModel\MediaPlayer\MainMediaPlayerViewModel.cs" />
+    <Compile Include="ViewModel\MediaPlayer\MainMediaPlayer.cs" />
+    <Compile Include="ViewModel\MediaPlayer\MediaPlayers.cs" />
     <Compile Include="ViewModel\Navigation\Scene.cs" />
     <Compile Include="ViewModel\Settings\OptionsViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer\AudioDevice.cs" />
     <Compile Include="ViewModel\MediaItems\MediaItemViewModel.cs" />
-    <Compile Include="ViewModel\MediaPlayer\BasePlayer.cs" />
+    <Compile Include="ViewModel\MediaPlayer\Base\BasePlayer.cs" />
     <Compile Include="ViewModel\MediaPlayer\NAudio\WaveFormatFactory.cs" />
     <Compile Include="ViewModel\MediaPlayer\NAudio\NAudioMediaPlayer.cs" />
     <Compile Include="ViewModel\MediaPlayer\NAudio\PlaybackDeviceFactory.cs" />
@@ -201,22 +202,22 @@
     <Compile Include="Pages\MediaPlayerPage.xaml.cs">
       <DependentUpon>MediaPlayerPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\NewMediaItem\NewMediaItemOptionsPage.xaml.cs">
+    <Compile Include="Pages\Playlist\NewMediaItemOptionsPage.xaml.cs">
       <DependentUpon>NewMediaItemOptionsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\NewMediaItem\NewMediaItemPage.xaml.cs">
+    <Compile Include="Pages\Playlist\NewMediaItemPage.xaml.cs">
       <DependentUpon>NewMediaItemPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\NewPlaylist\NewPlaylistOptionsPage.xaml.cs">
+    <Compile Include="Pages\Playlist\NewPlaylistOptionsPage.xaml.cs">
       <DependentUpon>NewPlaylistOptionsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\NewPlaylist\NewPlaylistPage.xaml.cs">
+    <Compile Include="Pages\Playlist\NewPlaylistPage.xaml.cs">
       <DependentUpon>NewPlaylistPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ColorOptionsPage.xaml.cs">
+    <Compile Include="Pages\Options\ColorOptionsPage.xaml.cs">
       <DependentUpon>ColorOptionsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\OptionsPage.xaml.cs">
+    <Compile Include="Pages\Options\OptionsPage.xaml.cs">
       <DependentUpon>OptionsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\InsireBotException.cs" />
@@ -229,8 +230,7 @@
     <Compile Include="View\MediaPlayerView.xaml.cs">
       <DependentUpon>MediaPlayerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\MediaPlayer\MediaPlayerViewModel.cs" />
-    <Compile Include="GlobalServiceLocator.cs" />
+    <Compile Include="ViewModel\MediaPlayer\MediaPlayer.cs" />
     <Compile Include="View\PlayModeView.xaml.cs">
       <DependentUpon>PlayModeView.xaml</DependentUpon>
     </Compile>
@@ -238,27 +238,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\MediaPlayers.xaml">
+    <Page Include="Pages\MediaPlayersPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\NewMediaItem\NewMediaItemOptionsPage.xaml">
+    <Page Include="Pages\Playlist\NewMediaItemOptionsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\NewMediaItem\NewMediaItemPage.xaml">
+    <Page Include="Pages\Playlist\NewMediaItemPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\NewPlaylist\NewPlaylistOptionsPage.xaml">
+    <Page Include="Pages\Playlist\NewPlaylistOptionsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\NewPlaylist\NewPlaylistPage.xaml">
+    <Page Include="Pages\Playlist\NewPlaylistPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\ColorOptionsPage.xaml">
+    <Page Include="Pages\Options\ColorOptionsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -270,7 +270,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\OptionsPage.xaml">
+    <Page Include="Pages\Options\OptionsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

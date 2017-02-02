@@ -97,6 +97,24 @@ namespace InsireBot.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Speichert geleert.
+        /// </summary>
+        public static string DisposedState {
+            get {
+                return ResourceManager.GetString("DisposedState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Speicher wird geleert.
+        /// </summary>
+        public static string DisposingState {
+            get {
+                return ResourceManager.GetString("DisposingState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://github.com/Insire/InsireBot-V2.
         /// </summary>
         public static string GithubProjectLink {
@@ -246,6 +264,24 @@ namespace InsireBot.Localization.Properties {
         public static string Remove {
             get {
                 return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Änderungen gespeichert.
+        /// </summary>
+        public static string SavedState {
+            get {
+                return ResourceManager.GetString("SavedState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Änderungen werden gespeichert.
+        /// </summary>
+        public static string SavingState {
+            get {
+                return ResourceManager.GetString("SavingState", resourceCulture);
             }
         }
         

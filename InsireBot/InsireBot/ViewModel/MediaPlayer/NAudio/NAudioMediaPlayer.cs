@@ -37,6 +37,8 @@ namespace InsireBot
 
             OnPropertyChanged(nameof(VolumeMin));
             OnPropertyChanged(nameof(VolumeMax));
+
+            _log.Info("NAudioMediaPlayer created");
         }
 
         private void PlaybackStopped(object sender, StoppedEventArgs e)
@@ -99,7 +101,7 @@ namespace InsireBot
                 throw new ArgumentNullException($"{nameof(_player)} is null");
 
             if (_player?.PlaybackState != NAudio.Wave.PlaybackState.Playing)
-                throw new InvalidOperationException("Can't stop playback for a file, thats not being played back");
+                return;
 
             _player.Stop();
         }

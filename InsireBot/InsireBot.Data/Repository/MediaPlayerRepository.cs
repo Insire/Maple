@@ -118,6 +118,7 @@ namespace InsireBot.Data
         public MediaPlayer Save(MediaPlayer item)
         {
             var result = item;
+
             using (var txScope = new TransactionScope())
             {
                 if (item.IsNew)

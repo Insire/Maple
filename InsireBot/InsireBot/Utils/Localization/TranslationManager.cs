@@ -8,7 +8,6 @@ namespace InsireBot
 {
     public class TranslationManager : ObservableObject, ITranslationManager
     {
-
         public ITranslationProvider TranslationProvider { get; private set; }
 
         public CultureInfo CurrentLanguage
@@ -52,6 +51,12 @@ namespace InsireBot
             }
 
             return $"!{key}!";
+        }
+
+        public void Save()
+        {
+            Properties.Settings.Default.StartUpCulture = CurrentLanguage;
+            Properties.Settings.Default.Save();
         }
     }
 }

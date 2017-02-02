@@ -8,13 +8,17 @@ namespace InsireBot
 {
     public class MediaItemViewModel : TrackingBaseViewModel<Data.MediaItem>, IMediaItem, ISequence, IIdentifier, IValidatableTrackingObject, IValidatableObject
     {
+        private readonly IBotLog _log;
+
+        public int IdOriginalValue => GetOriginalValue<int>(nameof(Id));
         private int _id;
-        public int ID
+        public int Id
         {
             get { return _id; }
             private set { SetValue(ref _id, value); }
         }
 
+        public int SequenceOriginalValue => GetOriginalValue<int>(nameof(Sequence));
         private int _sequence;
         public int Sequence
         {
@@ -22,13 +26,15 @@ namespace InsireBot
             set { SetValue(ref _sequence, value); }
         }
 
+        public string TitleOriginalValue => GetOriginalValue<string>(nameof(Title));
         private string _title;
         public string Title
         {
             get { return _title; }
-            private set { SetValue(ref _title, value); }
+            set { SetValue(ref _title, value); }
         }
 
+        public TimeSpan DurationOriginalValue => GetOriginalValue<TimeSpan>(nameof(Duration));
         private TimeSpan _duration;
         public TimeSpan Duration
         {
@@ -36,6 +42,7 @@ namespace InsireBot
             private set { SetValue(ref _duration, value); }
         }
 
+        public PrivacyStatus PrivacyStatusOriginalValue => GetOriginalValue<PrivacyStatus>(nameof(PrivacyStatus));
         private PrivacyStatus _privacyStatus;
         public PrivacyStatus PrivacyStatus
         {
@@ -43,6 +50,7 @@ namespace InsireBot
             private set { SetValue(ref _privacyStatus, value); }
         }
 
+        public string LocationOriginalValue => GetOriginalValue<string>(nameof(Location));
         private string _location;
         public string Location
         {
@@ -57,13 +65,14 @@ namespace InsireBot
             set { SetValue(ref _isSelected, value); }
         }
 
-        public MediaItemViewModel(Data.MediaItem model) : base(model)
+        public MediaItemViewModel(IBotLog log, Data.MediaItem model) : base(model)
         {
+            _log = log;
         }
 
         protected override void InitializeComplexProperties(Data.MediaItem model)
         {
-            ID = model.Id;
+            Id = model.Id;
             Location = model.Location;
             Title = model.Title;
             Sequence = model.Sequence;
@@ -83,7 +92,7 @@ namespace InsireBot
                 yield return new ValidationResult($"{nameof(Title)} {Resources.IsRequired}", new[] { nameof(Title) });
 
             if (string.IsNullOrWhiteSpace(Location))
-                yield return new ValidationResult($"{nameof(Location)} {Resources.IsRequired}",  new[] { nameof(Location) });
+                yield return new ValidationResult($"{nameof(Location)} {Resources.IsRequired}", new[] { nameof(Location) });
         }
     }
 }

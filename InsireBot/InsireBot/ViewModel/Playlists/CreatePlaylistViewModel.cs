@@ -7,7 +7,7 @@ namespace InsireBot
     /// <summary>
     /// viewmodel for creating playlists from a input string (path/url)
     /// </summary>
-    public class CreatePlaylistViewModel : ViewModelListBase<PlaylistViewModel>
+    public class CreatePlaylistViewModel : ViewModelListBase<Playlist>
     {
         private IYoutubeUrlParseService _dataParsingService;
         private IPlaylistMapper _mapper;

@@ -1,16 +1,15 @@
 using InsireBot.Core;
+using InsireBot.Localization.Properties;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows.Input;
-using System;
-using InsireBot.Data;
 
 namespace InsireBot
 {
-    public class MediaPlayerViewModel : ObservableObject, IValidatableTrackingObject
+    public class MediaPlayer : TrackingBaseViewModel<Data.MediaPlayer>, IValidatableTrackingObject, IDisposable
     {
-        public MediaPlayer Model { get; private set; }
-
         private IMediaPlayer _player;
         public IMediaPlayer Player
         {
@@ -32,8 +31,8 @@ namespace InsireBot
             private set { SetValue(ref _audioDevices, value); }
         }
 
-        private PlaylistViewModel _playlist;
-        public PlaylistViewModel Playlist
+        private Playlist _playlist;
+        public Playlist Playlist
         {
             get { return _playlist; }
             set { SetValue(ref _playlist, value, Changing: OnPlaylistChanging, Changed: OnPlaylistChanged); }
@@ -46,13 +45,22 @@ namespace InsireBot
             set { SetValue(ref _name, value); }
         }
 
-        public bool IsValid { get; }
-
-        public bool IsChanged { get; }
-
-        public MediaPlayerViewModel(IMediaPlayer player, MediaPlayer mediaPlayer) : base()
+        private bool _isPrimary;
+        public bool IsPrimary
         {
-            Model = mediaPlayer;
+            get { return _isPrimary; }
+            protected set { SetValue(ref _isPrimary, value); }
+        }
+
+        private bool _disposed;
+        public bool Disposed
+        {
+            get { return _disposed; }
+            protected set { SetValue(ref _disposed, value); }
+        }
+
+        public MediaPlayer(IMediaPlayer player, Data.MediaPlayer mediaPlayer) : base(mediaPlayer)
+        {
             AudioDevices = new AudioDevices();
 
             Player = player;
@@ -64,9 +72,26 @@ namespace InsireBot
             InitiliazeCommands();
         }
 
+        protected override void InitializeComplexProperties(Data.MediaPlayer model)
+        {
+            Name = model.Name;
+        }
+
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (string.IsNullOrWhiteSpace(Name))
+                yield return new ValidationResult($"{nameof(Name)} {Resources.IsRequired}", new[] { nameof(Name) });
+
+            if (Playlist == null)
+                yield return new ValidationResult($"{nameof(Playlist)} {Resources.IsRequired}", new[] { nameof(Playlist) });
+
+            if (Player == null)
+                yield return new ValidationResult($"{nameof(Player)} {Resources.IsRequired}", new[] { nameof(Player) });
+        }
+
         private void Player_AudioDeviceChanging(object sender, EventArgs e)
         {
-
+            // TODO
         }
 
         private void Player_AudioDeviceChanged(object sender, AudioDeviceChangedEventArgs e)
@@ -159,14 +184,35 @@ namespace InsireBot
             return false;
         }
 
-        public void RejectChanges()
+        public void Dispose()
         {
-            throw new NotImplementedException();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
-        public void AcceptChanges()
+        public void Dispose(bool disposing)
         {
-            throw new NotImplementedException();
+            if (Disposed)
+                return;
+
+            if (IsPlaying)
+                Stop();
+
+            if (disposing)
+            {
+                Player.PlayingMediaItem -= Player_PlayingMediaItem;
+                Player.CompletedMediaItem -= MediaPlayer_CompletedMediaItem;
+                Player.AudioDeviceChanged -= Player_AudioDeviceChanged;
+                Player.AudioDeviceChanging -= Player_AudioDeviceChanging;
+
+                Player?.Dispose();
+                Player = null;
+
+                // Free any other managed objects here.
+            }
+
+            // Free any unmanaged objects here.
+            Disposed = true;
         }
     }
 }

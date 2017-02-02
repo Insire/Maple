@@ -91,7 +91,7 @@ namespace InsireBot.Tests
         [TestMethod()]
         public void PlaylistRepositorySaveNewTest()
         {
-            var item = new Playlist
+            var item = new Data.Playlist
             {
                 RepeatMode = 2,
                 Sequence = 2,
@@ -107,7 +107,7 @@ namespace InsireBot.Tests
         [TestMethod()]
         public void PlaylistRepositorySaveDeleteTest()
         {
-            var item = new Playlist
+            var item = new Data.Playlist
             {
                 RepeatMode = 2,
                 Sequence = 2,
@@ -122,9 +122,9 @@ namespace InsireBot.Tests
             Assert.IsNull(readItem);
         }
 
-        private Playlist CreateOne()
+        private Data.Playlist CreateOne()
         {
-            var item = new Playlist
+            var item = new Data.Playlist
             {
                 RepeatMode = 1,
                 Sequence = 0,
@@ -136,23 +136,23 @@ namespace InsireBot.Tests
             return item;
         }
 
-        private IEnumerable<Playlist> CreateMultiple()
+        private IEnumerable<Data.Playlist> CreateMultiple()
         {
-            yield return new Playlist
+            yield return new Data.Playlist
             {
                 RepeatMode = 1,
                 Sequence = 0,
                 Title = "CreateMultiple",
             };
 
-            yield return new Playlist
+            yield return new Data.Playlist
             {
                 RepeatMode = 1,
                 Sequence = 1,
                 Title = "CreateMultiple_1",
             };
 
-            yield return new Playlist
+            yield return new Data.Playlist
             {
                 RepeatMode = 1,
                 Sequence = 2,

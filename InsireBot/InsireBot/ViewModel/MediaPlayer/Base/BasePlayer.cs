@@ -14,7 +14,12 @@ namespace InsireBot
         public AudioDevice AudioDevice
         {
             get { return _audioDevice; }
-            set { SetValue(ref _audioDevice, value); }
+            set
+            {
+                SetValue(ref _audioDevice, value,
+                                Changing: () => AudioDeviceChanging?.Raise(this),
+                                Changed: () => AudioDeviceChanged?.Invoke(this, new AudioDeviceChangedEventArgs(value)));
+            }
         }
 
         private IMediaItem _current;

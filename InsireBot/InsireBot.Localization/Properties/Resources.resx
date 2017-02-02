@@ -189,4 +189,16 @@
   <data name="MaxPlaylistCountReachedException" xml:space="preserve">
     <value>Es können keine weiteren Wiedergabelisten angelegt werden, da die maximale Anzahl erreicht wurde</value>
   </data>
+  <data name="SavingState" xml:space="preserve">
+    <value>Änderungen werden gespeichert</value>
+  </data>
+  <data name="SavedState" xml:space="preserve">
+    <value>Änderungen gespeichert</value>
+  </data>
+  <data name="DisposingState" xml:space="preserve">
+    <value>Speicher wird geleert</value>
+  </data>
+  <data name="DisposedState" xml:space="preserve">
+    <value>Speichert geleert</value>
+  </data>
 </root>

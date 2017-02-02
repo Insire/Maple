@@ -91,7 +91,7 @@ namespace InsireBot.Tests
         [TestMethod()]
         public void MediaPlayerRepositorySaveNewTest()
         {
-            var item = new MediaPlayer
+            var item = new Data.MediaPlayer
             {
                 DeviceName = "MediaPlayerRepositorySaveNewTest",
                 Sequence = 0,
@@ -107,7 +107,7 @@ namespace InsireBot.Tests
         [TestMethod()]
         public void MediaPlayerRepositorySaveDeleteTest()
         {
-            var item = new MediaPlayer
+            var item = new Data.MediaPlayer
             {
                 DeviceName = "MediaPlayerRepositorySaveDeleteTest",
                 Sequence = 0,
@@ -122,9 +122,9 @@ namespace InsireBot.Tests
             Assert.IsNull(readItem);
         }
 
-        private MediaPlayer CreateOne()
+        private Data.MediaPlayer CreateOne()
         {
-            var item = new MediaPlayer
+            var item = new Data.MediaPlayer
             {
                 DeviceName = "CreateOne",
                 Sequence = 0,
@@ -136,23 +136,23 @@ namespace InsireBot.Tests
             return item;
         }
 
-        private IEnumerable<MediaPlayer> CreateMultiple()
+        private IEnumerable<Data.MediaPlayer> CreateMultiple()
         {
-            yield return new MediaPlayer
+            yield return new Data.MediaPlayer
             {
                 DeviceName = "CreateMultiple_1",
                 Sequence = 0,
                 Name = "CreateMultiple_1",
             };
 
-            yield return new MediaPlayer
+            yield return new Data.MediaPlayer
             {
                 DeviceName = "CreateMultiple_2",
                 Sequence = 0,
                 Name = "CreateMultiple_2",
             };
 
-            yield return new MediaPlayer
+            yield return new Data.MediaPlayer
             {
                 DeviceName = "CreateMultiple_3",
                 Sequence = 0,

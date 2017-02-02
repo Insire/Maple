@@ -302,7 +302,7 @@
     </Style>
     <!--#endregion  ToggleButton Styles-->
 
-    <DataTemplate DataType="{x:Type local:PlaylistViewModel}">
+    <DataTemplate DataType="{x:Type local:Playlist}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -394,14 +394,14 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type local:MainMediaPlayerViewModel}">
+    <DataTemplate DataType="{x:Type local:MainMediaPlayer}">
         <StackPanel Orientation="Horizontal">
             <icons:PackIconModern Margin="0,0,5,0" Kind="MonitorPlay" />
             <TextBlock Text="{Binding Name}" />
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type local:MediaPlayerViewModel}">
+    <DataTemplate DataType="{x:Type local:MediaPlayer}">
         <StackPanel Orientation="Horizontal">
             <icons:PackIconOcticons Margin="0,0,5,0" Kind="DeviceDesktop" />
             <TextBlock Text="{Binding Name}" />

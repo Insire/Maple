@@ -35,12 +35,12 @@ namespace InsireBot
             return items.ForEach(mapper.GetCore);
         }
 
-        public static IEnumerable<PlaylistViewModel> GetMany(this IPlaylistMapper mapper, IEnumerable<Core.Playlist> items)
+        public static IEnumerable<Playlist> GetMany(this IPlaylistMapper mapper, IEnumerable<Core.Playlist> items)
         {
             return items.ForEach(mapper.Get);
         }
 
-        public static IEnumerable<PlaylistViewModel> GetMany(this IPlaylistMapper mapper, IEnumerable<Data.Playlist> items)
+        public static IEnumerable<Playlist> GetMany(this IPlaylistMapper mapper, IEnumerable<Data.Playlist> items)
         {
             return items.ForEach(mapper.Get);
         }
@@ -50,7 +50,7 @@ namespace InsireBot
             return items.ForEach(mapper.GetData);
         }
 
-        public static IEnumerable<Data.Playlist> GetManyData(this IPlaylistMapper mapper, IEnumerable<PlaylistViewModel> items)
+        public static IEnumerable<Data.Playlist> GetManyData(this IPlaylistMapper mapper, IEnumerable<Playlist> items)
         {
             return items.ForEach(mapper.GetData);
         }
@@ -60,7 +60,7 @@ namespace InsireBot
             return items.ForEach(mapper.GetCore);
         }
 
-        public static IEnumerable<Core.Playlist> GetManyCore(this IPlaylistMapper mapper, IEnumerable<PlaylistViewModel> items)
+        public static IEnumerable<Core.Playlist> GetManyCore(this IPlaylistMapper mapper, IEnumerable<Playlist> items)
         {
             return items.ForEach(mapper.GetCore);
         }

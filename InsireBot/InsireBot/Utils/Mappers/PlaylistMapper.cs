@@ -10,12 +10,12 @@ namespace InsireBot
 {
     public class PlaylistMapper : IPlaylistMapper
     {
-        public PlaylistViewModel Get(Core.Playlist mediaitem)
+        public Playlist Get(Core.Playlist mediaitem)
         {
             throw new NotImplementedException();
         }
 
-        public PlaylistViewModel Get(Data.Playlist mediaitem)
+        public Playlist Get(Data.Playlist mediaitem)
         {
             throw new NotImplementedException();
         }
@@ -25,12 +25,12 @@ namespace InsireBot
             throw new NotImplementedException();
         }
 
-        public Core.Playlist GetCore(PlaylistViewModel mediaitem)
+        public Core.Playlist GetCore(Playlist mediaitem)
         {
             throw new NotImplementedException();
         }
 
-        public Data.Playlist GetData(PlaylistViewModel mediaitem)
+        public Data.Playlist GetData(Playlist mediaitem)
         {
             throw new NotImplementedException();
         }

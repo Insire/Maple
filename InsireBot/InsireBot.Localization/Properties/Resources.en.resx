@@ -189,4 +189,16 @@
   <data name="MaxPlaylistCountReachedException" xml:space="preserve">
     <value>Creating a new playlist failed, because the maximum amount was reached</value>
   </data>
+  <data name="SavingState" xml:space="preserve">
+    <value>Saving changes</value>
+  </data>
+  <data name="SavedState" xml:space="preserve">
+    <value>Saved changes</value>
+  </data>
+  <data name="DisposingState" xml:space="preserve">
+    <value>Disposing cache</value>
+  </data>
+  <data name="DisposedState" xml:space="preserve">
+    <value>Disposed cache</value>
+  </data>
 </root>

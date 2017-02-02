@@ -9,9 +9,9 @@ using System.Linq;
 
 namespace InsireBot
 {
-    public class PlaylistViewModel : TrackingBaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier, INotifyPropertyChanged
+    public class Playlist : TrackingBaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier, INotifyPropertyChanged
     {
-        private IBotLog _log;
+        private readonly IBotLog _log;
         public int ItemCount => Items?.Count ?? 0;
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace InsireBot
         }
 
         private int _id;
-        public int ID
+        public int Id
         {
             get { return _id; }
             private set { SetValue(ref _id, value); }
@@ -122,7 +122,7 @@ namespace InsireBot
             set { SetValue(ref _repeatMode, value); }
         }
 
-        public PlaylistViewModel(IBotLog log, Data.Playlist model) : base(model)
+        public Playlist(IBotLog log, Data.Playlist model) : base(model)
         {
             _log = log;
 
@@ -134,7 +134,7 @@ namespace InsireBot
         {
             Title = model.Title;
             Description = model.Description;
-            ID = model.Id;
+            Id = model.Id;
             RepeatMode = (RepeatMode)model.RepeatMode;
             IsShuffeling = model.IsShuffeling;
         }
@@ -150,7 +150,7 @@ namespace InsireBot
                 OnPropertyChanged(nameof(ItemCount));
             };
 
-            Items.AddRange(model.MediaItems.Select(p => new MediaItemViewModel(p)));
+            Items.AddRange(model.MediaItems.Select(p => new MediaItemViewModel(_log, p)));
             RegisterCollection(Items, model.MediaItems);
         }
 

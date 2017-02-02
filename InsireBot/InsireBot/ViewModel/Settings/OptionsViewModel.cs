@@ -24,9 +24,6 @@ namespace InsireBot
 
         private void SyncCulture()
         {
-            Properties.Settings.Default.StartUpCulture = SelectedCulture;
-            Properties.Settings.Default.Save();
-
             _manager.CurrentLanguage = SelectedCulture;
         }
     }

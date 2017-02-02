@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace InsireBot
 {
-    public class PlaylistsViewModel : ViewModelListBase<PlaylistViewModel>, ISaveable
+    public class Playlists : ViewModelListBase<Playlist>, ISaveable
     {
         private readonly IBotLog _log;
         private readonly IPlaylistsRepository _playlistRepository;
@@ -16,16 +16,16 @@ namespace InsireBot
         public ICommand AddCommand { get; private set; }
         public ICommand PlayCommand { get; private set; }
 
-        public PlaylistsViewModel(IMediaItemRepository mediaItemRepository, IPlaylistsRepository playlistRepository, IBotLog log)
+        public Playlists(IMediaItemRepository mediaItemRepository, IPlaylistsRepository playlistRepository, IBotLog log)
         {
             _mediaItemRepository = mediaItemRepository;
             _playlistRepository = playlistRepository;
             _log = log;
 
             var playlists = playlistRepository.GetAll();
-            Items.AddRange(playlists.Select(p => new PlaylistViewModel(log, p)));
+            Items.AddRange(playlists.Select(p => new Playlist(log, p)));
 
-            SaveCommand = new RelayCommand<PlaylistViewModel>(Save, CanSave);
+            SaveCommand = new RelayCommand<Playlist>(Save, CanSave);
             AddCommand = new RelayCommand(Add, CanAdd);
         }
 
@@ -52,7 +52,7 @@ namespace InsireBot
                 playlist.Sequence = index;
             }
 
-            Items.Add(new PlaylistViewModel(_log, playlist));
+            Items.Add(new Playlist(_log, playlist));
         }
 
         public void Save()
@@ -60,7 +60,7 @@ namespace InsireBot
             SaveAllInternal();
         }
 
-        public void Save(PlaylistViewModel viewmodel)
+        public void Save(Playlist viewmodel)
         {
             if (viewmodel == null)
                 SaveAllInternal();
@@ -68,7 +68,7 @@ namespace InsireBot
                 SaveInternal(viewmodel);
         }
 
-        public bool CanSave(PlaylistViewModel viewmodel)
+        public bool CanSave(Playlist viewmodel)
         {
             if (viewmodel == null)
                 return CanSaveAllInternal();
@@ -76,24 +76,21 @@ namespace InsireBot
             return CanSaveInternal(viewmodel);
         }
 
-        private void SaveInternal(PlaylistViewModel viewmodel)
+        private void SaveInternal(Playlist viewmodel)
         {
             _playlistRepository.Save(viewmodel.Model);
+            viewmodel.AcceptChanges();
         }
 
-        private bool CanSaveInternal(PlaylistViewModel viewmodel)
+        private bool CanSaveInternal(Playlist viewmodel)
         {
             return viewmodel.IsValid && viewmodel.IsChanged;
         }
 
         private void SaveAllInternal()
         {
-            var models = Items.Where(p => p.IsChanged)
-                    .Select(p => p.Model)
-                    .ToList();
-
-            foreach (var model in models)
-                _playlistRepository.Save(model);
+           Items.Where(p => p.IsChanged && p.IsValid)
+                .ForEach(p => SaveInternal(p));
         }
 
         private bool CanSaveAllInternal()
