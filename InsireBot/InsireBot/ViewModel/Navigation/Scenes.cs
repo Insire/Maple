@@ -23,6 +23,7 @@ namespace InsireBot
                         IBotLog log,
                         DirectorViewModel directorViewModel,
                         CreateMediaItemViewModel createMediaItemViewModel,
+                        MediaPlayers mediaPlayersViewModel,
                         Playlists playlistsViewModel,
                         CreatePlaylistViewModel createPlaylistViewModel,
                         UIColorsViewModel uIColorsViewModel,
@@ -39,7 +40,7 @@ namespace InsireBot
                 {
                     Content = new MediaPlayerPage(_manager),
                     Key = nameof(Resources.Playback),
-                    GetDataContext = () => directorViewModel.MediaPlayers.Items.First(p => p is MainMediaPlayer),
+                    GetDataContext = () => mediaPlayersViewModel.Items.First(p => p is MainMediaPlayer),
                     IsSelected = true,
                     Sequence = 100,
                 },

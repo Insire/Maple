@@ -30,8 +30,8 @@
                     <ListBox Grid.Row="1"
                              Grid.Column="1"
                              AlternationCount="2"
-                             ItemsSource="{Binding MediaPlayers}"
-                             SelectedItem="{Binding SelectedItem}">
+                             ItemsSource="{Binding MediaPlayers.Items}"
+                             SelectedItem="{Binding MediaPlayers.SelectedItem}">
                         <ListBox.ItemContainerStyle>
                             <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -78,23 +78,23 @@
                         <ComboBox Grid.Row="0"
                                   Grid.Column="2"
                                   DisplayMemberPath="Name"
-                                  ItemsSource="{Binding SelectedItem.AudioDevices.Items}"
-                                  SelectedItem="{Binding SelectedItem.Player.AudioDevice}" />
+                                  ItemsSource="{Binding MediaPlayers.SelectedItem.AudioDevices.Items}"
+                                  SelectedItem="{Binding MediaPlayers.SelectedItem.Player.AudioDevice}" />
 
                         <ComboBox Grid.Row="2"
                                   Grid.Column="2"
-                                  ItemsSource="{Binding SelectedItem.Playlist.RepeatModes}"
-                                  SelectedItem="{Binding SelectedItem.Playlist.RepeatMode}">
+                                  ItemsSource="{Binding MediaPlayers.SelectedItem.Playlist.RepeatModes}"
+                                  SelectedItem="{Binding MediaPlayers.SelectedItem.Playlist.RepeatMode}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="Test" />
+                                    <TextBlock Text="{Binding}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                         <ComboBox Grid.Row="4"
                                   Grid.Column="2"
                                   ItemsSource="{Binding Playlists.Items}"
-                                  SelectedItem="{Binding SelectedItem.Playlist}">
+                                  SelectedItem="{Binding MediaPlayers.SelectedItem.Playlist}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Title}" />
@@ -103,7 +103,7 @@
                         </ComboBox>
                         <CheckBox Grid.Row="6"
                                   Grid.Column="2"
-                                  IsChecked="{Binding SelectedItem.Playlist.IsShuffeling}" />
+                                  IsChecked="{Binding MediaPlayers.SelectedItem.Playlist.IsShuffeling}" />
                     </Grid>
                 </Grid>
             </ScrollViewer>

@@ -4,6 +4,7 @@ namespace InsireBot.Data
 {
     public interface IRepository<T>
     {
+        string Path { get; }
         IEnumerable<T> GetAll();
         List<T> GetAllById(params int[] ids);
         T Create(T item);

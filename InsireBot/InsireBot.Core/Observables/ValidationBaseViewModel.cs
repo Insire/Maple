@@ -25,6 +25,12 @@ namespace InsireBot.Core
               : Enumerable.Empty<string>();
         }
 
+        public IEnumerable<List<string>> GetErrors()
+        {
+            foreach (var key in Errors.Keys)
+                yield return Errors[key];
+        }
+
         protected virtual void OnErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));

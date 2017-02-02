@@ -7,8 +7,11 @@ namespace InsireBot.Data
 {
     public class MediaItemRepository : IMediaItemRepository
     {
-        public MediaItemRepository()
+        public string Path { get; }
+        public MediaItemRepository(DBConnection connection)
         {
+            Path = connection.Path;
+
             CreateTable();
         }
 
@@ -21,7 +24,7 @@ namespace InsireBot.Data
                         + $"{nameof(MediaItem.Sequence)} INT, "
                         + $"{nameof(MediaItem.Duration)} INT)";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 connection.Execute(sql);
             }
@@ -31,7 +34,7 @@ namespace InsireBot.Data
         {
             var sql = $"SELECT * FROM {nameof(MediaItem)}";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 return connection.Query<MediaItem>(sql);
             }
@@ -49,7 +52,7 @@ namespace InsireBot.Data
                 + $"VALUES(@{nameof(MediaItem.Title)}, @{nameof(MediaItem.Sequence)}, @{nameof(MediaItem.Duration)}); "
                 + "SELECT last_insert_rowid();";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 var id = connection.Query<int>(sql, item).Single();
                 item.Id = id;
@@ -68,7 +71,7 @@ namespace InsireBot.Data
                 + $"VALUES (@{nameof(MediaItem.Title)}, @{nameof(MediaItem.Sequence)}, @{nameof(MediaItem.Duration)}); "
                 + "SELECT last_insert_rowid();";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 return connection.Execute(sql, items);
             }
@@ -84,7 +87,7 @@ namespace InsireBot.Data
             var sql = $"SELECT * FROM {nameof(MediaItem)} "
                 + $"WHERE ROWID = @{nameof(MediaItem.Id)}";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 return connection
                     .Query<MediaItem>(sql, new { Id = id })
@@ -100,7 +103,7 @@ namespace InsireBot.Data
                 $"{nameof(MediaItem.Duration)} = @{nameof(MediaItem.Duration)} " +
                 $"WHERE ROWID = @{nameof(MediaItem.Id)}";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 connection.Execute(sql, item);
                 return item;
@@ -116,7 +119,7 @@ namespace InsireBot.Data
         {
             var sql = $"DELETE FROM {nameof(MediaItem)} WHERE ROWID = @{nameof(MediaItem.Id)}";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 return connection.Execute(sql, new { id });
             }
@@ -146,7 +149,7 @@ namespace InsireBot.Data
         {
             var sql = $"SELECT * FROM {nameof(MediaItem)}  WHERE ROWID = @Ids";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 return connection.Query<MediaItem>(sql, new { Ids = ids }).ToList();
             }

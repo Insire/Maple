@@ -3,6 +3,7 @@ using InsireBot.Core;
 using InsireBot.Data;
 using InsireBot.Properties;
 using InsireBot.Youtube;
+using System.IO;
 using System.Threading;
 using System.Windows;
 
@@ -43,13 +44,17 @@ namespace InsireBot
 
         private void InitializeIocContainer()
         {
+            var connection = new DBConnection(new DirectoryInfo(".").FullName);
             _container = new Container(rules => rules.WithoutThrowOnRegisteringDisposableTransient());
+
+            _container.RegisterInstance(connection);
 
             _container.Register<IBotLog, LoggingService>(reuse: Reuse.Singleton);
             _container.Register<IYoutubeUrlParseService, UrlParseService>();
             _container.Register<Scenes>(reuse: Reuse.Singleton);
             _container.Register<UIColorsViewModel>(reuse: Reuse.Singleton);
             _container.Register<UrlParseService>();
+            _container.Register<MediaPlayers>(reuse: Reuse.Singleton);
             _container.Register<Playlists>(reuse: Reuse.Singleton);
             _container.Register<DirectorViewModel>(reuse: Reuse.Singleton);
             _container.Register<CreateMediaItemViewModel>();

@@ -70,6 +70,9 @@ namespace InsireBot
             Player.AudioDeviceChanging += Player_AudioDeviceChanging;
 
             InitiliazeCommands();
+
+            if (!Model.IsNew)
+                AcceptChanges();
         }
 
         protected override void InitializeComplexProperties(Data.MediaPlayer model)

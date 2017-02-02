@@ -56,10 +56,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Mocks\MockLog.cs" />
+    <Compile Include="Mocks\MockMediaPlayer.cs" />
+    <Compile Include="Mocks\MockTranslationManager.cs" />
     <Compile Include="Repository\MediaPlayerRepositoryTests.cs" />
     <Compile Include="Repository\PlaylistRepositoryTests.cs" />
     <Compile Include="Repository\MediaItemRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\MediaPlayer\MediaPlayerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InsireBot.Core\InsireBot.Core.csproj">
@@ -78,9 +82,7 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

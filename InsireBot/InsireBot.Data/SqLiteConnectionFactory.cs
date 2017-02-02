@@ -8,15 +8,14 @@ namespace InsireBot.Data
     {
         private const string DBFILENAME = "InsireBotDB.sqlite";
 
-        public static IDbConnection Get()
+        public static IDbConnection Get(string path)
         {
-            var dir = new DirectoryInfo(".").FullName;
-            var path = Path.Combine(dir, DBFILENAME);
+            var fullPath = Path.Combine(path, DBFILENAME);
 
-            var connection =  new SQLiteConnection($"Data Source={path}; Version=3;");
+            var connection =  new SQLiteConnection($"Data Source={fullPath}; Version=3;");
 
-            if (!File.Exists(path))
-                SQLiteConnection.CreateFile(path);
+            if (!File.Exists(fullPath))
+                SQLiteConnection.CreateFile(fullPath);
 
             return connection;
         }

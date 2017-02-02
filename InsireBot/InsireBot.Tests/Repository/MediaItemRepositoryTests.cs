@@ -13,7 +13,7 @@ namespace InsireBot.Tests
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            _repository = new MediaItemRepository();
+            _repository = new MediaItemRepository(new DBConnection(context.DeploymentDirectory));
         }
 
         [TestMethod()]

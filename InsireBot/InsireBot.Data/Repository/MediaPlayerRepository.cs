@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
-using System;
 
 namespace InsireBot.Data
 {
     public class MediaPlayerRepository : IMediaPlayerRepository
     {
-        public MediaPlayerRepository()
+        public string Path { get; }
+
+        public MediaPlayerRepository(DBConnection connection)
         {
+            Path = connection.Path;
+
             CreateTable();
         }
 
@@ -20,7 +23,7 @@ namespace InsireBot.Data
                 + $"VALUES(@{nameof(MediaPlayer.PlaylistId)}, @{nameof(MediaPlayer.Name)}, @{nameof(MediaPlayer.Sequence)}, @{nameof(MediaPlayer.IsPrimary)}, @{nameof(MediaPlayer.DeviceName)}); "
                 + "SELECT last_insert_rowid();";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 return connection.Execute(sql, items);
             }
@@ -33,7 +36,7 @@ namespace InsireBot.Data
                 + $"VALUES(@{nameof(MediaPlayer.PlaylistId)}, @{nameof(MediaPlayer.Name)}, @{nameof(MediaPlayer.Sequence)}, @{nameof(MediaPlayer.IsPrimary)}, @{nameof(MediaPlayer.DeviceName)}); "
                 + "SELECT last_insert_rowid();";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 var id = connection.Query<int>(sql, item).Single();
                 item.Id = id;
@@ -52,7 +55,7 @@ namespace InsireBot.Data
                         + $"{nameof(MediaPlayer.IsPrimary)} BOOL, "
                         + $"{nameof(MediaPlayer.DeviceName)} VARCHAR(255)) ";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 connection.Execute(sql);
             }
@@ -66,7 +69,7 @@ namespace InsireBot.Data
         public int Delete(int id)
         {
             var sql = $"DELETE FROM {nameof(MediaPlayer)} WHERE ROWID = @{nameof(MediaPlayer.Id)}";
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 return connection.Execute(sql, new { id });
             }
@@ -76,7 +79,7 @@ namespace InsireBot.Data
         {
             var sql = $"SELECT * FROM {nameof(MediaPlayer)}";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 return connection.Query<MediaPlayer>(sql);
             }
@@ -86,7 +89,7 @@ namespace InsireBot.Data
         {
             var sql = $"SELECT * FROM {nameof(MediaPlayer)}  WHERE ROWID = @Ids";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 return connection.Query<MediaPlayer>(sql, new { Ids = ids }).ToList();
             }
@@ -96,7 +99,7 @@ namespace InsireBot.Data
         {
             var sql = $"SELECT * FROM {nameof(MediaPlayer)}  WHERE {nameof(MediaPlayer.IsPrimary)} = 1";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 return connection.Query<MediaPlayer>(sql).ToList();
             }
@@ -107,7 +110,7 @@ namespace InsireBot.Data
             var sql = $"SELECT * FROM {nameof(MediaPlayer)} "
                 + $"WHERE ROWID = @{nameof(MediaPlayer.Id)}";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 return connection
                     .Query<MediaPlayer>(sql, new { Id = id })
@@ -145,7 +148,7 @@ namespace InsireBot.Data
                 $"{nameof(MediaPlayer.DeviceName)} = @{nameof(MediaPlayer.DeviceName)} " +
                 $"WHERE ROWID = @{nameof(MediaPlayer.Id)}";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 connection.Execute(sql, item);
                 return item;

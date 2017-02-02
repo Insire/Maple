@@ -13,7 +13,7 @@ namespace InsireBot.Tests
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            _repository = new MediaPlayerRepository();
+            _repository = new MediaPlayerRepository(new DBConnection(context.DeploymentDirectory));
         }
 
         [TestMethod()]

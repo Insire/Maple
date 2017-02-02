@@ -7,8 +7,12 @@ namespace InsireBot.Data
 {
     public class PlaylistsRepository : IPlaylistsRepository
     {
-        public PlaylistsRepository()
+        public string Path { get; }
+
+        public PlaylistsRepository(DBConnection connection)
         {
+            Path = connection.Path;
+
             CreateTable();
         }
 
@@ -19,7 +23,7 @@ namespace InsireBot.Data
                 + $"VALUES(@{nameof(Playlist.Title)}, @{nameof(Playlist.Sequence)}, @{nameof(Playlist.RepeatMode)}, @{nameof(Playlist.IsShuffeling)}, @{nameof(Playlist.Description)}); "
                 + "SELECT last_insert_rowid();";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 return connection.Execute(sql, items);
             }
@@ -32,7 +36,7 @@ namespace InsireBot.Data
                 + $"VALUES(@{nameof(Playlist.Title)}, @{nameof(Playlist.Sequence)}, @{nameof(Playlist.RepeatMode)}, @{nameof(Playlist.IsShuffeling)}, @{nameof(Playlist.Description)}); "
                 + "SELECT last_insert_rowid();";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 var id = connection.Query<int>(sql, item).Single();
                 item.Id = id;
@@ -51,7 +55,7 @@ namespace InsireBot.Data
                         + $"{nameof(Playlist.IsShuffeling)} BOOL, "
                         + $"{nameof(Playlist.Description)} VARCHAR(255))";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 connection.Execute(sql);
             }
@@ -65,7 +69,7 @@ namespace InsireBot.Data
         public int Delete(int id)
         {
             var sql = $"DELETE FROM {nameof(Playlist)} WHERE ROWID = @{nameof(Playlist.Id)}";
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 return connection.Execute(sql, new { id });
             }
@@ -75,7 +79,7 @@ namespace InsireBot.Data
         {
             var sql = $"SELECT * FROM {nameof(Playlist)}";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 return connection.Query<Playlist>(sql);
             }
@@ -85,7 +89,7 @@ namespace InsireBot.Data
         {
             var sql = $"SELECT * FROM {nameof(Playlist)}  WHERE ROWID = @Ids";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 return connection.Query<Playlist>(sql, new { Ids = ids }).ToList();
             }
@@ -96,7 +100,7 @@ namespace InsireBot.Data
             var sql = $"SELECT * FROM {nameof(Playlist)} "
                 + $"WHERE ROWID = @{nameof(Playlist.Id)}";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 return connection
                     .Query<Playlist>(sql, new { Id = id })
@@ -134,7 +138,7 @@ namespace InsireBot.Data
                 $"{nameof(Playlist.Description)} = @{nameof(Playlist.Description)} " +
                 $"WHERE ROWID = @{nameof(Playlist.Id)}";
 
-            using (var connection = SqLiteConnectionFactory.Get())
+            using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 connection.Execute(sql, playlist);
                 return playlist;

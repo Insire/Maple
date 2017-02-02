@@ -22,13 +22,20 @@ namespace InsireBot
             protected set { SetValue(ref _disposed, value); }
         }
 
-        public MediaPlayers(ITranslationManager manager, IBotLog log, IMediaPlayerRepository mediaPlayerRepository, Func<IMediaPlayer> playerFactory, Playlists playlists)
+        public MediaPlayers(ITranslationManager manager,
+                            IBotLog log,
+                            IMediaPlayerRepository mediaPlayerRepository,
+                            Func<IMediaPlayer> playerFactory,
+                            Playlists playlists)
         {
             _log = log;
             _manager = manager;
             _mediaPlayerRepository = mediaPlayerRepository;
 
             _playlists = playlists;
+
+            Items.AddRange(GetMediaPlayers(playerFactory).ToList());
+            SelectedItem = Items.FirstOrDefault();
         }
 
         private IEnumerable<MediaPlayer> GetMediaPlayers(Func<IMediaPlayer> playerFactory)

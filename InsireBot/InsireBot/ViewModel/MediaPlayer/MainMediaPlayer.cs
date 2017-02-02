@@ -21,6 +21,9 @@ namespace InsireBot
               };
 
             UpdateName();
+
+            if (!Model.IsNew)
+                AcceptChanges();
         }
 
         protected override void InitializeComplexProperties(Data.MediaPlayer model)

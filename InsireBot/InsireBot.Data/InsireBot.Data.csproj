@@ -82,6 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DBConnection.cs" />
     <Compile Include="DTO\Base\IDatabaseObject.cs" />
     <Compile Include="DTO\MediaPlayer.cs" />
     <Compile Include="DTO\Playlist.cs" />
@@ -113,9 +114,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Util\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\InsireBot.Core\InsireBot.Core.csproj">
       <Project>{21FA5854-0692-42E2-924E-A38CF3C7FF71}</Project>
