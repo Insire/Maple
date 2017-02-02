@@ -15,7 +15,7 @@ namespace Maple
         /// <param name="assembly">The assembly.</param>
         public ResxTranslationProvider()
         {
-            _resourceManager = new ResourceManager("InsireBot.Localization.Properties.Resources", typeof(Localization.Properties.Resources).Assembly);
+            _resourceManager = new ResourceManager("Maple.Localization.Properties.Resources", typeof(Localization.Properties.Resources).Assembly);
         }
 
         /// <summary>

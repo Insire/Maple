@@ -11,6 +11,7 @@ namespace Maple
     public class MediaPlayer : TrackingBaseViewModel<Data.MediaPlayer>, IValidatableTrackingObject, IDisposable
     {
         public bool IsPlaying { get { return Player.IsPlaying; } }
+        public bool Disposed { get; private set; }
 
         private IMediaPlayer _player;
         public IMediaPlayer Player
@@ -23,6 +24,7 @@ namespace Maple
         public ICommand PauseCommand { get; private set; }
         public ICommand NextCommand { get; private set; }
         public ICommand PreviousCommand { get; private set; }
+        public ICommand StopCommand { get; private set; }
 
         private AudioDevices _audioDevices;
         public AudioDevices AudioDevices
@@ -42,25 +44,21 @@ namespace Maple
         public string Name
         {
             get { return _name; }
-            set { SetValue(ref _name, value); }
+            set { SetValue(ref _name, value, Changed: () => Model.Name = value); }
         }
 
         private bool _isPrimary;
         public bool IsPrimary
         {
             get { return _isPrimary; }
-            protected set { SetValue(ref _isPrimary, value); }
-        }
-
-        private bool _disposed;
-        public bool Disposed
-        {
-            get { return _disposed; }
-            protected set { SetValue(ref _disposed, value); }
+            protected set { SetValue(ref _isPrimary, value, Changed: () => Model.IsPrimary = value); }
         }
 
         public MediaPlayer(IMediaPlayer player, Data.MediaPlayer mediaPlayer) : base(mediaPlayer)
         {
+            if (player == null)
+                throw new ArgumentNullException(nameof(player), $"{nameof(player)} {Resources.IsRequired}");
+
             AudioDevices = new AudioDevices();
 
             Player = player;
@@ -109,6 +107,7 @@ namespace Maple
 
         private void OnPlaylistChanged()
         {
+            Model.PlaylistId = Playlist.Id;
             // TODO: maybe add optional endless playback
         }
 
@@ -125,9 +124,10 @@ namespace Maple
         private void InitiliazeCommands()
         {
             PlayCommand = new RelayCommand<MediaItemViewModel>(Player.Play, CanPlay);
-            PreviousCommand = new RelayCommand(Previous, () => Playlist?.CanPrevious() == true);
-            NextCommand = new RelayCommand(Next, () => Playlist?.CanNext() == true);
-            PauseCommand = new RelayCommand(Pause, () => Player.CanPause());
+            PreviousCommand = new RelayCommand(Previous, () => Playlist?.CanPrevious() == true && CanPrevious());
+            NextCommand = new RelayCommand(Next, () => Playlist?.CanNext() == true && CanNext());
+            PauseCommand = new RelayCommand(Pause, () => CanPause());
+            StopCommand = new RelayCommand(Stop, () => CanStop());
         }
 
         public void AddRange(IEnumerable<MediaItemViewModel> mediaItems)
@@ -176,15 +176,31 @@ namespace Maple
             Player.Play(item);
         }
 
-        public void CanNext()
+        public bool CanNext()
         {
             var item = Playlist.Next();
-            Player.CanPlay(item);
+            return CanPlay(item);
+        }
+
+        public bool CanPrevious()
+        {
+            var item = Playlist.Previous();
+            return CanPlay(item);
+        }
+
+        public bool CanPause()
+        {
+            return Player.CanPause();
+        }
+
+        public bool CanStop()
+        {
+            return Player.CanStop();
         }
 
         private bool CanPlay(MediaItemViewModel item)
         {
-            return false;
+            return Player.CanPlay(item);
         }
 
         public void Dispose()

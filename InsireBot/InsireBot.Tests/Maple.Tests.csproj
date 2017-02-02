@@ -74,6 +74,10 @@
       <Project>{b3cd46be-3c08-4bae-ae60-a6d84a62400c}</Project>
       <Name>Maple.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\InsireBot.Localization\Maple.Localization.csproj">
+      <Project>{A073FC92-90E3-4541-8B52-6F7293187871}</Project>
+      <Name>Maple.Localization</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InsireBot\Maple.csproj">
       <Project>{FBD5595B-6859-4E8E-BDFA-C3169EF34985}</Project>
       <Name>Maple</Name>

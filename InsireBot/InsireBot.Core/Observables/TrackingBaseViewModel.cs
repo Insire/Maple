@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maple.Localization.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -19,7 +20,7 @@ namespace Maple.Core
         public TrackingBaseViewModel(T model)
         {
             if (model == null)
-                throw new ArgumentNullException(nameof(model));
+                throw new ArgumentNullException(nameof(model), $"{nameof(model)} {Resources.IsRequired}");
 
             Model = model;
             _originalValues = new Dictionary<string, object>();

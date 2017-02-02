@@ -6,7 +6,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Maple
 {
-    public class MediaItemViewModel : TrackingBaseViewModel<Data.MediaItem>, IMediaItem, ISequence, IIdentifier, IValidatableTrackingObject, IValidatableObject
+    public class MediaItemViewModel : TrackingBaseViewModel<Data.MediaItem>,
+                                        IMediaItem, ISequence, IIdentifier,
+                                        IValidatableTrackingObject, IValidatableObject
     {
         private readonly IBotLog _log;
 
@@ -15,7 +17,7 @@ namespace Maple
         public int Id
         {
             get { return _id; }
-            private set { SetValue(ref _id, value); }
+            private set { SetValue(ref _id, value, Changed: () => Model.Id = value); }
         }
 
         public int SequenceOriginalValue => GetOriginalValue<int>(nameof(Sequence));
@@ -23,7 +25,7 @@ namespace Maple
         public int Sequence
         {
             get { return _sequence; }
-            set { SetValue(ref _sequence, value); }
+            set { SetValue(ref _sequence, value, Changed: () => Model.Sequence = value); }
         }
 
         public string TitleOriginalValue => GetOriginalValue<string>(nameof(Title));
@@ -31,7 +33,7 @@ namespace Maple
         public string Title
         {
             get { return _title; }
-            set { SetValue(ref _title, value); }
+            set { SetValue(ref _title, value, Changed: () => Model.Title = value); }
         }
 
         public TimeSpan DurationOriginalValue => GetOriginalValue<TimeSpan>(nameof(Duration));
@@ -39,7 +41,7 @@ namespace Maple
         public TimeSpan Duration
         {
             get { return _duration; }
-            private set { SetValue(ref _duration, value); }
+            private set { SetValue(ref _duration, value, Changed: () => Model.Duration = value.Ticks); }
         }
 
         public PrivacyStatus PrivacyStatusOriginalValue => GetOriginalValue<PrivacyStatus>(nameof(PrivacyStatus));
@@ -47,7 +49,7 @@ namespace Maple
         public PrivacyStatus PrivacyStatus
         {
             get { return _privacyStatus; }
-            private set { SetValue(ref _privacyStatus, value); }
+            private set { SetValue(ref _privacyStatus, value, Changed: () => Model.PrivacyStatus = (int)value); }
         }
 
         public string LocationOriginalValue => GetOriginalValue<string>(nameof(Location));
@@ -55,7 +57,7 @@ namespace Maple
         public string Location
         {
             get { return _location; }
-            private set { SetValue(ref _location, value); }
+            private set { SetValue(ref _location, value, Changed: () => Model.Location = value); }
         }
 
         private bool _isSelected;
@@ -76,7 +78,7 @@ namespace Maple
             Location = model.Location;
             Title = model.Title;
             Sequence = model.Sequence;
-            Duration = TimeSpan.FromSeconds(model.Duration);
+            Duration = TimeSpan.FromTicks(model.Duration);
             PrivacyStatus = (PrivacyStatus)model.PrivacyStatus;
         }
 

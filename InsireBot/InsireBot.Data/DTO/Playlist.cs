@@ -1,4 +1,5 @@
-﻿using Maple.Localization.Properties;
+﻿using Maple.Core;
+using Maple.Localization.Properties;
 using System.Collections.Generic;
 
 namespace Maple.Data
@@ -22,7 +23,7 @@ namespace Maple.Data
         public string Description { get; set; }
         public int RepeatMode { get; set; }
         public bool IsShuffeling { get; set; }
-        public bool IsRestricted { get; set; }
+        public PrivacyStatus PrivacyStatus { get; set; }
         public List<MediaItem> MediaItems { get; set; } = new List<MediaItem>();
     }
 }

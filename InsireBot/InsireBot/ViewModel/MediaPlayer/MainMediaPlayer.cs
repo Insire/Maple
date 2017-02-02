@@ -1,4 +1,5 @@
 ﻿using Maple.Localization.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -11,6 +12,12 @@ namespace Maple
 
         public MainMediaPlayer(ITranslationManager manager, IMediaPlayer player, Data.MediaPlayer mediaPlayer, string nameKey) : base(player, mediaPlayer)
         {
+            if (manager == null)
+                throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} {Resources.IsRequired}");
+
+            if (string.IsNullOrWhiteSpace(nameKey))
+                throw new ArgumentNullException(nameof(nameKey), $"{nameof(nameKey)} {Resources.IsRequired}");
+
             _manager = manager;
             _nameKey = nameKey;
 

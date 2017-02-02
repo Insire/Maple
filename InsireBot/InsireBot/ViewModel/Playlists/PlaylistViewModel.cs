@@ -38,7 +38,7 @@ namespace Maple
         public int Sequence
         {
             get { return _sequence; }
-            set { SetValue(ref _sequence, value); }
+            set { SetValue(ref _sequence, value, Changed: () => Model.Sequence = value); }
         }
 
         private PrivacyStatus _privacyStatus;
@@ -48,7 +48,7 @@ namespace Maple
         public PrivacyStatus PrivacyStatus
         {
             get { return _privacyStatus; }
-            private set { SetValue(ref _privacyStatus, value); }
+            private set { SetValue(ref _privacyStatus, value, Changed: () => Model.PrivacyStatus = value); }
         }
 
         private bool _isSelected;
@@ -61,13 +61,6 @@ namespace Maple
             set { SetValue(ref _isSelected, value); }
         }
 
-        private bool _isActive;
-        public bool IsActive
-        {
-            get { return _isActive; }
-            set { SetValue(ref _isActive, value); }
-        }
-
         private bool _isShuffeling;
         /// <summary>
         /// indicates whether the next item is selected randomly from the list of items on a call of Next()
@@ -75,7 +68,7 @@ namespace Maple
         public bool IsShuffeling
         {
             get { return _isShuffeling; }
-            set { SetValue(ref _isShuffeling, value); }
+            set { SetValue(ref _isShuffeling, value, Changed: () => Model.IsShuffeling = value); }
         }
 
         private string _title;
@@ -85,7 +78,7 @@ namespace Maple
         public string Title
         {
             get { return _title; }
-            private set { SetValue(ref _title, value); }
+            private set { SetValue(ref _title, value, Changed: () => Model.Title = value); }
         }
 
         private string _description;
@@ -95,14 +88,14 @@ namespace Maple
         public string Description
         {
             get { return _description; }
-            private set { SetValue(ref _description, value); }
+            private set { SetValue(ref _description, value, Changed: () => Model.Description = value); }
         }
 
         private int _id;
         public int Id
         {
             get { return _id; }
-            private set { SetValue(ref _id, value); }
+            private set { SetValue(ref _id, value, Changed: () => Model.Id = value); }
         }
 
         private ObservableCollection<RepeatMode> _repeatModes;
@@ -119,7 +112,7 @@ namespace Maple
         public RepeatMode RepeatMode
         {
             get { return _repeatMode; }
-            set { SetValue(ref _repeatMode, value); }
+            set { SetValue(ref _repeatMode, value, Changed: () => Model.RepeatMode = (int)value); }
         }
 
         public Playlist(IBotLog log, Data.Playlist model) : base(model)

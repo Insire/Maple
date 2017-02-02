@@ -6,7 +6,7 @@
         /// <summary>
         /// Seconds (?)
         /// </summary>
-        public int Duration { get; set; }
+        public long Duration { get; set; }
 
         public string Location{ get; set; }
         public int PrivacyStatus { get; set; }
