@@ -53,8 +53,6 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="5" />
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="5" />
-                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -71,9 +69,7 @@
                         <TextBlock Grid.Row="4"
                                    Grid.Column="0"
                                    Text="{local:Translation Playlist}" />
-                        <TextBlock Grid.Row="6"
-                                   Grid.Column="0"
-                                   Text="{local:Translation PlaybackShuffle}" />
+
 
                         <ComboBox Grid.Row="0"
                                   Grid.Column="2"
@@ -101,9 +97,6 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <CheckBox Grid.Row="6"
-                                  Grid.Column="2"
-                                  IsChecked="{Binding MediaPlayers.SelectedItem.Playlist.IsShuffeling}" />
                     </Grid>
                 </Grid>
             </ScrollViewer>

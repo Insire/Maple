@@ -19,10 +19,10 @@ namespace Maple.Data
         {
             var sql = $"CREATE TABLE IF NOT EXISTS "
                     + $"{nameof(MediaItem)} "
-                        + $"({nameof(MediaItem.Id)} INT PRIMARY KEY, "
+                        + $"({nameof(MediaItem.Id)} INTEGER PRIMARY KEY AUTOINCREMENT, "
                         + $"{nameof(MediaItem.Title)} VARCHAR(255), "
-                        + $"{nameof(MediaItem.Sequence)} INT, "
-                        + $"{nameof(MediaItem.Duration)} INT)";
+                        + $"{nameof(MediaItem.Sequence)} INTEGER, "
+                        + $"{nameof(MediaItem.Duration)} BIGINT)";
 
             using (var connection = SqLiteConnectionFactory.Get(Path))
             {

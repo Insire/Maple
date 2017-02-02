@@ -67,7 +67,6 @@ namespace Maple
                     Playlist = _playlists.Items.FirstOrDefault(p => p.Id == primaries[0].PlaylistId),
                 };
 
-
             foreach (var player in players)
                 yield return player;
 

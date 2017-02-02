@@ -78,7 +78,7 @@ namespace Maple
         public string Title
         {
             get { return _title; }
-            private set { SetValue(ref _title, value, Changed: () => Model.Title = value); }
+            set { SetValue(ref _title, value, Changed: () => Model.Title = value); }
         }
 
         private string _description;
@@ -88,7 +88,7 @@ namespace Maple
         public string Description
         {
             get { return _description; }
-            private set { SetValue(ref _description, value, Changed: () => Model.Description = value); }
+            set { SetValue(ref _description, value, Changed: () => Model.Description = value); }
         }
 
         private int _id;

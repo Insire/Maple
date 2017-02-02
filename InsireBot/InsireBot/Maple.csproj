@@ -196,8 +196,8 @@
     <Compile Include="ViewModel\MediaPlayer\NAudio\NAudioMediaPlayer.cs" />
     <Compile Include="ViewModel\MediaPlayer\NAudio\PlaybackDeviceFactory.cs" />
     <Compile Include="ViewModel\MediaPlayer\NAudio\WavePlayerFactory.cs" />
-    <Compile Include="ViewModel\Playlists\PlaylistsViewModel.cs" />
-    <Compile Include="ViewModel\Playlists\PlaylistViewModel.cs" />
+    <Compile Include="ViewModel\Playlists\Playlists.cs" />
+    <Compile Include="ViewModel\Playlists\Playlist.cs" />
     <Compile Include="Pages\MediaPlayerPage.xaml.cs">
       <DependentUpon>MediaPlayerPage.xaml</DependentUpon>
     </Compile>

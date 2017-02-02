@@ -4,77 +4,187 @@
                       xmlns:icons="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks"
                       xmlns:local="clr-namespace:Maple"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    <Grid>
-        <materialDesign:TransitioningContent>
+    <local:IoCUserControl.Resources>
+        <local:BindingProxy x:Key="DetailViewToggleButtonProxy" Data="False" />
 
-            <materialDesign:TransitioningContent.OpeningEffects>
-                <materialDesign:TransitionEffect Kind="FadeIn" />
-            </materialDesign:TransitioningContent.OpeningEffects>
+        <ControlTemplate x:Key="ListView">
+            <!--  DataContext: Playlist  -->
+            <ListBox ItemsSource="{Binding Items}" />
+        </ControlTemplate>
 
-            <materialDesign:Card VerticalAlignment="Stretch">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="5" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="5" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="5" />
-                        <ColumnDefinition Width="0.5*" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="5" />
-                    </Grid.ColumnDefinitions>
+        <ControlTemplate x:Key="ConfigView">
+            <!--  DataContext: Playlist  -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-                    <!--  PlaylistsViewModel  -->
-                    <ListBox Grid.Row="1"
-                             Grid.Column="1"
-                             AlternationCount="2"
-                             ItemsSource="{Binding Items}"
-                             SelectedItem="{Binding SelectedItem}">
-                        <ListBox.ItemContainerStyle>
-                            <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Command="{Binding AddCommand}" Header="{local:Translation Add}">
-                                    <MenuItem.Icon>
-                                        <icons:PackIconMaterial Kind="Plus" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                                <MenuItem Command="{Binding RemoveCommand}"
-                                          CommandParameter="{Binding SelectedItem}"
-                                          Header="{local:Translation Remove}">
-                                    <MenuItem.Icon>
-                                        <icons:PackIconMaterial Kind="Minus" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                                <MenuItem Command="{Binding ClearCommand}" Header="{local:Translation Clear}">
-                                    <MenuItem.Icon>
-                                        <icons:PackIconMaterial Kind="Delete" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                            </ContextMenu>
-                        </ListBox.ContextMenu>
-                    </ListBox>
+                <TextBlock Grid.Row="0"
+                           Grid.Column="0"
+                           Text="{local:Translation Title}" />
+                <TextBlock Grid.Row="2"
+                           Grid.Column="0"
+                           Text="{local:Translation Description}" />
+                <TextBlock Grid.Row="4"
+                           Grid.Column="0"
+                           Text="{local:Translation PlaybackShuffle}" />
+                <TextBlock Grid.Row="6"
+                           Grid.Column="0"
+                           Text="{local:Translation PlaybackMode}" />
 
-                    <GridSplitter Grid.Row="1"
-                                  Grid.Column="2"
-                                  Width="5"
-                                  Margin="5,0"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Stretch" />
+                <TextBox Grid.Row="0"
+                         Grid.Column="2"
+                         Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Grid.Row="2"
+                         Grid.Column="2"
+                         Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+                <CheckBox Grid.Row="4"
+                          Grid.Column="2"
+                          IsChecked="{Binding IsShuffeling, UpdateSourceTrigger=PropertyChanged}" />
+                <ComboBox Grid.Row="6"
+                          Grid.Column="2"
+                          ItemsSource="{Binding RepeatModes}"
+                          SelectedItem="{Binding RepeatMode, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <ListBox Grid.Row="1"
+                <UniformGrid Grid.Row="10"
                              Grid.Column="3"
-                             ItemsSource="{Binding SelectedItem.Items}" />
+                             Columns="0"
+                             Rows="1">
+                    <Button Width="150" Margin="2.5,0">
+                        <Button.ToolTip>
+                            <TextBlock Text="{local:Translation FolderPlaylistImport}" />
+                        </Button.ToolTip>
+                        <icons:PackIconMaterial Kind="FolderDownload" />
+                    </Button>
 
-                </Grid>
-            </materialDesign:Card>
+                    <Button Width="150" Margin="2.5,0">
+                        <Button.ToolTip>
+                            <TextBlock Text="{local:Translation YoutubePlaylistImport}" />
+                        </Button.ToolTip>
+                        <icons:PackIconMaterial Kind="YoutubePlay" />
+                    </Button>
 
-        </materialDesign:TransitioningContent>
+                    <Button Width="150" Margin="2.5,0">
+                        <Button.ToolTip>
+                            <TextBlock Text="{local:Translation FilePlaylistImport}" />
+                        </Button.ToolTip>
+                        <icons:PackIconMaterial Kind="FileFind" />
+                    </Button>
+                </UniformGrid>
+            </Grid>
+        </ControlTemplate>
 
-    </Grid>
+    </local:IoCUserControl.Resources>
+    <materialDesign:TransitioningContent>
+        <materialDesign:TransitioningContent.OpeningEffects>
+            <materialDesign:TransitionEffect Kind="FadeIn" />
+        </materialDesign:TransitioningContent.OpeningEffects>
+        <materialDesign:Card VerticalAlignment="Stretch">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="5" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="5" />
+                </Grid.ColumnDefinitions>
+
+                <!--  Playlists  -->
+                <ListBox Grid.Row="1"
+                         Grid.RowSpan="3"
+                         Grid.Column="1"
+                         AlternationCount="2"
+                         ItemsSource="{Binding Items}"
+                         SelectedItem="{Binding SelectedItem}">
+                    <ListBox.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding AddCommand}" Header="{local:Translation Add}">
+                                <MenuItem.Icon>
+                                    <icons:PackIconMaterial Kind="Plus" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Command="{Binding RemoveCommand}"
+                                      CommandParameter="{Binding SelectedItem}"
+                                      Header="{local:Translation Remove}">
+                                <MenuItem.Icon>
+                                    <icons:PackIconMaterial Kind="Minus" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Command="{Binding ClearCommand}" Header="{local:Translation Clear}">
+                                <MenuItem.Icon>
+                                    <icons:PackIconMaterial Kind="Delete" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
+
+                <GridSplitter Grid.Row="1"
+                              Grid.RowSpan="3"
+                              Grid.Column="2"
+                              Width="5"
+                              Margin="5,0"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Stretch" />
+
+                <ToggleButton x:Name="DetailViewToggleButton"
+                              Grid.Row="1"
+                              Grid.Column="3"
+                              HorizontalAlignment="Right"
+                              IsChecked="{Binding Data, Source={StaticResource DetailViewToggleButtonProxy}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              Style="{StaticResource MaterialDesignActionToggleButton}">
+                    <ToggleButton.Content>
+                        <materialDesign:PackIcon Kind="FormatListNumbers" />
+                    </ToggleButton.Content>
+                    <materialDesign:ToggleButtonAssist.OnContent>
+                        <materialDesign:PackIcon Kind="Settings" />
+                    </materialDesign:ToggleButtonAssist.OnContent>
+                </ToggleButton>
+
+                <ContentControl Grid.Row="3" Grid.Column="3">
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Setter Property="DataContext" Value="{Binding SelectedItem}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Data, Source={StaticResource DetailViewToggleButtonProxy}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                    <Setter Property="Template" Value="{StaticResource ListView}" />
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding Data, Source={StaticResource DetailViewToggleButtonProxy}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                    <Setter Property="Template" Value="{StaticResource ConfigView}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
+            </Grid>
+        </materialDesign:Card>
+    </materialDesign:TransitioningContent>
 </local:IoCUserControl>

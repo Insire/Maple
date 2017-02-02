@@ -48,10 +48,10 @@ namespace Maple.Data
         {
             var sql = $"CREATE TABLE IF NOT EXISTS "
                     + $"{nameof(Playlist)} "
-                        + $"({nameof(Playlist.Id)} INT PRIMARY KEY, "
+                        + $"({nameof(Playlist.Id)} INTEGER PRIMARY KEY AUTOINCREMENT, "
                         + $"{nameof(Playlist.Title)} VARCHAR(255), "
-                        + $"{nameof(Playlist.Sequence)} INT, "
-                        + $"{nameof(Playlist.RepeatMode)} INT, "
+                        + $"{nameof(Playlist.Sequence)} INTEGER, "
+                        + $"{nameof(Playlist.RepeatMode)} INTEGER, "
                         + $"{nameof(Playlist.IsShuffeling)} BOOL, "
                         + $"{nameof(Playlist.Description)} VARCHAR(255))";
 

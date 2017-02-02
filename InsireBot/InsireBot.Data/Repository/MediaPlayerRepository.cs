@@ -48,10 +48,10 @@ namespace Maple.Data
         {
             var sql = $"CREATE TABLE IF NOT EXISTS "
                     + $"{nameof(MediaPlayer)} "
-                        + $"({nameof(MediaPlayer.Id)} INT PRIMARY KEY, "
-                        + $"{nameof(MediaPlayer.PlaylistId)} INT, "
+                        + $"({nameof(MediaPlayer.Id)} INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        + $"{nameof(MediaPlayer.PlaylistId)} INTEGER, "
                         + $"{nameof(MediaPlayer.Name)} VARCHAR(255), "
-                        + $"{nameof(MediaPlayer.Sequence)} INT, "
+                        + $"{nameof(MediaPlayer.Sequence)} INTEGER, "
                         + $"{nameof(MediaPlayer.IsPrimary)} BOOL, "
                         + $"{nameof(MediaPlayer.DeviceName)} VARCHAR(255)) ";
 
@@ -145,6 +145,7 @@ namespace Maple.Data
                 $"SET {nameof(MediaPlayer.Name)} = @{nameof(MediaPlayer.Name)}, " +
                 $"{nameof(MediaPlayer.Sequence)} = @{nameof(MediaPlayer.Sequence)}, " +
                 $"{nameof(MediaPlayer.IsPrimary)} = @{nameof(MediaPlayer.IsPrimary)}, " +
+                $"{nameof(MediaPlayer.PlaylistId)} = @{nameof(MediaPlayer.PlaylistId)}, " +
                 $"{nameof(MediaPlayer.DeviceName)} = @{nameof(MediaPlayer.DeviceName)} " +
                 $"WHERE ROWID = @{nameof(MediaPlayer.Id)}";
 

@@ -88,6 +88,15 @@ namespace Maple.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Beschreibung.
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dirigent.
         /// </summary>
         public static string Director {
@@ -111,6 +120,24 @@ namespace Maple.Localization.Properties {
         public static string DisposingState {
             get {
                 return ResourceManager.GetString("DisposingState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eine Wiedergabeliste aus einer Datei importieren.
+        /// </summary>
+        public static string FilePlaylistImport {
+            get {
+                return ResourceManager.GetString("FilePlaylistImport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eine Wiedergabeliste anhand eines Ordners aus dem Dateisystem generieren und importieren.
+        /// </summary>
+        public static string FolderPlaylistImport {
+            get {
+                return ResourceManager.GetString("FolderPlaylistImport", resourceCulture);
             }
         }
         
@@ -304,11 +331,29 @@ namespace Maple.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Titel.
+        /// </summary>
+        public static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Video hinzufügen.
         /// </summary>
         public static string VideoAdd {
             get {
                 return ResourceManager.GetString("VideoAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Eine Widergabeliste von Youtube importieren.
+        /// </summary>
+        public static string YoutubePlaylistImport {
+            get {
+                return ResourceManager.GetString("YoutubePlaylistImport", resourceCulture);
             }
         }
     }

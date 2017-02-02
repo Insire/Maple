@@ -67,6 +67,8 @@ namespace Maple
             Player.AudioDeviceChanged += Player_AudioDeviceChanged;
             Player.AudioDeviceChanging += Player_AudioDeviceChanging;
 
+            Player.AudioDevice = AudioDevices.Items.FirstOrDefault(p => p.Name == Model.DeviceName);
+
             InitiliazeCommands();
 
             if (!Model.IsNew)

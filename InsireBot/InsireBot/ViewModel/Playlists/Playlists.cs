@@ -24,6 +24,7 @@ namespace Maple
 
             var playlists = playlistRepository.GetAll();
             Items.AddRange(playlists.Select(p => new Playlist(log, p)));
+            SelectedItem = Items.FirstOrDefault();
 
             SaveCommand = new RelayCommand<Playlist>(Save, CanSave);
             AddCommand = new RelayCommand(Add, CanAdd);
