@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace InsireBot
+namespace Maple
 {
     public class BindingProxy : Freezable
     {

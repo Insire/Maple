@@ -1,7 +1,7 @@
-﻿using InsireBot.Core;
+﻿using Maple.Core;
 using System.Linq;
 
-namespace InsireBot
+namespace Maple
 {
     public class AudioDevices : ViewModelListBase<AudioDevice>
     {

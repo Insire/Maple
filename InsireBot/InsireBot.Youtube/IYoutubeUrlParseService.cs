@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace InsireBot.Youtube
+namespace Maple.Youtube
 {
     public interface IYoutubeUrlParseService
     {

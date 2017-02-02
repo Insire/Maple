@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace InsireBot.Localization.Properties {
+namespace Maple.Localization.Properties {
     using System;
     
     

@@ -1,13 +1,13 @@
 ﻿using DryIoc;
-using InsireBot.Core;
-using InsireBot.Data;
-using InsireBot.Properties;
-using InsireBot.Youtube;
+using Maple.Core;
+using Maple.Data;
+using Maple.Properties;
+using Maple.Youtube;
 using System.IO;
 using System.Threading;
 using System.Windows;
 
-namespace InsireBot
+namespace Maple
 {
     public partial class App : Application
     {

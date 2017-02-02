@@ -7,7 +7,7 @@ using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
 
-namespace InsireBot.Core
+namespace Maple.Core
 {
     public abstract class ViewModelListBase<T> : ObservableObject where T : INotifyPropertyChanged
     {

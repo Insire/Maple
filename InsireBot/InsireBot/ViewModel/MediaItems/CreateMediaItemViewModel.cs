@@ -1,8 +1,8 @@
-﻿using InsireBot.Core;
-using InsireBot.Youtube;
+﻿using Maple.Core;
+using Maple.Youtube;
 using System.Windows.Input;
 
-namespace InsireBot
+namespace Maple
 {
     /// <summary>
     /// viewmodel for creating mediaitem from a string (path/url)

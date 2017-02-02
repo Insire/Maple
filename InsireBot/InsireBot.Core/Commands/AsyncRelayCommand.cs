@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace InsireBot.Core
+namespace Maple.Core
 {
     public class AsyncRelayCommand<T> : ICommand
     {

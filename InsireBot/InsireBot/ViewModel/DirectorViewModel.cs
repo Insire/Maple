@@ -1,6 +1,6 @@
-﻿using InsireBot.Core;
+﻿using Maple.Core;
 
-namespace InsireBot
+namespace Maple
 {
     public class DirectorViewModel : ObservableObject
     {

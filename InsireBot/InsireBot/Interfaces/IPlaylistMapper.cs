@@ -1,4 +1,4 @@
-﻿namespace InsireBot
+﻿namespace Maple
 {
     public interface IPlaylistMapper
     {

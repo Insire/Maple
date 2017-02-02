@@ -1,4 +1,4 @@
-﻿using InsireBot.Core;
+﻿using Maple.Core;
 using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 
-namespace InsireBot
+namespace Maple
 {
     public class UIColorsViewModel : ObservableObject
     {

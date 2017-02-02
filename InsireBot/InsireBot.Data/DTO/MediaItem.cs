@@ -1,4 +1,4 @@
-﻿namespace InsireBot.Data
+﻿namespace Maple.Data
 {
     public class MediaItem : DatabaseObject
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 
-namespace InsireBot.Core
+namespace Maple.Core
 {
     public class BusyStack : ObservableObject
     {

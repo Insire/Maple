@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace InsireBot.Data
+namespace Maple.Data
 {
     public interface IMediaPlayerRepository : IRepository<MediaPlayer>
     {

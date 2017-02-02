@@ -4,7 +4,7 @@ using System.Windows.Data;
 using System.Windows.Markup;
 using System.Xaml;
 
-namespace InsireBot
+namespace Maple
 {
     public class TranslationExtension : MarkupExtension
     {

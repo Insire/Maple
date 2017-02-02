@@ -1,7 +1,7 @@
 ﻿using System;
-using InsireBot.Core;
+using Maple.Core;
 
-namespace InsireBot
+namespace Maple
 {
     public abstract class BasePlayer : ObservableObject, IMediaPlayer
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace InsireBot.Core
+namespace Maple.Core
 {
     public interface IMediaItem : IIsSelected, ISequence, INotifyPropertyChanged, IIdentifier, IValidatableTrackingObject
     {

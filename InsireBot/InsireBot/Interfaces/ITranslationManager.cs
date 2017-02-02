@@ -1,9 +1,9 @@
-﻿using InsireBot.Core;
+﻿using Maple.Core;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace InsireBot
+namespace Maple
 {
     public interface ITranslationManager : INotifyPropertyChanged, ISaveable
     {

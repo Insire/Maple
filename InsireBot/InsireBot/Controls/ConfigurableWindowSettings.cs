@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 using System.Windows;
 
-namespace InsireBot
+namespace Maple
 {
     public class ConfigurableWindowSettings : IConfigurableWindowSettings
     {

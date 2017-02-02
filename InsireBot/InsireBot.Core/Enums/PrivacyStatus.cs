@@ -1,4 +1,4 @@
-﻿namespace InsireBot.Core
+﻿namespace Maple.Core
 {
     public enum PrivacyStatus
     {

@@ -1,7 +1,7 @@
 ﻿using log4net;
 using System;
 
-namespace InsireBot.Core
+namespace Maple.Core
 {
     public class LoggingService : IBotLog
     {

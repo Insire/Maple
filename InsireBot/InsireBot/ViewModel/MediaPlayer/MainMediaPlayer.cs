@@ -1,8 +1,8 @@
-﻿using InsireBot.Localization.Properties;
+﻿using Maple.Localization.Properties;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace InsireBot
+namespace Maple
 {
     public class MainMediaPlayer : MediaPlayer
     {

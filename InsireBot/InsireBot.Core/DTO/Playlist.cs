@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace InsireBot.Core
+namespace Maple.Core
 {
     public class Playlist
     {

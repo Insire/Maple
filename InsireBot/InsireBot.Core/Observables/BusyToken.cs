@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InsireBot.Core
+namespace Maple.Core
 {
     [Serializable]
     public class BusyToken : WeakReference, IDisposable

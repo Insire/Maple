@@ -1,8 +1,8 @@
-﻿using InsireBot.Core;
+﻿using Maple.Core;
 using System;
 using System.Diagnostics;
 
-namespace InsireBot.Tests
+namespace Maple.Tests
 {
     public class MockLog : IBotLog
     {

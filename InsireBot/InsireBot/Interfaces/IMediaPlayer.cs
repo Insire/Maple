@@ -1,7 +1,7 @@
-﻿using InsireBot.Core;
+﻿using Maple.Core;
 using System;
 
-namespace InsireBot
+namespace Maple
 {
     public interface IMediaPlayer: IDisposable
     {

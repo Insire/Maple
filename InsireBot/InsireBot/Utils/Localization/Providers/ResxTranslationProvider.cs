@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Resources;
 
-namespace InsireBot
+namespace Maple
 {
     public class ResxTranslationProvider : ITranslationProvider
     {

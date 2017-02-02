@@ -1,7 +1,7 @@
 ﻿using NAudio.Wave;
 using System.IO;
 
-namespace InsireBot
+namespace Maple
 {
     public class WaveFormatFactory
     {

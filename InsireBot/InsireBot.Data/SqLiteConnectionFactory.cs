@@ -2,7 +2,7 @@
 using System.Data.SQLite;
 using System.IO;
 
-namespace InsireBot.Data
+namespace Maple.Data
 {
     public static class SqLiteConnectionFactory
     {

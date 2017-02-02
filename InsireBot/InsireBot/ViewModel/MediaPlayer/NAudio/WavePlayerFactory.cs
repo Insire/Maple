@@ -1,6 +1,6 @@
 ﻿using NAudio.Wave;
 
-namespace InsireBot
+namespace Maple
 {
     public class WavePlayerFactory
     {

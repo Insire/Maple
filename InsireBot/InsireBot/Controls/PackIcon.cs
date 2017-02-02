@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 
-namespace InsireBot
+namespace Maple
 {
     public class PackIcon : PackIcon<PackIconKind>
     {

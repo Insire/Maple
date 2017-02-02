@@ -1,7 +1,7 @@
-﻿using InsireBot.Core;
+﻿using Maple.Core;
 using System.Collections.Generic;
 
-namespace InsireBot.Youtube
+namespace Maple.Youtube
 {
     public class UrlParseResult
     {

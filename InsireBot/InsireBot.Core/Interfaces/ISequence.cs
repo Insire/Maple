@@ -1,4 +1,4 @@
-﻿namespace InsireBot.Core
+﻿namespace Maple.Core
 {
     /// <summary>
     /// Provides an index property which is meant for managing instances of the class inside of a collection

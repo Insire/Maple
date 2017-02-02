@@ -1,10 +1,10 @@
-﻿using InsireBot.Core;
-using InsireBot.Localization.Properties;
+﻿using Maple.Core;
+using Maple.Localization.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace InsireBot
+namespace Maple
 {
     public class MediaItemViewModel : TrackingBaseViewModel<Data.MediaItem>, IMediaItem, ISequence, IIdentifier, IValidatableTrackingObject, IValidatableObject
     {

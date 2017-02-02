@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using InsireBot.Core;
-using InsireBot.Data;
+using Maple.Core;
+using Maple.Data;
 
-namespace InsireBot
+namespace Maple
 {
     public class PlaylistMapper : IPlaylistMapper
     {

@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 
-namespace InsireBot.Core
+namespace Maple.Core
 {
     public class ChangeTrackingCollection<T> : RangeObservableCollection<T>, IValidatableTrackingObject where T : class, IValidatableTrackingObject
     {

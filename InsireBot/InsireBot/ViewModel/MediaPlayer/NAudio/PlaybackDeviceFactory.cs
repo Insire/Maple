@@ -1,7 +1,7 @@
 ﻿using NAudio.Wave;
 using System.Collections.Generic;
 
-namespace InsireBot
+namespace Maple
 {
     public class PlaybackDeviceFactory
     {

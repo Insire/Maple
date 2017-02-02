@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace InsireBot
+namespace Maple
 {
     public partial class PlayModeView : UserControl
     {

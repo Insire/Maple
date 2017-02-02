@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace InsireBot.Core
+namespace Maple.Core
 {
     public static class LinqExtensions
     {

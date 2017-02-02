@@ -1,7 +1,7 @@
-﻿using InsireBot.Core;
+﻿using Maple.Core;
 using System.Collections.Generic;
 
-namespace InsireBot
+namespace Maple
 {
     public static class MapperExtensions
     {

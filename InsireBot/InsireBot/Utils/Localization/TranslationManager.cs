@@ -1,10 +1,10 @@
-﻿using InsireBot.Core;
+﻿using Maple.Core;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
 
-namespace InsireBot
+namespace Maple
 {
     public class TranslationManager : ObservableObject, ITranslationManager
     {

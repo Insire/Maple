@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace InsireBot.Core
+namespace Maple.Core
 {
     public interface IValidatableTrackingObject : IRevertibleChangeTracking, INotifyPropertyChanged
     {

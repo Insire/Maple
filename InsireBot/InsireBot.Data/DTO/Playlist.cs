@@ -1,7 +1,7 @@
-﻿using InsireBot.Localization.Properties;
+﻿using Maple.Localization.Properties;
 using System.Collections.Generic;
 
-namespace InsireBot.Data
+namespace Maple.Data
 {
     public class Playlist : DatabaseObject
     {

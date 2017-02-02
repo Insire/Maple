@@ -1,7 +1,7 @@
-﻿using InsireBot.Core;
+﻿using Maple.Core;
 using System.Reflection;
 
-namespace InsireBot
+namespace Maple
 {
     public class StatusbarViewModel : ObservableObject
     {

@@ -1,11 +1,11 @@
-﻿using InsireBot.Core;
-using InsireBot.Data;
-using InsireBot.Localization.Properties;
+﻿using Maple.Core;
+using Maple.Data;
+using Maple.Localization.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace InsireBot
+namespace Maple
 {
     public class MediaPlayers : ViewModelListBase<MediaPlayer>, IDisposable, ISaveable
     {

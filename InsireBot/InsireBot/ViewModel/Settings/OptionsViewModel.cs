@@ -1,7 +1,7 @@
-﻿using InsireBot.Core;
+﻿using Maple.Core;
 using System.Globalization;
 
-namespace InsireBot
+namespace Maple
 {
     public class OptionsViewModel : ObservableObject
     {

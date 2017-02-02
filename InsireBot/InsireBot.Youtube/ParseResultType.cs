@@ -1,4 +1,4 @@
-﻿namespace InsireBot.Youtube
+﻿namespace Maple.Youtube
 {
     public enum ParseResultType
     {

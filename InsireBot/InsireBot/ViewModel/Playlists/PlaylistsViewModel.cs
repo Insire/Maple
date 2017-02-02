@@ -1,10 +1,10 @@
-﻿using InsireBot.Core;
-using InsireBot.Data;
-using InsireBot.Localization.Properties;
+﻿using Maple.Core;
+using Maple.Data;
+using Maple.Localization.Properties;
 using System.Linq;
 using System.Windows.Input;
 
-namespace InsireBot
+namespace Maple
 {
     public class Playlists : ViewModelListBase<Playlist>, ISaveable
     {

@@ -1,9 +1,9 @@
-﻿using InsireBot.Core;
+﻿using Maple.Core;
 using System;
 using System.Collections.Generic;
 using System.Windows;
 
-namespace InsireBot
+namespace Maple
 {
     public class Scene : ObservableObject, ISequence
     {

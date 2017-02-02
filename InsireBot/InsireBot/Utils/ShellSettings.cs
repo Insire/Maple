@@ -1,6 +1,6 @@
-﻿using InsireBot.Properties;
+﻿using Maple.Properties;
 
-namespace InsireBot
+namespace Maple
 {
     public class ShellSettings : ConfigurableWindowSettings
     {

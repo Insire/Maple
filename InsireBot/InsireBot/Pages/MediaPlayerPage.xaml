@@ -1,7 +1,7 @@
-﻿<local:IoCUserControl x:Class="InsireBot.MediaPlayerPage"
+﻿<local:IoCUserControl x:Class="Maple.MediaPlayerPage"
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                      xmlns:local="clr-namespace:InsireBot"
+                      xmlns:local="clr-namespace:Maple"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <Grid>
         <materialDesign:TransitioningContent>

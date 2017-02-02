@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace InsireBot
+namespace Maple
 {
     /// <summary>
     /// Interaction logic for MediaPlayerView.xaml

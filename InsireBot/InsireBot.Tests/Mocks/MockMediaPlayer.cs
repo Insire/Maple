@@ -1,7 +1,7 @@
-﻿using InsireBot.Core;
+﻿using Maple.Core;
 using System;
 
-namespace InsireBot.Tests
+namespace Maple.Tests
 {
     public class MockMediaPlayer : IMediaPlayer
     {

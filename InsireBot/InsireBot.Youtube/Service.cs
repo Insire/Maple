@@ -3,7 +3,7 @@ using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
-using InsireBot.Core;
+using Maple.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
 
-namespace InsireBot.Youtube
+namespace Maple.Youtube
 {
     public class Service
     {

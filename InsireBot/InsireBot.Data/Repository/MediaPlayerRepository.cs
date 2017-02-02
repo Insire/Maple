@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
 
-namespace InsireBot.Data
+namespace Maple.Data
 {
     public class MediaPlayerRepository : IMediaPlayerRepository
     {

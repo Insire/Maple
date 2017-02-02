@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace InsireBot.Core
+namespace Maple.Core
 {
     /// <summary>
     /// Windows Multi Media Service aka recording- and playback devices

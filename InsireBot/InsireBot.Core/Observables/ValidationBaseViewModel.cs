@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace InsireBot.Core
+namespace Maple.Core
 {
     public class ValidationBaseViewModel : ObservableObject, INotifyDataErrorInfo
     {

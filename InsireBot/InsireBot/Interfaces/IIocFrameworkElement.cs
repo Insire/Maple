@@ -1,4 +1,4 @@
-﻿namespace InsireBot
+﻿namespace Maple
 {
     interface IIocFrameworkElement
     {

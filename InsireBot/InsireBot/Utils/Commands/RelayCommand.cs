@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace InsireBot
+namespace Maple
 {
     public class RelayCommand : ICommand
     {

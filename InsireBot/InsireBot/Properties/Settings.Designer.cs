@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace InsireBot.Properties {
+namespace Maple.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace InsireBot
+namespace Maple
 {
     public class IoCUserControl : UserControl, IIocFrameworkElement
     {

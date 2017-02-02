@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Threading;
 
-namespace InsireBot.Core
+namespace Maple.Core
 {
     public static class DispatcherFactory
     {

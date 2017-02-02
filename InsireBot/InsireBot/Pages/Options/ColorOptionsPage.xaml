@@ -1,9 +1,9 @@
-﻿<local:IoCUserControl x:Class="InsireBot.ColorOptionsPage"
+﻿<local:IoCUserControl x:Class="Maple.ColorOptionsPage"
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:colors="clr-namespace:MaterialDesignColors;assembly=MaterialDesignColors"
                       xmlns:core="clr-namespace:InsireBotCore;assembly=InsireBot.Core"
-                      xmlns:local="clr-namespace:InsireBot"
+                      xmlns:local="clr-namespace:Maple"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
     <UserControl.Resources>

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace InsireBot.Core
+namespace Maple.Core
 {
     public abstract class TrackingBaseViewModel<T> : ValidationBaseViewModel, IValidatableTrackingObject, IValidatableObject
     {

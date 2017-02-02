@@ -1,8 +1,8 @@
-﻿using InsireBot.Core;
+﻿using Maple.Core;
 using System;
 using System.Windows.Media;
 
-namespace InsireBot
+namespace Maple
 {
     public delegate void CompletedMediaItemEventHandler(object sender, CompletedMediaItemEventEventArgs e);
     public class CompletedMediaItemEventEventArgs : EventArgs

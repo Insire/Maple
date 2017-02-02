@@ -1,5 +1,5 @@
-﻿using InsireBot.Core;
-using InsireBot.Localization.Properties;
+﻿using Maple.Core;
+using Maple.Localization.Properties;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace InsireBot
+namespace Maple
 {
     public class Playlist : TrackingBaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier, INotifyPropertyChanged
     {

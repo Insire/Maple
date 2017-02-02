@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InsireBot.Core
+namespace Maple.Core
 {
     public interface IIdentifier
     {

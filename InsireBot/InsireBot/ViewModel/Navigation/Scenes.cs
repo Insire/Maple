@@ -1,12 +1,12 @@
-﻿using InsireBot.Core;
-using InsireBot.Localization.Properties;
+﻿using Maple.Core;
+using Maple.Localization.Properties;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 
-namespace InsireBot
+namespace Maple
 {
     /// <summary>
     /// ViewModel that stores and controls which UserControl(Page/View) whatever is displayed in the mainwindow of this app)

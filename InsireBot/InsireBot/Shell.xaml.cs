@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace InsireBot
+namespace Maple
 {
     public partial class Shell : IoCWindow
     {

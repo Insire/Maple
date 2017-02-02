@@ -1,23 +1,23 @@
-using InsireBot.Core;
-using InsireBot.Localization.Properties;
+using Maple.Core;
+using Maple.Localization.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows.Input;
 
-namespace InsireBot
+namespace Maple
 {
     public class MediaPlayer : TrackingBaseViewModel<Data.MediaPlayer>, IValidatableTrackingObject, IDisposable
     {
+        public bool IsPlaying { get { return Player.IsPlaying; } }
+
         private IMediaPlayer _player;
         public IMediaPlayer Player
         {
             get { return _player; }
             private set { SetValue(ref _player, value); }
         }
-
-        public bool IsPlaying { get { return Player.IsPlaying; } }
 
         public ICommand PlayCommand { get; private set; }
         public ICommand PauseCommand { get; private set; }

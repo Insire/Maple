@@ -1,8 +1,8 @@
-﻿using InsireBot.Core;
+﻿using Maple.Core;
 using NAudio.Wave;
 using System;
 
-namespace InsireBot
+namespace Maple
 {
     public class NAudioMediaPlayer : BasePlayer
     {

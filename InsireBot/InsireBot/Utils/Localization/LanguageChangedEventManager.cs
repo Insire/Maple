@@ -2,7 +2,7 @@
 using System.Windows;
 using System.ComponentModel;
 
-namespace InsireBot
+namespace Maple
 {
     public class LanguageChangedEventManager : WeakEventManager
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 
-namespace InsireBot
+namespace Maple
 {
     public interface ITranslationProvider
     {

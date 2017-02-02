@@ -1,10 +1,10 @@
-﻿using InsireBot.Core;
+﻿using Maple.Core;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace InsireBot.Youtube
+namespace Maple.Youtube
 {
     public class UrlParseService : IYoutubeUrlParseService
     {

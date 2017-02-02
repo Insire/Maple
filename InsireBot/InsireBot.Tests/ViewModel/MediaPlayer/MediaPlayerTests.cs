@@ -1,9 +1,9 @@
-﻿using InsireBot.Core;
-using InsireBot.Data;
+﻿using Maple.Core;
+using Maple.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 
-namespace InsireBot.Tests
+namespace Maple.Tests
 {
     [TestClass()]
     public class MediaPlayerTests
@@ -21,7 +21,7 @@ namespace InsireBot.Tests
         }
 
         [TestMethod()]
-        public void InsireBotMainMediaPlayerTest()
+        public void MainMediaPlayerTest()
         {
             var mediaplayer = new MainMediaPlayer(_translationManager, CreateMockMediaPlayer(), CreateOneDataMediaPlayer(), "");
             mediaplayer.Playlist = new Playlist(_log, CreatePlaylist());
@@ -39,7 +39,7 @@ namespace InsireBot.Tests
         }
 
         [TestMethod()]
-        public void InsireBotNewMainMediaPlayerTest()
+        public void NewMainMediaPlayerTest()
         {
             var mediaplayer = new MainMediaPlayer(_translationManager, CreateMockMediaPlayer(), CreateOneNewDataMediaPlayer(), "");
             mediaplayer.Playlist = new Playlist(_log, CreatePlaylist());
@@ -57,7 +57,7 @@ namespace InsireBot.Tests
         }
 
         [TestMethod()]
-        public void InsireBotMediaPlayerTest()
+        public void MediaPlayerTest()
         {
             var mediaplayer = new MediaPlayer(CreateMockMediaPlayer(), CreateOneDataMediaPlayer());
             mediaplayer.Playlist = new Playlist(_log, CreatePlaylist());
@@ -75,7 +75,7 @@ namespace InsireBot.Tests
         }
 
         [TestMethod()]
-        public void InsireBotNewMediaPlayerTest()
+        public void NewMediaPlayerTest()
         {
             var mediaplayer = new MediaPlayer(CreateMockMediaPlayer(), CreateOneNewDataMediaPlayer());
             mediaplayer.Playlist = new Playlist(_log, CreatePlaylist());
@@ -93,63 +93,63 @@ namespace InsireBot.Tests
         }
 
         [TestMethod()]
-        public void InsireBotAddRangeTest()
+        public void AddRangeTest()
         {
             // TODO
             Assert.Fail();
         }
 
         [TestMethod()]
-        public void InsireBotAddTest()
+        public void AddTest()
         {
             // TODO
             Assert.Fail();
         }
 
         [TestMethod()]
-        public void InsireBotPauseTest()
+        public void PauseTest()
         {
             // TODO
             Assert.Fail();
         }
 
         [TestMethod()]
-        public void InsireBotStopTest()
+        public void StopTest()
         {
             // TODO
             Assert.Fail();
         }
 
         [TestMethod()]
-        public void InsireBotPreviousTest()
+        public void PreviousTest()
         {
             // TODO
             Assert.Fail();
         }
 
         [TestMethod()]
-        public void InsireBotNextTest()
+        public void NextTest()
         {
             // TODO
             Assert.Fail();
         }
 
         [TestMethod()]
-        public void InsireBotCanNextTest()
+        public void CanNextTest()
         {
             // TODO
             Assert.Fail();
         }
 
         [TestMethod()]
-        public void InsireBotDisposeTest()
+        public void DisposeTest()
         {
             // TODO
             Assert.Fail();
         }
 
         [TestMethod()]
-        public void InsireBotDisposeTest1()
+        public void DisposeTest1()
         {
             // TODO
             Assert.Fail();

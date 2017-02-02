@@ -8,7 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
-namespace InsireBot.Core
+namespace Maple.Core
 {
     public class RangeObservableCollection<T> : ObservableCollection<T>, INotifyPropertyChanged
     {

@@ -1,9 +1,9 @@
-﻿using InsireBot.Core;
+﻿using Maple.Core;
 using System;
 using System.ComponentModel;
 using System.Windows;
 
-namespace InsireBot
+namespace Maple
 {
     public class TranslationData : ObservableObject, IWeakEventListener, INotifyPropertyChanged, IDisposable
     {

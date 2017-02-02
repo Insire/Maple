@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Globalization;
 
-namespace InsireBot.Tests
+namespace Maple.Tests
 {
     public class MockTranslationManager : ITranslationManager
     {

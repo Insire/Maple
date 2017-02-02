@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace InsireBot
+namespace Maple
 {
     public static class DataGridBehavior
     {

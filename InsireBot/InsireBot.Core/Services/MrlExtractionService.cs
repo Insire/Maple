@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using YoutubeExtractor;
 
-namespace InsireBot.Core
+namespace Maple.Core
 {
     public class MrlExtractionService
     {

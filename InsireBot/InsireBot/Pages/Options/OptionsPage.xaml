@@ -1,8 +1,8 @@
-﻿<local:IoCUserControl x:Class="InsireBot.OptionsPage"
+﻿<local:IoCUserControl x:Class="Maple.OptionsPage"
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:sys="clr-namespace:System.Globalization;assembly=mscorlib"
-                      xmlns:local="clr-namespace:InsireBot"
+                      xmlns:local="clr-namespace:Maple"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
     <!-- DataContext: OptionsViewModel-->
