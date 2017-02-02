@@ -53,15 +53,17 @@ namespace Maple
             _container.Register<IYoutubeUrlParseService, UrlParseService>();
             _container.Register<Scenes>(reuse: Reuse.Singleton);
             _container.Register<UIColorsViewModel>(reuse: Reuse.Singleton);
-            _container.Register<UrlParseService>();
-            _container.Register<MediaPlayers>(reuse: Reuse.Singleton);
+
             _container.Register<Playlists>(reuse: Reuse.Singleton);
-            _container.Register<DirectorViewModel>(reuse: Reuse.Singleton);
-            _container.Register<CreateMediaItemViewModel>();
-            _container.Register<CreatePlaylistViewModel>();
-            _container.Register<StatusbarViewModel>(reuse: Reuse.Singleton);
+            _container.Register<MediaPlayers>(reuse: Reuse.Singleton);
             _container.Register<ShellViewModel>(reuse: Reuse.Singleton);
             _container.Register<OptionsViewModel>(reuse: Reuse.Singleton);
+            _container.Register<DirectorViewModel>(reuse: Reuse.Singleton);
+            _container.Register<StatusbarViewModel>(reuse: Reuse.Singleton);
+
+            _container.Register<UrlParseService>();
+            _container.Register<CreateMediaItemViewModel>();
+            _container.Register<CreatePlaylistViewModel>();
 
             _container.Register<ITranslationProvider, ResxTranslationProvider>(reuse: Reuse.Singleton);
             _container.Register<ITranslationManager, TranslationManager>(reuse: Reuse.Singleton);
