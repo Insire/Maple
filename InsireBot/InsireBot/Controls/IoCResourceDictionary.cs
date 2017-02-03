@@ -1,7 +1,7 @@
 ﻿namespace Maple
 {
     /// <summary>
-    /// ResourceDictionary to support <see cref="TranslationExtension"/>
+    /// SharedResourceDictionary to support <see cref="TranslationExtension"/>
     /// </summary>
     public class IoCResourceDictionary : SharedResourceDictionary, IIocFrameworkElement
     {

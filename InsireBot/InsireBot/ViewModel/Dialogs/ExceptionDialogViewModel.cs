@@ -1,13 +1,15 @@
 ﻿using Maple.Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Maple
 {
     public class ExceptionDialogViewModel : ObservableObject
     {
+        private Exception _exception;
+        public Exception Exception
+        {
+            get { return _exception; }
+            set { SetValue(ref _exception, value); }
+        }
     }
 }

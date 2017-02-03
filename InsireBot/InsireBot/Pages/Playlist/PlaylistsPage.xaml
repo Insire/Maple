@@ -42,10 +42,10 @@
                            Text="{local:Translation Description}" />
                 <TextBlock Grid.Row="4"
                            Grid.Column="0"
-                           Text="{local:Translation PlaybackShuffle}" />
+                           Text="{local:Translation PlaybackMode}" />
                 <TextBlock Grid.Row="6"
                            Grid.Column="0"
-                           Text="{local:Translation PlaybackMode}" />
+                           Text="{local:Translation PlaybackShuffle}" />
 
                 <TextBox Grid.Row="0"
                          Grid.Column="2"
@@ -53,37 +53,37 @@
                 <TextBox Grid.Row="2"
                          Grid.Column="2"
                          Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
-                <CheckBox Grid.Row="4"
-                          Grid.Column="2"
-                          IsChecked="{Binding IsShuffeling, UpdateSourceTrigger=PropertyChanged}" />
-                <ComboBox Grid.Row="6"
+                <ComboBox Grid.Row="4"
                           Grid.Column="2"
                           ItemsSource="{Binding RepeatModes}"
                           SelectedItem="{Binding RepeatMode, UpdateSourceTrigger=PropertyChanged}" />
+                <CheckBox Grid.Row="6"
+                          Grid.Column="2"
+                          IsChecked="{Binding IsShuffeling, UpdateSourceTrigger=PropertyChanged}" />
 
                 <UniformGrid Grid.Row="10"
                              Grid.Column="3"
                              Columns="0"
                              Rows="1">
-                    <Button Width="150" Margin="2.5,0">
+                    <Button Width="150" Margin="2.5,0" Command="{Binding LoadFromFileCommand}">
+                        <Button.ToolTip>
+                            <TextBlock Text="{local:Translation FilePlaylistImport}" />
+                        </Button.ToolTip>
+                        <icons:PackIconMaterial Kind="FileFind" />
+                    </Button>
+
+                    <Button Width="150" Margin="2.5,0" Command="{Binding LoadFromFolderCommand}">
                         <Button.ToolTip>
                             <TextBlock Text="{local:Translation FolderPlaylistImport}" />
                         </Button.ToolTip>
                         <icons:PackIconMaterial Kind="FolderDownload" />
                     </Button>
 
-                    <Button Width="150" Margin="2.5,0">
+                    <Button Width="150" Margin="2.5,0" Command="{Binding LoadFromUrlCommand}">
                         <Button.ToolTip>
                             <TextBlock Text="{local:Translation YoutubePlaylistImport}" />
                         </Button.ToolTip>
                         <icons:PackIconMaterial Kind="YoutubePlay" />
-                    </Button>
-
-                    <Button Width="150" Margin="2.5,0">
-                        <Button.ToolTip>
-                            <TextBlock Text="{local:Translation FilePlaylistImport}" />
-                        </Button.ToolTip>
-                        <icons:PackIconMaterial Kind="FileFind" />
                     </Button>
                 </UniformGrid>
             </Grid>

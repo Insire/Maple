@@ -13,7 +13,6 @@ namespace Maple
         private readonly IMediaItemRepository _mediaItemRepository;
         private readonly DialogViewModel _dialogViewModel;
 
-        public ICommand SaveCommand { get; private set; }
         public ICommand AddCommand { get; private set; }
         public ICommand PlayCommand { get; private set; }
 
@@ -25,22 +24,15 @@ namespace Maple
             _log = log;
 
             var playlists = playlistRepository.GetAll();
-            Items.AddRange(playlists.Select(p => new Playlist(log, p)));
+            Items.AddRange(playlists.Select(p => new Playlist(log, _dialogViewModel, p)));
             SelectedItem = Items.FirstOrDefault();
 
-            SaveCommand = new RelayCommand<Playlist>(Save, CanSave);
             AddCommand = new RelayCommand(Add, CanAdd);
         }
 
-        // TODO order changing + sync, Commands, UserInteraction, Reset?, async load, save and delete
+        // TODO order changing + sync, Commands, UserInteraction, Reset?, async load
 
         public void Add()
-        {
-            _dialogViewModel.AcceptAction=AddInternal;
-            _dialogViewModel.ShowMessageDialog("Test");
-        }
-
-        private void AddInternal()
         {
             var playlist = Data.Playlist.New();
 
@@ -61,7 +53,7 @@ namespace Maple
                 playlist.Sequence = index;
             }
 
-            Items.Add(new Playlist(_log, playlist));
+            Items.Add(new Playlist(_log, _dialogViewModel, playlist));
         }
 
         public void Save()
@@ -98,8 +90,8 @@ namespace Maple
 
         private void SaveAllInternal()
         {
-           Items.Where(p => p.IsChanged && p.IsValid)
-                .ForEach(p => SaveInternal(p));
+            Items.Where(p => p.IsChanged && p.IsValid)
+                 .ForEach(p => SaveInternal(p));
         }
 
         private bool CanSaveAllInternal()

@@ -6,13 +6,19 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Windows.Input;
 
 namespace Maple
 {
     public class Playlist : TrackingBaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier, INotifyPropertyChanged
     {
         private readonly IBotLog _log;
+        private readonly DialogViewModel _dialogViewModel;
         public int ItemCount => Items?.Count ?? 0;
+
+        public ICommand LoadFromFileCommand { get; private set; }
+        public ICommand LoadFromFolderCommand { get; private set; }
+        public ICommand LoadFromUrlCommand { get; private set; }
 
         /// <summary>
         /// contains indices of played <see cref="IMediaItem"/>
@@ -115,12 +121,59 @@ namespace Maple
             set { SetValue(ref _repeatMode, value, Changed: () => Model.RepeatMode = (int)value); }
         }
 
-        public Playlist(IBotLog log, Data.Playlist model) : base(model)
+        public Playlist(IBotLog log, DialogViewModel dialogViewModel, Data.Playlist model) : base(model)
         {
-            _log = log;
+            using (_busyStack.GetToken())
+            {
+                _log = log;
+                _dialogViewModel = dialogViewModel;
 
-            RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
-            History = new Stack<int>();
+                RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
+                History = new Stack<int>();
+
+                LoadFromFileCommand = new RelayCommand(LoadFromFile, () => CanLoadFromFile());
+                LoadFromFolderCommand = new RelayCommand(LoadFromFolder, () => CanLoadFromFolder());
+                LoadFromUrlCommand = new RelayCommand(LoadFromUrl, () => CanLoadFromUrl());
+            }
+        }
+
+        private void LoadFromUrl()
+        {
+            using (_busyStack.GetToken())
+            {
+                _dialogViewModel.ShowFolderBrowserDialog();
+            }
+        }
+
+        private bool CanLoadFromUrl()
+        {
+            return !IsBusy;
+        }
+
+        private void LoadFromFolder()
+        {
+            using (_busyStack.GetToken())
+            {
+                _dialogViewModel.ShowFolderBrowserDialog();
+            }
+        }
+
+        private bool CanLoadFromFolder()
+        {
+            return !IsBusy;
+        }
+
+        private void LoadFromFile()
+        {
+            using (_busyStack.GetToken())
+            {
+                _dialogViewModel.ShowFileBrowserDialog();
+            }
+        }
+
+        private bool CanLoadFromFile()
+        {
+            return !IsBusy;
         }
 
         protected override void InitializeComplexProperties(Data.Playlist model)
@@ -156,68 +209,80 @@ namespace Maple
 
         public virtual void Add(MediaItemViewModel item)
         {
-            if (Items?.Any() == true)
-                item.Sequence = Items.Select(p => p.Sequence).Max() + 1;
-            else
-                item.Sequence = 0;
+            using (_busyStack.GetToken())
+            {
+                if (Items?.Any() == true)
+                    item.Sequence = Items.Select(p => p.Sequence).Max() + 1;
+                else
+                    item.Sequence = 0;
 
-            if (Items.Any() != true)
-                History.Push(item.Sequence);
+                if (Items.Any() != true)
+                    History.Push(item.Sequence);
 
-            Items.Add(item);
+                Items.Add(item);
 
-            if (CurrentItem == null)
-                CurrentItem = Items.First();
+                if (CurrentItem == null)
+                    CurrentItem = Items.First();
+            }
         }
 
         public virtual void AddRange(IEnumerable<MediaItemViewModel> items)
         {
-            var currentIndex = -1;
-            if (Items.Any())
+            using (_busyStack.GetToken())
             {
-                var indices = Items.Select(p => p.Sequence);
-                currentIndex = (indices != null) ? indices.Max() : 0;
-            }
+                var currentIndex = -1;
+                if (Items.Any())
+                {
+                    var indices = Items.Select(p => p.Sequence);
+                    currentIndex = (indices != null) ? indices.Max() : 0;
+                }
 
-            foreach (var item in items)
-            {
-                currentIndex++;
-                item.Sequence = currentIndex;
-                Add(item);
-            }
+                foreach (var item in items)
+                {
+                    currentIndex++;
+                    item.Sequence = currentIndex;
+                    Add(item);
+                }
 
-            if (CurrentItem == null)
-                CurrentItem = Items.First();
+                if (CurrentItem == null)
+                    CurrentItem = Items.First();
+            }
         }
 
         public virtual void Remove(MediaItemViewModel item)
         {
-            while (Items.Contains(item))
-                Items.Remove(item);
+            using (_busyStack.GetToken())
+            {
+                while (Items.Contains(item))
+                    Items.Remove(item);
+            }
         }
 
         public virtual MediaItemViewModel Next()
         {
-            if (Items != null && Items.Any())
+            using (_busyStack.GetToken())
             {
-                if (IsShuffeling)
-                    return NextShuffle();
-                else
+                if (Items != null && Items.Any())
                 {
-                    switch (RepeatMode)
+                    if (IsShuffeling)
+                        return NextShuffle();
+                    else
                     {
-                        case RepeatMode.All: return NextRepeatAll();
+                        switch (RepeatMode)
+                        {
+                            case RepeatMode.All: return NextRepeatAll();
 
-                        case RepeatMode.None: return NextRepeatNone();
+                            case RepeatMode.None: return NextRepeatNone();
 
-                        case RepeatMode.Single: return NextRepeatSingle();
+                            case RepeatMode.Single: return NextRepeatSingle();
 
-                        default:
-                            throw new NotImplementedException(nameof(RepeatMode));
+                            default:
+                                throw new NotImplementedException(nameof(RepeatMode));
+                        }
                     }
                 }
+                return null;
             }
-            return null;
         }
 
         private MediaItemViewModel NextRepeatNone()
@@ -302,33 +367,36 @@ namespace Maple
         /// <returns>returns the last <see cref="MediaItemViewModel"/> from <seealso cref="History"/></returns>
         public virtual MediaItemViewModel Previous()
         {
-            if (History?.Any() == true)
+            using (_busyStack.GetToken())
             {
-                Items.ToList().ForEach(p => p.IsSelected = false);      // deselect all items in the list
-                while (History.Any())
+                if (History?.Any() == true)
                 {
-                    var previous = History.Pop();
-
-                    if (previous == CurrentItem.Sequence) // the most recent item in the history, is the just played item, so we wanna skip that
-                        continue;
-
-                    if (previous > -1)
+                    Items.ToList().ForEach(p => p.IsSelected = false);      // deselect all items in the list
+                    while (History.Any())
                     {
-                        var previousItems = Items.Where(p => p.Sequence == previous); // try to get the last played item
-                        if (previousItems.Any())
+                        var previous = History.Pop();
+
+                        if (previous == CurrentItem.Sequence) // the most recent item in the history, is the just played item, so we wanna skip that
+                            continue;
+
+                        if (previous > -1)
                         {
-                            var foundItem = previousItems.First();
-                            foundItem.IsSelected = true;
+                            var previousItems = Items.Where(p => p.Sequence == previous); // try to get the last played item
+                            if (previousItems.Any())
+                            {
+                                var foundItem = previousItems.First();
+                                foundItem.IsSelected = true;
 
-                            if (previousItems.Count() > 1)
-                                _log.Warn("Warning SelectPrevious returned more than one value, when it should only return one");
+                                if (previousItems.Count() > 1)
+                                    _log.Warn("Warning SelectPrevious returned more than one value, when it should only return one");
 
-                            return foundItem;
+                                return foundItem;
+                            }
                         }
                     }
                 }
+                return null;
             }
-            return null;
         }
 
         public bool CanNext()

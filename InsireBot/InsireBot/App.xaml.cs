@@ -43,9 +43,12 @@ namespace Maple
         {
             var styles = new IoCResourceDictionary(_manager)
             {
-                Source = new Uri("/Maple;component/Resources/Style.xaml", UriKind.RelativeOrAbsolute),
+                Source = new Uri("/Maple;component/Resources/Style.xaml", UriKind.RelativeOrAbsolute),                
             };
+            // injecting the translation manager into a shared resourcedictionary,
+            // so that hopefully all usages of the translation extension can be resolved inside of ResourceDictionaries
             styles.Add(typeof(ITranslationManager).Name, _manager);
+
             Resources.MergedDictionaries.Add(styles);
         }
 

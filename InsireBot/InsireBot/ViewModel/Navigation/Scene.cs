@@ -56,14 +56,14 @@ namespace Maple
         public bool IsSelected
         {
             get { return _isSelected; }
-            set { SetValue(ref _isSelected, value, Changed: UpdateDataContext); }
+            set { SetValue(ref _isSelected, value, Changed: UpdateDataContext, Changing: Save); }
         }
 
         public int _sequence;
         public int Sequence
         {
             get { return _sequence; }
-            set { SetValue(ref _sequence, value, Changed: UpdateDataContext); }
+            set { SetValue(ref _sequence, value, Changed: UpdateDataContext, Changing: Save); }
         }
 
         public Scene(ITranslationManager manager)
@@ -99,6 +99,18 @@ namespace Maple
                     return;
 
                 Content.DataContext = newContext;
+            }
+        }
+
+        private void Save()
+        {
+            if (Content == null || !IsSelected)
+                return;
+
+            using (var token = BusyStack.GetToken())
+            {
+                var saveable = Content.DataContext as ISaveable;
+                saveable?.Save();
             }
         }
 

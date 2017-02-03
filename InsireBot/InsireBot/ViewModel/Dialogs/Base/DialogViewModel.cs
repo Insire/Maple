@@ -29,6 +29,20 @@ namespace Maple
             set { SetValue(ref _isOpen, value); }
         }
 
+        private bool _isCancelVisible;
+        public bool IsCancelVisible
+        {
+            get { return _isCancelVisible; }
+            set { SetValue(ref _isCancelVisible, value); }
+        }
+
+        private string _title;
+        public string Title
+        {
+            get { return _title; }
+            private set { SetValue(ref _title, value); }
+        }
+
         private ObservableObject _context;
         public ObservableObject Context
         {
@@ -50,18 +64,39 @@ namespace Maple
             ProgressDialogViewModel = new ProgressDialogViewModel();
         }
 
-        public void ShowMessageDialog(string message)
+        public void ShowMessageDialog(string message, string title)
         {
             Context = MessageDialogViewModel;
+            Title = title;
             MessageDialogViewModel.Message = message;
+            IsCancelVisible = false;
+
             Open();
         }
 
         public void ShowExceptionDialog(Exception exception)
         {
             Context = ExceptionDialogViewModel;
-            //ExceptionDialogViewModel.Message = message;
+            Title = exception.GetType().Name;
+            ExceptionDialogViewModel.Exception = exception;
+            IsCancelVisible = false;
+
             Open();
+        }
+
+        public void ShowFileBrowserDialog()
+        {
+            ShowExceptionDialog(new NotImplementedException());
+        }
+
+        public void ShowFolderBrowserDialog()
+        {
+            ShowExceptionDialog(new NotImplementedException());
+        }
+
+        public void ShowProgressDialog()
+        {
+            ShowExceptionDialog(new NotImplementedException());
         }
 
         public void Accept()
@@ -72,7 +107,7 @@ namespace Maple
 
         public bool CanAccept()
         {
-            return CanClose() && CanAcceptFunc?.Invoke() == true;
+            return CanClose() && (CanAcceptFunc?.Invoke() ?? true) == true;
         }
 
         public void Cancel()
@@ -83,7 +118,7 @@ namespace Maple
 
         public bool CanCancel()
         {
-            return CanClose() && CanCancelFunc?.Invoke() == true;
+            return CanClose() && (CanCancelFunc?.Invoke() ?? true) == true;
         }
 
         public void Open()

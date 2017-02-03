@@ -10,26 +10,41 @@ namespace Maple.Core
 {
     public abstract class TrackingBaseViewModel<T> : ValidationBaseViewModel, IValidatableTrackingObject, IValidatableObject
     {
-        private Dictionary<string, object> _originalValues;
-        private List<IValidatableTrackingObject> _trackingObjects;
+        private readonly Dictionary<string, object> _originalValues;
+        private readonly List<IValidatableTrackingObject> _trackingObjects;
+
+        protected readonly BusyStack _busyStack;
 
         public T Model { get; private set; }
         public bool IsChanged => _originalValues.Count > 0 || _trackingObjects.Any(t => t.IsChanged);
         public bool IsValid => !HasErrors && _trackingObjects.All(t => t.IsValid);
 
-        public TrackingBaseViewModel(T model)
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set { SetValue(ref _isBusy, value); }
+        }
+
+        public TrackingBaseViewModel(T model) : base()
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model), $"{nameof(model)} {Resources.IsRequired}");
 
-            Model = model;
             _originalValues = new Dictionary<string, object>();
             _trackingObjects = new List<IValidatableTrackingObject>();
+            _busyStack = new BusyStack();
+            _busyStack.OnChanged += (isBusy) => IsBusy = isBusy;
 
-            InitializeComplexProperties(model);
-            InitializeCollectionProperties(model);
+            Model = model;
 
-            Validate();
+            using (_busyStack.GetToken())
+            {
+                InitializeComplexProperties(model);
+                InitializeCollectionProperties(model);
+
+                Validate();
+            }
         }
 
         protected virtual void InitializeComplexProperties(T model)
@@ -42,26 +57,32 @@ namespace Maple.Core
 
         public void AcceptChanges()
         {
-            _originalValues.Clear();
+            using (_busyStack.GetToken())
+            {
+                _originalValues.Clear();
 
-            foreach (var trackingObject in _trackingObjects)
-                trackingObject.AcceptChanges();
+                foreach (var trackingObject in _trackingObjects)
+                    trackingObject.AcceptChanges();
 
-            OnPropertyChanged("");
+                OnPropertyChanged("");
+            }
         }
 
         public void RejectChanges()
         {
-            foreach (var originalValueEntry in _originalValues)
-                typeof(T).GetProperty(originalValueEntry.Key).SetValue(Model, originalValueEntry.Value);
+            using (_busyStack.GetToken())
+            {
+                foreach (var originalValueEntry in _originalValues)
+                    typeof(T).GetProperty(originalValueEntry.Key).SetValue(Model, originalValueEntry.Value);
 
-            _originalValues.Clear();
+                _originalValues.Clear();
 
-            foreach (var trackingObject in _trackingObjects)
-                trackingObject.RejectChanges();
+                foreach (var trackingObject in _trackingObjects)
+                    trackingObject.RejectChanges();
 
-            Validate();
-            OnPropertyChanged("");
+                Validate();
+                OnPropertyChanged("");
+            }
         }
 
         protected TValue GetValue<TValue>([CallerMemberName] string propertyName = null)
