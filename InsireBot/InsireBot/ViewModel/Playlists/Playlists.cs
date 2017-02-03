@@ -11,15 +11,17 @@ namespace Maple
         private readonly IBotLog _log;
         private readonly IPlaylistsRepository _playlistRepository;
         private readonly IMediaItemRepository _mediaItemRepository;
+        private readonly DialogViewModel _dialogViewModel;
 
         public ICommand SaveCommand { get; private set; }
         public ICommand AddCommand { get; private set; }
         public ICommand PlayCommand { get; private set; }
 
-        public Playlists(IMediaItemRepository mediaItemRepository, IPlaylistsRepository playlistRepository, IBotLog log)
+        public Playlists(IMediaItemRepository mediaItemRepository, IPlaylistsRepository playlistRepository, IBotLog log, DialogViewModel dialogViewModel)
         {
             _mediaItemRepository = mediaItemRepository;
             _playlistRepository = playlistRepository;
+            _dialogViewModel = dialogViewModel;
             _log = log;
 
             var playlists = playlistRepository.GetAll();
@@ -33,6 +35,12 @@ namespace Maple
         // TODO order changing + sync, Commands, UserInteraction, Reset?, async load, save and delete
 
         public void Add()
+        {
+            _dialogViewModel.AcceptAction=AddInternal;
+            _dialogViewModel.ShowMessageDialog("Test");
+        }
+
+        private void AddInternal()
         {
             var playlist = Data.Playlist.New();
 

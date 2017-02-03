@@ -8,6 +8,7 @@ namespace Maple
 
         public IoCUserControl() : base()
         {
+            // for compatibility
         }
 
         public IoCUserControl(ITranslationManager manager) : base()

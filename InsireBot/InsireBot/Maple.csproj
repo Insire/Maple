@@ -139,8 +139,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\IoCResourceDictionary.cs" />
     <Compile Include="Controls\PackIcon.cs" />
     <Compile Include="Controls\PackIconKind.cs" />
+    <Compile Include="Controls\SharedResourceDictionary.cs" />
     <Compile Include="DryIoc\AsyncExecutionFlowScopeContext.cs" />
     <Compile Include="DryIoc\Container.cs" />
     <Compile Include="DryIoc\FastExpressionCompiler.cs" />
@@ -183,6 +185,12 @@
     <Compile Include="Interfaces\IMediaPlayer.cs" />
     <Compile Include="Utils\LinqExtensions.cs" />
     <Compile Include="Utils\Converters\RadioButtonCheckedConverter.cs" />
+    <Compile Include="ViewModel\Dialogs\DialogViewModel.cs" />
+    <Compile Include="ViewModel\Dialogs\ExceptionDialogViewModel.cs" />
+    <Compile Include="ViewModel\Dialogs\FileBrowserDialogViewModel.cs" />
+    <Compile Include="ViewModel\Dialogs\FolderBrowserDialogViewModel.cs" />
+    <Compile Include="ViewModel\Dialogs\MessageDialogViewModel.cs" />
+    <Compile Include="ViewModel\Dialogs\ProgressDialogViewModel.cs" />
     <Compile Include="ViewModel\DirectorViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer\AudioDevices.cs" />
     <Compile Include="ViewModel\MediaPlayer\MainMediaPlayer.cs" />

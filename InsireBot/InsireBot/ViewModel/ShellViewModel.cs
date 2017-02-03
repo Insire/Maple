@@ -25,11 +25,19 @@ namespace Maple
             private set { SetValue(ref _translationManager, value); }
         }
 
-        public ShellViewModel(ITranslationManager translationManager, Scenes scenes, StatusbarViewModel statusBarViewModel)
+        private DialogViewModel _dialogViewModel;
+        public DialogViewModel DialogViewModel
+        {
+            get { return _dialogViewModel; }
+            private set { SetValue(ref _dialogViewModel, value); }
+        }
+
+        public ShellViewModel(ITranslationManager translationManager, Scenes scenes, StatusbarViewModel statusBarViewModel, DialogViewModel dialogViewModel)
         {
             TranslationManager = translationManager;
             Scenes = scenes;
             StatusbarViewModel = statusBarViewModel;
+            DialogViewModel = dialogViewModel;
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Maple
 
         public IoCWindow() : base()
         {
+            // for compatibility
         }
 
         public IoCWindow(ITranslationManager container, UIColorsViewModel vm) : base()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
 using System.Xaml;
@@ -24,21 +25,50 @@ namespace Maple
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
+            var element = default(IIocFrameworkElement);
+            var manager = default(ITranslationManager);
+
+            if (TryGetIoCFrameWorkElement(serviceProvider, out element))
+                return ProvideValue(serviceProvider, element.TranslationManager);
+
+            if (TryGetTranslationManagerFromResources(serviceProvider, out manager))
+                return ProvideValue(serviceProvider, manager);
+
+            Debug.Fail($"{nameof(TranslationExtension)} ProvideValue {Key} failed");
+            return null;
+        }
+
+        private bool TryGetIoCFrameWorkElement(IServiceProvider serviceProvider, out IIocFrameworkElement element)
+        {
             var provider = serviceProvider.GetService(typeof(IRootObjectProvider)) as IRootObjectProvider;
-            var element = provider.RootObject as IIocFrameworkElement;
+            element = provider.RootObject as IIocFrameworkElement;
+            return element != null;
+        }
 
-            if (element != null)
+        private bool TryGetTranslationManagerFromResources(IServiceProvider serviceProvider, out ITranslationManager manager)
+        {
+            var provider = serviceProvider.GetService(typeof(IRootObjectProvider)) as IRootObjectProvider;
+            var dictionary = provider.RootObject as ResourceDictionary;
+            var key = typeof(ITranslationManager).Name;
+
+            if (dictionary?.Contains(key) == true)
             {
-                var binding = new Binding("Value")
-                {
-                    Source = new TranslationData(element.TranslationManager, _key)
-                };
-
-                return binding.ProvideValue(serviceProvider);
+                manager = dictionary[key] as ITranslationManager;
+                return true;
             }
 
-            Debug.Fail($"ProvideValue {Key} failed");
-            return null;
+            manager = null;
+            return false;
+        }
+
+        private object ProvideValue(IServiceProvider serviceProvider, ITranslationManager manager)
+        {
+            var binding = new Binding("Value")
+            {
+                Source = new TranslationData(manager, _key)
+            };
+
+            return binding.ProvideValue(serviceProvider);
         }
     }
 }

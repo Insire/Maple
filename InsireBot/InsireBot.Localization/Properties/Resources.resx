@@ -216,4 +216,13 @@
   <data name="FilePlaylistImport" xml:space="preserve">
     <value>Eine Wiedergabeliste aus einer Datei importieren</value>
   </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Schliessen</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
 </root>

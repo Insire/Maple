@@ -3,6 +3,7 @@ using Maple.Core;
 using Maple.Data;
 using Maple.Properties;
 using Maple.Youtube;
+using System;
 using System.IO;
 using System.Threading;
 using System.Windows;
@@ -12,17 +13,18 @@ namespace Maple
     public partial class App : Application
     {
         private IContainer _container;
+        private ITranslationManager _manager;
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
-
             InitializeLocalization();
             InitializeIocContainer();
+            InitializeResources();
 
-            var manager = _container.Resolve<ITranslationManager>();
+            base.OnStartup(e);
+
             var colorsViewModel = _container.Resolve<UIColorsViewModel>();
-            var shell = new Shell(manager, colorsViewModel)
+            var shell = new Shell(_manager, colorsViewModel)
             {
                 DataContext = _container.Resolve<ShellViewModel>(),
             };
@@ -35,6 +37,16 @@ namespace Maple
         {
             SaveState();
             ExitInternal(e);
+        }
+
+        private void InitializeResources()
+        {
+            var styles = new IoCResourceDictionary(_manager)
+            {
+                Source = new Uri("/Maple;component/Resources/Style.xaml", UriKind.RelativeOrAbsolute),
+            };
+            styles.Add(typeof(ITranslationManager).Name, _manager);
+            Resources.MergedDictionaries.Add(styles);
         }
 
         private void InitializeLocalization()
@@ -57,6 +69,7 @@ namespace Maple
             _container.Register<Playlists>(reuse: Reuse.Singleton);
             _container.Register<MediaPlayers>(reuse: Reuse.Singleton);
             _container.Register<ShellViewModel>(reuse: Reuse.Singleton);
+            _container.Register<DialogViewModel>(reuse: Reuse.Singleton);
             _container.Register<OptionsViewModel>(reuse: Reuse.Singleton);
             _container.Register<DirectorViewModel>(reuse: Reuse.Singleton);
             _container.Register<StatusbarViewModel>(reuse: Reuse.Singleton);
@@ -75,6 +88,8 @@ namespace Maple
             _container.Register<IPlaylistsRepository, PlaylistsRepository>(reuse: Reuse.Singleton);
             _container.Register<IMediaItemRepository, MediaItemRepository>(reuse: Reuse.Singleton);
             _container.Register<IMediaPlayerRepository, MediaPlayerRepository>(reuse: Reuse.Singleton);
+
+            _manager = _container.Resolve<ITranslationManager>();
         }
 
         private void SaveState()
@@ -84,7 +99,7 @@ namespace Maple
 
             _container.Resolve<Playlists>().Save();
             _container.Resolve<MediaPlayers>().Save();
-            _container.Resolve<ITranslationManager>().Save();
+            _manager.Save();
 
             log.Info(Localization.Properties.Resources.SavedState);
         }

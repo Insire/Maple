@@ -43,7 +43,10 @@
             </StackPanel>
         </materialDesign:ColorZone>
 
-        <materialDesign:DialogHost Identifier="RootDialog">
+        <materialDesign:DialogHost CloseOnClickAway="True"
+                                   DialogContent="{StaticResource DialogHostTemplate}"
+                                   Identifier="RootDialog"
+                                   IsOpen="{Binding DialogViewModel.IsOpen}">
             <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding Path=IsChecked, ElementName=MenuToggleButton}">
                 <materialDesign:DrawerHost.LeftDrawerContent>
                     <DockPanel MinWidth="212" DataContext="{Binding Scenes}">
