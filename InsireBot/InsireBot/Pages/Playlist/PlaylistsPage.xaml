@@ -65,24 +65,24 @@
                              Grid.Column="3"
                              Columns="0"
                              Rows="1">
-                    <Button Width="150" Margin="2.5,0" Command="{Binding LoadFromFileCommand}">
-                        <Button.ToolTip>
-                            <TextBlock Text="{local:Translation FilePlaylistImport}" />
-                        </Button.ToolTip>
+                    <Button Width="150"
+                            Margin="2.5,0"
+                            Command="{Binding LoadFromFileCommand}"
+                            ToolTip="{local:Translation FilePlaylistImport}">
                         <icons:PackIconMaterial Kind="FileFind" />
                     </Button>
 
-                    <Button Width="150" Margin="2.5,0" Command="{Binding LoadFromFolderCommand}">
-                        <Button.ToolTip>
-                            <TextBlock Text="{local:Translation FolderPlaylistImport}" />
-                        </Button.ToolTip>
+                    <Button Width="150"
+                            Margin="2.5,0"
+                            Command="{Binding LoadFromFolderCommand}"
+                            ToolTip="{local:Translation FolderPlaylistImport}">
                         <icons:PackIconMaterial Kind="FolderDownload" />
                     </Button>
 
-                    <Button Width="150" Margin="2.5,0" Command="{Binding LoadFromUrlCommand}">
-                        <Button.ToolTip>
-                            <TextBlock Text="{local:Translation YoutubePlaylistImport}" />
-                        </Button.ToolTip>
+                    <Button Width="150"
+                            Margin="2.5,0"
+                            Command="{Binding LoadFromUrlCommand}"
+                            ToolTip="{local:Translation YoutubePlaylistImport}">
                         <icons:PackIconMaterial Kind="YoutubePlay" />
                     </Button>
                 </UniformGrid>

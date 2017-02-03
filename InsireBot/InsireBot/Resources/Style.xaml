@@ -322,7 +322,7 @@
             <ScrollViewer Grid.Column="2"
                           HorizontalScrollBarVisibility="Auto"
                           VerticalScrollBarVisibility="Hidden">
-                <TextBlock Text="{Binding ValidatesOnExceptions.Message}" />
+                <TextBlock Text="{Binding ExceptionText}" />
             </ScrollViewer>
         </Grid>
     </DataTemplate>

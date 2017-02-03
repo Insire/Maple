@@ -9,7 +9,9 @@ namespace Maple
         public Exception Exception
         {
             get { return _exception; }
-            set { SetValue(ref _exception, value); }
+            set { SetValue(ref _exception, value, Changed: () => OnPropertyChanged(nameof(ExceptionText))); }
         }
+
+        public string ExceptionText => Exception?.ToString();
     }
 }

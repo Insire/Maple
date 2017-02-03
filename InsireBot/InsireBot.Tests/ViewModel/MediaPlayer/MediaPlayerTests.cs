@@ -30,7 +30,7 @@ namespace Maple.Tests
             {
                 var mediaplayer = new MainMediaPlayer(null, CreateMockMediaPlayer(), CreateOneDataMediaPlayer(), "");
             }
-            catch(ArgumentNullException ex)
+            catch (ArgumentNullException ex)
             {
                 Assert.AreEqual("manager", ex.ParamName);
                 throw;
@@ -86,7 +86,7 @@ namespace Maple.Tests
         public void MainMediaPlayerTest()
         {
             var mediaplayer = new MainMediaPlayer(_translationManager, CreateMockMediaPlayer(), CreateOneDataMediaPlayer(), nameof(Resources.MainMediaplayer));
-            mediaplayer.Playlist = new Playlist(_log, CreatePlaylist());
+            mediaplayer.Playlist = new Playlist(_log, new DialogViewModel(), CreatePlaylist());
 
             Assert.IsTrue(mediaplayer.IsValid);
             Assert.IsTrue(mediaplayer.IsPrimary);
@@ -104,7 +104,7 @@ namespace Maple.Tests
         public void NewMainMediaPlayerTest()
         {
             var mediaplayer = new MainMediaPlayer(_translationManager, CreateMockMediaPlayer(), CreateOneNewDataMediaPlayer(), nameof(Resources.MainMediaplayer));
-            mediaplayer.Playlist = new Playlist(_log, CreatePlaylist());
+            mediaplayer.Playlist = new Playlist(_log, new DialogViewModel(), CreatePlaylist());
 
             Assert.IsTrue(mediaplayer.IsValid);
             Assert.IsTrue(mediaplayer.IsChanged);
@@ -122,7 +122,7 @@ namespace Maple.Tests
         public void MediaPlayerTest()
         {
             var mediaplayer = new MediaPlayer(CreateMockMediaPlayer(), CreateOneDataMediaPlayer());
-            mediaplayer.Playlist = new Playlist(_log, CreatePlaylist());
+            mediaplayer.Playlist = new Playlist(_log, new DialogViewModel(), CreatePlaylist());
 
             Assert.IsTrue(mediaplayer.IsValid);
             Assert.IsTrue(mediaplayer.IsChanged);
@@ -140,7 +140,7 @@ namespace Maple.Tests
         public void NewMediaPlayerTest()
         {
             var mediaplayer = new MediaPlayer(CreateMockMediaPlayer(), CreateOneNewDataMediaPlayer());
-            mediaplayer.Playlist = new Playlist(_log, CreatePlaylist());
+            mediaplayer.Playlist = new Playlist(_log, new DialogViewModel(), CreatePlaylist());
 
             Assert.IsTrue(mediaplayer.IsValid);
             Assert.IsTrue(mediaplayer.IsChanged);
@@ -158,7 +158,7 @@ namespace Maple.Tests
         public void MediaPlayerNameChangeTest()
         {
             var mediaplayer = new MediaPlayer(CreateMockMediaPlayer(), CreateOneNewDataMediaPlayer());
-            mediaplayer.Playlist = new Playlist(_log, CreatePlaylist());
+            mediaplayer.Playlist = new Playlist(_log, new DialogViewModel(), CreatePlaylist());
 
             Assert.IsTrue(mediaplayer.IsValid);
             Assert.IsTrue(mediaplayer.IsChanged);

@@ -51,19 +51,40 @@
                     <materialDesign:ColorZone Padding="16"
                                               DockPanel.Dock="Top"
                                               Mode="PrimaryMid">
-                        <TextBlock Text="{Binding Title}" FontWeight="Medium"/>
+                        <DockPanel LastChildFill="False">
+                            <TextBlock DockPanel.Dock="Left"
+                                       FontWeight="Medium"
+                                       Text="{Binding Title}"
+                                       TextTrimming="CharacterEllipsis"
+                                       TextWrapping="NoWrap" />
+                            <Button Command="{Binding CloseDialogCommand}"
+                                    DockPanel.Dock="Right"
+                                    Style="{StaticResource MaterialDesignToolForegroundButton}"
+                                    ToolTip="{local:Translation Close}">
+                                <icons:PackIconMaterial Kind="WindowClose" />
+                            </Button>
+                        </DockPanel>
+
                     </materialDesign:ColorZone>
 
-                    <DockPanel Margin="5" >
+                    <DockPanel Margin="5">
                         <StackPanel Margin="0,5,0,0"
                                     HorizontalAlignment="Right"
                                     DockPanel.Dock="Bottom"
                                     Orientation="Horizontal">
-                            <Button Command="{Binding AcceptDialogCommand}" Content="{local:Translation Accept}" />
+                            <Button Command="{Binding AcceptDialogCommand}"
+                                    Content="{local:Translation Accept}"
+                                    ToolTip="{local:Translation Accept}" />
+                            <Button Command="{Binding CancelDialogCommand}"
+                                    Content="{local:Translation Cancel}"
+                                    ToolTip="{local:Translation Cancel}"
+                                    Visibility="{Binding IsCancelVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         </StackPanel>
 
                         <ContentControl MinWidth="300"
-                                        MinHeight="100"
+                                        MinHeight="169"
+                                        MaxWidth="900"
+                                        MaxHeight="506"
                                         Content="{Binding Context}" />
                     </DockPanel>
                 </DockPanel>
