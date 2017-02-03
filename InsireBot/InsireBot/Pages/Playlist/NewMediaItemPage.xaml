@@ -50,12 +50,12 @@
                                 <DataGrid ItemsSource="{Binding Items}" Style="{StaticResource BaseDataGridStyle}">
                                     <DataGrid.ContextMenu>
                                         <ContextMenu>
-                                            <MenuItem Command="{Binding RemoveCommand}" Header="Remove">
+                                            <MenuItem Command="{Binding RemoveCommand}" Header="{local:Translation Remove}">
                                                 <MenuItem.Icon>
                                                     <icons:PackIconMaterial Kind="PlaylistMinus" Style="{StaticResource IconStyle}" />
                                                 </MenuItem.Icon>
                                             </MenuItem>
-                                            <MenuItem Command="{Binding ClearCommand}" Header="Clear">
+                                            <MenuItem Command="{Binding ClearCommand}" Header="{local:Translation Clear}">
                                                 <MenuItem.Icon>
                                                     <icons:PackIconMaterial Kind="PlaylistRemove" Style="{StaticResource IconStyle}" />
                                                 </MenuItem.Icon>
@@ -65,7 +65,7 @@
 
                                     <DataGrid.Columns>
                                         <!--  Title  -->
-                                        <DataGridTemplateColumn Header="Title" SortMemberPath="Title">
+                                        <DataGridTemplateColumn Header="{local:Translation Title}" SortMemberPath="Title">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Label Content="{Binding Title}" />
@@ -74,7 +74,7 @@
                                         </DataGridTemplateColumn>
 
                                         <!--  Duration  -->
-                                        <DataGridTemplateColumn Header="Duration" SortMemberPath="Duration">
+                                        <DataGridTemplateColumn Header="{local:Translation Duration}" SortMemberPath="Duration">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Label Content="{Binding Duration, StringFormat={}{0:c}}" />
@@ -83,7 +83,7 @@
                                         </DataGridTemplateColumn>
 
                                         <!--  Restricted  -->
-                                        <DataGridTemplateColumn Header="Restriction" SortMemberPath="IsRestricted">
+                                        <DataGridTemplateColumn Header="{local:Translation Restriction}" SortMemberPath="IsRestricted">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <ContentControl Content="{Binding IsRestricted}">
@@ -110,7 +110,6 @@
                         </Grid>
                     </materialDesign:TransitioningContent>
                 </ControlTemplate>
-
             </materialDesign:Card.Resources>
             
             <ContentControl>

@@ -13,6 +13,12 @@
     </Style>
     <!--#endregion-->
 
+    <!--#region TextBox Styles-->
+    <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <!--#endregion-->
+
     <!--#region Control Templates-->
     <ControlTemplate x:Key="BusyTemplate">
         <materialDesign:TransitioningContent>
@@ -38,11 +44,15 @@
     </ControlTemplate>
 
     <ControlTemplate x:Key="IsRestrictedMediaItemTemplate">
-        <icons:PackIconMaterial Kind="BlockHelper" Style="{StaticResource IconStyle}" />
+        <icons:PackIconMaterial Kind="BlockHelper"
+                                Style="{StaticResource IconStyle}"
+                                ToolTip="{local:Translation RestrictionRestricted}" />
     </ControlTemplate>
 
     <ControlTemplate x:Key="IsNotRestrictedMediaItemTemplate">
-        <icons:PackIconMaterial Kind="Check" Style="{StaticResource IconStyle}" />
+        <icons:PackIconMaterial Kind="Check"
+                                Style="{StaticResource IconStyle}"
+                                ToolTip="{local:Translation ResctrictionNone}" />
     </ControlTemplate>
 
     <!--#endregion Control Templates-->
@@ -308,7 +318,7 @@
     <!--#endregion  ToggleButton Styles-->
 
     <!--#region local:DataTemplates-->
-    <DataTemplate DataType="{x:Type local:ExceptionDialogViewModel}" >
+    <DataTemplate DataType="{x:Type local:ExceptionDialogViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*" />
@@ -316,9 +326,10 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <icons:PackIconMaterial Grid.Column="0"
-                                    VerticalAlignment="Center" HorizontalAlignment="Center"
-                                    Style="{StaticResource HugeIconStyle}"
-                                    Kind="Bug" />
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Kind="Bug"
+                                    Style="{StaticResource HugeIconStyle}" />
             <ScrollViewer Grid.Column="2"
                           HorizontalScrollBarVisibility="Auto"
                           VerticalScrollBarVisibility="Hidden">
@@ -339,9 +350,10 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <icons:PackIconMaterial Grid.Column="0"
-                                    VerticalAlignment="Center" HorizontalAlignment="Center"
-                                    Style="{StaticResource HugeIconStyle}"
-                                    Kind="InformationOutline" />
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Kind="InformationOutline"
+                                    Style="{StaticResource HugeIconStyle}" />
             <ScrollViewer Grid.Column="2"
                           HorizontalScrollBarVisibility="Auto"
                           VerticalScrollBarVisibility="Hidden">
@@ -390,9 +402,9 @@
                            TextWrapping="NoWrap" />
                 <TextBlock Text="{Binding Description}"
                            TextTrimming="CharacterEllipsis"
-                           TextWrapping="NoWrap" >
+                           TextWrapping="NoWrap">
                     <TextBlock.Style>
-                        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                        <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="TextBlock">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Description}" Value="">
                                     <Setter Property="Visibility" Value="Collapsed" />

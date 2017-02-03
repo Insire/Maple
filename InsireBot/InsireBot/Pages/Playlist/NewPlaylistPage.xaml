@@ -32,7 +32,6 @@
 
                             <TextBox Grid.Row="0"
                                      Grid.Column="0"
-                                     VerticalAlignment="Center"
                                      VerticalContentAlignment="Center"
                                      AcceptsReturn="True"
                                      Text="{Binding Source, UpdateSourceTrigger=PropertyChanged}">
@@ -44,6 +43,7 @@
                             <Button Grid.Row="0"
                                     Grid.Column="2"
                                     Command="{Binding ParseCommand}"
+                                    ToolTip="{local:Translation Parse}"
                                     Style="{StaticResource ComputeButtonStyle}" />
 
                             <Border Grid.Row="2"
@@ -53,12 +53,12 @@
                                 <DataGrid ItemsSource="{Binding Items}" Style="{StaticResource BaseDataGridStyle}">
                                     <DataGrid.ContextMenu>
                                         <ContextMenu>
-                                            <MenuItem Command="{Binding RemoveCommand}" Header="Remove">
+                                            <MenuItem Command="{Binding RemoveCommand}" Header="{local:Translation Remove}">
                                                 <MenuItem.Icon>
                                                     <icons:PackIconMaterial Kind="PlaylistMinus" Style="{StaticResource IconStyle}" />
                                                 </MenuItem.Icon>
                                             </MenuItem>
-                                            <MenuItem Command="{Binding ClearCommand}" Header="Clear">
+                                            <MenuItem Command="{Binding ClearCommand}" Header="{local:Translation Clear}">
                                                 <MenuItem.Icon>
                                                     <icons:PackIconMaterial Kind="PlaylistRemove" Style="{StaticResource IconStyle}" />
                                                 </MenuItem.Icon>
@@ -69,7 +69,7 @@
                                     <DataGrid.Columns>
 
                                         <!--  Title  -->
-                                        <DataGridTemplateColumn Header="Title" SortMemberPath="Title">
+                                        <DataGridTemplateColumn Header="{local:Translation Title}" SortMemberPath="Title">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />
@@ -78,7 +78,7 @@
                                         </DataGridTemplateColumn>
 
                                         <!--  Count  -->
-                                        <DataGridTemplateColumn Header="Count" SortMemberPath="ItemCount">
+                                        <DataGridTemplateColumn Header="{local:Translation Count}" SortMemberPath="ItemCount">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding ItemCount, UpdateSourceTrigger=PropertyChanged}" />
@@ -87,7 +87,7 @@
                                         </DataGridTemplateColumn>
 
                                         <!--  PrivacyStatus  -->
-                                        <DataGridTemplateColumn Header="Privacy" SortMemberPath="PrivacyStatus">
+                                        <DataGridTemplateColumn Header="{local:Translation Restriction}" SortMemberPath="PrivacyStatus">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding PrivacyStatus, UpdateSourceTrigger=PropertyChanged}" />
@@ -100,9 +100,8 @@
                         </Grid>
                     </materialDesign:TransitioningContent>
                 </ControlTemplate>
-
-
             </materialDesign:Card.Resources>
+            
             <ContentControl>
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">

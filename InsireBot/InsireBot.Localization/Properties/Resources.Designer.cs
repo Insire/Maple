@@ -106,11 +106,20 @@ namespace Maple.Localization.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Schliessen.
+        ///   Looks up a localized string similar to Schließen.
         /// </summary>
         public static string Close {
             get {
                 return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Anzahl.
+        /// </summary>
+        public static string Count {
+            get {
+                return ResourceManager.GetString("Count", resourceCulture);
             }
         }
         
@@ -147,6 +156,15 @@ namespace Maple.Localization.Properties {
         public static string DisposingState {
             get {
                 return ResourceManager.GetString("DisposingState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dauer.
+        /// </summary>
+        public static string Duration {
+            get {
+                return ResourceManager.GetString("Duration", resourceCulture);
             }
         }
         
@@ -205,6 +223,15 @@ namespace Maple.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ort.
+        /// </summary>
+        public static string Location {
+            get {
+                return ResourceManager.GetString("Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Standardmediaplayer.
         /// </summary>
         public static string MainMediaplayer {
@@ -250,11 +277,29 @@ namespace Maple.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Weiter.
+        /// </summary>
+        public static string Next {
+            get {
+                return ResourceManager.GetString("Next", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Einstellungen.
         /// </summary>
         public static string Options {
             get {
                 return ResourceManager.GetString("Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Analysieren.
+        /// </summary>
+        public static string Parse {
+            get {
+                return ResourceManager.GetString("Parse", resourceCulture);
             }
         }
         
@@ -273,6 +318,33 @@ namespace Maple.Localization.Properties {
         public static string PlaybackMode {
             get {
                 return ResourceManager.GetString("PlaybackMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Alle Titel wiederholen.
+        /// </summary>
+        public static string PlaybackModeAll {
+            get {
+                return ResourceManager.GetString("PlaybackModeAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keinen Titel wiederholen.
+        /// </summary>
+        public static string PlaybackModeNone {
+            get {
+                return ResourceManager.GetString("PlaybackModeNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Einen Titel wiederholen.
+        /// </summary>
+        public static string PlaybackModeOne {
+            get {
+                return ResourceManager.GetString("PlaybackModeOne", resourceCulture);
             }
         }
         
@@ -313,11 +385,47 @@ namespace Maple.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zurück.
+        /// </summary>
+        public static string Previous {
+            get {
+                return ResourceManager.GetString("Previous", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Entfernen.
         /// </summary>
         public static string Remove {
             get {
                 return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keine Beschränkung.
+        /// </summary>
+        public static string ResctrictionNone {
+            get {
+                return ResourceManager.GetString("ResctrictionNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zugriffsbeschränkung.
+        /// </summary>
+        public static string Restriction {
+            get {
+                return ResourceManager.GetString("Restriction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kein Zugriff.
+        /// </summary>
+        public static string RestrictionRestricted {
+            get {
+                return ResourceManager.GetString("RestrictionRestricted", resourceCulture);
             }
         }
         
@@ -372,6 +480,15 @@ namespace Maple.Localization.Properties {
         public static string VideoAdd {
             get {
                 return ResourceManager.GetString("VideoAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lautstärke.
+        /// </summary>
+        public static string Volume {
+            get {
+                return ResourceManager.GetString("Volume", resourceCulture);
             }
         }
         

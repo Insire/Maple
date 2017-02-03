@@ -220,9 +220,48 @@
     <value>Ok</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Schliessen</value>
+    <value>Schließen</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Abbrechen</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Dauer</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Ort</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Weiter</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Zurück</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>Lautstärke</value>
+  </data>
+  <data name="PlaybackModeNone" xml:space="preserve">
+    <value>Keinen Titel wiederholen</value>
+  </data>
+  <data name="PlaybackModeOne" xml:space="preserve">
+    <value>Einen Titel wiederholen</value>
+  </data>
+  <data name="PlaybackModeAll" xml:space="preserve">
+    <value>Alle Titel wiederholen</value>
+  </data>
+  <data name="Restriction" xml:space="preserve">
+    <value>Zugriffsbeschränkung</value>
+  </data>
+  <data name="Parse" xml:space="preserve">
+    <value>Analysieren</value>
+  </data>
+  <data name="ResctrictionNone" xml:space="preserve">
+    <value>Keine Beschränkung</value>
+  </data>
+  <data name="RestrictionRestricted" xml:space="preserve">
+    <value>Kein Zugriff</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Anzahl</value>
   </data>
 </root>

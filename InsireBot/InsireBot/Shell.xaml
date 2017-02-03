@@ -48,7 +48,7 @@
                                    IsOpen="{Binding DialogViewModel.IsOpen}">
             <materialDesign:DialogHost.DialogContent>
                 <DockPanel DataContext="{Binding DialogViewModel}">
-                    <materialDesign:ColorZone Padding="16"
+                    <materialDesign:ColorZone Padding="4"
                                               DockPanel.Dock="Top"
                                               Mode="PrimaryMid">
                         <DockPanel LastChildFill="False">
@@ -61,7 +61,7 @@
                                     DockPanel.Dock="Right"
                                     Style="{StaticResource MaterialDesignToolForegroundButton}"
                                     ToolTip="{local:Translation Close}">
-                                <icons:PackIconMaterial Kind="WindowClose" />
+                                <icons:PackIconMaterial Kind="WindowClose" Style="{StaticResource MiniIconStyle}" />
                             </Button>
                         </DockPanel>
 

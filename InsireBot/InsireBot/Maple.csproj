@@ -102,6 +102,7 @@
       <HintPath>..\packages\MaterialDesignThemes.2.2.1.750\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="NAudio, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.1.8.0\lib\net35\NAudio.dll</HintPath>
       <Private>True</Private>
@@ -234,13 +235,7 @@
     <Compile Include="ViewModel\StatusbarViewModel.cs" />
     <Compile Include="ViewModel\Settings\UIColorsViewModel.cs" />
     <Compile Include="ViewModel\Navigation\Scenes.cs" />
-    <Compile Include="View\MediaPlayerView.xaml.cs">
-      <DependentUpon>MediaPlayerView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModel\MediaPlayer\MediaPlayer.cs" />
-    <Compile Include="View\PlayModeView.xaml.cs">
-      <DependentUpon>PlayModeView.xaml</DependentUpon>
-    </Compile>
     <Page Include="Pages\MediaPlayerPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -293,14 +288,6 @@
       <DependentUpon>Shell.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\MediaPlayerView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\PlayModeView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

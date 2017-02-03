@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -14,7 +15,7 @@ namespace Maple
 
         public IoCWindow() : base()
         {
-            // for compatibility
+            Assert.Fail($"The constructor without parameters of {nameof(IoCWindow)} exists only for compatibility reasons.");
         }
 
         public IoCWindow(ITranslationManager container, UIColorsViewModel vm) : base()

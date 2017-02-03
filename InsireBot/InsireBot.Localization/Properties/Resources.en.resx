@@ -225,4 +225,43 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Duration</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="PlaybackModeNone" xml:space="preserve">
+    <value>Repeat no track</value>
+  </data>
+  <data name="PlaybackModeOne" xml:space="preserve">
+    <value>Reapeat one track</value>
+  </data>
+  <data name="PlaybackModeAll" xml:space="preserve">
+    <value>Repeat all tracks</value>
+  </data>
+  <data name="Restriction" xml:space="preserve">
+    <value>Restriction</value>
+  </data>
+  <data name="Parse" xml:space="preserve">
+    <value>Parse</value>
+  </data>
+  <data name="ResctrictionNone" xml:space="preserve">
+    <value>No resctriction</value>
+  </data>
+  <data name="RestrictionRestricted" xml:space="preserve">
+    <value>No Access</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Count</value>
+  </data>
 </root>
