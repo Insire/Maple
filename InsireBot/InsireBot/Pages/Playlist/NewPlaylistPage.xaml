@@ -18,7 +18,7 @@
                         <materialDesign:TransitioningContent.OpeningEffects>
                             <materialDesign:TransitionEffect Kind="FadeIn" />
                         </materialDesign:TransitioningContent.OpeningEffects>
-                        <Grid Margin="10">
+                        <Grid Margin="{StaticResource DefaultThickness}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Style="{StaticResource BaseColumnDefinitionStyle}" />

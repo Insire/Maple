@@ -59,6 +59,7 @@
     <Compile Include="Mocks\MockLog.cs" />
     <Compile Include="Mocks\MockMediaPlayer.cs" />
     <Compile Include="Mocks\MockTranslationManager.cs" />
+    <Compile Include="Mocks\MockYoutubeParseService.cs" />
     <Compile Include="Repository\MediaPlayerRepositoryTests.cs" />
     <Compile Include="Repository\PlaylistRepositoryTests.cs" />
     <Compile Include="Repository\MediaItemRepositoryTests.cs" />
@@ -77,6 +78,10 @@
     <ProjectReference Include="..\InsireBot.Localization\Maple.Localization.csproj">
       <Project>{A073FC92-90E3-4541-8B52-6F7293187871}</Project>
       <Name>Maple.Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InsireBot.Youtube\Maple.Youtube.csproj">
+      <Project>{B5BE546F-8D9F-4FB9-B235-AF05FD553F9E}</Project>
+      <Name>Maple.Youtube</Name>
     </ProjectReference>
     <ProjectReference Include="..\InsireBot\Maple.csproj">
       <Project>{FBD5595B-6859-4E8E-BDFA-C3169EF34985}</Project>

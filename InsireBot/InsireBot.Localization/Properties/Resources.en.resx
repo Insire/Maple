@@ -264,4 +264,7 @@
   <data name="Count" xml:space="preserve">
     <value>Count</value>
   </data>
+  <data name="DialogOpenAlready" xml:space="preserve">
+    <value>There is already a dialog open. There can only be one</value>
+  </data>
 </root>

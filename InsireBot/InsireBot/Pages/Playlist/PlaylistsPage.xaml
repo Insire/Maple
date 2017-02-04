@@ -4,6 +4,7 @@
                       xmlns:icons="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks"
                       xmlns:local="clr-namespace:Maple"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    
     <local:IoCUserControl.Resources>
         <local:BindingProxy x:Key="DetailViewToggleButtonProxy" Data="False" />
 

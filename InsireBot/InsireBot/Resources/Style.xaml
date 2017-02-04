@@ -3,9 +3,20 @@
                                 xmlns:icons="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks"
                                 xmlns:local="clr-namespace:Maple"
                                 xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-                                xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls">
+                                xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+                                xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!--  Remember: the order of these styles matters, since they depend on each other. If one references for a style not yet declared, you get random RuntimeErrors  -->
+
+    <!--#region Default values-->
+    <sys:Double x:Key="DefaultSpacing">5</sys:Double>
+    <GridLength x:Key="DefaultGridLength">5</GridLength>
+    <Thickness x:Key="DefaultThickness"
+               Bottom="{StaticResource DefaultSpacing}"
+               Left="{StaticResource DefaultSpacing}"
+               Right="{StaticResource DefaultSpacing}"
+               Top="{StaticResource DefaultSpacing}" />
+    <!--  endregion  -->
 
     <!--#region TextBlock Styles-->
     <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="TextBlock">
@@ -83,11 +94,11 @@
     </Style>
 
     <Style x:Key="BaseRowDefinitionStyle" TargetType="RowDefinition">
-        <Setter Property="Height" Value="10" />
+        <Setter Property="Height" Value="{StaticResource DefaultGridLength}" />
     </Style>
 
     <Style x:Key="BaseColumnDefinitionStyle" TargetType="ColumnDefinition">
-        <Setter Property="Width" Value="10" />
+        <Setter Property="Width" Value="{StaticResource DefaultGridLength}" />
     </Style>
     <!--#endregion  Icon Styles-->
 
@@ -318,6 +329,8 @@
     <!--#endregion  ToggleButton Styles-->
 
     <!--#region local:DataTemplates-->
+
+    <!--#region Dialogs-->
     <DataTemplate DataType="{x:Type local:ExceptionDialogViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -337,10 +350,6 @@
             </ScrollViewer>
         </Grid>
     </DataTemplate>
-
-    <DataTemplate DataType="{x:Type local:FileBrowserDialogViewModel}" />
-
-    <DataTemplate DataType="{x:Type local:FolderBrowserDialogViewModel}" />
 
     <DataTemplate DataType="{x:Type local:MessageDialogViewModel}">
         <Grid>
@@ -362,7 +371,104 @@
         </Grid>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type local:FileBrowserDialogViewModel}" />
+
+    <DataTemplate DataType="{x:Type local:FolderBrowserDialogViewModel}" />
+
     <DataTemplate DataType="{x:Type local:ProgressDialogViewModel}" />
+    <!--#endregion-->
+
+    <DataTemplate DataType="{x:Type local:CreateMediaItemViewModel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Style="{StaticResource BaseColumnDefinitionStyle}" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Style="{StaticResource BaseRowDefinitionStyle}" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBox Grid.Row="0"
+                     Grid.Column="0"
+                     VerticalAlignment="Center"
+                     VerticalContentAlignment="Center"
+                     Text="{Binding Source, UpdateSourceTrigger=PropertyChanged}" />
+
+            <Button Grid.Row="0"
+                    Grid.Column="2"
+                    Command="{Binding ParseCommand}"
+                    Style="{StaticResource ComputeButtonStyle}" />
+
+            <Border Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    BorderThickness="0">
+
+                <DataGrid ItemsSource="{Binding Items}" Style="{StaticResource BaseDataGridStyle}">
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding RemoveCommand}" Header="{local:Translation Remove}">
+                                <MenuItem.Icon>
+                                    <icons:PackIconMaterial Kind="PlaylistMinus" Style="{StaticResource IconStyle}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Command="{Binding ClearCommand}" Header="{local:Translation Clear}">
+                                <MenuItem.Icon>
+                                    <icons:PackIconMaterial Kind="PlaylistRemove" Style="{StaticResource IconStyle}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+
+                    <DataGrid.Columns>
+                        <!--  Title  -->
+                        <DataGridTemplateColumn Header="{local:Translation Title}" SortMemberPath="Title">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Title}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!--  Duration  -->
+                        <DataGridTemplateColumn Header="{local:Translation Duration}" SortMemberPath="Duration">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Duration, StringFormat={}{0:c}}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!--  Restricted  -->
+                        <DataGridTemplateColumn Header="{local:Translation Restriction}" SortMemberPath="IsRestricted">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ContentControl Content="{Binding IsRestricted}">
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsRestricted}" Value="False">
+                                                        <Setter Property="Template" Value="{StaticResource IsNotRestrictedMediaItemTemplate}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsRestricted}" Value="True">
+                                                        <Setter Property="Template" Value="{StaticResource IsNotRestrictedMediaItemTemplate}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
+    </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:Playlist}">
         <Grid>

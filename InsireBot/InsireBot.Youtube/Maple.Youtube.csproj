@@ -92,6 +92,10 @@
       <Project>{21fa5854-0692-42e2-924e-a38cf3c7ff71}</Project>
       <Name>Maple.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\InsireBot.Data\Maple.Data.csproj">
+      <Project>{B3CD46BE-3C08-4BAE-AE60-A6D84A62400C}</Project>
+      <Name>Maple.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

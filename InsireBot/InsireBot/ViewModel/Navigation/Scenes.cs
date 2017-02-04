@@ -22,10 +22,8 @@ namespace Maple
         public Scenes(ITranslationManager manager,
                         IBotLog log,
                         DirectorViewModel directorViewModel,
-                        CreateMediaItemViewModel createMediaItemViewModel,
                         MediaPlayers mediaPlayersViewModel,
                         Playlists playlistsViewModel,
-                        CreatePlaylistViewModel createPlaylistViewModel,
                         UIColorsViewModel uIColorsViewModel,
                         OptionsViewModel optionsViewModel)
         {
@@ -47,15 +45,6 @@ namespace Maple
 
                 new Scene(_manager)
                 {
-                    Content = new NewMediaItemPage(_manager),
-                    Key = nameof(Resources.VideoAdd),
-                    GetDataContext = () => createMediaItemViewModel,
-                    IsSelected = false,
-                    Sequence = 200,
-                },
-
-                new Scene(_manager)
-                {
                     Content = new PlaylistsPage(_manager),
                     Key = nameof(Resources.Playlists),
                     GetDataContext = () => playlistsViewModel,
@@ -63,14 +52,14 @@ namespace Maple
                     Sequence = 300,
                 },
 
-                new Scene(_manager)
-                {
-                    Content = new NewPlaylistPage(_manager),
-                    Key = nameof(Resources.PlaylistAdd),
-                    GetDataContext = () => createPlaylistViewModel,
-                    IsSelected = false,
-                    Sequence = 400,
-                },
+                //new Scene(_manager)
+                //{
+                //    Content = new NewPlaylistPage(_manager),
+                //    Key = nameof(Resources.PlaylistAdd),
+                //    GetDataContext = () => createPlaylistViewModel,
+                //    IsSelected = false,
+                //    Sequence = 400,
+                //},
 
                 new Scene(_manager)
                 {

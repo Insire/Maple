@@ -78,8 +78,6 @@ namespace Maple
             _container.Register<StatusbarViewModel>(reuse: Reuse.Singleton);
 
             _container.Register<UrlParseService>();
-            _container.Register<CreateMediaItemViewModel>();
-            _container.Register<CreatePlaylistViewModel>();
 
             _container.Register<ITranslationProvider, ResxTranslationProvider>(reuse: Reuse.Singleton);
             _container.Register<ITranslationManager, TranslationManager>(reuse: Reuse.Singleton);

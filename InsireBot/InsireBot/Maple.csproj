@@ -213,9 +213,6 @@
     <Compile Include="Pages\Playlist\NewMediaItemOptionsPage.xaml.cs">
       <DependentUpon>NewMediaItemOptionsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Playlist\NewMediaItemPage.xaml.cs">
-      <DependentUpon>NewMediaItemPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\Playlist\NewPlaylistOptionsPage.xaml.cs">
       <DependentUpon>NewPlaylistOptionsPage.xaml</DependentUpon>
     </Compile>
@@ -245,10 +242,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Playlist\NewMediaItemOptionsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\Playlist\NewMediaItemPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -307,6 +300,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="..\Resources\client_secret.json">
+      <Link>Resources\client_secret.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

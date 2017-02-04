@@ -12,6 +12,7 @@ namespace Maple.Data
             {
                 Title = Resources.New,
                 Description = string.Empty,
+                Location = string.Empty,
                 MediaItems = new List<MediaItem>(),
                 RepeatMode = 0,
                 IsShuffeling = false,
@@ -21,6 +22,7 @@ namespace Maple.Data
 
         public string Title { get; set; }
         public string Description { get; set; }
+        public string Location { get; set; }
         public int RepeatMode { get; set; }
         public bool IsShuffeling { get; set; }
         public PrivacyStatus PrivacyStatus { get; set; }

@@ -133,6 +133,15 @@ namespace Maple.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Es ist bereits ein Dialog geöffnet. Es kann kein Weiterer geöffnet werden.
+        /// </summary>
+        public static string DialogOpenAlready {
+            get {
+                return ResourceManager.GetString("DialogOpenAlready", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dirigent.
         /// </summary>
         public static string Director {

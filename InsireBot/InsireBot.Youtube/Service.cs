@@ -64,9 +64,9 @@ namespace Maple.Youtube
             }
         }
 
-        public async Task<IList<Core.Playlist>> GetPlaylists(string playlistId)
+        public async Task<List<Data.Playlist>> GetPlaylists(string playlistId)
         {
-            var result = new List<Core.Playlist>();
+            var result = new List<Data.Playlist>();
             var youtubeService = await GetService();
 
             var request = youtubeService.Playlists.List("snippet,contentDetails");
@@ -79,11 +79,11 @@ namespace Maple.Youtube
                 var nextPageToken = "";
                 while (nextPageToken != null)
                 {
-                    var playlist = new Core.Playlist
+                    var playlist = new Data.Playlist
                     {
                         Title = item.Snippet.Title,
                         Location = $"{_playListBaseUrl}{item.Id}",
-                        IsRestricted = (!string.IsNullOrEmpty(item.Status?.PrivacyStatus)) ? item.Status?.PrivacyStatus == "none" : false,
+                        PrivacyStatus = string.IsNullOrEmpty(item.Status?.PrivacyStatus) ? PrivacyStatus.None : PrivacyStatus.Restricted,
                     };
 
                     result.Add(playlist);
@@ -95,7 +95,7 @@ namespace Maple.Youtube
             return result;
         }
 
-        public async Task CreatePlaylist(Core.Playlist playlist, bool publicPlaylist = true)
+        public async Task CreatePlaylist(Data.Playlist playlist, bool publicPlaylist = true)
         {
             var youtubeService = await GetService();
 
@@ -137,7 +137,21 @@ namespace Maple.Youtube
             return result;
         }
 
+        public static string GetVideoId(Data.MediaItem item)
+        {
+            var url = new Uri(item.Location);
+            var result = HttpUtility.ParseQueryString(url.Query).Get("v");
+            return result;
+        }
+
         public static string GetPlaylistId(Core.Playlist list)
+        {
+            var url = new Uri(list.Location);
+            var result = HttpUtility.ParseQueryString(url.Query).Get("list");
+            return result;
+        }
+
+        public static string GetPlaylistId(Data.Playlist list)
         {
             var url = new Uri(list.Location);
             var result = HttpUtility.ParseQueryString(url.Query).Get("list");
@@ -177,9 +191,9 @@ namespace Maple.Youtube
 
         //TODO writing a async sync method for what i get from youtube vs that i generate myself as playlist
 
-        public async Task<IList<Core.MediaItem>> GetVideo(string videoId)
+        public async Task<IList<Data.MediaItem>> GetVideo(string videoId)
         {
-            var result = new List<Core.MediaItem>();
+            var result = new List<Data.MediaItem>();
             var youtubeService = await GetService();
 
             var request = youtubeService.Videos.List("snippet,contentDetails");
@@ -192,12 +206,12 @@ namespace Maple.Youtube
                 var nextPageToken = "";
                 while (nextPageToken != null)
                 {
-                    var video = new Core.MediaItem
+                    var video = new Data.MediaItem
                     {
                         Title = item.Snippet.Title,
                         Location = $"{_videoBaseUrl}{videoId}",
                         Duration = XmlConvert.ToTimeSpan(item.ContentDetails.Duration).Ticks,
-                        IsRestricted = item.ContentDetails.CountryRestriction?.Allowed == true,
+                        PrivacyStatus = (item.ContentDetails.CountryRestriction?.Allowed ?? true) ? (int)PrivacyStatus.None : (int)PrivacyStatus.Restricted,
                     };
 
                     result.Add(video);

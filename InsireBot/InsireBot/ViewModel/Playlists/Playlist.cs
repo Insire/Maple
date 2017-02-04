@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Maple
@@ -131,17 +132,19 @@ namespace Maple
                 RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
                 History = new Stack<int>();
 
-                LoadFromFileCommand = new RelayCommand(LoadFromFile, () => CanLoadFromFile());
-                LoadFromFolderCommand = new RelayCommand(LoadFromFolder, () => CanLoadFromFolder());
-                LoadFromUrlCommand = new RelayCommand(LoadFromUrl, () => CanLoadFromUrl());
+                LoadFromFileCommand = new AsyncRelayCommand(LoadFromFile, () => CanLoadFromFile());
+                LoadFromFolderCommand = new AsyncRelayCommand(LoadFromFolder, () => CanLoadFromFolder());
+                LoadFromUrlCommand = new AsyncRelayCommand(LoadFromUrl, () => CanLoadFromUrl());
             }
         }
 
-        private void LoadFromUrl()
+        private async Task LoadFromUrl()
         {
             using (_busyStack.GetToken())
             {
-                _dialogViewModel.ShowFolderBrowserDialog();
+                var items = await _dialogViewModel.ShowUrlParseDialog();
+                var result = items.Select(p => new MediaItemViewModel(_log, p));
+                Items.AddRange(result);
             }
         }
 
@@ -150,11 +153,11 @@ namespace Maple
             return !IsBusy;
         }
 
-        private void LoadFromFolder()
+        private Task LoadFromFolder()
         {
             using (_busyStack.GetToken())
             {
-                _dialogViewModel.ShowFolderBrowserDialog();
+                return _dialogViewModel.ShowFolderBrowserDialog();
             }
         }
 
@@ -163,11 +166,11 @@ namespace Maple
             return !IsBusy;
         }
 
-        private void LoadFromFile()
+        private Task LoadFromFile()
         {
             using (_busyStack.GetToken())
             {
-                _dialogViewModel.ShowFileBrowserDialog();
+                return _dialogViewModel.ShowFileBrowserDialog();
             }
         }
 
