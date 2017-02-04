@@ -8,6 +8,7 @@ namespace Maple.Data
     public class PlaylistsRepository : IPlaylistsRepository
     {
         private readonly IMediaItemRepository _mediaItemRepository;
+
         public string Path { get; }
 
         public PlaylistsRepository(DBConnection connection, IMediaItemRepository mediaItemRepository)
@@ -113,11 +114,12 @@ namespace Maple.Data
 
             using (var connection = SqLiteConnectionFactory.Get(Path))
             {
-                var playlist =  connection
+                var playlist = connection
                     .Query<Playlist>(sql, new { Id = id })
                     .SingleOrDefault();
 
-                playlist.MediaItems = _mediaItemRepository.GetAllByPlaylistId(playlist.Id);
+                if (playlist != null)
+                    playlist.MediaItems = _mediaItemRepository.GetAllByPlaylistId(playlist.Id);
 
                 return playlist;
             }
