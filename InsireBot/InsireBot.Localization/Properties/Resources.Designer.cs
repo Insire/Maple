@@ -502,6 +502,24 @@ namespace Maple.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Youtubeservice wird geladen.
+        /// </summary>
+        public static string YoutubeLoad {
+            get {
+                return ResourceManager.GetString("YoutubeLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Youtubeservice geladen.
+        /// </summary>
+        public static string YoutubeLoaded {
+            get {
+                return ResourceManager.GetString("YoutubeLoaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Eine Widergabeliste von Youtube importieren.
         /// </summary>
         public static string YoutubePlaylistImport {

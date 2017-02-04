@@ -10,11 +10,14 @@ namespace Maple.Tests
     public class PlaylistRepositoryTests
     {
         private static PlaylistsRepository _repository;
+        private static IMediaItemRepository _mediaPlayerRepository;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            _repository = new PlaylistsRepository(new DBConnection(Path.Combine(context.DeploymentDirectory, "PlaylistRepositoryTests")));
+            var connection = new DBConnection(Path.Combine(context.DeploymentDirectory, "PlaylistRepositoryTests"));
+            _mediaPlayerRepository = new MediaItemRepository(connection);
+            _repository = new PlaylistsRepository(connection, _mediaPlayerRepository);
         }
 
         [ClassCleanup]

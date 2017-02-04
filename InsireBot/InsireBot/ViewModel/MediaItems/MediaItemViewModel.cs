@@ -1,4 +1,5 @@
 ﻿using Maple.Core;
+using Maple.Data;
 using Maple.Localization.Properties;
 using System;
 using System.Collections.Generic;
@@ -7,10 +8,11 @@ using System.ComponentModel.DataAnnotations;
 namespace Maple
 {
     public class MediaItemViewModel : TrackingBaseViewModel<Data.MediaItem>,
-                                        IMediaItem, ISequence, IIdentifier,
+                                        IMediaItem, ISequence, IIdentifier, ISaveable,
                                         IValidatableTrackingObject, IValidatableObject
     {
         private readonly IBotLog _log;
+        private readonly IMediaItemRepository _mediaItemRepository;
 
         public int IdOriginalValue => GetOriginalValue<int>(nameof(Id));
         private int _id;
@@ -28,12 +30,12 @@ namespace Maple
             set { SetValue(ref _sequence, value, Changed: () => Model.Sequence = value); }
         }
 
-        public string TitleOriginalValue => GetOriginalValue<string>(nameof(Title));
-        private string _title;
-        public string Title
+        public int PlaylistIdOriginalValue => GetOriginalValue<int>(nameof(PlaylistId));
+        private int _playlistId;
+        public int PlaylistId
         {
-            get { return _title; }
-            set { SetValue(ref _title, value, Changed: () => Model.Title = value); }
+            get { return _playlistId; }
+            set { SetValue(ref _playlistId, value, Changed: () => Model.PlaylistId = value); }
         }
 
         public TimeSpan DurationOriginalValue => GetOriginalValue<TimeSpan>(nameof(Duration));
@@ -52,6 +54,22 @@ namespace Maple
             private set { SetValue(ref _privacyStatus, value, Changed: () => Model.PrivacyStatus = (int)value); }
         }
 
+        public string TitleOriginalValue => GetOriginalValue<string>(nameof(Title));
+        private string _title;
+        public string Title
+        {
+            get { return _title; }
+            set { SetValue(ref _title, value, Changed: () => Model.Title = value); }
+        }
+
+        public string DescriptionOriginalValue => GetOriginalValue<string>(nameof(Description));
+        private string _description;
+        public string Description
+        {
+            get { return _description; }
+            set { SetValue(ref _description, value, Changed: () => Model.Description = value); }
+        }
+
         public string LocationOriginalValue => GetOriginalValue<string>(nameof(Location));
         private string _location;
         public string Location
@@ -67,15 +85,18 @@ namespace Maple
             set { SetValue(ref _isSelected, value); }
         }
 
-        public MediaItemViewModel(IBotLog log, Data.MediaItem model) : base(model)
+        public MediaItemViewModel(IBotLog log, IMediaItemRepository mediaItemRepository, Data.MediaItem model) : base(model)
         {
             _log = log;
+            _mediaItemRepository = mediaItemRepository;
         }
 
         protected override void InitializeComplexProperties(Data.MediaItem model)
         {
             Id = model.Id;
+            PlaylistId = model.PlaylistId;
             Location = model.Location;
+            Description = model.Description;
             Title = model.Title;
             Sequence = model.Sequence;
             Duration = TimeSpan.FromTicks(model.Duration);
@@ -95,6 +116,15 @@ namespace Maple
 
             if (string.IsNullOrWhiteSpace(Location))
                 yield return new ValidationResult($"{nameof(Location)} {Resources.IsRequired}", new[] { nameof(Location) });
+        }
+
+        public void Save()
+        {
+            if (!IsValid || !IsChanged)
+                return;
+
+            _mediaItemRepository.Save(Model);
+            AcceptChanges();
         }
     }
 }

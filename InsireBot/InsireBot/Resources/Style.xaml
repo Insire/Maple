@@ -16,6 +16,18 @@
                Left="{StaticResource DefaultSpacing}"
                Right="{StaticResource DefaultSpacing}"
                Top="{StaticResource DefaultSpacing}" />
+
+    <Thickness x:Key="LeftRightThickness"
+               Bottom="0"
+               Left="{StaticResource DefaultSpacing}"
+               Right="{StaticResource DefaultSpacing}"
+               Top="0" />
+
+    <Thickness x:Key="TopBottomThickness"
+               Bottom="{StaticResource DefaultSpacing}"
+               Left="0"
+               Right="0"
+               Top="{StaticResource DefaultSpacing}" />
     <!--  endregion  -->
 
     <!--#region TextBlock Styles-->
@@ -29,44 +41,6 @@
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
     <!--#endregion-->
-
-    <!--#region Control Templates-->
-    <ControlTemplate x:Key="BusyTemplate">
-        <materialDesign:TransitioningContent>
-            <materialDesign:TransitioningContent.OpeningEffects>
-                <materialDesign:TransitionEffect Kind="FadeIn" />
-            </materialDesign:TransitioningContent.OpeningEffects>
-            <Grid>
-                <ProgressBar HorizontalAlignment="Center"
-                             VerticalAlignment="Center"
-                             IsIndeterminate="True"
-                             Style="{StaticResource MaterialDesignCircularProgressBar}"
-                             Value="0" />
-            </Grid>
-        </materialDesign:TransitioningContent>
-    </ControlTemplate>
-
-    <ControlTemplate x:Key="IsMediaPlayerSilentTemplate">
-        <icons:PackIconMaterial Kind="SpeakerOff" Style="{Binding IconStyle}" />
-    </ControlTemplate>
-
-    <ControlTemplate x:Key="IsMediaPlayerNotSilentTemplate">
-        <icons:PackIconMaterial Kind="Speaker" Style="{Binding IconStyle}" />
-    </ControlTemplate>
-
-    <ControlTemplate x:Key="IsRestrictedMediaItemTemplate">
-        <icons:PackIconMaterial Kind="BlockHelper"
-                                Style="{StaticResource IconStyle}"
-                                ToolTip="{local:Translation RestrictionRestricted}" />
-    </ControlTemplate>
-
-    <ControlTemplate x:Key="IsNotRestrictedMediaItemTemplate">
-        <icons:PackIconMaterial Kind="Check"
-                                Style="{StaticResource IconStyle}"
-                                ToolTip="{local:Translation ResctrictionNone}" />
-    </ControlTemplate>
-
-    <!--#endregion Control Templates-->
 
     <!--#region  Icon Styles-->
     <Style x:Key="HugeIconStyle" TargetType="icons:PackIconMaterial">
@@ -328,6 +302,44 @@
     </Style>
     <!--#endregion  ToggleButton Styles-->
 
+    <!--#region Control Templates-->
+    <ControlTemplate x:Key="BusyTemplate">
+        <materialDesign:TransitioningContent>
+            <materialDesign:TransitioningContent.OpeningEffects>
+                <materialDesign:TransitionEffect Kind="FadeIn" />
+            </materialDesign:TransitioningContent.OpeningEffects>
+            <Grid>
+                <ProgressBar HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             IsIndeterminate="True"
+                             Style="{StaticResource MaterialDesignCircularProgressBar}"
+                             Value="0" />
+            </Grid>
+        </materialDesign:TransitioningContent>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="IsMediaPlayerSilentTemplate">
+        <icons:PackIconMaterial Kind="SpeakerOff" Style="{Binding IconStyle}" />
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="IsMediaPlayerNotSilentTemplate">
+        <icons:PackIconMaterial Kind="Speaker" Style="{Binding IconStyle}" />
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="IsRestrictedMediaItemTemplate">
+        <icons:PackIconMaterial Kind="BlockHelper"
+                                Style="{StaticResource IconStyle}"
+                                ToolTip="{local:Translation RestrictionRestricted}" />
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="IsNotRestrictedMediaItemTemplate">
+        <icons:PackIconMaterial Kind="Check"
+                                Style="{StaticResource IconStyle}"
+                                ToolTip="{local:Translation ResctrictionNone}" />
+    </ControlTemplate>
+
+    <!--#endregion Control Templates-->
+
     <!--#region local:DataTemplates-->
 
     <!--#region Dialogs-->
@@ -335,7 +347,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*" />
-                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <icons:PackIconMaterial Grid.Column="0"
@@ -355,7 +367,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*" />
-                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <icons:PackIconMaterial Grid.Column="0"
@@ -443,19 +455,19 @@
                         </DataGridTemplateColumn>
 
                         <!--  Restricted  -->
-                        <DataGridTemplateColumn Header="{local:Translation Restriction}" SortMemberPath="IsRestricted">
+                        <DataGridTemplateColumn Header="{local:Translation Restriction}" SortMemberPath="PrivacyStatus">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ContentControl Content="{Binding IsRestricted}">
+                                    <ContentControl Content="{Binding PrivacyStatus}">
                                         <ContentControl.Style>
                                             <Style TargetType="ContentControl">
                                                 <Setter Property="HorizontalAlignment" Value="Center" />
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsRestricted}" Value="False">
+                                                    <DataTrigger Binding="{Binding PrivacyStatus}" Value="0">
                                                         <Setter Property="Template" Value="{StaticResource IsNotRestrictedMediaItemTemplate}" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding IsRestricted}" Value="True">
-                                                        <Setter Property="Template" Value="{StaticResource IsNotRestrictedMediaItemTemplate}" />
+                                                    <DataTrigger Binding="{Binding PrivacyStatus}" Value="1">
+                                                        <Setter Property="Template" Value="{StaticResource IsRestrictedMediaItemTemplate}" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -482,20 +494,7 @@
                                     Width="32"
                                     Height="32"
                                     VerticalAlignment="Center"
-                                    Kind="FormatListBulleted">
-                <icons:PackIconMaterial.Style>
-                    <Style TargetType="icons:PackIconMaterial">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsActive}" Value="True">
-                                <Setter Property="Kind" Value="PlaylistPlay" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding IsActive}" Value="False">
-                                <Setter Property="Kind" Value="FormatListBulleted" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </icons:PackIconMaterial.Style>
-            </icons:PackIconMaterial>
+                                    Kind="FormatListBulleted" />
 
             <StackPanel Grid.Column="1"
                         Margin="10,0"
@@ -535,33 +534,30 @@
                                     Width="32"
                                     Height="32"
                                     VerticalAlignment="Center"
-                                    Kind="FormatListBulleted">
-                <icons:PackIconMaterial.Style>
-                    <Style TargetType="icons:PackIconMaterial">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding PrivacyStatus}" Value="None">
-                                <Setter Property="Kind" Value="Eye" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding PrivacyStatus}" Value="Restricted">
-                                <Setter Property="Kind" Value="EyeOff" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </icons:PackIconMaterial.Style>
-            </icons:PackIconMaterial>
+                                    Kind="File" />
 
             <StackPanel Grid.Column="1"
                         Margin="10,0"
                         VerticalAlignment="Center"
                         Orientation="Vertical">
                 <TextBlock FontSize="22"
-                           FontWeight="DemiBold"
+                           FontWeight="Medium"
                            Text="{Binding Title}"
                            TextTrimming="CharacterEllipsis"
                            TextWrapping="NoWrap" />
                 <TextBlock Text="{Binding Description}"
                            TextTrimming="CharacterEllipsis"
-                           TextWrapping="NoWrap" />
+                           TextWrapping="NoWrap">
+                    <TextBlock.Style>
+                        <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Description}" Value="">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
             </StackPanel>
         </Grid>
     </DataTemplate>

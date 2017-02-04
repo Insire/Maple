@@ -82,20 +82,20 @@
             <materialDesign:Card VerticalAlignment="Stretch">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="5" />
+                        <RowDefinition Height="{StaticResource DefaultGridLength}" />
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="5" />
+                        <RowDefinition Height="{StaticResource DefaultGridLength}" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="5" />
+                        <RowDefinition Height="{StaticResource DefaultGridLength}" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
                     </Grid.ColumnDefinitions>
 
                     <!--  Playlist  -->
@@ -160,7 +160,7 @@
                             <DataGridTemplateColumn Header="{local:Translation Restriction}" SortMemberPath="IsRestricted">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ContentControl Content="{Binding IsRestricted}" Style="{StaticResource RestrictedMediaItemStyle}" />
+                                        <ContentControl Content="{Binding PrivacyStatus}" Style="{StaticResource RestrictedMediaItemStyle}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

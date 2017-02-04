@@ -18,20 +18,20 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
+                    <RowDefinition Height="{StaticResource DefaultGridLength}" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
+                    <RowDefinition Height="{StaticResource DefaultGridLength}" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
+                    <RowDefinition Height="{StaticResource DefaultGridLength}" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
+                    <RowDefinition Height="{StaticResource DefaultGridLength}" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="5" />
+                    <RowDefinition Height="{StaticResource DefaultGridLength}" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
@@ -98,18 +98,18 @@
         <materialDesign:Card VerticalAlignment="Stretch">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="5" />
+                    <RowDefinition Height="{StaticResource DefaultGridLength}" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="5" />
+                    <RowDefinition Height="{StaticResource DefaultGridLength}" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="5" />
+                    <RowDefinition Height="{StaticResource DefaultGridLength}" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
                     <ColumnDefinition Width="0.5*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
                 </Grid.ColumnDefinitions>
 
                 <!--  Playlists  -->
@@ -151,7 +151,7 @@
                               Grid.RowSpan="3"
                               Grid.Column="2"
                               Width="5"
-                              Margin="5,0"
+                              Margin="{StaticResource LeftRightThickness}"
                               HorizontalAlignment="Center"
                               VerticalAlignment="Stretch" />
 

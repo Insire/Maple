@@ -25,7 +25,7 @@ namespace Maple.Data
         public string Location { get; set; }
         public int RepeatMode { get; set; }
         public bool IsShuffeling { get; set; }
-        public PrivacyStatus PrivacyStatus { get; set; }
+        public int PrivacyStatus { get; set; }
         public List<MediaItem> MediaItems { get; set; } = new List<MediaItem>();
     }
 }

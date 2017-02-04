@@ -16,18 +16,18 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
                         <ColumnDefinition Width="*" MaxWidth="200"/>
-                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="5" />
+                        <RowDefinition Height="{StaticResource DefaultGridLength}" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="5" />
+                        <RowDefinition Height="{StaticResource DefaultGridLength}" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="5" />
+                        <RowDefinition Height="{StaticResource DefaultGridLength}" />
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="1"

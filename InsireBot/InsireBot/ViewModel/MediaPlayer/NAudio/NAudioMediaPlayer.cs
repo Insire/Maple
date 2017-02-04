@@ -37,8 +37,6 @@ namespace Maple
 
             OnPropertyChanged(nameof(VolumeMin));
             OnPropertyChanged(nameof(VolumeMax));
-
-            _log.Info("NAudioMediaPlayer created");
         }
 
         private void PlaybackStopped(object sender, StoppedEventArgs e)

@@ -15,16 +15,16 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="5" />
+                        <RowDefinition Height="{StaticResource DefaultGridLength}" />
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="5" />
+                        <RowDefinition Height="{StaticResource DefaultGridLength}" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
                         <ColumnDefinition Width="0.5*" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
                     </Grid.ColumnDefinitions>
 
                     <ListBox Grid.Row="1"
@@ -42,21 +42,21 @@
                     <GridSplitter Grid.Row="1"
                                   Grid.Column="2"
                                   Width="5"
-                                  Margin="5,0"
+                                  Margin="{StaticResource LeftRightThickness}"
                                   HorizontalAlignment="Center"
                                   VerticalAlignment="Stretch" />
 
                     <Grid Grid.Row="1" Grid.Column="3">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="5" />
+                            <RowDefinition Height="{StaticResource DefaultGridLength}" />
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="5" />
+                            <RowDefinition Height="{StaticResource DefaultGridLength}" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 

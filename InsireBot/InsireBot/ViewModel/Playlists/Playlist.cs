@@ -1,4 +1,5 @@
 ﻿using Maple.Core;
+using Maple.Data;
 using Maple.Localization.Properties;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,11 @@ using System.Windows.Input;
 
 namespace Maple
 {
-    public class Playlist : TrackingBaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier, INotifyPropertyChanged
+    public class Playlist : TrackingBaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier, INotifyPropertyChanged, ISaveable
     {
         private readonly IBotLog _log;
+        private readonly IPlaylistsRepository _playlistsRepository;
+        private readonly IMediaItemRepository _mediaItemRepository;
         private readonly DialogViewModel _dialogViewModel;
         public int ItemCount => Items?.Count ?? 0;
 
@@ -55,7 +58,7 @@ namespace Maple
         public PrivacyStatus PrivacyStatus
         {
             get { return _privacyStatus; }
-            private set { SetValue(ref _privacyStatus, value, Changed: () => Model.PrivacyStatus = value); }
+            private set { SetValue(ref _privacyStatus, value, Changed: () => Model.PrivacyStatus = (int)value); }
         }
 
         private bool _isSelected;
@@ -122,12 +125,14 @@ namespace Maple
             set { SetValue(ref _repeatMode, value, Changed: () => Model.RepeatMode = (int)value); }
         }
 
-        public Playlist(IBotLog log, DialogViewModel dialogViewModel, Data.Playlist model) : base(model)
+        public Playlist(IBotLog log, IPlaylistsRepository playlistRepository, IMediaItemRepository mediaItemRepository, DialogViewModel dialogViewModel, Data.Playlist model) : base(model)
         {
             using (_busyStack.GetToken())
             {
                 _log = log;
                 _dialogViewModel = dialogViewModel;
+                _playlistsRepository = playlistRepository;
+                _mediaItemRepository = mediaItemRepository;
 
                 RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
                 History = new Stack<int>();
@@ -135,6 +140,8 @@ namespace Maple
                 LoadFromFileCommand = new AsyncRelayCommand(LoadFromFile, () => CanLoadFromFile());
                 LoadFromFolderCommand = new AsyncRelayCommand(LoadFromFolder, () => CanLoadFromFolder());
                 LoadFromUrlCommand = new AsyncRelayCommand(LoadFromUrl, () => CanLoadFromUrl());
+
+                Items.AddRange(model.MediaItems.Select(p => new MediaItemViewModel(_log, _mediaItemRepository, p)));
             }
         }
 
@@ -143,7 +150,7 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var items = await _dialogViewModel.ShowUrlParseDialog();
-                var result = items.Select(p => new MediaItemViewModel(_log, p));
+                var result = items.Select(p => new MediaItemViewModel(_log, _mediaItemRepository, p));
                 Items.AddRange(result);
             }
         }
@@ -199,7 +206,6 @@ namespace Maple
                 OnPropertyChanged(nameof(ItemCount));
             };
 
-            Items.AddRange(model.MediaItems.Select(p => new MediaItemViewModel(_log, p)));
             RegisterCollection(Items, model.MediaItems);
         }
 
@@ -222,6 +228,7 @@ namespace Maple
                 if (Items.Any() != true)
                     History.Push(item.Sequence);
 
+                item.PlaylistId = Id;
                 Items.Add(item);
 
                 if (CurrentItem == null)
@@ -292,7 +299,7 @@ namespace Maple
         {
             var currentIndex = 0;
             if (CurrentItem?.Sequence != null)
-                currentIndex = CurrentItem.Sequence;
+                currentIndex = CurrentItem?.Sequence ?? 0;
 
             if (Items.Count > 1)
             {
@@ -325,7 +332,7 @@ namespace Maple
         {
             var currentIndex = 0;
             if (CurrentItem?.Sequence != null)
-                currentIndex = CurrentItem.Sequence;
+                currentIndex = CurrentItem?.Sequence ?? 0;
 
             if (Items.Count > 1)
             {
@@ -354,7 +361,7 @@ namespace Maple
         {
             if (Items.Count > 1)
             {
-                var nextItems = Items.Where(p => p.Sequence != CurrentItem.Sequence); // get all items besides the current one
+                var nextItems = Items.Where(p => p.Sequence != CurrentItem?.Sequence); // get all items besides the current one
                 Items.ToList().ForEach(p => p.IsSelected = false);
                 var foundItem = nextItems.Random();
                 foundItem.IsSelected = true;
@@ -379,7 +386,7 @@ namespace Maple
                     {
                         var previous = History.Pop();
 
-                        if (previous == CurrentItem.Sequence) // the most recent item in the history, is the just played item, so we wanna skip that
+                        if (previous == CurrentItem?.Sequence) // the most recent item in the history, is the just played item, so we wanna skip that
                             continue;
 
                         if (previous > -1)
@@ -416,6 +423,22 @@ namespace Maple
         {
             if (string.IsNullOrWhiteSpace(Title))
                 yield return new ValidationResult($"{nameof(Title)} {Resources.IsRequired}", new[] { nameof(Title) });
+        }
+
+        public void Save()
+        {
+            if (!IsValid || !IsChanged)
+                return;
+
+            _playlistsRepository.Save(Model);
+
+            foreach (var item in Items)
+            {
+                item.PlaylistId = Id;
+                item.Save();
+            }
+
+            AcceptChanges();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Maple
             _log = log;
 
             var playlists = playlistRepository.GetAll();
-            Items.AddRange(playlists.Select(p => new Playlist(log, _dialogViewModel, p)));
+            Items.AddRange(playlists.Select(p => new Playlist(log, _playlistRepository, _mediaItemRepository, _dialogViewModel, p)));
             SelectedItem = Items.FirstOrDefault();
 
             AddCommand = new RelayCommand(Add, CanAdd);
@@ -53,7 +53,7 @@ namespace Maple
                 playlist.Sequence = index;
             }
 
-            Items.Add(new Playlist(_log, _dialogViewModel, playlist));
+            Items.Add(new Playlist(_log, _playlistRepository, _mediaItemRepository, _dialogViewModel, playlist));
         }
 
         public void Save()
@@ -66,32 +66,13 @@ namespace Maple
             if (viewmodel == null)
                 SaveAllInternal();
             else
-                SaveInternal(viewmodel);
-        }
-
-        public bool CanSave(Playlist viewmodel)
-        {
-            if (viewmodel == null)
-                return CanSaveAllInternal();
-
-            return CanSaveInternal(viewmodel);
-        }
-
-        private void SaveInternal(Playlist viewmodel)
-        {
-            _playlistRepository.Save(viewmodel.Model);
-            viewmodel.AcceptChanges();
-        }
-
-        private bool CanSaveInternal(Playlist viewmodel)
-        {
-            return viewmodel.IsValid && viewmodel.IsChanged;
+                viewmodel.Save();
         }
 
         private void SaveAllInternal()
         {
             Items.Where(p => p.IsChanged && p.IsValid)
-                 .ForEach(p => SaveInternal(p));
+                 .ForEach(p => p.Save());
         }
 
         private bool CanSaveAllInternal()

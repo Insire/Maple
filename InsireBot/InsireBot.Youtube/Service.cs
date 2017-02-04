@@ -4,6 +4,7 @@ using Google.Apis.Util.Store;
 using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
 using Maple.Core;
+using Maple.Localization.Properties;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,10 +31,10 @@ namespace Maple.Youtube
         {
             if (_service == null)
             {
-                _log.Info("Connecting to Youtube");
+                _log.Info(Resources.YoutubeLoad);
 
                 UserCredential credential;
-                using (var stream = new FileStream(@"Resources\client_secret.json", FileMode.Open, FileAccess.Read))
+                using (var stream = new FileStream(@"Resources\client_secret.json", FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                         GoogleClientSecrets.Load(stream).Secrets,
@@ -54,7 +55,7 @@ namespace Maple.Youtube
                     ApplicationName = GetType().ToString()
                 });
 
-                _log.Info("Connected to Youtube");
+                _log.Info(Resources.YoutubeLoaded);
                 _service = result;
                 return result;
             }
@@ -83,7 +84,7 @@ namespace Maple.Youtube
                     {
                         Title = item.Snippet.Title,
                         Location = $"{_playListBaseUrl}{item.Id}",
-                        PrivacyStatus = string.IsNullOrEmpty(item.Status?.PrivacyStatus) ? PrivacyStatus.None : PrivacyStatus.Restricted,
+                        PrivacyStatus = string.IsNullOrEmpty(item.Status?.PrivacyStatus) ? (int)PrivacyStatus.None : (int)PrivacyStatus.Restricted,
                     };
 
                     result.Add(playlist);

@@ -7,11 +7,14 @@ namespace Maple.Data
 {
     public class PlaylistsRepository : IPlaylistsRepository
     {
+        private readonly IMediaItemRepository _mediaItemRepository;
         public string Path { get; }
 
-        public PlaylistsRepository(DBConnection connection)
+        public PlaylistsRepository(DBConnection connection, IMediaItemRepository mediaItemRepository)
         {
             Path = connection.Path;
+
+            _mediaItemRepository = mediaItemRepository;
 
             CreateTable();
         }
@@ -75,13 +78,17 @@ namespace Maple.Data
             }
         }
 
-        public IEnumerable<Playlist> GetAll()
+        public List<Playlist> GetAll()
         {
             var sql = $"SELECT * FROM {nameof(Playlist)}";
 
             using (var connection = SqLiteConnectionFactory.Get(Path))
             {
-                return connection.Query<Playlist>(sql);
+                var playlists = connection.Query<Playlist>(sql).ToList();
+                foreach (var playlist in playlists)
+                    playlist.MediaItems = _mediaItemRepository.GetAllByPlaylistId(playlist.Id);
+
+                return playlists;
             }
         }
 
@@ -91,7 +98,11 @@ namespace Maple.Data
 
             using (var connection = SqLiteConnectionFactory.Get(Path))
             {
-                return connection.Query<Playlist>(sql, new { Ids = ids }).ToList();
+                var playlists = connection.Query<Playlist>(sql, new { Ids = ids }).ToList();
+                foreach (var playlist in playlists)
+                    playlist.MediaItems = _mediaItemRepository.GetAllByPlaylistId(playlist.Id);
+
+                return playlists;
             }
         }
 
@@ -102,9 +113,13 @@ namespace Maple.Data
 
             using (var connection = SqLiteConnectionFactory.Get(Path))
             {
-                return connection
+                var playlist =  connection
                     .Query<Playlist>(sql, new { Id = id })
                     .SingleOrDefault();
+
+                playlist.MediaItems = _mediaItemRepository.GetAllByPlaylistId(playlist.Id);
+
+                return playlist;
             }
         }
 

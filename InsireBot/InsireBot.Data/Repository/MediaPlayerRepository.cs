@@ -75,13 +75,13 @@ namespace Maple.Data
             }
         }
 
-        public IEnumerable<MediaPlayer> GetAll()
+        public List<MediaPlayer> GetAll()
         {
             var sql = $"SELECT * FROM {nameof(MediaPlayer)}";
 
             using (var connection = SqLiteConnectionFactory.Get(Path))
             {
-                return connection.Query<MediaPlayer>(sql);
+                return connection.Query<MediaPlayer>(sql).ToList();
             }
         }
 

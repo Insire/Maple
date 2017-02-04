@@ -10,14 +10,19 @@ namespace Maple.Tests
     [TestClass()]
     public class MediaPlayerTests
     {
-        private static MediaPlayerRepository _repository;
+        private static MediaPlayerRepository _mediaPlayerRepository;
+        private static PlaylistsRepository _playlistsRepository;
         private static IBotLog _log;
         private static ITranslationManager _translationManager;
+        private static IMediaItemRepository _mediaItemRepository;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            _repository = new MediaPlayerRepository(new DBConnection(context.DeploymentDirectory));
+            var connection = new DBConnection(context.DeploymentDirectory);
+            _mediaPlayerRepository = new MediaPlayerRepository(connection);
+            _playlistsRepository = new PlaylistsRepository(connection, _mediaItemRepository);
+            _mediaItemRepository = new MediaItemRepository(connection);
             _log = new MockLog();
             _translationManager = new MockTranslationManager();
         }
@@ -86,7 +91,7 @@ namespace Maple.Tests
         public void MainMediaPlayerTest()
         {
             var mediaplayer = new MainMediaPlayer(_translationManager, CreateMockMediaPlayer(), CreateOneDataMediaPlayer(), nameof(Resources.MainMediaplayer));
-            mediaplayer.Playlist = new Playlist(_log, new DialogViewModel(new MockYoutubeParseService(), new MediaItemMapper()), CreatePlaylist());
+            mediaplayer.Playlist = new Playlist(_log, _playlistsRepository, _mediaItemRepository, new DialogViewModel(new MockYoutubeParseService(), new MediaItemMapper(_log, _mediaItemRepository)), CreatePlaylist());
 
             Assert.IsTrue(mediaplayer.IsValid);
             Assert.IsTrue(mediaplayer.IsPrimary);
@@ -104,7 +109,7 @@ namespace Maple.Tests
         public void NewMainMediaPlayerTest()
         {
             var mediaplayer = new MainMediaPlayer(_translationManager, CreateMockMediaPlayer(), CreateOneNewDataMediaPlayer(), nameof(Resources.MainMediaplayer));
-            mediaplayer.Playlist = new Playlist(_log, new DialogViewModel(new MockYoutubeParseService(), new MediaItemMapper()), CreatePlaylist());
+            mediaplayer.Playlist = new Playlist(_log, _playlistsRepository, _mediaItemRepository, new DialogViewModel(new MockYoutubeParseService(), new MediaItemMapper(_log, _mediaItemRepository)), CreatePlaylist());
 
             Assert.IsTrue(mediaplayer.IsValid);
             Assert.IsTrue(mediaplayer.IsChanged);
@@ -122,7 +127,7 @@ namespace Maple.Tests
         public void MediaPlayerTest()
         {
             var mediaplayer = new MediaPlayer(CreateMockMediaPlayer(), CreateOneDataMediaPlayer());
-            mediaplayer.Playlist = new Playlist(_log, new DialogViewModel(new MockYoutubeParseService(), new MediaItemMapper()), CreatePlaylist());
+            mediaplayer.Playlist = new Playlist(_log, _playlistsRepository, _mediaItemRepository, new DialogViewModel(new MockYoutubeParseService(), new MediaItemMapper(_log, _mediaItemRepository)), CreatePlaylist());
 
             Assert.IsTrue(mediaplayer.IsValid);
             Assert.IsTrue(mediaplayer.IsChanged);
@@ -140,7 +145,7 @@ namespace Maple.Tests
         public void NewMediaPlayerTest()
         {
             var mediaplayer = new MediaPlayer(CreateMockMediaPlayer(), CreateOneNewDataMediaPlayer());
-            mediaplayer.Playlist = new Playlist(_log, new DialogViewModel(new MockYoutubeParseService(), new MediaItemMapper()), CreatePlaylist());
+            mediaplayer.Playlist = new Playlist(_log, _playlistsRepository, _mediaItemRepository, new DialogViewModel(new MockYoutubeParseService(), new MediaItemMapper(_log, _mediaItemRepository)), CreatePlaylist());
 
             Assert.IsTrue(mediaplayer.IsValid);
             Assert.IsTrue(mediaplayer.IsChanged);
@@ -158,7 +163,7 @@ namespace Maple.Tests
         public void MediaPlayerNameChangeTest()
         {
             var mediaplayer = new MediaPlayer(CreateMockMediaPlayer(), CreateOneNewDataMediaPlayer());
-            mediaplayer.Playlist = new Playlist(_log, new DialogViewModel(new MockYoutubeParseService(), new MediaItemMapper()), CreatePlaylist());
+            mediaplayer.Playlist = new Playlist(_log, _playlistsRepository, _mediaItemRepository, new DialogViewModel(new MockYoutubeParseService(), new MediaItemMapper(_log, _mediaItemRepository)), CreatePlaylist());
 
             Assert.IsTrue(mediaplayer.IsValid);
             Assert.IsTrue(mediaplayer.IsChanged);

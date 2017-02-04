@@ -1,7 +1,9 @@
 ﻿using Dapper;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Transactions;
+using System;
 
 namespace Maple.Data
 {
@@ -20,9 +22,13 @@ namespace Maple.Data
             var sql = $"CREATE TABLE IF NOT EXISTS "
                     + $"{nameof(MediaItem)} "
                         + $"({nameof(MediaItem.Id)} INTEGER PRIMARY KEY AUTOINCREMENT, "
-                        + $"{nameof(MediaItem.Title)} VARCHAR(255), "
                         + $"{nameof(MediaItem.Sequence)} INTEGER, "
-                        + $"{nameof(MediaItem.Duration)} BIGINT)";
+                        + $"{nameof(MediaItem.PlaylistId)} INTEGER, "
+                        + $"{nameof(MediaItem.PrivacyStatus)} INTEGER, "
+                        + $"{nameof(MediaItem.Title)} VARCHAR(255), "
+                        + $"{nameof(MediaItem.Location)} VARCHAR(255), "
+                        + $"{nameof(MediaItem.Description)} VARCHAR(255), "
+                        + $"{nameof(MediaItem.Duration)} INTEGER)";
 
             using (var connection = SqLiteConnectionFactory.Get(Path))
             {
@@ -30,13 +36,13 @@ namespace Maple.Data
             }
         }
 
-        public IEnumerable<MediaItem> GetAll()
+        public List<MediaItem> GetAll()
         {
             var sql = $"SELECT * FROM {nameof(MediaItem)}";
 
             using (var connection = SqLiteConnectionFactory.Get(Path))
             {
-                return connection.Query<MediaItem>(sql);
+                return connection.Query<MediaItem>(sql).ToList();
             }
         }
 
@@ -47,14 +53,27 @@ namespace Maple.Data
         /// <returns></returns>
         public MediaItem Create(MediaItem item)
         {
-            var sql = $"INSERT INTO {nameof(MediaItem)} "
-                + $"({nameof(MediaItem.Title)}, {nameof(MediaItem.Sequence)}, {nameof(MediaItem.Duration)}) "
-                + $"VALUES(@{nameof(MediaItem.Title)}, @{nameof(MediaItem.Sequence)}, @{nameof(MediaItem.Duration)}); "
-                + "SELECT last_insert_rowid();";
+            var builder = new StringBuilder();
+            builder.Append($"INSERT INTO {nameof(MediaItem)} ");
+            builder.Append($"({nameof(MediaItem.Title)}, ");
+            builder.Append($"{nameof(MediaItem.Sequence)}, ");
+            builder.Append($"{nameof(MediaItem.PlaylistId)}, ");
+            builder.Append($"{nameof(MediaItem.PrivacyStatus)},");
+            builder.Append($"{nameof(MediaItem.Location)}, ");
+            builder.Append($"{nameof(MediaItem.Description)}, ");
+            builder.Append($"{nameof(MediaItem.Duration)}) ");
+            builder.Append($"VALUES(@{nameof(MediaItem.Title)}, ");
+            builder.Append($"@{nameof(MediaItem.Sequence)}, ");
+            builder.Append($"@{nameof(MediaItem.PlaylistId)}, ");
+            builder.Append($"@{nameof(MediaItem.PrivacyStatus)}, ");
+            builder.Append($"@{nameof(MediaItem.Location)}, ");
+            builder.Append($"@{nameof(MediaItem.Description)}, ");
+            builder.Append($"@{nameof(MediaItem.Duration)}); ");
+            builder.Append($"SELECT last_insert_rowid();");
 
             using (var connection = SqLiteConnectionFactory.Get(Path))
             {
-                var id = connection.Query<int>(sql, item).Single();
+                var id = connection.Query<int>(builder.ToString(), item).Single();
                 item.Id = id;
                 return item;
             }
@@ -67,13 +86,27 @@ namespace Maple.Data
         /// <returns></returns>
         public int Create(IEnumerable<MediaItem> items)
         {
-            var sql = $"INSERT INTO {nameof(MediaItem)} ({nameof(MediaItem.Title)}, {nameof(MediaItem.Sequence)}, {nameof(MediaItem.Duration)}) "
-                + $"VALUES (@{nameof(MediaItem.Title)}, @{nameof(MediaItem.Sequence)}, @{nameof(MediaItem.Duration)}); "
-                + "SELECT last_insert_rowid();";
+            var builder = new StringBuilder();
+            builder.Append($"INSERT INTO {nameof(MediaItem)} ");
+            builder.Append($"({nameof(MediaItem.Title)}, ");
+            builder.Append($"{nameof(MediaItem.Sequence)}, ");
+            builder.Append($"{nameof(MediaItem.PlaylistId)}, ");
+            builder.Append($"{nameof(MediaItem.PrivacyStatus)},");
+            builder.Append($"{nameof(MediaItem.Location)}, ");
+            builder.Append($"{nameof(MediaItem.Description)}, ");
+            builder.Append($"{nameof(MediaItem.Duration)}) ");
+            builder.Append($"VALUES(@{nameof(MediaItem.Title)}, ");
+            builder.Append($"@{nameof(MediaItem.Sequence)}, ");
+            builder.Append($"@{nameof(MediaItem.PlaylistId)}, ");
+            builder.Append($"@{nameof(MediaItem.PrivacyStatus)}, ");
+            builder.Append($"@{nameof(MediaItem.Location)}, ");
+            builder.Append($"@{nameof(MediaItem.Description)}, ");
+            builder.Append($"@{nameof(MediaItem.Duration)}); ");
+            builder.Append($"SELECT last_insert_rowid();");
 
             using (var connection = SqLiteConnectionFactory.Get(Path))
             {
-                return connection.Execute(sql, items);
+                return connection.Execute(builder.ToString(), items);
             }
         }
 
@@ -100,6 +133,10 @@ namespace Maple.Data
             var sql = $"UPDATE {nameof(MediaItem)} " +
                 $"SET {nameof(MediaItem.Title)} = @{nameof(MediaItem.Title)}, " +
                 $"{nameof(MediaItem.Sequence)} = @{nameof(MediaItem.Sequence)}, " +
+                $"{nameof(MediaItem.PlaylistId)} = @{nameof(MediaItem.PlaylistId)}, " +
+                $"{nameof(MediaItem.PrivacyStatus)} = @{nameof(MediaItem.PrivacyStatus)}, " +
+                $"{nameof(MediaItem.Location)} = @{nameof(MediaItem.Location)}, " +
+                $"{nameof(MediaItem.Description)} = @{nameof(MediaItem.Description)}, " +
                 $"{nameof(MediaItem.Duration)} = @{nameof(MediaItem.Duration)} " +
                 $"WHERE ROWID = @{nameof(MediaItem.Id)}";
 
@@ -152,6 +189,16 @@ namespace Maple.Data
             using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 return connection.Query<MediaItem>(sql, new { Ids = ids }).ToList();
+            }
+        }
+
+        public List<MediaItem> GetAllByPlaylistId(int id)
+        {
+            var sql = $"SELECT * FROM {nameof(MediaItem)}  WHERE {nameof(MediaItem.PlaylistId)} = @Id";
+
+            using (var connection = SqLiteConnectionFactory.Get(Path))
+            {
+                return connection.Query<MediaItem>(sql, new { Id = id }).ToList();
             }
         }
     }

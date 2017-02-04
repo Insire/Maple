@@ -267,4 +267,10 @@
   <data name="DialogOpenAlready" xml:space="preserve">
     <value>There is already a dialog open. There can only be one</value>
   </data>
+  <data name="YoutubeLoad" xml:space="preserve">
+    <value>Loading youtube service</value>
+  </data>
+  <data name="YoutubeLoaded" xml:space="preserve">
+    <value>Loaded youtube service</value>
+  </data>
 </root>
