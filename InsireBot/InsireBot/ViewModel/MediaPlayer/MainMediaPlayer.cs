@@ -11,11 +11,14 @@ namespace Maple
         private readonly ITranslationManager _manager;
         private readonly string _nameKey;
 
-        public MainMediaPlayer(ITranslationManager manager, IMediaPlayerRepository mediaPlayerRepository, IMediaPlayer player, Data.MediaPlayer model,Playlist playlist, string nameKey)
+        public MainMediaPlayer(ITranslationManager manager, IMediaPlayerRepository mediaPlayerRepository, IMediaPlayer player, Data.MediaPlayer model, Playlist playlist, string nameKey)
             : base(manager, mediaPlayerRepository, player, model)
         {
             if (string.IsNullOrWhiteSpace(nameKey))
                 throw new ArgumentNullException(nameof(nameKey), $"{nameof(nameKey)} {Resources.IsRequired}");
+
+            if (playlist == null)
+                throw new ArgumentNullException(nameof(playlist), $"{nameof(playlist)} {Resources.IsRequired}");
 
             _manager = manager;
             _nameKey = nameKey;

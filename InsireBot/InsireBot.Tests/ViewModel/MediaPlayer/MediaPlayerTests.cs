@@ -2,6 +2,7 @@
 using Maple.Core;
 using Maple.Data;
 using Maple.Localization.Properties;
+using Maple.Youtube;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace Maple.Tests
 
             _container.Register<Scenes>(reuse: Reuse.Singleton);
             _container.Register<UIColorsViewModel>(reuse: Reuse.Singleton);
+            _container.Register<IYoutubeUrlParseService, UrlParseService>();
 
             _container.Register<Playlists>(reuse: Reuse.Singleton);
             _container.Register<MediaPlayers>(reuse: Reuse.Singleton);
@@ -52,7 +54,7 @@ namespace Maple.Tests
         {
             try
             {
-                var mediaplayer = new MainMediaPlayer(null, _container.Resolve<IMediaPlayerRepository>(), CreateMockMediaPlayer(), CreateOneDataMediaPlayer(), "");
+                var mediaplayer = new MainMediaPlayer(null, _container.Resolve<IMediaPlayerRepository>(), CreateMockMediaPlayer(), CreateOneDataMediaPlayer(), CreatePlaylist(), "");
             }
             catch (ArgumentNullException ex)
             {
@@ -67,7 +69,12 @@ namespace Maple.Tests
         {
             try
             {
-                var mediaplayer = new MainMediaPlayer(_container.Resolve<ITranslationManager>(), _container.Resolve<IMediaPlayerRepository>(), null, CreateOneDataMediaPlayer(), "test");
+                var mediaplayer = new MainMediaPlayer(_container.Resolve<ITranslationManager>(),
+                    _container.Resolve<IMediaPlayerRepository>(),
+                    null,
+                    CreateOneDataMediaPlayer(),
+                    CreatePlaylist(),
+                    "test");
             }
             catch (ArgumentNullException ex)
             {
@@ -78,11 +85,36 @@ namespace Maple.Tests
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentNullException))]
+        public void MainMediaPlayerCtorEmptyPlaylistTest()
+        {
+            try
+            {
+                var mediaplayer = new MainMediaPlayer(_container.Resolve<ITranslationManager>(),
+                    _container.Resolve<IMediaPlayerRepository>(),
+                    CreateMockMediaPlayer(),
+                    CreateOneDataMediaPlayer(),
+                    null,
+                    "test");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Assert.AreEqual("playlist", ex.ParamName);
+                throw;
+            }
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void MainMediaPlayerCtorEmptyModelTest()
         {
             try
             {
-                var mediaplayer = new MainMediaPlayer(_container.Resolve<ITranslationManager>(), _container.Resolve<IMediaPlayerRepository>(), CreateMockMediaPlayer(), null, "test");
+                var mediaplayer = new MainMediaPlayer(_container.Resolve<ITranslationManager>(),
+                    _container.Resolve<IMediaPlayerRepository>(),
+                    CreateMockMediaPlayer(),
+                    null,
+                    CreatePlaylist(),
+                    "test");
             }
             catch (ArgumentNullException ex)
             {
@@ -98,7 +130,12 @@ namespace Maple.Tests
         {
             try
             {
-                var mediaplayer = new MainMediaPlayer(_container.Resolve<ITranslationManager>(), null, CreateMockMediaPlayer(), CreateOneDataMediaPlayer(), "test");
+                var mediaplayer = new MainMediaPlayer(_container.Resolve<ITranslationManager>(),
+                    null,
+                    CreateMockMediaPlayer(),
+                    CreateOneDataMediaPlayer(),
+                    CreatePlaylist(),
+                    "test");
             }
             catch (ArgumentNullException ex)
             {
@@ -116,7 +153,9 @@ namespace Maple.Tests
                 var mediaplayer = new MainMediaPlayer(_container.Resolve<ITranslationManager>(),
                                                         _container.Resolve<IMediaPlayerRepository>(),
                                                         CreateMockMediaPlayer(),
-                                                        CreateOneDataMediaPlayer(), "");
+                                                        CreateOneDataMediaPlayer(),
+                                                        CreatePlaylist(),
+                                                        "");
             }
             catch (ArgumentNullException ex)
             {
@@ -132,12 +171,13 @@ namespace Maple.Tests
                                                     _container.Resolve<IMediaPlayerRepository>(),
                                                     CreateMockMediaPlayer(),
                                                     CreateOneDataMediaPlayer(),
+                                                    CreatePlaylist(),
                                                     nameof(Resources.MainMediaplayer));
 
             mediaplayer.Playlist = new Playlist(_container.Resolve<IPlaylistsRepository>(),
                                                 _container.Resolve<IMediaItemRepository>(),
                                                 new DialogViewModel(new MockYoutubeParseService(), _container.Resolve<IMediaItemMapper>()),
-                                                CreatePlaylist());
+                                                CreateDataPlaylist());
 
             Assert.IsTrue(mediaplayer.IsValid);
             Assert.IsTrue(mediaplayer.IsPrimary);
@@ -158,12 +198,13 @@ namespace Maple.Tests
                                                     _container.Resolve<IMediaPlayerRepository>(),
                                                     CreateMockMediaPlayer(),
                                                     CreateOneDataMediaPlayer(),
+                                                    CreatePlaylist(),
                                                     nameof(Resources.MainMediaplayer));
 
             mediaplayer.Playlist = new Playlist(_container.Resolve<IPlaylistsRepository>(),
                                                 _container.Resolve<IMediaItemRepository>(),
                                                 new DialogViewModel(new MockYoutubeParseService(), _container.Resolve<IMediaItemMapper>()),
-                                                CreatePlaylist());
+                                                CreateDataPlaylist());
 
             Assert.IsTrue(mediaplayer.IsValid);
             Assert.IsTrue(mediaplayer.IsChanged);
@@ -188,7 +229,7 @@ namespace Maple.Tests
             mediaplayer.Playlist = new Playlist(_container.Resolve<IPlaylistsRepository>(),
                                                 _container.Resolve<IMediaItemRepository>(),
                                                 new DialogViewModel(new MockYoutubeParseService(), _container.Resolve<IMediaItemMapper>()),
-                                                CreatePlaylist());
+                                                CreateDataPlaylist());
 
             Assert.IsTrue(mediaplayer.IsValid);
             Assert.IsTrue(mediaplayer.IsChanged);
@@ -213,7 +254,7 @@ namespace Maple.Tests
             mediaplayer.Playlist = new Playlist(_container.Resolve<IPlaylistsRepository>(),
                                                 _container.Resolve<IMediaItemRepository>(),
                                                 new DialogViewModel(new MockYoutubeParseService(), _container.Resolve<IMediaItemMapper>()),
-                                                CreatePlaylist());
+                                                CreateDataPlaylist());
 
             Assert.IsTrue(mediaplayer.IsValid);
             Assert.IsTrue(mediaplayer.IsChanged);
@@ -238,7 +279,7 @@ namespace Maple.Tests
             mediaplayer.Playlist = new Playlist(_container.Resolve<IPlaylistsRepository>(),
                                                 _container.Resolve<IMediaItemRepository>(),
                                                 new DialogViewModel(new MockYoutubeParseService(), _container.Resolve<IMediaItemMapper>()),
-                                                CreatePlaylist());
+                                                CreateDataPlaylist());
 
             Assert.IsTrue(mediaplayer.IsValid);
             Assert.IsTrue(mediaplayer.IsChanged);
@@ -344,7 +385,12 @@ namespace Maple.Tests
             };
         }
 
-        private Data.Playlist CreatePlaylist()
+        private Playlist CreatePlaylist()
+        {
+            return new Playlist(_container.Resolve<IPlaylistsRepository>(), _container.Resolve<IMediaItemRepository>(), _container.Resolve<DialogViewModel>(), CreateDataPlaylist());
+        }
+
+        private Data.Playlist CreateDataPlaylist()
         {
             return new Data.Playlist
             {
