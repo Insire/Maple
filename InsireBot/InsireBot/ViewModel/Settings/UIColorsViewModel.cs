@@ -8,8 +8,12 @@ using System.Windows.Input;
 
 namespace Maple
 {
-    public class UIColorsViewModel : ObservableObject
+    public class UIColorsViewModel : ObservableObject, ISaveable
     {
+        private static bool _isDark;
+        private static string _accent;
+        private static string _swatch;
+
         public void ApplyColorsFromSettings()
         {
             var swatchName = Properties.Settings.Default.SwatchName;
@@ -49,8 +53,7 @@ namespace Maple
         private static void ApplyBase(UIColorsViewModel vm, bool isDark = false)
         {
             _paletteHelper.SetLightDark(isDark);
-            Properties.Settings.Default.UseDarkTheme = isDark;
-            Properties.Settings.Default.Save();
+            _isDark = isDark;
         }
 
         private static void ApplyPrimary(UIColorsViewModel vm, Swatch swatch)
@@ -65,8 +68,7 @@ namespace Maple
             if (newPalette.PrimarySwatch.Name != oldPalette.PrimarySwatch.Name)
                 vm.PrimaryColorChanged?.Invoke(vm, new UiPrimaryColorEventArgs(newPalette.PrimarySwatch.ExemplarHue.Color));
 
-            Properties.Settings.Default.SwatchName = swatch.Name;
-            Properties.Settings.Default.Save();
+            _swatch = swatch.Name;
         }
 
         private static void ApplyAccent(UIColorsViewModel vm, Swatch swatch)
@@ -75,7 +77,15 @@ namespace Maple
                 return;
 
             _paletteHelper.ReplaceAccentColor(swatch);
-            Properties.Settings.Default.AccentName = swatch.Name;
+            _accent = swatch.Name;
+        }
+
+        public void Save()
+        {
+            Properties.Settings.Default.AccentName = _accent;
+            Properties.Settings.Default.SwatchName = _swatch;
+            Properties.Settings.Default.UseDarkTheme = _isDark;
+
             Properties.Settings.Default.Save();
         }
     }

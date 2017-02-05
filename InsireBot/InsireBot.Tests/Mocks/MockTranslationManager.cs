@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using Maple.Core;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Maple.Tests
 {
-    public class MockTranslationManager : ITranslationManager
+    public class MockTranslationManager : ObservableObject, ITranslationManager
     {
         public CultureInfo CurrentLanguage { get; set; }
 
         public IEnumerable<CultureInfo> Languages { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public void Save()
         {

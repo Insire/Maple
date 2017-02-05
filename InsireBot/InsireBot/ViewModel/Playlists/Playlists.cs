@@ -6,14 +6,13 @@ using System.Windows.Input;
 
 namespace Maple
 {
-    public class Playlists : ViewModelListBase<Playlist>, ISaveable
+    public class Playlists : ChangeTrackingViewModeListBase<Playlist>
     {
         private readonly IBotLog _log;
         private readonly IPlaylistsRepository _playlistRepository;
         private readonly IMediaItemRepository _mediaItemRepository;
         private readonly DialogViewModel _dialogViewModel;
 
-        public ICommand AddCommand { get; private set; }
         public ICommand PlayCommand { get; private set; }
 
         public Playlists(IMediaItemRepository mediaItemRepository, IPlaylistsRepository playlistRepository, IBotLog log, DialogViewModel dialogViewModel)
@@ -24,13 +23,13 @@ namespace Maple
             _log = log;
 
             var playlists = playlistRepository.GetAll();
-            Items.AddRange(playlists.Select(p => new Playlist(log, _playlistRepository, _mediaItemRepository, _dialogViewModel, p)));
+            Items.AddRange(playlists.Select(p => new Playlist(_playlistRepository, _mediaItemRepository, _dialogViewModel, p)));
             SelectedItem = Items.FirstOrDefault();
 
             AddCommand = new RelayCommand(Add, CanAdd);
         }
 
-        // TODO order changing + sync, Commands, UserInteraction, Reset?, async load
+        // TODO order changing + sync, Commands, UserInteraction, async load
 
         public void Add()
         {
@@ -53,34 +52,7 @@ namespace Maple
                 playlist.Sequence = index;
             }
 
-            Items.Add(new Playlist(_log, _playlistRepository, _mediaItemRepository, _dialogViewModel, playlist));
-        }
-
-        public void Save()
-        {
-            SaveAllInternal();
-        }
-
-        public void Save(Playlist viewmodel)
-        {
-            if (viewmodel == null)
-                SaveAllInternal();
-            else
-                viewmodel.Save();
-        }
-
-        private void SaveAllInternal()
-        {
-            Items.Where(p => p.IsChanged && p.IsValid)
-                 .ForEach(p => p.Save());
-        }
-
-        private bool CanSaveAllInternal()
-        {
-            if (Items.Any(p => !p.IsValid))
-                return false;
-
-            return Items.Any(p => p.IsChanged);
+            Items.Add(new Playlist(_playlistRepository, _mediaItemRepository, _dialogViewModel, playlist));
         }
     }
 }

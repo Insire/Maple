@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Maple.Core;
 using Maple.Data;
 
 namespace Maple
@@ -7,13 +6,10 @@ namespace Maple
     public class MediaItemMapper : IMediaItemMapper
     {
         private readonly IMapper _mapper;
-        private readonly IBotLog _log;
         private readonly IMediaItemRepository _mediaItemRepository;
 
-
-        public MediaItemMapper(IBotLog log, IMediaItemRepository mediaItemRepository)
+        public MediaItemMapper(IMediaItemRepository mediaItemRepository)
         {
-            _log = log;
             _mediaItemRepository = mediaItemRepository;
 
             var config = new MapperConfiguration(cfg =>
@@ -29,12 +25,12 @@ namespace Maple
 
         public MediaItemViewModel Get(Core.MediaItem mediaitem)
         {
-            return new MediaItemViewModel(_log, _mediaItemRepository, GetData(mediaitem));
+            return new MediaItemViewModel( _mediaItemRepository, GetData(mediaitem));
         }
 
         public MediaItemViewModel Get(Data.MediaItem mediaitem)
         {
-            return new MediaItemViewModel(_log, _mediaItemRepository, mediaitem);
+            return new MediaItemViewModel( _mediaItemRepository, mediaitem);
         }
 
         public Core.MediaItem GetCore(Data.MediaItem mediaitem)

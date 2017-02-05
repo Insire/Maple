@@ -1,5 +1,4 @@
-﻿using Maple.Core;
-using Maple.Localization.Properties;
+﻿using Maple.Localization.Properties;
 using System.Collections.Generic;
 
 namespace Maple.Data

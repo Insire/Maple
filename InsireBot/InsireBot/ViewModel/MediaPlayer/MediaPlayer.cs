@@ -1,4 +1,5 @@
 using Maple.Core;
+using Maple.Data;
 using Maple.Localization.Properties;
 using System;
 using System.Collections.Generic;
@@ -8,8 +9,10 @@ using System.Windows.Input;
 
 namespace Maple
 {
-    public class MediaPlayer : TrackingBaseViewModel<Data.MediaPlayer>, IValidatableTrackingObject, IDisposable
+    public class MediaPlayer : TrackingBaseViewModel<Data.MediaPlayer>, IValidatableTrackingObject, IDisposable, ISaveable
     {
+        private readonly ITranslationManager _manager;
+
         public bool IsPlaying { get { return Player.IsPlaying; } }
         public bool Disposed { get; private set; }
 
@@ -54,10 +57,20 @@ namespace Maple
             protected set { SetValue(ref _isPrimary, value, Changed: () => Model.IsPrimary = value); }
         }
 
-        public MediaPlayer(IMediaPlayer player, Data.MediaPlayer mediaPlayer) : base(mediaPlayer)
+        public MediaPlayer(ITranslationManager manager,
+                            IMediaPlayerRepository mediaPlayerRepository,
+                            IMediaPlayer player,
+                            Data.MediaPlayer model) : base(model, mediaPlayerRepository)
         {
             if (player == null)
                 throw new ArgumentNullException(nameof(player), $"{nameof(player)} {Resources.IsRequired}");
+
+            if (manager == null)
+                throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} {Resources.IsRequired}");
+
+            _manager = manager;
+
+            Name = model.Name;
 
             AudioDevices = new AudioDevices();
 
@@ -67,17 +80,16 @@ namespace Maple
             Player.AudioDeviceChanged += Player_AudioDeviceChanged;
             Player.AudioDeviceChanging += Player_AudioDeviceChanging;
 
-            Player.AudioDevice = AudioDevices.Items.FirstOrDefault(p => p.Name == Model.DeviceName);
+            var device = AudioDevices.Items.FirstOrDefault(p => p.Name == Model.DeviceName);
+            if (device != null)
+                Player.AudioDevice = device;
 
             InitiliazeCommands();
 
             if (!Model.IsNew)
                 AcceptChanges();
-        }
 
-        protected override void InitializeComplexProperties(Data.MediaPlayer model)
-        {
-            Name = model.Name;
+            Validate();
         }
 
         public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -90,6 +102,9 @@ namespace Maple
 
             if (Player == null)
                 yield return new ValidationResult($"{nameof(Player)} {Resources.IsRequired}", new[] { nameof(Player) });
+
+            if (Player?.AudioDevice == null)
+                yield return new ValidationResult($"{nameof(Player.AudioDevice)} {Resources.IsRequired}", new[] { nameof(Player.AudioDevice) });
         }
 
         private void Player_AudioDeviceChanging(object sender, EventArgs e)
@@ -99,7 +114,8 @@ namespace Maple
 
         private void Player_AudioDeviceChanged(object sender, AudioDeviceChangedEventArgs e)
         {
-            Model.DeviceName = e.AudioDevice.Name;
+            if (!string.IsNullOrEmpty(e?.AudioDevice?.Name))
+                Model.DeviceName = e.AudioDevice.Name;
         }
 
         private void OnPlaylistChanging()

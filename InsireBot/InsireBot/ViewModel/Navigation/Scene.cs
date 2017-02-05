@@ -8,7 +8,7 @@ namespace Maple
     public class Scene : ObservableObject, ISequence
     {
         private ITranslationManager _manager;
-        public Func<ObservableObject> GetDataContext { get; set; }
+        public Func<ISaveable> GetDataContext { get; set; }
 
         private BusyStack _busyStack;
         /// <summary>
@@ -89,13 +89,13 @@ namespace Maple
             // while fetching the dataconext, we will switch IsBusy accordingly
             using (var token = BusyStack.GetToken())
             {
-                var currentContext = Content.DataContext as ObservableObject;
+                var currentContext = Content.DataContext as ISaveable;
                 var newContext = GetDataContext.Invoke();
 
                 if (currentContext == null && newContext == null)
                     return;
 
-                if (EqualityComparer<ObservableObject>.Default.Equals(currentContext, newContext))
+                if (EqualityComparer<ISaveable>.Default.Equals(currentContext, newContext))
                     return;
 
                 Content.DataContext = newContext;

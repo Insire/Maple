@@ -7,9 +7,8 @@ using System.Linq;
 
 namespace Maple
 {
-    public class MediaPlayers : ViewModelListBase<MediaPlayer>, IDisposable, ISaveable
+    public class MediaPlayers : ChangeTrackingViewModeListBase<MediaPlayer>, IDisposable
     {
-        private readonly IBotLog _log;
         private readonly ITranslationManager _manager;
         private readonly IMediaPlayerRepository _mediaPlayerRepository;
 
@@ -23,18 +22,16 @@ namespace Maple
         }
 
         public MediaPlayers(ITranslationManager manager,
-                            IBotLog log,
                             IMediaPlayerRepository mediaPlayerRepository,
                             Func<IMediaPlayer> playerFactory,
                             Playlists playlists)
         {
-            _log = log;
             _manager = manager;
             _mediaPlayerRepository = mediaPlayerRepository;
 
             _playlists = playlists;
 
-            Items.AddRange(GetMediaPlayers(playerFactory).ToList());
+            AddRange(GetMediaPlayers(playerFactory).ToList());
             SelectedItem = Items.FirstOrDefault();
         }
 
@@ -42,7 +39,7 @@ namespace Maple
         {
             var all = _mediaPlayerRepository.GetAll();
             var players = all.Where(p => !p.IsPrimary)
-                                .Select(p => new MediaPlayer(playerFactory(), p));
+                                .Select(p => new MediaPlayer(_manager, _mediaPlayerRepository, playerFactory(), p));
 
             var primaries = all.Where(p => p.IsPrimary).ToList();
 
@@ -55,17 +52,16 @@ namespace Maple
                     IsPrimary = true,
                 };
 
-                yield return new MainMediaPlayer(_manager, playerFactory(), mediaPlayer, nameof(Resources.MainMediaplayer))
-                {
-                    Playlist = _playlists.Items.FirstOrDefault(),
-                };
+                var playlist = _playlists.Items.FirstOrDefault();
+
+                yield return new MainMediaPlayer(_manager, _mediaPlayerRepository, playerFactory(), mediaPlayer, playlist, nameof(Resources.MainMediaplayer));
             }
 
             if (primaries.Count == 1)
-                yield return new MainMediaPlayer(_manager, playerFactory(), primaries[0], nameof(Resources.MainMediaplayer))
-                {
-                    Playlist = _playlists.Items.FirstOrDefault(p => p.Id == primaries[0].PlaylistId),
-                };
+            {
+                var playlist = _playlists.Items.FirstOrDefault(p => p.Id == primaries[0].PlaylistId);
+                yield return new MainMediaPlayer(_manager, _mediaPlayerRepository, playerFactory(), primaries[0], playlist, nameof(Resources.MainMediaplayer));
+            }
 
             foreach (var player in players)
                 yield return player;
@@ -95,22 +91,6 @@ namespace Maple
 
             // Free any unmanaged objects here.
             Disposed = true;
-        }
-
-        public void Save()
-        {
-            var main = Items.First(p => p.IsPrimary);
-            if (main.IsChanged && main.IsValid)
-            {
-                _mediaPlayerRepository.Save(main.Model);
-                main.AcceptChanges();
-            }
-
-            var others = Items.Where(p => p.IsValid && p.IsChanged && !p.IsPrimary)
-                                     .Select(p => p.Model);
-
-            foreach (var player in others)
-                _mediaPlayerRepository.Save(player);
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Maple
 {
-    public class OptionsViewModel : ObservableObject
+    public class OptionsViewModel : ObservableObject, ISaveable
     {
         private ITranslationManager _manager;
         public RangeObservableCollection<CultureInfo> Items { get; private set; }
@@ -25,6 +25,11 @@ namespace Maple
         private void SyncCulture()
         {
             _manager.CurrentLanguage = SelectedCulture;
+        }
+
+        public void Save()
+        {
+            _manager.Save();
         }
     }
 }

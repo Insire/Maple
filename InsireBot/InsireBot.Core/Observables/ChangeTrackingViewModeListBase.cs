@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace Maple.Core
 {
-    public abstract class ViewModelListBase<T> : ObservableObject where T : INotifyPropertyChanged
+    public abstract class ChangeTrackingViewModeListBase<T> : ObservableObject, ISaveable where T : class, INotifyPropertyChanged, IValidatableTrackingObject, ISaveable
     {
         protected object _itemsLock;
 
@@ -54,11 +54,11 @@ namespace Maple.Core
             }
         }
 
-        private RangeObservableCollection<T> _items;
+        private ChangeTrackingCollection<T> _items;
         /// <summary>
         /// Contains all the UI relevant Models and notifies about changes in the collection and inside the Models themself
         /// </summary>
-        public RangeObservableCollection<T> Items
+        public ChangeTrackingCollection<T> Items
         {
             get { return _items; }
             private set { SetValue(ref _items, value); }
@@ -79,6 +79,16 @@ namespace Maple.Core
             get { return Items.Count; }
         }
 
+        public bool IsChanged
+        {
+            get { return Items.IsChanged; }
+        }
+
+        public bool IsValid
+        {
+            get { return Items.IsValid; }
+        }
+
         public T this[int index]
         {
             get { return Items[index]; }
@@ -87,8 +97,9 @@ namespace Maple.Core
         public ICommand RemoveRangeCommand { get; private set; }
         public ICommand RemoveCommand { get; private set; }
         public ICommand ClearCommand { get; private set; }
+        public ICommand AddCommand { get; protected set; }
 
-        public ViewModelListBase()
+        public ChangeTrackingViewModeListBase()
         {
             InitializeProperties();
             InitializeCommands();
@@ -96,21 +107,11 @@ namespace Maple.Core
             BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
         }
 
-        public ViewModelListBase(IList<T> items) : this()
-        {
-            Items.AddRange(items);
-        }
-
-        public ViewModelListBase(IEnumerable<T> items) : this()
-        {
-            Items.AddRange(items);
-        }
-
         private void InitializeProperties()
         {
             _itemsLock = new object();
 
-            Items = new RangeObservableCollection<T>();
+            Items = new ChangeTrackingCollection<T>();
             Items.CollectionChanged += ItemsCollectionChanged;
 
             BusyStack = new BusyStack();
@@ -132,6 +133,8 @@ namespace Maple.Core
         private void ItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged(nameof(Count));
+            OnPropertyChanged(nameof(IsValid));
+            OnPropertyChanged(nameof(IsChanged));
         }
 
         public virtual void Add(T item)
@@ -210,6 +213,50 @@ namespace Maple.Core
         protected virtual bool CanClear()
         {
             return Items?.Any() == true;
+        }
+
+        public virtual void Save()
+        {
+            using (BusyStack.GetToken())
+            {
+                if (IsChanged && IsValid)
+                {
+                    foreach (var item in Items)
+                    {
+                        Save(item);
+                        item.AcceptChanges();
+                    }
+                }
+                else
+                {
+                    foreach (var item in Items.Where(p => p.IsChanged && p.IsValid))
+                    {
+                        Save(item);
+                        item.AcceptChanges();
+                    }
+                }
+
+                InternalSave();
+            }
+        }
+
+        public virtual void Save(T viewmodel)
+        {
+            using (BusyStack.GetToken())
+            {
+                if (viewmodel == null)
+                    InternalSave();
+                else
+                    viewmodel.Save();
+            }
+        }
+
+        /// <summary>
+        /// save other dependencies
+        /// </summary>
+        protected virtual void InternalSave()
+        {
+
         }
     }
 }

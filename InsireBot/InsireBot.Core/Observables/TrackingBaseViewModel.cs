@@ -1,4 +1,5 @@
-﻿using Maple.Localization.Properties;
+﻿using Maple.Data;
+using Maple.Localization.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,12 +9,16 @@ using System.Runtime.CompilerServices;
 
 namespace Maple.Core
 {
-    public abstract class TrackingBaseViewModel<T> : ValidationBaseViewModel, IValidatableTrackingObject, IValidatableObject
+    public abstract class TrackingBaseViewModel<T> : ValidationBaseViewModel, IValidatableTrackingObject, IValidatableObject, ISaveable
     {
         private readonly Dictionary<string, object> _originalValues;
         private readonly List<IValidatableTrackingObject> _trackingObjects;
-
+        private readonly IRepository<T> _repository;
+        private readonly List<string> _propetyBlackList = new List<string> { "isbusy", "isselected" };
         protected readonly BusyStack _busyStack;
+
+        public EventHandler Saving;
+        public EventHandler Saved;
 
         public T Model { get; private set; }
         public bool IsChanged => _originalValues.Count > 0 || _trackingObjects.Any(t => t.IsChanged);
@@ -26,33 +31,21 @@ namespace Maple.Core
             set { SetValue(ref _isBusy, value); }
         }
 
-        public TrackingBaseViewModel(T model) : base()
+        public TrackingBaseViewModel(T model, IRepository<T> repository) : base()
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model), $"{nameof(model)} {Resources.IsRequired}");
+
+            if (repository == null)
+                throw new ArgumentNullException(nameof(repository), $"{nameof(repository)} {Resources.IsRequired}");
 
             _originalValues = new Dictionary<string, object>();
             _trackingObjects = new List<IValidatableTrackingObject>();
             _busyStack = new BusyStack();
             _busyStack.OnChanged += (isBusy) => IsBusy = isBusy;
+            _repository = repository;
 
             Model = model;
-
-            using (_busyStack.GetToken())
-            {
-                InitializeComplexProperties(model);
-                InitializeCollectionProperties(model);
-
-                Validate();
-            }
-        }
-
-        protected virtual void InitializeComplexProperties(T model)
-        {
-        }
-
-        protected virtual void InitializeCollectionProperties(T model)
-        {
         }
 
         public void AcceptChanges()
@@ -127,7 +120,7 @@ namespace Maple.Core
             return base.SetValue(ref field, value, newChanging, newChanged);
         }
 
-        private void Validate()
+        public void Validate()
         {
             ClearErrors();
 
@@ -157,6 +150,9 @@ namespace Maple.Core
         {
             if (!_originalValues.ContainsKey(propertyName))
             {
+                if (_propetyBlackList.Contains(propertyName.ToLowerInvariant()))
+                    return;
+
                 _originalValues.Add(propertyName, currentValue);
                 OnPropertyChanged(nameof(IsChanged));
             }
@@ -211,6 +207,19 @@ namespace Maple.Core
         public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             yield break;
+        }
+
+        public void Save()
+        {
+            if (!IsValid || !IsChanged)
+                return;
+
+            Saving?.Raise(this);
+
+            _repository.Save(Model);
+            AcceptChanges();
+
+            Saved?.Raise(this);
         }
     }
 }

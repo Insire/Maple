@@ -32,11 +32,24 @@ namespace Maple
                 RequestFloatOutput = false,
             };
 
+            AudioDeviceChanging += OnAudioDeviceChanging;
+            AudioDeviceChanged += OnAudioDeviceChanged;
+
             _player = WavePlayerFactory.GetPlayer();
             _player.PlaybackStopped += PlaybackStopped;
 
             OnPropertyChanged(nameof(VolumeMin));
             OnPropertyChanged(nameof(VolumeMax));
+        }
+
+        private void OnAudioDeviceChanging(object sender, EventArgs e)
+        {
+
+        }
+
+        private void OnAudioDeviceChanged(object sender, AudioDeviceChangedEventArgs e)
+        {
+
         }
 
         private void PlaybackStopped(object sender, StoppedEventArgs e)
@@ -83,7 +96,6 @@ namespace Maple
             if (_player?.PlaybackState == NAudio.Wave.PlaybackState.Playing)
                 throw new InvalidOperationException("Can't play a file, when already playing");
 
-            var t = new WaveFileReader("");
             _reader = new MediaFoundationReader(mediaItem.Location, _settings);
 
             _volumeProvider = new VolumeWaveProvider16(_reader);

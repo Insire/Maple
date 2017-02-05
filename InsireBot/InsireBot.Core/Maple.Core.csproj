@@ -74,6 +74,7 @@
     <Compile Include="Interfaces\ISaveable.cs" />
     <Compile Include="Interfaces\ISequence.cs" />
     <Compile Include="Observables\ChangeTrackingCollection.cs" />
+    <Compile Include="Observables\ChangeTrackingViewModeListBase.cs" />
     <Compile Include="Observables\IValidatableTrackingObject.cs" />
     <Compile Include="Observables\BusyStack.cs" />
     <Compile Include="Observables\BusyToken.cs" />
@@ -94,6 +95,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\InsireBot.Data\Maple.Data.csproj">
+      <Project>{B3CD46BE-3C08-4BAE-AE60-A6D84A62400C}</Project>
+      <Name>Maple.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InsireBot.Localization\Maple.Localization.csproj">
       <Project>{A073FC92-90E3-4541-8B52-6F7293187871}</Project>
       <Name>Maple.Localization</Name>

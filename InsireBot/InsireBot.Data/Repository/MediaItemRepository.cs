@@ -1,9 +1,9 @@
 ﻿using Dapper;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Transactions;
-using System;
 
 namespace Maple.Data
 {
@@ -130,6 +130,8 @@ namespace Maple.Data
 
         public MediaItem Update(MediaItem item)
         {
+            Debug.WriteLine("Update MediaItemRepository");
+
             var sql = $"UPDATE {nameof(MediaItem)} " +
                 $"SET {nameof(MediaItem.Title)} = @{nameof(MediaItem.Title)}, " +
                 $"{nameof(MediaItem.Sequence)} = @{nameof(MediaItem.Sequence)}, " +
@@ -154,6 +156,8 @@ namespace Maple.Data
 
         public int Delete(int id)
         {
+            Debug.WriteLine("Delete MediaItemRepository");
+
             var sql = $"DELETE FROM {nameof(MediaItem)} WHERE ROWID = @{nameof(MediaItem.Id)}";
 
             using (var connection = SqLiteConnectionFactory.Get(Path))

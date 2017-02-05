@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Transactions;
 
@@ -72,7 +73,10 @@ namespace Maple.Data
 
         public int Delete(int id)
         {
+            Debug.WriteLine("Delete PlaylistsRepository");
+
             var sql = $"DELETE FROM {nameof(Playlist)} WHERE ROWID = @{nameof(Playlist.Id)}";
+
             using (var connection = SqLiteConnectionFactory.Get(Path))
             {
                 return connection.Execute(sql, new { id });
@@ -147,6 +151,8 @@ namespace Maple.Data
 
         public Playlist Update(Playlist playlist)
         {
+            Debug.WriteLine("Update PlaylistsRepository");
+
             var sql = $"UPDATE {nameof(Playlist)} " +
                 $"SET {nameof(Playlist.Title)} = @{nameof(Playlist.Title)}, " +
                 $"{nameof(Playlist.Sequence)} = @{nameof(Playlist.Sequence)}, " +

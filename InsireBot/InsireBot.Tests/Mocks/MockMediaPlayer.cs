@@ -3,56 +3,37 @@ using System;
 
 namespace Maple.Tests
 {
-    public class MockMediaPlayer : IMediaPlayer
+    public class MockMediaPlayer : BasePlayer, IMediaPlayer
     {
-        public AudioDevice AudioDevice { get; set; }
+        public override bool IsPlaying { get; }
 
-        public bool Disposed { get; set; }
+        public override int Volume { get; set; }
 
-        public bool IsPlaying { get; set; }
+        public override int VolumeMax { get; }
 
-        public int Volume { get; set; }
+        public override int VolumeMin { get; }
 
-        public int VolumeMax { get; set; }
-
-        public int VolumeMin { get; set; }
-
-        public event AudioDeviceChangedEventHandler AudioDeviceChanged;
-        public event EventHandler AudioDeviceChanging;
-        public event CompletedMediaItemEventHandler CompletedMediaItem;
-        public event PlayingMediaItemEventHandler PlayingMediaItem;
-
-        public bool CanPause()
+        public override bool CanPlay(IMediaItem item)
         {
-            return true;
+            return false;
         }
 
-        public bool CanPlay(IMediaItem item)
-        {
-            return true;
-        }
-
-        public bool CanStop()
-        {
-            return true;
-        }
-
-        public void Dispose()
+        public override void Dispose()
         {
 
         }
 
-        public void Pause()
+        public override void Pause()
         {
 
         }
 
-        public void Play(IMediaItem item)
+        public override void Play(IMediaItem mediaItem)
         {
 
         }
 
-        public void Stop()
+        public override void Stop()
         {
 
         }

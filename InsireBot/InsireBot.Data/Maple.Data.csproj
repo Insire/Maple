@@ -116,10 +116,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\InsireBot.Core\Maple.Core.csproj">
-      <Project>{21FA5854-0692-42E2-924E-A38CF3C7FF71}</Project>
-      <Name>Maple.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\InsireBot.Localization\Maple.Localization.csproj">
       <Project>{A073FC92-90E3-4541-8B52-6F7293187871}</Project>
       <Name>Maple.Localization</Name>

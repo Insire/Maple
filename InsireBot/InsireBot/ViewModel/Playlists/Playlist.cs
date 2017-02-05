@@ -1,10 +1,10 @@
 ﻿using Maple.Core;
 using Maple.Data;
 using Maple.Localization.Properties;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,9 +12,8 @@ using System.Windows.Input;
 
 namespace Maple
 {
-    public class Playlist : TrackingBaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier, INotifyPropertyChanged, ISaveable
+    public class Playlist : TrackingBaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier
     {
-        private readonly IBotLog _log;
         private readonly IPlaylistsRepository _playlistsRepository;
         private readonly IMediaItemRepository _mediaItemRepository;
         private readonly DialogViewModel _dialogViewModel;
@@ -125,15 +124,16 @@ namespace Maple
             set { SetValue(ref _repeatMode, value, Changed: () => Model.RepeatMode = (int)value); }
         }
 
-        public Playlist(IBotLog log, IPlaylistsRepository playlistRepository, IMediaItemRepository mediaItemRepository, DialogViewModel dialogViewModel, Data.Playlist model) : base(model)
+        public Playlist(IPlaylistsRepository playlistRepository, IMediaItemRepository mediaItemRepository, DialogViewModel dialogViewModel, Data.Playlist model)
+            : base(model, playlistRepository)
         {
             using (_busyStack.GetToken())
             {
-                _log = log;
                 _dialogViewModel = dialogViewModel;
                 _playlistsRepository = playlistRepository;
                 _mediaItemRepository = mediaItemRepository;
 
+                Items = new ChangeTrackingCollection<MediaItemViewModel>();
                 RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
                 History = new Stack<int>();
 
@@ -141,7 +141,30 @@ namespace Maple
                 LoadFromFolderCommand = new AsyncRelayCommand(LoadFromFolder, () => CanLoadFromFolder());
                 LoadFromUrlCommand = new AsyncRelayCommand(LoadFromUrl, () => CanLoadFromUrl());
 
-                Items.AddRange(model.MediaItems.Select(p => new MediaItemViewModel(_log, _mediaItemRepository, p)));
+                Items.AddRange(model.MediaItems.Select(p => new MediaItemViewModel(_mediaItemRepository, p)));
+
+                Title = model.Title;
+                Description = model.Description;
+                Id = model.Id;
+                RepeatMode = (RepeatMode)model.RepeatMode;
+                IsShuffeling = model.IsShuffeling;
+
+                if (model.MediaItems == null)
+                    throw new ArgumentException($"{model.MediaItems} cannot be null");
+
+                Saved += OnSaved;
+
+                Items.CollectionChanged += (o, e) =>
+                {
+                    OnPropertyChanged(nameof(ItemCount));
+                };
+
+                RegisterCollection(Items, model.MediaItems);
+
+                if (!Model.IsNew)
+                    AcceptChanges();
+
+                Validate();
             }
         }
 
@@ -150,7 +173,7 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var items = await _dialogViewModel.ShowUrlParseDialog();
-                var result = items.Select(p => new MediaItemViewModel(_log, _mediaItemRepository, p));
+                var result = items.Select(p => new MediaItemViewModel(_mediaItemRepository, p));
                 Items.AddRange(result);
             }
         }
@@ -184,29 +207,6 @@ namespace Maple
         private bool CanLoadFromFile()
         {
             return !IsBusy;
-        }
-
-        protected override void InitializeComplexProperties(Data.Playlist model)
-        {
-            Title = model.Title;
-            Description = model.Description;
-            Id = model.Id;
-            RepeatMode = (RepeatMode)model.RepeatMode;
-            IsShuffeling = model.IsShuffeling;
-        }
-
-        protected override void InitializeCollectionProperties(Data.Playlist model)
-        {
-            if (model.MediaItems == null)
-                throw new ArgumentException($"{model.MediaItems} cannot be null");
-
-            Items = new ChangeTrackingCollection<MediaItemViewModel>();
-            Items.CollectionChanged += (o, e) =>
-            {
-                OnPropertyChanged(nameof(ItemCount));
-            };
-
-            RegisterCollection(Items, model.MediaItems);
         }
 
         public virtual void Clear()
@@ -397,8 +397,7 @@ namespace Maple
                                 var foundItem = previousItems.First();
                                 foundItem.IsSelected = true;
 
-                                if (previousItems.Count() > 1)
-                                    _log.Warn("Warning SelectPrevious returned more than one value, when it should only return one");
+                                Assert.IsTrue(previousItems.Count() > 1, "Warning SelectPrevious returned more than one value, when it should only return one");
 
                                 return foundItem;
                             }
@@ -425,20 +424,16 @@ namespace Maple
                 yield return new ValidationResult($"{nameof(Title)} {Resources.IsRequired}", new[] { nameof(Title) });
         }
 
-        public void Save()
+        public void OnSaved(object sender, EventArgs e)
         {
-            if (!IsValid || !IsChanged)
-                return;
-
-            _playlistsRepository.Save(Model);
-
             foreach (var item in Items)
             {
-                item.PlaylistId = Id;
-                item.Save();
+                if (item.PlaylistId != Id)
+                {
+                    item.PlaylistId = Id;
+                    item.Save();
+                }
             }
-
-            AcceptChanges();
         }
     }
 }

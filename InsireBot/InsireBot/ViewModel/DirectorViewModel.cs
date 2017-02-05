@@ -1,8 +1,9 @@
-﻿using Maple.Core;
+﻿using System;
+using Maple.Core;
 
 namespace Maple
 {
-    public class DirectorViewModel : ObservableObject
+    public class DirectorViewModel : ObservableObject, ISaveable
     {
         private MediaPlayers _mediaPlayers;
         public MediaPlayers MediaPlayers
@@ -22,6 +23,12 @@ namespace Maple
         {
             Playlists = playlists;
             MediaPlayers = players;
+        }
+
+        public void Save()
+        {
+            Playlists.Save();
+            MediaPlayers.Save();
         }
     }
 }

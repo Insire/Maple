@@ -8,12 +8,8 @@ using System.ComponentModel.DataAnnotations;
 namespace Maple
 {
     public class MediaItemViewModel : TrackingBaseViewModel<Data.MediaItem>,
-                                        IMediaItem, ISequence, IIdentifier, ISaveable,
-                                        IValidatableTrackingObject, IValidatableObject
+                                        IMediaItem, ISequence, IIdentifier
     {
-        private readonly IBotLog _log;
-        private readonly IMediaItemRepository _mediaItemRepository;
-
         public int IdOriginalValue => GetOriginalValue<int>(nameof(Id));
         private int _id;
         public int Id
@@ -85,13 +81,7 @@ namespace Maple
             set { SetValue(ref _isSelected, value); }
         }
 
-        public MediaItemViewModel(IBotLog log, IMediaItemRepository mediaItemRepository, Data.MediaItem model) : base(model)
-        {
-            _log = log;
-            _mediaItemRepository = mediaItemRepository;
-        }
-
-        protected override void InitializeComplexProperties(Data.MediaItem model)
+        public MediaItemViewModel(IMediaItemRepository mediaItemRepository, Data.MediaItem model) : base(model, mediaItemRepository)
         {
             Id = model.Id;
             PlaylistId = model.PlaylistId;
@@ -101,6 +91,11 @@ namespace Maple
             Sequence = model.Sequence;
             Duration = TimeSpan.FromTicks(model.Duration);
             PrivacyStatus = (PrivacyStatus)model.PrivacyStatus;
+
+            if (!Model.IsNew)
+                AcceptChanges();
+
+            Validate();
         }
 
         public override string ToString()
@@ -116,15 +111,6 @@ namespace Maple
 
             if (string.IsNullOrWhiteSpace(Location))
                 yield return new ValidationResult($"{nameof(Location)} {Resources.IsRequired}", new[] { nameof(Location) });
-        }
-
-        public void Save()
-        {
-            if (!IsValid || !IsChanged)
-                return;
-
-            _mediaItemRepository.Save(Model);
-            AcceptChanges();
         }
     }
 }

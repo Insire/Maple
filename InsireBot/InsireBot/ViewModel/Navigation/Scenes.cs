@@ -52,15 +52,6 @@ namespace Maple
                     Sequence = 300,
                 },
 
-                //new Scene(_manager)
-                //{
-                //    Content = new NewPlaylistPage(_manager),
-                //    Key = nameof(Resources.PlaylistAdd),
-                //    GetDataContext = () => createPlaylistViewModel,
-                //    IsSelected = false,
-                //    Sequence = 400,
-                //},
-
                 new Scene(_manager)
                 {
                     Content = new ColorOptionsPage(_manager),
