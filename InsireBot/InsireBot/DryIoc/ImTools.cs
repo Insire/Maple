@@ -27,9 +27,9 @@ namespace ImTools
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.CompilerServices; // for aggressive inlining hints
     using System.Text;
     using System.Threading;
+    using System.Runtime.CompilerServices; // for aggressive inlining hints
 
     /// <summary>Portable aggressive in-lining option for MethodImpl.</summary>
     public static class MethodImplHints

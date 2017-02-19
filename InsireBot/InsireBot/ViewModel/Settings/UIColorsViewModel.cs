@@ -45,7 +45,7 @@ namespace Maple
 
         private void InitializeCommands()
         {
-            ToggleBaseCommand = new RelayCommand<bool>(o => ApplyBase(this, o));
+            ToggleBaseCommand = new RelayCommand(() => ApplyBase(this, !_isDark));
             ApplyPrimaryCommand = new RelayCommand<Swatch>(o => ApplyPrimary(this, o));
             ApplyAccentCommand = new RelayCommand<Swatch>(o => ApplyAccent(this, o));
         }

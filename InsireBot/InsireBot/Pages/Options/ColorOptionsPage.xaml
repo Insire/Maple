@@ -107,7 +107,6 @@
                               Margin="0,0,5,20"
                               Panel.ZIndex="5"
                               Command="{Binding Data, Source={StaticResource ToggleBaseCommandProxy}}"
-                              CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
                               Style="{StaticResource MaterialDesignActionAccentToggleButton}">
                     <ToggleButton.Content>
                         <materialDesign:PackIcon Kind="InvertColors" />
