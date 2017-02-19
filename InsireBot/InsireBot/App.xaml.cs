@@ -41,15 +41,25 @@ namespace Maple
 
         private void InitializeResources()
         {
-            var styles = new IoCResourceDictionary(_manager)
-            {
-                Source = new Uri("/Maple;component/Resources/Style.xaml", UriKind.RelativeOrAbsolute),                
-            };
-            // injecting the translation manager into a shared resourcedictionary,
-            // so that hopefully all usages of the translation extension can be resolved inside of ResourceDictionaries
-            styles.Add(typeof(ITranslationManager).Name, _manager);
+            var styles = CreateResourceDictionary(new Uri("/Maple;component/Resources/Style.xaml", UriKind.RelativeOrAbsolute));
+            var listViewStyles = CreateResourceDictionary(new Uri("/Maple;component/Resources/ListViewStyles.xaml", UriKind.RelativeOrAbsolute));
 
             Resources.MergedDictionaries.Add(styles);
+            Resources.MergedDictionaries.Add(listViewStyles);
+        }
+
+        private IoCResourceDictionary CreateResourceDictionary(Uri uri)
+        {
+            // injecting the translation manager into a shared resourcedictionary,
+            // so that hopefully all usages of the translation extension can be resolved inside of ResourceDictionaries
+
+            var dic = new IoCResourceDictionary(_manager)
+            {
+                Source = uri,
+            };
+            dic.Add(typeof(ITranslationManager).Name, _manager);
+
+            return dic;
         }
 
         private void InitializeLocalization()

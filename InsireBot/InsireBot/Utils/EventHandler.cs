@@ -40,8 +40,8 @@ namespace Maple
     public delegate void PlayingMediaItemEventHandler(object sender, PlayingMediaItemEventArgs e);
     public class PlayingMediaItemEventArgs : EventArgs
     {
-        public MediaItemViewModel MediaItem { get; private set; }
-        public PlayingMediaItemEventArgs(MediaItemViewModel item)
+        public IMediaItem MediaItem { get; private set; }
+        public PlayingMediaItemEventArgs(IMediaItem item)
         {
             MediaItem = item;
         }

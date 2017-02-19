@@ -24,17 +24,17 @@ THE SOFTWARE.
 
 namespace DryIoc
 {
+    using ImTools;
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
+    using System.Runtime.CompilerServices;
     using System.Text;
     using System.Threading;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.CompilerServices;
-    using ImTools;
 
     /// <summary>IoC Container. Documentation is available at https://bitbucket.org/dadhi/dryioc. </summary>
     public sealed partial class Container : IContainer, IScopeAccess
@@ -11107,9 +11107,9 @@ namespace DryIoc
 
 namespace DryIoc.Experimental
 {
+    using ImTools;
     using System;
     using System.Reflection;
-    using ImTools;
 
     /// <summary>Succinct convention-based, LINQ like API to resolve resolution root at the end.</summary>
     public static class DI

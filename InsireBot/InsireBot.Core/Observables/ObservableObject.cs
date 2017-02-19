@@ -14,7 +14,7 @@ namespace Maple.Core
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected virtual bool SetValue<T>(ref T field, T value, Action Changing = null, Action Changed = null, [CallerMemberName]string propertyName = null)
+        protected bool SetValue<T>(ref T field, T value, Action Changing = null, Action Changed = null, [CallerMemberName]string propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(field, value))
                 return false;

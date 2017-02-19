@@ -96,9 +96,7 @@ namespace Maple.Core
             return _originalValues.ContainsKey(propertyName);
         }
 
-#pragma warning disable CS0693 // Type parameter has the same name as the type parameter from outer type
-        protected override bool SetValue<T>(ref T field, T value, Action Changing = null, Action Changed = null, [CallerMemberName] string propertyName = null)
-#pragma warning restore CS0693
+        protected bool SetValue(ref T field, T value, Action Changing = null, Action Changed = null, [CallerMemberName]string propertyName = null)
         {
             var currentValue = field;
             var newChanging = new Action(() =>

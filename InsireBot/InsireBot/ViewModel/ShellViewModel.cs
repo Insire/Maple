@@ -4,6 +4,8 @@ namespace Maple
 {
     public class ShellViewModel : ObservableObject
     {
+
+
         private StatusbarViewModel _statusbarViewModel;
         public StatusbarViewModel StatusbarViewModel
         {
@@ -32,7 +34,12 @@ namespace Maple
             private set { SetValue(ref _dialogViewModel, value); }
         }
 
-        public ShellViewModel(ITranslationManager translationManager, Scenes scenes, StatusbarViewModel statusBarViewModel, DialogViewModel dialogViewModel)
+
+
+        public ShellViewModel(ITranslationManager translationManager,
+                                Scenes scenes,
+                                StatusbarViewModel statusBarViewModel,
+                                DialogViewModel dialogViewModel)
         {
             TranslationManager = translationManager;
             Scenes = scenes;

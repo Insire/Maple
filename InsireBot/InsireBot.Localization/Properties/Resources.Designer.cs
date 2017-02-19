@@ -385,6 +385,15 @@ namespace Maple.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aktuelle Wiedergabeliste.
+        /// </summary>
+        public static string PlaylistCurrent {
+            get {
+                return ResourceManager.GetString("PlaylistCurrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wiedergabelisten.
         /// </summary>
         public static string Playlists {

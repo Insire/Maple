@@ -6,12 +6,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Maple
 {
+    [DebuggerDisplay("{Title}, {Sequence}")]
     public class Playlist : TrackingBaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier
     {
         private readonly IPlaylistsRepository _playlistsRepository;
@@ -28,6 +30,7 @@ namespace Maple
         /// </summary>
         public Stack<int> History { get; private set; }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public ChangeTrackingCollection<MediaItemViewModel> Items { get; private set; }
 
         private MediaItemViewModel _currentItem;
@@ -266,6 +269,14 @@ namespace Maple
                 while (Items.Contains(item))
                     Items.Remove(item);
             }
+        }
+
+        public virtual bool CanRemove(MediaItemViewModel item)
+        {
+            if (Items == null || Items.Count == 0 || item as MediaItemViewModel == null)
+                return false;
+
+            return Items.Contains(item) && !IsBusy;
         }
 
         public virtual MediaItemViewModel Next()

@@ -273,4 +273,7 @@
   <data name="YoutubeLoaded" xml:space="preserve">
     <value>Loaded youtube service</value>
   </data>
+  <data name="PlaylistCurrent" xml:space="preserve">
+    <value>Current playlist</value>
+  </data>
 </root>

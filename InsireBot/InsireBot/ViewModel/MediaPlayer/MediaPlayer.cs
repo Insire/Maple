@@ -28,6 +28,11 @@ namespace Maple
         public ICommand NextCommand { get; private set; }
         public ICommand PreviousCommand { get; private set; }
         public ICommand StopCommand { get; private set; }
+        public ICommand RemoveCommand { get; private set; }
+        public ICommand ClearCommand { get; private set; }
+        public ICommand LoadFromFileCommand { get; private set; }
+        public ICommand LoadFromFolderCommand { get; private set; }
+        public ICommand LoadFromUrlCommand { get; private set; }
 
         private AudioDevices _audioDevices;
         public AudioDevices AudioDevices
@@ -62,19 +67,12 @@ namespace Maple
                             IMediaPlayer player,
                             Data.MediaPlayer model) : base(model, mediaPlayerRepository)
         {
-            if (player == null)
-                throw new ArgumentNullException(nameof(player), $"{nameof(player)} {Resources.IsRequired}");
-
-            if (manager == null)
-                throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} {Resources.IsRequired}");
-
-            _manager = manager;
+            _manager = manager ?? throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} {Resources.IsRequired}");
+            Player = player ?? throw new ArgumentNullException(nameof(player), $"{nameof(player)} {Resources.IsRequired}");
 
             Name = model.Name;
-
             AudioDevices = new AudioDevices();
 
-            Player = player;
             Player.PlayingMediaItem += Player_PlayingMediaItem;
             Player.CompletedMediaItem += MediaPlayer_CompletedMediaItem;
             Player.AudioDeviceChanged += Player_AudioDeviceChanged;
@@ -127,6 +125,18 @@ namespace Maple
         {
             Model.PlaylistId = Playlist.Id;
             // TODO: maybe add optional endless playback
+
+            UpdatePlaylistCommands();
+        }
+
+        private void UpdatePlaylistCommands()
+        {
+            if (Playlist != null)
+            {
+                LoadFromFileCommand = Playlist.LoadFromFileCommand;
+                LoadFromFolderCommand = Playlist.LoadFromFolderCommand;
+                LoadFromUrlCommand = Playlist.LoadFromUrlCommand;
+            }
         }
 
         private void Player_PlayingMediaItem(object sender, PlayingMediaItemEventArgs e)
@@ -146,6 +156,20 @@ namespace Maple
             NextCommand = new RelayCommand(Next, () => Playlist?.CanNext() == true && CanNext());
             PauseCommand = new RelayCommand(Pause, () => CanPause());
             StopCommand = new RelayCommand(Stop, () => CanStop());
+            RemoveCommand = new RelayCommand<MediaItemViewModel>(Remove, CanRemove);
+            ClearCommand = new RelayCommand(Clear, CanClear);
+
+            UpdatePlaylistCommands();
+        }
+
+        public void Clear()
+        {
+            Playlist.Clear();
+        }
+
+        public bool CanClear()
+        {
+            return !IsBusy && Playlist.ItemCount > 0;
         }
 
         public void AddRange(IEnumerable<MediaItemViewModel> mediaItems)
@@ -170,6 +194,16 @@ namespace Maple
             }
 
             Playlist.Items.Add(mediaItem);
+        }
+
+        public void Remove(MediaItemViewModel item)
+        {
+            Playlist.Remove(item);
+        }
+
+        private bool CanRemove(MediaItemViewModel item)
+        {
+            return Playlist.CanRemove(item);
         }
 
         public void Pause()

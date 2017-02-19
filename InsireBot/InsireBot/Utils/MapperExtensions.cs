@@ -20,20 +20,10 @@ namespace Maple
             return items.ForEach(mapper.GetData);
         }
 
-        //public static IEnumerable<Data.MediaItem> GetManyData(this IMediaItemMapper mapper, IEnumerable<MediaItemViewModel> items)
-        //{
-        //    return items.ForEach(mapper.GetData);
-        //}
-
         public static IEnumerable<Core.MediaItem> GetManyCore(this IMediaItemMapper mapper, IEnumerable<Data.MediaItem> items)
         {
             return items.ForEach(mapper.GetCore);
         }
-
-        //public static IEnumerable<Core.MediaItem> GetManyCore(this IMediaItemMapper mapper, IEnumerable<MediaItemViewModel> items)
-        //{
-        //    return items.ForEach(mapper.GetCore);
-        //}
 
         public static IEnumerable<Playlist> GetMany(this IPlaylistMapper mapper, IEnumerable<Core.Playlist> items)
         {

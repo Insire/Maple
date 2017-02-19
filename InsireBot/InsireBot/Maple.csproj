@@ -169,6 +169,7 @@
     <Compile Include="Utils\Commands\AsyncRelayCommand.cs" />
     <Compile Include="Utils\Commands\RelayCommand.cs" />
     <Compile Include="Utils\Converters\DebugConverter.cs" />
+    <Compile Include="Utils\IPlaylistRepositoryExtensions.cs" />
     <Compile Include="Utils\MapperExtensions.cs" />
     <Compile Include="Utils\Localization\LanguageChangedEventManager.cs" />
     <Compile Include="Utils\Localization\Providers\ITranslationProvider.cs" />
@@ -179,12 +180,10 @@
     <Compile Include="Utils\Mappers\MediaItemMapper.cs" />
     <Compile Include="Utils\Mappers\PlaylistMapper.cs" />
     <Compile Include="Utils\ShellSettings.cs" />
-    <Compile Include="Utils\DataGridBehavior.cs" />
     <Compile Include="Enums\MediaPlayerType.cs" />
     <Compile Include="Enums\RepeatMode.cs" />
     <Compile Include="Utils\EventHandler.cs" />
     <Compile Include="Interfaces\IMediaPlayer.cs" />
-    <Compile Include="Utils\LinqExtensions.cs" />
     <Compile Include="Utils\Converters\RadioButtonCheckedConverter.cs" />
     <Compile Include="ViewModel\Dialogs\Base\DialogViewModel.cs" />
     <Compile Include="ViewModel\Dialogs\ExceptionDialogViewModel.cs" />
@@ -258,6 +257,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Playlist\PlaylistsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\ListViewStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

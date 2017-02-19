@@ -22,7 +22,7 @@ namespace Maple
             _dialogViewModel = dialogViewModel;
             _log = log;
 
-            var playlists = playlistRepository.GetAll();
+            var playlists = playlistRepository.Seed();
             Items.AddRange(playlists.Select(p => new Playlist(_playlistRepository, _mediaItemRepository, _dialogViewModel, p)));
             SelectedItem = Items.FirstOrDefault();
 

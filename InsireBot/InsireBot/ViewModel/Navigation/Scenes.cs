@@ -106,9 +106,7 @@ namespace Maple
 
         private void SelectedSceneChanging(object sender, EventArgs e)
         {
-            var viewmodel = sender as ISaveable;
-
-            if (viewmodel != null)
+            if (sender is ISaveable viewmodel)
                 viewmodel.Save();
         }
 

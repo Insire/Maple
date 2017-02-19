@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Windows;
 using System.ComponentModel;
+using System.Windows;
 
 namespace Maple
 {

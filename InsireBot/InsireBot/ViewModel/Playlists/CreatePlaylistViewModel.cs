@@ -47,7 +47,7 @@ namespace Maple
                     if (Result.Count > 0 && Result.Playlists?.Count > 0)
                         Items.AddRange(_mapper.GetMany(Result.Playlists));
                 }
-            });
+            }, () => !string.IsNullOrWhiteSpace(Source));
         }
     }
 }

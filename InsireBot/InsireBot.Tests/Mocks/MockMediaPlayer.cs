@@ -13,6 +13,9 @@ namespace Maple.Tests
 
         public override int VolumeMin { get; }
 
+        public override event CompletedMediaItemEventHandler CompletedMediaItem;
+        public override event PlayingMediaItemEventHandler PlayingMediaItem;
+
         public override bool CanPlay(IMediaItem item)
         {
             return false;

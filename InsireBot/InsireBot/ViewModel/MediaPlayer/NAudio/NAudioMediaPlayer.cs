@@ -6,16 +6,21 @@ namespace Maple
 {
     public class NAudioMediaPlayer : BasePlayer
     {
-        private IBotLog _log;
+        private readonly IBotLog _log;
+        private readonly MediaFoundationReader.MediaFoundationReaderSettings _settings;
+
+        private int _volume;
+        private IMediaItem _current;
         private IWavePlayer _player;
         private WaveStream _reader;
         private VolumeWaveProvider16 _volumeProvider;
-        private MediaFoundationReader.MediaFoundationReaderSettings _settings;
 
         public override int VolumeMax => 1;
         public override int VolumeMin => 0;
 
-        private int _volume;
+        public override event PlayingMediaItemEventHandler PlayingMediaItem;
+        public override event CompletedMediaItemEventHandler CompletedMediaItem;
+
         public override int Volume
         {
             get { return _volume; }
@@ -38,8 +43,15 @@ namespace Maple
             _player = WavePlayerFactory.GetPlayer();
             _player.PlaybackStopped += PlaybackStopped;
 
+            PlayingMediaItem += OnPlaybackStarted; 
+
             OnPropertyChanged(nameof(VolumeMin));
             OnPropertyChanged(nameof(VolumeMax));
+        }
+
+        private void OnPlaybackStarted(object sender, PlayingMediaItemEventArgs e)
+        {
+            _current = e.MediaItem;
         }
 
         private void OnAudioDeviceChanging(object sender, EventArgs e)
@@ -54,6 +66,10 @@ namespace Maple
 
         private void PlaybackStopped(object sender, StoppedEventArgs e)
         {
+            CompletedMediaItem?.Invoke(this, new CompletedMediaItemEventEventArgs(_current));
+
+            _current = null;
+
             OnPropertyChanged(nameof(IsPlaying));
             OnPropertyChanged(nameof(CanPlay));
             OnPropertyChanged(nameof(CanStop));
@@ -98,11 +114,14 @@ namespace Maple
 
             _reader = new MediaFoundationReader(mediaItem.Location, _settings);
 
-            _volumeProvider = new VolumeWaveProvider16(_reader);
-            _volumeProvider.Volume = 0.5f;
-
+            _volumeProvider = new VolumeWaveProvider16(_reader)
+            {
+                Volume = 0.5f
+            };
             _player.Init(_volumeProvider);
             _player.Play();
+
+            PlayingMediaItem?.Invoke(this, new PlayingMediaItemEventArgs(mediaItem));
         }
 
         public override void Stop()

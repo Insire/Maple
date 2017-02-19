@@ -1,5 +1,4 @@
-﻿using System;
-using Maple.Core;
+﻿using Maple.Core;
 
 namespace Maple
 {

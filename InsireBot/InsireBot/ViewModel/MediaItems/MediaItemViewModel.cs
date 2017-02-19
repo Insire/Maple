@@ -4,6 +4,7 @@ using Maple.Localization.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 
 namespace Maple
 {
@@ -34,7 +35,7 @@ namespace Maple
             set { SetValue(ref _playlistId, value, Changed: () => Model.PlaylistId = value); }
         }
 
-        public TimeSpan DurationOriginalValue => GetOriginalValue<TimeSpan>(nameof(Duration));
+        public TimeSpan DurationOriginalValue => TimeSpan.FromTicks(GetOriginalValue<long>(nameof(Duration)));
         private TimeSpan _duration;
         public TimeSpan Duration
         {
@@ -80,6 +81,8 @@ namespace Maple
             get { return _isSelected; }
             set { SetValue(ref _isSelected, value); }
         }
+
+        public bool IsFile => File.Exists(Location);
 
         public MediaItemViewModel(IMediaItemRepository mediaItemRepository, Data.MediaItem model) : base(model, mediaItemRepository)
         {

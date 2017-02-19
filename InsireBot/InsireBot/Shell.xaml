@@ -35,11 +35,14 @@
                                   Mode="PrimaryMid">
             <StackPanel HorizontalAlignment="Left"
                         DataContext="{Binding StatusbarViewModel}"
-                        Orientation="Vertical">
+                        Orientation="Horizontal">
                 <TextBlock>
                     <Run Text="{Binding Version, Mode=OneWay}" />
                     <Run Text="{Binding Language, Mode=OneWay}" />
                 </TextBlock>
+                <TextBlock Margin="5,0" Text="{local:Translation PlaylistCurrent}" />
+                <TextBlock Text="{Binding MainMediaPlayer.Playlist.Title}" />
+                <TextBlock Margin="5,0" Text="{Binding MainMediaPlayer.Playlist.CurrentItem.Title}" />
             </StackPanel>
         </materialDesign:ColorZone>
 

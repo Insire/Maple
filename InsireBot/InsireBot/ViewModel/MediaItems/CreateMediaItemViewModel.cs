@@ -47,7 +47,7 @@ namespace Maple
                     if (Result.Count > 0 && Result.MediaItems?.Count > 0)
                         Items.AddRange(_mapper.GetMany(Result.MediaItems));
                 }
-            });
+            }, () => !string.IsNullOrWhiteSpace(Source));
         }
     }
 }
