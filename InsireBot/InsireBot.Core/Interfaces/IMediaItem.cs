@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace Maple.Core
 {
-    public interface IMediaItem : IIsSelected, ISequence, INotifyPropertyChanged, IIdentifier, IValidatableTrackingObject
+    public interface IMediaItem : IIsSelected, ISequence, INotifyPropertyChanged, IIdentifier
     {
         string Title { get; }
         string Location { get; }

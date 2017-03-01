@@ -48,15 +48,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dapper.1.50.2\lib\net451\Dapper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLite.CodeFirst, Version=1.2.4.16, Culture=neutral, PublicKeyToken=eb96ba0a78d831a7, processorArchitecture=MSIL">
+      <HintPath>..\packages\SQLite.CodeFirst.1.2.4.16\lib\net45\SQLite.CodeFirst.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -83,18 +82,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DBConnection.cs" />
-    <Compile Include="DTO\Base\IDatabaseObject.cs" />
+    <Compile Include="DTO\Base\IModel.cs" />
+    <Compile Include="DTO\obsolete\IDatabaseObject.cs" />
     <Compile Include="DTO\MediaPlayer.cs" />
     <Compile Include="DTO\Playlist.cs" />
     <Compile Include="Repository\Base\IRepository.cs" />
-    <Compile Include="DTO\Base\DatabaseObject.cs" />
+    <Compile Include="DTO\obsolete\DatabaseObject.cs" />
     <Compile Include="DTO\MediaItem.cs" />
+    <Compile Include="Repository\IDbContext.cs" />
     <Compile Include="Repository\IMediaItemRepository.cs" />
     <Compile Include="Repository\IMediaPlayerRepository.cs" />
+    <Compile Include="Repository\IPlaylistContext.cs" />
     <Compile Include="Repository\IPlaylistsRepository.cs" />
     <Compile Include="Repository\MediaItemRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\MediaPlayerRepository.cs" />
+    <Compile Include="Repository\PlaylistContext.cs" />
     <Compile Include="Repository\PlaylistsRepository.cs" />
     <Compile Include="SqLiteConnectionFactory.cs" />
   </ItemGroup>

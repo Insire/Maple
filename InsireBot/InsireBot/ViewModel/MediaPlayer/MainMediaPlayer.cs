@@ -1,8 +1,5 @@
-﻿using Maple.Data;
-using Maple.Localization.Properties;
+﻿using Maple.Localization.Properties;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Maple
 {
@@ -11,21 +8,18 @@ namespace Maple
         private readonly ITranslationManager _manager;
         private readonly string _nameKey;
 
-        public MainMediaPlayer(ITranslationManager manager, IMediaPlayerRepository mediaPlayerRepository, IMediaPlayer player, Data.MediaPlayer model, Playlist playlist, string nameKey)
-            : base(manager, mediaPlayerRepository, player, model)
+        public MainMediaPlayer(ITranslationManager manager, IMediaPlayer player, Data.MediaPlayer model, Playlist playlist, string nameKey)
+            : base(manager, player, model)
         {
             if (string.IsNullOrWhiteSpace(nameKey))
                 throw new ArgumentNullException(nameof(nameKey), $"{nameof(nameKey)} {Resources.IsRequired}");
-
-            if (playlist == null)
-                throw new ArgumentNullException(nameof(playlist), $"{nameof(playlist)} {Resources.IsRequired}");
 
             _manager = manager;
             _nameKey = nameKey;
 
             Name = model.Name;
             IsPrimary = model.IsPrimary;
-            Playlist = playlist;
+            Playlist = playlist ?? throw new ArgumentNullException(nameof(playlist), $"{nameof(playlist)} {Resources.IsRequired}");
 
             _manager.PropertyChanged += (o, e) =>
               {
@@ -34,22 +28,17 @@ namespace Maple
               };
 
             UpdateName();
-
-            if (!Model.IsNew)
-                AcceptChanges();
-
-            Validate();
         }
 
-        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (string.IsNullOrWhiteSpace(Name))
-                yield return new ValidationResult($"{nameof(Name)} {Resources.IsRequired}", new[] { nameof(Name) });
+        //public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        //{
+        //    if (string.IsNullOrWhiteSpace(Name))
+        //        yield return new ValidationResult($"{nameof(Name)} {Resources.IsRequired}", new[] { nameof(Name) });
 
 
-            if (!IsPrimary)
-                yield return new ValidationResult($"{nameof(IsPrimary)} {Resources.IsRequired}", new[] { nameof(IsPrimary) });
-        }
+        //    if (!IsPrimary)
+        //        yield return new ValidationResult($"{nameof(IsPrimary)} {Resources.IsRequired}", new[] { nameof(IsPrimary) });
+        //}
 
         private void UpdateName()
         {

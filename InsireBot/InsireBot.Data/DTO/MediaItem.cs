@@ -1,7 +1,9 @@
 ﻿namespace Maple.Data
 {
-    public class MediaItem : DatabaseObject
+    public class MediaItem : IModel
     {
+        public int Id { get; set; }
+        public int Sequence { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         /// <summary>
@@ -9,7 +11,7 @@
         /// </summary>
         public long Duration { get; set; }
 
-        public string Location{ get; set; }
+        public string Location { get; set; }
         public int PrivacyStatus { get; set; }
 
         public int PlaylistId { get; set; }

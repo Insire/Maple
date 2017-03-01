@@ -1,22 +1,17 @@
 ﻿using AutoMapper;
-using Maple.Data;
 
 namespace Maple
 {
     public class MediaItemMapper : IMediaItemMapper
     {
         private readonly IMapper _mapper;
-        private readonly IMediaItemRepository _mediaItemRepository;
 
-        public MediaItemMapper(IMediaItemRepository mediaItemRepository)
+        public MediaItemMapper()
         {
-            _mediaItemRepository = mediaItemRepository;
-
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Data.MediaItem, Core.MediaItem>();
-                cfg.CreateMap<Core.MediaItem, Data.MediaItem>()
-                    .ForMember(nameof(Data.MediaItem.IsDeleted), opt => opt.Ignore());
+                cfg.CreateMap<Core.MediaItem, Data.MediaItem>();
             });
 
             config.AssertConfigurationIsValid();
@@ -25,12 +20,12 @@ namespace Maple
 
         public MediaItemViewModel Get(Core.MediaItem mediaitem)
         {
-            return new MediaItemViewModel( _mediaItemRepository, GetData(mediaitem));
+            return new MediaItemViewModel(GetData(mediaitem));
         }
 
         public MediaItemViewModel Get(Data.MediaItem mediaitem)
         {
-            return new MediaItemViewModel( _mediaItemRepository, mediaitem);
+            return new MediaItemViewModel(mediaitem);
         }
 
         public Core.MediaItem GetCore(Data.MediaItem mediaitem)

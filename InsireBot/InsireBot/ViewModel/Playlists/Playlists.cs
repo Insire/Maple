@@ -6,24 +6,21 @@ using System.Windows.Input;
 
 namespace Maple
 {
-    public class Playlists : ChangeTrackingViewModeListBase<Playlist>
+    public class Playlists : BaseListViewModel<Playlist>
     {
+        private readonly IPlaylistContext _context;
         private readonly IBotLog _log;
-        private readonly IPlaylistsRepository _playlistRepository;
-        private readonly IMediaItemRepository _mediaItemRepository;
         private readonly DialogViewModel _dialogViewModel;
 
         public ICommand PlayCommand { get; private set; }
 
-        public Playlists(IMediaItemRepository mediaItemRepository, IPlaylistsRepository playlistRepository, IBotLog log, DialogViewModel dialogViewModel)
+        public Playlists(IPlaylistContext context, IBotLog log, DialogViewModel dialogViewModel) : base()
         {
-            _mediaItemRepository = mediaItemRepository;
-            _playlistRepository = playlistRepository;
             _dialogViewModel = dialogViewModel;
             _log = log;
 
-            var playlists = playlistRepository.Seed();
-            Items.AddRange(playlists.Select(p => new Playlist(_playlistRepository, _mediaItemRepository, _dialogViewModel, p)));
+
+            Items.AddRange(context.Playlists.Select(p => new Playlist(_dialogViewModel, p)));
             SelectedItem = Items.FirstOrDefault();
 
             AddCommand = new RelayCommand(Add, CanAdd);
@@ -52,7 +49,7 @@ namespace Maple
                 playlist.Sequence = index;
             }
 
-            Items.Add(new Playlist(_playlistRepository, _mediaItemRepository, _dialogViewModel, playlist));
+            Items.Add(new Playlist(_dialogViewModel, playlist));
         }
     }
 }

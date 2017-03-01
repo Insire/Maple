@@ -1,4 +1,5 @@
 ﻿using Maple.Core;
+using Maple.Data;
 using Maple.Localization.Properties;
 using System;
 using System.ComponentModel;
@@ -11,7 +12,7 @@ namespace Maple
     /// <summary>
     /// ViewModel that stores and controls which UserControl(Page/View) whatever is displayed in the mainwindow of this app)
     /// </summary>
-    public class Scenes : ViewModelListBase<Scene>
+    public class Scenes : BaseListViewModel<Scene>
     {
         private ITranslationManager _manager;
         private IBotLog _log;
@@ -20,6 +21,7 @@ namespace Maple
         public ICommand OpenGithubPageCommand { get; private set; }
 
         public Scenes(ITranslationManager manager,
+                        IPlaylistContext context,
                         IBotLog log,
                         DirectorViewModel directorViewModel,
                         MediaPlayers mediaPlayersViewModel,
@@ -34,7 +36,7 @@ namespace Maple
 
             var content = new[]
             {
-                new Scene(_manager)
+                new Scene(_manager,context)
                 {
                     Content = new MediaPlayerPage(_manager),
                     Key = nameof(Resources.Playback),
@@ -43,7 +45,7 @@ namespace Maple
                     Sequence = 100,
                 },
 
-                new Scene(_manager)
+                new Scene(_manager,context)
                 {
                     Content = new PlaylistsPage(_manager),
                     Key = nameof(Resources.Playlists),
@@ -52,7 +54,7 @@ namespace Maple
                     Sequence = 300,
                 },
 
-                new Scene(_manager)
+                new Scene(_manager,context)
                 {
                     Content = new ColorOptionsPage(_manager),
                     Key = nameof(Resources.Themes),
@@ -61,7 +63,7 @@ namespace Maple
                     Sequence = 500,
                 },
 
-                new Scene(_manager)
+                new Scene(_manager,context)
                 {
                     Content = new OptionsPage(_manager),
                     Key = nameof(Resources.Options),
@@ -70,7 +72,7 @@ namespace Maple
                     Sequence = 600,
                 },
 
-                new Scene(_manager)
+                new Scene(_manager,context)
                 {
                     Content = new MediaPlayersPage(_manager),
                     Key = nameof(Resources.Director),

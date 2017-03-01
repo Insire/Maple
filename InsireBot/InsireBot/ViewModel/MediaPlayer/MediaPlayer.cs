@@ -3,14 +3,14 @@ using Maple.Data;
 using Maple.Localization.Properties;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows.Input;
 
 namespace Maple
 {
-    public class MediaPlayer : TrackingBaseViewModel<Data.MediaPlayer>, IValidatableTrackingObject, IDisposable, ISaveable
+    public class MediaPlayer : BaseViewModel<Data.MediaPlayer>, IDisposable
     {
+        private readonly IDbContext _context;
         private readonly ITranslationManager _manager;
 
         public bool IsPlaying { get { return Player.IsPlaying; } }
@@ -28,11 +28,12 @@ namespace Maple
         public ICommand NextCommand { get; private set; }
         public ICommand PreviousCommand { get; private set; }
         public ICommand StopCommand { get; private set; }
-        public ICommand RemoveCommand { get; private set; }
-        public ICommand ClearCommand { get; private set; }
         public ICommand LoadFromFileCommand { get; private set; }
         public ICommand LoadFromFolderCommand { get; private set; }
         public ICommand LoadFromUrlCommand { get; private set; }
+        public ICommand RemoveRangeCommand { get; protected set; }
+        public ICommand RemoveCommand { get; protected set; }
+        public ICommand ClearCommand { get; protected set; }
 
         private AudioDevices _audioDevices;
         public AudioDevices AudioDevices
@@ -62,10 +63,7 @@ namespace Maple
             protected set { SetValue(ref _isPrimary, value, Changed: () => Model.IsPrimary = value); }
         }
 
-        public MediaPlayer(ITranslationManager manager,
-                            IMediaPlayerRepository mediaPlayerRepository,
-                            IMediaPlayer player,
-                            Data.MediaPlayer model) : base(model, mediaPlayerRepository)
+        public MediaPlayer(ITranslationManager manager, IMediaPlayer player, Data.MediaPlayer model) : base(model)
         {
             _manager = manager ?? throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} {Resources.IsRequired}");
             Player = player ?? throw new ArgumentNullException(nameof(player), $"{nameof(player)} {Resources.IsRequired}");
@@ -83,27 +81,22 @@ namespace Maple
                 Player.AudioDevice = device;
 
             InitiliazeCommands();
-
-            if (!Model.IsNew)
-                AcceptChanges();
-
-            Validate();
         }
 
-        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (string.IsNullOrWhiteSpace(Name))
-                yield return new ValidationResult($"{nameof(Name)} {Resources.IsRequired}", new[] { nameof(Name) });
+        //public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        //{
+        //    if (string.IsNullOrWhiteSpace(Name))
+        //        yield return new ValidationResult($"{nameof(Name)} {Resources.IsRequired}", new[] { nameof(Name) });
 
-            if (Playlist == null)
-                yield return new ValidationResult($"{nameof(Playlist)} {Resources.IsRequired}", new[] { nameof(Playlist) });
+        //    if (Playlist == null)
+        //        yield return new ValidationResult($"{nameof(Playlist)} {Resources.IsRequired}", new[] { nameof(Playlist) });
 
-            if (Player == null)
-                yield return new ValidationResult($"{nameof(Player)} {Resources.IsRequired}", new[] { nameof(Player) });
+        //    if (Player == null)
+        //        yield return new ValidationResult($"{nameof(Player)} {Resources.IsRequired}", new[] { nameof(Player) });
 
-            if (Player?.AudioDevice == null)
-                yield return new ValidationResult($"{nameof(Player.AudioDevice)} {Resources.IsRequired}", new[] { nameof(Player.AudioDevice) });
-        }
+        //    if (Player?.AudioDevice == null)
+        //        yield return new ValidationResult($"{nameof(Player.AudioDevice)} {Resources.IsRequired}", new[] { nameof(Player.AudioDevice) });
+        //}
 
         private void Player_AudioDeviceChanging(object sender, EventArgs e)
         {
@@ -164,7 +157,8 @@ namespace Maple
 
         public void Clear()
         {
-            Playlist.Clear();
+            using (_busyStack.GetToken())
+                Playlist.Clear();
         }
 
         public bool CanClear()
@@ -174,58 +168,74 @@ namespace Maple
 
         public void AddRange(IEnumerable<MediaItemViewModel> mediaItems)
         {
-            foreach (var item in mediaItems)
-                Playlist.Add(item);
+            using (_busyStack.GetToken())
+            {
+                foreach (var item in mediaItems)
+                    Playlist.Add(item);
+            }
         }
 
         public void Add(MediaItemViewModel mediaItem)
         {
-            if (Playlist.Items.Any())
+            using (_busyStack.GetToken())
             {
-                var maxIndex = Playlist.Items.Max(p => p.Sequence) + 1;
-                if (maxIndex < 0)
-                    maxIndex = 0;
+                if (Playlist.Items.Any())
+                {
+                    var maxIndex = Playlist.Items.Max(p => p.Sequence) + 1;
+                    if (maxIndex < 0)
+                        maxIndex = 0;
 
-                mediaItem.Sequence = maxIndex;
-            }
-            else
-            {
-                mediaItem.Sequence = 0;
-            }
+                    mediaItem.Sequence = maxIndex;
+                }
+                else
+                {
+                    mediaItem.Sequence = 0;
+                }
 
-            Playlist.Items.Add(mediaItem);
+                Playlist.Items.Add(mediaItem);
+            }
         }
 
         public void Remove(MediaItemViewModel item)
         {
-            Playlist.Remove(item);
+            using (_busyStack.GetToken())
+                Playlist.Remove(item);
         }
 
         private bool CanRemove(MediaItemViewModel item)
         {
-            return Playlist.CanRemove(item);
+            using (_busyStack.GetToken())
+                return Playlist.CanRemove(item);
         }
 
         public void Pause()
         {
-            Player.Pause();
+            using (_busyStack.GetToken())
+                Player.Pause();
         }
 
         public void Stop()
         {
-            Player.Stop();
+            using (_busyStack.GetToken())
+                Player.Stop();
         }
 
         public void Previous()
         {
-            var item = Playlist.Previous();
-            Player.Play(item);
+            using (_busyStack.GetToken())
+            {
+                var item = Playlist.Previous();
+                Player.Play(item);
+            }
         }
 
         public void Next()
         {
-            var item = Playlist.Next();
-            Player.Play(item);
+            using (_busyStack.GetToken())
+            {
+                var item = Playlist.Next();
+                Player.Play(item);
+            }
         }
 
         public bool CanNext()

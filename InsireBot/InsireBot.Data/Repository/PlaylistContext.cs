@@ -1,0 +1,23 @@
+﻿using SQLite.CodeFirst;
+using System.Data.Entity;
+
+namespace Maple.Data
+{
+    public class PlaylistContext : DbContext, IPlaylistContext
+    {
+        public DbSet<Playlist> Playlists { get; set; }
+        public DbSet<MediaItem> MediaItems { get; set; }
+        public DbSet<MediaPlayer> Mediaplayers { get; set; }
+
+        public PlaylistContext() : base("Main")
+        {
+
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            var sqliteConnectionInitializer = new SqliteDropCreateDatabaseWhenModelChanges<PlaylistContext>(modelBuilder);
+            Database.SetInitializer(sqliteConnectionInitializer);
+        }
+    }
+}

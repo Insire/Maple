@@ -1,14 +1,17 @@
 ﻿using Maple.Core;
+using Maple.Data;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Maple
 {
     public class Scene : ObservableObject, ISequence
     {
-        private ITranslationManager _manager;
-        public Func<ISaveable> GetDataContext { get; set; }
+        private readonly ITranslationManager _manager;
+        private readonly IPlaylistContext _context;
+        public Func<ObservableObject> GetDataContext { get; set; }
 
         private BusyStack _busyStack;
         /// <summary>
@@ -56,18 +59,19 @@ namespace Maple
         public bool IsSelected
         {
             get { return _isSelected; }
-            set { SetValue(ref _isSelected, value, Changed: UpdateDataContext, Changing: Save); }
+            set { SetValue(ref _isSelected, value, Changed: async () => await UpdateDataContext()); }
         }
 
         public int _sequence;
         public int Sequence
         {
             get { return _sequence; }
-            set { SetValue(ref _sequence, value, Changed: UpdateDataContext, Changing: Save); }
+            set { SetValue(ref _sequence, value, Changed: async () => await UpdateDataContext()); }
         }
 
-        public Scene(ITranslationManager manager)
+        public Scene(ITranslationManager manager, IPlaylistContext context)
         {
+            _context = context;
             _manager = manager;
             _manager.PropertyChanged += (o, e) =>
                       {
@@ -75,13 +79,15 @@ namespace Maple
                               UpdateDisplayName();
                       };
 
-            BusyStack = new BusyStack();
-            BusyStack.OnChanged = (hasItems) => IsBusy = hasItems;
+            BusyStack = new BusyStack()
+            {
+                OnChanged = (hasItems) => IsBusy = hasItems
+            };
         }
 
         // TODO fiure out a way to call this async and still maintain order
         // maybe blocking collection + cancellationtokensource
-        private void UpdateDataContext()
+        private async Task UpdateDataContext()
         {
             if (Content == null || !IsSelected || GetDataContext == null)
                 return;
@@ -89,28 +95,18 @@ namespace Maple
             // while fetching the dataconext, we will switch IsBusy accordingly
             using (var token = BusyStack.GetToken())
             {
-                var currentContext = Content.DataContext as ISaveable;
+                var currentContext = Content.DataContext as ObservableObject;
                 var newContext = GetDataContext.Invoke();
 
                 if (currentContext == null && newContext == null)
                     return;
 
-                if (EqualityComparer<ISaveable>.Default.Equals(currentContext, newContext))
+                if (EqualityComparer<ObservableObject>.Default.Equals(currentContext, newContext))
                     return;
 
+                await _context.SaveChangesAsync();
+
                 Content.DataContext = newContext;
-            }
-        }
-
-        private void Save()
-        {
-            if (Content == null || !IsSelected)
-                return;
-
-            using (var token = BusyStack.GetToken())
-            {
-                var saveable = Content.DataContext as ISaveable;
-                saveable?.Save();
             }
         }
 

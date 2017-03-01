@@ -1,11 +1,8 @@
 ﻿using Maple.Core;
-using Maple.Data;
-using Maple.Localization.Properties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,10 +11,8 @@ using System.Windows.Input;
 namespace Maple
 {
     [DebuggerDisplay("{Title}, {Sequence}")]
-    public class Playlist : TrackingBaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier
+    public class Playlist : BaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier
     {
-        private readonly IPlaylistsRepository _playlistsRepository;
-        private readonly IMediaItemRepository _mediaItemRepository;
         private readonly DialogViewModel _dialogViewModel;
         public int ItemCount => Items?.Count ?? 0;
 
@@ -31,7 +26,7 @@ namespace Maple
         public Stack<int> History { get; private set; }
 
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public ChangeTrackingCollection<MediaItemViewModel> Items { get; private set; }
+        public RangeObservableCollection<MediaItemViewModel> Items { get; private set; }
 
         private MediaItemViewModel _currentItem;
         /// <summary>
@@ -127,24 +122,20 @@ namespace Maple
             set { SetValue(ref _repeatMode, value, Changed: () => Model.RepeatMode = (int)value); }
         }
 
-        public Playlist(IPlaylistsRepository playlistRepository, IMediaItemRepository mediaItemRepository, DialogViewModel dialogViewModel, Data.Playlist model)
-            : base(model, playlistRepository)
+        public Playlist(DialogViewModel dialogViewModel, Data.Playlist model)
+            : base(model)
         {
             using (_busyStack.GetToken())
             {
                 _dialogViewModel = dialogViewModel;
-                _playlistsRepository = playlistRepository;
-                _mediaItemRepository = mediaItemRepository;
 
-                Items = new ChangeTrackingCollection<MediaItemViewModel>();
+                Items = new RangeObservableCollection<MediaItemViewModel>();
                 RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
                 History = new Stack<int>();
 
                 LoadFromFileCommand = new AsyncRelayCommand(LoadFromFile, () => CanLoadFromFile());
                 LoadFromFolderCommand = new AsyncRelayCommand(LoadFromFolder, () => CanLoadFromFolder());
                 LoadFromUrlCommand = new AsyncRelayCommand(LoadFromUrl, () => CanLoadFromUrl());
-
-                Items.AddRange(model.MediaItems.Select(p => new MediaItemViewModel(_mediaItemRepository, p)));
 
                 Title = model.Title;
                 Description = model.Description;
@@ -155,19 +146,12 @@ namespace Maple
                 if (model.MediaItems == null)
                     throw new ArgumentException($"{model.MediaItems} cannot be null");
 
-                Saved += OnSaved;
+                model.MediaItems.ForEach(p => Items.Add(new MediaItemViewModel(p)));
 
                 Items.CollectionChanged += (o, e) =>
                 {
                     OnPropertyChanged(nameof(ItemCount));
                 };
-
-                RegisterCollection(Items, model.MediaItems);
-
-                if (!Model.IsNew)
-                    AcceptChanges();
-
-                Validate();
             }
         }
 
@@ -176,7 +160,7 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var items = await _dialogViewModel.ShowUrlParseDialog();
-                var result = items.Select(p => new MediaItemViewModel(_mediaItemRepository, p));
+                var result = items.Select(p => new MediaItemViewModel(p));
                 Items.AddRange(result);
             }
         }
@@ -429,22 +413,10 @@ namespace Maple
             return History != null && History.Any();
         }
 
-        public override IEnumerable<ValidationResult> Validate(ValidationContext context)
-        {
-            if (string.IsNullOrWhiteSpace(Title))
-                yield return new ValidationResult($"{nameof(Title)} {Resources.IsRequired}", new[] { nameof(Title) });
-        }
-
-        public void OnSaved(object sender, EventArgs e)
-        {
-            foreach (var item in Items)
-            {
-                if (item.PlaylistId != Id)
-                {
-                    item.PlaylistId = Id;
-                    item.Save();
-                }
-            }
-        }
+        //public override IEnumerable<ValidationResult> Validate(ValidationContext context)
+        //{
+        //    if (string.IsNullOrWhiteSpace(Title))
+        //        yield return new ValidationResult($"{nameof(Title)} {Resources.IsRequired}", new[] { nameof(Title) });
+        //}
     }
 }

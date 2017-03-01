@@ -7,7 +7,7 @@ namespace Maple
     /// <summary>
     /// viewmodel for creating mediaitem from a string (path/url)
     /// </summary>
-    public class CreateMediaItemViewModel : ViewModelListBase<IMediaItem>
+    public class CreateMediaItemViewModel : BaseListViewModel<IMediaItem>
     {
         private IYoutubeUrlParseService _dataParsingService;
         private IMediaItemMapper _mapper;

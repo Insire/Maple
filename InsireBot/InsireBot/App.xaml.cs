@@ -96,9 +96,7 @@ namespace Maple
             _container.Register<IMediaItemMapper, MediaItemMapper>();
             _container.Register<IPlaylistMapper, PlaylistMapper>();
 
-            _container.Register<IPlaylistsRepository, PlaylistsRepository>(reuse: Reuse.Singleton);
-            _container.Register<IMediaItemRepository, MediaItemRepository>(reuse: Reuse.Singleton);
-            _container.Register<IMediaPlayerRepository, MediaPlayerRepository>(reuse: Reuse.Singleton);
+            _container.Register<IPlaylistContext, PlaylistContext>();
 
             _manager = _container.Resolve<ITranslationManager>();
         }

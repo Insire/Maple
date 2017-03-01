@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
 
 namespace Maple.Core
 {
-    public abstract class ViewModelListBase<T> : ObservableObject where T : INotifyPropertyChanged
+    public abstract class BaseListViewModel<T> : ObservableObject where T : INotifyPropertyChanged
     {
         protected object _itemsLock;
 
@@ -58,6 +59,7 @@ namespace Maple.Core
         /// <summary>
         /// Contains all the UI relevant Models and notifies about changes in the collection and inside the Models themself
         /// </summary>
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public RangeObservableCollection<T> Items
         {
             get { return _items; }
@@ -84,11 +86,12 @@ namespace Maple.Core
             get { return Items[index]; }
         }
 
-        public ICommand RemoveRangeCommand { get; private set; }
-        public ICommand RemoveCommand { get; private set; }
-        public ICommand ClearCommand { get; private set; }
+        public ICommand RemoveRangeCommand { get; protected set; }
+        public ICommand RemoveCommand { get; protected set; }
+        public ICommand ClearCommand { get; protected set; }
+        public ICommand AddCommand { get; protected set; }
 
-        public ViewModelListBase()
+        public BaseListViewModel()
         {
             InitializeProperties();
             InitializeCommands();
@@ -96,12 +99,12 @@ namespace Maple.Core
             BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
         }
 
-        public ViewModelListBase(IList<T> items) : this()
+        public BaseListViewModel(IList<T> items) : this()
         {
             Items.AddRange(items);
         }
 
-        public ViewModelListBase(IEnumerable<T> items) : this()
+        public BaseListViewModel(IEnumerable<T> items) : this()
         {
             Items.AddRange(items);
         }
@@ -113,9 +116,10 @@ namespace Maple.Core
             Items = new RangeObservableCollection<T>();
             Items.CollectionChanged += ItemsCollectionChanged;
 
-            BusyStack = new BusyStack();
-            BusyStack.OnChanged = (hasItems) => IsBusy = hasItems;
-
+            BusyStack = new BusyStack()
+            {
+                OnChanged = (hasItems) => IsBusy = hasItems
+            };
             View = CollectionViewSource.GetDefaultView(Items);
 
             // initial Notification, so that UI recognizes the value

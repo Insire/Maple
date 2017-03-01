@@ -2,7 +2,7 @@
 
 namespace Maple
 {
-    public class DirectorViewModel : ObservableObject, ISaveable
+    public class DirectorViewModel : ObservableObject
     {
         private MediaPlayers _mediaPlayers;
         public MediaPlayers MediaPlayers
@@ -22,12 +22,6 @@ namespace Maple
         {
             Playlists = playlists;
             MediaPlayers = players;
-        }
-
-        public void Save()
-        {
-            Playlists.Save();
-            MediaPlayers.Save();
         }
     }
 }

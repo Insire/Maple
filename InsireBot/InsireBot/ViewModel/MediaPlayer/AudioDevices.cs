@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Maple
 {
-    public class AudioDevices : ViewModelListBase<AudioDevice>
+    public class AudioDevices : BaseListViewModel<AudioDevice>
     {
         public AudioDevices() : base()
         {

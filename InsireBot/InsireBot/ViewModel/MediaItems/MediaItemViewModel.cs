@@ -1,17 +1,11 @@
 ﻿using Maple.Core;
-using Maple.Data;
-using Maple.Localization.Properties;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
 
 namespace Maple
 {
-    public class MediaItemViewModel : TrackingBaseViewModel<Data.MediaItem>,
-                                        IMediaItem, ISequence, IIdentifier
+    public class MediaItemViewModel : BaseViewModel<Data.MediaItem>, IMediaItem, ISequence, IIdentifier
     {
-        public int IdOriginalValue => GetOriginalValue<int>(nameof(Id));
         private int _id;
         public int Id
         {
@@ -19,7 +13,6 @@ namespace Maple
             private set { SetValue(ref _id, value, Changed: () => Model.Id = value); }
         }
 
-        public int SequenceOriginalValue => GetOriginalValue<int>(nameof(Sequence));
         private int _sequence;
         public int Sequence
         {
@@ -27,7 +20,7 @@ namespace Maple
             set { SetValue(ref _sequence, value, Changed: () => Model.Sequence = value); }
         }
 
-        public int PlaylistIdOriginalValue => GetOriginalValue<int>(nameof(PlaylistId));
+
         private int _playlistId;
         public int PlaylistId
         {
@@ -35,7 +28,6 @@ namespace Maple
             set { SetValue(ref _playlistId, value, Changed: () => Model.PlaylistId = value); }
         }
 
-        public TimeSpan DurationOriginalValue => TimeSpan.FromTicks(GetOriginalValue<long>(nameof(Duration)));
         private TimeSpan _duration;
         public TimeSpan Duration
         {
@@ -43,7 +35,6 @@ namespace Maple
             private set { SetValue(ref _duration, value, Changed: () => Model.Duration = value.Ticks); }
         }
 
-        public PrivacyStatus PrivacyStatusOriginalValue => GetOriginalValue<PrivacyStatus>(nameof(PrivacyStatus));
         private PrivacyStatus _privacyStatus;
         public PrivacyStatus PrivacyStatus
         {
@@ -51,7 +42,6 @@ namespace Maple
             private set { SetValue(ref _privacyStatus, value, Changed: () => Model.PrivacyStatus = (int)value); }
         }
 
-        public string TitleOriginalValue => GetOriginalValue<string>(nameof(Title));
         private string _title;
         public string Title
         {
@@ -59,7 +49,6 @@ namespace Maple
             set { SetValue(ref _title, value, Changed: () => Model.Title = value); }
         }
 
-        public string DescriptionOriginalValue => GetOriginalValue<string>(nameof(Description));
         private string _description;
         public string Description
         {
@@ -67,7 +56,6 @@ namespace Maple
             set { SetValue(ref _description, value, Changed: () => Model.Description = value); }
         }
 
-        public string LocationOriginalValue => GetOriginalValue<string>(nameof(Location));
         private string _location;
         public string Location
         {
@@ -84,7 +72,7 @@ namespace Maple
 
         public bool IsFile => File.Exists(Location);
 
-        public MediaItemViewModel(IMediaItemRepository mediaItemRepository, Data.MediaItem model) : base(model, mediaItemRepository)
+        public MediaItemViewModel(Data.MediaItem model) : base(model)
         {
             Id = model.Id;
             PlaylistId = model.PlaylistId;
@@ -94,11 +82,6 @@ namespace Maple
             Sequence = model.Sequence;
             Duration = TimeSpan.FromTicks(model.Duration);
             PrivacyStatus = (PrivacyStatus)model.PrivacyStatus;
-
-            if (!Model.IsNew)
-                AcceptChanges();
-
-            Validate();
         }
 
         public override string ToString()
@@ -107,13 +90,13 @@ namespace Maple
             return result;
         }
 
-        public override IEnumerable<ValidationResult> Validate(ValidationContext context)
-        {
-            if (string.IsNullOrWhiteSpace(Title))
-                yield return new ValidationResult($"{nameof(Title)} {Resources.IsRequired}", new[] { nameof(Title) });
+        //public override IEnumerable<ValidationResult> Validate(ValidationContext context)
+        //{
+        //    if (string.IsNullOrWhiteSpace(Title))
+        //        yield return new ValidationResult($"{nameof(Title)} {Resources.IsRequired}", new[] { nameof(Title) });
 
-            if (string.IsNullOrWhiteSpace(Location))
-                yield return new ValidationResult($"{nameof(Location)} {Resources.IsRequired}", new[] { nameof(Location) });
-        }
+        //    if (string.IsNullOrWhiteSpace(Location))
+        //        yield return new ValidationResult($"{nameof(Location)} {Resources.IsRequired}", new[] { nameof(Location) });
+        //}
     }
 }

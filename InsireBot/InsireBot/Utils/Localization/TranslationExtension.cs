@@ -25,13 +25,10 @@ namespace Maple
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            var element = default(IIocFrameworkElement);
-            var manager = default(ITranslationManager);
-
-            if (TryGetIoCFrameWorkElement(serviceProvider, out element))
+            if (TryGetIoCFrameWorkElement(serviceProvider, out IIocFrameworkElement element))
                 return ProvideValue(serviceProvider, element.TranslationManager);
 
-            if (TryGetTranslationManagerFromResources(serviceProvider, out manager))
+            if (TryGetTranslationManagerFromResources(serviceProvider, out ITranslationManager manager))
                 return ProvideValue(serviceProvider, manager);
 
             Debug.Fail($"{nameof(TranslationExtension)} ProvideValue {Key} failed");
@@ -42,14 +39,14 @@ namespace Maple
         private bool TryGetIoCFrameWorkElement(IServiceProvider serviceProvider, out IIocFrameworkElement element)
         {
             var provider = serviceProvider.GetService(typeof(IRootObjectProvider)) as IRootObjectProvider;
-            element = provider.RootObject as IIocFrameworkElement;
+            element = provider?.RootObject as IIocFrameworkElement;
             return element != null;
         }
 
         private bool TryGetTranslationManagerFromResources(IServiceProvider serviceProvider, out ITranslationManager manager)
         {
             var provider = serviceProvider.GetService(typeof(IRootObjectProvider)) as IRootObjectProvider;
-            var dictionary = provider.RootObject as ResourceDictionary;
+            var dictionary = provider?.RootObject as ResourceDictionary;
             var key = typeof(ITranslationManager).Name;
 
             if (dictionary?.Contains(key) == true)
