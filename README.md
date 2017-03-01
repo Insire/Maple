@@ -55,5 +55,5 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ## Credits
-- Application Icon - [Maple Leaf](https://thenounproject.com/term/maple-leaf/463010/) by parkjisun from the Noun Project
+- Application Icon - by vngnc aka [Keno Böhme](http://www.kenoboeh.me/)
 - General Feedback - [C# Discord Server](https://discord.gg/VCFhEDy)
