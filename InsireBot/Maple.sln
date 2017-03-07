@@ -14,12 +14,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\license.md = ..\license.md
 		..\README.md = ..\README.md
 		..\test.runsettings = ..\test.runsettings
-		..\TestSettings1.testsettings = ..\TestSettings1.testsettings
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Localization", "InsireBot.Localization\Maple.Localization.csproj", "{A073FC92-90E3-4541-8B52-6F7293187871}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Tests", "InsireBot.Tests\Maple.Tests.csproj", "{161B76D6-52E4-4842-924B-1D3F1019F6BE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C517102D-FA5E-4B12-9F43-0BE202470222} = {C517102D-FA5E-4B12-9F43-0BE202470222}
+		{A9B11084-CE8D-4734-8961-3A254841F82E} = {A9B11084-CE8D-4734-8961-3A254841F82E}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Data", "InsireBot.Data\Maple.Data.csproj", "{B3CD46BE-3C08-4BAE-AE60-A6D84A62400C}"
 EndProject

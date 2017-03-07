@@ -47,13 +47,7 @@
         <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
       </ItemGroup>
     </When>
-    <Otherwise>
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-          <Private>False</Private>
-        </Reference>
-      </ItemGroup>
-    </Otherwise>
+    <Otherwise />
   </Choose>
   <ItemGroup>
     <Compile Include="Mocks\MockLog.cs" />
@@ -75,9 +69,17 @@
       <Project>{b3cd46be-3c08-4bae-ae60-a6d84a62400c}</Project>
       <Name>Maple.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\InsireBot.Discord\Maple.Discord.csproj">
+      <Project>{c517102d-fa5e-4b12-9f43-0be202470222}</Project>
+      <Name>Maple.Discord</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InsireBot.Localization\Maple.Localization.csproj">
       <Project>{A073FC92-90E3-4541-8B52-6F7293187871}</Project>
       <Name>Maple.Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InsireBot.Twitch\Maple.Twitch.csproj">
+      <Project>{a9b11084-ce8d-4734-8961-3a254841f82e}</Project>
+      <Name>Maple.Twitch</Name>
     </ProjectReference>
     <ProjectReference Include="..\InsireBot.Youtube\Maple.Youtube.csproj">
       <Project>{B5BE546F-8D9F-4FB9-B235-AF05FD553F9E}</Project>
@@ -91,7 +93,14 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PackageReference Include="MSTest.TestAdapter">
+      <Version>1.1.12</Version>
+    </PackageReference>
+    <PackageReference Include="MSTest.TestFramework">
+      <Version>1.1.11</Version>
+    </PackageReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

@@ -52,10 +52,7 @@ namespace Maple.Tests
         {
             try
             {
-                var playlist = new Playlist(_container.Resolve<IPlaylistsRepository>(),
-_container.Resolve<IMediaItemRepository>(),
-new DialogViewModel(new MockYoutubeParseService(), _container.Resolve<IMediaItemMapper>()), CreatePlaylist());
-
+                var playlist = new Playlist(_container.Resolve<IPlaylistsRepository>(), _container.Resolve<IMediaItemRepository>(), new DialogViewModel(new MockYoutubeParseService(), _container.Resolve<IMediaItemMapper>()), CreatePlaylist());
                 var mediaplayer = new MainMediaPlayer(null, _container.Resolve<IMediaPlayerRepository>(), CreateMockMediaPlayer(), CreateOneDataMediaPlayer(), playlist, "");
             }
             catch (ArgumentNullException ex)
@@ -71,10 +68,7 @@ new DialogViewModel(new MockYoutubeParseService(), _container.Resolve<IMediaItem
         {
             try
             {
-                var playlist = new Playlist(_container.Resolve<IPlaylistsRepository>(),
-_container.Resolve<IMediaItemRepository>(),
-new DialogViewModel(new MockYoutubeParseService(), _container.Resolve<IMediaItemMapper>()), CreatePlaylist());
-
+                var playlist = new Playlist(_container.Resolve<IPlaylistsRepository>(), _container.Resolve<IMediaItemRepository>(), new DialogViewModel(new MockYoutubeParseService(), _container.Resolve<IMediaItemMapper>()), CreatePlaylist());
                 var mediaplayer = new MainMediaPlayer(_container.Resolve<ITranslationManager>(), _container.Resolve<IMediaPlayerRepository>(), null, CreateOneDataMediaPlayer(), playlist, "test");
             }
             catch (ArgumentNullException ex)
