@@ -75,8 +75,10 @@ namespace Maple
                               UpdateDisplayName();
                       };
 
-            BusyStack = new BusyStack();
-            BusyStack.OnChanged = (hasItems) => IsBusy = hasItems;
+            BusyStack = new BusyStack()
+            {
+                OnChanged = (hasItems) => IsBusy = hasItems
+            };
         }
 
         // TODO fiure out a way to call this async and still maintain order

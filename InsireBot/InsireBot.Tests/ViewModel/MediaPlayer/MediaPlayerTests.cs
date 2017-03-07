@@ -208,13 +208,13 @@ new DialogViewModel(new MockYoutubeParseService(), _container.Resolve<IMediaItem
             var mediaplayer = new MediaPlayer(_container.Resolve<ITranslationManager>(),
                                                     _container.Resolve<IMediaPlayerRepository>(),
                                                     CreateMockMediaPlayer(),
-                                                    CreateOneDataMediaPlayer());
-
-            mediaplayer.Playlist = new Playlist(_container.Resolve<IPlaylistsRepository>(),
+                                                    CreateOneDataMediaPlayer())
+            {
+                Playlist = new Playlist(_container.Resolve<IPlaylistsRepository>(),
                                                 _container.Resolve<IMediaItemRepository>(),
                                                 new DialogViewModel(new MockYoutubeParseService(), _container.Resolve<IMediaItemMapper>()),
-                                                CreatePlaylist());
-
+                                                CreatePlaylist())
+            };
             Assert.IsTrue(mediaplayer.IsValid);
             Assert.IsTrue(mediaplayer.IsChanged);
 
@@ -233,13 +233,13 @@ new DialogViewModel(new MockYoutubeParseService(), _container.Resolve<IMediaItem
             var mediaplayer = new MediaPlayer(_container.Resolve<ITranslationManager>(),
                                                     _container.Resolve<IMediaPlayerRepository>(),
                                                     CreateMockMediaPlayer(),
-                                                    CreateOneDataMediaPlayer());
-
-            mediaplayer.Playlist = new Playlist(_container.Resolve<IPlaylistsRepository>(),
+                                                    CreateOneDataMediaPlayer())
+            {
+                Playlist = new Playlist(_container.Resolve<IPlaylistsRepository>(),
                                                 _container.Resolve<IMediaItemRepository>(),
                                                 new DialogViewModel(new MockYoutubeParseService(), _container.Resolve<IMediaItemMapper>()),
-                                                CreatePlaylist());
-
+                                                CreatePlaylist())
+            };
             Assert.IsTrue(mediaplayer.IsValid);
             Assert.IsTrue(mediaplayer.IsChanged);
 
@@ -258,13 +258,13 @@ new DialogViewModel(new MockYoutubeParseService(), _container.Resolve<IMediaItem
             var mediaplayer = new MediaPlayer(_container.Resolve<ITranslationManager>(),
                                                     _container.Resolve<IMediaPlayerRepository>(),
                                                     CreateMockMediaPlayer(),
-                                                    CreateOneDataMediaPlayer());
-
-            mediaplayer.Playlist = new Playlist(_container.Resolve<IPlaylistsRepository>(),
+                                                    CreateOneDataMediaPlayer())
+            {
+                Playlist = new Playlist(_container.Resolve<IPlaylistsRepository>(),
                                                 _container.Resolve<IMediaItemRepository>(),
                                                 new DialogViewModel(new MockYoutubeParseService(), _container.Resolve<IMediaItemMapper>()),
-                                                CreatePlaylist());
-
+                                                CreatePlaylist())
+            };
             Assert.IsTrue(mediaplayer.IsValid);
             Assert.IsTrue(mediaplayer.IsChanged);
 
