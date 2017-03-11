@@ -30,8 +30,7 @@ namespace Maple.Core
         /// <returns></returns>
         public bool Pull()
         {
-            var token = default(BusyToken);
-            var result = Items.TryTake(out token);
+            var result = Items.TryTake(out BusyToken token);
 
             if (result)
                 InvokeOnChanged();
@@ -51,8 +50,7 @@ namespace Maple.Core
 
         public bool HasItems()
         {
-            var token = default(BusyToken);
-            return Items?.TryPeek(out token) ?? false;
+            return Items?.TryPeek(out BusyToken token) ?? false;
         }
 
         /// <summary>

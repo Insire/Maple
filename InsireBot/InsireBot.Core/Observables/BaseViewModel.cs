@@ -1,20 +1,24 @@
-﻿using Maple.Data;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
+using System.Windows.Controls;
 
 namespace Maple.Core
 {
-    public abstract class BaseViewModel<T> : ObservableObject, INotifyDataErrorInfo where T : IModel
+    public abstract class BaseViewModel<T> : ObservableObject, INotifyDataErrorInfo
     {
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
         protected readonly BusyStack _busyStack;
-        protected readonly Dictionary<string, List<string>> Errors;
+        protected Dictionary<string, List<string>> Errors { get; set; }
+        protected Dictionary<string, (List<ValidationRule> Items, object Value)> Rules { get; set; }
 
-        public bool HasErrors => Errors.Any();
+        public bool HasErrors => Errors.Count > 0;
+        public bool IsValid => Errors.Count == 0;
 
         private T _model;
         public T Model
@@ -36,6 +40,7 @@ namespace Maple.Core
             _busyStack.OnChanged += (isBusy) => IsBusy = isBusy;
 
             Errors = new Dictionary<string, List<string>>();
+            Rules = new Dictionary<string, (List<ValidationRule> Items, object Value)>();
         }
 
         protected BaseViewModel(T model) : this()
@@ -45,7 +50,7 @@ namespace Maple.Core
 
         public IEnumerable GetErrors(string propertyName)
         {
-            return propertyName != null && Errors.ContainsKey(propertyName)
+            return !string.IsNullOrEmpty(propertyName) && Errors.ContainsKey(propertyName)
               ? Errors[propertyName]
               : Enumerable.Empty<string>();
         }
@@ -69,5 +74,51 @@ namespace Maple.Core
                 OnErrorsChanged(propertyName);
             }
         }
+
+        protected void AddRule(string propertyName, object value, ValidationRule rule)
+        {
+            var result = (Items: new List<ValidationRule>(), Value: value);
+            if (Rules.ContainsKey(propertyName))
+                result = Rules[propertyName];
+
+            if (!result.Items.Contains(rule))
+                result.Items.Add(rule);
+
+            result.Value = value;
+
+            Rules[propertyName] = result;
+        }
+
+        protected virtual void Validate(string propertyName)
+        {
+            if (string.IsNullOrEmpty(propertyName))
+                ValidateAllInternal();
+            else
+                ValidateInternal(propertyName);
+        }
+
+        private void ValidateInternal(string propertyName, CultureInfo culture = null)
+        {
+            var current = culture ?? Thread.CurrentThread.CurrentCulture;
+            Errors[propertyName].Clear();
+
+            foreach (var item in Rules[propertyName].Items)
+            {
+                var result = item.Validate(Rules[propertyName].Value, current);
+                Errors[propertyName].Add(result.ErrorContent.ToString());
+            }
+
+            OnErrorsChanged(propertyName);
+        }
+
+        private void ValidateAllInternal()
+        {
+            var current = Thread.CurrentThread.CurrentCulture;
+
+            foreach (var key in Errors.Keys)
+                ValidateInternal(key, current);
+        }
+
+
     }
 }

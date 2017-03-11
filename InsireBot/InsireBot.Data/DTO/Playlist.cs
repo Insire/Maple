@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Maple.Data
 {
-    public class Playlist : IModel
+    public class Playlist
     {
         public static Playlist New()
         {

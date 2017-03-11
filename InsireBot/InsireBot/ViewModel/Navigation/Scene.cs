@@ -10,7 +10,7 @@ namespace Maple
     public class Scene : ObservableObject, ISequence
     {
         private readonly ITranslationManager _manager;
-        private readonly IPlaylistContext _context;
+        private readonly PlaylistContext _context;
         public Func<ObservableObject> GetDataContext { get; set; }
 
         private BusyStack _busyStack;
@@ -69,7 +69,7 @@ namespace Maple
             set { SetValue(ref _sequence, value, Changed: async () => await UpdateDataContext()); }
         }
 
-        public Scene(ITranslationManager manager, IPlaylistContext context)
+        public Scene(ITranslationManager manager, PlaylistContext context)
         {
             _context = context;
             _manager = manager;

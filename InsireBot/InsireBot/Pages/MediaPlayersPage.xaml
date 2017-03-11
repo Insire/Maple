@@ -70,7 +70,6 @@
                                    Grid.Column="0"
                                    Text="{local:Translation Playlist}" />
 
-
                         <ComboBox Grid.Row="0"
                                   Grid.Column="2"
                                   DisplayMemberPath="Name"

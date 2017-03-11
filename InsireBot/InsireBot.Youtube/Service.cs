@@ -100,24 +100,31 @@ namespace Maple.Youtube
         {
             var youtubeService = await GetService();
 
-            var newPlaylist = new Google.Apis.YouTube.v3.Data.Playlist();
-            newPlaylist.Snippet = new PlaylistSnippet();
-            newPlaylist.Snippet.Title = playlist.Title;
-            newPlaylist.Snippet.Description = playlist.Description;
-            newPlaylist.Status = new PlaylistStatus
+            var newPlaylist = new Google.Apis.YouTube.v3.Data.Playlist()
             {
-                PrivacyStatus = publicPlaylist == true ? "public" : "private"
+                Snippet = new PlaylistSnippet()
+                {
+                    Title = playlist.Title,
+                    Description = playlist.Description
+                },
+                Status = new PlaylistStatus
+                {
+                    PrivacyStatus = publicPlaylist == true ? "public" : "private"
+                }
             };
-
             newPlaylist = await youtubeService.Playlists.Insert(newPlaylist, "snippet,status").ExecuteAsync();
 
             foreach (var item in playlist.MediaItems)
             {
                 // Add a video to the newly created playlist.
-                var newVideo = new PlaylistItem();
-                newVideo.Snippet = new PlaylistItemSnippet();
-                newVideo.Snippet.PlaylistId = newPlaylist.Id;
-                newVideo.Snippet.ResourceId = new ResourceId();
+                var newVideo = new PlaylistItem()
+                {
+                    Snippet = new PlaylistItemSnippet()
+                    {
+                        PlaylistId = newPlaylist.Id,
+                        ResourceId = new ResourceId()
+                    }
+                };
                 newVideo.Snippet.ResourceId.Kind = "youtube#video";
                 newVideo.Snippet.ResourceId.VideoId = GetVideoId(item);
                 newVideo = await youtubeService.PlaylistItems.Insert(newVideo, "snippet").ExecuteAsync();

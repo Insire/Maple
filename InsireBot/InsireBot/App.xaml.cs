@@ -2,10 +2,9 @@
 using Maple.Core;
 using Maple.Data;
 using Maple.Properties;
-using Maple.Youtube;
 using System;
-using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Maple
@@ -15,10 +14,11 @@ namespace Maple
         private IContainer _container;
         private ITranslationManager _manager;
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             InitializeLocalization();
-            InitializeIocContainer();
+            _container = await ContainerFactory.InitializeIocContainer();
+            _manager = _container.Resolve<ITranslationManager>();
             InitializeResources();
 
             base.OnStartup(e);
@@ -33,9 +33,9 @@ namespace Maple
             shell.Show();
         }
 
-        protected override void OnExit(ExitEventArgs e)
+        protected override async void OnExit(ExitEventArgs e)
         {
-            SaveState();
+            await SaveState();
             ExitInternal(e);
         }
 
@@ -67,50 +67,18 @@ namespace Maple
             Thread.CurrentThread.CurrentCulture = Settings.Default.StartUpCulture;
         }
 
-        private void InitializeIocContainer()
+        private Task SaveState()
         {
-            var connection = new DBConnection(new DirectoryInfo(".").FullName);
-            _container = new Container(rules => rules.WithoutThrowOnRegisteringDisposableTransient());
+            return Task.Run(() =>
+            {
+                var log = _container.Resolve<IBotLog>();
+                log.Info(Localization.Properties.Resources.SavingState);
 
-            _container.RegisterInstance(connection);
+                _container.Resolve<PlaylistContext>().SaveChangesAsync();
+                _manager.Save();
 
-            _container.Register<IBotLog, LoggingService>(reuse: Reuse.Singleton);
-            _container.Register<IYoutubeUrlParseService, UrlParseService>();
-            _container.Register<Scenes>(reuse: Reuse.Singleton);
-            _container.Register<UIColorsViewModel>(reuse: Reuse.Singleton);
-
-            _container.Register<Playlists>(reuse: Reuse.Singleton);
-            _container.Register<MediaPlayers>(reuse: Reuse.Singleton);
-            _container.Register<ShellViewModel>(reuse: Reuse.Singleton);
-            _container.Register<DialogViewModel>(reuse: Reuse.Singleton);
-            _container.Register<OptionsViewModel>(reuse: Reuse.Singleton);
-            _container.Register<DirectorViewModel>(reuse: Reuse.Singleton);
-            _container.Register<StatusbarViewModel>(reuse: Reuse.Singleton);
-
-            _container.Register<UrlParseService>();
-
-            _container.Register<ITranslationProvider, ResxTranslationProvider>(reuse: Reuse.Singleton);
-            _container.Register<ITranslationManager, TranslationManager>(reuse: Reuse.Singleton);
-            _container.Register<IMediaPlayer, NAudioMediaPlayer>(reuse: Reuse.Transient);
-
-            _container.Register<IMediaItemMapper, MediaItemMapper>();
-            _container.Register<IPlaylistMapper, PlaylistMapper>();
-
-            _container.Register<IPlaylistContext, PlaylistContext>();
-
-            _manager = _container.Resolve<ITranslationManager>();
-        }
-
-        private void SaveState()
-        {
-            var log = _container.Resolve<IBotLog>();
-            log.Info(Localization.Properties.Resources.SavingState);
-
-            _container.Resolve<Playlists>().Save();
-            _container.Resolve<MediaPlayers>().Save();
-            _manager.Save();
-
-            log.Info(Localization.Properties.Resources.SavedState);
+                log.Info(Localization.Properties.Resources.SavedState);
+            });
         }
 
         private void ExitInternal(ExitEventArgs e)

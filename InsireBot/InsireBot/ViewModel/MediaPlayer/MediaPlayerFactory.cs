@@ -8,39 +8,18 @@ namespace Maple
 {
     public static class MediaPlayerFactory
     {
-        public static IEnumerable<MediaPlayer> GetMediaPlayers(IPlaylistContext context, ITranslationManager manager, Func<IMediaPlayer> playerFactory, Playlists playlists)
+        public static List<MediaPlayer> GetMediaPlayers(PlaylistContext context, ITranslationManager manager, Func<IMediaPlayer> playerFactory, Playlists playlists, AudioDevices devices, DialogViewModel dialog)
         {
+            var result = new List<MediaPlayer>();
             var all = context.Mediaplayers.ToList();
-            var players = all.Where(p => !p.IsPrimary)
-                                .Select(p => new MediaPlayer(manager, playerFactory(), p));
+            result.AddRange(all.Where(p => !p.IsPrimary)
+                             .Select(p => new MediaPlayer(context, manager, playerFactory(), p, devices, dialog)));
 
-            var primaries = all.Where(p => p.IsPrimary).ToList();
+            var primary = all.First(p => p.IsPrimary);
+            var playlist = playlists.Items.FirstOrDefault(p => p.Id == primary.PlaylistId);
+            result.Add(new MainMediaPlayer(context, manager, playerFactory(), primary, playlist, devices, nameof(Resources.MainMediaplayer)));
 
-            if ((primaries?.Count ?? 0) == 0)
-            {
-                var mediaPlayer = new Data.MediaPlayer
-                {
-                    Name = nameof(Resources.MainMediaplayer),
-                    Sequence = 0,
-                    IsPrimary = true,
-                };
-
-                var playlist = playlists.Items.FirstOrDefault();
-
-                yield return new MainMediaPlayer(manager, playerFactory(), mediaPlayer, playlist, nameof(Resources.MainMediaplayer));
-            }
-
-            if (primaries.Count == 1)
-            {
-                var playlist = playlists.Items.FirstOrDefault(p => p.Id == primaries[0].PlaylistId);
-                yield return new MainMediaPlayer(manager, playerFactory(), primaries[0], playlist, nameof(Resources.MainMediaplayer));
-            }
-
-            foreach (var player in players)
-                yield return player;
-
-            if (primaries?.Count > 1)
-                throw new InsireBotException(Resources.InvalidMediaplayerCountOnDBException + $"({primaries.Count})");
+            return result;
         }
     }
 }

@@ -8,19 +8,22 @@ namespace Maple
 {
     public class Playlists : BaseListViewModel<Playlist>
     {
-        private readonly IPlaylistContext _context;
+        private readonly PlaylistContext _context;
         private readonly IBotLog _log;
         private readonly DialogViewModel _dialogViewModel;
 
         public ICommand PlayCommand { get; private set; }
 
-        public Playlists(IPlaylistContext context, IBotLog log, DialogViewModel dialogViewModel) : base()
+        public Playlists(PlaylistContext context, IBotLog log, DialogViewModel dialogViewModel)
+            : base()
         {
             _dialogViewModel = dialogViewModel;
             _log = log;
+            _context = context;
 
-
-            Items.AddRange(context.Playlists.Select(p => new Playlist(_dialogViewModel, p)));
+            foreach (var item in context.Playlists)
+                Items.Add(new Playlist(_dialogViewModel, item));
+            
             SelectedItem = Items.FirstOrDefault();
 
             AddCommand = new RelayCommand(Add, CanAdd);

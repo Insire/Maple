@@ -26,7 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -39,6 +39,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xaml" />
   </ItemGroup>
   <Choose>
@@ -47,24 +48,10 @@
         <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
       </ItemGroup>
     </When>
-    <Otherwise>
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-          <Private>False</Private>
-        </Reference>
-      </ItemGroup>
-    </Otherwise>
+    <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Mocks\MockLog.cs" />
-    <Compile Include="Mocks\MockMediaPlayer.cs" />
-    <Compile Include="Mocks\MockTranslationManager.cs" />
-    <Compile Include="Mocks\MockYoutubeParseService.cs" />
-    <Compile Include="Repository\MediaPlayerRepositoryTests.cs" />
-    <Compile Include="Repository\PlaylistRepositoryTests.cs" />
-    <Compile Include="Repository\MediaItemRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModel\MediaPlayer\MediaPlayerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InsireBot.Core\Maple.Core.csproj">
@@ -95,7 +82,20 @@
     <PackageReference Include="EntityFramework">
       <Version>6.1.3</Version>
     </PackageReference>
+    <PackageReference Include="Moq">
+      <Version>4.7.1</Version>
+    </PackageReference>
+    <PackageReference Include="MSTest.TestAdapter">
+      <Version>1.1.13</Version>
+    </PackageReference>
+    <PackageReference Include="MSTest.TestFramework">
+      <Version>1.1.13</Version>
+    </PackageReference>
+    <PackageReference Include="System.ValueTuple">
+      <Version>4.3.0</Version>
+    </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

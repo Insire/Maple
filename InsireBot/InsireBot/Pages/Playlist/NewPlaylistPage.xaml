@@ -72,7 +72,7 @@
                                         <DataGridTemplateColumn Header="{local:Translation Title}" SortMemberPath="Title">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />
+                                                    <TextBlock Text="{Binding Title, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" />
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>

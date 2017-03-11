@@ -133,10 +133,6 @@ namespace Maple
                 RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
                 History = new Stack<int>();
 
-                LoadFromFileCommand = new AsyncRelayCommand(LoadFromFile, () => CanLoadFromFile());
-                LoadFromFolderCommand = new AsyncRelayCommand(LoadFromFolder, () => CanLoadFromFolder());
-                LoadFromUrlCommand = new AsyncRelayCommand(LoadFromUrl, () => CanLoadFromUrl());
-
                 Title = model.Title;
                 Description = model.Description;
                 Id = model.Id;
@@ -152,7 +148,26 @@ namespace Maple
                 {
                     OnPropertyChanged(nameof(ItemCount));
                 };
+
+                InitializeCommands();
+                IntializeValidation();
             }
+        }
+
+        private void InitializeCommands()
+        {
+            LoadFromFileCommand = new AsyncRelayCommand(LoadFromFile, () => CanLoadFromFile());
+            LoadFromFolderCommand = new AsyncRelayCommand(LoadFromFolder, () => CanLoadFromFolder());
+            LoadFromUrlCommand = new AsyncRelayCommand(LoadFromUrl, () => CanLoadFromUrl());
+        }
+
+        private void IntializeValidation()
+        {
+            AddRule(nameof(Title), Title, new NotNullOrEmptyRule());
+            AddRule(nameof(Description), Description, new NotNullOrEmptyRule());
+            AddRule(nameof(CurrentItem), CurrentItem, new NotNullRule());
+            AddRule(nameof(RepeatModes), RepeatModes, new NotNullRule());
+            AddRule(nameof(Items), Items, new NotNullRule());
         }
 
         private async Task LoadFromUrl()

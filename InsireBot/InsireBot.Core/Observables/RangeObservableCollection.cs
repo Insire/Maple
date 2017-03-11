@@ -46,6 +46,11 @@ namespace Maple.Core
             base.OnCollectionChanged((NotifyCollectionChangedEventArgs)param);
         }
 
+        public virtual void AddRange(List<T> items)
+        {
+            AddRange(items.AsEnumerable());
+        }
+
         public virtual void AddRange(IEnumerable<T> items)
         {
             if (items == null)

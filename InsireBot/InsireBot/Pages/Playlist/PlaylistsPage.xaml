@@ -4,7 +4,7 @@
                       xmlns:icons="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks"
                       xmlns:local="clr-namespace:Maple"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    
+
     <local:IoCUserControl.Resources>
         <local:BindingProxy x:Key="DetailViewToggleButtonProxy" Data="False" />
 
@@ -50,17 +50,17 @@
 
                 <TextBox Grid.Row="0"
                          Grid.Column="2"
-                         Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />
+                         Text="{Binding Title, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" />
                 <TextBox Grid.Row="2"
                          Grid.Column="2"
-                         Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+                         Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" />
                 <ComboBox Grid.Row="4"
                           Grid.Column="2"
-                          ItemsSource="{Binding RepeatModes}"
-                          SelectedItem="{Binding RepeatMode, UpdateSourceTrigger=PropertyChanged}" />
+                          ItemsSource="{Binding RepeatModes, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
+                          SelectedItem="{Binding RepeatMode, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" />
                 <CheckBox Grid.Row="6"
                           Grid.Column="2"
-                          IsChecked="{Binding IsShuffeling, UpdateSourceTrigger=PropertyChanged}" />
+                          IsChecked="{Binding IsShuffeling, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" />
 
                 <UniformGrid Grid.Row="10"
                              Grid.Column="3"

@@ -10,8 +10,7 @@ namespace Maple
 {
     public class MediaPlayer : BaseViewModel<Data.MediaPlayer>, IDisposable
     {
-        private readonly IDbContext _context;
-        private readonly ITranslationManager _manager;
+        protected readonly ITranslationManager _manager;
 
         public bool IsPlaying { get { return Player.IsPlaying; } }
         public bool Disposed { get; private set; }
@@ -63,13 +62,15 @@ namespace Maple
             protected set { SetValue(ref _isPrimary, value, Changed: () => Model.IsPrimary = value); }
         }
 
-        public MediaPlayer(ITranslationManager manager, IMediaPlayer player, Data.MediaPlayer model) : base(model)
+        public MediaPlayer(PlaylistContext context, ITranslationManager manager, IMediaPlayer player, Data.MediaPlayer model, AudioDevices devices, DialogViewModel dialog)
+            : base(model)
         {
             _manager = manager ?? throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} {Resources.IsRequired}");
             Player = player ?? throw new ArgumentNullException(nameof(player), $"{nameof(player)} {Resources.IsRequired}");
 
             Name = model.Name;
-            AudioDevices = new AudioDevices();
+            Playlist = new Playlist(dialog, context.Playlists.FirstOrDefault(p => p.Id == model.PlaylistId));
+            AudioDevices = devices;
 
             Player.PlayingMediaItem += Player_PlayingMediaItem;
             Player.CompletedMediaItem += MediaPlayer_CompletedMediaItem;
@@ -83,20 +84,34 @@ namespace Maple
             InitiliazeCommands();
         }
 
-        //public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        //{
-        //    if (string.IsNullOrWhiteSpace(Name))
-        //        yield return new ValidationResult($"{nameof(Name)} {Resources.IsRequired}", new[] { nameof(Name) });
+        public MediaPlayer(PlaylistContext context, ITranslationManager manager, IMediaPlayer player, Data.MediaPlayer model, Playlist playlist, AudioDevices devices)
+            : base(model)
+        {
+            _manager = manager ?? throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} {Resources.IsRequired}");
+            Player = player ?? throw new ArgumentNullException(nameof(player), $"{nameof(player)} {Resources.IsRequired}");
+            Playlist = playlist ?? throw new ArgumentNullException(nameof(playlist), $"{nameof(playlist)} {Resources.IsRequired}");
 
-        //    if (Playlist == null)
-        //        yield return new ValidationResult($"{nameof(Playlist)} {Resources.IsRequired}", new[] { nameof(Playlist) });
+            Name = model.Name;
+            Playlist = playlist;
+            AudioDevices = devices;
 
-        //    if (Player == null)
-        //        yield return new ValidationResult($"{nameof(Player)} {Resources.IsRequired}", new[] { nameof(Player) });
+            Player.PlayingMediaItem += Player_PlayingMediaItem;
+            Player.CompletedMediaItem += MediaPlayer_CompletedMediaItem;
+            Player.AudioDeviceChanged += Player_AudioDeviceChanged;
+            Player.AudioDeviceChanging += Player_AudioDeviceChanging;
 
-        //    if (Player?.AudioDevice == null)
-        //        yield return new ValidationResult($"{nameof(Player.AudioDevice)} {Resources.IsRequired}", new[] { nameof(Player.AudioDevice) });
-        //}
+            var device = AudioDevices.Items.FirstOrDefault(p => p.Name == Model.DeviceName);
+            if (device != null)
+                Player.AudioDevice = device;
+
+            if (string.IsNullOrWhiteSpace(model.Name))
+                devices.Items.FirstOrDefault();
+            else
+                Name = model.Name;
+
+            InitiliazeCommands();
+            IntializeValidation();
+        }
 
         private void Player_AudioDeviceChanging(object sender, EventArgs e)
         {
@@ -153,6 +168,14 @@ namespace Maple
             ClearCommand = new RelayCommand(Clear, CanClear);
 
             UpdatePlaylistCommands();
+        }
+
+        private void IntializeValidation()
+        {
+            AddRule(nameof(Name), Name, new NotNullOrEmptyRule());
+            AddRule(nameof(Player), Player, new NotNullRule());
+            AddRule(nameof(Playlist), Playlist, new NotNullRule());
+            AddRule(nameof(Disposed), Disposed, new NotFalseRule());
         }
 
         public void Clear()

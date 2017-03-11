@@ -1,25 +1,22 @@
-﻿using Maple.Localization.Properties;
+﻿using Maple.Data;
+using Maple.Localization.Properties;
 using System;
 
 namespace Maple
 {
     public class MainMediaPlayer : MediaPlayer
     {
-        private readonly ITranslationManager _manager;
         private readonly string _nameKey;
 
-        public MainMediaPlayer(ITranslationManager manager, IMediaPlayer player, Data.MediaPlayer model, Playlist playlist, string nameKey)
-            : base(manager, player, model)
+        public MainMediaPlayer(PlaylistContext context, ITranslationManager manager, IMediaPlayer player, Data.MediaPlayer model, Playlist playlist, AudioDevices devices, string nameKey)
+            : base(context, manager, player, model, playlist, devices)
         {
             if (string.IsNullOrWhiteSpace(nameKey))
                 throw new ArgumentNullException(nameof(nameKey), $"{nameof(nameKey)} {Resources.IsRequired}");
 
-            _manager = manager;
             _nameKey = nameKey;
 
-            Name = model.Name;
             IsPrimary = model.IsPrimary;
-            Playlist = playlist ?? throw new ArgumentNullException(nameof(playlist), $"{nameof(playlist)} {Resources.IsRequired}");
 
             _manager.PropertyChanged += (o, e) =>
               {
@@ -43,6 +40,11 @@ namespace Maple
         private void UpdateName()
         {
             Name = _manager.Translate(_nameKey);
+        }
+
+        private void InitializeValidation()
+        {
+
         }
     }
 }

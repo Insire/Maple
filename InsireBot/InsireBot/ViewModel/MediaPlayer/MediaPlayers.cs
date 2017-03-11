@@ -13,9 +13,9 @@ namespace Maple
             protected set { SetValue(ref _disposed, value); }
         }
 
-        public MediaPlayers(IPlaylistContext context, ITranslationManager manager, Func<IMediaPlayer> playerFactory, Playlists playlists)
+        public MediaPlayers(PlaylistContext context, ITranslationManager manager, Func<IMediaPlayer> playerFactory, Playlists playlists, AudioDevices devices, DialogViewModel dialog)
         {
-            Items.AddRange(MediaPlayerFactory.GetMediaPlayers(context, manager, playerFactory, playlists));
+            Items.AddRange(MediaPlayerFactory.GetMediaPlayers(context, manager, playerFactory, playlists, devices, dialog));
         }
 
         public void Dispose()

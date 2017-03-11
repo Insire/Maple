@@ -15,13 +15,14 @@ namespace Maple
     public class Scenes : BaseListViewModel<Scene>
     {
         private ITranslationManager _manager;
+        private PlaylistContext _context;
         private IBotLog _log;
         public ICommand OpenColorOptionsCommand { get; private set; }
         public ICommand OpenMediaPlayerCommand { get; private set; }
         public ICommand OpenGithubPageCommand { get; private set; }
 
         public Scenes(ITranslationManager manager,
-                        IPlaylistContext context,
+                        PlaylistContext context,
                         IBotLog log,
                         DirectorViewModel directorViewModel,
                         MediaPlayers mediaPlayersViewModel,
@@ -31,6 +32,7 @@ namespace Maple
         {
             _manager = manager;
             _log = log;
+            _context = context;
 
             _log.Info(_manager.Translate(nameof(Resources.NavigationLoad)));
 
@@ -106,10 +108,9 @@ namespace Maple
             OpenGithubPageCommand = new RelayCommand(OpenGithubPage);
         }
 
-        private void SelectedSceneChanging(object sender, EventArgs e)
+        private async void SelectedSceneChanging(object sender, EventArgs e)
         {
-            if (sender is ISaveable viewmodel)
-                viewmodel.Save();
+            await _context.SaveChangesAsync();
         }
 
         private void OpenColorOptionsView()

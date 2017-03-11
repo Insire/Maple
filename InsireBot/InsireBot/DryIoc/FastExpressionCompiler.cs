@@ -746,8 +746,7 @@ namespace DryIoc
                     ok = TryEmit(((MemberAssignment)binding).Expression, ps, il, closure);
                     if (!ok) return false;
 
-                    var prop = binding.Member as PropertyInfo;
-                    if (prop != null)
+                    if (binding.Member is PropertyInfo prop)
                     {
                         var setMethod = prop.GetSetMethod();
                         if (setMethod == null)
@@ -790,15 +789,13 @@ namespace DryIoc
                     if (!ok) return false;
                 }
 
-                var field = m.Member as FieldInfo;
-                if (field != null)
+                if (m.Member is FieldInfo field)
                 {
                     il.Emit(field.IsStatic ? OpCodes.Ldsfld : OpCodes.Ldfld, field);
                     return true;
                 }
 
-                var property = m.Member as PropertyInfo;
-                if (property != null)
+                if (m.Member is PropertyInfo property)
                 {
                     var getMethod = property.GetGetMethod();
                     if (getMethod == null)

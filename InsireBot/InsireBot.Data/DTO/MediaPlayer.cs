@@ -1,6 +1,6 @@
 ﻿namespace Maple.Data
 {
-    public class MediaPlayer : IModel
+    public class MediaPlayer
     {
         public int Id { get; set; }
         public int Sequence { get; set; }
