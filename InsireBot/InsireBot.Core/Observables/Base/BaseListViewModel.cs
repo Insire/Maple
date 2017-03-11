@@ -10,6 +10,10 @@ using System.Windows.Input;
 
 namespace Maple.Core
 {
+    /// <summary>
+    /// ListViewModel implementation for ObservableObjects unrelated to the DataAccessLayer (DB)
+    /// </summary>
+    /// <typeparam name="T">a class implementing <see cref="ObservableObject"/></typeparam>
     public abstract class BaseListViewModel<T> : ObservableObject where T : INotifyPropertyChanged
     {
         protected object _itemsLock;

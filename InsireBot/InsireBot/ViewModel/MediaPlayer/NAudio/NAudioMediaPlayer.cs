@@ -6,7 +6,7 @@ namespace Maple
 {
     public class NAudioMediaPlayer : BasePlayer
     {
-        private readonly IBotLog _log;
+        private readonly IMapleLog _log;
         private readonly MediaFoundationReader.MediaFoundationReaderSettings _settings;
 
         private int _volume;
@@ -27,7 +27,7 @@ namespace Maple
             set { SetValue(ref _volume, value, Changed: () => SyncVolumeToVolumeProvider(value)); }
         }
 
-        public NAudioMediaPlayer(IBotLog log) : base()
+        public NAudioMediaPlayer(IMapleLog log) : base()
         {
             _log = log;
             _settings = new MediaFoundationReader.MediaFoundationReaderSettings

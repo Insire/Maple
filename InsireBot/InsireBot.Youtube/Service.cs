@@ -21,8 +21,8 @@ namespace Maple.Youtube
         private const string _playListBaseUrl = @"https://www.youtube.com/playlist?list=";
 
         private YouTubeService _service;
-        private readonly IBotLog _log;
-        public Service(IBotLog log)
+        private readonly IMapleLog _log;
+        public Service(IMapleLog log)
         {
             _log = log;
         }

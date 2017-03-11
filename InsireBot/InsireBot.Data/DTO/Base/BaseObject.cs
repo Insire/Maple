@@ -1,0 +1,15 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Maple.Data
+{
+    public abstract class BaseObject
+    {
+        public int Id { get; set; }
+        public int Sequence { get; set; }
+
+        [NotMapped]
+        public bool IsNew => Id == 0;
+        [NotMapped]
+        public bool IsDeleted { get; set; }
+    }
+}

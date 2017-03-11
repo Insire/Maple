@@ -1,11 +1,11 @@
 ﻿using SQLite.CodeFirst;
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics;
 
 namespace Maple.Data
 {
-    public class PlaylistContext : LoggingContext
+    public class PlaylistContext : DbContext
     {
         public DbSet<Playlist> Playlists { get; set; }
         public DbSet<MediaItem> MediaItems { get; set; }
@@ -21,18 +21,19 @@ namespace Maple.Data
         }
     }
 
-
     public class CreateSeedDatabaseIfNotExists<TContext> : SqliteDropCreateDatabaseWhenModelChanges<TContext> where TContext : PlaylistContext
     {
         public CreateSeedDatabaseIfNotExists(DbModelBuilder builder)
             : base(builder)
         {
-
         }
 
         protected override void Seed(TContext context)
         {
             base.Seed(context);
+
+            if (!Debugger.IsAttached)
+                return;
 
             context.Set<Playlist>()
                    .Add(new Playlist
@@ -42,7 +43,20 @@ namespace Maple.Data
                        IsShuffeling = false,
                        Location = "",
                        PrivacyStatus = 0,
-                       MediaItems = new List<MediaItem>(),
+                       MediaItems = new List<MediaItem>
+                       {
+                           new MediaItem
+                           {
+                               Title = "Test",
+                               Description = "Description",
+                               Duration = 60_000,
+                               Id= 1,
+                               Location = "C:",
+                               PlaylistId = 1,
+                               PrivacyStatus=0,
+                               Sequence=0,
+                           },
+                       },
                        RepeatMode = 0,
                        Sequence = 0,
                        Title = "Base",
@@ -57,25 +71,8 @@ namespace Maple.Data
                        PlaylistId = 1,
                        Sequence = 0,
                    });
-        }
-    }
 
-    public class LoggingContext : DbContext
-    {
-        public EventHandler Saving;
-        public EventHandler Saved;
-
-        public LoggingContext(string nameOrConnectionString) : base(nameOrConnectionString)
-        {
-        }
-
-        public override int SaveChanges()
-        {
-            Saving?.Invoke(this, EventArgs.Empty);
-            var result = base.SaveChanges();
-            Saved?.Invoke(this, EventArgs.Empty);
-
-            return result;
+            context.SaveChanges();
         }
     }
 }

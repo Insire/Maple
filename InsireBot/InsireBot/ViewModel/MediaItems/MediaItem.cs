@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Maple
 {
-    public class MediaItemViewModel : BaseViewModel<Data.MediaItem>, IMediaItem, ISequence, IIdentifier
+    public class MediaItem : BaseViewModel<Data.MediaItem>, IMediaItem
     {
         private int _id;
         public int Id
@@ -72,7 +72,8 @@ namespace Maple
 
         public bool IsFile => File.Exists(Location);
 
-        public MediaItemViewModel(Data.MediaItem model) : base(model)
+        public MediaItem(Data.MediaItem model)
+            : base(model)
         {
             Id = model.Id;
             PlaylistId = model.PlaylistId;
@@ -90,13 +91,11 @@ namespace Maple
             return result;
         }
 
-        //public override IEnumerable<ValidationResult> Validate(ValidationContext context)
-        //{
-        //    if (string.IsNullOrWhiteSpace(Title))
-        //        yield return new ValidationResult($"{nameof(Title)} {Resources.IsRequired}", new[] { nameof(Title) });
-
-        //    if (string.IsNullOrWhiteSpace(Location))
-        //        yield return new ValidationResult($"{nameof(Location)} {Resources.IsRequired}", new[] { nameof(Location) });
-        //}
+        private void IntializeValidation()
+        {
+            AddRule(Title, new NotNullOrEmptyRule(nameof(Title)));
+            AddRule(Description, new NotNullOrEmptyRule(nameof(Description)));
+            AddRule(Location, new NotNullOrEmptyRule(nameof(Location)));
+        }
     }
 }

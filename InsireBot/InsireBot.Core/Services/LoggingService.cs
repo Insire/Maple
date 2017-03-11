@@ -3,7 +3,7 @@ using System;
 
 namespace Maple.Core
 {
-    public class LoggingService : IBotLog
+    public class LoggingService : IMapleLog
     {
         private ILog _log;
 

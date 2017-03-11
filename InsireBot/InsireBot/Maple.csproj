@@ -210,12 +210,11 @@
     <Compile Include="ViewModel\DirectorViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer\AudioDevices.cs" />
     <Compile Include="ViewModel\MediaPlayer\MainMediaPlayer.cs" />
-    <Compile Include="ViewModel\MediaPlayer\MediaPlayerFactory.cs" />
     <Compile Include="ViewModel\MediaPlayer\MediaPlayers.cs" />
     <Compile Include="ViewModel\Navigation\Scene.cs" />
     <Compile Include="ViewModel\Settings\OptionsViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer\AudioDevice.cs" />
-    <Compile Include="ViewModel\MediaItems\MediaItemViewModel.cs" />
+    <Compile Include="ViewModel\MediaItems\MediaItem.cs" />
     <Compile Include="ViewModel\MediaPlayer\Base\BasePlayer.cs" />
     <Compile Include="ViewModel\MediaPlayer\NAudio\WaveFormatFactory.cs" />
     <Compile Include="ViewModel\MediaPlayer\NAudio\NAudioMediaPlayer.cs" />
@@ -239,8 +238,8 @@
       <DependentUpon>OptionsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\InsireBotException.cs" />
-    <Compile Include="ViewModel\MediaItems\CreateMediaItemViewModel.cs" />
-    <Compile Include="ViewModel\Playlists\CreatePlaylistViewModel.cs" />
+    <Compile Include="ViewModel\MediaItems\CreateMediaItem.cs" />
+    <Compile Include="ViewModel\Playlists\CreatePlaylist.cs" />
     <Compile Include="ViewModel\ShellViewModel.cs" />
     <Compile Include="ViewModel\StatusbarViewModel.cs" />
     <Compile Include="ViewModel\Settings\UIColorsViewModel.cs" />

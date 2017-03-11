@@ -5,20 +5,20 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using System.Windows.Controls;
 
 namespace Maple.Core
 {
     public abstract class BaseViewModel<T> : ObservableObject, INotifyDataErrorInfo
     {
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+        private readonly Dictionary<string, List<string>> _errors;
+        private readonly Dictionary<string, (List<BaseValidationRule> Items, object Value)> _rules;
 
         protected readonly BusyStack _busyStack;
-        protected Dictionary<string, List<string>> Errors { get; set; }
-        protected Dictionary<string, (List<ValidationRule> Items, object Value)> Rules { get; set; }
 
-        public bool HasErrors => Errors.Count > 0;
-        public bool IsValid => Errors.Count == 0;
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public bool HasErrors => _errors.Count > 0;
+        public bool IsValid => _errors.Count == 0;
 
         private T _model;
         public T Model
@@ -39,8 +39,8 @@ namespace Maple.Core
             _busyStack = new BusyStack();
             _busyStack.OnChanged += (isBusy) => IsBusy = isBusy;
 
-            Errors = new Dictionary<string, List<string>>();
-            Rules = new Dictionary<string, (List<ValidationRule> Items, object Value)>();
+            _errors = new Dictionary<string, List<string>>();
+            _rules = new Dictionary<string, (List<BaseValidationRule> Items, object Value)>();
         }
 
         protected BaseViewModel(T model) : this()
@@ -50,15 +50,15 @@ namespace Maple.Core
 
         public IEnumerable GetErrors(string propertyName)
         {
-            return !string.IsNullOrEmpty(propertyName) && Errors.ContainsKey(propertyName)
-              ? Errors[propertyName]
+            return !string.IsNullOrEmpty(propertyName) && _errors.ContainsKey(propertyName)
+              ? _errors[propertyName]
               : Enumerable.Empty<string>();
         }
 
         public IEnumerable<List<string>> GetErrors()
         {
-            foreach (var key in Errors.Keys)
-                yield return Errors[key];
+            foreach (var key in _errors.Keys)
+                yield return _errors[key];
         }
 
         protected virtual void OnErrorsChanged(string propertyName)
@@ -68,25 +68,27 @@ namespace Maple.Core
 
         protected void ClearErrors()
         {
-            foreach (var propertyName in Errors.Keys.ToList())
+            foreach (var propertyName in _errors.Keys.ToList())
             {
-                Errors.Remove(propertyName);
+                _errors.Remove(propertyName);
                 OnErrorsChanged(propertyName);
             }
         }
 
-        protected void AddRule(string propertyName, object value, ValidationRule rule)
+        protected void AddRule(object value, BaseValidationRule rule)
         {
-            var result = (Items: new List<ValidationRule>(), Value: value);
-            if (Rules.ContainsKey(propertyName))
-                result = Rules[propertyName];
+            var propertyName = rule.PropertyName;
+            var result = (Items: new List<BaseValidationRule>(), Value: value);
+
+            if (_rules.ContainsKey(propertyName))
+                result = _rules[propertyName];
 
             if (!result.Items.Contains(rule))
                 result.Items.Add(rule);
 
             result.Value = value;
 
-            Rules[propertyName] = result;
+            _rules[propertyName] = result;
         }
 
         protected virtual void Validate(string propertyName)
@@ -100,12 +102,12 @@ namespace Maple.Core
         private void ValidateInternal(string propertyName, CultureInfo culture = null)
         {
             var current = culture ?? Thread.CurrentThread.CurrentCulture;
-            Errors[propertyName].Clear();
+            _errors[propertyName].Clear();
 
-            foreach (var item in Rules[propertyName].Items)
+            foreach (var item in _rules[propertyName].Items)
             {
-                var result = item.Validate(Rules[propertyName].Value, current);
-                Errors[propertyName].Add(result.ErrorContent.ToString());
+                var result = item.Validate(_rules[propertyName].Value, current);
+                _errors[propertyName].Add(result.ErrorContent.ToString());
             }
 
             OnErrorsChanged(propertyName);
@@ -115,10 +117,8 @@ namespace Maple.Core
         {
             var current = Thread.CurrentThread.CurrentCulture;
 
-            foreach (var key in Errors.Keys)
+            foreach (var key in _errors.Keys)
                 ValidateInternal(key, current);
         }
-
-
     }
 }

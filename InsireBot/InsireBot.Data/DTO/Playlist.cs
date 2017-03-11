@@ -1,26 +1,9 @@
-﻿using Maple.Localization.Properties;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Maple.Data
 {
-    public class Playlist
+    public class Playlist : BaseObject
     {
-        public static Playlist New()
-        {
-            return new Playlist
-            {
-                Title = Resources.New,
-                Description = string.Empty,
-                Location = string.Empty,
-                MediaItems = new List<MediaItem>(),
-                RepeatMode = 0,
-                IsShuffeling = false,
-                Sequence = 0,
-            };
-        }
-
-        public int Id { get; set; }
-        public int Sequence { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string Location { get; set; }

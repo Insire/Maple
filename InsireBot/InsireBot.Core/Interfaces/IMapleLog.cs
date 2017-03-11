@@ -2,7 +2,7 @@
 
 namespace Maple.Core
 {
-    public interface IBotLog
+    public interface IMapleLog
     {
         //
         // Summary:

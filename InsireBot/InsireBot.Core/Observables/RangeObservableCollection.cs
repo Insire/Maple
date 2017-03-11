@@ -6,14 +6,11 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading;
 
 namespace Maple.Core
 {
     public class RangeObservableCollection<T> : ObservableCollection<T>, INotifyPropertyChanged
     {
-        private SynchronizationContext _synchronizationContext = SynchronizationContext.Current;
-
         private bool _suppressNotification = false;
 
         public RangeObservableCollection() : base()
@@ -27,17 +24,11 @@ namespace Maple.Core
 
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            if (!_suppressNotification)
-                if (SynchronizationContext.Current == _synchronizationContext)
-                {
-                    // Execute the CollectionChanged event on the current thread
+            DispatcherFactory.Invoke(() =>
+            {
+                if (!_suppressNotification)
                     RaiseCollectionChanged(e);
-                }
-                else
-                {
-                    // Raises the CollectionChanged event on the creator thread
-                    _synchronizationContext.Send(RaiseCollectionChanged, e);
-                }
+            });
         }
 
         private void RaiseCollectionChanged(object param)
@@ -115,16 +106,11 @@ namespace Maple.Core
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            if (SynchronizationContext.Current == _synchronizationContext)
+            DispatcherFactory.Invoke(() =>
             {
-                // Execute the PropertyChanged event on the current thread
-                RaisePropertyChanged(e);
-            }
-            else
-            {
-                // Raises the PropertyChanged event on the creator thread
-                _synchronizationContext.Send(RaisePropertyChanged, e);
-            }
+                if (!_suppressNotification)
+                    RaisePropertyChanged(e);
+            });
         }
 
         private void RaisePropertyChanged(object param)

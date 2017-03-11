@@ -390,7 +390,7 @@
     <DataTemplate DataType="{x:Type local:ProgressDialogViewModel}" />
     <!--#endregion-->
 
-    <DataTemplate DataType="{x:Type local:CreateMediaItemViewModel}">
+    <DataTemplate DataType="{x:Type local:CreateMediaItem}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -522,7 +522,7 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type local:MediaItemViewModel}">
+    <DataTemplate DataType="{x:Type local:MediaItem}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />

@@ -15,7 +15,9 @@ namespace Maple
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Data.Playlist, Core.Playlist>();
-                cfg.CreateMap<Core.Playlist, Data.Playlist>();
+                cfg.CreateMap<Core.Playlist, Data.Playlist>()
+                    .Ignore(p => p.IsDeleted)
+                    .Ignore(p => p.IsNew);
             });
 
             config.AssertConfigurationIsValid();

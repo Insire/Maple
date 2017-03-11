@@ -2,16 +2,16 @@
 {
     public interface IMediaItemMapper
     {
-        Core.MediaItem GetCore(MediaItemViewModel mediaitem);
+        Core.MediaItem GetCore(MediaItem mediaitem);
 
         Core.MediaItem GetCore(Data.MediaItem mediaitem);
 
         Data.MediaItem GetData(Core.MediaItem mediaitem);
 
-        Data.MediaItem GetData(MediaItemViewModel mediaitem);
+        Data.MediaItem GetData(MediaItem mediaitem);
 
-        MediaItemViewModel Get(Data.MediaItem mediaitem);
+        MediaItem Get(Data.MediaItem mediaitem);
 
-        MediaItemViewModel Get(Core.MediaItem mediaitem);
+        MediaItem Get(Core.MediaItem mediaitem);
     }
 }

@@ -26,13 +26,13 @@ namespace Maple
         public Stack<int> History { get; private set; }
 
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public RangeObservableCollection<MediaItemViewModel> Items { get; private set; }
+        public RangeObservableCollection<MediaItem> Items { get; private set; }
 
-        private MediaItemViewModel _currentItem;
+        private MediaItem _currentItem;
         /// <summary>
         /// is <see cref="SetActive"/> when a IMediaPlayer picks a <see cref="IMediaItem"/> from this
         /// </summary>
-        public MediaItemViewModel CurrentItem
+        public MediaItem CurrentItem
         {
             get { return _currentItem; }
             private set { SetValue(ref _currentItem, value); }
@@ -129,7 +129,7 @@ namespace Maple
             {
                 _dialogViewModel = dialogViewModel;
 
-                Items = new RangeObservableCollection<MediaItemViewModel>();
+                Items = new RangeObservableCollection<MediaItem>();
                 RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
                 History = new Stack<int>();
 
@@ -142,7 +142,7 @@ namespace Maple
                 if (model.MediaItems == null)
                     throw new ArgumentException($"{model.MediaItems} cannot be null");
 
-                model.MediaItems.ForEach(p => Items.Add(new MediaItemViewModel(p)));
+                model.MediaItems.ForEach(p => Items.Add(new MediaItem(p)));
 
                 Items.CollectionChanged += (o, e) =>
                 {
@@ -163,11 +163,11 @@ namespace Maple
 
         private void IntializeValidation()
         {
-            AddRule(nameof(Title), Title, new NotNullOrEmptyRule());
-            AddRule(nameof(Description), Description, new NotNullOrEmptyRule());
-            AddRule(nameof(CurrentItem), CurrentItem, new NotNullRule());
-            AddRule(nameof(RepeatModes), RepeatModes, new NotNullRule());
-            AddRule(nameof(Items), Items, new NotNullRule());
+            AddRule(Title, new NotNullOrEmptyRule(nameof(Title)));
+            AddRule(Description, new NotNullOrEmptyRule(nameof(Description)));
+            AddRule(CurrentItem, new NotNullRule(nameof(CurrentItem)));
+            AddRule(RepeatModes, new NotNullRule(nameof(RepeatModes)));
+            AddRule(Items, new NotNullRule(nameof(Items)));
         }
 
         private async Task LoadFromUrl()
@@ -175,7 +175,7 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var items = await _dialogViewModel.ShowUrlParseDialog();
-                var result = items.Select(p => new MediaItemViewModel(p));
+                var result = items.Select(p => new MediaItem(p));
                 Items.AddRange(result);
             }
         }
@@ -218,7 +218,7 @@ namespace Maple
             CurrentItem = null;
         }
 
-        public virtual void Add(MediaItemViewModel item)
+        public virtual void Add(MediaItem item)
         {
             using (_busyStack.GetToken())
             {
@@ -238,7 +238,7 @@ namespace Maple
             }
         }
 
-        public virtual void AddRange(IEnumerable<MediaItemViewModel> items)
+        public virtual void AddRange(IEnumerable<MediaItem> items)
         {
             using (_busyStack.GetToken())
             {
@@ -261,7 +261,7 @@ namespace Maple
             }
         }
 
-        public virtual void Remove(MediaItemViewModel item)
+        public virtual void Remove(MediaItem item)
         {
             using (_busyStack.GetToken())
             {
@@ -270,15 +270,15 @@ namespace Maple
             }
         }
 
-        public virtual bool CanRemove(MediaItemViewModel item)
+        public virtual bool CanRemove(MediaItem item)
         {
-            if (Items == null || Items.Count == 0 || item as MediaItemViewModel == null)
+            if (Items == null || Items.Count == 0 || item as MediaItem == null)
                 return false;
 
             return Items.Contains(item) && !IsBusy;
         }
 
-        public virtual MediaItemViewModel Next()
+        public virtual MediaItem Next()
         {
             using (_busyStack.GetToken())
             {
@@ -305,7 +305,7 @@ namespace Maple
             }
         }
 
-        private MediaItemViewModel NextRepeatNone()
+        private MediaItem NextRepeatNone()
         {
             var currentIndex = 0;
             if (CurrentItem?.Sequence != null)
@@ -330,7 +330,7 @@ namespace Maple
                 return NextRepeatSingle();
         }
 
-        private MediaItemViewModel NextRepeatSingle()
+        private MediaItem NextRepeatSingle()
         {
             if (RepeatMode != RepeatMode.None)
                 return CurrentItem;
@@ -338,7 +338,7 @@ namespace Maple
                 return null;
         }
 
-        private MediaItemViewModel NextRepeatAll()
+        private MediaItem NextRepeatAll()
         {
             var currentIndex = 0;
             if (CurrentItem?.Sequence != null)
@@ -367,7 +367,7 @@ namespace Maple
                 return NextRepeatSingle();
         }
 
-        private MediaItemViewModel NextShuffle()
+        private MediaItem NextShuffle()
         {
             if (Items.Count > 1)
             {
@@ -382,10 +382,10 @@ namespace Maple
         }
 
         /// <summary>
-        /// Removes the last <see cref="MediaItemViewModel"/> from <seealso cref="History"/> and returns it
+        /// Removes the last <see cref="MediaItem"/> from <seealso cref="History"/> and returns it
         /// </summary>
-        /// <returns>returns the last <see cref="MediaItemViewModel"/> from <seealso cref="History"/></returns>
-        public virtual MediaItemViewModel Previous()
+        /// <returns>returns the last <see cref="MediaItem"/> from <seealso cref="History"/></returns>
+        public virtual MediaItem Previous()
         {
             using (_busyStack.GetToken())
             {
@@ -427,11 +427,5 @@ namespace Maple
         {
             return History != null && History.Any();
         }
-
-        //public override IEnumerable<ValidationResult> Validate(ValidationContext context)
-        //{
-        //    if (string.IsNullOrWhiteSpace(Title))
-        //        yield return new ValidationResult($"{nameof(Title)} {Resources.IsRequired}", new[] { nameof(Title) });
-        //}
     }
 }

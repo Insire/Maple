@@ -1,7 +1,5 @@
 ﻿using Maple.Core;
-using Maple.Data;
 using Maple.Localization.Properties;
-using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -15,15 +13,14 @@ namespace Maple
     public class Scenes : BaseListViewModel<Scene>
     {
         private ITranslationManager _manager;
-        private PlaylistContext _context;
-        private IBotLog _log;
+        private IMapleLog _log;
+
         public ICommand OpenColorOptionsCommand { get; private set; }
         public ICommand OpenMediaPlayerCommand { get; private set; }
         public ICommand OpenGithubPageCommand { get; private set; }
 
         public Scenes(ITranslationManager manager,
-                        PlaylistContext context,
-                        IBotLog log,
+                        IMapleLog log,
                         DirectorViewModel directorViewModel,
                         MediaPlayers mediaPlayersViewModel,
                         Playlists playlistsViewModel,
@@ -32,22 +29,21 @@ namespace Maple
         {
             _manager = manager;
             _log = log;
-            _context = context;
 
             _log.Info(_manager.Translate(nameof(Resources.NavigationLoad)));
 
             var content = new[]
             {
-                new Scene(_manager,context)
+                new Scene(_manager)
                 {
                     Content = new MediaPlayerPage(_manager),
                     Key = nameof(Resources.Playback),
-                    GetDataContext = () => mediaPlayersViewModel.Items.First(p => p is MainMediaPlayer),
+                    GetDataContext = () => mediaPlayersViewModel.Items.FirstOrDefault(p => p is MainMediaPlayer),
                     IsSelected = true,
                     Sequence = 100,
                 },
 
-                new Scene(_manager,context)
+                new Scene(_manager)
                 {
                     Content = new PlaylistsPage(_manager),
                     Key = nameof(Resources.Playlists),
@@ -56,7 +52,7 @@ namespace Maple
                     Sequence = 300,
                 },
 
-                new Scene(_manager,context)
+                new Scene(_manager)
                 {
                     Content = new ColorOptionsPage(_manager),
                     Key = nameof(Resources.Themes),
@@ -65,7 +61,7 @@ namespace Maple
                     Sequence = 500,
                 },
 
-                new Scene(_manager,context)
+                new Scene(_manager)
                 {
                     Content = new OptionsPage(_manager),
                     Key = nameof(Resources.Options),
@@ -74,7 +70,7 @@ namespace Maple
                     Sequence = 600,
                 },
 
-                new Scene(_manager,context)
+                new Scene(_manager)
                 {
                     Content = new MediaPlayersPage(_manager),
                     Key = nameof(Resources.Director),
@@ -88,6 +84,8 @@ namespace Maple
             {
                 AddRange(content);
 
+                SelectedItem = Items[0];
+
                 using (View.DeferRefresh())
                 {
                     View.SortDescriptions.Add(new SortDescription(nameof(Scene.Sequence), ListSortDirection.Ascending));
@@ -95,8 +93,6 @@ namespace Maple
             }
 
             InitializeCommands();
-
-            SelectionChanging += SelectedSceneChanging;
 
             _log.Info(manager.Translate(nameof(Resources.NavigationLoaded)));
         }
@@ -106,11 +102,6 @@ namespace Maple
             OpenColorOptionsCommand = new RelayCommand(OpenColorOptionsView, CanOpenColorOptionsView);
             OpenMediaPlayerCommand = new RelayCommand(OpenMediaPlayerView, CanOpenMediaPlayerView);
             OpenGithubPageCommand = new RelayCommand(OpenGithubPage);
-        }
-
-        private async void SelectedSceneChanging(object sender, EventArgs e)
-        {
-            await _context.SaveChangesAsync();
         }
 
         private void OpenColorOptionsView()

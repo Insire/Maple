@@ -103,7 +103,7 @@
                               Grid.Column="1"
                               Grid.ColumnSpan="5"
                               SelectionMode="Single"
-                              BorderThickness="0" Style="{StaticResource MaterialDesignListView}"
+                              BorderThickness="0" 
                               ItemsSource="{Binding Playlist.Items}">
                         <ListView.ContextMenu>
                             <ContextMenu>

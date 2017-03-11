@@ -1,7 +1,7 @@
 ﻿using DryIoc;
 using Maple.Core;
-using Maple.Data;
 using Maple.Youtube;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Maple
@@ -10,36 +10,56 @@ namespace Maple
     {
         public static Task<IContainer> InitializeIocContainer()
         {
-            return Task.Run<IContainer>(() =>
+            return Task.Run<IContainer>(async () =>
            {
                var container = new Container(rules => rules.WithoutThrowOnRegisteringDisposableTransient());
 
-               container.Register<IBotLog, LoggingService>(reuse: Reuse.Singleton);
-               container.Register<IYoutubeUrlParseService, UrlParseService>();
-               container.Register<Scenes>(reuse: Reuse.Singleton);
-               container.Register<UIColorsViewModel>(reuse: Reuse.Singleton);
+               RegisterViewModels();
+               RegisterServices();
 
-               container.Register<Playlists>(reuse: Reuse.Singleton);
-               container.Register<AudioDevices>(reuse: Reuse.Singleton);
-               container.Register<MediaPlayers>(reuse: Reuse.Singleton);
-               container.Register<ShellViewModel>(reuse: Reuse.Singleton);
-               container.Register<DialogViewModel>(reuse: Reuse.Singleton);
-               container.Register<OptionsViewModel>(reuse: Reuse.Singleton);
-               container.Register<DirectorViewModel>(reuse: Reuse.Singleton);
-               container.Register<StatusbarViewModel>(reuse: Reuse.Singleton);
+               container.Register<Scenes>(Reuse.Singleton);
+               await container.Resolve<ITranslationManager>().LoadAsync();
 
-               container.Register<UrlParseService>();
+               var tasks = new List<Task>();
+               foreach (var item in container.Resolve<IEnumerable<IRefreshable>>())
+                   tasks.Add(item.LoadAsync());
 
-               container.Register<ITranslationProvider, ResxTranslationProvider>(reuse: Reuse.Singleton);
-               container.Register<ITranslationManager, TranslationManager>(reuse: Reuse.Singleton);
-               container.Register<IMediaPlayer, NAudioMediaPlayer>(reuse: Reuse.Transient);
-
-               container.Register<IMediaItemMapper, MediaItemMapper>();
-               container.Register<IPlaylistMapper, PlaylistMapper>();
-
-               container.Register<PlaylistContext>();
+               await Task.WhenAll(tasks);
 
                return container;
+
+               void RegisterViewModels()
+               {
+                   container.Register<Playlists>(Reuse.Singleton);
+                   container.Register<MediaPlayers>(Reuse.Singleton);
+                   container.Register<OptionsViewModel>(Reuse.Singleton);
+                   container.Register<UIColorsViewModel>(Reuse.Singleton);
+
+                   container.Register<AudioDevices>(Reuse.Singleton);
+                   container.Register<ShellViewModel>(Reuse.Singleton);
+                   container.Register<DialogViewModel>(Reuse.Singleton);
+                   container.Register<DirectorViewModel>(Reuse.Singleton);
+                   container.Register<StatusbarViewModel>(Reuse.Singleton);
+
+                   container.Register<IRefreshable, Playlists>(ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
+                   container.Register<IRefreshable, MediaPlayers>(ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
+                   container.Register<IRefreshable, OptionsViewModel>(ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
+                   container.Register<IRefreshable, UIColorsViewModel>(ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
+
+                   container.Register<IRefreshable, RefreshableDecorator>(setup: Setup.Decorator);
+               };
+
+               void RegisterServices()
+               {
+                   container.Register<IMediaPlayer, NAudioMediaPlayer>(Reuse.Transient);
+
+                   container.Register<IMediaItemMapper, MediaItemMapper>();
+                   container.Register<IPlaylistMapper, PlaylistMapper>();
+                   container.Register<IMapleLog, LoggingService>(Reuse.Singleton);
+                   container.Register<IYoutubeUrlParseService, UrlParseService>();
+                   container.Register<ITranslationProvider, ResxTranslationProvider>(Reuse.Singleton);
+                   container.Register<ITranslationManager, TranslationManager>(Reuse.Singleton);
+               }
            });
         }
     }

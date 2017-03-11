@@ -88,8 +88,8 @@
                         </ComboBox>
                         <ComboBox Grid.Row="4"
                                   Grid.Column="2"
-                                  ItemsSource="{Binding Playlists.Items}"
-                                  SelectedItem="{Binding MediaPlayers.SelectedItem.Playlist}">
+                                  ItemsSource="{Binding Playlists.Items, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
+                                  SelectedItem="{Binding MediaPlayers.SelectedItem.Playlist, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Title}" />

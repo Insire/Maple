@@ -1,8 +1,6 @@
 ﻿using Maple.Core;
-using Maple.Data;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Maple
@@ -10,7 +8,6 @@ namespace Maple
     public class Scene : ObservableObject, ISequence
     {
         private readonly ITranslationManager _manager;
-        private readonly PlaylistContext _context;
         public Func<ObservableObject> GetDataContext { get; set; }
 
         private BusyStack _busyStack;
@@ -59,19 +56,18 @@ namespace Maple
         public bool IsSelected
         {
             get { return _isSelected; }
-            set { SetValue(ref _isSelected, value, Changed: async () => await UpdateDataContext()); }
+            set { SetValue(ref _isSelected, value, Changed: () => UpdateDataContext()); }
         }
 
         public int _sequence;
         public int Sequence
         {
             get { return _sequence; }
-            set { SetValue(ref _sequence, value, Changed: async () => await UpdateDataContext()); }
+            set { SetValue(ref _sequence, value, Changed: () => UpdateDataContext()); }
         }
 
-        public Scene(ITranslationManager manager, PlaylistContext context)
+        public Scene(ITranslationManager manager)
         {
-            _context = context;
             _manager = manager;
             _manager.PropertyChanged += (o, e) =>
                       {
@@ -85,9 +81,7 @@ namespace Maple
             };
         }
 
-        // TODO fiure out a way to call this async and still maintain order
-        // maybe blocking collection + cancellationtokensource
-        private async Task UpdateDataContext()
+        private void UpdateDataContext()
         {
             if (Content == null || !IsSelected || GetDataContext == null)
                 return;
@@ -103,8 +97,6 @@ namespace Maple
 
                 if (EqualityComparer<ObservableObject>.Default.Equals(currentContext, newContext))
                     return;
-
-                await _context.SaveChangesAsync();
 
                 Content.DataContext = newContext;
             }

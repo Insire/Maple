@@ -11,7 +11,10 @@ namespace Maple.Core
 
         protected virtual void OnPropertyChanged([CallerMemberName]string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            DispatcherFactory.Invoke(() =>
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            });
         }
 
         protected bool SetValue<T>(ref T field, T value, Action Changing = null, Action Changed = null, [CallerMemberName]string propertyName = null)

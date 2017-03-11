@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace Maple
 {
-    public interface ITranslationManager : INotifyPropertyChanged, ISaveable
+    public interface ITranslationManager : INotifyPropertyChanged, IRefreshable
     {
         CultureInfo CurrentLanguage { get; set; }
         IEnumerable<CultureInfo> Languages { get; }

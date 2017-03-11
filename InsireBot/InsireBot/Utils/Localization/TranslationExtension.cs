@@ -11,17 +11,11 @@ namespace Maple
     {
         public TranslationExtension(string key)
         {
-            _key = key;
+            Key = key;
         }
-
-        private string _key;
 
         [ConstructorArgument("key")]
-        public string Key
-        {
-            get { return _key; }
-            set { _key = value; }
-        }
+        public string Key { get; set; }
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
@@ -31,8 +25,8 @@ namespace Maple
             if (TryGetTranslationManagerFromResources(serviceProvider, out ITranslationManager manager))
                 return ProvideValue(serviceProvider, manager);
 
-            Debug.Fail($"{nameof(TranslationExtension)} ProvideValue {Key} failed");
             Debug.WriteLine($"{nameof(TranslationExtension)} ProvideValue {Key} failed");
+            Debug.Fail($"{nameof(TranslationExtension)} ProvideValue {Key} failed");
             return null;
         }
 
@@ -63,7 +57,7 @@ namespace Maple
         {
             var binding = new Binding("Value")
             {
-                Source = new TranslationData(manager, _key)
+                Source = new TranslationData(manager, Key)
             };
 
             return binding.ProvideValue(serviceProvider);

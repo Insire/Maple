@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Maple
 {
@@ -18,7 +19,7 @@ namespace Maple
                 if (value != Thread.CurrentThread.CurrentUICulture)
                 {
                     Thread.CurrentThread.CurrentUICulture = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(CurrentLanguage));
                 }
             }
         }
@@ -28,9 +29,8 @@ namespace Maple
             get
             {
                 if (TranslationProvider != null)
-                {
                     return TranslationProvider.Languages;
-                }
+
                 return Enumerable.Empty<CultureInfo>();
             }
         }
@@ -38,7 +38,6 @@ namespace Maple
         public TranslationManager(ITranslationProvider provider)
         {
             TranslationProvider = provider;
-            Thread.CurrentThread.CurrentCulture = Languages.First(p => p.TwoLetterISOLanguageName == "en");
         }
 
         public string Translate(string key)
@@ -53,10 +52,19 @@ namespace Maple
             return $"!{key}!";
         }
 
-        public void Save()
+        public Task SaveAsync()
         {
-            Properties.Settings.Default.StartUpCulture = CurrentLanguage;
-            Properties.Settings.Default.Save();
+            return Task.Run(() =>
+            {
+                Properties.Settings.Default.StartUpCulture = CurrentLanguage;
+                Properties.Settings.Default.Save();
+            });
+        }
+
+        public Task LoadAsync()
+        {
+            Thread.CurrentThread.CurrentCulture = Languages.First(p => p.TwoLetterISOLanguageName == "en");
+            return Task.FromResult(0);
         }
     }
 }

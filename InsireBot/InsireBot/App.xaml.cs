@@ -1,6 +1,5 @@
 ﻿using DryIoc;
 using Maple.Core;
-using Maple.Data;
 using Maple.Properties;
 using System;
 using System.Threading;
@@ -19,17 +18,20 @@ namespace Maple
             InitializeLocalization();
             _container = await ContainerFactory.InitializeIocContainer();
             _manager = _container.Resolve<ITranslationManager>();
+
+
+            var colorsViewModel = _container.Resolve<UIColorsViewModel>();
+            await colorsViewModel.LoadAsync();
+
             InitializeResources();
 
             base.OnStartup(e);
 
-            var colorsViewModel = _container.Resolve<UIColorsViewModel>();
             var shell = new Shell(_manager, colorsViewModel)
             {
                 DataContext = _container.Resolve<ShellViewModel>(),
             };
 
-            colorsViewModel.ApplyColorsFromSettings();
             shell.Show();
         }
 
@@ -67,18 +69,14 @@ namespace Maple
             Thread.CurrentThread.CurrentCulture = Settings.Default.StartUpCulture;
         }
 
-        private Task SaveState()
+        private async Task SaveState()
         {
-            return Task.Run(() =>
-            {
-                var log = _container.Resolve<IBotLog>();
-                log.Info(Localization.Properties.Resources.SavingState);
+            var log = _container.Resolve<IMapleLog>();
+            log.Info(Localization.Properties.Resources.SavingState);
 
-                _container.Resolve<PlaylistContext>().SaveChangesAsync();
-                _manager.Save();
+            await _manager.SaveAsync();
 
-                log.Info(Localization.Properties.Resources.SavedState);
-            });
+            log.Info(Localization.Properties.Resources.SavedState);
         }
 
         private void ExitInternal(ExitEventArgs e)

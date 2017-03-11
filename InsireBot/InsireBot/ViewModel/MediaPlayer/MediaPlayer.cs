@@ -1,5 +1,4 @@
 using Maple.Core;
-using Maple.Data;
 using Maple.Localization.Properties;
 using System;
 using System.Collections.Generic;
@@ -62,29 +61,7 @@ namespace Maple
             protected set { SetValue(ref _isPrimary, value, Changed: () => Model.IsPrimary = value); }
         }
 
-        public MediaPlayer(PlaylistContext context, ITranslationManager manager, IMediaPlayer player, Data.MediaPlayer model, AudioDevices devices, DialogViewModel dialog)
-            : base(model)
-        {
-            _manager = manager ?? throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} {Resources.IsRequired}");
-            Player = player ?? throw new ArgumentNullException(nameof(player), $"{nameof(player)} {Resources.IsRequired}");
-
-            Name = model.Name;
-            Playlist = new Playlist(dialog, context.Playlists.FirstOrDefault(p => p.Id == model.PlaylistId));
-            AudioDevices = devices;
-
-            Player.PlayingMediaItem += Player_PlayingMediaItem;
-            Player.CompletedMediaItem += MediaPlayer_CompletedMediaItem;
-            Player.AudioDeviceChanged += Player_AudioDeviceChanged;
-            Player.AudioDeviceChanging += Player_AudioDeviceChanging;
-
-            var device = AudioDevices.Items.FirstOrDefault(p => p.Name == Model.DeviceName);
-            if (device != null)
-                Player.AudioDevice = device;
-
-            InitiliazeCommands();
-        }
-
-        public MediaPlayer(PlaylistContext context, ITranslationManager manager, IMediaPlayer player, Data.MediaPlayer model, Playlist playlist, AudioDevices devices)
+        public MediaPlayer(ITranslationManager manager, IMediaPlayer player, Data.MediaPlayer model, Playlist playlist, AudioDevices devices)
             : base(model)
         {
             _manager = manager ?? throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} {Resources.IsRequired}");
@@ -95,22 +72,42 @@ namespace Maple
             Playlist = playlist;
             AudioDevices = devices;
 
+            if (AudioDevices.Items.Count > 0)
+                Player.AudioDevice = AudioDevices.Items.FirstOrDefault(p => p.Name == Model.DeviceName) ?? AudioDevices.Items[0];
+
+            InitializeSubscriptions();
+            InitiliazeCommands();
+            IntializeValidation();
+        }
+
+        private void InitializeSubscriptions()
+        {
             Player.PlayingMediaItem += Player_PlayingMediaItem;
             Player.CompletedMediaItem += MediaPlayer_CompletedMediaItem;
             Player.AudioDeviceChanged += Player_AudioDeviceChanged;
             Player.AudioDeviceChanging += Player_AudioDeviceChanging;
+        }
 
-            var device = AudioDevices.Items.FirstOrDefault(p => p.Name == Model.DeviceName);
-            if (device != null)
-                Player.AudioDevice = device;
+        private void InitiliazeCommands()
+        {
+            PlayCommand = new RelayCommand<MediaItem>(Player.Play, CanPlay);
+            PreviousCommand = new RelayCommand(Previous, () => Playlist?.CanPrevious() == true && CanPrevious());
+            NextCommand = new RelayCommand(Next, () => Playlist?.CanNext() == true && CanNext());
+            PauseCommand = new RelayCommand(Pause, () => CanPause());
+            StopCommand = new RelayCommand(Stop, () => CanStop());
+            RemoveCommand = new RelayCommand<MediaItem>(Remove, CanRemove);
+            ClearCommand = new RelayCommand(Clear, CanClear);
 
-            if (string.IsNullOrWhiteSpace(model.Name))
-                devices.Items.FirstOrDefault();
-            else
-                Name = model.Name;
+            UpdatePlaylistCommands();
+        }
 
-            InitiliazeCommands();
-            IntializeValidation();
+        private void IntializeValidation()
+        {
+            AddRule(Name, new NotNullOrEmptyRule(nameof(Name)));
+            AddRule(Player, new NotNullRule(nameof(Player)));
+            AddRule(Playlist, new NotNullRule(nameof(Playlist)));
+            AddRule(Disposed, new NotFalseRule(nameof(Disposed)));
+            AddRule(AudioDevices, new ListNotEmptyRule(nameof(AudioDevices)));
         }
 
         private void Player_AudioDeviceChanging(object sender, EventArgs e)
@@ -157,27 +154,6 @@ namespace Maple
             Next();
         }
 
-        private void InitiliazeCommands()
-        {
-            PlayCommand = new RelayCommand<MediaItemViewModel>(Player.Play, CanPlay);
-            PreviousCommand = new RelayCommand(Previous, () => Playlist?.CanPrevious() == true && CanPrevious());
-            NextCommand = new RelayCommand(Next, () => Playlist?.CanNext() == true && CanNext());
-            PauseCommand = new RelayCommand(Pause, () => CanPause());
-            StopCommand = new RelayCommand(Stop, () => CanStop());
-            RemoveCommand = new RelayCommand<MediaItemViewModel>(Remove, CanRemove);
-            ClearCommand = new RelayCommand(Clear, CanClear);
-
-            UpdatePlaylistCommands();
-        }
-
-        private void IntializeValidation()
-        {
-            AddRule(nameof(Name), Name, new NotNullOrEmptyRule());
-            AddRule(nameof(Player), Player, new NotNullRule());
-            AddRule(nameof(Playlist), Playlist, new NotNullRule());
-            AddRule(nameof(Disposed), Disposed, new NotFalseRule());
-        }
-
         public void Clear()
         {
             using (_busyStack.GetToken())
@@ -189,7 +165,7 @@ namespace Maple
             return !IsBusy && Playlist.ItemCount > 0;
         }
 
-        public void AddRange(IEnumerable<MediaItemViewModel> mediaItems)
+        public void AddRange(IEnumerable<MediaItem> mediaItems)
         {
             using (_busyStack.GetToken())
             {
@@ -198,7 +174,7 @@ namespace Maple
             }
         }
 
-        public void Add(MediaItemViewModel mediaItem)
+        public void Add(MediaItem mediaItem)
         {
             using (_busyStack.GetToken())
             {
@@ -211,21 +187,19 @@ namespace Maple
                     mediaItem.Sequence = maxIndex;
                 }
                 else
-                {
                     mediaItem.Sequence = 0;
-                }
 
                 Playlist.Items.Add(mediaItem);
             }
         }
 
-        public void Remove(MediaItemViewModel item)
+        public void Remove(MediaItem item)
         {
             using (_busyStack.GetToken())
                 Playlist.Remove(item);
         }
 
-        private bool CanRemove(MediaItemViewModel item)
+        private bool CanRemove(MediaItem item)
         {
             using (_busyStack.GetToken())
                 return Playlist.CanRemove(item);
@@ -283,7 +257,7 @@ namespace Maple
             return Player.CanStop();
         }
 
-        private bool CanPlay(MediaItemViewModel item)
+        private bool CanPlay(MediaItem item)
         {
             return Player.CanPlay(item);
         }

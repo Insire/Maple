@@ -1,9 +1,10 @@
 ﻿using Maple.Core;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace Maple
 {
-    public class OptionsViewModel : ObservableObject, ISaveable
+    public class OptionsViewModel : ObservableObject, IRefreshable
     {
         private ITranslationManager _manager;
         public RangeObservableCollection<CultureInfo> Items { get; private set; }
@@ -27,9 +28,14 @@ namespace Maple
             _manager.CurrentLanguage = SelectedCulture;
         }
 
-        public void Save()
+        public Task SaveAsync()
         {
-            _manager.Save();
+            return _manager.SaveAsync();
+        }
+
+        public Task LoadAsync()
+        {
+            return _manager.LoadAsync();
         }
     }
 }

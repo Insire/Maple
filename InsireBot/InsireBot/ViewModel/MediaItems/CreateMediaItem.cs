@@ -5,12 +5,14 @@ using System.Windows.Input;
 namespace Maple
 {
     /// <summary>
-    /// viewmodel for creating playlists from a input string (path/url)
+    /// viewmodel for creating mediaitem from a string (path/url)
     /// </summary>
-    public class CreatePlaylistViewModel : BaseListViewModel<Playlist>
+    public class CreateMediaItem : BaseListViewModel<IMediaItem>
     {
         private IYoutubeUrlParseService _dataParsingService;
-        private IPlaylistMapper _mapper;
+        private IMediaItemMapper _mapper;
+
+        public ICommand ParseCommand { get; private set; }
 
         private string _source;
         public string Source
@@ -26,9 +28,7 @@ namespace Maple
             private set { SetValue(ref _result, value); }
         }
 
-        public ICommand ParseCommand { get; private set; }
-
-        public CreatePlaylistViewModel(IYoutubeUrlParseService dataParsingService, IPlaylistMapper mapper) : base()
+        public CreateMediaItem(IYoutubeUrlParseService dataParsingService, IMediaItemMapper mapper) : base()
         {
             _dataParsingService = dataParsingService;
             _mapper = mapper;
@@ -42,10 +42,10 @@ namespace Maple
             {
                 using (BusyStack.GetToken())
                 {
-                    Result = await _dataParsingService.Parse(Source, ParseResultType.Playlists);
+                    Result = await _dataParsingService.Parse(Source, ParseResultType.MediaItems);
 
-                    if (Result.Count > 0 && Result.Playlists?.Count > 0)
-                        Items.AddRange(_mapper.GetMany(Result.Playlists));
+                    if (Result.Count > 0 && Result.MediaItems?.Count > 0)
+                        Items.AddRange(_mapper.GetMany(Result.MediaItems));
                 }
             }, () => !string.IsNullOrWhiteSpace(Source));
         }
