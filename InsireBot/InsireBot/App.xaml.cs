@@ -2,6 +2,7 @@
 using Maple.Core;
 using Maple.Properties;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,7 +17,7 @@ namespace Maple
         protected override async void OnStartup(StartupEventArgs e)
         {
             InitializeLocalization();
-            _container = await ContainerFactory.InitializeIocContainer();
+            _container = await DependencyInjectionFactory.GetContainerAsync();
             _manager = _container.Resolve<ITranslationManager>();
 
 
@@ -74,7 +75,16 @@ namespace Maple
             var log = _container.Resolve<IMapleLog>();
             log.Info(Localization.Properties.Resources.SavingState);
 
-            await _manager.SaveAsync();
+            var tasks = new List<Task>
+            {
+                _manager.SaveAsync(),
+            };
+
+            _container.Resolve<IEnumerable<IRefreshable>>()
+                      .ForEach(p => tasks.Add(p.SaveAsync()));
+
+
+            await Task.WhenAll(tasks);
 
             log.Info(Localization.Properties.Resources.SavedState);
         }

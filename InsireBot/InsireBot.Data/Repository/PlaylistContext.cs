@@ -21,7 +21,7 @@ namespace Maple.Data
         }
     }
 
-    public class CreateSeedDatabaseIfNotExists<TContext> : SqliteDropCreateDatabaseWhenModelChanges<TContext> where TContext : PlaylistContext
+    internal class CreateSeedDatabaseIfNotExists<TContext> : SqliteDropCreateDatabaseWhenModelChanges<TContext> where TContext : PlaylistContext
     {
         public CreateSeedDatabaseIfNotExists(DbModelBuilder builder)
             : base(builder)

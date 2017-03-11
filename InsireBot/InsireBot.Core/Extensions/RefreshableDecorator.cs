@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace Maple.Core
 {
+    /// <summary>
+    /// Decorator logs loading and saving method calls
+    /// </summary>
     public class RefreshableDecorator : IRefreshable
     {
         private readonly IRefreshable _refreshable;
