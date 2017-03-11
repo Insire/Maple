@@ -55,5 +55,5 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ## Credits
-- Application Icon - by vngnc aka [Keno B�hme](http://www.kenoboeh.me/)
+- Application Icon - by vngnc aka [Keno Böhme](http://www.kenoboeh.me/)
 - General Feedback - [C# Discord Server](https://discord.gg/VCFhEDy)
