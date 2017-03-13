@@ -3,8 +3,13 @@
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:icons="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks"
                       xmlns:local="clr-namespace:Maple"
+                      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding MediaPlayers.LoadCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <local:IoCUserControl.Resources>
         <Style x:Key="BaseRepeatModeStyle"
                BasedOn="{StaticResource MaterialDesignFlatToggleButton}"
@@ -72,7 +77,8 @@
         </Style>
     </local:IoCUserControl.Resources>
 
-    <Grid>
+    <!--  DataContext ShellViewModel  -->
+    <Grid DataContext="{Binding MediaPlayers.SelectedItem}">
         <materialDesign:TransitioningContent>
 
             <materialDesign:TransitioningContent.OpeningEffects>

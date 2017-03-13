@@ -11,10 +11,14 @@ namespace Maple.Core
 {
     public class RangeObservableCollection<T> : ObservableCollection<T>, INotifyPropertyChanged
     {
-        private bool _suppressNotification = false;
+        private bool _suppressNotification;
+        private readonly BusyStack _busyStack;
 
-        public RangeObservableCollection() : base()
+        public RangeObservableCollection()
+            : base()
         {
+            _busyStack = new BusyStack();
+            _busyStack.OnChanged += (updatePending) => _suppressNotification = updatePending;
         }
 
         public RangeObservableCollection(IEnumerable<T> items) : this()
@@ -24,17 +28,13 @@ namespace Maple.Core
 
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            DispatcherFactory.Invoke(() =>
-            {
-                if (!_suppressNotification)
-                    RaiseCollectionChanged(e);
-            });
+            if (!_suppressNotification)
+                RaiseCollectionChanged(e);
         }
 
-        private void RaiseCollectionChanged(object param)
+        private void RaiseCollectionChanged(NotifyCollectionChangedEventArgs param)
         {
-            // We are in the creator thread, call the base implementation directly
-            base.OnCollectionChanged((NotifyCollectionChangedEventArgs)param);
+            base.OnCollectionChanged(param);
         }
 
         public virtual void AddRange(List<T> items)
@@ -47,12 +47,11 @@ namespace Maple.Core
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 
-            _suppressNotification = true;
-
-            foreach (var item in items)
-                Add(item);
-
-            _suppressNotification = false;
+            using (_busyStack.GetToken())
+            {
+                foreach (var item in items)
+                    Add(item);
+            }
 
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
@@ -62,12 +61,12 @@ namespace Maple.Core
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 
-            _suppressNotification = true;
+            using (_busyStack.GetToken())
+            {
+                foreach (var item in items)
+                    Remove(item);
+            }
 
-            foreach (var item in items)
-                Remove(item);
-
-            _suppressNotification = false;
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
@@ -76,12 +75,12 @@ namespace Maple.Core
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 
-            _suppressNotification = true;
+            using (_busyStack.GetToken())
+            {
+                foreach (var item in items.Cast<T>())
+                    Remove(item);
+            }
 
-            foreach (var item in items.Cast<T>())
-                Remove(item);
-
-            _suppressNotification = false;
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
@@ -90,12 +89,12 @@ namespace Maple.Core
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 
-            _suppressNotification = true;
+            using (_busyStack.GetToken())
+            {
+                foreach (var item in items)
+                    Remove(item);
+            }
 
-            foreach (var item in items)
-                Remove(item);
-
-            _suppressNotification = false;
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
@@ -106,17 +105,12 @@ namespace Maple.Core
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            DispatcherFactory.Invoke(() =>
-            {
-                if (!_suppressNotification)
-                    RaisePropertyChanged(e);
-            });
+            RaisePropertyChanged(e);
         }
 
-        private void RaisePropertyChanged(object param)
+        private void RaisePropertyChanged(PropertyChangedEventArgs param)
         {
-            // We are in the creator thread, call the base implementation directly
-            base.OnPropertyChanged((PropertyChangedEventArgs)param);
+            base.OnPropertyChanged(param);
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using Maple.Core;
-using System;
-using System.Collections.Generic;
 using System.Windows;
 
 namespace Maple
@@ -8,7 +6,6 @@ namespace Maple
     public class Scene : ObservableObject, ISequence
     {
         private readonly ITranslationManager _manager;
-        public Func<ObservableObject> GetDataContext { get; set; }
 
         private BusyStack _busyStack;
         /// <summary>
@@ -56,14 +53,14 @@ namespace Maple
         public bool IsSelected
         {
             get { return _isSelected; }
-            set { SetValue(ref _isSelected, value, Changed: () => UpdateDataContext()); }
+            set { SetValue(ref _isSelected, value); }
         }
 
         public int _sequence;
         public int Sequence
         {
             get { return _sequence; }
-            set { SetValue(ref _sequence, value, Changed: () => UpdateDataContext()); }
+            set { SetValue(ref _sequence, value); }
         }
 
         public Scene(ITranslationManager manager)
@@ -79,27 +76,6 @@ namespace Maple
             {
                 OnChanged = (hasItems) => IsBusy = hasItems
             };
-        }
-
-        private void UpdateDataContext()
-        {
-            if (Content == null || !IsSelected || GetDataContext == null)
-                return;
-
-            // while fetching the dataconext, we will switch IsBusy accordingly
-            using (var token = BusyStack.GetToken())
-            {
-                var currentContext = Content.DataContext as ObservableObject;
-                var newContext = GetDataContext.Invoke();
-
-                if (currentContext == null && newContext == null)
-                    return;
-
-                if (EqualityComparer<ObservableObject>.Default.Equals(currentContext, newContext))
-                    return;
-
-                Content.DataContext = newContext;
-            }
         }
 
         private void UpdateDisplayName()

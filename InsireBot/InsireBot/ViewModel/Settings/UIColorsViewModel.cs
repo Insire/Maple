@@ -4,12 +4,11 @@ using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Maple
 {
-    public class UIColorsViewModel : ObservableObject, IRefreshable
+    public class UIColorsViewModel : ObservableObject, ILoadableViewModel, ISaveableViewModel
     {
         private static bool _isDark;
         private static string _accent;
@@ -17,11 +16,16 @@ namespace Maple
 
         private static PaletteHelper _paletteHelper = new PaletteHelper();
 
+        public EventHandler<UiPrimaryColorEventArgs> PrimaryColorChanged;
+        public bool IsLoaded { get; private set; }
+
         public ICommand ToggleBaseCommand { get; private set; }
         public ICommand ApplyPrimaryCommand { get; private set; }
         public ICommand ApplyAccentCommand { get; private set; }
 
-        public EventHandler<UiPrimaryColorEventArgs> PrimaryColorChanged;
+        public ICommand RefreshCommand => new RelayCommand(Load);
+        public ICommand LoadCommand => new RelayCommand(Load, () => !IsLoaded);
+        public ICommand SaveCommand => new RelayCommand(Save);
 
         public static IEnumerable<Swatch> Swatches => new SwatchesProvider().Swatches;
 
@@ -68,32 +72,28 @@ namespace Maple
             _accent = swatch.Name;
         }
 
-        public Task SaveAsync()
+        public void Save()
         {
-            return Task.Run(() =>
-            {
-                Properties.Settings.Default.AccentName = _accent;
-                Properties.Settings.Default.SwatchName = _swatch;
-                Properties.Settings.Default.UseDarkTheme = _isDark;
+            Properties.Settings.Default.AccentName = _accent;
+            Properties.Settings.Default.SwatchName = _swatch;
+            Properties.Settings.Default.UseDarkTheme = _isDark;
 
-                Properties.Settings.Default.Save();
-            });
+            Properties.Settings.Default.Save();
         }
 
-        public Task LoadAsync()
+        public void Load()
         {
-            return Task.Run(() =>
-            {
-                var swatchName = Properties.Settings.Default.SwatchName;
-                var swatch = Swatches.FirstOrDefault(p => p.Name == swatchName);
+            var swatchName = Properties.Settings.Default.SwatchName;
+            var swatch = Swatches.FirstOrDefault(p => p.Name == swatchName);
 
-                var accentName = Properties.Settings.Default.AccentName;
-                var accent = Swatches.FirstOrDefault(p => p.Name == accentName);
+            var accentName = Properties.Settings.Default.AccentName;
+            var accent = Swatches.FirstOrDefault(p => p.Name == accentName);
 
-                ApplyPrimary(this, swatch);
-                ApplyAccent(this, accent);
-                ApplyBase(this, Properties.Settings.Default.UseDarkTheme);
-            });
+            ApplyPrimary(this, swatch);
+            ApplyAccent(this, accent);
+            ApplyBase(this, Properties.Settings.Default.UseDarkTheme);
+
+            IsLoaded = true;
         }
     }
 }

@@ -19,13 +19,7 @@ namespace Maple
         public ICommand OpenMediaPlayerCommand { get; private set; }
         public ICommand OpenGithubPageCommand { get; private set; }
 
-        public Scenes(ITranslationManager manager,
-                        IMapleLog log,
-                        DirectorViewModel directorViewModel,
-                        MediaPlayers mediaPlayersViewModel,
-                        Playlists playlistsViewModel,
-                        UIColorsViewModel uIColorsViewModel,
-                        OptionsViewModel optionsViewModel)
+        public Scenes(ITranslationManager manager, IMapleLog log)
         {
             _manager = manager;
             _log = log;
@@ -38,7 +32,6 @@ namespace Maple
                 {
                     Content = new MediaPlayerPage(_manager),
                     Key = nameof(Resources.Playback),
-                    GetDataContext = () => mediaPlayersViewModel.Items.FirstOrDefault(p => p is MainMediaPlayer),
                     IsSelected = true,
                     Sequence = 100,
                 },
@@ -47,7 +40,6 @@ namespace Maple
                 {
                     Content = new PlaylistsPage(_manager),
                     Key = nameof(Resources.Playlists),
-                    GetDataContext = () => playlistsViewModel,
                     IsSelected = false,
                     Sequence = 300,
                 },
@@ -56,7 +48,6 @@ namespace Maple
                 {
                     Content = new ColorOptionsPage(_manager),
                     Key = nameof(Resources.Themes),
-                    GetDataContext = () => uIColorsViewModel,
                     IsSelected = false,
                     Sequence = 500,
                 },
@@ -65,7 +56,6 @@ namespace Maple
                 {
                     Content = new OptionsPage(_manager),
                     Key = nameof(Resources.Options),
-                    GetDataContext = () => optionsViewModel,
                     IsSelected = false,
                     Sequence = 600,
                 },
@@ -74,7 +64,6 @@ namespace Maple
                 {
                     Content = new MediaPlayersPage(_manager),
                     Key = nameof(Resources.Director),
-                    GetDataContext = () => directorViewModel,
                     IsSelected = false,
                     Sequence = 150,
                 },

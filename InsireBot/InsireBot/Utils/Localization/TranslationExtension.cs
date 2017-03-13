@@ -26,7 +26,10 @@ namespace Maple
                 return ProvideValue(serviceProvider, manager);
 
             Debug.WriteLine($"{nameof(TranslationExtension)} ProvideValue {Key} failed");
-            Debug.Fail($"{nameof(TranslationExtension)} ProvideValue {Key} failed");
+
+            if (Debugger.IsAttached)
+                Debug.Fail($"{nameof(TranslationExtension)} ProvideValue {Key} failed");
+
             return null;
         }
 

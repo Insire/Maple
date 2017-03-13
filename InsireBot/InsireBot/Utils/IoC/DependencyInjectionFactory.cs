@@ -1,71 +1,59 @@
 ﻿using DryIoc;
 using Maple.Core;
 using Maple.Youtube;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Maple
 {
     public class DependencyInjectionFactory
     {
-        public static Task<IContainer> GetContainerAsync()
+        public static IContainer GetContainer()
         {
-            return Task.Run<IContainer>(async () =>
-           {
-               var container = new Container(rules => rules.WithoutThrowOnRegisteringDisposableTransient());
+            var container = new Container(rules => rules.WithoutThrowOnRegisteringDisposableTransient());
 
-               RegisterViewModels();
-               RegisterServices();
+            RegisterViewModels();
+            RegisterServices();
 
-               container.Register<Scenes>(Reuse.Singleton);
-               await container.Resolve<ITranslationManager>().LoadAsync();
+            container.Register<Scenes>(Reuse.Singleton);
+            container.Resolve<ITranslationManager>().Load();
 
-               var tasks = new List<Task>();
-               foreach (var item in container.Resolve<IEnumerable<IRefreshable>>())
-                   tasks.Add(item.LoadAsync());
+            return container;
 
-               await Task.WhenAll(tasks);
+            void RegisterViewModels()
+            {
+                // save-/loadable ViewModels
+                container.Register<Playlists>(Reuse.Singleton);
+                container.Register<MediaPlayers>(Reuse.Singleton);
+                container.Register<OptionsViewModel>(Reuse.Singleton);
+                container.Register<UIColorsViewModel>(Reuse.Singleton);
 
-               return container;
+                // generic ViewModels
+                container.Register<AudioDevices>(Reuse.Singleton);
+                container.Register<ShellViewModel>(Reuse.Singleton);
+                container.Register<DialogViewModel>(Reuse.Singleton);
+                container.Register<StatusbarViewModel>(Reuse.Singleton);
 
-               void RegisterViewModels()
-               {
-                   // save-/loadable ViewModels
-                   container.Register<Playlists>(Reuse.Singleton);
-                   container.Register<MediaPlayers>(Reuse.Singleton);
-                   container.Register<OptionsViewModel>(Reuse.Singleton);
-                   container.Register<UIColorsViewModel>(Reuse.Singleton);
+                // "Overloads" for already registered ViewModels, so i can query them via the container by resolving the specified interface
+                container.Register<IRefreshable, Playlists>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
+                container.Register<IRefreshable, MediaPlayers>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
+                container.Register<IRefreshable, OptionsViewModel>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
+                container.Register<IRefreshable, UIColorsViewModel>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
 
-                   // generic ViewModels
-                   container.Register<AudioDevices>(Reuse.Singleton);
-                   container.Register<ShellViewModel>(Reuse.Singleton);
-                   container.Register<DialogViewModel>(Reuse.Singleton);
-                   container.Register<DirectorViewModel>(Reuse.Singleton);
-                   container.Register<StatusbarViewModel>(Reuse.Singleton);
+                // Decorator for logging Loading and Saving
+                container.Register<IRefreshable, RefreshableDecorator>(setup: Setup.Decorator);
+            };
 
-                   // "Overloads" for already registered ViewModels, so i can query them via the container by resolving the specified interface
-                   container.Register<IRefreshable, Playlists>(ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
-                   container.Register<IRefreshable, MediaPlayers>(ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
-                   container.Register<IRefreshable, OptionsViewModel>(ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
-                   container.Register<IRefreshable, UIColorsViewModel>(ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
+            void RegisterServices()
+            {
+                // misc
+                container.Register<IMediaPlayer, NAudioMediaPlayer>(Reuse.Transient);
 
-                   // Decorator for logging Loading and Saving
-                   container.Register<IRefreshable, RefreshableDecorator>(setup: Setup.Decorator);
-               };
-
-               void RegisterServices()
-               {
-                   // misc
-                   container.Register<IMediaPlayer, NAudioMediaPlayer>(Reuse.Transient);
-
-                   container.Register<IMediaItemMapper, MediaItemMapper>();
-                   container.Register<IPlaylistMapper, PlaylistMapper>();
-                   container.Register<IMapleLog, LoggingService>(Reuse.Singleton);
-                   container.Register<IYoutubeUrlParseService, UrlParseService>();
-                   container.Register<ITranslationProvider, ResxTranslationProvider>(Reuse.Singleton);
-                   container.Register<ITranslationManager, TranslationManager>(Reuse.Singleton);
-               }
-           });
+                container.Register<IMediaItemMapper, MediaItemMapper>();
+                container.Register<IPlaylistMapper, PlaylistMapper>();
+                container.Register<IMapleLog, LoggingService>(Reuse.Singleton);
+                container.Register<IYoutubeUrlParseService, UrlParseService>();
+                container.Register<ITranslationProvider, ResxTranslationProvider>(Reuse.Singleton);
+                container.Register<ITranslationManager, TranslationManager>(Reuse.Singleton);
+            }
         }
     }
 }

@@ -32,15 +32,51 @@ namespace Maple
             private set { SetValue(ref _dialogViewModel, value); }
         }
 
+        private Playlists _playlists;
+        public Playlists Playlists
+        {
+            get { return _playlists; }
+            private set { SetValue(ref _playlists, value); }
+        }
+
+        private MediaPlayers _mediaPlayers;
+        public MediaPlayers MediaPlayers
+        {
+            get { return _mediaPlayers; }
+            private set { SetValue(ref _mediaPlayers, value); }
+        }
+
+        private UIColorsViewModel _uiColorsViewModel;
+        public UIColorsViewModel UIColorsViewModel
+        {
+            get { return _uiColorsViewModel; }
+            private set { SetValue(ref _uiColorsViewModel, value); }
+        }
+
+        private OptionsViewModel _optionsViewModel;
+        public OptionsViewModel OptionsViewModel
+        {
+            get { return _optionsViewModel; }
+            private set { SetValue(ref _optionsViewModel, value); }
+        }
+
         public ShellViewModel(ITranslationManager translationManager,
                                 Scenes scenes,
                                 StatusbarViewModel statusBarViewModel,
-                                DialogViewModel dialogViewModel)
+                                DialogViewModel dialogViewModel,
+                                Playlists playlists,
+                                MediaPlayers mediaPlayers,
+                                UIColorsViewModel uiColorsViewModel,
+                                OptionsViewModel optionsViewModel)
         {
             TranslationManager = translationManager;
             Scenes = scenes;
             StatusbarViewModel = statusBarViewModel;
             DialogViewModel = dialogViewModel;
+            Playlists = playlists;
+            MediaPlayers = mediaPlayers;
+            UIColorsViewModel = uiColorsViewModel;
+            OptionsViewModel = optionsViewModel;
         }
     }
 }

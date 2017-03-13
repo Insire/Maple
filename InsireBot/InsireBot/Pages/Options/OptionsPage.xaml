@@ -1,12 +1,22 @@
 ﻿<local:IoCUserControl x:Class="Maple.OptionsPage"
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                      xmlns:sys="clr-namespace:System.Globalization;assembly=mscorlib"
+                      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                       xmlns:local="clr-namespace:Maple"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
-    <!-- DataContext: OptionsViewModel-->
-    
+    <!--  DataContext ShellViewModel  -->
+
+    <local:IoCUserControl.Resources>
+        <local:SharedResourceDictionary>
+            <local:SharedResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Resources/Style.xaml" />
+            </local:SharedResourceDictionary.MergedDictionaries>
+        </local:SharedResourceDictionary>
+    </local:IoCUserControl.Resources>
+
+    <!--  DataContext: OptionsViewModel  -->
+
     <materialDesign:TransitioningContent>
         <materialDesign:TransitioningContent.OpeningEffects>
             <materialDesign:TransitionEffect Kind="FadeIn" />
@@ -19,7 +29,7 @@
                         <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
-                        <ColumnDefinition Width="*" MaxWidth="200"/>
+                        <ColumnDefinition Width="*" MaxWidth="200" />
                         <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
@@ -36,10 +46,16 @@
                                Text="{local:Translation Languages}" />
                     <ComboBox Grid.Row="1"
                               Grid.Column="3"
-                              SelectedItem="{Binding SelectedCulture}"
-                              ItemsSource="{Binding Items}">
+                              ItemsSource="{Binding OptionsViewModel.Items}"
+                              SelectedItem="{Binding OptionsViewModel.SelectedCulture}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Loaded">
+                                <i:InvokeCommandAction Command="{Binding OptionsViewModel.LoadCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
                         <ComboBox.ItemTemplate>
-                            <DataTemplate >
+                            <DataTemplate>
                                 <TextBlock Text="{Binding DisplayName}" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>

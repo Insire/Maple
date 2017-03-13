@@ -78,12 +78,14 @@
     <Compile Include="Enums\PrivacyStatus.cs" />
     <Compile Include="Extensions\EventExtension.cs" />
     <Compile Include="Extensions\RefreshableDecorator.cs" />
+    <Compile Include="Interfaces\ILoadableViewModel.cs" />
     <Compile Include="Interfaces\IMapleLog.cs" />
     <Compile Include="Interfaces\IIsSelected.cs" />
     <Compile Include="Interfaces\IMediaItem.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Interfaces\IIdentifier.cs" />
     <Compile Include="Interfaces\IRefreshable.cs" />
+    <Compile Include="Interfaces\ISaveableViewModel.cs" />
     <Compile Include="Interfaces\ISequence.cs" />
     <Compile Include="Observables\Base\BaseDataListViewModel.cs" />
     <Compile Include="Validation\Base\BaseValidationRule.cs" />

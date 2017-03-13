@@ -207,7 +207,6 @@
     <Compile Include="ViewModel\Dialogs\FolderBrowserDialogViewModel.cs" />
     <Compile Include="ViewModel\Dialogs\MessageDialogViewModel.cs" />
     <Compile Include="ViewModel\Dialogs\ProgressDialogViewModel.cs" />
-    <Compile Include="ViewModel\DirectorViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer\AudioDevices.cs" />
     <Compile Include="ViewModel\MediaPlayer\MainMediaPlayer.cs" />
     <Compile Include="ViewModel\MediaPlayer\MediaPlayers.cs" />
@@ -266,10 +265,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Playlist\PlaylistsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\ListViewStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

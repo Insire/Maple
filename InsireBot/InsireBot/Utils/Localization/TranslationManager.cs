@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Maple
 {
@@ -52,19 +51,15 @@ namespace Maple
             return $"!{key}!";
         }
 
-        public Task SaveAsync()
+        public void Save()
         {
-            return Task.Run(() =>
-            {
-                Properties.Settings.Default.StartUpCulture = CurrentLanguage;
-                Properties.Settings.Default.Save();
-            });
+            Properties.Settings.Default.StartUpCulture = CurrentLanguage;
+            Properties.Settings.Default.Save();
         }
 
-        public Task LoadAsync()
+        public void Load()
         {
             Thread.CurrentThread.CurrentCulture = Languages.First(p => p.TwoLetterISOLanguageName == "en");
-            return Task.FromResult(0);
         }
     }
 }

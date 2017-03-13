@@ -1,33 +1,38 @@
 ﻿using Maple.Localization.Properties;
 using System;
-using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Maple.Core
 {
     /// <summary>
     /// Decorator logs loading and saving method calls
     /// </summary>
-    public class RefreshableDecorator : IRefreshable
+    public class RefreshableDecorator : ILoadableViewModel
     {
-        private readonly IRefreshable _refreshable;
+        private readonly ILoadableViewModel _refreshable;
         private readonly IMapleLog _log;
 
-        public RefreshableDecorator(IRefreshable refreshable, IMapleLog log)
+        public bool IsLoaded => _refreshable.IsLoaded;
+
+        public ICommand LoadCommand => _refreshable.LoadCommand;
+        public ICommand RefreshCommand => _refreshable.RefreshCommand;
+
+        public RefreshableDecorator(ILoadableViewModel refreshable, IMapleLog log)
         {
             _refreshable = refreshable ?? throw new ArgumentNullException(nameof(refreshable));
             _log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
-        public Task LoadAsync()
+        public void Load()
         {
             _log.Info($"{Resources.Loading} {_refreshable.GetType().Name}");
-            return _refreshable.LoadAsync();
+            _refreshable.Load();
         }
 
-        public Task SaveAsync()
+        public void Save()
         {
             _log.Info($"{Resources.Saving} {_refreshable.GetType().Name}");
-            return _refreshable.SaveAsync();
+            _refreshable.Save();
         }
     }
 }

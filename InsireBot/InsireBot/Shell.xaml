@@ -29,23 +29,26 @@
     </metro:MetroWindow.LeftWindowCommands>
 
     <DockPanel x:Name="Root">
+        
+        <!--  DataContext: StatusBar  -->
         <materialDesign:ColorZone Padding="4"
                                   materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                  DataContext="{Binding StatusbarViewModel}"
                                   DockPanel.Dock="Bottom"
                                   Mode="PrimaryMid">
-            <StackPanel HorizontalAlignment="Left"
-                        DataContext="{Binding StatusbarViewModel}"
-                        Orientation="Horizontal">
+            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock>
                     <Run Text="{Binding Version, Mode=OneWay}" />
                     <Run Text="{Binding Language, Mode=OneWay}" />
                 </TextBlock>
                 <TextBlock Margin="5,0" Text="{local:Translation PlaylistCurrent}" />
-                <TextBlock Text="{Binding MainMediaPlayer.Playlist.Title}" />
-                <TextBlock Margin="5,0" Text="{Binding MainMediaPlayer.Playlist.CurrentItem.Title}" />
+                <TextBlock Text="{Binding MainMediaPlayer.Playlist.Title, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Margin="5,0" Text="{Binding MainMediaPlayer.Playlist.CurrentItem.Title, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </materialDesign:ColorZone>
 
+        <!--  Content Area  -->
+        <!--  DataContext ShellViewModel  -->
         <materialDesign:DialogHost CloseOnClickAway="True"
                                    Identifier="RootDialog"
                                    IsOpen="{Binding DialogViewModel.IsOpen}">
@@ -88,7 +91,7 @@
                                         MinHeight="169"
                                         MaxWidth="900"
                                         MaxHeight="506"
-                                        Content="{Binding Context}" />
+                                        Content="{Binding Context, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" />
                     </DockPanel>
                 </DockPanel>
             </materialDesign:DialogHost.DialogContent>
@@ -102,9 +105,9 @@
                                       Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
 
                         <ListBox Grid.IsSharedSizeScope="True"
-                                 ItemsSource="{Binding Items}"
+                                 ItemsSource="{Binding Items, IsAsync=True, UpdateSourceTrigger=PropertyChanged}"
                                  PreviewMouseLeftButtonUp="UIElement_OnPreviewMouseLeftButtonUp"
-                                 SelectedItem="{Binding SelectedItem}"
+                                 SelectedItem="{Binding SelectedItem, IsAsync=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
                                  SelectionMode="Single">
                             <ListBox.ItemContainerStyle>
                                 <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="{x:Type ListBoxItem}">
@@ -116,7 +119,7 @@
                                     <TextBlock Grid.Column="1"
                                                HorizontalAlignment="Stretch"
                                                VerticalAlignment="Center"
-                                               Text="{Binding DisplayName}" />
+                                               Text="{Binding DisplayName, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" />
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
@@ -138,10 +141,10 @@
                                        VerticalAlignment="Center"
                                        FontSize="22"
                                        FontWeight="Medium"
-                                       Text="{Binding Scenes.SelectedItem.DisplayName}" />
+                                       Text="{Binding Scenes.SelectedItem.DisplayName, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" />
                         </DockPanel>
                     </materialDesign:ColorZone>
-                    <ContentControl Content="{Binding Scenes.SelectedItem.Content}" Style="{StaticResource BaseLayoutStyle}" />
+                    <ContentControl Content="{Binding Scenes.SelectedItem.Content, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseLayoutStyle}" />
                 </DockPanel>
 
             </materialDesign:DrawerHost>

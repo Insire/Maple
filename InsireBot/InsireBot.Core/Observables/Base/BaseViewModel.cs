@@ -23,15 +23,15 @@ namespace Maple.Core
         private T _model;
         public T Model
         {
-            get { return _model; }
-            protected set { SetValue(ref _model, value); }
+            get => _model;
+            protected set => SetValue(ref _model, value);
         }
 
         private bool _isBusy;
         public bool IsBusy
         {
-            get { return _isBusy; }
-            set { SetValue(ref _isBusy, value); }
+            get => _isBusy;
+            set => SetValue(ref _isBusy, value);
         }
 
         private BaseViewModel()

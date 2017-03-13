@@ -1,20 +1,23 @@
 ﻿using Maple.Core;
 using Maple.Data;
 using Maple.Localization.Properties;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Maple
 {
-    public class Playlists : BaseDataListViewModel<Playlist, Data.Playlist>, IRefreshable
+    public class Playlists : BaseDataListViewModel<Playlist, Data.Playlist>, ILoadableViewModel, ISaveableViewModel
     {
         private readonly IMapleLog _log;
         private readonly DialogViewModel _dialogViewModel;
 
         public ICommand PlayCommand { get; private set; }
+        public ICommand LoadCommand => new RelayCommand(Load, () => !IsLoaded);
+        public ICommand RefreshCommand => new RelayCommand(Load);
+        public ICommand SaveCommand => new RelayCommand(Save);
+
+        public bool IsLoaded { get; private set; }
 
         public Playlists(IMapleLog log, DialogViewModel dialogViewModel)
             : base()
@@ -25,25 +28,25 @@ namespace Maple
             AddCommand = new RelayCommand(Add, CanAdd);
         }
 
-        public Task LoadAsync()
+        public void Load()
         {
-            return Task.Run(() =>
+            Items.Clear();
+
+            foreach (var item in GetPlaylists())
+                Items.Add(new Playlist(_dialogViewModel, item));
+
+            SelectedItem = Items.FirstOrDefault();
+            IsLoaded = true;
+
+            List<Data.Playlist> GetPlaylists()
             {
-                Items.Clear();
-
                 using (var context = new PlaylistContext())
-                {
-                    foreach (var item in context.Playlists)
-                        Items.Add(new Playlist(_dialogViewModel, item));
-
-                    SelectedItem = Items.FirstOrDefault();
-                }
-            });
+                    return context.Playlists.ToList();
+            }
         }
 
-        public Task SaveAsync()
+        public void Save()
         {
-            throw new NotImplementedException();
         }
 
         // TODO order changing + sync, Commands, UserInteraction, async load

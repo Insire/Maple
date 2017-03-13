@@ -23,7 +23,10 @@ namespace Maple
 
         protected override void StartListening(object source)
         {
-            var manager = (ITranslationManager)source;
+            var manager = source as ITranslationManager;
+            if (manager == null)
+                return;
+
             manager.PropertyChanged += PropertyChanged;
         }
 
@@ -35,7 +38,10 @@ namespace Maple
 
         protected override void StopListening(object source)
         {
-            var manager = (ITranslationManager)source;
+            var manager = source as ITranslationManager;
+            if (manager == null)
+                return;
+
             manager.PropertyChanged -= PropertyChanged;
         }
 

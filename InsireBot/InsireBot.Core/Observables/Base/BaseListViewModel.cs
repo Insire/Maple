@@ -28,8 +28,8 @@ namespace Maple.Core
         /// </summary>
         public bool IsBusy
         {
-            get { return _isBusy; }
-            private set { SetValue(ref _isBusy, value); }
+            get => _isBusy;
+            private set => SetValue(ref _isBusy, value);
         }
 
         private BusyStack _busyStack;
@@ -38,14 +38,14 @@ namespace Maple.Core
         /// </summary>
         protected BusyStack BusyStack
         {
-            get { return _busyStack; }
-            private set { SetValue(ref _busyStack, value); }
+            get => _busyStack;
+            private set => SetValue(ref _busyStack, value);
         }
 
         private T _selectedItem;
         public virtual T SelectedItem
         {
-            get { return _selectedItem; }
+            get => _selectedItem;
             set
             {
                 if (EqualityComparer<T>.Default.Equals(_selectedItem, value))
@@ -66,8 +66,8 @@ namespace Maple.Core
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public RangeObservableCollection<T> Items
         {
-            get { return _items; }
-            private set { SetValue(ref _items, value); }
+            get => _items;
+            private set => SetValue(ref _items, value);
         }
 
         private ICollectionView _view;
@@ -76,19 +76,12 @@ namespace Maple.Core
         /// </summary>
         public ICollectionView View
         {
-            get { return _view; }
-            protected set { SetValue(ref _view, value); }
+            get => _view;
+            protected set => SetValue(ref _view, value);
         }
 
-        public int Count
-        {
-            get { return Items.Count; }
-        }
-
-        public T this[int index]
-        {
-            get { return Items[index]; }
-        }
+        public int Count => Items.Count;
+        public T this[int index] => Items[index];
 
         public ICommand RemoveRangeCommand { get; protected set; }
         public ICommand RemoveCommand { get; protected set; }

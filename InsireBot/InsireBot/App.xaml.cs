@@ -4,7 +4,6 @@ using Maple.Properties;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Maple
@@ -14,41 +13,38 @@ namespace Maple
         private IContainer _container;
         private ITranslationManager _manager;
 
-        protected override async void OnStartup(StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
+            InitializeResources();
             InitializeLocalization();
-            _container = await DependencyInjectionFactory.GetContainerAsync();
+
+            _container = DependencyInjectionFactory.GetContainer();
             _manager = _container.Resolve<ITranslationManager>();
 
-
-            var colorsViewModel = _container.Resolve<UIColorsViewModel>();
-            await colorsViewModel.LoadAsync();
-
-            InitializeResources();
-
-            base.OnStartup(e);
-
-            var shell = new Shell(_manager, colorsViewModel)
+            var shell = new Shell(_manager, _container.Resolve<UIColorsViewModel>())
             {
                 DataContext = _container.Resolve<ShellViewModel>(),
             };
 
             shell.Show();
+
+            foreach (var item in _container.Resolve<IEnumerable<ILoadableViewModel>>())
+                item.Load();
+
+            base.OnStartup(e);
         }
 
-        protected override async void OnExit(ExitEventArgs e)
+        protected override void OnExit(ExitEventArgs e)
         {
-            await SaveState();
+            SaveState();
             ExitInternal(e);
         }
 
         private void InitializeResources()
         {
             var styles = CreateResourceDictionary(new Uri("/Maple;component/Resources/Style.xaml", UriKind.RelativeOrAbsolute));
-            var listViewStyles = CreateResourceDictionary(new Uri("/Maple;component/Resources/ListViewStyles.xaml", UriKind.RelativeOrAbsolute));
 
             Resources.MergedDictionaries.Add(styles);
-            Resources.MergedDictionaries.Add(listViewStyles);
         }
 
         private IoCResourceDictionary CreateResourceDictionary(Uri uri)
@@ -70,21 +66,13 @@ namespace Maple
             Thread.CurrentThread.CurrentCulture = Settings.Default.StartUpCulture;
         }
 
-        private async Task SaveState()
+        private void SaveState()
         {
             var log = _container.Resolve<IMapleLog>();
             log.Info(Localization.Properties.Resources.SavingState);
 
-            var tasks = new List<Task>
-            {
-                _manager.SaveAsync(),
-            };
-
-            _container.Resolve<IEnumerable<IRefreshable>>()
-                      .ForEach(p => tasks.Add(p.SaveAsync()));
-
-
-            await Task.WhenAll(tasks);
+            _container.Resolve<IEnumerable<ILoadableViewModel>>()
+                      .ForEach(p => p.Save());
 
             log.Info(Localization.Properties.Resources.SavedState);
         }
