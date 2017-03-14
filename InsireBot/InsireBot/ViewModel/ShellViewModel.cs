@@ -18,8 +18,8 @@ namespace Maple
             private set { SetValue(ref _scenes, value); }
         }
 
-        private ITranslationManager _translationManager;
-        public ITranslationManager TranslationManager
+        private ITranslationService _translationManager;
+        public ITranslationService TranslationManager
         {
             get { return _translationManager; }
             private set { SetValue(ref _translationManager, value); }
@@ -60,7 +60,7 @@ namespace Maple
             private set { SetValue(ref _optionsViewModel, value); }
         }
 
-        public ShellViewModel(ITranslationManager translationManager,
+        public ShellViewModel(ITranslationService translationManager,
                                 Scenes scenes,
                                 StatusbarViewModel statusBarViewModel,
                                 DialogViewModel dialogViewModel,

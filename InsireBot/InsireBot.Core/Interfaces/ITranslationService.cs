@@ -1,11 +1,10 @@
-﻿using Maple.Core;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace Maple
+namespace Maple.Core
 {
-    public interface ITranslationManager : INotifyPropertyChanged, IRefreshable
+    public interface ITranslationService : INotifyPropertyChanged, IRefreshable
     {
         CultureInfo CurrentLanguage { get; set; }
         IEnumerable<CultureInfo> Languages { get; }

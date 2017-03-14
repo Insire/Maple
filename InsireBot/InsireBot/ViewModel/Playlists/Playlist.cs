@@ -11,10 +11,13 @@ using System.Windows.Input;
 namespace Maple
 {
     [DebuggerDisplay("{Title}, {Sequence}")]
-    public class Playlist : BaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier
+    public class Playlist : BaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier, IChangeState
     {
         private readonly DialogViewModel _dialogViewModel;
         public int ItemCount => Items?.Count ?? 0;
+
+        public bool IsNew => Model.IsNew;
+        public bool IsDeleted => Model.IsDeleted;
 
         public ICommand LoadFromFileCommand { get; private set; }
         public ICommand LoadFromFolderCommand { get; private set; }

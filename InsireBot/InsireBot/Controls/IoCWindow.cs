@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Maple.Core;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -12,16 +13,16 @@ namespace Maple
     {
         private IConfigurableWindowSettings _settings;
         private UIColorsViewModel _colorsViewModel;
-        public ITranslationManager TranslationManager { get; private set; }
+        public ITranslationService TranslationManager { get; private set; }
 
-        public IoCWindow() 
+        public IoCWindow()
             : base()
         {
             if (Debugger.IsAttached)
                 Assert.Fail($"The constructor without parameters of {nameof(IoCWindow)} exists only for compatibility reasons.");
         }
 
-        public IoCWindow(ITranslationManager container, UIColorsViewModel vm) : base()
+        public IoCWindow(ITranslationService container, UIColorsViewModel vm) : base()
         {
             TranslationManager = container;
             _colorsViewModel = vm;

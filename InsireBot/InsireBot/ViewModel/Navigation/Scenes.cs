@@ -12,14 +12,14 @@ namespace Maple
     /// </summary>
     public class Scenes : BaseListViewModel<Scene>
     {
-        private ITranslationManager _manager;
+        private ITranslationService _manager;
         private IMapleLog _log;
 
         public ICommand OpenColorOptionsCommand { get; private set; }
         public ICommand OpenMediaPlayerCommand { get; private set; }
         public ICommand OpenGithubPageCommand { get; private set; }
 
-        public Scenes(ITranslationManager manager, IMapleLog log)
+        public Scenes(ITranslationService manager, IMapleLog log)
         {
             _manager = manager;
             _log = log;

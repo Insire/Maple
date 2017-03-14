@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maple.Core;
+using System;
 using System.ComponentModel;
 using System.Windows;
 
@@ -6,12 +7,12 @@ namespace Maple
 {
     public class LanguageChangedEventManager : WeakEventManager
     {
-        public static void AddListener(ITranslationManager source, IWeakEventListener listener)
+        public static void AddListener(ITranslationService source, IWeakEventListener listener)
         {
             CurrentManager.ProtectedAddListener(source, listener);
         }
 
-        public static void RemoveListener(ITranslationManager source, IWeakEventListener listener)
+        public static void RemoveListener(ITranslationService source, IWeakEventListener listener)
         {
             CurrentManager.ProtectedRemoveListener(source, listener);
         }
@@ -23,7 +24,7 @@ namespace Maple
 
         protected override void StartListening(object source)
         {
-            var manager = source as ITranslationManager;
+            var manager = source as ITranslationService;
             if (manager == null)
                 return;
 
@@ -32,13 +33,13 @@ namespace Maple
 
         private void PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(ITranslationManager.CurrentLanguage))
+            if (e.PropertyName == nameof(ITranslationService.CurrentLanguage))
                 DeliverEvent(sender, new EventArgs());
         }
 
         protected override void StopListening(object source)
         {
-            var manager = source as ITranslationManager;
+            var manager = source as ITranslationService;
             if (manager == null)
                 return;
 

@@ -7,12 +7,14 @@ using System.Windows.Input;
 
 namespace Maple
 {
-    public class MediaPlayer : BaseViewModel<Data.MediaPlayer>, IDisposable
+    public class MediaPlayer : BaseViewModel<Data.MediaPlayer>, IDisposable, IChangeState
     {
-        protected readonly ITranslationManager _manager;
+        protected readonly ITranslationService _manager;
 
         public bool IsPlaying { get { return Player.IsPlaying; } }
         public bool Disposed { get; private set; }
+        public bool IsNew => Model.IsNew;
+        public bool IsDeleted => Model.IsDeleted;
 
         private IMediaPlayer _player;
         public IMediaPlayer Player
@@ -61,7 +63,7 @@ namespace Maple
             protected set { SetValue(ref _isPrimary, value, Changed: () => Model.IsPrimary = value); }
         }
 
-        public MediaPlayer(ITranslationManager manager, IMediaPlayer player, Data.MediaPlayer model, Playlist playlist, AudioDevices devices)
+        public MediaPlayer(ITranslationService manager, IMediaPlayer player, Data.MediaPlayer model, Playlist playlist, AudioDevices devices)
             : base(model)
         {
             _manager = manager ?? throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} {Resources.IsRequired}");

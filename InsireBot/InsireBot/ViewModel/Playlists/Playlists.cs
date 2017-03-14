@@ -1,6 +1,6 @@
 ﻿using Maple.Core;
-using Maple.Data;
 using Maple.Localization.Properties;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
@@ -11,6 +11,7 @@ namespace Maple
     {
         private readonly IMapleLog _log;
         private readonly DialogViewModel _dialogViewModel;
+        private readonly Func<IMediaRepository> _repositoryFactory;
 
         public ICommand PlayCommand { get; private set; }
         public ICommand LoadCommand => new RelayCommand(Load, () => !IsLoaded);
@@ -19,11 +20,12 @@ namespace Maple
 
         public bool IsLoaded { get; private set; }
 
-        public Playlists(IMapleLog log, DialogViewModel dialogViewModel)
+        public Playlists(IMapleLog log, Func<IMediaRepository> repo, DialogViewModel dialogViewModel)
             : base()
         {
             _dialogViewModel = dialogViewModel;
             _log = log;
+            _repositoryFactory = repo;
 
             AddCommand = new RelayCommand(Add, CanAdd);
         }
@@ -32,21 +34,19 @@ namespace Maple
         {
             Items.Clear();
 
-            foreach (var item in GetPlaylists())
-                Items.Add(new Playlist(_dialogViewModel, item));
+            using (var context = _repositoryFactory())
+                Items.AddRange(context.GetAllPlaylists());
 
             SelectedItem = Items.FirstOrDefault();
             IsLoaded = true;
-
-            List<Data.Playlist> GetPlaylists()
-            {
-                using (var context = new PlaylistContext())
-                    return context.Playlists.ToList();
-            }
         }
 
         public void Save()
         {
+            using (var context = _repositoryFactory())
+            {
+                context.Save(this);
+            }
         }
 
         // TODO order changing + sync, Commands, UserInteraction, async load

@@ -5,7 +5,7 @@ namespace Maple
 {
     public class Scene : ObservableObject, ISequence
     {
-        private readonly ITranslationManager _manager;
+        private readonly ITranslationService _manager;
 
         private BusyStack _busyStack;
         /// <summary>
@@ -63,7 +63,7 @@ namespace Maple
             set { SetValue(ref _sequence, value); }
         }
 
-        public Scene(ITranslationManager manager)
+        public Scene(ITranslationService manager)
         {
             _manager = manager;
             _manager.PropertyChanged += (o, e) =>

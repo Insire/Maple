@@ -8,9 +8,9 @@ namespace Maple
     public class TranslationData : ObservableObject, IWeakEventListener, INotifyPropertyChanged, IDisposable
     {
         private string _key;
-        private ITranslationManager _manager;
+        private ITranslationService _manager;
 
-        public TranslationData(ITranslationManager manager, string key)
+        public TranslationData(ITranslationService manager, string key)
         {
             _manager = manager;
             _key = key;

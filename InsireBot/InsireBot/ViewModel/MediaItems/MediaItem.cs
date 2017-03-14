@@ -6,6 +6,9 @@ namespace Maple
 {
     public class MediaItem : BaseViewModel<Data.MediaItem>, IMediaItem
     {
+        public bool IsNew => Model.IsNew;
+        public bool IsDeleted => Model.IsDeleted;
+
         private int _id;
         public int Id
         {

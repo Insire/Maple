@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Maple.Core;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Maple
 {
@@ -7,14 +8,14 @@ namespace Maple
     /// </summary>
     public class IoCResourceDictionary : SharedResourceDictionary, IIocFrameworkElement
     {
-        public ITranslationManager TranslationManager { get; private set; }
+        public ITranslationService TranslationManager { get; private set; }
 
         public IoCResourceDictionary() : base()
         {
             Assert.Fail($"The constructor without parameters of {nameof(IoCResourceDictionary)} exists only for compatibility reasons.");
         }
 
-        public IoCResourceDictionary(ITranslationManager translationManager) : base()
+        public IoCResourceDictionary(ITranslationService translationManager) : base()
         {
             TranslationManager = translationManager;
         }

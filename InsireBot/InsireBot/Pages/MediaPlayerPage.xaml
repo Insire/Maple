@@ -110,7 +110,15 @@
                               Grid.ColumnSpan="5"
                               SelectionMode="Single"
                               BorderThickness="0" 
-                              ItemsSource="{Binding Playlist.Items}">
+                              ItemsSource="{Binding Playlist.View}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Loaded">
+                                <i:InvokeCommandAction Command="{Binding Playlists.LoadCommand}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="UnLoaded">
+                                <i:InvokeCommandAction Command="{Binding Playlists.SaveCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <ContextMenu.Items>

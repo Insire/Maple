@@ -4,6 +4,7 @@
                       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                       xmlns:local="clr-namespace:Maple"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    
     <local:IoCUserControl.Resources>
         <local:SharedResourceDictionary>
             <local:SharedResourceDictionary.MergedDictionaries>
@@ -11,12 +12,6 @@
             </local:SharedResourceDictionary.MergedDictionaries>
         </local:SharedResourceDictionary>
     </local:IoCUserControl.Resources>
-
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding MediaPlayers.LoadCommand}" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
 
     <!--  DataContext ShellViewModel  -->
 
@@ -46,6 +41,14 @@
                              AlternationCount="2"
                              ItemsSource="{Binding MediaPlayers.View, IsAsync=True, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
                              SelectedItem="{Binding MediaPlayers.SelectedItem, IsAsync=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Loaded">
+                                <i:InvokeCommandAction Command="{Binding MediaPlayers.LoadCommand}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="UnLoaded">
+                                <i:InvokeCommandAction Command="{Binding MediaPlayers.SaveCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                         <ListBox.ItemContainerStyle>
                             <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />

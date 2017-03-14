@@ -7,7 +7,7 @@ namespace Maple
     public class StatusbarViewModel : ObservableObject
     {
         private readonly MediaPlayers _mediaplayers;
-        private readonly ITranslationManager _manager;
+        private readonly ITranslationService _manager;
 
         private string _version;
         public string Version
@@ -30,14 +30,14 @@ namespace Maple
             private set { SetValue(ref _mainMediaPlayer, value); }
         }
 
-        public StatusbarViewModel(ITranslationManager manager, MediaPlayers mediaPlayers)
+        public StatusbarViewModel(ITranslationService manager, MediaPlayers mediaPlayers)
         {
             _mediaplayers = mediaPlayers;
 
             _manager = manager;
             _manager.PropertyChanged += (o, e) =>
               {
-                  if (e.PropertyName == $"{nameof(ITranslationManager.CurrentLanguage)}")
+                  if (e.PropertyName == $"{nameof(ITranslationService.CurrentLanguage)}")
                       UpdateLanguage();
               };
 

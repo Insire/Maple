@@ -14,7 +14,7 @@ namespace Maple
             RegisterServices();
 
             container.Register<Scenes>(Reuse.Singleton);
-            container.Resolve<ITranslationManager>().Load();
+            container.Resolve<ITranslationService>().Load();
 
             return container;
 
@@ -46,13 +46,13 @@ namespace Maple
             {
                 // misc
                 container.Register<IMediaPlayer, NAudioMediaPlayer>(Reuse.Transient);
-
+                container.Register<IMediaRepository, MediaRepository>();
                 container.Register<IMediaItemMapper, MediaItemMapper>();
                 container.Register<IPlaylistMapper, PlaylistMapper>();
                 container.Register<IMapleLog, LoggingService>(Reuse.Singleton);
                 container.Register<IYoutubeUrlParseService, UrlParseService>();
                 container.Register<ITranslationProvider, ResxTranslationProvider>(Reuse.Singleton);
-                container.Register<ITranslationManager, TranslationManager>(Reuse.Singleton);
+                container.Register<ITranslationService, TranslationService>(Reuse.Singleton);
             }
         }
     }

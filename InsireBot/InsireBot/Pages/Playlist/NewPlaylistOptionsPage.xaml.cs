@@ -1,8 +1,10 @@
-﻿namespace Maple
+﻿using Maple.Core;
+
+namespace Maple
 {
     public partial class NewPlaylistOptionsPage
     {
-        public NewPlaylistOptionsPage(ITranslationManager manager) : base(manager)
+        public NewPlaylistOptionsPage(ITranslationService manager) : base(manager)
         {
             InitializeComponent();
         }

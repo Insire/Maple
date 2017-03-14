@@ -6,7 +6,7 @@ namespace Maple
 {
     public class OptionsViewModel : ObservableObject, ILoadableViewModel, ISaveableViewModel
     {
-        private readonly ITranslationManager _manager;
+        private readonly ITranslationService _manager;
 
         private RangeObservableCollection<CultureInfo> _items;
         public RangeObservableCollection<CultureInfo> Items
@@ -28,7 +28,7 @@ namespace Maple
         public ICommand LoadCommand => new RelayCommand(Load, () => !IsLoaded);
         public ICommand SaveCommand => new RelayCommand(Save);
 
-        public OptionsViewModel(ITranslationManager manager)
+        public OptionsViewModel(ITranslationService manager)
         {
             _manager = manager;
             Items = new RangeObservableCollection<CultureInfo>(_manager.Languages);

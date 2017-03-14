@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace Maple
 {
-    public class TranslationManager : ObservableObject, ITranslationManager
+    public class TranslationService : ObservableObject, ITranslationService
     {
         public ITranslationProvider TranslationProvider { get; private set; }
 
@@ -34,7 +34,7 @@ namespace Maple
             }
         }
 
-        public TranslationManager(ITranslationProvider provider)
+        public TranslationService(ITranslationProvider provider)
         {
             TranslationProvider = provider;
         }

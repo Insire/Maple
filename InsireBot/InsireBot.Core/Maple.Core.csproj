@@ -78,6 +78,9 @@
     <Compile Include="Enums\PrivacyStatus.cs" />
     <Compile Include="Extensions\EventExtension.cs" />
     <Compile Include="Extensions\RefreshableDecorator.cs" />
+    <Compile Include="Interfaces\IChangeState.cs" />
+    <Compile Include="Interfaces\IConfigurableWindowSettings.cs" />
+    <Compile Include="Interfaces\IIocFrameworkElement.cs" />
     <Compile Include="Interfaces\ILoadableViewModel.cs" />
     <Compile Include="Interfaces\IMapleLog.cs" />
     <Compile Include="Interfaces\IIsSelected.cs" />
@@ -87,6 +90,7 @@
     <Compile Include="Interfaces\IRefreshable.cs" />
     <Compile Include="Interfaces\ISaveableViewModel.cs" />
     <Compile Include="Interfaces\ISequence.cs" />
+    <Compile Include="Interfaces\ITranslationService.cs" />
     <Compile Include="Observables\Base\BaseDataListViewModel.cs" />
     <Compile Include="Validation\Base\BaseValidationRule.cs" />
     <Compile Include="Validation\ListNotEmptyRule.cs" />

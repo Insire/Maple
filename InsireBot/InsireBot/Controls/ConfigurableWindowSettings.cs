@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using Maple.Core;
+using System.Configuration;
 using System.Windows;
 
 namespace Maple

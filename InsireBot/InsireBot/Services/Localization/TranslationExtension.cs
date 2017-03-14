@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maple.Core;
+using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Data;
@@ -22,7 +23,7 @@ namespace Maple
             if (TryGetIoCFrameWorkElement(serviceProvider, out IIocFrameworkElement element))
                 return ProvideValue(serviceProvider, element.TranslationManager);
 
-            if (TryGetTranslationManagerFromResources(serviceProvider, out ITranslationManager manager))
+            if (TryGetTranslationManagerFromResources(serviceProvider, out ITranslationService manager))
                 return ProvideValue(serviceProvider, manager);
 
             Debug.WriteLine($"{nameof(TranslationExtension)} ProvideValue {Key} failed");
@@ -40,15 +41,15 @@ namespace Maple
             return element != null;
         }
 
-        private bool TryGetTranslationManagerFromResources(IServiceProvider serviceProvider, out ITranslationManager manager)
+        private bool TryGetTranslationManagerFromResources(IServiceProvider serviceProvider, out ITranslationService manager)
         {
             var provider = serviceProvider.GetService(typeof(IRootObjectProvider)) as IRootObjectProvider;
             var dictionary = provider?.RootObject as ResourceDictionary;
-            var key = typeof(ITranslationManager).Name;
+            var key = typeof(ITranslationService).Name;
 
             if (dictionary?.Contains(key) == true)
             {
-                manager = dictionary[key] as ITranslationManager;
+                manager = dictionary[key] as ITranslationService;
                 return true;
             }
 
@@ -56,7 +57,7 @@ namespace Maple
             return false;
         }
 
-        private object ProvideValue(IServiceProvider serviceProvider, ITranslationManager manager)
+        private object ProvideValue(IServiceProvider serviceProvider, ITranslationService manager)
         {
             var binding = new Binding("Value")
             {

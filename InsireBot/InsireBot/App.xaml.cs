@@ -11,7 +11,7 @@ namespace Maple
     public partial class App : Application
     {
         private IContainer _container;
-        private ITranslationManager _manager;
+        private ITranslationService _manager;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -19,7 +19,7 @@ namespace Maple
             InitializeLocalization();
 
             _container = DependencyInjectionFactory.GetContainer();
-            _manager = _container.Resolve<ITranslationManager>();
+            _manager = _container.Resolve<ITranslationService>();
 
             var shell = new Shell(_manager, _container.Resolve<UIColorsViewModel>())
             {
@@ -56,7 +56,7 @@ namespace Maple
             {
                 Source = uri,
             };
-            dic.Add(typeof(ITranslationManager).Name, _manager);
+            dic.Add(typeof(ITranslationService).Name, _manager);
 
             return dic;
         }

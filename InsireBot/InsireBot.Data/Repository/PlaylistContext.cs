@@ -18,6 +18,11 @@ namespace Maple.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             Database.SetInitializer(new CreateSeedDatabaseIfNotExists<PlaylistContext>(modelBuilder));
+
+            modelBuilder.Entity<Playlist>()
+                .HasOptional(a => a.MediaItems)
+                .WithOptionalDependent()
+                .WillCascadeOnDelete(true);
         }
     }
 

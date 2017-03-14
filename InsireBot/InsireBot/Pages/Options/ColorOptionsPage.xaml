@@ -8,7 +8,7 @@
 
     <!--  DataContext ShellViewModel  -->
 
-    <UserControl.Resources>
+    <local:IoCUserControl.Resources>
         <local:BindingProxy x:Key="ApplyPrimaryProxy" Data="{Binding UIColorsViewModel.ApplyPrimaryCommand}" />
         <local:BindingProxy x:Key="ApplyAccentProxy" Data="{Binding UIColorsViewModel.ApplyAccentCommand}" />
         <local:BindingProxy x:Key="ToggleBaseCommandProxy" Data="{Binding UIColorsViewModel.ToggleBaseCommand}" />
@@ -72,7 +72,7 @@
                 </Grid>
             </materialDesign:Card>
         </DataTemplate>
-    </UserControl.Resources>
+    </local:IoCUserControl.Resources>
 
     <materialDesign:TransitioningContent>
         <materialDesign:TransitioningContent.OpeningEffects>

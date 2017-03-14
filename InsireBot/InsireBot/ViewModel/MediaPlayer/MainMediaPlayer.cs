@@ -1,26 +1,20 @@
 ﻿using Maple.Core;
 using Maple.Localization.Properties;
-using System;
 
 namespace Maple
 {
     public class MainMediaPlayer : MediaPlayer
     {
-        private readonly string _nameKey;
+        private const string _nameKey = nameof(Resources.MainMediaplayer);
 
-        public MainMediaPlayer(ITranslationManager manager, IMediaPlayer player, Data.MediaPlayer model, Playlist playlist, AudioDevices devices, string nameKey)
+        public MainMediaPlayer(ITranslationService manager, IMediaPlayer player, Data.MediaPlayer model, Playlist playlist, AudioDevices devices)
             : base(manager, player, model, playlist, devices)
         {
-            if (string.IsNullOrWhiteSpace(nameKey))
-                throw new ArgumentNullException(nameof(nameKey), $"{nameof(nameKey)} {Resources.IsRequired}");
-
-            _nameKey = nameKey;
-
             IsPrimary = model.IsPrimary;
 
             _manager.PropertyChanged += (o, e) =>
               {
-                  if (e.PropertyName == nameof(ITranslationManager.CurrentLanguage))
+                  if (e.PropertyName == nameof(ITranslationService.CurrentLanguage))
                       UpdateName();
               };
 
