@@ -1,14 +1,14 @@
-﻿using System;
-using Maple.Core;
+﻿using Maple.Core;
+using System;
 
 namespace Maple
 {
     public abstract class BasePlayer : ObservableObject, IMediaPlayer
     {
-        public event CompletedMediaItemEventHandler CompletedMediaItem;
+        public abstract event CompletedMediaItemEventHandler CompletedMediaItem;
         public event AudioDeviceChangedEventHandler AudioDeviceChanged;
         public event EventHandler AudioDeviceChanging;
-        public event PlayingMediaItemEventHandler PlayingMediaItem;
+        public abstract event PlayingMediaItemEventHandler PlayingMediaItem;
 
         private AudioDevice _audioDevice;
         public AudioDevice AudioDevice

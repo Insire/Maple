@@ -1,36 +1,33 @@
 ﻿using AutoMapper;
-using Maple.Data;
 
 namespace Maple
 {
     public class MediaItemMapper : IMediaItemMapper
     {
         private readonly IMapper _mapper;
-        private readonly IMediaItemRepository _mediaItemRepository;
 
-        public MediaItemMapper(IMediaItemRepository mediaItemRepository)
+        public MediaItemMapper()
         {
-            _mediaItemRepository = mediaItemRepository;
-
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Data.MediaItem, Core.MediaItem>();
                 cfg.CreateMap<Core.MediaItem, Data.MediaItem>()
-                    .ForMember(nameof(Data.MediaItem.IsDeleted), opt => opt.Ignore());
+                    .Ignore(p => p.IsDeleted)
+                    .Ignore(p => p.IsNew);
             });
 
             config.AssertConfigurationIsValid();
             _mapper = config.CreateMapper();
         }
 
-        public MediaItemViewModel Get(Core.MediaItem mediaitem)
+        public MediaItem Get(Core.MediaItem mediaitem)
         {
-            return new MediaItemViewModel( _mediaItemRepository, GetData(mediaitem));
+            return new MediaItem(GetData(mediaitem));
         }
 
-        public MediaItemViewModel Get(Data.MediaItem mediaitem)
+        public MediaItem Get(Data.MediaItem mediaitem)
         {
-            return new MediaItemViewModel( _mediaItemRepository, mediaitem);
+            return new MediaItem(mediaitem);
         }
 
         public Core.MediaItem GetCore(Data.MediaItem mediaitem)
@@ -38,12 +35,12 @@ namespace Maple
             return _mapper.Map<Data.MediaItem, Core.MediaItem>(mediaitem);
         }
 
-        public Core.MediaItem GetCore(MediaItemViewModel mediaitem)
+        public Core.MediaItem GetCore(MediaItem mediaitem)
         {
             return GetCore(mediaitem.Model);
         }
 
-        public Data.MediaItem GetData(MediaItemViewModel mediaitem)
+        public Data.MediaItem GetData(MediaItem mediaitem)
         {
             return mediaitem.Model;
         }

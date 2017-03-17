@@ -1,14 +1,11 @@
 ﻿using Maple.Core;
-using System;
-using System.Collections.Generic;
 using System.Windows;
 
 namespace Maple
 {
     public class Scene : ObservableObject, ISequence
     {
-        private ITranslationManager _manager;
-        public Func<ISaveable> GetDataContext { get; set; }
+        private readonly ITranslationService _manager;
 
         private BusyStack _busyStack;
         /// <summary>
@@ -56,17 +53,17 @@ namespace Maple
         public bool IsSelected
         {
             get { return _isSelected; }
-            set { SetValue(ref _isSelected, value, Changed: UpdateDataContext, Changing: Save); }
+            set { SetValue(ref _isSelected, value); }
         }
 
         public int _sequence;
         public int Sequence
         {
             get { return _sequence; }
-            set { SetValue(ref _sequence, value, Changed: UpdateDataContext, Changing: Save); }
+            set { SetValue(ref _sequence, value); }
         }
 
-        public Scene(ITranslationManager manager)
+        public Scene(ITranslationService manager)
         {
             _manager = manager;
             _manager.PropertyChanged += (o, e) =>
@@ -75,45 +72,8 @@ namespace Maple
                               UpdateDisplayName();
                       };
 
-            BusyStack = new BusyStack()
-            {
-                OnChanged = (hasItems) => IsBusy = hasItems
-            };
-        }
-
-        // TODO fiure out a way to call this async and still maintain order
-        // maybe blocking collection + cancellationtokensource
-        private void UpdateDataContext()
-        {
-            if (Content == null || !IsSelected || GetDataContext == null)
-                return;
-
-            // while fetching the dataconext, we will switch IsBusy accordingly
-            using (var token = BusyStack.GetToken())
-            {
-                var currentContext = Content.DataContext as ISaveable;
-                var newContext = GetDataContext.Invoke();
-
-                if (currentContext == null && newContext == null)
-                    return;
-
-                if (EqualityComparer<ISaveable>.Default.Equals(currentContext, newContext))
-                    return;
-
-                Content.DataContext = newContext;
-            }
-        }
-
-        private void Save()
-        {
-            if (Content == null || !IsSelected)
-                return;
-
-            using (var token = BusyStack.GetToken())
-            {
-                var saveable = Content.DataContext as ISaveable;
-                saveable?.Save();
-            }
+            BusyStack = new BusyStack();
+            BusyStack.OnChanged = (hasItems) => IsBusy = hasItems;
         }
 
         private void UpdateDisplayName()

@@ -1,8 +1,10 @@
-﻿namespace Maple
+﻿using Maple.Core;
+
+namespace Maple
 {
     public partial class MediaPlayersPage
     {
-        public MediaPlayersPage(ITranslationManager manager) : base(manager)
+        public MediaPlayersPage(ITranslationService manager) : base(manager)
         {
             InitializeComponent();
         }

@@ -134,7 +134,7 @@ namespace Maple
         public async Task<List<Data.MediaItem>> ShowUrlParseDialog()
         {
             var result = new List<Data.MediaItem>();
-            var viewmodel = new CreateMediaItemViewModel(_service, _mediaItemMapper);
+            var viewmodel = new CreateMediaItem(_service, _mediaItemMapper);
             Context = viewmodel;
             Title = Resources.VideoAdd;
 

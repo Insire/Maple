@@ -1,23 +1,23 @@
 ﻿using Maple.Core;
-using Maple.Data;
-using Maple.Localization.Properties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Maple
 {
-    public class Playlist : TrackingBaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier
+    [DebuggerDisplay("{Title}, {Sequence}")]
+    public class Playlist : BaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier, IChangeState
     {
-        private readonly IPlaylistsRepository _playlistsRepository;
-        private readonly IMediaItemRepository _mediaItemRepository;
         private readonly DialogViewModel _dialogViewModel;
         public int ItemCount => Items?.Count ?? 0;
+
+        public bool IsNew => Model.IsNew;
+        public bool IsDeleted => Model.IsDeleted;
 
         public ICommand LoadFromFileCommand { get; private set; }
         public ICommand LoadFromFolderCommand { get; private set; }
@@ -28,13 +28,14 @@ namespace Maple
         /// </summary>
         public Stack<int> History { get; private set; }
 
-        public ChangeTrackingCollection<MediaItemViewModel> Items { get; private set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+        public RangeObservableCollection<MediaItem> Items { get; private set; }
 
-        private MediaItemViewModel _currentItem;
+        private MediaItem _currentItem;
         /// <summary>
         /// is <see cref="SetActive"/> when a IMediaPlayer picks a <see cref="IMediaItem"/> from this
         /// </summary>
-        public MediaItemViewModel CurrentItem
+        public MediaItem CurrentItem
         {
             get { return _currentItem; }
             private set { SetValue(ref _currentItem, value); }
@@ -124,24 +125,16 @@ namespace Maple
             set { SetValue(ref _repeatMode, value, Changed: () => Model.RepeatMode = (int)value); }
         }
 
-        public Playlist(IPlaylistsRepository playlistRepository, IMediaItemRepository mediaItemRepository, DialogViewModel dialogViewModel, Data.Playlist model)
-            : base(model, playlistRepository)
+        public Playlist(DialogViewModel dialogViewModel, Data.Playlist model)
+            : base(model)
         {
             using (_busyStack.GetToken())
             {
                 _dialogViewModel = dialogViewModel;
-                _playlistsRepository = playlistRepository;
-                _mediaItemRepository = mediaItemRepository;
 
-                Items = new ChangeTrackingCollection<MediaItemViewModel>();
+                Items = new RangeObservableCollection<MediaItem>();
                 RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
                 History = new Stack<int>();
-
-                LoadFromFileCommand = new AsyncRelayCommand(LoadFromFile, () => CanLoadFromFile());
-                LoadFromFolderCommand = new AsyncRelayCommand(LoadFromFolder, () => CanLoadFromFolder());
-                LoadFromUrlCommand = new AsyncRelayCommand(LoadFromUrl, () => CanLoadFromUrl());
-
-                Items.AddRange(model.MediaItems.Select(p => new MediaItemViewModel(_mediaItemRepository, p)));
 
                 Title = model.Title;
                 Description = model.Description;
@@ -152,20 +145,32 @@ namespace Maple
                 if (model.MediaItems == null)
                     throw new ArgumentException($"{model.MediaItems} cannot be null");
 
-                Saved += OnSaved;
+                model.MediaItems.ForEach(p => Items.Add(new MediaItem(p)));
 
                 Items.CollectionChanged += (o, e) =>
                 {
                     OnPropertyChanged(nameof(ItemCount));
                 };
 
-                RegisterCollection(Items, model.MediaItems);
-
-                if (!Model.IsNew)
-                    AcceptChanges();
-
-                Validate();
+                InitializeCommands();
+                IntializeValidation();
             }
+        }
+
+        private void InitializeCommands()
+        {
+            LoadFromFileCommand = new AsyncRelayCommand(LoadFromFile, () => CanLoadFromFile());
+            LoadFromFolderCommand = new AsyncRelayCommand(LoadFromFolder, () => CanLoadFromFolder());
+            LoadFromUrlCommand = new AsyncRelayCommand(LoadFromUrl, () => CanLoadFromUrl());
+        }
+
+        private void IntializeValidation()
+        {
+            AddRule(Title, new NotNullOrEmptyRule(nameof(Title)));
+            AddRule(Description, new NotNullOrEmptyRule(nameof(Description)));
+            AddRule(CurrentItem, new NotNullRule(nameof(CurrentItem)));
+            AddRule(RepeatModes, new NotNullRule(nameof(RepeatModes)));
+            AddRule(Items, new NotNullRule(nameof(Items)));
         }
 
         private async Task LoadFromUrl()
@@ -173,7 +178,7 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var items = await _dialogViewModel.ShowUrlParseDialog();
-                var result = items.Select(p => new MediaItemViewModel(_mediaItemRepository, p));
+                var result = items.Select(p => new MediaItem(p));
                 Items.AddRange(result);
             }
         }
@@ -216,7 +221,7 @@ namespace Maple
             CurrentItem = null;
         }
 
-        public virtual void Add(MediaItemViewModel item)
+        public virtual void Add(MediaItem item)
         {
             using (_busyStack.GetToken())
             {
@@ -236,7 +241,7 @@ namespace Maple
             }
         }
 
-        public virtual void AddRange(IEnumerable<MediaItemViewModel> items)
+        public virtual void AddRange(IEnumerable<MediaItem> items)
         {
             using (_busyStack.GetToken())
             {
@@ -259,7 +264,7 @@ namespace Maple
             }
         }
 
-        public virtual void Remove(MediaItemViewModel item)
+        public virtual void Remove(MediaItem item)
         {
             using (_busyStack.GetToken())
             {
@@ -268,7 +273,15 @@ namespace Maple
             }
         }
 
-        public virtual MediaItemViewModel Next()
+        public virtual bool CanRemove(MediaItem item)
+        {
+            if (Items == null || Items.Count == 0 || item as MediaItem == null)
+                return false;
+
+            return Items.Contains(item) && !IsBusy;
+        }
+
+        public virtual MediaItem Next()
         {
             using (_busyStack.GetToken())
             {
@@ -295,7 +308,7 @@ namespace Maple
             }
         }
 
-        private MediaItemViewModel NextRepeatNone()
+        private MediaItem NextRepeatNone()
         {
             var currentIndex = 0;
             if (CurrentItem?.Sequence != null)
@@ -320,7 +333,7 @@ namespace Maple
                 return NextRepeatSingle();
         }
 
-        private MediaItemViewModel NextRepeatSingle()
+        private MediaItem NextRepeatSingle()
         {
             if (RepeatMode != RepeatMode.None)
                 return CurrentItem;
@@ -328,7 +341,7 @@ namespace Maple
                 return null;
         }
 
-        private MediaItemViewModel NextRepeatAll()
+        private MediaItem NextRepeatAll()
         {
             var currentIndex = 0;
             if (CurrentItem?.Sequence != null)
@@ -357,7 +370,7 @@ namespace Maple
                 return NextRepeatSingle();
         }
 
-        private MediaItemViewModel NextShuffle()
+        private MediaItem NextShuffle()
         {
             if (Items.Count > 1)
             {
@@ -372,10 +385,10 @@ namespace Maple
         }
 
         /// <summary>
-        /// Removes the last <see cref="MediaItemViewModel"/> from <seealso cref="History"/> and returns it
+        /// Removes the last <see cref="MediaItem"/> from <seealso cref="History"/> and returns it
         /// </summary>
-        /// <returns>returns the last <see cref="MediaItemViewModel"/> from <seealso cref="History"/></returns>
-        public virtual MediaItemViewModel Previous()
+        /// <returns>returns the last <see cref="MediaItem"/> from <seealso cref="History"/></returns>
+        public virtual MediaItem Previous()
         {
             using (_busyStack.GetToken())
             {
@@ -416,24 +429,6 @@ namespace Maple
         public bool CanPrevious()
         {
             return History != null && History.Any();
-        }
-
-        public override IEnumerable<ValidationResult> Validate(ValidationContext context)
-        {
-            if (string.IsNullOrWhiteSpace(Title))
-                yield return new ValidationResult($"{nameof(Title)} {Resources.IsRequired}", new[] { nameof(Title) });
-        }
-
-        public void OnSaved(object sender, EventArgs e)
-        {
-            foreach (var item in Items)
-            {
-                if (item.PlaylistId != Id)
-                {
-                    item.PlaylistId = Id;
-                    item.Save();
-                }
-            }
         }
     }
 }

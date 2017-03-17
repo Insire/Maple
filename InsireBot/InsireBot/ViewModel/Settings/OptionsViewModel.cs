@@ -1,12 +1,19 @@
 ﻿using Maple.Core;
 using System.Globalization;
+using System.Windows.Input;
 
 namespace Maple
 {
-    public class OptionsViewModel : ObservableObject, ISaveable
+    public class OptionsViewModel : ObservableObject, ILoadableViewModel, ISaveableViewModel
     {
-        private ITranslationManager _manager;
-        public RangeObservableCollection<CultureInfo> Items { get; private set; }
+        private readonly ITranslationService _manager;
+
+        private RangeObservableCollection<CultureInfo> _items;
+        public RangeObservableCollection<CultureInfo> Items
+        {
+            get { return _items; }
+            set { SetValue(ref _items, value); }
+        }
 
         private CultureInfo _selectedCulture;
         public CultureInfo SelectedCulture
@@ -15,11 +22,16 @@ namespace Maple
             set { SetValue(ref _selectedCulture, value, Changed: SyncCulture); }
         }
 
-        public OptionsViewModel(ITranslationManager manager)
+        public bool IsLoaded { get; private set; }
+
+        public ICommand RefreshCommand => new RelayCommand(Load);
+        public ICommand LoadCommand => new RelayCommand(Load, () => !IsLoaded);
+        public ICommand SaveCommand => new RelayCommand(Save);
+
+        public OptionsViewModel(ITranslationService manager)
         {
             _manager = manager;
             Items = new RangeObservableCollection<CultureInfo>(_manager.Languages);
-            SelectedCulture = Properties.Settings.Default.StartUpCulture;
         }
 
         private void SyncCulture()
@@ -30,6 +42,13 @@ namespace Maple
         public void Save()
         {
             _manager.Save();
+        }
+
+        public void Load()
+        {
+            _manager.Load();
+            SelectedCulture = Properties.Settings.Default.StartUpCulture;
+            IsLoaded = true;
         }
     }
 }

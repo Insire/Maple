@@ -1,6 +1,5 @@
 ﻿using Maple.Core;
 using Maple.Localization.Properties;
-using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -11,21 +10,16 @@ namespace Maple
     /// <summary>
     /// ViewModel that stores and controls which UserControl(Page/View) whatever is displayed in the mainwindow of this app)
     /// </summary>
-    public class Scenes : ViewModelListBase<Scene>
+    public class Scenes : BaseListViewModel<Scene>
     {
-        private ITranslationManager _manager;
-        private IBotLog _log;
+        private ITranslationService _manager;
+        private IMapleLog _log;
+
         public ICommand OpenColorOptionsCommand { get; private set; }
         public ICommand OpenMediaPlayerCommand { get; private set; }
         public ICommand OpenGithubPageCommand { get; private set; }
 
-        public Scenes(ITranslationManager manager,
-                        IBotLog log,
-                        DirectorViewModel directorViewModel,
-                        MediaPlayers mediaPlayersViewModel,
-                        Playlists playlistsViewModel,
-                        UIColorsViewModel uIColorsViewModel,
-                        OptionsViewModel optionsViewModel)
+        public Scenes(ITranslationService manager, IMapleLog log)
         {
             _manager = manager;
             _log = log;
@@ -38,7 +32,6 @@ namespace Maple
                 {
                     Content = new MediaPlayerPage(_manager),
                     Key = nameof(Resources.Playback),
-                    GetDataContext = () => mediaPlayersViewModel.Items.First(p => p is MainMediaPlayer),
                     IsSelected = true,
                     Sequence = 100,
                 },
@@ -47,7 +40,6 @@ namespace Maple
                 {
                     Content = new PlaylistsPage(_manager),
                     Key = nameof(Resources.Playlists),
-                    GetDataContext = () => playlistsViewModel,
                     IsSelected = false,
                     Sequence = 300,
                 },
@@ -56,7 +48,6 @@ namespace Maple
                 {
                     Content = new ColorOptionsPage(_manager),
                     Key = nameof(Resources.Themes),
-                    GetDataContext = () => uIColorsViewModel,
                     IsSelected = false,
                     Sequence = 500,
                 },
@@ -65,7 +56,6 @@ namespace Maple
                 {
                     Content = new OptionsPage(_manager),
                     Key = nameof(Resources.Options),
-                    GetDataContext = () => optionsViewModel,
                     IsSelected = false,
                     Sequence = 600,
                 },
@@ -74,7 +64,6 @@ namespace Maple
                 {
                     Content = new MediaPlayersPage(_manager),
                     Key = nameof(Resources.Director),
-                    GetDataContext = () => directorViewModel,
                     IsSelected = false,
                     Sequence = 150,
                 },
@@ -84,6 +73,8 @@ namespace Maple
             {
                 AddRange(content);
 
+                SelectedItem = Items[0];
+
                 using (View.DeferRefresh())
                 {
                     View.SortDescriptions.Add(new SortDescription(nameof(Scene.Sequence), ListSortDirection.Ascending));
@@ -91,8 +82,6 @@ namespace Maple
             }
 
             InitializeCommands();
-
-            SelectionChanging += SelectedSceneChanging;
 
             _log.Info(manager.Translate(nameof(Resources.NavigationLoaded)));
         }
@@ -102,12 +91,6 @@ namespace Maple
             OpenColorOptionsCommand = new RelayCommand(OpenColorOptionsView, CanOpenColorOptionsView);
             OpenMediaPlayerCommand = new RelayCommand(OpenMediaPlayerView, CanOpenMediaPlayerView);
             OpenGithubPageCommand = new RelayCommand(OpenGithubPage);
-        }
-
-        private void SelectedSceneChanging(object sender, EventArgs e)
-        {
-            if (sender is ISaveable viewmodel)
-                viewmodel.Save();
         }
 
         private void OpenColorOptionsView()

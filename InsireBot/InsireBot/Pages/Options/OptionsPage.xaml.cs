@@ -1,8 +1,10 @@
-﻿namespace Maple
+﻿using Maple.Core;
+
+namespace Maple
 {
     public partial class OptionsPage
     {
-        public OptionsPage(ITranslationManager manager) : base(manager)
+        public OptionsPage(ITranslationService manager) : base(manager)
         {
             InitializeComponent();
         }

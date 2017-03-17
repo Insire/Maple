@@ -35,7 +35,7 @@
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -85,6 +85,12 @@
       <HintPath>..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="MahApps.Metro, Version=1.4.3.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.4.3\lib\net45\MahApps.Metro.dll</HintPath>
       <Private>True</Private>
@@ -100,9 +106,8 @@
       <HintPath>..\packages\MaterialDesignThemes.MahApps.0.0.10\lib\net45\MaterialDesignThemes.MahApps.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MaterialDesignThemes.Wpf, Version=2.2.1.750, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MaterialDesignThemes.2.2.1.750\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="MaterialDesignThemes.Wpf, Version=2.3.0.823, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignThemes.2.3.0.823\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.1.1.11\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
@@ -121,8 +126,20 @@
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.104.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.104.0\lib\net451\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.104.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.104.0\lib\net451\System.Data.SQLite.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.104.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.104.0\lib\net451\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -157,11 +174,9 @@
     <Compile Include="DryIoc\ImTools.cs" />
     <Compile Include="Enums\AudioFormats.cs" />
     <Compile Include="Enums\PlaybackState.cs" />
-    <Compile Include="Interfaces\IConfigurableWindowSettings.cs" />
-    <Compile Include="Interfaces\IIocFrameworkElement.cs" />
     <Compile Include="Interfaces\IMediaItemMapper.cs" />
+    <Compile Include="Interfaces\IMediaPlayer.cs" />
     <Compile Include="Interfaces\IPlaylistMapper.cs" />
-    <Compile Include="Interfaces\ITranslationManager.cs" />
     <Compile Include="Pages\MediaPlayersPage.xaml.cs">
       <DependentUpon>MediaPlayersPage.xaml</DependentUpon>
     </Compile>
@@ -172,26 +187,25 @@
     <Compile Include="Controls\ConfigurableWindowSettings.cs" />
     <Compile Include="Controls\IocUserControl.cs" />
     <Compile Include="Controls\IoCWindow.cs" />
+    <Compile Include="Interfaces\IMediaRepository.cs" />
+    <Compile Include="Services\DataAccess\MediaRepository.cs" />
     <Compile Include="Utils\BindingProxy.cs" />
-    <Compile Include="Utils\Commands\AsyncRelayCommand.cs" />
-    <Compile Include="Utils\Commands\RelayCommand.cs" />
+    <Compile Include="Utils\Extensions\ContextExtensions.cs" />
+    <Compile Include="Utils\IoC\DependencyInjectionFactory.cs" />
     <Compile Include="Utils\Converters\DebugConverter.cs" />
-    <Compile Include="Utils\MapperExtensions.cs" />
-    <Compile Include="Utils\Localization\LanguageChangedEventManager.cs" />
-    <Compile Include="Utils\Localization\Providers\ITranslationProvider.cs" />
-    <Compile Include="Utils\Localization\Providers\ResxTranslationProvider.cs" />
-    <Compile Include="Utils\Localization\TranslationData.cs" />
-    <Compile Include="Utils\Localization\TranslationExtension.cs" />
-    <Compile Include="Utils\Localization\TranslationManager.cs" />
+    <Compile Include="Utils\Extensions\MapperExtensions.cs" />
+    <Compile Include="Services\Localization\LanguageChangedEventManager.cs" />
+    <Compile Include="Services\Localization\Providers\ITranslationProvider.cs" />
+    <Compile Include="Services\Localization\Providers\ResxTranslationProvider.cs" />
+    <Compile Include="Services\Localization\TranslationData.cs" />
+    <Compile Include="Services\Localization\TranslationExtension.cs" />
+    <Compile Include="Services\Localization\TranslationService.cs" />
     <Compile Include="Utils\Mappers\MediaItemMapper.cs" />
     <Compile Include="Utils\Mappers\PlaylistMapper.cs" />
     <Compile Include="Utils\ShellSettings.cs" />
-    <Compile Include="Utils\DataGridBehavior.cs" />
     <Compile Include="Enums\MediaPlayerType.cs" />
     <Compile Include="Enums\RepeatMode.cs" />
     <Compile Include="Utils\EventHandler.cs" />
-    <Compile Include="Interfaces\IMediaPlayer.cs" />
-    <Compile Include="Utils\LinqExtensions.cs" />
     <Compile Include="Utils\Converters\RadioButtonCheckedConverter.cs" />
     <Compile Include="ViewModel\Dialogs\Base\DialogViewModel.cs" />
     <Compile Include="ViewModel\Dialogs\ExceptionDialogViewModel.cs" />
@@ -199,14 +213,13 @@
     <Compile Include="ViewModel\Dialogs\FolderBrowserDialogViewModel.cs" />
     <Compile Include="ViewModel\Dialogs\MessageDialogViewModel.cs" />
     <Compile Include="ViewModel\Dialogs\ProgressDialogViewModel.cs" />
-    <Compile Include="ViewModel\DirectorViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer\AudioDevices.cs" />
     <Compile Include="ViewModel\MediaPlayer\MainMediaPlayer.cs" />
     <Compile Include="ViewModel\MediaPlayer\MediaPlayers.cs" />
     <Compile Include="ViewModel\Navigation\Scene.cs" />
     <Compile Include="ViewModel\Settings\OptionsViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer\AudioDevice.cs" />
-    <Compile Include="ViewModel\MediaItems\MediaItemViewModel.cs" />
+    <Compile Include="ViewModel\MediaItems\MediaItem.cs" />
     <Compile Include="ViewModel\MediaPlayer\Base\BasePlayer.cs" />
     <Compile Include="ViewModel\MediaPlayer\NAudio\WaveFormatFactory.cs" />
     <Compile Include="ViewModel\MediaPlayer\NAudio\NAudioMediaPlayer.cs" />
@@ -216,9 +229,6 @@
     <Compile Include="ViewModel\Playlists\Playlist.cs" />
     <Compile Include="Pages\MediaPlayerPage.xaml.cs">
       <DependentUpon>MediaPlayerPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Playlist\NewMediaItemOptionsPage.xaml.cs">
-      <DependentUpon>NewMediaItemOptionsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Playlist\NewPlaylistOptionsPage.xaml.cs">
       <DependentUpon>NewPlaylistOptionsPage.xaml</DependentUpon>
@@ -233,8 +243,8 @@
       <DependentUpon>OptionsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\InsireBotException.cs" />
-    <Compile Include="ViewModel\MediaItems\CreateMediaItemViewModel.cs" />
-    <Compile Include="ViewModel\Playlists\CreatePlaylistViewModel.cs" />
+    <Compile Include="ViewModel\MediaItems\CreateMediaItem.cs" />
+    <Compile Include="ViewModel\Playlists\CreatePlaylist.cs" />
     <Compile Include="ViewModel\ShellViewModel.cs" />
     <Compile Include="ViewModel\StatusbarViewModel.cs" />
     <Compile Include="ViewModel\Settings\UIColorsViewModel.cs" />
@@ -245,10 +255,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\MediaPlayersPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\Playlist\NewMediaItemOptionsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -351,24 +357,11 @@
   <ItemGroup>
     <Resource Include="MapleLogo.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.1.12\build\net45\MSTest.TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.1.12\build\net45\MSTest.TestAdapter.props'))" />
-    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.1.12\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.1.12\build\net45\MSTest.TestAdapter.targets'))" />
-  </Target>
   <Import Project="..\packages\MSTest.TestAdapter.1.1.12\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.1.12\build\net45\MSTest.TestAdapter.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

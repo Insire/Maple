@@ -5,13 +5,13 @@ namespace Maple.Youtube
 {
     public class UrlParseResult
     {
-        private IBotLog _log;
+        private IMapleLog _log;
         public int Count => RefreshCount();
         public ParseResultType Type { get; private set; }
         public List<Data.MediaItem> MediaItems { get; private set; }
         public List<Data.Playlist> Playlists { get; private set; }
 
-        private UrlParseResult(IBotLog log)
+        private UrlParseResult(IMapleLog log)
         {
             _log = log;
 
@@ -22,26 +22,26 @@ namespace Maple.Youtube
         /// <summary>
         /// essentially no data was returned, when using this constructor
         /// </summary>
-        public UrlParseResult(IBotLog log, ParseResultType type = ParseResultType.None) : this(log)
+        public UrlParseResult(IMapleLog log, ParseResultType type = ParseResultType.None) : this(log)
         {
             Type = type;
         }
 
-        public UrlParseResult(IBotLog log, List<Data.Playlist> items) : this(log, ParseResultType.Playlists)
+        public UrlParseResult(IMapleLog log, List<Data.Playlist> items) : this(log, ParseResultType.Playlists)
         {
             Playlists = items;
 
             Log();
         }
 
-        public UrlParseResult(IBotLog log, List<Data.Playlist> items, ParseResultType type) : this(log, type)
+        public UrlParseResult(IMapleLog log, List<Data.Playlist> items, ParseResultType type) : this(log, type)
         {
             Playlists = items;
 
             Log();
         }
 
-        public UrlParseResult(IBotLog log, Data.Playlist item) : this(log, ParseResultType.Playlists)
+        public UrlParseResult(IMapleLog log, Data.Playlist item) : this(log, ParseResultType.Playlists)
         {
             Playlists = new List<Data.Playlist>()
             {
@@ -51,7 +51,7 @@ namespace Maple.Youtube
             Log();
         }
 
-        public UrlParseResult(IBotLog log, Data.Playlist item, ParseResultType type) : this(log, type)
+        public UrlParseResult(IMapleLog log, Data.Playlist item, ParseResultType type) : this(log, type)
         {
             Playlists = new List<Data.Playlist>()
             {
@@ -61,7 +61,7 @@ namespace Maple.Youtube
             Log();
         }
 
-        public UrlParseResult(IBotLog log, Data.MediaItem item) : this(log, ParseResultType.MediaItems)
+        public UrlParseResult(IMapleLog log, Data.MediaItem item) : this(log, ParseResultType.MediaItems)
         {
             MediaItems = new List<Data.MediaItem>()
             {
@@ -71,7 +71,7 @@ namespace Maple.Youtube
             Log();
         }
 
-        public UrlParseResult(IBotLog log, Data.MediaItem item, ParseResultType type) : this(log, type)
+        public UrlParseResult(IMapleLog log, Data.MediaItem item, ParseResultType type) : this(log, type)
         {
             MediaItems = new List<Data.MediaItem>()
             {
@@ -81,14 +81,14 @@ namespace Maple.Youtube
             Log();
         }
 
-        public UrlParseResult(IBotLog log, List<Data.MediaItem> items) : this(log, ParseResultType.MediaItems)
+        public UrlParseResult(IMapleLog log, List<Data.MediaItem> items) : this(log, ParseResultType.MediaItems)
         {
             MediaItems = items;
 
             Log();
         }
 
-        public UrlParseResult(IBotLog log, List<Data.MediaItem> items, ParseResultType type) : this(log, type)
+        public UrlParseResult(IMapleLog log, List<Data.MediaItem> items, ParseResultType type) : this(log, type)
         {
             MediaItems = items;
 

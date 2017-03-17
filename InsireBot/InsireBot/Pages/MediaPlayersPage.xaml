@@ -1,10 +1,19 @@
 ﻿<local:IoCUserControl x:Class="Maple.MediaPlayersPage"
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                       xmlns:local="clr-namespace:Maple"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    
+    <local:IoCUserControl.Resources>
+        <local:SharedResourceDictionary>
+            <local:SharedResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/Style.xaml" />
+            </local:SharedResourceDictionary.MergedDictionaries>
+        </local:SharedResourceDictionary>
+    </local:IoCUserControl.Resources>
 
-    <!--  DataContext: DirectorViewModel  -->
+    <!--  DataContext ShellViewModel  -->
 
     <materialDesign:TransitioningContent>
         <materialDesign:TransitioningContent.OpeningEffects>
@@ -30,8 +39,16 @@
                     <ListBox Grid.Row="1"
                              Grid.Column="1"
                              AlternationCount="2"
-                             ItemsSource="{Binding MediaPlayers.Items}"
-                             SelectedItem="{Binding MediaPlayers.SelectedItem}">
+                             ItemsSource="{Binding MediaPlayers.View, IsAsync=True, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
+                             SelectedItem="{Binding MediaPlayers.SelectedItem, IsAsync=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Loaded">
+                                <i:InvokeCommandAction Command="{Binding MediaPlayers.LoadCommand}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="UnLoaded">
+                                <i:InvokeCommandAction Command="{Binding MediaPlayers.SaveCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                         <ListBox.ItemContainerStyle>
                             <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -70,17 +87,16 @@
                                    Grid.Column="0"
                                    Text="{local:Translation Playlist}" />
 
-
                         <ComboBox Grid.Row="0"
                                   Grid.Column="2"
                                   DisplayMemberPath="Name"
-                                  ItemsSource="{Binding MediaPlayers.SelectedItem.AudioDevices.Items}"
-                                  SelectedItem="{Binding MediaPlayers.SelectedItem.Player.AudioDevice}" />
+                                  ItemsSource="{Binding MediaPlayers.SelectedItem.AudioDevices.Items, IsAsync=True, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
+                                  SelectedItem="{Binding MediaPlayers.SelectedItem.Player.AudioDevice, IsAsync=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}" />
 
                         <ComboBox Grid.Row="2"
                                   Grid.Column="2"
-                                  ItemsSource="{Binding MediaPlayers.SelectedItem.Playlist.RepeatModes}"
-                                  SelectedItem="{Binding MediaPlayers.SelectedItem.Playlist.RepeatMode}">
+                                  ItemsSource="{Binding MediaPlayers.SelectedItem.Playlist.RepeatModes, IsAsync=True, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedItem="{Binding MediaPlayers.SelectedItem.Playlist.RepeatMode, IsAsync=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding}" />
@@ -89,8 +105,16 @@
                         </ComboBox>
                         <ComboBox Grid.Row="4"
                                   Grid.Column="2"
-                                  ItemsSource="{Binding Playlists.Items}"
-                                  SelectedItem="{Binding MediaPlayers.SelectedItem.Playlist}">
+                                  ItemsSource="{Binding Playlists.View, UpdateSourceTrigger=PropertyChanged, IsAsync=True, ValidatesOnNotifyDataErrors=True}"
+                                  SelectedItem="{Binding MediaPlayers.SelectedItem.Playlist, IsAsync=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Loaded">
+                                    <i:InvokeCommandAction Command="{Binding Playlists.LoadCommand}" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="UnLoaded">
+                                    <i:InvokeCommandAction Command="{Binding Playlists.SaveCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Title}" />

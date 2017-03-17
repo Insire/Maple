@@ -1,26 +1,23 @@
 ﻿using AutoMapper;
-using Maple.Data;
 
 namespace Maple
 {
     public class PlaylistMapper : IPlaylistMapper
     {
         private readonly IMapper _mapper;
-        private readonly IPlaylistsRepository _playlistsRepository;
-        private readonly IMediaItemRepository _mediaItemRepository;
+
         private DialogViewModel _dialogViewModel;
 
-        public PlaylistMapper(IPlaylistsRepository playlistsRepository, IMediaItemRepository mediaItemRepository, DialogViewModel dialogViewModel)
+        public PlaylistMapper(DialogViewModel dialogViewModel)
         {
-            _playlistsRepository = playlistsRepository;
-            _mediaItemRepository = mediaItemRepository;
             _dialogViewModel = dialogViewModel;
 
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Data.Playlist, Core.Playlist>();
                 cfg.CreateMap<Core.Playlist, Data.Playlist>()
-                    .ForMember(nameof(Data.Playlist.IsDeleted), opt => opt.Ignore());
+                    .Ignore(p => p.IsDeleted)
+                    .Ignore(p => p.IsNew);
             });
 
             config.AssertConfigurationIsValid();
@@ -29,12 +26,12 @@ namespace Maple
 
         public Playlist Get(Core.Playlist mediaitem)
         {
-            return new Playlist(_playlistsRepository, _mediaItemRepository, _dialogViewModel, GetData(mediaitem));
+            return new Playlist(_dialogViewModel, GetData(mediaitem));
         }
 
         public Playlist Get(Data.Playlist mediaitem)
         {
-            return new Playlist(_playlistsRepository, _mediaItemRepository, _dialogViewModel, mediaitem);
+            return new Playlist(_dialogViewModel, mediaitem);
         }
 
         public Core.Playlist GetCore(Data.Playlist mediaitem)

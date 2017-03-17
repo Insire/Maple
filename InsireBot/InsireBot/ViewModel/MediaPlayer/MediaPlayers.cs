@@ -1,18 +1,16 @@
 ﻿using Maple.Core;
-using Maple.Data;
-using Maple.Localization.Properties;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Windows.Input;
 
 namespace Maple
 {
-    public class MediaPlayers : ChangeTrackingViewModeListBase<MediaPlayer>, IDisposable
+    public class MediaPlayers : BaseDataListViewModel<MediaPlayer, Data.MediaPlayer>, IDisposable, ILoadableViewModel, ISaveableViewModel
     {
-        private readonly ITranslationManager _manager;
-        private readonly IMediaPlayerRepository _mediaPlayerRepository;
-
-        private readonly Playlists _playlists;
+        private readonly ITranslationService _manager;
+        private readonly Func<IMediaPlayer> _playerFactory;
+        private readonly AudioDevices _devices;
+        private readonly DialogViewModel _dialog;
+        private readonly Func<IMediaRepository> _repositoryFactory;
 
         private bool _disposed;
         public bool Disposed
@@ -21,53 +19,44 @@ namespace Maple
             protected set { SetValue(ref _disposed, value); }
         }
 
-        public MediaPlayers(ITranslationManager manager,
-                            IMediaPlayerRepository mediaPlayerRepository,
-                            Func<IMediaPlayer> playerFactory,
-                            Playlists playlists)
+        public ICommand LoadCommand => new RelayCommand(Load, () => !IsLoaded);
+        public ICommand RefreshCommand => new RelayCommand(Load);
+        public ICommand SaveCommand => new RelayCommand(Save);
+
+        public bool IsLoaded { get; private set; }
+
+        public MediaPlayers(ITranslationService manager, Func<IMediaPlayer> playerFactory, Func<IMediaRepository> repo, AudioDevices devices, DialogViewModel dialog)
         {
             _manager = manager;
-            _mediaPlayerRepository = mediaPlayerRepository;
-
-            _playlists = playlists;
-
-            AddRange(GetMediaPlayers(playerFactory).ToList());
-            SelectedItem = Items.FirstOrDefault();
+            _playerFactory = playerFactory;
+            _devices = devices;
+            _dialog = dialog;
+            _repositoryFactory = repo;
         }
 
-        private IEnumerable<MediaPlayer> GetMediaPlayers(Func<IMediaPlayer> playerFactory)
+        public void Load()
         {
-            var all = _mediaPlayerRepository.GetAll();
-            var players = all.Where(p => !p.IsPrimary)
-                                .Select(p => new MediaPlayer(_manager, _mediaPlayerRepository, playerFactory(), p));
+            Items.Clear();
 
-            var primaries = all.Where(p => p.IsPrimary).ToList();
-
-            if ((primaries?.Count ?? 0) == 0)
+            using (var context = _repositoryFactory())
             {
-                var mediaPlayer = new Data.MediaPlayer
-                {
-                    Name = nameof(Resources.MainMediaplayer),
-                    Sequence = 0,
-                    IsPrimary = true,
-                };
+                var main = context.GetMainMediaPlayer();
 
-                var playlist = _playlists.Items.FirstOrDefault();
+                Items.Add(main);
+                SelectedItem = main;
 
-                yield return new MainMediaPlayer(_manager, _mediaPlayerRepository, playerFactory(), mediaPlayer, playlist, nameof(Resources.MainMediaplayer));
+                Items.AddRange(context.GetAllOptionalMediaPlayers());
             }
 
-            if (primaries.Count == 1)
+            IsLoaded = true;
+        }
+
+        public void Save()
+        {
+            using (var context = _repositoryFactory())
             {
-                var playlist = _playlists.Items.FirstOrDefault(p => p.Id == primaries[0].PlaylistId);
-                yield return new MainMediaPlayer(_manager, _mediaPlayerRepository, playerFactory(), primaries[0], playlist, nameof(Resources.MainMediaplayer));
+                context.Save(this);
             }
-
-            foreach (var player in players)
-                yield return player;
-
-            if (primaries?.Count > 1)
-                throw new InsireBotException(Resources.InvalidMediaplayerCountOnDBException + $"({primaries.Count})");
         }
 
         public void Dispose()

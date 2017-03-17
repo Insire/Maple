@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Maple.Core
+﻿namespace Maple.Core
 {
     public interface IIdentifier
     {

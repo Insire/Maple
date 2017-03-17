@@ -1,10 +1,11 @@
-﻿using System.Windows.Input;
+﻿using Maple.Core;
+using System.Windows.Input;
 
 namespace Maple
 {
     public partial class Shell : IoCWindow
     {
-        public Shell(ITranslationManager manager, UIColorsViewModel vm) : base(manager, vm)
+        public Shell(ITranslationService manager, UIColorsViewModel vm) : base(manager, vm)
         {
             InitializeComponent();
         }

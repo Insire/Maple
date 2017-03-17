@@ -232,6 +232,15 @@ namespace Maple.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lade.
+        /// </summary>
+        public static string Loading {
+            get {
+                return ResourceManager.GetString("Loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ort.
         /// </summary>
         public static string Location {
@@ -385,6 +394,15 @@ namespace Maple.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aktuelle Wiedergabeliste.
+        /// </summary>
+        public static string PlaylistCurrent {
+            get {
+                return ResourceManager.GetString("PlaylistCurrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wiedergabelisten.
         /// </summary>
         public static string Playlists {
@@ -444,6 +462,15 @@ namespace Maple.Localization.Properties {
         public static string SavedState {
             get {
                 return ResourceManager.GetString("SavedState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Speichere.
+        /// </summary>
+        public static string Saving {
+            get {
+                return ResourceManager.GetString("Saving", resourceCulture);
             }
         }
         

@@ -1,11 +1,13 @@
 ﻿using Maple.Core;
+using System.Linq;
 using System.Reflection;
 
 namespace Maple
 {
     public class StatusbarViewModel : ObservableObject
     {
-        private readonly ITranslationManager _manager;
+        private readonly MediaPlayers _mediaplayers;
+        private readonly ITranslationService _manager;
 
         private string _version;
         public string Version
@@ -21,12 +23,21 @@ namespace Maple
             private set { SetValue(ref _language, value); }
         }
 
-        public StatusbarViewModel(ITranslationManager manager)
+        private MainMediaPlayer _mainMediaPlayer;
+        public MainMediaPlayer MainMediaPlayer
         {
+            get { return _mainMediaPlayer; }
+            private set { SetValue(ref _mainMediaPlayer, value); }
+        }
+
+        public StatusbarViewModel(ITranslationService manager, MediaPlayers mediaPlayers)
+        {
+            _mediaplayers = mediaPlayers;
+
             _manager = manager;
             _manager.PropertyChanged += (o, e) =>
               {
-                  if (e.PropertyName == $"{nameof(ITranslationManager.CurrentLanguage)}")
+                  if (e.PropertyName == $"{nameof(ITranslationService.CurrentLanguage)}")
                       UpdateLanguage();
               };
 
@@ -34,6 +45,8 @@ namespace Maple
             Version = $"v{version.Major}.{version.Minor}.{version.Revision}";
 
             UpdateLanguage();
+
+            MainMediaPlayer = (MainMediaPlayer)_mediaplayers.Items.ToList().Find(p => p is MainMediaPlayer);
         }
 
         private void UpdateLanguage()

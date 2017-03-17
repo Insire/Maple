@@ -3,8 +3,13 @@
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:icons="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks"
                       xmlns:local="clr-namespace:Maple"
+                      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding MediaPlayers.LoadCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <local:IoCUserControl.Resources>
         <Style x:Key="BaseRepeatModeStyle"
                BasedOn="{StaticResource MaterialDesignFlatToggleButton}"
@@ -72,7 +77,8 @@
         </Style>
     </local:IoCUserControl.Resources>
 
-    <Grid>
+    <!--  DataContext ShellViewModel  -->
+    <Grid DataContext="{Binding MediaPlayers.SelectedItem}">
         <materialDesign:TransitioningContent>
 
             <materialDesign:TransitioningContent.OpeningEffects>
@@ -99,73 +105,78 @@
                     </Grid.ColumnDefinitions>
 
                     <!--  Playlist  -->
-                    <DataGrid Grid.Row="1"
+                    <ListView Grid.Row="1"
                               Grid.Column="1"
                               Grid.ColumnSpan="5"
-                              ItemsSource="{Binding Playlist}"
-                              Style="{StaticResource BaseDataGridStyle}">
-                        <DataGrid.ContextMenu>
+                              SelectionMode="Single"
+                              BorderThickness="0" 
+                              ItemsSource="{Binding Playlist.View}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Loaded">
+                                <i:InvokeCommandAction Command="{Binding Playlists.LoadCommand}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="UnLoaded">
+                                <i:InvokeCommandAction Command="{Binding Playlists.SaveCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <ListView.ContextMenu>
                             <ContextMenu>
                                 <ContextMenu.Items>
+                                    <MenuItem Command="{Binding LoadFromFileCommand}" Header="{local:Translation FilePlaylistImport}">
+                                        <MenuItem.Icon>
+                                            <icons:PackIconMaterial Kind="FileFind" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Command="{Binding LoadFromFolderCommand}" Header="{local:Translation FolderPlaylistImport}">
+                                        <MenuItem.Icon>
+                                            <icons:PackIconMaterial Kind="FolderDownload" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Command="{Binding LoadFromUrlCommand}" Header="{local:Translation YoutubePlaylistImport}">
+                                        <MenuItem.Icon>
+                                            <icons:PackIconMaterial Kind="YoutubePlay" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
                                     <MenuItem Command="{Binding RemoveCommand}" Header="{local:Translation Remove}">
                                         <MenuItem.Icon>
-                                            <icons:PackIconMaterial Kind="PlaylistMinus" Style="{StaticResource IconStyle}" />
+                                            <icons:PackIconMaterial Kind="PlaylistMinus" />
                                         </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Command="{Binding ClearCommand}" Header="{local:Translation Clear}">
                                         <MenuItem.Icon>
-                                            <icons:PackIconMaterial Kind="PlaylistRemove" Style="{StaticResource IconStyle}" />
+                                            <icons:PackIconMaterial Kind="PlaylistRemove" />
                                         </MenuItem.Icon>
                                     </MenuItem>
                                 </ContextMenu.Items>
                             </ContextMenu>
-                        </DataGrid.ContextMenu>
-                        <DataGrid.Columns>
-
-                            <!--  Title  -->
-                            <DataGridTemplateColumn Header="{local:Translation Title}" SortMemberPath="Title">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Title}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-
-                            <!--  Duration  -->
-                            <DataGridTemplateColumn Header="{local:Translation Duration}" SortMemberPath="Duration">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Duration, StringFormat={}{0:c}}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-
-                            <!--  Location  -->
-                            <DataGridTextColumn Binding="{Binding Location}"
-                                                Header="{local:Translation Location}"
-                                                SortMemberPath="Location">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
-                                        <Setter Property="VerticalAlignment" Value="Center" />
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                                <DataGridTextColumn.EditingElementStyle>
-                                    <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="{x:Type TextBox}">
-                                        <Setter Property="VerticalAlignment" Value="Center" />
-                                    </Style>
-                                </DataGridTextColumn.EditingElementStyle>
-                            </DataGridTextColumn>
-
-                            <!--  Restricted  -->
-                            <DataGridTemplateColumn Header="{local:Translation Restriction}" SortMemberPath="IsRestricted">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <ContentControl Content="{Binding PrivacyStatus}" Style="{StaticResource RestrictedMediaItemStyle}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                        </ListView.ContextMenu>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn >
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <icons:PackIconMaterial >
+                                                <icons:PackIconMaterial.Style>
+                                                    <Style TargetType="{x:Type icons:PackIconMaterial}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsFile}" Value="True">
+                                                                <Setter Property="Kind" Value="File"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding IsFile}" Value="False">
+                                                                <Setter Property="Kind" Value="Earth"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </icons:PackIconMaterial.Style>
+                                            </icons:PackIconMaterial>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" />
+                                <GridViewColumn Header="Duration" DisplayMemberBinding="{Binding Duration, StringFormat={}{0:c}}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
 
                     <!--  Previous, Play, Next  -->
                     <DockPanel Grid.Row="3"

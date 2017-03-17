@@ -2,14 +2,16 @@
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:colors="clr-namespace:MaterialDesignColors;assembly=MaterialDesignColors"
-                      xmlns:core="clr-namespace:InsireBotCore;assembly=InsireBot.Core"
+                      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                       xmlns:local="clr-namespace:Maple"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
-    <UserControl.Resources>
-        <local:BindingProxy x:Key="ApplyPrimaryProxy" Data="{Binding ApplyPrimaryCommand}" />
-        <local:BindingProxy x:Key="ApplyAccentProxy" Data="{Binding ApplyAccentCommand}" />
-        <local:BindingProxy x:Key="ToggleBaseCommandProxy" Data="{Binding ToggleBaseCommand}" />
+    <!--  DataContext ShellViewModel  -->
+
+    <local:IoCUserControl.Resources>
+        <local:BindingProxy x:Key="ApplyPrimaryProxy" Data="{Binding UIColorsViewModel.ApplyPrimaryCommand}" />
+        <local:BindingProxy x:Key="ApplyAccentProxy" Data="{Binding UIColorsViewModel.ApplyAccentCommand}" />
+        <local:BindingProxy x:Key="ToggleBaseCommandProxy" Data="{Binding UIColorsViewModel.ToggleBaseCommand}" />
 
         <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="Button">
             <Setter Property="Foreground">
@@ -70,7 +72,7 @@
                 </Grid>
             </materialDesign:Card>
         </DataTemplate>
-    </UserControl.Resources>
+    </local:IoCUserControl.Resources>
 
     <materialDesign:TransitioningContent>
         <materialDesign:TransitioningContent.OpeningEffects>
@@ -93,7 +95,7 @@
                               Grid.Column="0"
                               Grid.ColumnSpan="2"
                               VerticalScrollBarVisibility="Auto">
-                    <ItemsControl ItemTemplate="{StaticResource SwatchDataTemplate}" ItemsSource="{Binding Swatches}">
+                    <ItemsControl ItemTemplate="{StaticResource SwatchDataTemplate}" ItemsSource="{Binding UIColorsViewModel.Swatches}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel />
@@ -107,7 +109,6 @@
                               Margin="0,0,5,20"
                               Panel.ZIndex="5"
                               Command="{Binding Data, Source={StaticResource ToggleBaseCommandProxy}}"
-                              CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
                               Style="{StaticResource MaterialDesignActionAccentToggleButton}">
                     <ToggleButton.Content>
                         <materialDesign:PackIcon Kind="InvertColors" />

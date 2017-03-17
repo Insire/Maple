@@ -8,32 +8,24 @@ using System.Windows.Input;
 
 namespace Maple
 {
-    public class UIColorsViewModel : ObservableObject, ISaveable
+    public class UIColorsViewModel : ObservableObject, ILoadableViewModel, ISaveableViewModel
     {
         private static bool _isDark;
         private static string _accent;
         private static string _swatch;
 
-        public void ApplyColorsFromSettings()
-        {
-            var swatchName = Properties.Settings.Default.SwatchName;
-            var swatch = Swatches.FirstOrDefault(p => p.Name == swatchName);
-
-            var accentName = Properties.Settings.Default.AccentName;
-            var accent = Swatches.FirstOrDefault(p => p.Name == accentName);
-
-            ApplyPrimary(this,swatch);
-            ApplyAccent(this, accent);
-            ApplyBase(this, Properties.Settings.Default.UseDarkTheme);
-        }
-
         private static PaletteHelper _paletteHelper = new PaletteHelper();
+
+        public EventHandler<UiPrimaryColorEventArgs> PrimaryColorChanged;
+        public bool IsLoaded { get; private set; }
 
         public ICommand ToggleBaseCommand { get; private set; }
         public ICommand ApplyPrimaryCommand { get; private set; }
         public ICommand ApplyAccentCommand { get; private set; }
 
-        public EventHandler<UiPrimaryColorEventArgs> PrimaryColorChanged;
+        public ICommand RefreshCommand => new RelayCommand(Load);
+        public ICommand LoadCommand => new RelayCommand(Load, () => !IsLoaded);
+        public ICommand SaveCommand => new RelayCommand(Save);
 
         public static IEnumerable<Swatch> Swatches => new SwatchesProvider().Swatches;
 
@@ -45,7 +37,7 @@ namespace Maple
 
         private void InitializeCommands()
         {
-            ToggleBaseCommand = new RelayCommand<bool>(o => ApplyBase(this, o));
+            ToggleBaseCommand = new RelayCommand(() => ApplyBase(this, !_isDark));
             ApplyPrimaryCommand = new RelayCommand<Swatch>(o => ApplyPrimary(this, o));
             ApplyAccentCommand = new RelayCommand<Swatch>(o => ApplyAccent(this, o));
         }
@@ -87,6 +79,21 @@ namespace Maple
             Properties.Settings.Default.UseDarkTheme = _isDark;
 
             Properties.Settings.Default.Save();
+        }
+
+        public void Load()
+        {
+            var swatchName = Properties.Settings.Default.SwatchName;
+            var swatch = Swatches.FirstOrDefault(p => p.Name == swatchName);
+
+            var accentName = Properties.Settings.Default.AccentName;
+            var accent = Swatches.FirstOrDefault(p => p.Name == accentName);
+
+            ApplyPrimary(this, swatch);
+            ApplyAccent(this, accent);
+            ApplyBase(this, Properties.Settings.Default.UseDarkTheme);
+
+            IsLoaded = true;
         }
     }
 }
