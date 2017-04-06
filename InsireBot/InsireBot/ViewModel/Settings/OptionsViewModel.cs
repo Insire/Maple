@@ -19,7 +19,7 @@ namespace Maple
         public CultureInfo SelectedCulture
         {
             get { return _selectedCulture; }
-            set { SetValue(ref _selectedCulture, value, Changed: SyncCulture); }
+            set { SetValue(ref _selectedCulture, value, OnChanged: SyncCulture); }
         }
 
         public bool IsLoaded { get; private set; }

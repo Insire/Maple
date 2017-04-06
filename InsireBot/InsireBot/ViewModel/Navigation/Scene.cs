@@ -39,7 +39,7 @@ namespace Maple
         public string Key
         {
             get { return _key; }
-            set { SetValue(ref _key, value, Changed: UpdateDisplayName); }
+            set { SetValue(ref _key, value, OnChanged: UpdateDisplayName); }
         }
 
         private string _displayName;

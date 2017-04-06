@@ -13,14 +13,14 @@ namespace Maple
         public int Id
         {
             get { return _id; }
-            private set { SetValue(ref _id, value, Changed: () => Model.Id = value); }
+            private set { SetValue(ref _id, value, OnChanged: () => Model.Id = value); }
         }
 
         private int _sequence;
         public int Sequence
         {
             get { return _sequence; }
-            set { SetValue(ref _sequence, value, Changed: () => Model.Sequence = value); }
+            set { SetValue(ref _sequence, value, OnChanged: () => Model.Sequence = value); }
         }
 
 
@@ -28,42 +28,42 @@ namespace Maple
         public int PlaylistId
         {
             get { return _playlistId; }
-            set { SetValue(ref _playlistId, value, Changed: () => Model.PlaylistId = value); }
+            set { SetValue(ref _playlistId, value, OnChanged: () => Model.PlaylistId = value); }
         }
 
         private TimeSpan _duration;
         public TimeSpan Duration
         {
             get { return _duration; }
-            private set { SetValue(ref _duration, value, Changed: () => Model.Duration = value.Ticks); }
+            private set { SetValue(ref _duration, value, OnChanged: () => Model.Duration = value.Ticks); }
         }
 
         private PrivacyStatus _privacyStatus;
         public PrivacyStatus PrivacyStatus
         {
             get { return _privacyStatus; }
-            private set { SetValue(ref _privacyStatus, value, Changed: () => Model.PrivacyStatus = (int)value); }
+            private set { SetValue(ref _privacyStatus, value, OnChanged: () => Model.PrivacyStatus = (int)value); }
         }
 
         private string _title;
         public string Title
         {
             get { return _title; }
-            set { SetValue(ref _title, value, Changed: () => Model.Title = value); }
+            set { SetValue(ref _title, value, OnChanged: () => Model.Title = value); }
         }
 
         private string _description;
         public string Description
         {
             get { return _description; }
-            set { SetValue(ref _description, value, Changed: () => Model.Description = value); }
+            set { SetValue(ref _description, value, OnChanged: () => Model.Description = value); }
         }
 
         private string _location;
         public string Location
         {
             get { return _location; }
-            private set { SetValue(ref _location, value, Changed: () => Model.Location = value); }
+            private set { SetValue(ref _location, value, OnChanged: () => Model.Location = value); }
         }
 
         private bool _isSelected;

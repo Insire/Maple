@@ -17,8 +17,8 @@ namespace Maple
             set
             {
                 SetValue(ref _audioDevice, value,
-                                Changing: () => AudioDeviceChanging?.Raise(this),
-                                Changed: () => AudioDeviceChanged?.Invoke(this, new AudioDeviceChangedEventArgs(value)));
+                                OnChanging: () => AudioDeviceChanging?.Raise(this),
+                                OnChanged: () => AudioDeviceChanged?.Invoke(this, new AudioDeviceChangedEventArgs(value)));
             }
         }
 

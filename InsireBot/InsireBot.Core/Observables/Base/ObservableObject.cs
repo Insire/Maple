@@ -14,17 +14,17 @@ namespace Maple.Core
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected bool SetValue<T>(ref T field, T value, Action Changing = null, Action Changed = null, [CallerMemberName]string propertyName = null)
+        protected bool SetValue<T>(ref T field, T value, Action OnChanging = null, Action OnChanged = null, [CallerMemberName]string propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(field, value))
                 return false;
 
-            Changing?.Invoke();
+            OnChanging?.Invoke();
 
             field = value;
             OnPropertyChanged(propertyName);
 
-            Changed?.Invoke();
+            OnChanged?.Invoke();
 
             return true;
         }

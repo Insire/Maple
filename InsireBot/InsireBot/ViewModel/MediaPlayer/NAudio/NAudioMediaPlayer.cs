@@ -24,7 +24,7 @@ namespace Maple
         public override int Volume
         {
             get { return _volume; }
-            set { SetValue(ref _volume, value, Changed: () => SyncVolumeToVolumeProvider(value)); }
+            set { SetValue(ref _volume, value, OnChanged: () => SyncVolumeToVolumeProvider(value)); }
         }
 
         public NAudioMediaPlayer(IMapleLog log) : base()
