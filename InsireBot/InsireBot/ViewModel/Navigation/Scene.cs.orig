@@ -39,7 +39,7 @@ namespace Maple
         public string Key
         {
             get { return _key; }
-            set { SetValue(ref _key, value, OnChanged: UpdateDisplayName); }
+            set { SetValue(ref _key, value, Changed: UpdateDisplayName); }
         }
 
         private string _displayName;
@@ -72,8 +72,47 @@ namespace Maple
                               UpdateDisplayName();
                       };
 
-            BusyStack = new BusyStack();
-            BusyStack.OnChanged = (hasItems) => IsBusy = hasItems;
+            BusyStack = new BusyStack()
+<<<<<<< HEAD
+            {
+                OnChanged = (hasItems) => IsBusy = hasItems
+            };
+        }
+
+        // TODO fiure out a way to call this async and still maintain order
+        // maybe blocking collection + cancellationtokensource
+        private void UpdateDataContext()
+        {
+            if (Content == null || !IsSelected || GetDataContext == null)
+                return;
+
+            // while fetching the dataconext, we will switch IsBusy accordingly
+            using (var token = BusyStack.GetToken())
+            {
+                var currentContext = Content.DataContext as ISaveable;
+                var newContext = GetDataContext.Invoke();
+
+                if (currentContext == null && newContext == null)
+                    return;
+
+                if (EqualityComparer<ISaveable>.Default.Equals(currentContext, newContext))
+                    return;
+
+                Content.DataContext = newContext;
+            }
+        }
+
+        private void Save()
+        {
+            if (Content == null || !IsSelected)
+                return;
+
+            using (var token = BusyStack.GetToken())
+=======
+>>>>>>> Dev
+            {
+                OnChanged = (hasItems) => IsBusy = hasItems
+            };
         }
 
         private void UpdateDisplayName()
