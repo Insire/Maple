@@ -35,7 +35,7 @@ namespace Maple
         public bool IsOpen
         {
             get { return _isOpen; }
-            set { SetValue(ref _isOpen, value, Changed: OnOpenChanged); }
+            set { SetValue(ref _isOpen, value, OnChanged: OnOpenChanged); }
         }
 
         private bool _isCancelVisible;

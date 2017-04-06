@@ -46,21 +46,21 @@ namespace Maple
         public Playlist Playlist
         {
             get { return _playlist; }
-            set { SetValue(ref _playlist, value, Changing: OnPlaylistChanging, Changed: OnPlaylistChanged); }
+            set { SetValue(ref _playlist, value, OnChanging: OnPlaylistChanging, OnChanged: OnPlaylistChanged); }
         }
 
         private string _name;
         public string Name
         {
             get { return _name; }
-            set { SetValue(ref _name, value, Changed: () => Model.Name = value); }
+            set { SetValue(ref _name, value, OnChanged: () => Model.Name = value); }
         }
 
         private bool _isPrimary;
         public bool IsPrimary
         {
             get { return _isPrimary; }
-            protected set { SetValue(ref _isPrimary, value, Changed: () => Model.IsPrimary = value); }
+            protected set { SetValue(ref _isPrimary, value, OnChanged: () => Model.IsPrimary = value); }
         }
 
         public MediaPlayer(ITranslationService manager, IMediaPlayer player, Data.MediaPlayer model, Playlist playlist, AudioDevices devices)
