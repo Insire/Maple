@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple", "InsireBot\Maple.csproj", "{FBD5595B-6859-4E8E-BDFA-C3169EF34985}"
 EndProject
@@ -12,7 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		Resources\client_secret.json = Resources\client_secret.json
 		..\license.md = ..\license.md
+		Resources\Images\logo.ico = Resources\Images\logo.ico
+		Resources\Images\logo.png = Resources\Images\logo.png
+		Resources\Images\logo_small.ico = Resources\Images\logo_small.ico
 		..\README.md = ..\README.md
+		Settings.XamlStyler = Settings.XamlStyler
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Localization", "InsireBot.Localization\Maple.Localization.csproj", "{A073FC92-90E3-4541-8B52-6F7293187871}"
