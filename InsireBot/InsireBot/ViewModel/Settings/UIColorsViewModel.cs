@@ -8,6 +8,12 @@ using System.Windows.Input;
 
 namespace Maple
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <seealso cref="Maple.Core.ObservableObject" />
+    /// <seealso cref="Maple.Core.ILoadableViewModel" />
+    /// <seealso cref="Maple.Core.ISaveableViewModel" />
     public class UIColorsViewModel : ObservableObject, ILoadableViewModel, ISaveableViewModel
     {
         private static bool _isDark;
@@ -16,19 +22,73 @@ namespace Maple
 
         private static PaletteHelper _paletteHelper = new PaletteHelper();
 
+        /// <summary>
+        /// The primary color changed
+        /// </summary>
         public EventHandler<UiPrimaryColorEventArgs> PrimaryColorChanged;
+        /// <summary>
+        /// Gets a value indicating whether this instance is loaded.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is loaded; otherwise, <c>false</c>.
+        /// </value>
         public bool IsLoaded { get; private set; }
 
+        /// <summary>
+        /// Gets the toggle base command.
+        /// </summary>
+        /// <value>
+        /// The toggle base command.
+        /// </value>
         public ICommand ToggleBaseCommand { get; private set; }
+        /// <summary>
+        /// Gets the apply primary command.
+        /// </summary>
+        /// <value>
+        /// The apply primary command.
+        /// </value>
         public ICommand ApplyPrimaryCommand { get; private set; }
+        /// <summary>
+        /// Gets the apply accent command.
+        /// </summary>
+        /// <value>
+        /// The apply accent command.
+        /// </value>
         public ICommand ApplyAccentCommand { get; private set; }
 
+        /// <summary>
+        /// Gets the refresh command.
+        /// </summary>
+        /// <value>
+        /// The refresh command.
+        /// </value>
         public ICommand RefreshCommand => new RelayCommand(Load);
+        /// <summary>
+        /// Gets the load command.
+        /// </summary>
+        /// <value>
+        /// The load command.
+        /// </value>
         public ICommand LoadCommand => new RelayCommand(Load, () => !IsLoaded);
+        /// <summary>
+        /// Gets the save command.
+        /// </summary>
+        /// <value>
+        /// The save command.
+        /// </value>
         public ICommand SaveCommand => new RelayCommand(Save);
 
+        /// <summary>
+        /// Gets the swatches.
+        /// </summary>
+        /// <value>
+        /// The swatches.
+        /// </value>
         public static IEnumerable<Swatch> Swatches => new SwatchesProvider().Swatches;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UIColorsViewModel"/> class.
+        /// </summary>
         public UIColorsViewModel()
         {
             OnPropertyChanged(nameof(Swatches));
@@ -72,6 +132,9 @@ namespace Maple
             _accent = swatch.Name;
         }
 
+        /// <summary>
+        /// Saves this instance.
+        /// </summary>
         public void Save()
         {
             Properties.Settings.Default.AccentName = _accent;
@@ -81,6 +144,9 @@ namespace Maple
             Properties.Settings.Default.Save();
         }
 
+        /// <summary>
+        /// Loads this instance.
+        /// </summary>
         public void Load()
         {
             var swatchName = Properties.Settings.Default.SwatchName;

@@ -7,6 +7,10 @@ using System.Linq;
 namespace Maple
 {
     // helpful: https://blog.oneunicorn.com/2012/03/10/secrets-of-detectchanges-part-1-what-does-detectchanges-do/
+    /// <summary>
+    /// Provides a way to access all playback related data on the DAL
+    /// </summary>
+    /// <seealso cref="Maple.IMediaRepository" />
     public class MediaRepository : IMediaRepository
     {
         private readonly PlaylistContext _context;
@@ -32,6 +36,11 @@ namespace Maple
             _busyStack.OnChanged += (hasItems) => { IsBusy = hasItems; };
         }
 
+        /// <summary>
+        /// Gets the playlist by identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
         public Playlist GetPlaylistById(int id)
         {
             var playlist = _context.Playlists.FirstOrDefault(p => p.Id == id);

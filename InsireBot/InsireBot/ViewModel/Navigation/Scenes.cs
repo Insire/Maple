@@ -10,15 +10,39 @@ namespace Maple
     /// <summary>
     /// ViewModel that stores and controls which UserControl(Page/View) whatever is displayed in the mainwindow of this app)
     /// </summary>
+    /// <seealso cref="Maple.Core.BaseListViewModel{Maple.Scene}" />
     public class Scenes : BaseListViewModel<Scene>
     {
         private ITranslationService _manager;
         private IMapleLog _log;
 
+        /// <summary>
+        /// Gets the open color options command.
+        /// </summary>
+        /// <value>
+        /// The open color options command.
+        /// </value>
         public ICommand OpenColorOptionsCommand { get; private set; }
+        /// <summary>
+        /// Gets the open media player command.
+        /// </summary>
+        /// <value>
+        /// The open media player command.
+        /// </value>
         public ICommand OpenMediaPlayerCommand { get; private set; }
+        /// <summary>
+        /// Gets the open github page command.
+        /// </summary>
+        /// <value>
+        /// The open github page command.
+        /// </value>
         public ICommand OpenGithubPageCommand { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Scenes"/> class.
+        /// </summary>
+        /// <param name="manager">The manager.</param>
+        /// <param name="log">The log.</param>
         public Scenes(ITranslationService manager, IMapleLog log)
         {
             _manager = manager;

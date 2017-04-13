@@ -29,6 +29,9 @@ namespace Maple
         /// <summary>
         /// See <see cref="ITranslationProvider.AvailableLanguages" />
         /// </summary>
+        /// <value>
+        /// The available languages.
+        /// </value>
         public IEnumerable<CultureInfo> Languages
         {
             get

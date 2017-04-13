@@ -12,9 +12,21 @@ namespace Maple
         private IYoutubeUrlParseService _dataParsingService;
         private IMediaItemMapper _mapper;
 
+        /// <summary>
+        /// Gets the parse command.
+        /// </summary>
+        /// <value>
+        /// The parse command.
+        /// </value>
         public ICommand ParseCommand { get; private set; }
 
         private string _source;
+        /// <summary>
+        /// Gets or sets the source.
+        /// </summary>
+        /// <value>
+        /// The source.
+        /// </value>
         public string Source
         {
             get { return _source; }
@@ -22,12 +34,23 @@ namespace Maple
         }
 
         private UrlParseResult _result;
+        /// <summary>
+        /// Gets the result.
+        /// </summary>
+        /// <value>
+        /// The result.
+        /// </value>
         public UrlParseResult Result
         {
             get { return _result; }
             private set { SetValue(ref _result, value); }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateMediaItem"/> class.
+        /// </summary>
+        /// <param name="dataParsingService">The data parsing service.</param>
+        /// <param name="mapper">The mapper.</param>
         public CreateMediaItem(IYoutubeUrlParseService dataParsingService, IMediaItemMapper mapper) : base()
         {
             _dataParsingService = dataParsingService;

@@ -22,6 +22,10 @@ namespace Maple.Core
         //     WARNING Note that passing an System.Exception to this method will print the name
         //     of the System.Exception but no stack trace. To print a stack trace use the Error(object,Exception)
         //     form instead.
+        /// <summary>
+        /// Errors the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
         void Error(object message);
         //
         // Summary:
@@ -37,6 +41,11 @@ namespace Maple.Core
         //
         // Remarks:
         //     See the Error(object) form for more detailed information.
+        /// <summary>
+        /// Errors the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="exception">The exception.</param>
         void Error(object message, Exception exception);
 
         //
@@ -57,6 +66,10 @@ namespace Maple.Core
         //     WARNING Note that passing an System.Exception to this method will print the name
         //     of the System.Exception but no stack trace. To print a stack trace use the Fatal(object,Exception)
         //     form instead.
+        /// <summary>
+        /// Fatals the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
         void Fatal(object message);
         //
         // Summary:
@@ -72,6 +85,11 @@ namespace Maple.Core
         //
         // Remarks:
         //     See the Fatal(object) form for more detailed information.
+        /// <summary>
+        /// Fatals the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="exception">The exception.</param>
         void Fatal(object message, Exception exception);
 
         //
@@ -92,6 +110,10 @@ namespace Maple.Core
         //     WARNING Note that passing an System.Exception to this method will print the name
         //     of the System.Exception but no stack trace. To print a stack trace use the Info(object,Exception)
         //     form instead.
+        /// <summary>
+        /// Informations the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
         void Info(object message);
         //
         // Summary:
@@ -107,6 +129,11 @@ namespace Maple.Core
         //
         // Remarks:
         //     See the Info(object) form for more detailed information.
+        /// <summary>
+        /// Informations the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="exception">The exception.</param>
         void Info(object message, Exception exception);
 
         //
@@ -127,6 +154,10 @@ namespace Maple.Core
         //     WARNING Note that passing an System.Exception to this method will print the name
         //     of the System.Exception but no stack trace. To print a stack trace use the Warn(object,Exception)
         //     form instead.
+        /// <summary>
+        /// Warns the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
         void Warn(object message);
         //
         // Summary:
@@ -142,6 +173,11 @@ namespace Maple.Core
         //
         // Remarks:
         //     See the Warn(object) form for more detailed information.
+        /// <summary>
+        /// Warns the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="exception">The exception.</param>
         void Warn(object message, Exception exception);
     }
 }

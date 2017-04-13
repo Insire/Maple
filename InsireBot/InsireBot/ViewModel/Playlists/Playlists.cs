@@ -7,19 +7,61 @@ using System.Windows.Input;
 
 namespace Maple
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <seealso cref="Maple.Core.BaseDataListViewModel{Maple.Playlist, Maple.Data.Playlist}" />
+    /// <seealso cref="Maple.Core.ILoadableViewModel" />
+    /// <seealso cref="Maple.Core.ISaveableViewModel" />
     public class Playlists : BaseDataListViewModel<Playlist, Data.Playlist>, ILoadableViewModel, ISaveableViewModel
     {
         private readonly IMapleLog _log;
         private readonly DialogViewModel _dialogViewModel;
         private readonly Func<IMediaRepository> _repositoryFactory;
 
+        /// <summary>
+        /// Gets the play command.
+        /// </summary>
+        /// <value>
+        /// The play command.
+        /// </value>
         public ICommand PlayCommand { get; private set; }
+        /// <summary>
+        /// Gets the load command.
+        /// </summary>
+        /// <value>
+        /// The load command.
+        /// </value>
         public ICommand LoadCommand => new RelayCommand(Load, () => !IsLoaded);
+        /// <summary>
+        /// Gets the refresh command.
+        /// </summary>
+        /// <value>
+        /// The refresh command.
+        /// </value>
         public ICommand RefreshCommand => new RelayCommand(Load);
+        /// <summary>
+        /// Gets the save command.
+        /// </summary>
+        /// <value>
+        /// The save command.
+        /// </value>
         public ICommand SaveCommand => new RelayCommand(Save);
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is loaded.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is loaded; otherwise, <c>false</c>.
+        /// </value>
         public bool IsLoaded { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Playlists"/> class.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="repo">The repo.</param>
+        /// <param name="dialogViewModel">The dialog view model.</param>
         public Playlists(IMapleLog log, Func<IMediaRepository> repo, DialogViewModel dialogViewModel)
             : base()
         {
@@ -30,6 +72,9 @@ namespace Maple
             AddCommand = new RelayCommand(Add, CanAdd);
         }
 
+        /// <summary>
+        /// Loads this instance.
+        /// </summary>
         public void Load()
         {
             Items.Clear();
@@ -41,6 +86,9 @@ namespace Maple
             IsLoaded = true;
         }
 
+        /// <summary>
+        /// Saves this instance.
+        /// </summary>
         public void Save()
         {
             using (var context = _repositoryFactory())
@@ -51,6 +99,9 @@ namespace Maple
 
         // TODO order changing + sync, Commands, UserInteraction, async load
 
+        /// <summary>
+        /// Adds this instance.
+        /// </summary>
         public void Add()
         {
             var playlist = new Playlist(_dialogViewModel, new Data.Playlist

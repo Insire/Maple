@@ -5,6 +5,12 @@
     /// </summary>
     public interface ISequence
     {
-        int Sequence{ get; set; }
+        /// <summary>
+        /// Gets or sets the sequence.
+        /// </summary>
+        /// <value>
+        /// The sequence.
+        /// </value>
+        int Sequence { get; set; }
     }
 }

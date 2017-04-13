@@ -4,18 +4,34 @@ using System.Windows;
 
 namespace Maple
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <seealso cref="MahApps.Metro.IconPacks.PackIcon{Maple.PackIconKind}" />
     public class PackIcon : PackIcon<PackIconKind>
     {
         private static IDictionary<PackIconKind, string> _cache;
+        /// <summary>
+        /// Initializes the <see cref="PackIcon"/> class.
+        /// </summary>
         static PackIcon()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(PackIcon), new FrameworkPropertyMetadata(typeof(PackIcon)));
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PackIcon"/> class.
+        /// </summary>
         public PackIcon() : base(CreateIconData)
         {
         }
 
+        /// <summary>
+        /// Tries the get.
+        /// </summary>
+        /// <param name="kind">The kind.</param>
+        /// <param name="data">The data.</param>
+        /// <returns></returns>
         public static bool TryGet(PackIconKind kind, out string data)
         {
             if (_cache == null)
@@ -31,6 +47,10 @@ namespace Maple
             return false;
         }
 
+        /// <summary>
+        /// Creates the icon data.
+        /// </summary>
+        /// <returns></returns>
         private static IDictionary<PackIconKind, string> CreateIconData()
         {
             if (_cache == null)

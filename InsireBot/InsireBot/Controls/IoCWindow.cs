@@ -9,12 +9,20 @@ using System.Windows.Media.Imaging;
 
 namespace Maple
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <seealso cref="Maple.ConfigurableWindow" />
+    /// <seealso cref="Maple.Core.IIocFrameworkElement" />
     public class IoCWindow : ConfigurableWindow, IIocFrameworkElement
     {
         private IConfigurableWindowSettings _settings;
         private UIColorsViewModel _colorsViewModel;
         public ITranslationService TranslationManager { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IoCWindow"/> class.
+        /// </summary>
         public IoCWindow()
             : base()
         {
@@ -22,6 +30,11 @@ namespace Maple
                 Assert.Fail($"The constructor without parameters of {nameof(IoCWindow)} exists only for compatibility reasons.");
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IoCWindow"/> class.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="vm">The vm.</param>
         public IoCWindow(ITranslationService container, UIColorsViewModel vm) : base()
         {
             TranslationManager = container;
@@ -29,6 +42,12 @@ namespace Maple
             _colorsViewModel.PrimaryColorChanged += PrimaryColorChanged;
         }
 
+        /// <summary>
+        /// Derived classes must return the object which exposes
+        /// persisted window settings. This method is only invoked
+        /// once per Window, during construction.
+        /// </summary>
+        /// <returns></returns>
         protected override IConfigurableWindowSettings CreateSettings()
         {
             return _settings = _settings ?? new ShellSettings(this);
@@ -44,6 +63,12 @@ namespace Maple
             }
         }
 
+        /// <summary>
+        /// Sets the image.
+        /// </summary>
+        /// <param name="geo">The geo.</param>
+        /// <param name="color">The color.</param>
+        /// <returns></returns>
         private BitmapSource SetImage(Geometry geo, Color color)
         {
             var canvas = new Canvas

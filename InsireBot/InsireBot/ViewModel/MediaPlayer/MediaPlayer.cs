@@ -7,35 +7,143 @@ using System.Windows.Input;
 
 namespace Maple
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <seealso cref="Maple.Core.BaseViewModel{Maple.Data.MediaPlayer}" />
+    /// <seealso cref="System.IDisposable" />
+    /// <seealso cref="Maple.Core.IChangeState" />
     public class MediaPlayer : BaseViewModel<Data.MediaPlayer>, IDisposable, IChangeState
     {
         protected readonly ITranslationService _manager;
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is playing.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is playing; otherwise, <c>false</c>.
+        /// </value>
         public bool IsPlaying { get { return Player.IsPlaying; } }
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="MediaPlayer"/> is disposed.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if disposed; otherwise, <c>false</c>.
+        /// </value>
         public bool Disposed { get; private set; }
+        /// <summary>
+        /// Gets a value indicating whether this instance is new.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is new; otherwise, <c>false</c>.
+        /// </value>
         public bool IsNew => Model.IsNew;
+        /// <summary>
+        /// Gets a value indicating whether this instance is deleted.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is deleted; otherwise, <c>false</c>.
+        /// </value>
         public bool IsDeleted => Model.IsDeleted;
 
         private IMediaPlayer _player;
+        /// <summary>
+        /// Gets the player.
+        /// </summary>
+        /// <value>
+        /// The player.
+        /// </value>
         public IMediaPlayer Player
         {
             get { return _player; }
             private set { SetValue(ref _player, value); }
         }
 
+        /// <summary>
+        /// Gets the play command.
+        /// </summary>
+        /// <value>
+        /// The play command.
+        /// </value>
         public ICommand PlayCommand { get; private set; }
+        /// <summary>
+        /// Gets the pause command.
+        /// </summary>
+        /// <value>
+        /// The pause command.
+        /// </value>
         public ICommand PauseCommand { get; private set; }
+        /// <summary>
+        /// Gets the next command.
+        /// </summary>
+        /// <value>
+        /// The next command.
+        /// </value>
         public ICommand NextCommand { get; private set; }
+        /// <summary>
+        /// Gets the previous command.
+        /// </summary>
+        /// <value>
+        /// The previous command.
+        /// </value>
         public ICommand PreviousCommand { get; private set; }
+        /// <summary>
+        /// Gets the stop command.
+        /// </summary>
+        /// <value>
+        /// The stop command.
+        /// </value>
         public ICommand StopCommand { get; private set; }
+        /// <summary>
+        /// Gets the load from file command.
+        /// </summary>
+        /// <value>
+        /// The load from file command.
+        /// </value>
         public ICommand LoadFromFileCommand { get; private set; }
+        /// <summary>
+        /// Gets the load from folder command.
+        /// </summary>
+        /// <value>
+        /// The load from folder command.
+        /// </value>
         public ICommand LoadFromFolderCommand { get; private set; }
+        /// <summary>
+        /// Gets the load from URL command.
+        /// </summary>
+        /// <value>
+        /// The load from URL command.
+        /// </value>
         public ICommand LoadFromUrlCommand { get; private set; }
+        /// <summary>
+        /// Gets or sets the remove range command.
+        /// </summary>
+        /// <value>
+        /// The remove range command.
+        /// </value>
         public ICommand RemoveRangeCommand { get; protected set; }
+        /// <summary>
+        /// Gets or sets the remove command.
+        /// </summary>
+        /// <value>
+        /// The remove command.
+        /// </value>
         public ICommand RemoveCommand { get; protected set; }
+        /// <summary>
+        /// Gets or sets the clear command.
+        /// </summary>
+        /// <value>
+        /// The clear command.
+        /// </value>
         public ICommand ClearCommand { get; protected set; }
 
         private AudioDevices _audioDevices;
+        /// <summary>
+        /// Gets the audio devices.
+        /// </summary>
+        /// <value>
+        /// The audio devices.
+        /// </value>
         public AudioDevices AudioDevices
         {
             get { return _audioDevices; }
@@ -43,6 +151,12 @@ namespace Maple
         }
 
         private Playlist _playlist;
+        /// <summary>
+        /// Gets or sets the playlist.
+        /// </summary>
+        /// <value>
+        /// The playlist.
+        /// </value>
         public Playlist Playlist
         {
             get { return _playlist; }
@@ -50,6 +164,12 @@ namespace Maple
         }
 
         private string _name;
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
         public string Name
         {
             get { return _name; }
@@ -57,12 +177,33 @@ namespace Maple
         }
 
         private bool _isPrimary;
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is primary.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is primary; otherwise, <c>false</c>.
+        /// </value>
         public bool IsPrimary
         {
             get { return _isPrimary; }
             protected set { SetValue(ref _isPrimary, value, OnChanged: () => Model.IsPrimary = value); }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MediaPlayer"/> class.
+        /// </summary>
+        /// <param name="manager">The manager.</param>
+        /// <param name="player">The player.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="playlist">The playlist.</param>
+        /// <param name="devices">The devices.</param>
+        /// <exception cref="System.ArgumentNullException">
+        /// manager - manager
+        /// or
+        /// player - player
+        /// or
+        /// playlist - playlist
+        /// </exception>
         public MediaPlayer(ITranslationService manager, IMediaPlayer player, Data.MediaPlayer model, Playlist playlist, AudioDevices devices)
             : base(model)
         {
@@ -156,17 +297,30 @@ namespace Maple
             Next();
         }
 
+        /// <summary>
+        /// Clears this instance.
+        /// </summary>
         public void Clear()
         {
             using (_busyStack.GetToken())
                 Playlist.Clear();
         }
 
+        /// <summary>
+        /// Determines whether this instance can clear.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if this instance can clear; otherwise, <c>false</c>.
+        /// </returns>
         public bool CanClear()
         {
             return !IsBusy && Playlist.ItemCount > 0;
         }
 
+        /// <summary>
+        /// Adds the range.
+        /// </summary>
+        /// <param name="mediaItems">The media items.</param>
         public void AddRange(IEnumerable<MediaItem> mediaItems)
         {
             using (_busyStack.GetToken())
@@ -176,6 +330,10 @@ namespace Maple
             }
         }
 
+        /// <summary>
+        /// Adds the specified media item.
+        /// </summary>
+        /// <param name="mediaItem">The media item.</param>
         public void Add(MediaItem mediaItem)
         {
             using (_busyStack.GetToken())
@@ -195,6 +353,10 @@ namespace Maple
             }
         }
 
+        /// <summary>
+        /// Removes the specified item.
+        /// </summary>
+        /// <param name="item">The item.</param>
         public void Remove(MediaItem item)
         {
             using (_busyStack.GetToken())
@@ -207,18 +369,27 @@ namespace Maple
                 return Playlist.CanRemove(item);
         }
 
+        /// <summary>
+        /// Pauses this instance.
+        /// </summary>
         public void Pause()
         {
             using (_busyStack.GetToken())
                 Player.Pause();
         }
 
+        /// <summary>
+        /// Stops this instance.
+        /// </summary>
         public void Stop()
         {
             using (_busyStack.GetToken())
                 Player.Stop();
         }
 
+        /// <summary>
+        /// Previouses this instance.
+        /// </summary>
         public void Previous()
         {
             using (_busyStack.GetToken())
@@ -228,6 +399,9 @@ namespace Maple
             }
         }
 
+        /// <summary>
+        /// Nexts this instance.
+        /// </summary>
         public void Next()
         {
             using (_busyStack.GetToken())
@@ -237,40 +411,78 @@ namespace Maple
             }
         }
 
+        /// <summary>
+        /// Determines whether this instance can next.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if this instance can next; otherwise, <c>false</c>.
+        /// </returns>
         public bool CanNext()
         {
             var item = Playlist.Next();
             return CanPlay(item);
         }
 
+        /// <summary>
+        /// Determines whether this instance can previous.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if this instance can previous; otherwise, <c>false</c>.
+        /// </returns>
         public bool CanPrevious()
         {
             var item = Playlist.Previous();
             return CanPlay(item);
         }
 
+        /// <summary>
+        /// Determines whether this instance can pause.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if this instance can pause; otherwise, <c>false</c>.
+        /// </returns>
         public bool CanPause()
         {
             return Player.CanPause();
         }
 
+        /// <summary>
+        /// Determines whether this instance can stop.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if this instance can stop; otherwise, <c>false</c>.
+        /// </returns>
         public bool CanStop()
         {
             return Player.CanStop();
         }
 
+        /// <summary>
+        /// Determines whether this instance can play the specified item.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns>
+        ///   <c>true</c> if this instance can play the specified item; otherwise, <c>false</c>.
+        /// </returns>
         private bool CanPlay(MediaItem item)
         {
             return Player.CanPlay(item);
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        public void Dispose(bool disposing)
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
         {
             if (Disposed)
                 return;

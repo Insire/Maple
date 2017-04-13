@@ -7,11 +7,19 @@ using System.Windows.Threading;
 
 namespace Maple
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <seealso cref="MahApps.Metro.Controls.MetroWindow" />
     public abstract class ConfigurableWindow : MetroWindow
     {
         private bool _isLoaded;
         private readonly IConfigurableWindowSettings _settings;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigurableWindow"/> class.
+        /// </summary>
+        /// <exception cref="System.ArgumentNullException">_settings - Cannot be null.</exception>
         protected ConfigurableWindow()
         {
             _settings = CreateSettings();
@@ -25,12 +33,17 @@ namespace Maple
         }
 
         /// <summary>
-        /// Derived classes must return the object which exposes 
-        /// persisted window settings. This method is only invoked 
+        /// Derived classes must return the object which exposes
+        /// persisted window settings. This method is only invoked
         /// once per Window, during construction.
         /// </summary>
+        /// <returns></returns>
         protected abstract IConfigurableWindowSettings CreateSettings();
 
+        /// <summary>
+        /// Raises the <see cref="E:System.Windows.Window.LocationChanged" /> event.
+        /// </summary>
+        /// <param name="e">An <see cref="T:System.EventArgs" /> that contains the event data.</param>
         protected override void OnLocationChanged(EventArgs e)
         {
             base.OnLocationChanged(e);
@@ -51,6 +64,10 @@ namespace Maple
             }));
         }
 
+        /// <summary>
+        /// When overridden in a derived class, participates in rendering operations that are directed by the layout system. This method is invoked after layout update, and before rendering, if the element's <see cref="P:System.Windows.UIElement.RenderSize" /> has changed as a result of layout update.
+        /// </summary>
+        /// <param name="info">The packaged parameters (<see cref="T:System.Windows.SizeChangedInfo" />), which includes old and new sizes, and which dimension actually changes.</param>
         protected override void OnRenderSizeChanged(SizeChangedInfo info)
         {
             base.OnRenderSizeChanged(info);
@@ -61,6 +78,10 @@ namespace Maple
             }
         }
 
+        /// <summary>
+        /// Raises the <see cref="E:System.Windows.Window.StateChanged" /> event.
+        /// </summary>
+        /// <param name="e">An <see cref="T:System.EventArgs" /> that contains the event data.</param>
         protected override void OnStateChanged(EventArgs e)
         {
             base.OnStateChanged(e);
@@ -76,6 +97,9 @@ namespace Maple
             }
         }
 
+        /// <summary>
+        /// Applies the settings.
+        /// </summary>
         void ApplySettings()
         {
             var size = _settings.WindowSize;
@@ -87,7 +111,7 @@ namespace Maple
             // If the user's machine had two monitors but now only
             // has one, and the Window was previously on the other
             // monitor, we need to move the Window into view.
-            bool outOfBounds = loccation.X <= -size.Width
+            var outOfBounds = loccation.X <= -size.Width
                             || loccation.Y <= -size.Height
                             || SystemParameters.VirtualScreenWidth <= loccation.X
                             || SystemParameters.VirtualScreenHeight <= loccation.Y;
