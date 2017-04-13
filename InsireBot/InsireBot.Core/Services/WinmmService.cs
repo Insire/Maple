@@ -7,13 +7,17 @@ namespace Maple.Core
     /// </summary>
     public class WinmmService
     {
+        /// <summary>
+        /// Gets the dev caps playback.
+        /// </summary>
+        /// <returns></returns>
         public static WAVEOUTCAPS[] GetDevCapsPlayback()
         {
             var waveOutDevicesCount = waveOutGetNumDevs();
             if (waveOutDevicesCount > 0)
             {
                 var list = new WAVEOUTCAPS[waveOutDevicesCount];
-                for (int uDeviceID = 0; uDeviceID < waveOutDevicesCount; uDeviceID++)
+                for (var uDeviceID = 0; uDeviceID < waveOutDevicesCount; uDeviceID++)
                 {
                     var waveOutCaps = new WAVEOUTCAPS();
                     waveOutGetDevCaps(uDeviceID, ref waveOutCaps, Marshal.SizeOf(typeof(WAVEOUTCAPS)));
@@ -27,6 +31,10 @@ namespace Maple.Core
             }
         }
 
+        /// <summary>
+        /// Gets the dev caps recording.
+        /// </summary>
+        /// <returns></returns>
         public static WAVEINCAPS[] GetDevCapsRecording()
         {
             var waveInDevicesCount = waveInGetNumDevs();
@@ -47,6 +55,9 @@ namespace Maple.Core
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [StructLayout(LayoutKind.Sequential, Pack = 4, CharSet = CharSet.Auto)]
         public struct WAVEOUTCAPS
         {
@@ -68,6 +79,9 @@ namespace Maple.Core
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [StructLayout(LayoutKind.Sequential, Pack = 4, CharSet = CharSet.Auto)]
         public struct WAVEINCAPS
         {
@@ -88,6 +102,7 @@ namespace Maple.Core
                 return string.Format("wMid:{0}|wPid:{1}|vDriverVersion:{2}|'szPname:{3}'|dwFormats:{4}|wChannels:{5}|wReserved:{6}", new object[] { wMid, wPid, vDriverVersion, szPname, dwFormats, wChannels, wReserved });
             }
         }
+
 
         [DllImport("winmm.dll", SetLastError = true, CharSet = CharSet.Auto)]
         private static extern uint waveInGetDevCaps(int hwo, ref WAVEINCAPS pwic, /*uint*/ int cbwic);

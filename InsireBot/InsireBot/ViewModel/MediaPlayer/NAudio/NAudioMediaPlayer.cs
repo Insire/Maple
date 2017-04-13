@@ -43,7 +43,7 @@ namespace Maple
             _player = WavePlayerFactory.GetPlayer();
             _player.PlaybackStopped += PlaybackStopped;
 
-            PlayingMediaItem += OnPlaybackStarted; 
+            PlayingMediaItem += OnPlaybackStarted;
 
             OnPropertyChanged(nameof(VolumeMin));
             OnPropertyChanged(nameof(VolumeMax));
@@ -83,7 +83,7 @@ namespace Maple
 
         public override bool CanPlay(IMediaItem item)
         {
-            return item!= null && _player?.PlaybackState != null && _player.PlaybackState != NAudio.Wave.PlaybackState.Playing;
+            return item != null && _player?.PlaybackState != null && _player.PlaybackState != NAudio.Wave.PlaybackState.Playing;
         }
 
         public override bool CanPause()
@@ -149,7 +149,7 @@ namespace Maple
             GC.SuppressFinalize(this);
         }
 
-        public void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (Disposed)
                 return;
@@ -163,6 +163,7 @@ namespace Maple
                 _player?.Dispose();
                 _player = null;
 
+                _reader?.Close();
                 _reader?.Dispose();
                 _reader = null;
 

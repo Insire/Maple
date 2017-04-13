@@ -4,12 +4,23 @@ using System.IO;
 
 namespace Maple
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <seealso cref="Maple.Core.BaseViewModel{Maple.Data.MediaItem}" />
+    /// <seealso cref="Maple.Core.IMediaItem" />
     public class MediaItem : BaseViewModel<Data.MediaItem>, IMediaItem
     {
         public bool IsNew => Model.IsNew;
         public bool IsDeleted => Model.IsDeleted;
 
         private int _id;
+        /// <summary>
+        /// Gets the identifier.
+        /// </summary>
+        /// <value>
+        /// The identifier.
+        /// </value>
         public int Id
         {
             get { return _id; }
@@ -17,6 +28,12 @@ namespace Maple
         }
 
         private int _sequence;
+        /// <summary>
+        /// Gets or sets the sequence.
+        /// </summary>
+        /// <value>
+        /// The sequence.
+        /// </value>
         public int Sequence
         {
             get { return _sequence; }
@@ -25,6 +42,12 @@ namespace Maple
 
 
         private int _playlistId;
+        /// <summary>
+        /// Gets or sets the playlist identifier.
+        /// </summary>
+        /// <value>
+        /// The playlist identifier.
+        /// </value>
         public int PlaylistId
         {
             get { return _playlistId; }
@@ -32,6 +55,12 @@ namespace Maple
         }
 
         private TimeSpan _duration;
+        /// <summary>
+        /// Gets the duration.
+        /// </summary>
+        /// <value>
+        /// The duration.
+        /// </value>
         public TimeSpan Duration
         {
             get { return _duration; }
@@ -39,6 +68,12 @@ namespace Maple
         }
 
         private PrivacyStatus _privacyStatus;
+        /// <summary>
+        /// Gets the privacy status.
+        /// </summary>
+        /// <value>
+        /// The privacy status.
+        /// </value>
         public PrivacyStatus PrivacyStatus
         {
             get { return _privacyStatus; }
@@ -46,6 +81,12 @@ namespace Maple
         }
 
         private string _title;
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        /// <value>
+        /// The title.
+        /// </value>
         public string Title
         {
             get { return _title; }
@@ -53,6 +94,12 @@ namespace Maple
         }
 
         private string _description;
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        /// <value>
+        /// The description.
+        /// </value>
         public string Description
         {
             get { return _description; }
@@ -60,6 +107,12 @@ namespace Maple
         }
 
         private string _location;
+        /// <summary>
+        /// Gets the location.
+        /// </summary>
+        /// <value>
+        /// The location.
+        /// </value>
         public string Location
         {
             get { return _location; }
@@ -67,14 +120,30 @@ namespace Maple
         }
 
         private bool _isSelected;
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is selected.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is selected; otherwise, <c>false</c>.
+        /// </value>
         public bool IsSelected
         {
             get { return _isSelected; }
             set { SetValue(ref _isSelected, value); }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is file.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is file; otherwise, <c>false</c>.
+        /// </value>
         public bool IsFile => File.Exists(Location);
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MediaItem"/> class.
+        /// </summary>
+        /// <param name="model">The model.</param>
         public MediaItem(Data.MediaItem model)
             : base(model)
         {
@@ -88,6 +157,12 @@ namespace Maple
             PrivacyStatus = (PrivacyStatus)model.PrivacyStatus;
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             var result = Title == string.Empty ? Location : Title;

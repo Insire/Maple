@@ -10,10 +10,11 @@ namespace Maple
     /// that loads it content only once. If a second instance with the same source
     /// is created, it only merges the resources from the cache.
     /// </summary>
+    /// <seealso cref="System.Windows.ResourceDictionary" />
     public class SharedResourceDictionary : ResourceDictionary
     {
         /// <summary>
-        /// Internal cache of loaded dictionaries 
+        /// Internal cache of loaded dictionaries
         /// </summary>
         public static readonly Dictionary<Uri, ResourceDictionary> _sharedDictionaries = new Dictionary<Uri, ResourceDictionary>();
 

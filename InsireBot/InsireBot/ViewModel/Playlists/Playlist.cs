@@ -10,22 +10,63 @@ using System.Windows.Input;
 
 namespace Maple
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <seealso cref="Maple.Core.BaseViewModel{Maple.Data.Playlist}" />
+    /// <seealso cref="Maple.Core.IIsSelected" />
+    /// <seealso cref="Maple.Core.ISequence" />
+    /// <seealso cref="Maple.Core.IIdentifier" />
+    /// <seealso cref="Maple.Core.IChangeState" />
     [DebuggerDisplay("{Title}, {Sequence}")]
     public class Playlist : BaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier, IChangeState
     {
         private readonly DialogViewModel _dialogViewModel;
         public int ItemCount => Items?.Count ?? 0;
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is new.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is new; otherwise, <c>false</c>.
+        /// </value>
         public bool IsNew => Model.IsNew;
+        /// <summary>
+        /// Gets a value indicating whether this instance is deleted.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is deleted; otherwise, <c>false</c>.
+        /// </value>
         public bool IsDeleted => Model.IsDeleted;
 
+        /// <summary>
+        /// Gets the load from file command.
+        /// </summary>
+        /// <value>
+        /// The load from file command.
+        /// </value>
         public ICommand LoadFromFileCommand { get; private set; }
+        /// <summary>
+        /// Gets the load from folder command.
+        /// </summary>
+        /// <value>
+        /// The load from folder command.
+        /// </value>
         public ICommand LoadFromFolderCommand { get; private set; }
+        /// <summary>
+        /// Gets the load from URL command.
+        /// </summary>
+        /// <value>
+        /// The load from URL command.
+        /// </value>
         public ICommand LoadFromUrlCommand { get; private set; }
 
         /// <summary>
-        /// contains indices of played <see cref="IMediaItem"/>
+        /// contains indices of played <see cref="IMediaItem" />
         /// </summary>
+        /// <value>
+        /// The history.
+        /// </value>
         public Stack<int> History { get; private set; }
 
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
@@ -33,8 +74,11 @@ namespace Maple
 
         private MediaItem _currentItem;
         /// <summary>
-        /// is <see cref="SetActive"/> when a IMediaPlayer picks a <see cref="IMediaItem"/> from this
+        /// is <see cref="SetActive" /> when a IMediaPlayer picks a <see cref="IMediaItem" /> from this
         /// </summary>
+        /// <value>
+        /// The current item.
+        /// </value>
         public MediaItem CurrentItem
         {
             get { return _currentItem; }
@@ -45,6 +89,9 @@ namespace Maple
         /// <summary>
         /// the index of this item if its part of a collection
         /// </summary>
+        /// <value>
+        /// The sequence.
+        /// </value>
         public int Sequence
         {
             get { return _sequence; }
@@ -55,6 +102,9 @@ namespace Maple
         /// <summary>
         /// Youtube Property
         /// </summary>
+        /// <value>
+        /// The privacy status.
+        /// </value>
         public PrivacyStatus PrivacyStatus
         {
             get { return _privacyStatus; }
@@ -65,6 +115,9 @@ namespace Maple
         /// <summary>
         /// if this list is part of a ui bound collection and selected this should be true
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is selected; otherwise, <c>false</c>.
+        /// </value>
         public bool IsSelected
         {
             get { return _isSelected; }
@@ -75,6 +128,9 @@ namespace Maple
         /// <summary>
         /// indicates whether the next item is selected randomly from the list of items on a call of Next()
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is shuffeling; otherwise, <c>false</c>.
+        /// </value>
         public bool IsShuffeling
         {
             get { return _isShuffeling; }
@@ -85,6 +141,9 @@ namespace Maple
         /// <summary>
         /// the title/name of this playlist (human readable identifier)
         /// </summary>
+        /// <value>
+        /// The title.
+        /// </value>
         public string Title
         {
             get { return _title; }
@@ -95,6 +154,9 @@ namespace Maple
         /// <summary>
         /// the description of this playlist
         /// </summary>
+        /// <value>
+        /// The description.
+        /// </value>
         public string Description
         {
             get { return _description; }
@@ -102,6 +164,12 @@ namespace Maple
         }
 
         private int _id;
+        /// <summary>
+        /// Gets the identifier.
+        /// </summary>
+        /// <value>
+        /// The identifier.
+        /// </value>
         public int Id
         {
             get { return _id; }
@@ -109,6 +177,12 @@ namespace Maple
         }
 
         private ObservableCollection<RepeatMode> _repeatModes;
+        /// <summary>
+        /// Gets the repeat modes.
+        /// </summary>
+        /// <value>
+        /// The repeat modes.
+        /// </value>
         public ObservableCollection<RepeatMode> RepeatModes
         {
             get { return _repeatModes; }
@@ -117,14 +191,23 @@ namespace Maple
 
         private RepeatMode _repeatMode;
         /// <summary>
-        /// defines what happens when the last <see cref="IMediaItem"/> of <see cref="Items"/> is <see cref="SetActive"/> and the <see cref="Next"/> is requested
+        /// defines what happens when the last <see cref="IMediaItem" /> of <see cref="Items" /> is <see cref="SetActive" /> and the <see cref="Next" /> is requested
         /// </summary>
+        /// <value>
+        /// The repeat mode.
+        /// </value>
         public RepeatMode RepeatMode
         {
             get { return _repeatMode; }
             set { SetValue(ref _repeatMode, value, OnChanged: () => Model.RepeatMode = (int)value); }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Playlist"/> class.
+        /// </summary>
+        /// <param name="dialogViewModel">The dialog view model.</param>
+        /// <param name="model">The model.</param>
+        /// <exception cref="System.ArgumentException"></exception>
         public Playlist(DialogViewModel dialogViewModel, Data.Playlist model)
             : base(model)
         {
@@ -221,6 +304,10 @@ namespace Maple
             CurrentItem = null;
         }
 
+        /// <summary>
+        /// Adds the specified item.
+        /// </summary>
+        /// <param name="item">The item.</param>
         public virtual void Add(MediaItem item)
         {
             using (_busyStack.GetToken())
@@ -241,6 +328,10 @@ namespace Maple
             }
         }
 
+        /// <summary>
+        /// Adds the range.
+        /// </summary>
+        /// <param name="items">The items.</param>
         public virtual void AddRange(IEnumerable<MediaItem> items)
         {
             using (_busyStack.GetToken())
@@ -264,6 +355,10 @@ namespace Maple
             }
         }
 
+        /// <summary>
+        /// Removes the specified item.
+        /// </summary>
+        /// <param name="item">The item.</param>
         public virtual void Remove(MediaItem item)
         {
             using (_busyStack.GetToken())
@@ -273,6 +368,13 @@ namespace Maple
             }
         }
 
+        /// <summary>
+        /// Determines whether this instance can remove the specified item.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns>
+        ///   <c>true</c> if this instance can remove the specified item; otherwise, <c>false</c>.
+        /// </returns>
         public virtual bool CanRemove(MediaItem item)
         {
             if (Items == null || Items.Count == 0 || item as MediaItem == null)
@@ -281,6 +383,11 @@ namespace Maple
             return Items.Contains(item) && !IsBusy;
         }
 
+        /// <summary>
+        /// Nexts this instance.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="System.NotImplementedException">RepeatMode</exception>
         public virtual MediaItem Next()
         {
             using (_busyStack.GetToken())
@@ -385,9 +492,11 @@ namespace Maple
         }
 
         /// <summary>
-        /// Removes the last <see cref="MediaItem"/> from <seealso cref="History"/> and returns it
+        /// Removes the last <see cref="MediaItem" /> from <seealso cref="History" /> and returns it
         /// </summary>
-        /// <returns>returns the last <see cref="MediaItem"/> from <seealso cref="History"/></returns>
+        /// <returns>
+        /// returns the last <see cref="MediaItem" /> from <seealso cref="History" />
+        /// </returns>
         public virtual MediaItem Previous()
         {
             using (_busyStack.GetToken())
@@ -421,11 +530,23 @@ namespace Maple
             }
         }
 
+        /// <summary>
+        /// Determines whether this instance can next.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if this instance can next; otherwise, <c>false</c>.
+        /// </returns>
         public bool CanNext()
         {
             return Items != null && Items.Any();
         }
 
+        /// <summary>
+        /// Determines whether this instance can previous.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if this instance can previous; otherwise, <c>false</c>.
+        /// </returns>
         public bool CanPrevious()
         {
             return History != null && History.Any();

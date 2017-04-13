@@ -4,8 +4,15 @@ using Maple.Youtube;
 
 namespace Maple
 {
+    /// <summary>
+    /// Factory class that provides an Instance of <see cref="IContainer"/>
+    /// </summary>
     public class DependencyInjectionFactory
     {
+        /// <summary>
+        /// Gets the container.
+        /// </summary>
+        /// <returns></returns>
         public static IContainer GetContainer()
         {
             var container = new Container(rules => rules.WithoutThrowOnRegisteringDisposableTransient());

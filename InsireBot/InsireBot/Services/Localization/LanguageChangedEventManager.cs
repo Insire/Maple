@@ -12,6 +12,11 @@ namespace Maple
             CurrentManager.ProtectedAddListener(source, listener);
         }
 
+        /// <summary>
+        /// Removes the listener.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="listener">The listener.</param>
         public static void RemoveListener(ITranslationService source, IWeakEventListener listener)
         {
             CurrentManager.ProtectedRemoveListener(source, listener);

@@ -5,6 +5,13 @@ using System.Windows;
 
 namespace Maple
 {
+    /// <summary>
+    /// Poco that holds localization data and supports changing it during runtime
+    /// </summary>
+    /// <seealso cref="Maple.Core.ObservableObject" />
+    /// <seealso cref="System.Windows.IWeakEventListener" />
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
+    /// <seealso cref="System.IDisposable" />
     public class TranslationData : ObservableObject, IWeakEventListener, INotifyPropertyChanged, IDisposable
     {
         private string _key;
