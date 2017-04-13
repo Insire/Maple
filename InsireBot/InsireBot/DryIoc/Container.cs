@@ -24,17 +24,17 @@ THE SOFTWARE.
 
 namespace DryIoc
 {
+    using ImTools;
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics;               // for StackTrace
+    using System.Diagnostics.CodeAnalysis;  // for SupressMessage
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
     using System.Text;
     using System.Threading;
-    using System.Diagnostics.CodeAnalysis;  // for SupressMessage
-    using System.Diagnostics;               // for StackTrace
-    using ImTools;
 
     /// <summary>IoC Container. Documentation is available at https://bitbucket.org/dadhi/dryioc. </summary>
     public sealed partial class Container : IContainer, IScopeAccess
@@ -11221,8 +11221,8 @@ namespace DryIoc
 namespace FastExpressionCompiler
 {
     using System;
-    using System.Linq.Expressions;
     using System.Collections.Generic;
+    using System.Linq.Expressions;
 
     /// <summary>Compiles to delegate using FastExpressionCompiler.</summary>
     public static partial class ExpressionCompiler
@@ -11246,9 +11246,9 @@ namespace FastExpressionCompiler
 
 namespace DryIoc.Experimental
 {
+    using ImTools;
     using System;
     using System.Reflection;
-    using ImTools;
 
     /// <summary>Succinct convention-based, LINQ like API to resolve resolution root at the end.</summary>
     public static class DI
