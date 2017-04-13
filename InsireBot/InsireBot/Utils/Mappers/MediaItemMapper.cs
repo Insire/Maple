@@ -13,7 +13,8 @@ namespace Maple
                 cfg.CreateMap<Data.MediaItem, Core.MediaItem>();
                 cfg.CreateMap<Core.MediaItem, Data.MediaItem>()
                     .Ignore(p => p.IsDeleted)
-                    .Ignore(p => p.IsNew);
+                    .Ignore(p => p.IsNew)
+                    .Ignore(p => p.Playlist);
             });
 
             config.AssertConfigurationIsValid();

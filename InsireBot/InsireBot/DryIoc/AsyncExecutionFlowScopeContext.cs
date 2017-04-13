@@ -58,7 +58,7 @@ namespace DryIoc
             return _ambientScope.Value;
 #else
             var scopeEntry = (ScopeEntry<IScope>)System.Runtime.Remoting.Messaging.CallContext.LogicalGetData(_scopeEntryKey);
-            return scopeEntry?.Value;
+            return scopeEntry == null ? null : scopeEntry.Value;
 #endif
         }
 
