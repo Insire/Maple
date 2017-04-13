@@ -78,7 +78,7 @@
     <StartupObject>Maple.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>MapleLogo.ico</ApplicationIcon>
+    <ApplicationIcon>..\Resources\Images\logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper, Version=6.0.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
@@ -354,9 +354,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="MapleLogo.ico" />
+    <Resource Include="..\Resources\Images\logo.ico">
+      <Link>Resources\logo.ico</Link>
+    </Resource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

@@ -29,7 +29,7 @@
     </metro:MetroWindow.LeftWindowCommands>
 
     <DockPanel x:Name="Root">
-        
+
         <!--  DataContext: StatusBar  -->
         <materialDesign:ColorZone Padding="4"
                                   materialDesign:ShadowAssist.ShadowDepth="Depth2"
