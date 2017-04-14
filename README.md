@@ -9,8 +9,8 @@ After a long hiatus, I'm continuing my rewrite and try to improve on my previous
 ![Mainwindow](MainWindow.gif)
 
 ## Compile Requirements:
- - Visual Studio 2015 Community Edition or better
- - .NET Framework 4.5.2
+ - Visual Studio 2017 Community Edition or better
+ - .NET Framework 4.5.2, C# 7
  - Windows 7 or better
 
 ## Features
@@ -21,17 +21,18 @@ After a long hiatus, I'm continuing my rewrite and try to improve on my previous
 - Localization (German, English ...)
 
 ## Libraries used
-- [MaterialDesignInXamlToolkit](https://github.com/ButchersBoy/MaterialDesignInXamlToolkit)
-- [MahApps.Metro](https://github.com/MahApps/MahApps.Metro)
-- [MahApps.Metro.IconPacks](https://github.com/MahApps/MahApps.Metro.IconPacks)
-- [log4net](https://github.com/apache/log4net)
-- [AutoMapper](https://github.com/AutoMapper/AutoMapper)
-- [YoutubeExtractor](https://github.com/flagbug/YoutubeExtractor)
-- [Google Youtube Api v3](https://www.nuget.org/packages/Google.Apis.youtube.v3/)
-- [NAudio](https://github.com/naudio/NAudio)
-- [Dapper](https://github.com/StackExchange/dapper-dot-net)
-- [System.Data.SQLite](https://system.data.sqlite.org/index.html/doc/trunk/www/index.wiki)
-- [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)
+- [MaterialDesignInXamlToolkit](https://github.com/ButchersBoy/MaterialDesignInXamlToolkit) - UI Library
+- [MahApps.Metro](https://github.com/MahApps/MahApps.Metro) - UI Library
+- [MahApps.Metro.IconPacks](https://github.com/MahApps/MahApps.Metro.IconPacks) - UI Library
+- [log4net](https://github.com/apache/log4net) - logging framework
+- [AutoMapper](https://github.com/AutoMapper/AutoMapper) - convention-based object-object mapper
+- [YoutubeExtractor](https://github.com/flagbug/YoutubeExtractor) - retrieval of video links from youtube
+- [Google Api v3](https://github.com/google/google-api-dotnet-client) - Google APIs Client Library
+- [NAudio](https://github.com/naudio/NAudio) - Audio and MIDI library
+- [System.Data.SQLite](https://system.data.sqlite.org/index.html/doc/trunk/www/index.wiki) - ADO.NET provider for sqlite
+- [EntityFramework](https://github.com/aspnet/EntityFramework6) - ORM mapper
+- [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json) - JSON framework 
+- [DryIoc](https://bitbucket.org/dadhi/dryioc) - IoC container
 
 ## MIT License
 Copyright (c) 2017 

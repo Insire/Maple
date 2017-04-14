@@ -20,6 +20,8 @@ namespace Maple.Core
             _log = LogManager.GetLogger(typeof(LoggingService));
         }
 
+        public event LogMessageReceivedEventHandler LogMessageReceived;
+
         /// <summary>
         /// Errors the specified message.
         /// </summary>
@@ -65,6 +67,7 @@ namespace Maple.Core
         public void Info(object message)
         {
             _log.Info(message);
+            LogMessageReceived?.Invoke(this, new LogMessageReceivedEventEventArgs((string)message));
         }
 
         /// <summary>
@@ -75,6 +78,7 @@ namespace Maple.Core
         public void Info(object message, Exception exception)
         {
             _log.Info(message, exception);
+            LogMessageReceived?.Invoke(this, new LogMessageReceivedEventEventArgs((string)message));
         }
 
         /// <summary>

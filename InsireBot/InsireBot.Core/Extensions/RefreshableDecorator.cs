@@ -1,5 +1,6 @@
 ﻿using Maple.Localization.Properties;
 using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Maple.Core
@@ -68,6 +69,18 @@ namespace Maple.Core
         {
             _log.Info($"{Resources.Saving} {_refreshable.GetType().Name}");
             _refreshable.Save();
+        }
+
+        public async Task SaveAsync()
+        {
+            _log.Info($"{Resources.Saving} {_refreshable.GetType().Name}");
+            await _refreshable.LoadAsync();
+        }
+
+        public async Task LoadAsync()
+        {
+            _log.Info($"{Resources.Loading} {_refreshable.GetType().Name}");
+            await _refreshable.LoadAsync();
         }
     }
 }

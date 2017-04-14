@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Maple.Localization.Properties
-{
-
-
+namespace Maple.Localization.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -480,6 +480,24 @@ namespace Maple.Localization.Properties
         public static string SavingState {
             get {
                 return ResourceManager.GetString("SavingState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dateiauswahl.
+        /// </summary>
+        public static string SelectFiles {
+            get {
+                return ResourceManager.GetString("SelectFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ordnerauswahl.
+        /// </summary>
+        public static string SelectFolder {
+            get {
+                return ResourceManager.GetString("SelectFolder", resourceCulture);
             }
         }
         

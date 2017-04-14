@@ -1,4 +1,5 @@
 ﻿using Maple.Core;
+using Maple.Localization.Properties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;
@@ -269,10 +270,11 @@ namespace Maple
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Playlist"/> class.
+        /// Initializes a new instance of the <see cref="Playlist" /> class.
         /// </summary>
         /// <param name="dialogViewModel">The dialog view model.</param>
         /// <param name="model">The model.</param>
+        /// <exception cref="System.ArgumentNullException">dialogViewModel</exception>
         /// <exception cref="System.ArgumentException"></exception>
         public Playlist(DialogViewModel dialogViewModel, Data.Playlist model)
             : base(model)
@@ -355,7 +357,13 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                return _dialogViewModel.ShowFolderBrowserDialog();
+                var options = new FileSystemBrowserOptions()
+                {
+                    CanCancel = true,
+                    MultiSelection = false,
+                    Title = Resources.SelectFolder,
+                };
+                return _dialogViewModel.ShowFolderBrowserDialog(options);
             }
         }
 
@@ -368,7 +376,13 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                return _dialogViewModel.ShowFileBrowserDialog();
+                var options = new FileSystemBrowserOptions()
+                {
+                    CanCancel = true,
+                    MultiSelection = false,
+                    Title = Resources.SelectFiles,
+                };
+                return _dialogViewModel.ShowFileBrowserDialog(options);
             }
         }
 

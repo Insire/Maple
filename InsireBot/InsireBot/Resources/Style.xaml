@@ -33,15 +33,15 @@
     <!--  endregion  -->
 
     <!--#region TextBlock Styles-->
-    <!--<Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
+    <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
         <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>-->
+    </Style>
     <!--#endregion-->
 
     <!--#region TextBox Styles-->
-    <!--<Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="{x:Type TextBox}">
+    <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="{x:Type TextBox}">
         <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>-->
+    </Style>
     <!--#endregion-->
 
     <!--#region  Icon Styles-->

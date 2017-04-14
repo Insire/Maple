@@ -20,6 +20,8 @@ namespace Maple.Data
                 return;
             }
 
+            base.Seed(context);
+
             context.Playlists
                    .Add(new Playlist
                    {
@@ -56,7 +58,7 @@ namespace Maple.Data
                        Sequence = 0,
                    });
 
-            base.Seed(context);
+            context.SaveChanges();
         }
     }
 }

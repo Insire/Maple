@@ -4,6 +4,7 @@ namespace Maple.Core
 {
     public interface IMapleLog
     {
+        event LogMessageReceivedEventHandler LogMessageReceived;
         //
         // Summary:
         //     Logs a message object with the log4net.Core.Level.Error level.

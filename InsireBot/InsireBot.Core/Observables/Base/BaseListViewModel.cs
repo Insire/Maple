@@ -194,6 +194,7 @@ namespace Maple.Core
             {
                 OnChanged = (hasItems) => IsBusy = hasItems
             };
+
             View = CollectionViewSource.GetDefaultView(Items);
 
             // initial Notification, so that UI recognizes the value

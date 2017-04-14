@@ -1,0 +1,32 @@
+﻿<local:IoCWindow x:Class="Maple.SplashScreen"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                 xmlns:local="clr-namespace:Maple"
+                 Title="SplashScreen"
+                 ResizeMode="NoResize"
+                 ShowCloseButton="False"
+                 ShowIconOnTitleBar="False"
+                 ShowMaxRestoreButton="False"
+                 ShowMinButton="False"
+                 ShowTitleBar="False"
+                 Style="{StaticResource BaseWindowStyle}"
+                 WindowStartupLocation="CenterScreen"
+                 WindowTransitionsEnabled="True">
+    <DockPanel Margin="10">
+        <TextBlock HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   DockPanel.Dock="Bottom"
+                   Text="{Binding Message}" />
+        <Image Source="Resources/logo_withoutbackground.png">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Loaded">
+                    <i:InvokeCommandAction Command="{Binding LoadCommand}" />
+                </i:EventTrigger>
+                <i:EventTrigger EventName="Unloaded">
+                    <i:InvokeCommandAction Command="{Binding DisposeCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Image>
+    </DockPanel>
+</local:IoCWindow>

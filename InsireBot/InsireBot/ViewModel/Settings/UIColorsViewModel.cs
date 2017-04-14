@@ -4,12 +4,13 @@ using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="Maple.Core.ObservableObject" />
     /// <seealso cref="Maple.Core.ILoadableViewModel" />
@@ -160,6 +161,17 @@ namespace Maple
             ApplyBase(this, Properties.Settings.Default.UseDarkTheme);
 
             IsLoaded = true;
+        }
+
+        public Task SaveAsync()
+        {
+            return Task.Run(() => Save());
+        }
+
+        public Task LoadAsync()
+        {
+            Load();
+            return Task.FromResult(0);
         }
     }
 }

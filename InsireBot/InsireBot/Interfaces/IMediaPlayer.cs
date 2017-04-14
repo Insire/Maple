@@ -4,7 +4,7 @@ using System;
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="System.IDisposable" />
     public interface IMediaPlayer : IDisposable

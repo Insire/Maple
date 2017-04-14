@@ -4,6 +4,7 @@ using Maple.Properties;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Maple
@@ -12,24 +13,23 @@ namespace Maple
     {
         private IContainer _container;
         private ITranslationService _manager;
+        private IMapleLog _log;
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             InitializeResources();
             InitializeLocalization();
 
             _container = DependencyInjectionFactory.GetContainer();
             _manager = _container.Resolve<ITranslationService>();
+            _log = _container.Resolve<IMapleLog>();
 
-            var shell = new Shell(_manager, _container.Resolve<UIColorsViewModel>())
-            {
-                DataContext = _container.Resolve<ShellViewModel>(),
-            };
+            var splash = ShowSplashScreen();
 
-            shell.Show();
+            _log.Info("Loading data");
+            await Task.WhenAll(LoadApplicationData());
 
-            foreach (var item in _container.Resolve<IEnumerable<ILoadableViewModel>>())
-                item.Load();
+            ShowShell(splash);
 
             base.OnStartup(e);
         }
@@ -64,6 +64,47 @@ namespace Maple
         private void InitializeLocalization()
         {
             Thread.CurrentThread.CurrentCulture = Settings.Default.StartUpCulture;
+        }
+
+        private SplashScreen ShowSplashScreen()
+        {
+            var vm = _container.Resolve<UIColorsViewModel>();
+            var splash = new SplashScreen(_manager, vm)
+            {
+                DataContext = _container.Resolve<SplashScreenViewModel>(),
+            };
+            splash.Show();
+            return splash;
+        }
+
+        private void ShowShell(SplashScreen splash)
+        {
+            var colors = _container.Resolve<UIColorsViewModel>();
+            var vm = _container.Resolve<SplashScreenViewModel>();
+
+            var shell = new Shell(_manager, colors)
+            {
+                DataContext = _container.Resolve<ShellViewModel>(),
+                //Visibility = Visibility.Hidden,
+            };
+
+            shell.Loaded += (o, args) =>
+            {
+                //shell.Visibility = Visibility.Visible;
+                splash.Close();
+            };
+
+            shell.Show();
+        }
+
+        private IList<Task> LoadApplicationData()
+        {
+            var tasks = new List<Task>();
+            foreach (var item in _container.Resolve<IEnumerable<ILoadableViewModel>>())
+                tasks.Add(item.LoadAsync());
+
+            tasks.Add(Task.Delay(TimeSpan.FromSeconds(2)));
+            return tasks;
         }
 
         private void SaveState()

@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Resources\Images\logo.ico = Resources\Images\logo.ico
 		Resources\Images\logo.png = Resources\Images\logo.png
 		Resources\Images\logo_small.ico = Resources\Images\logo_small.ico
+		Resources\Images\logo_withoutbackground.png = Resources\Images\logo_withoutbackground.png
 		..\README.md = ..\README.md
 		Settings.XamlStyler = Settings.XamlStyler
 	EndProjectSection

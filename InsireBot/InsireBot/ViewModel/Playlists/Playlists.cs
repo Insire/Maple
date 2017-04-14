@@ -2,6 +2,7 @@
 using Maple.Localization.Properties;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Maple
@@ -117,6 +118,25 @@ namespace Maple
             });
 
             Add(playlist);
+        }
+
+        public Task SaveAsync()
+        {
+            return Task.Run(() => Save());
+        }
+
+        public async Task LoadAsync()
+        {
+            Clear();
+
+            using (var context = _repositoryFactory())
+            {
+                var result = await context.GetAllPlaylistsAsync();
+                AddRange(result);
+            }
+
+            SelectedItem = Items.FirstOrDefault();
+            IsLoaded = true;
         }
     }
 }

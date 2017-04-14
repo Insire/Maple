@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Maple
 {
@@ -66,6 +67,17 @@ namespace Maple
         public void Load()
         {
             Thread.CurrentThread.CurrentCulture = Languages.First(p => p.TwoLetterISOLanguageName == "en");
+        }
+
+        public Task SaveAsync()
+        {
+            return Task.Run(() => Save());
+        }
+
+        public Task LoadAsync()
+        {
+            Load();
+            return Task.FromResult(0);
         }
     }
 }

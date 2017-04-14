@@ -3,7 +3,7 @@
 namespace Maple.Core
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public static class EventExtension
     {

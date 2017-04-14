@@ -32,6 +32,7 @@ namespace Maple
                 container.Register<MediaPlayers>(Reuse.Singleton);
                 container.Register<OptionsViewModel>(Reuse.Singleton);
                 container.Register<UIColorsViewModel>(Reuse.Singleton);
+                container.Register<SplashScreenViewModel>(Reuse.Singleton);
 
                 // generic ViewModels
                 container.Register<AudioDevices>(Reuse.Singleton);
@@ -61,6 +62,7 @@ namespace Maple
                 container.Register<ITranslationProvider, ResxTranslationProvider>(Reuse.Singleton);
                 container.Register<ITranslationService, TranslationService>(Reuse.Singleton);
                 container.Register<ISequenceProvider, SequenceService>();
+                container.Register<FileSystemViewModel>();
             }
         }
     }

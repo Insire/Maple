@@ -13,8 +13,8 @@ namespace Maple
     /// <seealso cref="Maple.Core.BaseListViewModel{Maple.Scene}" />
     public class Scenes : BaseListViewModel<Scene>
     {
-        private ITranslationService _manager;
-        private IMapleLog _log;
+        private readonly ITranslationService _manager;
+        private readonly IMapleLog _log;
 
         /// <summary>
         /// Gets the open color options command.

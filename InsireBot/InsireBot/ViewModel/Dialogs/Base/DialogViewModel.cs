@@ -5,19 +5,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="Maple.Core.ObservableObject" />
     public class DialogViewModel : ObservableObject
     {
         private readonly IYoutubeUrlParseService _service;
         private readonly IMediaItemMapper _mediaItemMapper;
-
+        private readonly FileSystemViewModel _fileSystemViewModel;
         /// <summary>
         /// The dialog closed
         /// </summary>
@@ -30,20 +31,6 @@ namespace Maple
         /// The exception dialog view model.
         /// </value>
         public ExceptionDialogViewModel ExceptionDialogViewModel { get; private set; }
-        /// <summary>
-        /// Gets the file browser dialog view model.
-        /// </summary>
-        /// <value>
-        /// The file browser dialog view model.
-        /// </value>
-        public FileBrowserDialogViewModel FileBrowserDialogViewModel { get; private set; }
-        /// <summary>
-        /// Gets the folder browser dialog view model.
-        /// </summary>
-        /// <value>
-        /// The folder browser dialog view model.
-        /// </value>
-        public FolderBrowserDialogViewModel FolderBrowserDialogViewModel { get; private set; }
         /// <summary>
         /// Gets the message dialog view model.
         /// </summary>
@@ -167,18 +154,17 @@ namespace Maple
         /// </summary>
         /// <param name="service">The service.</param>
         /// <param name="mediaItemMapper">The media item mapper.</param>
-        public DialogViewModel(IYoutubeUrlParseService service, IMediaItemMapper mediaItemMapper)
+        public DialogViewModel(IYoutubeUrlParseService service, IMediaItemMapper mediaItemMapper, FileSystemViewModel fileSystemViewModel)
         {
-            _service = service;
-            _mediaItemMapper = mediaItemMapper;
+            _service = service ?? throw new ArgumentNullException(nameof(service));
+            _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper));
+            _fileSystemViewModel = fileSystemViewModel ?? throw new ArgumentNullException(nameof(fileSystemViewModel));
 
             CloseDialogCommand = new RelayCommand(Close, () => CanClose());
             CancelDialogCommand = new RelayCommand(Cancel, () => CanCancel());
             AcceptDialogCommand = new RelayCommand(Accept, () => CanAccept());
 
             ExceptionDialogViewModel = new ExceptionDialogViewModel();
-            FileBrowserDialogViewModel = new FileBrowserDialogViewModel();
-            FolderBrowserDialogViewModel = new FolderBrowserDialogViewModel();
             MessageDialogViewModel = new MessageDialogViewModel();
             ProgressDialogViewModel = new ProgressDialogViewModel();
         }
@@ -232,12 +218,33 @@ namespace Maple
         /// </summary>
         /// <returns></returns>
         /// <exception cref="System.InvalidOperationException"></exception>
-        public Task ShowFileBrowserDialog()
+        public async Task<(DialogResult Result, IList<IFileSystemFile> Files)> ShowFileBrowserDialog(FileSystemBrowserOptions options)
         {
             if (IsOpen)
                 throw new InvalidOperationException(Resources.DialogOpenAlready);
 
-            return ShowExceptionDialog(new NotImplementedException(Resources.DialogOpenAlready));
+            var tuple = default((DialogResult Result, IList<IFileSystemFile> Files));
+            var viewModel = new FileBrowserDialogViewModel(_fileSystemViewModel, options);
+
+            Context = viewModel;
+            Title = options.Title;
+            IsCancelVisible = options.CanCancel;
+
+            AcceptAction = () =>
+            {
+                var items = viewModel.FileSystemViewModel.SelectedItems;
+                tuple = (DialogResult.OK, items.Select(p => p as IFileSystemFile).Where(p => p != null).ToList());
+            };
+
+            CancelAction = () =>
+            {
+                var items = viewModel.FileSystemViewModel.SelectedItems;
+                tuple = (DialogResult.Cancel, new List<IFileSystemFile>());
+            };
+
+            await Open();
+
+            return tuple;
         }
 
         /// <summary>
@@ -245,12 +252,33 @@ namespace Maple
         /// </summary>
         /// <returns></returns>
         /// <exception cref="System.InvalidOperationException"></exception>
-        public Task ShowFolderBrowserDialog()
+        public async Task<(DialogResult Result, IFileSystemDirectory Directory)> ShowFolderBrowserDialog(FileSystemBrowserOptions options)
         {
             if (IsOpen)
                 throw new InvalidOperationException(Resources.DialogOpenAlready);
 
-            return ShowExceptionDialog(new NotImplementedException());
+            var tuple = default((DialogResult Result, IFileSystemDirectory Directory));
+            var viewModel = new FileBrowserDialogViewModel(_fileSystemViewModel, options);
+
+            Context = viewModel;
+            Title = options.Title;
+            IsCancelVisible = options.CanCancel;
+
+            AcceptAction = () =>
+            {
+                var items = viewModel.FileSystemViewModel.SelectedItems;
+                tuple = (DialogResult.OK, items.FirstOrDefault() as IFileSystemDirectory);
+            };
+
+            CancelAction = () =>
+            {
+                var items = viewModel.FileSystemViewModel.SelectedItems;
+                tuple = (DialogResult.Cancel, default(IFileSystemDirectory));
+            };
+
+            await Open();
+
+            return tuple;
         }
 
         /// <summary>

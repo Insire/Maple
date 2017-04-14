@@ -1,11 +1,12 @@
 ﻿using Maple.Core;
 using System.Globalization;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="Maple.Core.ObservableObject" />
     /// <seealso cref="Maple.Core.ILoadableViewModel" />
@@ -93,6 +94,18 @@ namespace Maple
         public void Load()
         {
             _manager.Load();
+            SelectedCulture = Properties.Settings.Default.StartUpCulture;
+            IsLoaded = true;
+        }
+
+        public async Task SaveAsync()
+        {
+            await _manager.SaveAsync();
+        }
+
+        public async Task LoadAsync()
+        {
+            await _manager.LoadAsync();
             SelectedCulture = Properties.Settings.Default.StartUpCulture;
             IsLoaded = true;
         }

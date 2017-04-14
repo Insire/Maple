@@ -282,4 +282,10 @@
   <data name="Saving" xml:space="preserve">
     <value>Speichere</value>
   </data>
+  <data name="SelectFolder" xml:space="preserve">
+    <value>Ordnerauswahl</value>
+  </data>
+  <data name="SelectFiles" xml:space="preserve">
+    <value>Dateiauswahl</value>
+  </data>
 </root>

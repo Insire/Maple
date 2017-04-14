@@ -3,6 +3,7 @@ using Maple.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Maple
 {
@@ -54,6 +55,19 @@ namespace Maple
             return viewModel;
         }
 
+        public async Task<Playlist> GetPlaylistByIdAsync(int id)
+        {
+            var playlist = await Task.Run(() => _context.Playlists.FirstOrDefault(p => p.Id == id));
+
+            if (playlist == null)
+                return default(Playlist);
+
+            var viewModel = new Playlist(_dialog, playlist);
+            viewModel.AddRange(GetMediaItemByPlaylistId(playlist.Id));
+
+            return viewModel;
+        }
+
         public IList<Playlist> GetAllPlaylists()
         {
             var playlists = new List<Playlist>();
@@ -65,6 +79,17 @@ namespace Maple
                 playlist.AddRange(mediaItems.Where(p => p.PlaylistId == playlist.Id));
 
             return playlists;
+        }
+
+        public async Task<IList<Playlist>> GetAllPlaylistsAsync()
+        {
+            var playlists = await Task.Run(() => _context.Playlists.AsEnumerable().Select(p => new Playlist(_dialog, p)));
+            var mediaItems = await GetAllMediaItemsAsync();
+
+            foreach (var playlist in playlists)
+                playlist.AddRange(mediaItems.Where(p => p.PlaylistId == playlist.Id));
+
+            return playlists.ToList();
         }
 
         public void Save(Playlist playlist)
@@ -123,22 +148,65 @@ namespace Maple
 
         public MediaPlayer GetMainMediaPlayer()
         {
-            var player = _context.Mediaplayers.FirstOrDefault(p => p.IsPrimary);
+            using (_busyStack.GetToken())
+            {
+                var player = _context.Mediaplayers.FirstOrDefault(p => p.IsPrimary);
 
-            if (player != null)
-                return new MainMediaPlayer(_manager, _mediaPlayer, player, GetPlaylistById(player.PlaylistId), _devices);
+                if (player != null)
+                    return new MainMediaPlayer(_manager, _mediaPlayer, player, GetPlaylistById(player.PlaylistId), _devices);
 
-            return default(MediaPlayer);
+                return default(MediaPlayer);
+            }
+        }
+
+
+        public async Task<MediaPlayer> GetMainMediaPlayerAsync()
+        {
+            using (_busyStack.GetToken())
+            {
+                var player = await Task.Run(() => _context.Mediaplayers.FirstOrDefault(p => p.IsPrimary));
+
+                if (player != null)
+                {
+                    var playlist = await GetPlaylistByIdAsync(player.PlaylistId);
+
+                    if (playlist != null)
+                        return new MainMediaPlayer(_manager, _mediaPlayer, player, playlist, _devices);
+                }
+
+                return default(MediaPlayer);
+            }
         }
 
         public MediaPlayer GetMediaPlayerById(int id)
         {
-            var player = _context.Mediaplayers.FirstOrDefault(p => p.Id == id);
+            using (_busyStack.GetToken())
+            {
+                var player = _context.Mediaplayers.FirstOrDefault(p => p.Id == id);
 
-            if (player != null)
-                return new MediaPlayer(_manager, _mediaPlayer, player, GetPlaylistById(player.PlaylistId), _devices);
+                if (player != null)
+                    return new MediaPlayer(_manager, _mediaPlayer, player, GetPlaylistById(player.PlaylistId), _devices);
 
-            return default(MediaPlayer);
+                return default(MediaPlayer);
+            }
+        }
+
+        public async Task<MediaPlayer> GetMediaPlayerByIdAsync(int id)
+        {
+            using (_busyStack.GetToken())
+            {
+                var player = await Task.Run(() => _context.Mediaplayers.FirstOrDefault(p => p.Id == id));
+
+                if (player != null)
+                {
+                    var playlist = await GetPlaylistByIdAsync(player.PlaylistId);
+
+                    if (playlist != null)
+                        return new MediaPlayer(_manager, _mediaPlayer, player, playlist, _devices);
+                }
+
+                return default(MediaPlayer);
+            }
         }
 
         /// <summary>
@@ -147,15 +215,35 @@ namespace Maple
         /// <returns></returns>
         public IList<MediaPlayer> GetAllOptionalMediaPlayers()
         {
-            var result = new List<MediaPlayer>();
-            var players = _context.Mediaplayers
-                                  .Where(p => !p.IsPrimary)
-                                  .AsEnumerable()
-                                  .Select(p => new MediaPlayer(_manager, _mediaPlayer, p, GetPlaylistById(p.PlaylistId), _devices));
+            using (_busyStack.GetToken())
+            {
+                var result = new List<MediaPlayer>();
+                var players = _context.Mediaplayers
+                                      .Where(p => !p.IsPrimary)
+                                      .AsEnumerable()
+                                      .Select(p => new MediaPlayer(_manager, _mediaPlayer, p, GetPlaylistById(p.PlaylistId), _devices));
 
-            result.AddRange(players);
+                result.AddRange(players);
 
-            return result;
+                return result;
+            }
+        }
+
+        public async Task<IList<MediaPlayer>> GetAllOptionalMediaPlayersAsync()
+        {
+            using (_busyStack.GetToken())
+            {
+                var result = new List<MediaPlayer>();
+                var players = await Task.Run(() => _context.Mediaplayers.Where(p => !p.IsPrimary).AsEnumerable());
+
+                foreach (var player in players)
+                {
+                    var playlist = await GetPlaylistByIdAsync(player.PlaylistId);
+                    result.Add(new MediaPlayer(_manager, _mediaPlayer, player, playlist, _devices));
+                }
+
+                return result;
+            }
         }
 
         public void Save(MediaPlayer player)
@@ -240,28 +328,79 @@ namespace Maple
 
         public MediaItem GetMediaItemById(int id)
         {
-            var item = _context.MediaItems.FirstOrDefault(p => p.Id == id);
+            using (_busyStack.GetToken())
+            {
+                var item = _context.MediaItems.FirstOrDefault(p => p.Id == id);
 
-            if (item != null)
-                return new MediaItem(item);
+                if (item != null)
+                    return new MediaItem(item);
 
-            return default(MediaItem);
+                return default(MediaItem);
+            }
+        }
+
+        public async Task<MediaItem> GetMediaItemByIdAsync(int id)
+        {
+            using (_busyStack.GetToken())
+            {
+                var item = await Task.Run(() => _context.MediaItems.FirstOrDefault(p => p.Id == id));
+
+                if (item != null)
+                    return new MediaItem(item);
+
+                return default(MediaItem);
+            }
         }
 
         public IList<MediaItem> GetMediaItemByPlaylistId(int id)
         {
-            var result = new List<MediaItem>();
-            result.AddRange(_context.MediaItems.Where(p => p.PlaylistId == id).AsEnumerable().Select(p => new MediaItem(p)));
+            using (_busyStack.GetToken())
+            {
+                var result = new List<MediaItem>();
+                result.AddRange(_context.MediaItems.Where(p => p.PlaylistId == id).AsEnumerable().Select(p => new MediaItem(p)));
 
-            return result;
+                return result;
+            }
+        }
+
+        public async Task<IList<MediaItem>> GetMediaItemByPlaylistIdAsync(int id)
+        {
+            using (_busyStack.GetToken())
+            {
+                var result = new List<MediaItem>();
+                await Task.Run(() =>
+                {
+                    result.AddRange(_context.MediaItems.Where(p => p.PlaylistId == id).AsEnumerable().Select(p => new MediaItem(p)));
+                });
+
+                return result;
+            }
         }
 
         public IList<MediaItem> GetAllMediaItems()
         {
-            var result = new List<MediaItem>();
-            result.AddRange(_context.MediaItems.AsEnumerable().Select(p => new MediaItem(p)));
+            using (_busyStack.GetToken())
+            {
+                var result = new List<MediaItem>();
+                result.AddRange(_context.MediaItems.AsEnumerable().Select(p => new MediaItem(p)));
 
-            return result;
+                return result;
+            }
+        }
+
+        public async Task<IList<MediaItem>> GetAllMediaItemsAsync()
+        {
+            using (_busyStack.GetToken())
+            {
+                var result = new List<MediaItem>();
+
+                await Task.Run(() =>
+                {
+                    result.AddRange(_context.MediaItems.AsEnumerable().Select(p => new MediaItem(p)));
+                });
+
+                return result;
+            }
         }
 
         public void Save(MediaItem item)

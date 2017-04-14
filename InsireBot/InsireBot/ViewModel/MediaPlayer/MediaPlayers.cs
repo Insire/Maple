@@ -1,11 +1,12 @@
 ﻿using Maple.Core;
 using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="Maple.Core.BaseDataListViewModel{Maple.MediaPlayer, Maple.Data.MediaPlayer}" />
     /// <seealso cref="System.IDisposable" />
@@ -131,13 +132,35 @@ namespace Maple
             if (disposing)
             {
                 foreach (var player in Items)
-                    player.Dispose();
+                    player?.Dispose();
 
                 // Free any other managed objects here.
             }
 
             // Free any unmanaged objects here.
             Disposed = true;
+        }
+
+        public Task SaveAsync()
+        {
+            return Task.Run(() => Save());
+        }
+
+        public async Task LoadAsync()
+        {
+            Items.Clear();
+
+            using (var context = _repositoryFactory())
+            {
+                var main = await Task.Run(() => context.GetMainMediaPlayer());
+
+                Items.Add(main);
+                SelectedItem = main;
+                var others = await Task.Run(() => context.GetAllOptionalMediaPlayers());
+                Items.AddRange(others);
+            }
+
+            IsLoaded = true;
         }
     }
 }
