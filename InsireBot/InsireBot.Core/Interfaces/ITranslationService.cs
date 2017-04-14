@@ -5,7 +5,7 @@ using System.Globalization;
 namespace Maple.Core
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     /// <seealso cref="Maple.Core.IRefreshable" />

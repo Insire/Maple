@@ -40,13 +40,13 @@ namespace Maple
                 container.Register<StatusbarViewModel>(Reuse.Singleton);
 
                 // "Overloads" for already registered ViewModels, so i can query them via the container by resolving the specified interface
-                container.Register<IRefreshable, Playlists>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
-                container.Register<IRefreshable, MediaPlayers>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
-                container.Register<IRefreshable, OptionsViewModel>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
-                container.Register<IRefreshable, UIColorsViewModel>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
+                container.RegisterMapping<ILoadableViewModel, Playlists>(Reuse.Singleton);
+                container.RegisterMapping<ILoadableViewModel, MediaPlayers>(Reuse.Singleton);
+                container.RegisterMapping<ILoadableViewModel, OptionsViewModel>(Reuse.Singleton);
+                container.RegisterMapping<ILoadableViewModel, UIColorsViewModel>(Reuse.Singleton);
 
                 // Decorator for logging Loading and Saving
-                container.Register<IRefreshable, RefreshableDecorator>(setup: Setup.Decorator);
+                container.Register<ILoadableViewModel, RefreshableDecorator>(setup: Setup.Decorator);
             };
 
             void RegisterServices()
@@ -60,6 +60,7 @@ namespace Maple
                 container.Register<IYoutubeUrlParseService, UrlParseService>();
                 container.Register<ITranslationProvider, ResxTranslationProvider>(Reuse.Singleton);
                 container.Register<ITranslationService, TranslationService>(Reuse.Singleton);
+                container.Register<ISequenceProvider, SequenceService>();
             }
         }
     }

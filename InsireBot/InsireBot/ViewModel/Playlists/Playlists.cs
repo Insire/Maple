@@ -1,14 +1,13 @@
 ﻿using Maple.Core;
 using Maple.Localization.Properties;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="Maple.Core.BaseDataListViewModel{Maple.Playlist, Maple.Data.Playlist}" />
     /// <seealso cref="Maple.Core.ILoadableViewModel" />
@@ -18,6 +17,7 @@ namespace Maple
         private readonly IMapleLog _log;
         private readonly DialogViewModel _dialogViewModel;
         private readonly Func<IMediaRepository> _repositoryFactory;
+        private readonly ISequenceProvider _sequenceProvider;
 
         /// <summary>
         /// Gets the play command.
@@ -62,12 +62,13 @@ namespace Maple
         /// <param name="log">The log.</param>
         /// <param name="repo">The repo.</param>
         /// <param name="dialogViewModel">The dialog view model.</param>
-        public Playlists(IMapleLog log, Func<IMediaRepository> repo, DialogViewModel dialogViewModel)
+        public Playlists(IMapleLog log, Func<IMediaRepository> repo, DialogViewModel dialogViewModel, ISequenceProvider sequenceProvider)
             : base()
         {
-            _dialogViewModel = dialogViewModel;
-            _log = log;
-            _repositoryFactory = repo;
+            _sequenceProvider = sequenceProvider ?? throw new ArgumentNullException(nameof(sequenceProvider));
+            _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
+            _log = log ?? throw new ArgumentNullException(nameof(log));
+            _repositoryFactory = repo ?? throw new ArgumentNullException(nameof(repo));
 
             AddCommand = new RelayCommand(Add, CanAdd);
         }
@@ -77,10 +78,10 @@ namespace Maple
         /// </summary>
         public void Load()
         {
-            Items.Clear();
+            Clear();
 
             using (var context = _repositoryFactory())
-                Items.AddRange(context.GetAllPlaylists());
+                AddRange(context.GetAllPlaylists());
 
             SelectedItem = Items.FirstOrDefault();
             IsLoaded = true;
@@ -104,35 +105,18 @@ namespace Maple
         /// </summary>
         public void Add()
         {
+            var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
             var playlist = new Playlist(_dialogViewModel, new Data.Playlist
             {
                 Title = Resources.New,
                 Description = string.Empty,
                 Location = string.Empty,
-                MediaItems = new List<Data.MediaItem>(),
                 RepeatMode = 0,
                 IsShuffeling = false,
-                Sequence = 0,
+                Sequence = sequence,
             });
 
-            if (Count > 0)
-            {
-                var index = 0;
-                var current = Items.Select(p => p.Sequence).ToList();
-                while (current.IndexOf(index) >= 0)
-                {
-                    if (index == int.MaxValue)
-                    {
-                        _log.Error(Resources.MaxPlaylistCountReachedException);
-                        return;
-                    }
-
-                    index++;
-                }
-                playlist.Model.Sequence = index;
-            }
-
-            Items.Add(playlist);
+            Add(playlist);
         }
     }
 }

@@ -56,7 +56,7 @@ namespace Maple.Core
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [StructLayout(LayoutKind.Sequential, Pack = 4, CharSet = CharSet.Auto)]
         public struct WAVEOUTCAPS
@@ -80,7 +80,7 @@ namespace Maple.Core
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [StructLayout(LayoutKind.Sequential, Pack = 4, CharSet = CharSet.Auto)]
         public struct WAVEINCAPS

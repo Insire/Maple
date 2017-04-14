@@ -4,7 +4,7 @@ using YoutubeExtractor;
 namespace Maple.Core
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class MrlExtractionService
     {

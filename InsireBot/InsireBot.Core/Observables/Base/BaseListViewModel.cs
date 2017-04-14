@@ -111,7 +111,7 @@ namespace Maple.Core
         /// <value>
         /// The count.
         /// </value>
-        public int Count => Items.Count;
+        public int Count => Items?.Count ?? 0;
         /// <summary>
         /// Gets the <see cref="T"/> at the specified index.
         /// </summary>

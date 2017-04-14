@@ -5,7 +5,7 @@ using System.Reflection;
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="Maple.Core.ObservableObject" />
     public class StatusbarViewModel : ObservableObject

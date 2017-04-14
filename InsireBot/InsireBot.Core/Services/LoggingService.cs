@@ -4,7 +4,7 @@ using System;
 namespace Maple.Core
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="Maple.Core.IMapleLog" />
     public class LoggingService : IMapleLog

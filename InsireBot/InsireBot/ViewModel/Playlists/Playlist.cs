@@ -1,17 +1,20 @@
 ﻿using Maple.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="Maple.Core.BaseViewModel{Maple.Data.Playlist}" />
     /// <seealso cref="Maple.Core.IIsSelected" />
@@ -21,8 +24,18 @@ namespace Maple
     [DebuggerDisplay("{Title}, {Sequence}")]
     public class Playlist : BaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier, IChangeState
     {
+        private readonly object _itemsLock;
         private readonly DialogViewModel _dialogViewModel;
-        public int ItemCount => Items?.Count ?? 0;
+        public int Count => Items?.Count ?? 0;
+
+        /// <summary>
+        /// The selection changed event
+        /// </summary>
+        public EventHandler SelectionChanged;
+        /// <summary>
+        /// The selection changing event
+        /// </summary>
+        public EventHandler SelectionChanging;
 
         /// <summary>
         /// Gets a value indicating whether this instance is new.
@@ -60,7 +73,34 @@ namespace Maple
         /// The load from URL command.
         /// </value>
         public ICommand LoadFromUrlCommand { get; private set; }
-
+        /// <summary>
+        /// Gets or sets the remove range command.
+        /// </summary>
+        /// <value>
+        /// The remove range command.
+        /// </value>
+        public ICommand RemoveRangeCommand { get; protected set; }
+        /// <summary>
+        /// Gets or sets the remove command.
+        /// </summary>
+        /// <value>
+        /// The remove command.
+        /// </value>
+        public ICommand RemoveCommand { get; protected set; }
+        /// <summary>
+        /// Gets or sets the clear command.
+        /// </summary>
+        /// <value>
+        /// The clear command.
+        /// </value>
+        public ICommand ClearCommand { get; protected set; }
+        /// <summary>
+        /// Gets or sets the add command.
+        /// </summary>
+        /// <value>
+        /// The add command.
+        /// </value>
+        public ICommand AddCommand { get; protected set; }
         /// <summary>
         /// contains indices of played <see cref="IMediaItem" />
         /// </summary>
@@ -72,17 +112,17 @@ namespace Maple
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public RangeObservableCollection<MediaItem> Items { get; private set; }
 
-        private MediaItem _currentItem;
+        private MediaItem _selectedItem;
         /// <summary>
         /// is <see cref="SetActive" /> when a IMediaPlayer picks a <see cref="IMediaItem" /> from this
         /// </summary>
         /// <value>
         /// The current item.
         /// </value>
-        public MediaItem CurrentItem
+        public MediaItem SelectedItem
         {
-            get { return _currentItem; }
-            private set { SetValue(ref _currentItem, value); }
+            get { return _selectedItem; }
+            private set { SetValue(ref _selectedItem, value, OnChanging: () => SelectionChanging?.Raise(this), OnChanged: () => SelectionChanged?.Raise(this)); }
         }
 
         private int _sequence;
@@ -202,6 +242,32 @@ namespace Maple
             set { SetValue(ref _repeatMode, value, OnChanged: () => Model.RepeatMode = (int)value); }
         }
 
+        private ICollectionView _view;
+        /// <summary>
+        /// For grouping, sorting and filtering
+        /// </summary>
+        /// <value>
+        /// The view.
+        /// </value>
+        public ICollectionView View
+        {
+            get { return _view; }
+            protected set { SetValue(ref _view, value); }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="T"/> at the specified index.
+        /// </summary>
+        /// <value>
+        /// The <see cref="T"/>.
+        /// </value>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
+        public MediaItem this[int index]
+        {
+            get { return Items[index]; }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Playlist"/> class.
         /// </summary>
@@ -213,17 +279,21 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                _dialogViewModel = dialogViewModel;
+                _itemsLock = new object();
+                _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
 
                 Items = new RangeObservableCollection<MediaItem>();
                 RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
                 History = new Stack<int>();
 
-                Title = model.Title;
-                Description = model.Description;
-                Id = model.Id;
-                RepeatMode = (RepeatMode)model.RepeatMode;
-                IsShuffeling = model.IsShuffeling;
+                BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
+
+                _title = model.Title;
+                _description = model.Description;
+                _id = model.Id;
+                _repeatMode = (RepeatMode)model.RepeatMode;
+                _isShuffeling = model.IsShuffeling;
+                _sequence = model.Sequence;
 
                 if (model.MediaItems == null)
                     throw new ArgumentException($"{model.MediaItems} cannot be null");
@@ -232,8 +302,11 @@ namespace Maple
 
                 Items.CollectionChanged += (o, e) =>
                 {
-                    OnPropertyChanged(nameof(ItemCount));
+                    OnPropertyChanged(nameof(Count));
                 };
+
+                View = CollectionViewSource.GetDefaultView(Items);
+                OnPropertyChanged(nameof(Count));
 
                 InitializeCommands();
                 IntializeValidation();
@@ -245,13 +318,17 @@ namespace Maple
             LoadFromFileCommand = new AsyncRelayCommand(LoadFromFile, () => CanLoadFromFile());
             LoadFromFolderCommand = new AsyncRelayCommand(LoadFromFolder, () => CanLoadFromFolder());
             LoadFromUrlCommand = new AsyncRelayCommand(LoadFromUrl, () => CanLoadFromUrl());
+
+            RemoveCommand = new RelayCommand<MediaItem>(Remove, CanRemove);
+            RemoveRangeCommand = new RelayCommand<IList>(RemoveRange, CanRemoveRange);
+            ClearCommand = new RelayCommand(() => Clear(), CanClear);
         }
 
         private void IntializeValidation()
         {
             AddRule(Title, new NotNullOrEmptyRule(nameof(Title)));
             AddRule(Description, new NotNullOrEmptyRule(nameof(Description)));
-            AddRule(CurrentItem, new NotNullRule(nameof(CurrentItem)));
+            AddRule(SelectedItem, new NotNullRule(nameof(SelectedItem)));
             AddRule(RepeatModes, new NotNullRule(nameof(RepeatModes)));
             AddRule(Items, new NotNullRule(nameof(Items)));
         }
@@ -261,7 +338,10 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var items = await _dialogViewModel.ShowUrlParseDialog();
-                var result = items.Select(p => new MediaItem(p));
+                var result = items.Select(p => new MediaItem(p)
+                {
+                    PlaylistId = Id,
+                });
                 Items.AddRange(result);
             }
         }
@@ -301,7 +381,18 @@ namespace Maple
         {
             Items.Clear();
             History.Clear();
-            CurrentItem = null;
+            SelectedItem = null;
+        }
+
+        /// <summary>
+        /// Determines whether this instance can clear.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if this instance can clear; otherwise, <c>false</c>.
+        /// </returns>
+        private bool CanClear()
+        {
+            return Items?.Any() == true;
         }
 
         /// <summary>
@@ -323,8 +414,8 @@ namespace Maple
                 item.PlaylistId = Id;
                 Items.Add(item);
 
-                if (CurrentItem == null)
-                    CurrentItem = Items.First();
+                if (SelectedItem == null)
+                    SelectedItem = Items.First();
             }
         }
 
@@ -336,6 +427,7 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
+                var added = false;
                 var currentIndex = -1;
                 if (Items.Any())
                 {
@@ -348,10 +440,12 @@ namespace Maple
                     currentIndex++;
                     item.Sequence = currentIndex;
                     Add(item);
+
+                    added = true;
                 }
 
-                if (CurrentItem == null)
-                    CurrentItem = Items.First();
+                if (SelectedItem == null && added)
+                    SelectedItem = Items.First();
             }
         }
 
@@ -369,6 +463,34 @@ namespace Maple
         }
 
         /// <summary>
+        /// Removes the range.
+        /// </summary>
+        /// <param name="items">The items.</param>
+        /// <exception cref="System.ArgumentNullException">items</exception>
+        public virtual void RemoveRange(IEnumerable<MediaItem> items)
+        {
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
+
+            using (_busyStack.GetToken())
+                Items.RemoveRange(items);
+        }
+
+        /// <summary>
+        /// Removes the range.
+        /// </summary>
+        /// <param name="items">The items.</param>
+        /// <exception cref="System.ArgumentNullException">items</exception>
+        public virtual void RemoveRange(IList items)
+        {
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
+
+            using (_busyStack.GetToken())
+                Items.RemoveRange(items);
+        }
+
+        /// <summary>
         /// Determines whether this instance can remove the specified item.
         /// </summary>
         /// <param name="item">The item.</param>
@@ -381,6 +503,23 @@ namespace Maple
                 return false;
 
             return Items.Contains(item) && !IsBusy;
+        }
+
+        protected virtual bool CanRemoveRange(IEnumerable<MediaItem> items)
+        {
+            return CanClear() && items != null && items.Any(p => Items.Contains(p));
+        }
+
+        /// <summary>
+        /// Determines whether this instance [can remove range] the specified items.
+        /// </summary>
+        /// <param name="items">The items.</param>
+        /// <returns>
+        ///   <c>true</c> if this instance [can remove range] the specified items; otherwise, <c>false</c>.
+        /// </returns>
+        protected virtual bool CanRemoveRange(IList items)
+        {
+            return items == null ? false : CanRemoveRange(items.Cast<MediaItem>());
         }
 
         /// <summary>
@@ -418,8 +557,8 @@ namespace Maple
         private MediaItem NextRepeatNone()
         {
             var currentIndex = 0;
-            if (CurrentItem?.Sequence != null)
-                currentIndex = CurrentItem?.Sequence ?? 0;
+            if (SelectedItem?.Sequence != null)
+                currentIndex = SelectedItem?.Sequence ?? 0;
 
             if (Items.Count > 1)
             {
@@ -443,7 +582,7 @@ namespace Maple
         private MediaItem NextRepeatSingle()
         {
             if (RepeatMode != RepeatMode.None)
-                return CurrentItem;
+                return SelectedItem;
             else
                 return null;
         }
@@ -451,8 +590,8 @@ namespace Maple
         private MediaItem NextRepeatAll()
         {
             var currentIndex = 0;
-            if (CurrentItem?.Sequence != null)
-                currentIndex = CurrentItem?.Sequence ?? 0;
+            if (SelectedItem?.Sequence != null)
+                currentIndex = SelectedItem?.Sequence ?? 0;
 
             if (Items.Count > 1)
             {
@@ -481,7 +620,7 @@ namespace Maple
         {
             if (Items.Count > 1)
             {
-                var nextItems = Items.Where(p => p.Sequence != CurrentItem?.Sequence); // get all items besides the current one
+                var nextItems = Items.Where(p => p.Sequence != SelectedItem?.Sequence); // get all items besides the current one
                 Items.ToList().ForEach(p => p.IsSelected = false);
                 var foundItem = nextItems.Random();
                 foundItem.IsSelected = true;
@@ -508,7 +647,7 @@ namespace Maple
                     {
                         var previous = History.Pop();
 
-                        if (previous == CurrentItem?.Sequence) // the most recent item in the history, is the just played item, so we wanna skip that
+                        if (previous == SelectedItem?.Sequence) // the most recent item in the history, is the just played item, so we wanna skip that
                             continue;
 
                         if (previous > -1)

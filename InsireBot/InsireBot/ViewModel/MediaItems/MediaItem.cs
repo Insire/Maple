@@ -5,7 +5,7 @@ using System.IO;
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="Maple.Core.BaseViewModel{Maple.Data.MediaItem}" />
     /// <seealso cref="Maple.Core.IMediaItem" />

@@ -5,7 +5,7 @@ namespace Maple.Data
     public class MediaItem : BaseObject
     {
         [ForeignKey(nameof(PlaylistId))]
-        public Playlist Playlist { get; set; }
+        public virtual Playlist Playlist { get; set; }
         public int PlaylistId { get; set; }
 
         public string Title { get; set; }

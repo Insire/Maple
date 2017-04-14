@@ -4,7 +4,7 @@ using System.Windows.Forms;
 namespace InsireBotCore
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public static class WinFormsService
     {

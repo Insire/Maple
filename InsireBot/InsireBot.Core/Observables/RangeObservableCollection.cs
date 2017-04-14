@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 namespace Maple.Core
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="System.Collections.ObjectModel.ObservableCollection{T}" />

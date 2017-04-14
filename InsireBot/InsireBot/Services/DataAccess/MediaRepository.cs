@@ -45,18 +45,26 @@ namespace Maple
         {
             var playlist = _context.Playlists.FirstOrDefault(p => p.Id == id);
 
-            if (playlist != null)
-                return new Playlist(_dialog, playlist);
+            if (playlist == null)
+                return default(Playlist);
 
-            return default(Playlist);
+            var viewModel = new Playlist(_dialog, playlist);
+            viewModel.AddRange(GetMediaItemByPlaylistId(playlist.Id));
+
+            return viewModel;
         }
 
-        public List<Playlist> GetAllPlaylists()
+        public IList<Playlist> GetAllPlaylists()
         {
-            var result = new List<Playlist>();
-            result.AddRange(_context.Playlists.Select(p => new Playlist(_dialog, p)));
+            var playlists = new List<Playlist>();
+            var mediaItems = new List<MediaItem>();
+            mediaItems.AddRange(_context.MediaItems.AsEnumerable().Select(p => new MediaItem(p)));
+            playlists.AddRange(_context.Playlists.AsEnumerable().Select(p => new Playlist(_dialog, p)));
 
-            return result;
+            foreach (var playlist in playlists)
+                playlist.AddRange(mediaItems.Where(p => p.PlaylistId == playlist.Id));
+
+            return playlists;
         }
 
         public void Save(Playlist playlist)
@@ -137,11 +145,15 @@ namespace Maple
         /// returns all non MainMediaPlayers
         /// </summary>
         /// <returns></returns>
-        public List<MediaPlayer> GetAllOptionalMediaPlayers()
+        public IList<MediaPlayer> GetAllOptionalMediaPlayers()
         {
             var result = new List<MediaPlayer>();
-            result.AddRange(_context.Mediaplayers.Where(p => !p.IsPrimary)
-                                                 .Select(p => new MediaPlayer(_manager, _mediaPlayer, p, GetPlaylistById(p.PlaylistId), _devices)));
+            var players = _context.Mediaplayers
+                                  .Where(p => !p.IsPrimary)
+                                  .AsEnumerable()
+                                  .Select(p => new MediaPlayer(_manager, _mediaPlayer, p, GetPlaylistById(p.PlaylistId), _devices));
+
+            result.AddRange(players);
 
             return result;
         }
@@ -236,10 +248,18 @@ namespace Maple
             return default(MediaItem);
         }
 
-        public List<MediaItem> GetAllMediaItems()
+        public IList<MediaItem> GetMediaItemByPlaylistId(int id)
         {
             var result = new List<MediaItem>();
-            result.AddRange(_context.MediaItems.Select(p => new MediaItem(p)));
+            result.AddRange(_context.MediaItems.Where(p => p.PlaylistId == id).AsEnumerable().Select(p => new MediaItem(p)));
+
+            return result;
+        }
+
+        public IList<MediaItem> GetAllMediaItems()
+        {
+            var result = new List<MediaItem>();
+            result.AddRange(_context.MediaItems.AsEnumerable().Select(p => new MediaItem(p)));
 
             return result;
         }

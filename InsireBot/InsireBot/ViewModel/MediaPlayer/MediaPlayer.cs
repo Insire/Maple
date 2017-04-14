@@ -8,7 +8,7 @@ using System.Windows.Input;
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="Maple.Core.BaseViewModel{Maple.Data.MediaPlayer}" />
     /// <seealso cref="System.IDisposable" />
@@ -314,7 +314,7 @@ namespace Maple
         /// </returns>
         public bool CanClear()
         {
-            return !IsBusy && Playlist.ItemCount > 0;
+            return !IsBusy && Playlist.Count > 0;
         }
 
         /// <summary>
