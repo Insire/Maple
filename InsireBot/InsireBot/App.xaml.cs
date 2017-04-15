@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Linq;
 
 namespace Maple
 {
@@ -99,7 +100,7 @@ namespace Maple
         private IList<Task> LoadApplicationData()
         {
             var tasks = new List<Task>();
-            foreach (var item in _container.Resolve<IEnumerable<ILoadableViewModel>>())
+            foreach (var item in _container.ResolveMany<ILoadableViewModel>())
                 tasks.Add(item.LoadAsync());
 
             tasks.Add(Task.Delay(TimeSpan.FromSeconds(2)));
@@ -111,7 +112,7 @@ namespace Maple
             var log = _container.Resolve<IMapleLog>();
             log.Info(Localization.Properties.Resources.SavingState);
 
-            foreach (var item in _container.Resolve<IEnumerable<ILoadableViewModel>>())
+            foreach (var item in _container.ResolveMany<ILoadableViewModel>())
                 item.Save();
 
             log.Info(Localization.Properties.Resources.SavedState);

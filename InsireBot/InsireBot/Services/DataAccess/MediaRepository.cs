@@ -121,6 +121,9 @@ namespace Maple
             playlist.Model.CreatedOn = DateTime.UtcNow;
 
             _context.Set<Data.Playlist>().Add(playlist.Model);
+
+            foreach (var item in playlist.Items)
+                Save(item);
         }
 
         private void Update(Playlist playlist)

@@ -1,6 +1,8 @@
 ﻿using DryIoc;
 using Maple.Core;
 using Maple.Youtube;
+using System.Diagnostics;
+using System.Linq;
 
 namespace Maple
 {
@@ -20,8 +22,10 @@ namespace Maple
             RegisterViewModels();
             RegisterServices();
 
-            container.Register<Scenes>(Reuse.Singleton);
             container.Resolve<ITranslationService>().Load();
+
+            if (Debugger.IsAttached)
+                Debugging();
 
             return container;
 
@@ -32,32 +36,31 @@ namespace Maple
                 container.Register<MediaPlayers>(Reuse.Singleton);
                 container.Register<OptionsViewModel>(Reuse.Singleton);
                 container.Register<UIColorsViewModel>(Reuse.Singleton);
-                container.Register<SplashScreenViewModel>(Reuse.Singleton);
 
-                // generic ViewModels
+                container.RegisterMany(
+                    new[]
+                    {
+                        typeof(Playlists),
+                        typeof(MediaPlayers),
+                        typeof(OptionsViewModel),
+                        typeof(UIColorsViewModel)
+                    },
+                    serviceTypeCondition: type => type.IsInterface);
+
+                //generic ViewModels
+                container.Register<Scenes>(Reuse.Singleton);
                 container.Register<AudioDevices>(Reuse.Singleton);
                 container.Register<ShellViewModel>(Reuse.Singleton);
                 container.Register<DialogViewModel>(Reuse.Singleton);
                 container.Register<StatusbarViewModel>(Reuse.Singleton);
+                container.Register<FileSystemViewModel>(Reuse.Singleton);
+                container.Register<SplashScreenViewModel>(Reuse.Singleton);
 
-                // "Overloads" for already registered ViewModels, so i can query them via the container by resolving the specified interface
-                container.RegisterMapping<ILoadableViewModel, Playlists>(Reuse.Singleton);
-                container.RegisterMapping<ILoadableViewModel, MediaPlayers>(Reuse.Singleton);
-                container.RegisterMapping<ILoadableViewModel, OptionsViewModel>(Reuse.Singleton);
-                container.RegisterMapping<ILoadableViewModel, UIColorsViewModel>(Reuse.Singleton);
-
-                //container.Register<ILoadableViewModel, Playlists>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
-                //container.Register<ILoadableViewModel, MediaPlayers>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
-                //container.Register<ILoadableViewModel, OptionsViewModel>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
-                //container.Register<ILoadableViewModel, UIColorsViewModel>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
-
-                // Decorator for logging Loading and Saving
                 container.Register<ILoadableViewModel, RefreshableDecorator>(setup: Setup.Decorator);
             };
 
             void RegisterServices()
             {
-                // misc
                 container.Register<IMediaPlayer, NAudioMediaPlayer>(Reuse.Transient);
                 container.Register<IMediaRepository, MediaRepository>();
                 container.Register<IMediaItemMapper, MediaItemMapper>();
@@ -67,7 +70,19 @@ namespace Maple
                 container.Register<ITranslationProvider, ResxTranslationProvider>(Reuse.Singleton);
                 container.Register<ITranslationService, TranslationService>(Reuse.Singleton);
                 container.Register<ISequenceProvider, SequenceService>();
-                container.Register<FileSystemViewModel>();
+            }
+
+            void Debugging()
+            {
+                foreach (var item in container.VerifyResolutions())
+                {
+                    Debug.WriteLine($"{item.Key} registered with {item.Value}");
+                }
+
+                foreach (var item in container.GetServiceRegistrations().OrderBy(p => p.Factory.ImplementationType.ToString()))
+                {
+                    Debug.WriteLine($"{item.ServiceType.Name.PadRight(30, '.')} registered with {item.Factory.FactoryID.ToString().PadRight(10, '.')} of type {item.Factory.ImplementationType.Name}");
+                }
             }
         }
     }
