@@ -6,7 +6,7 @@ using System.Windows.Data;
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="System.Windows.Data.IValueConverter" />
     public class DebugConverter : IValueConverter

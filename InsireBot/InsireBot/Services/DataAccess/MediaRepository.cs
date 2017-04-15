@@ -117,21 +117,24 @@ namespace Maple
 
         private void Create(Playlist playlist)
         {
+            playlist.Model.CreatedBy = System.Security.Principal.WindowsIdentity.GetCurrent().User.Value;
+            playlist.Model.CreatedOn = DateTime.UtcNow;
+
             _context.Set<Data.Playlist>().Add(playlist.Model);
         }
 
         private void Update(Playlist playlist)
         {
             var model = playlist.Model;
-            var entitiy = _context.Playlists.Find(model.Id);
+            var entity = _context.Playlists.Find(model.Id);
 
-            entitiy.Description = model.Description;
-            entitiy.IsShuffeling = model.IsShuffeling;
-            entitiy.Location = model.Location;
-            entitiy.PrivacyStatus = model.PrivacyStatus;
-            entitiy.RepeatMode = model.RepeatMode;
-            entitiy.Sequence = model.Sequence;
-            entitiy.Title = model.Title;
+            if (entity == null)
+                return;
+
+            playlist.UpdatedOn = DateTime.UtcNow;
+            playlist.UpdatedBy = System.Security.Principal.WindowsIdentity.GetCurrent().User.Value;
+
+            _context.Entry(entity).CurrentValues.SetValues(playlist.Model);
 
             foreach (var item in playlist.Items)
                 Save(item);
@@ -158,7 +161,6 @@ namespace Maple
                 return default(MediaPlayer);
             }
         }
-
 
         public async Task<MediaPlayer> GetMainMediaPlayerAsync()
         {
@@ -271,6 +273,9 @@ namespace Maple
 
         private void Create(MediaPlayer player)
         {
+            player.Model.CreatedBy = System.Security.Principal.WindowsIdentity.GetCurrent().User.Value;
+            player.Model.CreatedOn = DateTime.UtcNow;
+
             _context.Set<Data.MediaPlayer>().Add(player.Model);
         }
 
@@ -279,13 +284,15 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var model = player.Model;
-                var entitiy = _context.Mediaplayers.Find(model.Id);
+                var entity = _context.Mediaplayers.Find(model.Id);
 
-                entitiy.DeviceName = model.DeviceName;
-                entitiy.IsPrimary = model.IsPrimary;
-                entitiy.Name = model.Name;
-                entitiy.PlaylistId = model.PlaylistId;
-                entitiy.Sequence = model.Sequence;
+                if (entity == null)
+                    return;
+
+                player.Model.UpdatedOn = DateTime.UtcNow;
+                player.Model.UpdatedBy = System.Security.Principal.WindowsIdentity.GetCurrent().User.Value;
+
+                _context.Entry(entity).CurrentValues.SetValues(player.Model);
             }
         }
 
@@ -305,6 +312,9 @@ namespace Maple
 
         private void Create(MediaItem item)
         {
+            item.Model.CreatedBy = System.Security.Principal.WindowsIdentity.GetCurrent().User.Value;
+            item.Model.CreatedOn = DateTime.UtcNow;
+
             _context.Set<Data.MediaItem>().Add(item.Model);
         }
 
@@ -313,16 +323,15 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var model = item.Model;
-                var entitiy = _context.MediaItems.Find(model.Id);
+                var entity = _context.MediaItems.Find(model.Id);
 
-                entitiy.Location = model.Location;
-                entitiy.Playlist = model.Playlist;
-                entitiy.PrivacyStatus = model.PrivacyStatus;
-                entitiy.PlaylistId = model.PlaylistId;
-                entitiy.Title = model.Title;
-                entitiy.Duration = model.Duration;
-                entitiy.Description = model.Description;
-                entitiy.Sequence = model.Sequence;
+                if (entity == null)
+                    return;
+
+                entity.UpdatedOn = DateTime.UtcNow;
+                entity.UpdatedBy = System.Security.Principal.WindowsIdentity.GetCurrent().User.Value;
+
+                _context.Entry(entity).CurrentValues.SetValues(item.Model);
             }
         }
 

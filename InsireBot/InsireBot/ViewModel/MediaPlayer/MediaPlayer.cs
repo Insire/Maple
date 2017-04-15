@@ -189,6 +189,34 @@ namespace Maple
             protected set { SetValue(ref _isPrimary, value, OnChanged: () => Model.IsPrimary = value); }
         }
 
+        private string _createdBy;
+        public string CreatedBy
+        {
+            get { return _createdBy; }
+            set { SetValue(ref _createdBy, value, OnChanged: () => Model.CreatedBy = value); }
+        }
+
+        private string _updatedBy;
+        public string UpdatedBy
+        {
+            get { return _updatedBy; }
+            set { SetValue(ref _updatedBy, value, OnChanged: () => Model.UpdatedBy = value); }
+        }
+
+        private DateTime _updatedOn;
+        public DateTime UpdatedOn
+        {
+            get { return _updatedOn; }
+            set { SetValue(ref _updatedOn, value, OnChanged: () => Model.UpdatedOn = value); }
+        }
+
+        private DateTime _createdOn;
+        public DateTime CreatedOn
+        {
+            get { return _updatedOn; }
+            set { SetValue(ref _updatedOn, value, OnChanged: () => Model.CreatedOn = value); }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaPlayer"/> class.
         /// </summary>
@@ -211,9 +239,14 @@ namespace Maple
             Player = player ?? throw new ArgumentNullException(nameof(player), $"{nameof(player)} {Resources.IsRequired}");
             Playlist = playlist ?? throw new ArgumentNullException(nameof(playlist), $"{nameof(playlist)} {Resources.IsRequired}");
 
-            Name = model.Name;
-            Playlist = playlist;
-            AudioDevices = devices;
+            _name = model.Name;
+            _playlist = playlist;
+            _audioDevices = devices;
+
+            _createdBy = model.CreatedBy;
+            _createdOn = model.CreatedOn;
+            _updatedBy = model.UpdatedBy;
+            _updatedOn = model.UpdatedOn;
 
             if (AudioDevices.Items.Count > 0)
                 Player.AudioDevice = AudioDevices.Items.FirstOrDefault(p => p.Name == Model.DeviceName) ?? AudioDevices.Items[0];

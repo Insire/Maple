@@ -22,7 +22,17 @@ namespace Maple.Data
 
             base.Seed(context);
 
-            context.Playlists
+            SeedPlaylists(context);
+            SeedMediaItems(context);
+            SeedMediaPlayers(context);
+
+            context.SaveChanges();
+        }
+
+        private void SeedPlaylists(TContext context)
+        {
+            if (context.Playlists.Find(1) == null)
+                context.Playlists
                    .Add(new Playlist
                    {
                        Description = "Base",
@@ -34,31 +44,37 @@ namespace Maple.Data
                        Sequence = 0,
                        Title = "Base",
                    });
+        }
 
-            context.MediaItems
-                .Add(new MediaItem
-                {
-                    Title = "Test",
-                    Description = "Description",
-                    Duration = 60_000,
-                    Id = 1,
-                    Location = "C:",
-                    PlaylistId = 1,
-                    PrivacyStatus = 0,
-                    Sequence = 0,
-                });
+        private void SeedMediaItems(TContext context)
+        {
+            if (context.MediaItems.Find(1) == null)
+                context.MediaItems
+                        .Add(new MediaItem
+                        {
+                            Title = "Test",
+                            Description = "Description",
+                            Duration = 60_000,
+                            Id = 1,
+                            Location = "C:",
+                            PlaylistId = 1,
+                            PrivacyStatus = 0,
+                            Sequence = 0,
+                        });
+        }
 
-            context.Mediaplayers
-                   .Add(new MediaPlayer
-                   {
-                       Id = 1,
-                       IsPrimary = true,
-                       Name = "Main",
-                       PlaylistId = 1,
-                       Sequence = 0,
-                   });
-
-            context.SaveChanges();
+        private void SeedMediaPlayers(TContext context)
+        {
+            if (context.Mediaplayers.Find(1) == null)
+                context.Mediaplayers
+                       .Add(new MediaPlayer
+                       {
+                           Id = 1,
+                           IsPrimary = true,
+                           Name = "Main",
+                           PlaylistId = 1,
+                           Sequence = 0,
+                       });
         }
     }
 }

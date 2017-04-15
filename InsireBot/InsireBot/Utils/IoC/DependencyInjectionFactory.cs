@@ -46,6 +46,11 @@ namespace Maple
                 container.RegisterMapping<ILoadableViewModel, OptionsViewModel>(Reuse.Singleton);
                 container.RegisterMapping<ILoadableViewModel, UIColorsViewModel>(Reuse.Singleton);
 
+                //container.Register<ILoadableViewModel, Playlists>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
+                //container.Register<ILoadableViewModel, MediaPlayers>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
+                //container.Register<ILoadableViewModel, OptionsViewModel>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
+                //container.Register<ILoadableViewModel, UIColorsViewModel>(Reuse.Singleton, ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
+
                 // Decorator for logging Loading and Saving
                 container.Register<ILoadableViewModel, RefreshableDecorator>(setup: Setup.Decorator);
             };

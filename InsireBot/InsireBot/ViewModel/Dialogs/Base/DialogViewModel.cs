@@ -308,7 +308,10 @@ namespace Maple
             AcceptAction = () =>
             {
                 if (viewmodel.Result?.MediaItems?.Any() == true)
-                    result.AddRange(viewmodel.Result.MediaItems);
+                {
+                    var items = _mediaItemMapper.GetManyData(viewmodel.Result.MediaItems);
+                    result.AddRange(items);
+                }
             };
 
             await Open();

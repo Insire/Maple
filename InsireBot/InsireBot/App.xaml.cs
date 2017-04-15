@@ -85,13 +85,12 @@ namespace Maple
             var shell = new Shell(_manager, colors)
             {
                 DataContext = _container.Resolve<ShellViewModel>(),
-                //Visibility = Visibility.Hidden,
             };
 
             shell.Loaded += (o, args) =>
             {
-                //shell.Visibility = Visibility.Visible;
                 splash.Close();
+                vm.Dispose();
             };
 
             shell.Show();
@@ -112,8 +111,8 @@ namespace Maple
             var log = _container.Resolve<IMapleLog>();
             log.Info(Localization.Properties.Resources.SavingState);
 
-            _container.Resolve<IEnumerable<ILoadableViewModel>>()
-                      .ForEach(p => p.Save());
+            foreach (var item in _container.Resolve<IEnumerable<ILoadableViewModel>>())
+                item.Save();
 
             log.Info(Localization.Properties.Resources.SavedState);
         }

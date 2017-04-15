@@ -256,6 +256,34 @@ namespace Maple
             protected set { SetValue(ref _view, value); }
         }
 
+        private string _createdBy;
+        public string CreatedBy
+        {
+            get { return _createdBy; }
+            set { SetValue(ref _createdBy, value, OnChanged: () => Model.CreatedBy = value); }
+        }
+
+        private string _updatedBy;
+        public string UpdatedBy
+        {
+            get { return _updatedBy; }
+            set { SetValue(ref _updatedBy, value, OnChanged: () => Model.UpdatedBy = value); }
+        }
+
+        private DateTime _updatedOn;
+        public DateTime UpdatedOn
+        {
+            get { return _updatedOn; }
+            set { SetValue(ref _updatedOn, value, OnChanged: () => Model.UpdatedOn = value); }
+        }
+
+        private DateTime _createdOn;
+        public DateTime CreatedOn
+        {
+            get { return _updatedOn; }
+            set { SetValue(ref _updatedOn, value, OnChanged: () => Model.CreatedOn = value); }
+        }
+
         /// <summary>
         /// Gets the <see cref="T"/> at the specified index.
         /// </summary>
@@ -296,6 +324,10 @@ namespace Maple
                 _repeatMode = (RepeatMode)model.RepeatMode;
                 _isShuffeling = model.IsShuffeling;
                 _sequence = model.Sequence;
+                _createdBy = model.CreatedBy;
+                _createdOn = model.CreatedOn;
+                _updatedBy = model.UpdatedBy;
+                _updatedOn = model.UpdatedOn;
 
                 if (model.MediaItems == null)
                     throw new ArgumentException($"{model.MediaItems} cannot be null");

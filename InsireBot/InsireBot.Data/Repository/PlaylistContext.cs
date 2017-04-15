@@ -17,13 +17,13 @@ namespace Maple.Data
         {
             Database.SetInitializer(new CreateSeedDatabaseIfNotExists<PlaylistContext>(modelBuilder));
 
-            modelBuilder.Entity<MediaItem>()
-                .HasRequired(p => p.Playlist)
-                .WithMany(p => p.MediaItems)
-                .WillCascadeOnDelete(true);
+            //modelBuilder.Entity<MediaItem>()
+            //    .HasRequired(p => p.Playlist)
+            //    .WithMany(p => p.MediaItems)
+            //    .WillCascadeOnDelete(true);
 
-            modelBuilder.Entity<MediaPlayer>()
-                .HasRequired(p => p.Playlist);
+            //modelBuilder.Entity<MediaPlayer>()
+            //    .HasRequired(p => p.Playlist);
         }
     }
 }

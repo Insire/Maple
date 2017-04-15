@@ -65,9 +65,9 @@ namespace Maple.Youtube
             }
         }
 
-        public async Task<List<Data.Playlist>> GetPlaylists(string playlistId)
+        public async Task<List<Core.Playlist>> GetPlaylists(string playlistId)
         {
-            var result = new List<Data.Playlist>();
+            var result = new List<Core.Playlist>();
             var youtubeService = await GetService();
 
             var request = youtubeService.Playlists.List("snippet,contentDetails");
@@ -80,7 +80,7 @@ namespace Maple.Youtube
                 var nextPageToken = "";
                 while (nextPageToken != null)
                 {
-                    var playlist = new Data.Playlist
+                    var playlist = new Core.Playlist
                     {
                         Title = item.Snippet.Title,
                         Location = $"{_playListBaseUrl}{item.Id}",
@@ -96,7 +96,7 @@ namespace Maple.Youtube
             return result;
         }
 
-        public async Task CreatePlaylist(Data.Playlist playlist, bool publicPlaylist = true)
+        public async Task CreatePlaylist(Core.Playlist playlist, bool publicPlaylist = true)
         {
             var youtubeService = await GetService();
 
@@ -199,9 +199,9 @@ namespace Maple.Youtube
 
         //TODO writing a async sync method for what i get from youtube vs that i generate myself as playlist
 
-        public async Task<IList<Data.MediaItem>> GetVideo(string videoId)
+        public async Task<IList<Core.MediaItem>> GetVideo(string videoId)
         {
-            var result = new List<Data.MediaItem>();
+            var result = new List<Core.MediaItem>();
             var youtubeService = await GetService();
 
             var request = youtubeService.Videos.List("snippet,contentDetails");
@@ -214,7 +214,7 @@ namespace Maple.Youtube
                 var nextPageToken = "";
                 while (nextPageToken != null)
                 {
-                    var video = new Data.MediaItem
+                    var video = new Core.MediaItem
                     {
                         Title = item.Snippet.Title,
                         Location = $"{_videoBaseUrl}{videoId}",

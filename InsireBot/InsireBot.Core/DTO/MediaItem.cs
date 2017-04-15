@@ -1,7 +1,9 @@
-﻿namespace Maple.Core
+﻿using System;
+
+namespace Maple.Core
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class MediaItem
     {
@@ -62,5 +64,11 @@
         /// The playlist identifier.
         /// </value>
         public int PlaylistId { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+        public string CreatedBy { get; set; }
+
+        public DateTime UpdatedOn { get; set; }
+        public string UpdatedBy { get; set; }
     }
 }

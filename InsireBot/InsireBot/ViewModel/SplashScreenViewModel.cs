@@ -1,21 +1,16 @@
 ﻿using Maple.Core;
 using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Threading;
 
 namespace Maple
 {
     public class SplashScreenViewModel : ObservableObject, IDisposable
     {
         private readonly IMapleLog _log;
-        private readonly BlockingCollection<string> _queue;
-        private Task _queueProcessor;
-        private CancellationTokenSource _source;
-        private readonly TimeSpan _displayDelay;
+        private readonly Queue<string> _queue;
+        private readonly System.Timers.Timer _timer;
 
         private string _version;
         /// <summary>
@@ -56,10 +51,20 @@ namespace Maple
         public SplashScreenViewModel(IMapleLog log)
         {
             _log = log ?? throw new ArgumentNullException(nameof(log));
-            _queue = new BlockingCollection<string>();
-            _displayDelay = TimeSpan.FromMilliseconds(100);
+            _queue = new Queue<string>();
+            _timer = new System.Timers.Timer(100);
+            _timer.Elapsed += _timer_Elapsed;
 
             InitializeCommands();
+        }
+
+        private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (_queue.Count > 0)
+            {
+                Message = _queue.Dequeue();
+                Debug.WriteLine(Message);
+            }
         }
 
         private void InitializeCommands()
@@ -72,10 +77,8 @@ namespace Maple
         {
             IsLoaded = false;
             IsLoading = true;
-
+            _timer.Start();
             _log.LogMessageReceived += LogMessageReceived;
-            _source = new CancellationTokenSource();
-            _queueProcessor = Task.Run(() => ProcessQueue(), _source.Token);
 
             IsLoading = false;
             IsLoaded = true;
@@ -91,20 +94,7 @@ namespace Maple
 
         private void LogMessageReceived(object sender, LogMessageReceivedEventEventArgs e)
         {
-            _queue.Add(e.Message);
-        }
-
-        private void ProcessQueue()
-        {
-            var dispatcher = DispatcherFactory.GetDispatcher();
-            while (!_source.IsCancellationRequested)
-            {
-                var message = _queue.Take(_source.Token);
-                //dispatcher.Invoke(() => Message = message, DispatcherPriority.Send);
-                Message = message;
-                Debug.WriteLine(message);
-                //await Task.Delay(_displayDelay, _source.Token);
-            }
+            _queue.Enqueue(e.Message);
         }
 
         public void Dispose()
@@ -122,10 +112,10 @@ namespace Maple
             {
                 IsDisposing = false;
                 IsDisposing = true;
+                _timer.Stop();
+                _timer.Elapsed -= _timer_Elapsed;
+                _timer.Dispose();
 
-                _log.LogMessageReceived -= LogMessageReceived;
-                _source?.Cancel();
-                _queueProcessor?.Wait();
                 // Free any other managed objects here.
             }
 

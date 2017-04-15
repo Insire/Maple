@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Maple.Core
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class Playlist
     {
@@ -56,5 +57,11 @@ namespace Maple.Core
         /// The media items.
         /// </value>
         public List<MediaItem> MediaItems { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+        public string CreatedBy { get; set; }
+
+        public DateTime UpdatedOn { get; set; }
+        public string UpdatedBy { get; set; }
     }
 }

@@ -132,6 +132,34 @@ namespace Maple
             set { SetValue(ref _isSelected, value); }
         }
 
+        private string _createdBy;
+        public string CreatedBy
+        {
+            get { return _createdBy; }
+            set { SetValue(ref _createdBy, value, OnChanged: () => Model.CreatedBy = value); }
+        }
+
+        private string _updatedBy;
+        public string UpdatedBy
+        {
+            get { return _updatedBy; }
+            set { SetValue(ref _updatedBy, value, OnChanged: () => Model.UpdatedBy = value); }
+        }
+
+        private DateTime _updatedOn;
+        public DateTime UpdatedOn
+        {
+            get { return _updatedOn; }
+            set { SetValue(ref _updatedOn, value, OnChanged: () => Model.UpdatedOn = value); }
+        }
+
+        private DateTime _createdOn;
+        public DateTime CreatedOn
+        {
+            get { return _updatedOn; }
+            set { SetValue(ref _updatedOn, value, OnChanged: () => Model.CreatedOn = value); }
+        }
+
         /// <summary>
         /// Gets a value indicating whether this instance is file.
         /// </summary>
@@ -147,14 +175,18 @@ namespace Maple
         public MediaItem(Data.MediaItem model)
             : base(model)
         {
-            Id = model.Id;
-            PlaylistId = model.PlaylistId;
-            Location = model.Location;
-            Description = model.Description;
-            Title = model.Title;
-            Sequence = model.Sequence;
-            Duration = TimeSpan.FromTicks(model.Duration);
-            PrivacyStatus = (PrivacyStatus)model.PrivacyStatus;
+            _id = model.Id;
+            _playlistId = model.PlaylistId;
+            _location = model.Location;
+            _description = model.Description;
+            _title = model.Title;
+            _sequence = model.Sequence;
+            _duration = TimeSpan.FromTicks(model.Duration);
+            _privacyStatus = (PrivacyStatus)model.PrivacyStatus;
+            _createdBy = model.CreatedBy;
+            _createdOn = model.CreatedOn;
+            _updatedBy = model.UpdatedBy;
+            _updatedOn = model.UpdatedOn;
         }
 
         /// <summary>

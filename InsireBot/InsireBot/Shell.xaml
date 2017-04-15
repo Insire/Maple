@@ -41,9 +41,9 @@
                     <Run Text="{Binding Version, Mode=OneWay}" />
                     <Run Text="{Binding Language, Mode=OneWay}" />
                 </TextBlock>
-                <TextBlock Margin="5,0" Text="{local:Translation PlaylistCurrent}" />
-                <TextBlock Text="{Binding MainMediaPlayer.Playlist.Title, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBlock Margin="5,0" Text="{Binding MainMediaPlayer.Playlist.CurrentItem.Title, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Margin="5 0" Text="{local:Translation PlaylistCurrent}" />
+                <TextBlock Text="{Binding MainMediaPlayer.Playlist.Title, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Margin="5 0" Text="{Binding MainMediaPlayer.Playlist.CurrentItem.Title, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </materialDesign:ColorZone>
 
@@ -74,7 +74,7 @@
                     </materialDesign:ColorZone>
 
                     <DockPanel Margin="5">
-                        <StackPanel Margin="0,5,0,0"
+                        <StackPanel Margin="0 5 0 0"
                                     HorizontalAlignment="Right"
                                     DockPanel.Dock="Bottom"
                                     Orientation="Horizontal">
@@ -91,7 +91,7 @@
                                         MinHeight="169"
                                         MaxWidth="900"
                                         MaxHeight="506"
-                                        Content="{Binding Context, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" />
+                                        Content="{Binding Context, UpdateSourceTrigger=PropertyChanged}" />
                     </DockPanel>
                 </DockPanel>
             </materialDesign:DialogHost.DialogContent>
@@ -105,9 +105,9 @@
                                       Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
 
                         <ListBox Grid.IsSharedSizeScope="True"
-                                 ItemsSource="{Binding Items, IsAsync=True, UpdateSourceTrigger=PropertyChanged}"
+                                 ItemsSource="{Binding Items, UpdateSourceTrigger=PropertyChanged}"
                                  PreviewMouseLeftButtonUp="UIElement_OnPreviewMouseLeftButtonUp"
-                                 SelectedItem="{Binding SelectedItem, IsAsync=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
+                                 SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
                                  SelectionMode="Single">
                             <ListBox.ItemContainerStyle>
                                 <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="{x:Type ListBoxItem}">
@@ -119,7 +119,7 @@
                                     <TextBlock Grid.Column="1"
                                                HorizontalAlignment="Stretch"
                                                VerticalAlignment="Center"
-                                               Text="{Binding DisplayName, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" />
+                                               Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" />
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
@@ -141,10 +141,10 @@
                                        VerticalAlignment="Center"
                                        FontSize="22"
                                        FontWeight="Medium"
-                                       Text="{Binding Scenes.SelectedItem.DisplayName, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" />
+                                       Text="{Binding Scenes.SelectedItem.DisplayName, UpdateSourceTrigger=PropertyChanged}" />
                         </DockPanel>
                     </materialDesign:ColorZone>
-                    <ContentControl Content="{Binding Scenes.SelectedItem.Content, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseLayoutStyle}" />
+                    <ContentControl Content="{Binding Scenes.SelectedItem.Content, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseLayoutStyle}" />
                 </DockPanel>
 
             </materialDesign:DrawerHost>
