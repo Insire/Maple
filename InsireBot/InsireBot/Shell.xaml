@@ -99,13 +99,13 @@
                     </DockPanel>
                 </DockPanel>
             </materialDesign:DialogHost.DialogContent>
-            <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding Path=IsChecked, ElementName=MenuToggleButton}">
+            <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding Data.IsExpanded, Source={StaticResource ScenesProxy}}">
                 <materialDesign:DrawerHost.LeftDrawerContent>
                     <DockPanel MinWidth="212" DataContext="{Binding Data, Source={StaticResource ScenesProxy}}">
                         <ToggleButton Margin="16"
                                       HorizontalAlignment="Right"
                                       DockPanel.Dock="Top"
-                                      IsChecked="{Binding Path=IsChecked, ElementName=MenuToggleButton, Mode=TwoWay}"
+                                      IsChecked="{Binding Data.IsExpanded, Source={StaticResource ScenesProxy}, Mode=TwoWay}"
                                       Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
 
                         <ListBox Grid.IsSharedSizeScope="True"
@@ -138,7 +138,7 @@
                         <DockPanel>
                             <ToggleButton x:Name="MenuToggleButton"
                                           HorizontalAlignment="Left"
-                                          IsChecked="False"
+                                          IsChecked="{Binding Data.IsExpanded, Source={StaticResource ScenesProxy}}"
                                           Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
 
                             <TextBlock HorizontalAlignment="Center"

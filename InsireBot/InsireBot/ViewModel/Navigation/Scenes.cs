@@ -16,6 +16,13 @@ namespace Maple
         private readonly ITranslationService _manager;
         private readonly IMapleLog _log;
 
+        private bool _isExpanded;
+        public bool IsExpanded
+        {
+            get { return _isExpanded; }
+            set { SetValue(ref _isExpanded, value); }
+        }
+
         /// <summary>
         /// Gets the open color options command.
         /// </summary>
