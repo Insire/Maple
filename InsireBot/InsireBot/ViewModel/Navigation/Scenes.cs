@@ -23,6 +23,8 @@ namespace Maple
             set { SetValue(ref _isExpanded, value); }
         }
 
+        public ICommand CloseExpanderCommand { get; private set; }
+
         /// <summary>
         /// Gets the open color options command.
         /// </summary>
@@ -118,6 +120,7 @@ namespace Maple
             OpenColorOptionsCommand = new RelayCommand(OpenColorOptionsView, CanOpenColorOptionsView);
             OpenMediaPlayerCommand = new RelayCommand(OpenMediaPlayerView, CanOpenMediaPlayerView);
             OpenGithubPageCommand = new RelayCommand(OpenGithubPage);
+            CloseExpanderCommand = new RelayCommand(() => IsExpanded = false, () => IsExpanded != false);
         }
 
         private void OpenColorOptionsView()
