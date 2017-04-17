@@ -83,7 +83,8 @@ namespace Maple
 
         public async Task<IList<Playlist>> GetAllPlaylistsAsync()
         {
-            var playlists = await Task.Run(() => _context.Playlists.AsEnumerable().Select(p => new Playlist(_dialog, p)));
+            var data = await Task.Run(() => _context.Playlists.AsEnumerable());
+            var playlists = data.Select(p => new Playlist(_dialog, p));
             var mediaItems = await GetAllMediaItemsAsync();
 
             foreach (var playlist in playlists)
@@ -404,14 +405,14 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                var result = new List<MediaItem>();
+                var result = new List<Data.MediaItem>();
 
                 await Task.Run(() =>
                 {
-                    result.AddRange(_context.MediaItems.AsEnumerable().Select(p => new MediaItem(p)));
+                    result.AddRange(_context.MediaItems.AsEnumerable());
                 });
 
-                return result;
+                return result.Select(p => new MediaItem(p)).ToList();
             }
         }
 

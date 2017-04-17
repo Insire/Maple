@@ -117,8 +117,6 @@ namespace Maple
                 c.Register<FileSystemViewModel>(Reuse.Singleton);
                 c.Register<ISplashScreenViewModel, SplashScreenViewModel>(Reuse.Singleton);
 
-                c.Register<ILoadableViewModel, RefreshableDecorator>(setup: Setup.Decorator);
-
                 //c.RegisterMapping<ILoadableViewModel, IPlaylistsViewModel>();
                 //c.RegisterMapping<ILoadableViewModel, IMediaPlayersViewModel>();
                 //c.RegisterMapping<ILoadableViewModel, IOptionsViewModel>();

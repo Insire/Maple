@@ -3,7 +3,7 @@
 namespace Maple.Core
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="Maple.Core.IRefreshable" />
     public interface ILoadableViewModel : IRefreshable

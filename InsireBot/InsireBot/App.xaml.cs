@@ -3,7 +3,6 @@ using Maple.Core;
 using Maple.Properties;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,12 +24,29 @@ namespace Maple
             _manager = _container.Resolve<ITranslationService>();
             _log = _container.Resolve<IMapleLog>();
 
-            var splash = ShowSplashScreen();
-
             _log.Info("Loading data");
-            await Task.WhenAll(LoadApplicationData());
+            using (var vm = _container.Resolve<ISplashScreenViewModel>())
+            {
+                var screen = new SplashScreen(_manager, _container.Resolve<IUIColorsViewModel>())
+                {
+                    DataContext = vm,
+                };
+                screen.Show();
 
-            ShowShell(splash);
+                await Task.WhenAll(LoadApplicationData());
+
+                var shell = new Shell(_manager, _container.Resolve<IUIColorsViewModel>())
+                {
+                    DataContext = _container.Resolve<ShellViewModel>(),
+                };
+
+                shell.Loaded += (o, args) =>
+                {
+                    screen.Close();
+                };
+
+                shell.Show();
+            }
 
             base.OnStartup(e);
         }
@@ -67,47 +83,12 @@ namespace Maple
             Thread.CurrentThread.CurrentCulture = Settings.Default.StartUpCulture;
         }
 
-        private SplashScreen ShowSplashScreen()
-        {
-            var vm = _container.Resolve<IUIColorsViewModel>();
-            var splash = new SplashScreen(_manager, vm)
-            {
-                DataContext = _container.Resolve<ISplashScreenViewModel>(),
-            };
-            splash.Show();
-            return splash;
-        }
-
-        private void ShowShell(SplashScreen splash)
-        {
-            var colors = _container.Resolve<IUIColorsViewModel>();
-            var vm = _container.Resolve<ISplashScreenViewModel>();
-
-            var shell = new Shell(_manager, colors)
-            {
-                DataContext = _container.Resolve<ShellViewModel>(),
-            };
-
-            shell.Loaded += (o, args) =>
-            {
-                splash.Close();
-                vm.Dispose();
-            };
-
-            shell.Show();
-        }
-
         private IList<Task> LoadApplicationData()
         {
             var tasks = new List<Task>();
-            Debug.WriteLine($"Loading");
 
-            foreach (var item in _container.ResolveMany<ILoadableViewModel>(behavior: ResolveManyBehavior.AsFixedArray))
-            {
-                Debug.WriteLine($"resolved {item.GetType().Name}");
+            foreach (var item in _container.Resolve<IEnumerable<ILoadableViewModel>>())
                 tasks.Add(item.LoadAsync());
-            }
-
 
             tasks.Add(Task.Delay(TimeSpan.FromSeconds(2)));
             return tasks;
@@ -118,12 +99,8 @@ namespace Maple
             var log = _container.Resolve<IMapleLog>();
             log.Info(Localization.Properties.Resources.SavingState);
 
-            Debug.WriteLine($"Saving");
             foreach (var item in _container.Resolve<IEnumerable<ILoadableViewModel>>())
-            {
-                Debug.WriteLine($"resolved {item.GetType().Name}");
                 item.Save();
-            }
 
             log.Info(Localization.Properties.Resources.SavedState);
         }
