@@ -1,7 +1,6 @@
 ﻿using Maple.Core;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows.Input;
 
 namespace Maple
@@ -27,10 +26,6 @@ namespace Maple
         }
 
         public bool IsDisposed { get; private set; }
-        public bool IsDisposing { get; private set; }
-
-        public bool IsLoaded { get; private set; }
-        public bool IsLoading { get; private set; }
 
         public ICommand LoadCommand { get; private set; }
         public ICommand DisposeCommand { get; private set; }
@@ -38,25 +33,29 @@ namespace Maple
         private SplashScreenViewModel()
         {
             _queue = new Queue<string>();
-            _timer = new System.Timers.Timer(100);
+            _timer = new System.Timers.Timer(150);
             _timer.Elapsed += _timer_Elapsed;
         }
 
-        public SplashScreenViewModel(IMapleLog log, IVersionService version) : this()
+        private SplashScreenViewModel(IMapleLog log) : this()
         {
             _log = log ?? throw new ArgumentNullException(nameof(log));
+            _log.LogMessageReceived += LogMessageReceived;
+        }
 
+        public SplashScreenViewModel(IMapleLog log, IVersionService version) : this(log)
+        {
             Version = version.Get();
             InitializeCommands();
         }
 
         private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            if (_queue.Count > 0)
-            {
-                Message = _queue.Dequeue();
-                Debug.WriteLine(Message);
-            }
+            if (_queue.Count == 0)
+                return;
+
+            var test = _queue.Dequeue();
+            Message = test;
         }
 
         private void InitializeCommands()
@@ -67,21 +66,12 @@ namespace Maple
 
         public void Load()
         {
-            IsLoaded = false;
-            IsLoading = true;
             _timer.Start();
-            _log.LogMessageReceived += LogMessageReceived;
-
-            IsLoading = false;
-            IsLoaded = true;
         }
 
         private bool CanLoad()
         {
-            return !IsDisposed
-                && !IsDisposing
-                && !IsLoaded
-                && !IsLoading;
+            return !IsDisposed;
         }
 
         private void LogMessageReceived(object sender, LogMessageReceivedEventEventArgs e)
@@ -102,8 +92,6 @@ namespace Maple
 
             if (disposing)
             {
-                IsDisposing = false;
-                IsDisposing = true;
                 _timer.Stop();
                 _timer.Elapsed -= _timer_Elapsed;
                 _timer.Dispose();
@@ -113,15 +101,11 @@ namespace Maple
 
             // Free any unmanaged objects here.
             IsDisposed = true;
-            IsDisposing = false;
         }
 
         public bool CanDispose()
         {
-            return !IsDisposed
-                && !IsDisposing
-                && IsLoaded
-                && IsLoading;
+            return !IsDisposed;
         }
     }
 }

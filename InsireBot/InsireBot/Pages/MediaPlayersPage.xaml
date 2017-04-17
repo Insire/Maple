@@ -4,7 +4,7 @@
                       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                       xmlns:local="clr-namespace:Maple"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    
+
     <local:IoCUserControl.Resources>
         <local:SharedResourceDictionary>
             <local:SharedResourceDictionary.MergedDictionaries>
@@ -80,18 +80,15 @@
                         <TextBlock Grid.Row="0"
                                    Grid.Column="0"
                                    Text="{local:Translation AudioDevice}" />
-                        <TextBlock Grid.Row="2"
-                                   Grid.Column="0"
-                                   Text="{local:Translation PlaybackMode}" />
-                        <TextBlock Grid.Row="4"
-                                   Grid.Column="0"
-                                   Text="{local:Translation Playlist}" />
 
                         <ComboBox Grid.Row="0"
                                   Grid.Column="2"
                                   DisplayMemberPath="Name"
                                   ItemsSource="{Binding MediaPlayers.SelectedItem.AudioDevices.Items, IsAsync=True, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
                                   SelectedItem="{Binding MediaPlayers.SelectedItem.Player.AudioDevice, IsAsync=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}" />
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="0"
+                                   Text="{local:Translation PlaybackMode}" />
 
                         <ComboBox Grid.Row="2"
                                   Grid.Column="2"
@@ -103,6 +100,9 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
+                        <TextBlock Grid.Row="4"
+                                   Grid.Column="0"
+                                   Text="{local:Translation Playlist}" />
                         <ComboBox Grid.Row="4"
                                   Grid.Column="2"
                                   ItemsSource="{Binding Playlists.View, UpdateSourceTrigger=PropertyChanged, IsAsync=True, ValidatesOnNotifyDataErrors=True}"

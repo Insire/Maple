@@ -79,6 +79,15 @@ namespace Maple.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Anwendung wird gestartet.
+        /// </summary>
+        public static string AppStart {
+            get {
+                return ResourceManager.GetString("AppStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wiedergabegerät.
         /// </summary>
         public static string AudioDevice {

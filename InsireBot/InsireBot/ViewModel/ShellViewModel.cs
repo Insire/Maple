@@ -1,4 +1,5 @@
 ﻿using Maple.Core;
+using System;
 
 namespace Maple
 {
@@ -132,14 +133,14 @@ namespace Maple
                                 IUIColorsViewModel uiColorsViewModel,
                                 IOptionsViewModel optionsViewModel)
         {
-            TranslationManager = translationManager;
-            Scenes = scenes;
-            StatusbarViewModel = statusBarViewModel;
-            DialogViewModel = dialogViewModel;
-            Playlists = playlists;
-            MediaPlayers = mediaPlayers;
-            UIColorsViewModel = uiColorsViewModel;
-            OptionsViewModel = optionsViewModel;
+            TranslationManager = translationManager ?? throw new ArgumentNullException(nameof(translationManager));
+            Scenes = scenes ?? throw new ArgumentNullException(nameof(scenes));
+            StatusbarViewModel = statusBarViewModel ?? throw new ArgumentNullException(nameof(statusBarViewModel));
+            DialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
+            Playlists = playlists ?? throw new ArgumentNullException(nameof(playlists));
+            MediaPlayers = mediaPlayers ?? throw new ArgumentNullException(nameof(mediaPlayers));
+            UIColorsViewModel = uiColorsViewModel ?? throw new ArgumentNullException(nameof(uiColorsViewModel));
+            OptionsViewModel = optionsViewModel ?? throw new ArgumentNullException(nameof(optionsViewModel));
         }
     }
 }

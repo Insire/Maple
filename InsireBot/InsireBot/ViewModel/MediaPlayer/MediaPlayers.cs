@@ -158,11 +158,11 @@ namespace Maple
 
             using (var context = _repositoryFactory())
             {
-                var main = await Task.Run(() => context.GetMainMediaPlayer());
+                var main = await context.GetMainMediaPlayerAsync();
 
                 Items.Add(main);
                 SelectedItem = main;
-                var others = await Task.Run(() => context.GetAllOptionalMediaPlayers());
+                var others = await context.GetAllOptionalMediaPlayersAsync();
                 Items.AddRange(others);
             }
 

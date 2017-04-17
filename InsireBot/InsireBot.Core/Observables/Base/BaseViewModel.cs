@@ -9,7 +9,7 @@ using System.Threading;
 namespace Maple.Core
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class BaseViewModel<T> : ObservableObject, INotifyDataErrorInfo

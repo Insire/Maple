@@ -288,4 +288,7 @@
   <data name="SelectFiles" xml:space="preserve">
     <value>File selection</value>
   </data>
+  <data name="AppStart" xml:space="preserve">
+    <value>Application is being started</value>
+  </data>
 </root>

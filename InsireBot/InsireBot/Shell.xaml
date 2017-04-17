@@ -7,6 +7,11 @@
                  xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
                  Title="{local:Translation ShellTitle}"
                  Style="{StaticResource BaseWindowStyle}">
+    <local:IoCWindow.Resources>
+        <local:BindingProxy x:Key="ScenesProxy" Data="{Binding Scenes}" />
+        <local:BindingProxy x:Key="DialogProxy" Data="{Binding DialogViewModel}" />
+    </local:IoCWindow.Resources>
+
 
     <!--  DataContext ShellViewModel  -->
     <metro:MetroWindow.RightWindowCommands>
@@ -43,17 +48,16 @@
                 </TextBlock>
                 <TextBlock Margin="5 0" Text="{local:Translation PlaylistCurrent}" />
                 <TextBlock Text="{Binding MainMediaPlayer.Playlist.Title, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBlock Margin="5 0" Text="{Binding MainMediaPlayer.Playlist.CurrentItem.Title, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Margin="5 0" Text="{Binding MainMediaPlayer.Playlist.SelectedItem.Title, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </materialDesign:ColorZone>
 
-        <!--  Content Area  -->
         <!--  DataContext ShellViewModel  -->
         <materialDesign:DialogHost CloseOnClickAway="True"
                                    Identifier="RootDialog"
-                                   IsOpen="{Binding DialogViewModel.IsOpen}">
+                                   IsOpen="{Binding Data.IsOpen, Source={StaticResource DialogProxy}}">
             <materialDesign:DialogHost.DialogContent>
-                <DockPanel DataContext="{Binding DialogViewModel}">
+                <DockPanel DataContext="{Binding Data, Source={StaticResource DialogProxy}}">
                     <materialDesign:ColorZone Padding="4"
                                               DockPanel.Dock="Top"
                                               Mode="PrimaryMid">
@@ -97,7 +101,7 @@
             </materialDesign:DialogHost.DialogContent>
             <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding Path=IsChecked, ElementName=MenuToggleButton}">
                 <materialDesign:DrawerHost.LeftDrawerContent>
-                    <DockPanel MinWidth="212" DataContext="{Binding Scenes}">
+                    <DockPanel MinWidth="212" DataContext="{Binding Data, Source={StaticResource ScenesProxy}}">
                         <ToggleButton Margin="16"
                                       HorizontalAlignment="Right"
                                       DockPanel.Dock="Top"

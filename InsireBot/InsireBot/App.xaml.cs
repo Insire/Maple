@@ -21,29 +21,25 @@ namespace Maple
             InitializeLocalization();
 
             _container = DependencyInjectionFactory.Get();
-            _manager = _container.Resolve<ITranslationService>();
-            _log = _container.Resolve<IMapleLog>();
 
-            _log.Info("Loading data");
             using (var vm = _container.Resolve<ISplashScreenViewModel>())
             {
-                var screen = new SplashScreen(_manager, _container.Resolve<IUIColorsViewModel>())
-                {
-                    DataContext = vm,
-                };
+                _manager = _container.Resolve<ITranslationService>();
+                _log = _container.Resolve<IMapleLog>();
+
+                var shell = new Shell(_manager, _container.Resolve<IUIColorsViewModel>(), _container.Resolve<ShellViewModel>());
+                var screen = new SplashScreen(_manager, _container.Resolve<IUIColorsViewModel>(), vm);
                 screen.Show();
 
                 await Task.WhenAll(LoadApplicationData());
-
-                var shell = new Shell(_manager, _container.Resolve<IUIColorsViewModel>())
-                {
-                    DataContext = _container.Resolve<ShellViewModel>(),
-                };
 
                 shell.Loaded += (o, args) =>
                 {
                     screen.Close();
                 };
+
+                _log.Info(Localization.Properties.Resources.AppStart);
+                await Task.Delay(TimeSpan.FromSeconds(1));
 
                 shell.Show();
             }
@@ -90,7 +86,6 @@ namespace Maple
             foreach (var item in _container.Resolve<IEnumerable<ILoadableViewModel>>())
                 tasks.Add(item.LoadAsync());
 
-            tasks.Add(Task.Delay(TimeSpan.FromSeconds(2)));
             return tasks;
         }
 

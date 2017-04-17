@@ -48,8 +48,6 @@ namespace Maple
             _manager = manager;
             _log = log;
 
-            _log.Info(_manager.Translate(nameof(Resources.NavigationLoad)));
-
             var content = new[]
             {
                 new Scene(_manager)
@@ -106,8 +104,6 @@ namespace Maple
             }
 
             InitializeCommands();
-
-            _log.Info(manager.Translate(nameof(Resources.NavigationLoaded)));
         }
 
         private void InitializeCommands()

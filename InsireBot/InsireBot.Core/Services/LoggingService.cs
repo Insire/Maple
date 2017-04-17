@@ -1,5 +1,6 @@
 ﻿using log4net;
 using System;
+using System.Diagnostics;
 
 namespace Maple.Core
 {
@@ -66,8 +67,12 @@ namespace Maple.Core
         /// <param name="message">The message.</param>
         public void Info(object message)
         {
-            _log.Info(message);
-            LogMessageReceived?.Invoke(this, new LogMessageReceivedEventEventArgs((string)message));
+            var text = (string)message;
+
+            Debug.WriteLine(text);
+            _log.Info(text);
+
+            LogMessageReceived?.Invoke(this, new LogMessageReceivedEventEventArgs(text));
         }
 
         /// <summary>
@@ -77,8 +82,12 @@ namespace Maple.Core
         /// <param name="exception">The exception.</param>
         public void Info(object message, Exception exception)
         {
+            var text = (string)message;
+
+            Debug.WriteLine(text);
             _log.Info(message, exception);
-            LogMessageReceived?.Invoke(this, new LogMessageReceivedEventEventArgs((string)message));
+
+            LogMessageReceived?.Invoke(this, new LogMessageReceivedEventEventArgs(text));
         }
 
         /// <summary>

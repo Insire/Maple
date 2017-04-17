@@ -1,4 +1,6 @@
 ﻿using Maple.Core;
+using Maple.Localization.Properties;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -10,24 +12,18 @@ namespace Maple
     public class TranslationService : ObservableObject, ITranslationService
     {
         public ITranslationProvider TranslationProvider { get; private set; }
-
+        public readonly IMapleLog _log;
         /// <summary>
         /// Gets or sets the current language.
         /// </summary>
         /// <value>
         /// The current language.
         /// </value>
+        private CultureInfo _currentLanguage;
         public CultureInfo CurrentLanguage
         {
-            get { return Thread.CurrentThread.CurrentUICulture; }
-            set
-            {
-                if (value != Thread.CurrentThread.CurrentUICulture)
-                {
-                    Thread.CurrentThread.CurrentUICulture = value;
-                    OnPropertyChanged(nameof(CurrentLanguage));
-                }
-            }
+            get { return _currentLanguage; }
+            set { SetValue(ref _currentLanguage, value, () => Thread.CurrentThread.CurrentUICulture = value); }
         }
 
         public IEnumerable<CultureInfo> Languages
@@ -41,9 +37,11 @@ namespace Maple
             }
         }
 
-        public TranslationService(ITranslationProvider provider)
+        public TranslationService(ITranslationProvider provider, IMapleLog log)
         {
-            TranslationProvider = provider;
+            _log = log ?? throw new ArgumentNullException(nameof(log));
+            TranslationProvider = provider ?? throw new ArgumentNullException(nameof(provider));
+            _currentLanguage = Thread.CurrentThread.CurrentUICulture;
         }
 
         public string Translate(string key)
@@ -66,12 +64,14 @@ namespace Maple
 
         public void Load()
         {
-            Thread.CurrentThread.CurrentCulture = Languages.First(p => p.TwoLetterISOLanguageName == "en");
+            _log.Info($"{Resources.Loading} {GetType().Name}");
+            Thread.CurrentThread.CurrentCulture = Properties.Settings.Default.StartUpCulture;
         }
 
         public Task SaveAsync()
         {
-            return Task.Run(() => Save());
+            Save();
+            return Task.FromResult(0);
         }
 
         public Task LoadAsync()

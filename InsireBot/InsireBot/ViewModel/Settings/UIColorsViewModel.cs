@@ -149,7 +149,7 @@ namespace Maple
         /// </summary>
         public void Save()
         {
-            _log.Info($"{Resources.Saving} {GetType().Name}");
+            _log.Info($"{Resources.Saving} {Resources.Themes}");
 
             Properties.Settings.Default.AccentName = _accent;
             Properties.Settings.Default.SwatchName = _swatch;
@@ -163,7 +163,7 @@ namespace Maple
         /// </summary>
         public void Load()
         {
-            _log.Info($"{Resources.Loading} {GetType().Name}");
+            _log.Info($"{Resources.Loading} {Resources.Themes}");
 
             var swatchName = Properties.Settings.Default.SwatchName;
             var swatch = Swatches.FirstOrDefault(p => p.Name == swatchName);

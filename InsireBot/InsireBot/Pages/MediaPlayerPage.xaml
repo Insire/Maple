@@ -80,11 +80,9 @@
     <!--  DataContext ShellViewModel  -->
     <Grid DataContext="{Binding MediaPlayers.SelectedItem}">
         <materialDesign:TransitioningContent>
-
             <materialDesign:TransitioningContent.OpeningEffects>
                 <materialDesign:TransitionEffect Kind="FadeIn" />
             </materialDesign:TransitioningContent.OpeningEffects>
-
             <materialDesign:Card VerticalAlignment="Stretch">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -105,13 +103,18 @@
                     </Grid.ColumnDefinitions>
 
                     <!--  Playlist  -->
-                    <ListView Grid.Row="1"
+                    <DataGrid Grid.Row="1"
                               Grid.Column="1"
                               Grid.ColumnSpan="5"
+                              AutoGenerateColumns="False"
                               BorderThickness="0"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              CanUserResizeRows="False"
+                              IsReadOnly="True"
                               ItemsSource="{Binding Playlist.View}"
-                              SelectionMode="Single">
-                        <ListView.ContextMenu>
+                              SelectionMode="Extended">
+                        <DataGrid.ContextMenu>
                             <ContextMenu>
                                 <ContextMenu.Items>
                                     <MenuItem Command="{Binding LoadFromFileCommand}" Header="{local:Translation FilePlaylistImport}">
@@ -141,34 +144,39 @@
                                     </MenuItem>
                                 </ContextMenu.Items>
                             </ContextMenu>
-                        </ListView.ContextMenu>
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <icons:PackIconMaterial>
-                                                <icons:PackIconMaterial.Style>
-                                                    <Style TargetType="{x:Type icons:PackIconMaterial}">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding IsFile}" Value="True">
-                                                                <Setter Property="Kind" Value="File" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding IsFile}" Value="False">
-                                                                <Setter Property="Kind" Value="Earth" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </icons:PackIconMaterial.Style>
-                                            </icons:PackIconMaterial>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn DisplayMemberBinding="{Binding Title}" Header="Title" />
-                                <GridViewColumn DisplayMemberBinding="{Binding Duration, StringFormat={}{0:c}}" Header="Duration" />
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
+                        </DataGrid.ContextMenu>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="Auto" CanUserResize="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <icons:PackIconMaterial HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <icons:PackIconMaterial.Style>
+                                                <Style TargetType="{x:Type icons:PackIconMaterial}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsFile}" Value="True">
+                                                            <Setter Property="Kind" Value="File" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsFile}" Value="False">
+                                                            <Setter Property="Kind" Value="YoutubePlay" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </icons:PackIconMaterial.Style>
+                                        </icons:PackIconMaterial>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Width="*"
+                                                Binding="{Binding Title}"
+                                                Header="{local:Translation Title}"
+                                                IsReadOnly="True" />
+                            <DataGridTextColumn Width="Auto" MinWidth="50"
+                                                Binding="{Binding Duration, StringFormat={}{0:c}}"
+                                                Header="{local:Translation Duration}"
+                                                IsReadOnly="True" />
+
+                        </DataGrid.Columns>
+                    </DataGrid>
 
                     <!--  Volume Slider  -->
                     <Grid Grid.Row="3" Grid.Column="1">

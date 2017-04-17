@@ -991,10 +991,11 @@
             </Grid.ColumnDefinitions>
 
             <icons:PackIconMaterial Grid.Column="0"
-                                    Width="32"
-                                    Height="32"
+                                    Width="24"
+                                    Height="24"
                                     VerticalAlignment="Center"
-                                    Kind="FormatListBulleted" />
+                                    HorizontalAlignment="Center"
+                                    Kind="ViewHeadline" />
 
             <StackPanel Grid.Column="1"
                         Margin="10 0"
@@ -1006,7 +1007,7 @@
                            TextTrimming="CharacterEllipsis"
                            TextWrapping="NoWrap" />
                 <TextBlock Text="{Binding Description}"
-                           TextTrimming="CharacterEllipsis"
+                           TextTrimming="CharacterEllipsis" FontSize="9"
                            TextWrapping="NoWrap">
                     <TextBlock.Style>
                         <Style BasedOn="{StaticResource MaterialDesignBody1TextBlock}" TargetType="TextBlock">
@@ -1019,6 +1020,8 @@
                     </TextBlock.Style>
                 </TextBlock>
             </StackPanel>
+
+            <TextBlock Grid.Column="2" Text="{Binding Count}" />
         </Grid>
     </DataTemplate>
 

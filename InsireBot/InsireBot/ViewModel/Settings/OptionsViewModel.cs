@@ -90,7 +90,7 @@ namespace Maple
         /// </summary>
         public void Save()
         {
-            _log.Info($"{Resources.Saving} {GetType().Name}");
+            _log.Info($"{Resources.Saving} {Resources.Options}");
             _manager.Save();
         }
 
@@ -99,7 +99,7 @@ namespace Maple
         /// </summary>
         public void Load()
         {
-            _log.Info($"{Resources.Loading} {GetType().Name}");
+            _log.Info($"{Resources.Loading} {Resources.Options}");
             _manager.Load();
             SelectedCulture = Properties.Settings.Default.StartUpCulture;
             IsLoaded = true;
@@ -107,13 +107,13 @@ namespace Maple
 
         public async Task SaveAsync()
         {
-            _log.Info($"{Resources.Saving} {GetType().Name}");
+            _log.Info($"{Resources.Saving} {Resources.Options}");
             await _manager.SaveAsync();
         }
 
         public async Task LoadAsync()
         {
-            _log.Info($"{Resources.Loading} {GetType().Name}");
+            _log.Info($"{Resources.Loading} {Resources.Options}");
             await _manager.LoadAsync();
             SelectedCulture = Properties.Settings.Default.StartUpCulture;
             IsLoaded = true;

@@ -79,7 +79,7 @@ namespace Maple
         /// </summary>
         public void Load()
         {
-            _log.Info($"{Resources.Loading} {GetType().Name}");
+            _log.Info($"{Resources.Loading} {Resources.Playlists}");
             Clear();
 
             using (var context = _repositoryFactory())
@@ -94,7 +94,7 @@ namespace Maple
         /// </summary>
         public void Save()
         {
-            _log.Info($"{Resources.Saving} {GetType().Name}");
+            _log.Info($"{Resources.Saving} {Resources.Playlists}");
             using (var context = _repositoryFactory())
             {
                 context.Save(this);
@@ -129,7 +129,7 @@ namespace Maple
 
         public async Task LoadAsync()
         {
-            _log.Info($"{Resources.Loading} {GetType().Name}");
+            _log.Info($"{Resources.Loading} {Resources.Playlists}");
             Clear();
 
             using (var context = _repositoryFactory())

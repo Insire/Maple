@@ -13,6 +13,15 @@
                  Style="{StaticResource BaseWindowStyle}"
                  WindowStartupLocation="CenterScreen"
                  WindowTransitionsEnabled="True">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadCommand}" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Unloaded">
+            <i:InvokeCommandAction Command="{Binding DisposeCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <DockPanel Margin="10">
         <Grid DockPanel.Dock="Bottom">
             <Grid.ColumnDefinitions>
@@ -24,11 +33,11 @@
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        FontWeight="Medium"
-                       Text="© Insire 2017" />
+                       Text="Copyright © 2017 by Insire" />
             <TextBlock Grid.Column="1"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       Text="{Binding Message}" />
+                       Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Grid.Column="2"
                        HorizontalAlignment="Right"
                        VerticalAlignment="Center"
@@ -39,14 +48,7 @@
         <Image RenderOptions.BitmapScalingMode="HighQuality"
                SnapsToDevicePixels="True"
                Source="Resources/logo_withoutbackground.png">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Loaded">
-                    <i:InvokeCommandAction Command="{Binding LoadCommand}" />
-                </i:EventTrigger>
-                <i:EventTrigger EventName="Unloaded">
-                    <i:InvokeCommandAction Command="{Binding DisposeCommand}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
+
         </Image>
     </DockPanel>
 </local:IoCWindow>
