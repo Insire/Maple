@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		Resources\client_secret.json = Resources\client_secret.json
 		..\license.md = ..\license.md
+		local.runsettings = local.runsettings
 		Resources\Images\logo.ico = Resources\Images\logo.ico
 		Resources\Images\logo.png = Resources\Images\logo.png
 		Resources\Images\logo_small.ico = Resources\Images\logo_small.ico
@@ -196,5 +197,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

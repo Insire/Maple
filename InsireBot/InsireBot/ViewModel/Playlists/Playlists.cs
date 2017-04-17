@@ -13,7 +13,7 @@ namespace Maple
     /// <seealso cref="Maple.Core.BaseDataListViewModel{Maple.Playlist, Maple.Data.Playlist}" />
     /// <seealso cref="Maple.Core.ILoadableViewModel" />
     /// <seealso cref="Maple.Core.ISaveableViewModel" />
-    public class Playlists : BaseDataListViewModel<Playlist, Data.Playlist>, ILoadableViewModel, ISaveableViewModel
+    public class Playlists : BaseDataListViewModel<Playlist, Data.Playlist>, ILoadableViewModel, ISaveableViewModel, IPlaylistsViewModel
     {
         private readonly IMapleLog _log;
         private readonly DialogViewModel _dialogViewModel;
@@ -79,6 +79,7 @@ namespace Maple
         /// </summary>
         public void Load()
         {
+            _log.Info($"{Resources.Loading} {GetType().Name}");
             Clear();
 
             using (var context = _repositoryFactory())
@@ -93,6 +94,7 @@ namespace Maple
         /// </summary>
         public void Save()
         {
+            _log.Info($"{Resources.Saving} {GetType().Name}");
             using (var context = _repositoryFactory())
             {
                 context.Save(this);
@@ -127,6 +129,7 @@ namespace Maple
 
         public async Task LoadAsync()
         {
+            _log.Info($"{Resources.Loading} {GetType().Name}");
             Clear();
 
             using (var context = _repositoryFactory())

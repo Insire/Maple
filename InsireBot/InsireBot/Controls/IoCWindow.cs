@@ -10,14 +10,14 @@ using System.Windows.Media.Imaging;
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="Maple.ConfigurableWindow" />
     /// <seealso cref="Maple.Core.IIocFrameworkElement" />
     public class IoCWindow : ConfigurableWindow, IIocFrameworkElement
     {
         private IConfigurableWindowSettings _settings;
-        private UIColorsViewModel _colorsViewModel;
+        private IUIColorsViewModel _colorsViewModel;
         public ITranslationService TranslationManager { get; private set; }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Maple
         /// </summary>
         /// <param name="container">The container.</param>
         /// <param name="vm">The vm.</param>
-        public IoCWindow(ITranslationService container, UIColorsViewModel vm) : base()
+        public IoCWindow(ITranslationService container, IUIColorsViewModel vm) : base()
         {
             TranslationManager = container;
             _colorsViewModel = vm;

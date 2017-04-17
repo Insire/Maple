@@ -14,11 +14,31 @@
                  WindowStartupLocation="CenterScreen"
                  WindowTransitionsEnabled="True">
     <DockPanel Margin="10">
-        <TextBlock HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   DockPanel.Dock="Bottom"
-                   Text="{Binding Message}" />
-        <Image Source="Resources/logo_withoutbackground.png">
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       FontWeight="Medium"
+                       Text="© Insire 2017" />
+            <TextBlock Grid.Column="1"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Text="{Binding Message}" />
+            <TextBlock Grid.Column="2"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                       FontWeight="Medium"
+                       Text="{Binding Version}" />
+        </Grid>
+
+        <Image RenderOptions.BitmapScalingMode="HighQuality"
+               SnapsToDevicePixels="True"
+               Source="Resources/logo_withoutbackground.png">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Loaded">
                     <i:InvokeCommandAction Command="{Binding LoadCommand}" />

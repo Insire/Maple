@@ -5,7 +5,7 @@ namespace Maple
 {
     public partial class Shell : IoCWindow
     {
-        public Shell(ITranslationService manager, UIColorsViewModel vm) : base(manager, vm)
+        public Shell(ITranslationService manager, IUIColorsViewModel vm) : base(manager, vm)
         {
             InitializeComponent();
         }

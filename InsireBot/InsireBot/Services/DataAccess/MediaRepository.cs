@@ -299,7 +299,7 @@ namespace Maple
             }
         }
 
-        public void Save(MediaPlayers players)
+        public void Save(IMediaPlayersViewModel players)
         {
             using (_busyStack.GetToken())
             {

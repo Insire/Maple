@@ -3,10 +3,10 @@ using Maple.Core;
 using Maple.Properties;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Linq;
 
 namespace Maple
 {
@@ -21,7 +21,7 @@ namespace Maple
             InitializeResources();
             InitializeLocalization();
 
-            _container = DependencyInjectionFactory.GetContainer();
+            _container = DependencyInjectionFactory.Get();
             _manager = _container.Resolve<ITranslationService>();
             _log = _container.Resolve<IMapleLog>();
 
@@ -69,10 +69,10 @@ namespace Maple
 
         private SplashScreen ShowSplashScreen()
         {
-            var vm = _container.Resolve<UIColorsViewModel>();
+            var vm = _container.Resolve<IUIColorsViewModel>();
             var splash = new SplashScreen(_manager, vm)
             {
-                DataContext = _container.Resolve<SplashScreenViewModel>(),
+                DataContext = _container.Resolve<ISplashScreenViewModel>(),
             };
             splash.Show();
             return splash;
@@ -80,8 +80,8 @@ namespace Maple
 
         private void ShowShell(SplashScreen splash)
         {
-            var colors = _container.Resolve<UIColorsViewModel>();
-            var vm = _container.Resolve<SplashScreenViewModel>();
+            var colors = _container.Resolve<IUIColorsViewModel>();
+            var vm = _container.Resolve<ISplashScreenViewModel>();
 
             var shell = new Shell(_manager, colors)
             {
@@ -100,8 +100,14 @@ namespace Maple
         private IList<Task> LoadApplicationData()
         {
             var tasks = new List<Task>();
-            foreach (var item in _container.ResolveMany<ILoadableViewModel>())
+            Debug.WriteLine($"Loading");
+
+            foreach (var item in _container.ResolveMany<ILoadableViewModel>(behavior: ResolveManyBehavior.AsFixedArray))
+            {
+                Debug.WriteLine($"resolved {item.GetType().Name}");
                 tasks.Add(item.LoadAsync());
+            }
+
 
             tasks.Add(Task.Delay(TimeSpan.FromSeconds(2)));
             return tasks;
@@ -112,8 +118,12 @@ namespace Maple
             var log = _container.Resolve<IMapleLog>();
             log.Info(Localization.Properties.Resources.SavingState);
 
-            foreach (var item in _container.ResolveMany<ILoadableViewModel>())
+            Debug.WriteLine($"Saving");
+            foreach (var item in _container.Resolve<IEnumerable<ILoadableViewModel>>())
+            {
+                Debug.WriteLine($"resolved {item.GetType().Name}");
                 item.Save();
+            }
 
             log.Info(Localization.Properties.Resources.SavedState);
         }

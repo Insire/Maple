@@ -1,6 +1,5 @@
 ﻿using Maple.Core;
 using System;
-using System.IO;
 
 namespace Maple
 {
@@ -166,7 +165,7 @@ namespace Maple
         /// <value>
         ///   <c>true</c> if this instance is file; otherwise, <c>false</c>.
         /// </value>
-        public bool IsFile => File.Exists(Location);
+        public bool IsFile => IOUtils.IsLocalFile(Location);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaItem"/> class.

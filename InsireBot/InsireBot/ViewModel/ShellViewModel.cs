@@ -3,7 +3,7 @@
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="Maple.Core.ObservableObject" />
     public class ShellViewModel : ObservableObject
@@ -60,53 +60,53 @@ namespace Maple
             private set { SetValue(ref _dialogViewModel, value); }
         }
 
-        private Playlists _playlists;
+        private IPlaylistsViewModel _playlists;
         /// <summary>
         /// Gets the playlists.
         /// </summary>
         /// <value>
         /// The playlists.
         /// </value>
-        public Playlists Playlists
+        public IPlaylistsViewModel Playlists
         {
             get { return _playlists; }
             private set { SetValue(ref _playlists, value); }
         }
 
-        private MediaPlayers _mediaPlayers;
+        private IMediaPlayersViewModel _mediaPlayers;
         /// <summary>
         /// Gets the media players.
         /// </summary>
         /// <value>
         /// The media players.
         /// </value>
-        public MediaPlayers MediaPlayers
+        public IMediaPlayersViewModel MediaPlayers
         {
             get { return _mediaPlayers; }
             private set { SetValue(ref _mediaPlayers, value); }
         }
 
-        private UIColorsViewModel _uiColorsViewModel;
+        private IUIColorsViewModel _uiColorsViewModel;
         /// <summary>
         /// Gets the UI colors view model.
         /// </summary>
         /// <value>
         /// The UI colors view model.
         /// </value>
-        public UIColorsViewModel UIColorsViewModel
+        public IUIColorsViewModel UIColorsViewModel
         {
             get { return _uiColorsViewModel; }
             private set { SetValue(ref _uiColorsViewModel, value); }
         }
 
-        private OptionsViewModel _optionsViewModel;
+        private IOptionsViewModel _optionsViewModel;
         /// <summary>
         /// Gets the options view model.
         /// </summary>
         /// <value>
         /// The options view model.
         /// </value>
-        public OptionsViewModel OptionsViewModel
+        public IOptionsViewModel OptionsViewModel
         {
             get { return _optionsViewModel; }
             private set { SetValue(ref _optionsViewModel, value); }
@@ -127,10 +127,10 @@ namespace Maple
                                 Scenes scenes,
                                 StatusbarViewModel statusBarViewModel,
                                 DialogViewModel dialogViewModel,
-                                Playlists playlists,
-                                MediaPlayers mediaPlayers,
-                                UIColorsViewModel uiColorsViewModel,
-                                OptionsViewModel optionsViewModel)
+                                IPlaylistsViewModel playlists,
+                                IMediaPlayersViewModel mediaPlayers,
+                                IUIColorsViewModel uiColorsViewModel,
+                                IOptionsViewModel optionsViewModel)
         {
             TranslationManager = translationManager;
             Scenes = scenes;

@@ -1,4 +1,5 @@
 ﻿using Maple.Core;
+using Maple.Localization.Properties;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -12,8 +13,9 @@ namespace Maple
     /// <seealso cref="System.IDisposable" />
     /// <seealso cref="Maple.Core.ILoadableViewModel" />
     /// <seealso cref="Maple.Core.ISaveableViewModel" />
-    public class MediaPlayers : BaseDataListViewModel<MediaPlayer, Data.MediaPlayer>, IDisposable, ILoadableViewModel, ISaveableViewModel
+    public class MediaPlayers : BaseDataListViewModel<MediaPlayer, Data.MediaPlayer>, IMediaPlayersViewModel
     {
+        private readonly IMapleLog _log;
         private readonly ITranslationService _manager;
         private readonly Func<IMediaPlayer> _playerFactory;
         private readonly AudioDevices _devices;
@@ -71,13 +73,14 @@ namespace Maple
         /// <param name="repo">The repo.</param>
         /// <param name="devices">The devices.</param>
         /// <param name="dialog">The dialog.</param>
-        public MediaPlayers(ITranslationService manager, Func<IMediaPlayer> playerFactory, Func<IMediaRepository> repo, AudioDevices devices, DialogViewModel dialog)
+        public MediaPlayers(IMapleLog log, ITranslationService manager, Func<IMediaPlayer> playerFactory, Func<IMediaRepository> repo, AudioDevices devices, DialogViewModel dialog)
         {
-            _manager = manager;
-            _playerFactory = playerFactory;
-            _devices = devices;
-            _dialog = dialog;
-            _repositoryFactory = repo;
+            _log = log ?? throw new ArgumentNullException(nameof(log));
+            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
+            _playerFactory = playerFactory ?? throw new ArgumentNullException(nameof(playerFactory));
+            _devices = devices ?? throw new ArgumentNullException(nameof(devices));
+            _dialog = dialog ?? throw new ArgumentNullException(nameof(dialog));
+            _repositoryFactory = repo ?? throw new ArgumentNullException(nameof(repo));
         }
 
         /// <summary>
@@ -85,6 +88,7 @@ namespace Maple
         /// </summary>
         public void Load()
         {
+            _log.Info($"{Resources.Loading} {GetType().Name}");
             Items.Clear();
 
             using (var context = _repositoryFactory())
@@ -105,6 +109,7 @@ namespace Maple
         /// </summary>
         public void Save()
         {
+            _log.Info($"{Resources.Saving} {GetType().Name}");
             using (var context = _repositoryFactory())
             {
                 context.Save(this);
@@ -148,6 +153,7 @@ namespace Maple
 
         public async Task LoadAsync()
         {
+            _log.Info($"{Resources.Loading} {GetType().Name}");
             Items.Clear();
 
             using (var context = _repositoryFactory())

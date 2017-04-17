@@ -1,4 +1,6 @@
 ﻿using Maple.Core;
+using Maple.Localization.Properties;
+using System;
 using System.Globalization;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -11,9 +13,10 @@ namespace Maple
     /// <seealso cref="Maple.Core.ObservableObject" />
     /// <seealso cref="Maple.Core.ILoadableViewModel" />
     /// <seealso cref="Maple.Core.ISaveableViewModel" />
-    public class OptionsViewModel : ObservableObject, ILoadableViewModel, ISaveableViewModel
+    public class OptionsViewModel : ObservableObject, IOptionsViewModel
     {
         private readonly ITranslationService _manager;
+        private readonly IMapleLog _log;
 
         private RangeObservableCollection<CultureInfo> _items;
         /// <summary>
@@ -69,9 +72,11 @@ namespace Maple
         /// Initializes a new instance of the <see cref="OptionsViewModel"/> class.
         /// </summary>
         /// <param name="manager">The manager.</param>
-        public OptionsViewModel(ITranslationService manager)
+        public OptionsViewModel(ITranslationService manager, IMapleLog log)
         {
-            _manager = manager;
+            _log = log ?? throw new ArgumentNullException(nameof(log));
+            _manager = manager ?? throw new ArgumentNullException(nameof(log));
+
             Items = new RangeObservableCollection<CultureInfo>(_manager.Languages);
         }
 
@@ -85,6 +90,7 @@ namespace Maple
         /// </summary>
         public void Save()
         {
+            _log.Info($"{Resources.Saving} {GetType().Name}");
             _manager.Save();
         }
 
@@ -93,6 +99,7 @@ namespace Maple
         /// </summary>
         public void Load()
         {
+            _log.Info($"{Resources.Loading} {GetType().Name}");
             _manager.Load();
             SelectedCulture = Properties.Settings.Default.StartUpCulture;
             IsLoaded = true;
@@ -100,11 +107,13 @@ namespace Maple
 
         public async Task SaveAsync()
         {
+            _log.Info($"{Resources.Saving} {GetType().Name}");
             await _manager.SaveAsync();
         }
 
         public async Task LoadAsync()
         {
+            _log.Info($"{Resources.Loading} {GetType().Name}");
             await _manager.LoadAsync();
             SelectedCulture = Properties.Settings.Default.StartUpCulture;
             IsLoaded = true;

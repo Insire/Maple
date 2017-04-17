@@ -1,6 +1,5 @@
 ﻿using Maple.Core;
 using System.Linq;
-using System.Reflection;
 
 namespace Maple
 {
@@ -10,7 +9,7 @@ namespace Maple
     /// <seealso cref="Maple.Core.ObservableObject" />
     public class StatusbarViewModel : ObservableObject
     {
-        private readonly MediaPlayers _mediaplayers;
+        private readonly IMediaPlayersViewModel _mediaplayers;
         private readonly ITranslationService _manager;
 
         private string _version;
@@ -57,7 +56,7 @@ namespace Maple
         /// </summary>
         /// <param name="manager">The manager.</param>
         /// <param name="mediaPlayers">The media players.</param>
-        public StatusbarViewModel(ITranslationService manager, MediaPlayers mediaPlayers)
+        public StatusbarViewModel(ITranslationService manager, IVersionService version, IMediaPlayersViewModel mediaPlayers)
         {
             _mediaplayers = mediaPlayers;
 
@@ -68,8 +67,7 @@ namespace Maple
                       UpdateLanguage();
               };
 
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
-            Version = $"v{version.Major}.{version.Minor}.{version.Revision}";
+            Version = version.Get();
 
             UpdateLanguage();
 

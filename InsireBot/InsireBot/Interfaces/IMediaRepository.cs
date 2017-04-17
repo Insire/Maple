@@ -93,7 +93,7 @@ namespace Maple
         /// Saves the specified players.
         /// </summary>
         /// <param name="players">The players.</param>
-        void Save(MediaPlayers players);
+        void Save(IMediaPlayersViewModel players);
         /// <summary>
         /// Saves the specified playlist.
         /// </summary>

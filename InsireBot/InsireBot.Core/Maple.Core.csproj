@@ -83,7 +83,6 @@
     <Compile Include="DTO\Playlist.cs" />
     <Compile Include="Enums\PrivacyStatus.cs" />
     <Compile Include="Extensions\EventExtension.cs" />
-    <Compile Include="Extensions\RefreshableDecorator.cs" />
     <Compile Include="IO\FileSystemBrowser.cs" />
     <Compile Include="IO\Interfaces\IDepth.cs" />
     <Compile Include="IO\Interfaces\IFileSystemDirectory.cs" />
@@ -148,9 +147,7 @@
       <Name>Maple.Localization</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\Logging\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

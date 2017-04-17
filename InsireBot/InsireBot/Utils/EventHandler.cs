@@ -63,7 +63,7 @@ namespace Maple
         }
     }
 
-    public delegate void UiPrimaryColorEventHandler(object sender, PlayingMediaItemEventArgs e);
+    public delegate void UiPrimaryColorEventHandler(object sender, UiPrimaryColorEventArgs e);
     public class UiPrimaryColorEventArgs : EventArgs
     {
         public Color Color { get; private set; }
