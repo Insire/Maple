@@ -87,27 +87,14 @@ namespace Maple
             private set { SetValue(ref _mediaPlayers, value); }
         }
 
-        private IUIColorsViewModel _uiColorsViewModel;
-        /// <summary>
-        /// Gets the UI colors view model.
-        /// </summary>
-        /// <value>
-        /// The UI colors view model.
-        /// </value>
-        public IUIColorsViewModel UIColorsViewModel
-        {
-            get { return _uiColorsViewModel; }
-            private set { SetValue(ref _uiColorsViewModel, value); }
-        }
-
-        private IOptionsViewModel _optionsViewModel;
+        private OptionsViewModel _optionsViewModel;
         /// <summary>
         /// Gets the options view model.
         /// </summary>
         /// <value>
         /// The options view model.
         /// </value>
-        public IOptionsViewModel OptionsViewModel
+        public OptionsViewModel OptionsViewModel
         {
             get { return _optionsViewModel; }
             private set { SetValue(ref _optionsViewModel, value); }
@@ -130,8 +117,7 @@ namespace Maple
                                 DialogViewModel dialogViewModel,
                                 IPlaylistsViewModel playlists,
                                 IMediaPlayersViewModel mediaPlayers,
-                                IUIColorsViewModel uiColorsViewModel,
-                                IOptionsViewModel optionsViewModel)
+                                OptionsViewModel optionsViewModel)
         {
             TranslationManager = translationManager ?? throw new ArgumentNullException(nameof(translationManager));
             Scenes = scenes ?? throw new ArgumentNullException(nameof(scenes));
@@ -139,7 +125,6 @@ namespace Maple
             DialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
             Playlists = playlists ?? throw new ArgumentNullException(nameof(playlists));
             MediaPlayers = mediaPlayers ?? throw new ArgumentNullException(nameof(mediaPlayers));
-            UIColorsViewModel = uiColorsViewModel ?? throw new ArgumentNullException(nameof(uiColorsViewModel));
             OptionsViewModel = optionsViewModel ?? throw new ArgumentNullException(nameof(optionsViewModel));
         }
     }

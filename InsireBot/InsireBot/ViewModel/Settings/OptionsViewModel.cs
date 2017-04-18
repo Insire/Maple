@@ -1,122 +1,28 @@
 ﻿using Maple.Core;
-using Maple.Localization.Properties;
 using System;
-using System.Globalization;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace Maple
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <seealso cref="Maple.Core.ObservableObject" />
-    /// <seealso cref="Maple.Core.ILoadableViewModel" />
-    /// <seealso cref="Maple.Core.ISaveableViewModel" />
-    public class OptionsViewModel : ObservableObject, IOptionsViewModel
+    public class OptionsViewModel : ObservableObject
     {
-        private readonly ITranslationService _manager;
-        private readonly IMapleLog _log;
-
-        private RangeObservableCollection<CultureInfo> _items;
-        /// <summary>
-        /// Gets or sets the items.
-        /// </summary>
-        /// <value>
-        /// The items.
-        /// </value>
-        public RangeObservableCollection<CultureInfo> Items
+        private ICultureViewModel _cultureViewModel;
+        public ICultureViewModel CultureViewModel
         {
-            get { return _items; }
-            set { SetValue(ref _items, value); }
+            get { return _cultureViewModel; }
+            set { SetValue(ref _cultureViewModel, value); }
         }
 
-        private CultureInfo _selectedCulture;
-        /// <summary>
-        /// Gets or sets the selected culture.
-        /// </summary>
-        /// <value>
-        /// The selected culture.
-        /// </value>
-        public CultureInfo SelectedCulture
+        private IUIColorsViewModel _uiColorsViewModel;
+        public IUIColorsViewModel UIColorsViewModel
         {
-            get { return _selectedCulture; }
-            set { SetValue(ref _selectedCulture, value, OnChanged: SyncCulture); }
+            get { return _uiColorsViewModel; }
+            set { SetValue(ref _uiColorsViewModel, value); }
         }
 
-        public bool IsLoaded { get; private set; }
-
-        /// <summary>
-        /// Gets the refresh command.
-        /// </summary>
-        /// <value>
-        /// The refresh command.
-        /// </value>
-        public ICommand RefreshCommand => new RelayCommand(Load);
-        /// <summary>
-        /// Gets the load command.
-        /// </summary>
-        /// <value>
-        /// The load command.
-        /// </value>
-        public ICommand LoadCommand => new RelayCommand(Load, () => !IsLoaded);
-        /// <summary>
-        /// Gets the save command.
-        /// </summary>
-        /// <value>
-        /// The save command.
-        /// </value>
-        public ICommand SaveCommand => new RelayCommand(Save);
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OptionsViewModel"/> class.
-        /// </summary>
-        /// <param name="manager">The manager.</param>
-        public OptionsViewModel(ITranslationService manager, IMapleLog log)
+        public OptionsViewModel(IUIColorsViewModel colors, ICultureViewModel culture)
         {
-            _log = log ?? throw new ArgumentNullException(nameof(log));
-            _manager = manager ?? throw new ArgumentNullException(nameof(log));
-
-            Items = new RangeObservableCollection<CultureInfo>(_manager.Languages);
-        }
-
-        private void SyncCulture()
-        {
-            _manager.CurrentLanguage = SelectedCulture;
-        }
-
-        /// <summary>
-        /// Saves this instance.
-        /// </summary>
-        public void Save()
-        {
-            _log.Info($"{Resources.Saving} {Resources.Options}");
-            _manager.Save();
-        }
-
-        /// <summary>
-        /// Loads this instance.
-        /// </summary>
-        public void Load()
-        {
-            _log.Info($"{Resources.Loading} {Resources.Options}");
-            _manager.Load();
-            SelectedCulture = Properties.Settings.Default.StartUpCulture;
-            IsLoaded = true;
-        }
-
-        public async Task SaveAsync()
-        {
-            _log.Info($"{Resources.Saving} {Resources.Options}");
-            await _manager.SaveAsync();
-        }
-
-        public async Task LoadAsync()
-        {
-            _log.Info($"{Resources.Loading} {Resources.Options}");
-            await _manager.LoadAsync();
-            SelectedCulture = Properties.Settings.Default.StartUpCulture;
-            IsLoaded = true;
+            UIColorsViewModel = colors ?? throw new ArgumentNullException(nameof(colors));
+            CultureViewModel = culture ?? throw new ArgumentNullException(nameof(culture));
         }
     }
 }

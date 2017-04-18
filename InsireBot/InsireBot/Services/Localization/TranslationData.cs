@@ -14,13 +14,15 @@ namespace Maple
     /// <seealso cref="System.IDisposable" />
     public class TranslationData : ObservableObject, IWeakEventListener, INotifyPropertyChanged, IDisposable
     {
-        private string _key;
-        private ITranslationService _manager;
+        private readonly string _key;
+        private readonly ITranslationService _manager;
+        private readonly bool _toUpper;
 
-        public TranslationData(ITranslationService manager, string key)
+        public TranslationData(ITranslationService manager, string key, bool toUpper)
         {
-            _manager = manager;
-            _key = key;
+            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
+            _key = key ?? throw new ArgumentNullException(nameof(key));
+            _toUpper = toUpper;
 
             LanguageChangedEventManager.AddListener(_manager, this);
         }
@@ -39,7 +41,7 @@ namespace Maple
 
         public object Value
         {
-            get { return _manager?.Translate(_key); }
+            get { return GetValue(); }
         }
 
         public bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
@@ -50,6 +52,14 @@ namespace Maple
                 return true;
             }
             return false;
+        }
+
+        private string GetValue()
+        {
+            if (_toUpper)
+                return _manager?.Translate(_key).ToUpperInvariant();
+
+            return _manager?.Translate(_key);
         }
     }
 }

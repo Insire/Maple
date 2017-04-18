@@ -130,7 +130,7 @@
     <value>Add playlist</value>
   </data>
   <data name="Themes" xml:space="preserve">
-    <value>Themes</value>
+    <value>Color  Themes</value>
   </data>
   <data name="NavigationLoad" xml:space="preserve">
     <value>Loading navigation</value>
@@ -290,5 +290,23 @@
   </data>
   <data name="AppStart" xml:space="preserve">
     <value>Application is being started</value>
+  </data>
+  <data name="GithubPageCommand" xml:space="preserve">
+    <value>Open project page at GitHub.com</value>
+  </data>
+  <data name="MediaPlayerCommand" xml:space="preserve">
+    <value>Switch to playlist</value>
+  </data>
+  <data name="ColorOptionsCommand" xml:space="preserve">
+    <value>Switch to color profiles</value>
+  </data>
+  <data name="OptionsCommand" xml:space="preserve">
+    <value>Switch to options</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="EditLanguage" xml:space="preserve">
+    <value>Change language</value>
   </data>
 </root>

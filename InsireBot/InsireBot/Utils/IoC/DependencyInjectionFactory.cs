@@ -30,7 +30,7 @@ namespace Maple
                 // save-/loadable ViewModels
                 c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IPlaylistsViewModel) }, typeof(Playlists), Reuse.Singleton);
                 c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IMediaPlayersViewModel) }, typeof(MediaPlayers), Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
-                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IOptionsViewModel) }, typeof(OptionsViewModel), Reuse.Singleton);
+                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(ICultureViewModel) }, typeof(CultureViewModel), Reuse.Singleton);
                 c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IUIColorsViewModel) }, typeof(UIColorsViewModel), Reuse.Singleton);
 
                 //generic ViewModels
@@ -40,6 +40,7 @@ namespace Maple
                 c.Register<DialogViewModel>(Reuse.Singleton);
                 c.Register<StatusbarViewModel>(Reuse.Singleton);
                 c.Register<FileSystemViewModel>(Reuse.Singleton);
+                c.Register<OptionsViewModel>(Reuse.Singleton);
                 c.Register<ISplashScreenViewModel, SplashScreenViewModel>(Reuse.Singleton);
             };
 
@@ -95,7 +96,7 @@ namespace Maple
                 // save-/loadable ViewModels
                 c.Register<IPlaylistsViewModel, Playlists>(Reuse.Singleton);
                 c.Register<IMediaPlayersViewModel, MediaPlayers>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
-                c.Register<IOptionsViewModel, OptionsViewModel>(Reuse.Singleton);
+                c.Register<ICultureViewModel, CultureViewModel>(Reuse.Singleton);
                 c.Register<IUIColorsViewModel, UIColorsViewModel>(Reuse.Singleton);
 
                 c.RegisterMany(
@@ -103,7 +104,7 @@ namespace Maple
                     {
                         typeof(Playlists),
                         typeof(MediaPlayers),
-                        typeof(OptionsViewModel),
+                        typeof(CultureViewModel),
                         typeof(UIColorsViewModel)
                     },
                     serviceTypeCondition: type => type.IsInterface, setup: Setup.With(allowDisposableTransient: true));

@@ -17,15 +17,16 @@ namespace Maple
 
         protected override async void OnStartup(StartupEventArgs e)
         {
+            _container = DependencyInjectionFactory.Get();
+            _manager = _container.Resolve<ITranslationService>();
+            _log = _container.Resolve<IMapleLog>();
+
             InitializeResources();
             InitializeLocalization();
 
-            _container = DependencyInjectionFactory.Get();
-
             using (var vm = _container.Resolve<ISplashScreenViewModel>())
             {
-                _manager = _container.Resolve<ITranslationService>();
-                _log = _container.Resolve<IMapleLog>();
+
 
                 var shell = new Shell(_manager, _container.Resolve<IUIColorsViewModel>(), _container.Resolve<ShellViewModel>());
                 var screen = new SplashScreen(_manager, _container.Resolve<IUIColorsViewModel>(), vm);

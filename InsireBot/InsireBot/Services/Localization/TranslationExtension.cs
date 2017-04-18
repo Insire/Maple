@@ -18,6 +18,9 @@ namespace Maple
         [ConstructorArgument("key")]
         public string Key { get; set; }
 
+        [ConstructorArgument("ToUpper")]
+        public bool ToUpper { get; set; }
+
         /// <summary>
         /// When implemented in a derived class, returns an object that is provided as the value of the target property for this markup extension.
         /// </summary>
@@ -68,7 +71,7 @@ namespace Maple
         {
             var binding = new Binding("Value")
             {
-                Source = new TranslationData(manager, Key)
+                Source = new TranslationData(manager, Key, ToUpper)
             };
 
             return binding.ProvideValue(serviceProvider);

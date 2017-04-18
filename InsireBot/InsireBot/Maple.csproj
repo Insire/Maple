@@ -185,6 +185,9 @@
     <Compile Include="Pages\MediaPlayersPage.xaml.cs">
       <DependentUpon>MediaPlayersPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Options\OptionsPage.xaml.cs">
+      <DependentUpon>OptionsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Playlist\PlaylistsPage.xaml.cs">
       <DependentUpon>PlaylistsPage.xaml</DependentUpon>
     </Compile>
@@ -200,6 +203,7 @@
       <DependentUpon>SplashScreen.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\BindingProxy.cs" />
+    <Compile Include="Utils\Converters\CaseConverter.cs" />
     <Compile Include="Utils\Extensions\ContextExtensions.cs" />
     <Compile Include="Utils\IoC\DependencyInjectionFactory.cs" />
     <Compile Include="Utils\Converters\DebugConverter.cs" />
@@ -226,6 +230,7 @@
     <Compile Include="ViewModel\Dialogs\IO\FolderBrowserDialogViewModel.cs" />
     <Compile Include="ViewModel\Dialogs\MessageDialogViewModel.cs" />
     <Compile Include="ViewModel\Dialogs\ProgressDialogViewModel.cs" />
+    <Compile Include="ViewModel\Interfaces\ICultureViewModel.cs" />
     <Compile Include="ViewModel\Interfaces\ISplashScreenViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer\AudioDevices.cs" />
     <Compile Include="ViewModel\Interfaces\IMediaPlayersViewModel.cs" />
@@ -233,9 +238,7 @@
     <Compile Include="ViewModel\MediaPlayer\MediaPlayers.cs" />
     <Compile Include="ViewModel\Navigation\Scene.cs" />
     <Compile Include="ViewModel\Interfaces\IPlaylistsViewModel.cs" />
-    <Compile Include="ViewModel\Interfaces\IOptionsViewModel.cs" />
     <Compile Include="ViewModel\Interfaces\IUIColorsViewModel.cs" />
-    <Compile Include="ViewModel\Settings\OptionsViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer\AudioDevice.cs" />
     <Compile Include="ViewModel\MediaItems\MediaItem.cs" />
     <Compile Include="ViewModel\MediaPlayer\Base\BasePlayer.cs" />
@@ -257,12 +260,11 @@
     <Compile Include="Pages\Options\ColorOptionsPage.xaml.cs">
       <DependentUpon>ColorOptionsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Options\OptionsPage.xaml.cs">
-      <DependentUpon>OptionsPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Utils\InsireBotException.cs" />
     <Compile Include="ViewModel\MediaItems\CreateMediaItem.cs" />
     <Compile Include="ViewModel\Playlists\CreatePlaylist.cs" />
+    <Compile Include="ViewModel\Settings\CultureViewModel.cs" />
+    <Compile Include="ViewModel\Settings\OptionsViewModel.cs" />
     <Compile Include="ViewModel\ShellViewModel.cs" />
     <Compile Include="ViewModel\SplashScreenViewModel.cs" />
     <Compile Include="ViewModel\StatusbarViewModel.cs" />
@@ -274,6 +276,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\MediaPlayersPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Options\OptionsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -294,10 +300,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Style.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\Options\OptionsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

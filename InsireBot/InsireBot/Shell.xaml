@@ -16,10 +16,13 @@
     <!--  DataContext ShellViewModel  -->
     <metro:MetroWindow.RightWindowCommands>
         <metro:WindowCommands ShowSeparators="False">
-            <Button Command="{Binding Scenes.OpenColorOptionsCommand}">
+            <Button Command="{Binding Scenes.OpenOptionsCommand}" ToolTip="{local:Translation OptionsCommand}">
+                <icons:PackIconMaterial Kind="Earth" />
+            </Button>
+            <Button Command="{Binding Scenes.OpenColorOptionsCommand}" ToolTip="{local:Translation ColorOptionsCommand}">
                 <icons:PackIconMaterial Kind="Brush" />
             </Button>
-            <Button Command="{Binding Scenes.OpenMediaPlayerCommand}">
+            <Button Command="{Binding Scenes.OpenMediaPlayerCommand}" ToolTip="{local:Translation MediaPlayerCommand}">
                 <icons:PackIconMaterial Kind="Play" />
             </Button>
         </metro:WindowCommands>
@@ -27,7 +30,7 @@
 
     <metro:MetroWindow.LeftWindowCommands>
         <metro:WindowCommands>
-            <Button Command="{Binding Scenes.OpenGithubPageCommand}">
+            <Button Command="{Binding Scenes.OpenGithubPageCommand}" ToolTip="{local:Translation GithubPageCommand}">
                 <icons:PackIconMaterial Kind="GithubCircle" />
             </Button>
         </metro:WindowCommands>

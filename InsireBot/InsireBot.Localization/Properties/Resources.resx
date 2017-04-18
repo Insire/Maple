@@ -130,7 +130,7 @@
     <value>Wiedergabeliste hinzufügen</value>
   </data>
   <data name="Themes" xml:space="preserve">
-    <value>Themen</value>
+    <value>Farbprofile</value>
   </data>
   <data name="NavigationLoad" xml:space="preserve">
     <value>Navigation wird geladen</value>
@@ -290,5 +290,23 @@
   </data>
   <data name="AppStart" xml:space="preserve">
     <value>Anwendung wird gestartet</value>
+  </data>
+  <data name="GithubPageCommand" xml:space="preserve">
+    <value>Projektseite auf GitHub.com öffnen</value>
+  </data>
+  <data name="MediaPlayerCommand" xml:space="preserve">
+    <value>Zur Wiedergabeliste wechseln</value>
+  </data>
+  <data name="ColorOptionsCommand" xml:space="preserve">
+    <value>Zu den Farbprofilen wechseln</value>
+  </data>
+  <data name="OptionsCommand" xml:space="preserve">
+    <value>Zu den Einstellungen wechseln</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Ändern</value>
+  </data>
+  <data name="EditLanguage" xml:space="preserve">
+    <value>Sprache ändern</value>
   </data>
 </root>

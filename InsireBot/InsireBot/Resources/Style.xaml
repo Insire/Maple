@@ -808,6 +808,7 @@
         <Setter Property="VerticalAlignment" Value="Stretch" />
     </Style>
     <!--  #endrgion FileSystemBrowser  -->
+
     <!--#region Control Templates-->
     <ControlTemplate x:Key="BusyTemplate">
         <materialDesign:TransitioningContent>
@@ -823,8 +824,6 @@
             </Grid>
         </materialDesign:TransitioningContent>
     </ControlTemplate>
-
-
 
     <ControlTemplate x:Key="IsRestrictedMediaItemTemplate">
         <icons:PackIconMaterial Kind="BlockHelper"
@@ -993,8 +992,8 @@
             <icons:PackIconMaterial Grid.Column="0"
                                     Width="24"
                                     Height="24"
-                                    VerticalAlignment="Center"
                                     HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
                                     Kind="ViewHeadline" />
 
             <StackPanel Grid.Column="1"
@@ -1006,8 +1005,9 @@
                            Text="{Binding Title}"
                            TextTrimming="CharacterEllipsis"
                            TextWrapping="NoWrap" />
-                <TextBlock Text="{Binding Description}"
-                           TextTrimming="CharacterEllipsis" FontSize="9"
+                <TextBlock FontSize="9"
+                           Text="{Binding Description}"
+                           TextTrimming="CharacterEllipsis"
                            TextWrapping="NoWrap">
                     <TextBlock.Style>
                         <Style BasedOn="{StaticResource MaterialDesignBody1TextBlock}" TargetType="TextBlock">

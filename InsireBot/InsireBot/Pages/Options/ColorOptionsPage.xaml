@@ -79,7 +79,7 @@
             <materialDesign:TransitionEffect Kind="FadeIn" />
         </materialDesign:TransitioningContent.OpeningEffects>
 
-        <materialDesign:Card VerticalAlignment="Stretch">
+        <materialDesign:Card VerticalAlignment="Stretch" DataContext="{Binding OptionsViewModel}">
 
             <Grid>
                 <Grid.ColumnDefinitions>
