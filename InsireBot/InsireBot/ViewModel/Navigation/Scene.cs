@@ -1,29 +1,18 @@
 ﻿using Maple.Core;
+using System;
 using System.Windows;
 
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="Maple.Core.ObservableObject" />
     /// <seealso cref="Maple.Core.ISequence" />
     public class Scene : ObservableObject, ISequence
     {
         private readonly ITranslationService _manager;
-
-        private BusyStack _busyStack;
-        /// <summary>
-        /// Provides IDisposable tokens for running async operations
-        /// </summary>
-        /// <value>
-        /// The busy stack.
-        /// </value>
-        public BusyStack BusyStack
-        {
-            get { return _busyStack; }
-            private set { SetValue(ref _busyStack, value); }
-        }
+        private readonly BusyStack _busyStack;
 
         private bool _isBusy;
         /// <summary>
@@ -110,17 +99,15 @@ namespace Maple
         /// <param name="manager">The manager.</param>
         public Scene(ITranslationService manager)
         {
-            _manager = manager;
+            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
             _manager.PropertyChanged += (o, e) =>
                       {
                           if (e.PropertyName == nameof(_manager.CurrentLanguage))
                               UpdateDisplayName();
                       };
 
-            BusyStack = new BusyStack()
-            {
-                OnChanged = (hasItems) => IsBusy = hasItems
-            };
+            _busyStack = new BusyStack();
+            _busyStack.OnChanged = (hasItems) => IsBusy = hasItems;
         }
 
         private void UpdateDisplayName()

@@ -76,5 +76,86 @@ namespace Maple.Data
                            Sequence = 0,
                        });
         }
+
+        private void SeedOptions(TContext context)
+        {
+            if (context.Options.Find(1) == null)
+                context.Options
+                    .Add(new Option
+                    {
+                        Id = 1,
+                        Key = "SelectedPlaylist",
+                        Sequence = 0,
+                        Type = (int)OptionType.Playlist,
+                        Value = "1",
+                    });
+
+            if (context.Options.Find(2) == null)
+                context.Options
+                    .Add(new Option
+                    {
+                        Id = 2,
+                        Key = "SelectedMediaItem",
+                        Sequence = 10,
+                        Type = (int)OptionType.MediaItem,
+                        Value = "",
+                    });
+
+            if (context.Options.Find(3) == null)
+                context.Options
+                    .Add(new Option
+                    {
+                        Id = 3,
+                        Key = "SelectedMediaPlayer",
+                        Sequence = 20,
+                        Type = (int)OptionType.MediaPlayer,
+                        Value = "1",
+                    });
+
+            if (context.Options.Find(4) == null)
+                context.Options
+                    .Add(new Option
+                    {
+                        Id = 4,
+                        Key = "SelectedCulture",
+                        Sequence = 30,
+                        Type = (int)OptionType.Culture,
+                        Value = "0",
+                    });
+
+            if (context.Options.Find(5) == null)
+                context.Options
+                    .Add(new Option
+                    {
+                        Id = 5,
+                        Key = "SelectedPrimary",
+                        Sequence = 40,
+                        Type = (int)OptionType.ColorProfile,
+                        Value = "",
+                    });
+
+            if (context.Options.Find(6) == null)
+                context.Options
+                    .Add(new Option
+                    {
+                        Id = 6,
+                        Key = "SelectedAccent",
+                        Sequence = 50,
+                        Type = (int)OptionType.ColorProfile,
+                        Value = "",
+                    });
+
+            if (context.Options.Find(7) == null)
+                context.Options
+                    .Add(new Option
+                    {
+                        Id = 7,
+                        Key = "SelectedScene",
+                        Sequence = 60,
+                        Type = (int)OptionType.Scene,
+                        Value = "",
+                    });
+
+        }
     }
 }
