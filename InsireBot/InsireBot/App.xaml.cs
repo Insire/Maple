@@ -12,38 +12,18 @@ namespace Maple
     public partial class App : Application
     {
         private IContainer _container;
-        private ITranslationService _manager;
-        private IMapleLog _log;
 
         protected override async void OnStartup(StartupEventArgs e)
         {
             _container = DependencyInjectionFactory.Get();
-            _manager = _container.Resolve<ITranslationService>();
-            _log = _container.Resolve<IMapleLog>();
 
-            InitializeResources();
+            var service = _container.Resolve<ITranslationService>();
+
+            InitializeResources(service);
             InitializeLocalization();
 
-            using (var vm = _container.Resolve<ISplashScreenViewModel>())
-            {
-
-
-                var shell = new Shell(_manager, _container.Resolve<IUIColorsViewModel>(), _container.Resolve<ShellViewModel>());
-                var screen = new SplashScreen(_manager, _container.Resolve<IUIColorsViewModel>(), vm);
-                screen.Show();
-
-                await Task.WhenAll(LoadApplicationData());
-
-                shell.Loaded += (o, args) =>
-                {
-                    screen.Close();
-                };
-
-                _log.Info(Localization.Properties.Resources.AppStart);
-                await Task.Delay(TimeSpan.FromSeconds(1));
-
-                shell.Show();
-            }
+            var shell = await GetShell(service);
+            shell.Show();
 
             base.OnStartup(e);
         }
@@ -54,25 +34,49 @@ namespace Maple
             ExitInternal(e);
         }
 
-        private void InitializeResources()
+        /// <summary>
+        /// Gets the shell control.
+        /// </summary>
+        /// <param name="service">The service.</param>
+        /// <returns></returns>
+        /// <remarks>
+        /// order matters alot here, so be careful when modifying this
+        /// </remarks>
+        private async Task<Shell> GetShell(ITranslationService service)
         {
-            var styles = CreateResourceDictionary(new Uri("/Maple;component/Resources/Style.xaml", UriKind.RelativeOrAbsolute));
+            var log = _container.Resolve<IMapleLog>();
 
-            Resources.MergedDictionaries.Add(styles);
+            using (var vm = _container.Resolve<ISplashScreenViewModel>())
+            {
+                var shell = _container.Resolve<Shell>();
+                var screen = _container.Resolve<SplashScreen>();
+
+                shell.Loaded += (o, args) => screen.Close();
+                screen.Show();
+
+                await Task.WhenAll(LoadApplicationData());
+
+                log.Info(Localization.Properties.Resources.AppStart);
+                await Task.Delay(TimeSpan.FromSeconds(1));
+
+                return shell;
+            }
         }
 
-        private IoCResourceDictionary CreateResourceDictionary(Uri uri)
+        /// <summary>
+        /// Initializes the resources.
+        /// </summary>
+        /// <param name="service">The service.</param>
+        /// <remarks>
+        /// injecting the translation manager into a SharedResourcedictionary,
+        /// so that hopefully all usages of the translation extension can be resolved inside of ResourceDictionaries
+        /// </remarks>
+        private void InitializeResources(ITranslationService service)
         {
-            // injecting the translation manager into a shared resourcedictionary,
-            // so that hopefully all usages of the translation extension can be resolved inside of ResourceDictionaries
+            var url = new Uri("/Maple;component/Resources/Style.xaml", UriKind.RelativeOrAbsolute);
+            var styles = new IoCResourceDictionary(service, url);
 
-            var dic = new IoCResourceDictionary(_manager)
-            {
-                Source = uri,
-            };
-            dic.Add(typeof(ITranslationService).Name, _manager);
-
-            return dic;
+            Resources.MergedDictionaries.Add(styles);
         }
 
         private void InitializeLocalization()

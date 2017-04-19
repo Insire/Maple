@@ -92,6 +92,7 @@
     <Compile Include="OptionType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\CreateSeedDatabaseIfNotExists.cs" />
+    <Compile Include="Interfaces\IPlaylistContext.cs" />
     <Compile Include="Repository\PlaylistContext.cs" />
   </ItemGroup>
   <ItemGroup>

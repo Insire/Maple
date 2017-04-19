@@ -9,9 +9,9 @@
     <!--  DataContext ShellViewModel  -->
 
     <local:IoCUserControl.Resources>
-        <local:BindingProxy x:Key="ApplyPrimaryProxy" Data="{Binding UIColorsViewModel.ApplyPrimaryCommand}" />
-        <local:BindingProxy x:Key="ApplyAccentProxy" Data="{Binding UIColorsViewModel.ApplyAccentCommand}" />
-        <local:BindingProxy x:Key="ToggleBaseCommandProxy" Data="{Binding UIColorsViewModel.ToggleBaseCommand}" />
+        <local:BindingProxy x:Key="ApplyPrimaryProxy" Data="{Binding OptionsViewModel.UIColorsViewModel.ApplyPrimaryCommand}" />
+        <local:BindingProxy x:Key="ApplyAccentProxy" Data="{Binding OptionsViewModel.UIColorsViewModel.ApplyAccentCommand}" />
+        <local:BindingProxy x:Key="ToggleBaseCommandProxy" Data="{Binding OptionsViewModel.UIColorsViewModel.ToggleBaseCommand}" />
 
         <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="Button">
             <Setter Property="Foreground">

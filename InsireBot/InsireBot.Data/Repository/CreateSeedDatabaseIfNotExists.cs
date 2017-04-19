@@ -35,14 +35,28 @@ namespace Maple.Data
                 context.Playlists
                    .Add(new Playlist
                    {
-                       Description = "Base",
+                       Title = "Main Playlist",
+                       Description = "Test playlist with 3 entries",
                        Id = 1,
                        IsShuffeling = false,
                        Location = "",
                        PrivacyStatus = 0,
-                       RepeatMode = 0,
+                       RepeatMode = 1,
                        Sequence = 0,
-                       Title = "Base",
+                   });
+
+            if (context.Playlists.Find(2) == null)
+                context.Playlists
+                   .Add(new Playlist
+                   {
+                       Title = "Another Playlist with a very long title",
+                       Description = "Playlist for testing with 1 entry",
+                       Id = 2,
+                       IsShuffeling = true,
+                       Location = "",
+                       PrivacyStatus = 0,
+                       RepeatMode = 0,
+                       Sequence = 10,
                    });
         }
 
@@ -52,12 +66,54 @@ namespace Maple.Data
                 context.MediaItems
                         .Add(new MediaItem
                         {
-                            Title = "Test",
-                            Description = "Description",
-                            Duration = 60_000,
+                            Title = "Test Song",
+                            Description = "A popular youtube video",
+                            Duration = 60_000_000,
                             Id = 1,
-                            Location = "C:",
+                            Location = "https://www.youtube.com/watch?v=oHg5SJYRHA0",
                             PlaylistId = 1,
+                            PrivacyStatus = 0,
+                            Sequence = 0,
+                        });
+
+            if (context.MediaItems.Find(2) == null)
+                context.MediaItems
+                        .Add(new MediaItem
+                        {
+                            Title = "Incorrect Title",
+                            Description = "A music video on youtube",
+                            Duration = 60_000_000,
+                            Id = 2,
+                            Location = "https://www.youtube.com/watch?v=PXf4rkguwDI&t",
+                            PlaylistId = 1,
+                            PrivacyStatus = 0,
+                            Sequence = 0,
+                        });
+
+            if (context.MediaItems.Find(3) == null)
+                context.MediaItems
+                        .Add(new MediaItem
+                        {
+                            Title = "Another Incorrect Title",
+                            Description = "A music video on youtube",
+                            Duration = 60_000_000,
+                            Id = 3,
+                            Location = "https://www.youtube.com/watch?v=xYfn7MWU7TQ&t",
+                            PlaylistId = 1,
+                            PrivacyStatus = 0,
+                            Sequence = 0,
+                        });
+
+            if (context.MediaItems.Find(4) == null)
+                context.MediaItems
+                        .Add(new MediaItem
+                        {
+                            Title = "Another Incorrect Title",
+                            Description = "A music video on youtube",
+                            Duration = 60_000_000,
+                            Id = 4,
+                            Location = "https://www.youtube.com/watch?v=WS9ludtQmqs&t",
+                            PlaylistId = 2,
                             PrivacyStatus = 0,
                             Sequence = 0,
                         });
@@ -112,16 +168,7 @@ namespace Maple.Data
                         Value = "1",
                     });
 
-            if (context.Options.Find(4) == null)
-                context.Options
-                    .Add(new Option
-                    {
-                        Id = 4,
-                        Key = "SelectedCulture",
-                        Sequence = 30,
-                        Type = (int)OptionType.Culture,
-                        Value = "0",
-                    });
+            // 4
 
             if (context.Options.Find(5) == null)
                 context.Options

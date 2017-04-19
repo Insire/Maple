@@ -1,5 +1,6 @@
 ﻿using Maple.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace Maple
 {
@@ -30,9 +31,11 @@ namespace Maple
         /// Initializes a new instance of the <see cref="IoCResourceDictionary"/> class.
         /// </summary>
         /// <param name="translationManager">The translation manager.</param>
-        public IoCResourceDictionary(ITranslationService translationManager) : base()
+        public IoCResourceDictionary(ITranslationService service, Uri url) : base()
         {
-            TranslationManager = translationManager;
+            TranslationManager = service;
+            Source = url;
+            Add(typeof(ITranslationService).Name, service);
         }
     }
 }

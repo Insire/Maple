@@ -14,7 +14,7 @@ namespace Maple
     /// <seealso cref="Maple.IMediaRepository" />
     public class MediaRepository : IMediaRepository
     {
-        private readonly PlaylistContext _context;
+        private readonly IPlaylistContext _context;
         private readonly AudioDevices _devices;
         private readonly BusyStack _busyStack;
         private readonly DialogViewModel _dialog;
@@ -25,14 +25,14 @@ namespace Maple
 
         public bool IsBusy { get; private set; }
 
-        public MediaRepository(ITranslationService manager, IMediaPlayer mediaPlayer, DialogViewModel dialog, AudioDevices devices)
+        public MediaRepository(ITranslationService manager, IMediaPlayer mediaPlayer, DialogViewModel dialog, AudioDevices devices, IPlaylistContext context)
         {
-            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
-            _mediaPlayer = mediaPlayer ?? throw new ArgumentNullException(nameof(mediaPlayer));
             _dialog = dialog ?? throw new ArgumentNullException(nameof(dialog));
+            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
             _devices = devices ?? throw new ArgumentNullException(nameof(devices));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _mediaPlayer = mediaPlayer ?? throw new ArgumentNullException(nameof(mediaPlayer));
 
-            _context = new PlaylistContext();
             _busyStack = new BusyStack();
             _busyStack.OnChanged += (hasItems) => { IsBusy = hasItems; };
         }

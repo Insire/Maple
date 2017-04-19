@@ -2,7 +2,7 @@
 
 namespace Maple.Data
 {
-    public class PlaylistContext : DbContext
+    public class PlaylistContext : DbContext, IPlaylistContext
     {
         public DbSet<Playlist> Playlists { get; set; }
         public DbSet<MediaItem> MediaItems { get; set; }

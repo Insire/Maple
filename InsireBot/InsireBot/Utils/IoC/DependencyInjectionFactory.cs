@@ -1,5 +1,6 @@
 ﻿using DryIoc;
 using Maple.Core;
+using Maple.Data;
 using Maple.Youtube;
 using System.Diagnostics;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace Maple
 
             RegisterViewModels();
             RegisterServices();
+            RegisterControls();
 
             c.Resolve<ITranslationService>().Load();
 
@@ -24,6 +26,12 @@ namespace Maple
                 Debugging();
 
             return c;
+
+            void RegisterControls()
+            {
+                c.Register<Shell>();
+                c.Register<SplashScreen>();
+            }
 
             void RegisterViewModels()
             {
@@ -46,16 +54,19 @@ namespace Maple
 
             void RegisterServices()
             {
-                c.Register<IMediaPlayer, NAudioMediaPlayer>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
+                c.Register<IMediaPlayer, NAudioMediaPlayer>(setup: Setup.With(allowDisposableTransient: true));
+                c.Register<IPlaylistContext, PlaylistContext>(setup: Setup.With(allowDisposableTransient: true));
                 c.Register<IMediaRepository, MediaRepository>(setup: Setup.With(allowDisposableTransient: true));
-                c.Register<IMediaItemMapper, MediaItemMapper>();
+
                 c.Register<IPlaylistMapper, PlaylistMapper>();
-                c.Register<IMapleLog, LoggingService>(Reuse.Singleton);
-                c.Register<IYoutubeUrlParseService, UrlParseService>();
-                c.Register<ITranslationProvider, ResxTranslationProvider>(Reuse.Singleton);
-                c.Register<ITranslationService, TranslationService>(Reuse.Singleton);
+                c.Register<IMediaItemMapper, MediaItemMapper>();
                 c.Register<ISequenceProvider, SequenceService>();
+                c.Register<IYoutubeUrlParseService, UrlParseService>();
+
+                c.Register<IMapleLog, LoggingService>(Reuse.Singleton);
                 c.Register<IVersionService, VersionService>(Reuse.Singleton);
+                c.Register<ITranslationService, TranslationService>(Reuse.Singleton);
+                c.Register<ITranslationProvider, ResxTranslationProvider>(Reuse.Singleton);
             }
 
             void Debugging()
