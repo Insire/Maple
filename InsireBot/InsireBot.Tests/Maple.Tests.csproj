@@ -67,10 +67,6 @@
       <Project>{A073FC92-90E3-4541-8B52-6F7293187871}</Project>
       <Name>Maple.Localization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\InsireBot.Twitch\Maple.Twitch.csproj">
-      <Project>{a9b11084-ce8d-4734-8961-3a254841f82e}</Project>
-      <Name>Maple.Twitch</Name>
-    </ProjectReference>
     <ProjectReference Include="..\InsireBot.Youtube\Maple.Youtube.csproj">
       <Project>{B5BE546F-8D9F-4FB9-B235-AF05FD553F9E}</Project>
       <Name>Maple.Youtube</Name>
