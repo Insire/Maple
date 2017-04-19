@@ -14,12 +14,13 @@ namespace Maple
     /// <seealso cref="Maple.IMediaRepository" />
     public class MediaRepository : IMediaRepository
     {
-        private readonly IPlaylistContext _context;
-        private readonly AudioDevices _devices;
-        private readonly BusyStack _busyStack;
-        private readonly DialogViewModel _dialog;
-        private readonly ITranslationService _manager;
         private readonly IMediaPlayer _mediaPlayer;
+        private readonly IPlaylistContext _context;
+        private readonly ITranslationService _manager;
+
+        private readonly BusyStack _busyStack;
+        private readonly AudioDevices _devices;
+        private readonly DialogViewModel _dialog;
 
         private bool _disposed = false;
 
