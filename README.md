@@ -10,15 +10,15 @@ After a long hiatus, I'm continuing my rewrite and try to improve on my previous
 
 ## Compile Requirements:
  - Visual Studio 2017 Community Edition or better
- - .NET Framework 4.5.2, C# 7
- - Windows 7 or better
+ - .NET Framework 4.6.2, C# 7
+ - Windows 10 (lower versions may run down till Windows 7)
 
 ## Features
 - AudioPlayback
 - AudioDeviceSelection
-- PlaylistManagement
-- UI ThemeConfiguration
-- Localization (German, English ...)
+- PlaylistManagement for local audio files and audio from youtube
+- Colorprofile Configuration, can be changed during runtime
+- Localization (German, English ...), can be changed during runtime
 
 ## Libraries used
 - [MaterialDesignInXamlToolkit](https://github.com/ButchersBoy/MaterialDesignInXamlToolkit) - UI Library
