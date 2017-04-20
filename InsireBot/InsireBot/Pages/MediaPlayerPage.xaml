@@ -113,6 +113,7 @@
                               CanUserResizeRows="False"
                               IsReadOnly="True"
                               ItemsSource="{Binding Playlist.View}"
+                              SelectedItem="{Binding Playlist.SelectedItem}"
                               SelectionMode="Extended">
                         <DataGrid.ContextMenu>
                             <ContextMenu>

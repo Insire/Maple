@@ -44,8 +44,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.AppVeyor|Any CPU.ActiveCfg = Release|Any CPU
 		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.AppVeyor|Any CPU.Build.0 = Release|Any CPU
-		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.AppVeyor|x64.ActiveCfg = Debug|Any CPU
-		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.AppVeyor|x64.Build.0 = Debug|Any CPU
+		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.AppVeyor|x64.ActiveCfg = Release|Any CPU
+		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.AppVeyor|x64.Build.0 = Release|Any CPU
 		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.AppVeyor|x86.ActiveCfg = Release|x86
 		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.AppVeyor|x86.Build.0 = Release|x86
 		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

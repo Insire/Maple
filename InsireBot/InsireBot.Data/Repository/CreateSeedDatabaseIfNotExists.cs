@@ -1,14 +1,71 @@
 ﻿using SQLite.CodeFirst;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Diagnostics;
 
 namespace Maple.Data
 {
-    internal class CreateSeedDatabaseIfNotExists<TContext> : SqliteDropCreateDatabaseWhenModelChanges<TContext>
+    public class CreateSeedDatabaseIfNotExists<TContext> : SqliteDropCreateDatabaseWhenModelChanges<TContext>
         where TContext : PlaylistContext
     {
+        private const int saveThresHold = 100;
+
+        private readonly List<string> _playlistTitles = new List<string>()
+        {
+            "Memories Of A Time To Come",
+            "A Twist In The Myth",
+            "At The Edge Of Time",
+            "Beyond The Red Mirror",
+            "Battalions Of Fear",
+            "Follow The Blind",
+            "Tales From The Twilight World",
+            "Somewhere Far Beyond",
+            "Tokyo Tales",
+            "Imaginations From The Other Side",
+            "The Forgotten Tales",
+            "Nightfall In Middle Earth",
+            "A Night At The Opera",
+
+            "Infinite",
+            "The Slim Shady LP",
+            "Marshall Mathers",
+            "The Eminem Show",
+            "Encore",
+            "Relapse",
+            "Recovery",
+        };
+
+        private readonly List<string> _mediaItemTitles = new List<string>()
+        {
+            "The Ninth Wave",
+            "Twilight Of The Gods",
+            "Prophecies",
+            "At The Edge Of Time",
+            "Ashes Of Eternity",
+            "Distant Memories",
+            "The Holy Grail",
+            "The Throne",
+            "Sacred Mind",
+            "Miracle Machine",
+            "Grand Parade",
+
+            "My Name Is",
+            "Guilty Conscience",
+            "Brain Damage",
+            "Paul",
+            "If I Had",
+            "'97 Bonnie & Clyde",
+            "Bitch",
+            "Role Model",
+        };
+
         public CreateSeedDatabaseIfNotExists(DbModelBuilder builder)
             : base(builder)
+        {
+        }
+
+        public CreateSeedDatabaseIfNotExists(DbModelBuilder modelBuilder, System.Type historyEntityType)
+            : base(modelBuilder, historyEntityType)
         {
         }
 
@@ -22,101 +79,51 @@ namespace Maple.Data
 
             base.Seed(context);
 
-            SeedPlaylists(context);
-            SeedMediaItems(context);
+            SeedTestData(context);
             SeedMediaPlayers(context);
 
             context.SaveChanges();
         }
 
-        private void SeedPlaylists(TContext context)
+        private void SeedTestData(TContext context)
         {
-            if (context.Playlists.Find(1) == null)
+            var index = 0;
+            for (var i = 0; i < _playlistTitles.Count; i++)
+            {
                 context.Playlists
-                   .Add(new Playlist
-                   {
-                       Title = "Main Playlist",
-                       Description = "Test playlist with 3 entries",
-                       Id = 1,
-                       IsShuffeling = false,
-                       Location = "",
-                       PrivacyStatus = 0,
-                       RepeatMode = 1,
-                       Sequence = 0,
-                   });
+                       .Add(new Playlist
+                       {
+                           Title = _playlistTitles[i],
+                           Description = "Test playlist with 3 entries",
+                           Id = i,
+                           IsShuffeling = false,
+                           Location = "https://www.youtube.com/watch?v=WxfcsmbBd00&t=0s",
+                           PrivacyStatus = 0,
+                           RepeatMode = 1,
+                           Sequence = i,
+                       });
 
-            if (context.Playlists.Find(2) == null)
-                context.Playlists
-                   .Add(new Playlist
-                   {
-                       Title = "Another Playlist with a very long title",
-                       Description = "Playlist for testing with 1 entry",
-                       Id = 2,
-                       IsShuffeling = true,
-                       Location = "",
-                       PrivacyStatus = 0,
-                       RepeatMode = 0,
-                       Sequence = 10,
-                   });
-        }
+                for (var j = 0; j < _mediaItemTitles.Count; j++)
+                {
+                    context.MediaItems
+                            .Add(new MediaItem
+                            {
+                                Title = _mediaItemTitles[j],
+                                Description = "A popular youtube video",
+                                Duration = 60_000_000,
+                                Id = j,
+                                Location = "https://www.youtube.com/watch?v=oHg5SJYRHA0",
+                                PlaylistId = i,
+                                PrivacyStatus = 0,
+                                Sequence = j,
+                            });
+                    index++;
 
-        private void SeedMediaItems(TContext context)
-        {
-            if (context.MediaItems.Find(1) == null)
-                context.MediaItems
-                        .Add(new MediaItem
-                        {
-                            Title = "Test Song",
-                            Description = "A popular youtube video",
-                            Duration = 60_000_000,
-                            Id = 1,
-                            Location = "https://www.youtube.com/watch?v=oHg5SJYRHA0",
-                            PlaylistId = 1,
-                            PrivacyStatus = 0,
-                            Sequence = 0,
-                        });
+                    if (index % saveThresHold == 0)
+                        context.SaveChanges();
+                }
+            }
 
-            if (context.MediaItems.Find(2) == null)
-                context.MediaItems
-                        .Add(new MediaItem
-                        {
-                            Title = "Incorrect Title",
-                            Description = "A music video on youtube",
-                            Duration = 60_000_000,
-                            Id = 2,
-                            Location = "https://www.youtube.com/watch?v=PXf4rkguwDI&t",
-                            PlaylistId = 1,
-                            PrivacyStatus = 0,
-                            Sequence = 0,
-                        });
-
-            if (context.MediaItems.Find(3) == null)
-                context.MediaItems
-                        .Add(new MediaItem
-                        {
-                            Title = "Another Incorrect Title",
-                            Description = "A music video on youtube",
-                            Duration = 60_000_000,
-                            Id = 3,
-                            Location = "https://www.youtube.com/watch?v=xYfn7MWU7TQ&t",
-                            PlaylistId = 1,
-                            PrivacyStatus = 0,
-                            Sequence = 0,
-                        });
-
-            if (context.MediaItems.Find(4) == null)
-                context.MediaItems
-                        .Add(new MediaItem
-                        {
-                            Title = "Another Incorrect Title",
-                            Description = "A music video on youtube",
-                            Duration = 60_000_000,
-                            Id = 4,
-                            Location = "https://www.youtube.com/watch?v=WS9ludtQmqs&t",
-                            PlaylistId = 2,
-                            PrivacyStatus = 0,
-                            Sequence = 0,
-                        });
         }
 
         private void SeedMediaPlayers(TContext context)

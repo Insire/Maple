@@ -83,26 +83,26 @@ namespace Maple
         /// Saves the specified item.
         /// </summary>
         /// <param name="item">The item.</param>
-        void Save(MediaItem item);
+        void Save(MediaItem item, bool isRoot = true);
         /// <summary>
         /// Saves the specified player.
         /// </summary>
         /// <param name="player">The player.</param>
-        void Save(MediaPlayer player);
+        void Save(MediaPlayer player, bool isRoot = true);
         /// <summary>
         /// Saves the specified players.
         /// </summary>
         /// <param name="players">The players.</param>
-        void Save(IMediaPlayersViewModel players);
+        void Save(IMediaPlayersViewModel players, bool isRoot = true);
         /// <summary>
         /// Saves the specified playlist.
         /// </summary>
         /// <param name="playlist">The playlist.</param>
-        void Save(Playlist playlist);
+        void Save(Playlist playlist, bool isRoot = true);
         /// <summary>
         /// Saves the specified playlists.
         /// </summary>
         /// <param name="playlists">The playlists.</param>
-        void Save(Playlists playlists);
+        void Save(Playlists playlists, bool isRoot = true);
     }
 }

@@ -14,6 +14,8 @@ namespace Maple
     /// <seealso cref="Maple.IMediaRepository" />
     public class MediaRepository : IMediaRepository
     {
+        private const int _saveThreshold = 100;
+
         private readonly IMediaPlayer _mediaPlayer;
         private readonly IPlaylistContext _context;
         private readonly ITranslationService _manager;
@@ -71,10 +73,8 @@ namespace Maple
 
         public IList<Playlist> GetAllPlaylists()
         {
-            var playlists = new List<Playlist>();
-            var mediaItems = new List<MediaItem>();
-            mediaItems.AddRange(_context.MediaItems.AsEnumerable().Select(p => new MediaItem(p)));
-            playlists.AddRange(_context.Playlists.AsEnumerable().Select(p => new Playlist(_dialog, p)));
+            var playlists = _context.Playlists.AsEnumerable().Select(p => new Playlist(_dialog, p)).ToList();
+            var mediaItems = _context.MediaItems.AsEnumerable().Select(p => new MediaItem(p)).ToList();
 
             foreach (var playlist in playlists)
                 playlist.AddRange(mediaItems.Where(p => p.PlaylistId == playlist.Id));
@@ -94,7 +94,7 @@ namespace Maple
             return playlists.ToList();
         }
 
-        public void Save(Playlist playlist)
+        public void Save(Playlist playlist, bool isRoot = true)
         {
             using (_busyStack.GetToken())
             {
@@ -108,7 +108,8 @@ namespace Maple
                         Update(playlist);
                 }
 
-                _context.SaveChanges();
+                if (isRoot)
+                    _context.SaveChanges();
             }
         }
 
@@ -125,7 +126,7 @@ namespace Maple
             _context.Set<Data.Playlist>().Add(playlist.Model);
 
             foreach (var item in playlist.Items)
-                Save(item);
+                Save(item, false);
         }
 
         private void Update(Playlist playlist)
@@ -142,15 +143,29 @@ namespace Maple
             _context.Entry(entity).CurrentValues.SetValues(playlist.Model);
 
             foreach (var item in playlist.Items)
-                Save(item);
+                Save(item, false);
         }
 
-        public void Save(Playlists playlists)
+        public void Save(Playlists playlists, bool isRoot = true)
         {
             using (_busyStack.GetToken())
             {
-                foreach (var playlist in playlists.Items)
-                    Save(playlist);
+                var saveRequired = false;
+                for (var i = 0; i < playlists.Items.Count; i++)
+                {
+                    saveRequired = true;
+                    Save(playlists.Items[i], false);
+
+                    if (i % _saveThreshold == 0)
+                    {
+                        _context.SaveChanges();
+                        saveRequired = false;
+                    }
+
+                }
+
+                if (isRoot || saveRequired)
+                    _context.SaveChanges();
             }
         }
 
@@ -253,7 +268,7 @@ namespace Maple
             }
         }
 
-        public void Save(MediaPlayer player)
+        public void Save(MediaPlayer player, bool isRoot = true)
         {
             using (_busyStack.GetToken())
             {
@@ -267,7 +282,8 @@ namespace Maple
                         Update(player);
                 }
 
-                _context.SaveChanges();
+                if (isRoot)
+                    _context.SaveChanges();
             }
         }
 
@@ -301,12 +317,25 @@ namespace Maple
             }
         }
 
-        public void Save(IMediaPlayersViewModel players)
+        public void Save(IMediaPlayersViewModel players, bool isRoot = true)
         {
             using (_busyStack.GetToken())
             {
-                foreach (var player in players.Items)
-                    Save(player);
+                var saveRequired = false;
+                for (var i = 0; i < players.Items.Count; i++)
+                {
+                    saveRequired = true;
+                    Save(players.Items[i], false);
+
+                    if (i % _saveThreshold == 0)
+                    {
+                        _context.SaveChanges();
+                        saveRequired = false;
+                    }
+                }
+
+                if (isRoot || saveRequired)
+                    _context.SaveChanges();
             }
         }
 
@@ -370,10 +399,10 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                var result = new List<MediaItem>();
-                result.AddRange(_context.MediaItems.Where(p => p.PlaylistId == id).AsEnumerable().Select(p => new MediaItem(p)));
-
-                return result;
+                return _context.MediaItems.Where(p => p.PlaylistId == id)
+                                          .AsEnumerable()
+                                          .Select(p => new MediaItem(p))
+                                          .ToList();
             }
         }
 
@@ -381,13 +410,9 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                var result = new List<MediaItem>();
-                await Task.Run(() =>
-                {
-                    result.AddRange(_context.MediaItems.Where(p => p.PlaylistId == id).AsEnumerable().Select(p => new MediaItem(p)));
-                });
+                var result = await Task.Run(() => _context.MediaItems.Where(p => p.PlaylistId == id).AsEnumerable());
 
-                return result;
+                return result.Select(p => new MediaItem(p)).ToList();
             }
         }
 
@@ -395,10 +420,7 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                var result = new List<MediaItem>();
-                result.AddRange(_context.MediaItems.AsEnumerable().Select(p => new MediaItem(p)));
-
-                return result;
+                return _context.MediaItems.AsEnumerable().Select(p => new MediaItem(p)).ToList();
             }
         }
 
@@ -406,18 +428,13 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                var result = new List<Data.MediaItem>();
-
-                await Task.Run(() =>
-                {
-                    result.AddRange(_context.MediaItems.AsEnumerable());
-                });
+                var result = await Task.Run(() => _context.MediaItems.AsEnumerable());
 
                 return result.Select(p => new MediaItem(p)).ToList();
             }
         }
 
-        public void Save(MediaItem item)
+        public void Save(MediaItem item, bool isRoot = true)
         {
             using (_busyStack.GetToken())
             {
@@ -431,7 +448,8 @@ namespace Maple
                         Update(item);
                 }
 
-                _context.SaveChanges();
+                if (isRoot)
+                    _context.SaveChanges();
             }
         }
 
@@ -451,11 +469,9 @@ namespace Maple
             {
                 _context.Dispose();
                 // Free any other managed objects here.
-                //
             }
 
             // Free any unmanaged objects here.
-            //
             _disposed = true;
         }
     }

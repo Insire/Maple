@@ -123,7 +123,7 @@ namespace Maple
         public MediaItem SelectedItem
         {
             get { return _selectedItem; }
-            private set { SetValue(ref _selectedItem, value, OnChanging: () => SelectionChanging?.Raise(this), OnChanged: () => SelectionChanged?.Raise(this)); }
+            set { SetValue(ref _selectedItem, value, OnChanging: () => SelectionChanging?.Raise(this), OnChanged: () => SelectionChanged?.Raise(this)); }
         }
 
         private int _sequence;
