@@ -223,6 +223,15 @@ namespace Maple.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter.
+        /// </summary>
+        public static string Filter {
+            get {
+                return ResourceManager.GetString("Filter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Eine Wiedergabeliste anhand eines Ordners aus dem Dateisystem generieren und importieren.
         /// </summary>
         public static string FolderPlaylistImport {

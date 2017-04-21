@@ -309,4 +309,7 @@
   <data name="EditLanguage" xml:space="preserve">
     <value>Sprache ändern</value>
   </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
 </root>
