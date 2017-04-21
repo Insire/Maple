@@ -202,7 +202,9 @@
       <DependentUpon>SplashScreen.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\BindingProxy.cs" />
+    <Compile Include="Utils\Converters\BrushRoundConverter.cs" />
     <Compile Include="Utils\Converters\CaseConverter.cs" />
+    <Compile Include="Utils\Converters\MathMultipleConverter.cs" />
     <Compile Include="Utils\Extensions\ContextExtensions.cs" />
     <Compile Include="Utils\IoC\DependencyInjectionFactory.cs" />
     <Compile Include="Utils\Converters\DebugConverter.cs" />
@@ -214,6 +216,7 @@
     <Compile Include="Services\Localization\TranslationExtension.cs" />
     <Compile Include="Services\Localization\TranslationService.cs" />
     <Compile Include="Utils\IOUtils.cs" />
+    <Compile Include="Utils\MapleException.cs" />
     <Compile Include="Utils\Mappers\MediaItemMapper.cs" />
     <Compile Include="Utils\Mappers\PlaylistMapper.cs" />
     <Compile Include="Utils\SelectedTreeViewItemBehavior.cs" />
@@ -259,7 +262,6 @@
     <Compile Include="Pages\Options\ColorOptionsPage.xaml.cs">
       <DependentUpon>ColorOptionsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\InsireBotException.cs" />
     <Compile Include="ViewModel\MediaItems\CreateMediaItem.cs" />
     <Compile Include="ViewModel\Playlists\CreatePlaylist.cs" />
     <Compile Include="ViewModel\Settings\CultureViewModel.cs" />

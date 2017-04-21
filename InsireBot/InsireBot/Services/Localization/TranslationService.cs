@@ -48,6 +48,9 @@ namespace Maple
         {
             if (TranslationProvider != null)
             {
+                if (Thread.CurrentThread.CurrentUICulture != CurrentLanguage)
+                    Thread.CurrentThread.CurrentUICulture = CurrentLanguage;
+
                 var translatedValue = TranslationProvider.Translate(key);
                 if (!string.IsNullOrEmpty(translatedValue))
                     return translatedValue;

@@ -18,7 +18,7 @@ namespace Maple
 
         private readonly IMediaPlayer _mediaPlayer;
         private readonly IPlaylistContext _context;
-        private readonly ITranslationService _manager;
+        private readonly ITranslationService _translator;
 
         private readonly BusyStack _busyStack;
         private readonly AudioDevices _devices;
@@ -28,10 +28,10 @@ namespace Maple
 
         public bool IsBusy { get; private set; }
 
-        public MediaRepository(ITranslationService manager, IMediaPlayer mediaPlayer, DialogViewModel dialog, AudioDevices devices, IPlaylistContext context)
+        public MediaRepository(ITranslationService translator, IMediaPlayer mediaPlayer, DialogViewModel dialog, AudioDevices devices, IPlaylistContext context)
         {
             _dialog = dialog ?? throw new ArgumentNullException(nameof(dialog));
-            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
+            _translator = translator ?? throw new ArgumentNullException(nameof(translator));
             _devices = devices ?? throw new ArgumentNullException(nameof(devices));
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _mediaPlayer = mediaPlayer ?? throw new ArgumentNullException(nameof(mediaPlayer));
@@ -52,7 +52,7 @@ namespace Maple
             if (playlist == null)
                 return default(Playlist);
 
-            var viewModel = new Playlist(_dialog, playlist);
+            var viewModel = new Playlist(_translator, _dialog, playlist);
             viewModel.AddRange(GetMediaItemByPlaylistId(playlist.Id));
 
             return viewModel;
@@ -65,7 +65,7 @@ namespace Maple
             if (playlist == null)
                 return default(Playlist);
 
-            var viewModel = new Playlist(_dialog, playlist);
+            var viewModel = new Playlist(_translator, _dialog, playlist);
             viewModel.AddRange(GetMediaItemByPlaylistId(playlist.Id));
 
             return viewModel;
@@ -73,7 +73,7 @@ namespace Maple
 
         public IList<Playlist> GetAllPlaylists()
         {
-            var playlists = _context.Playlists.AsEnumerable().Select(p => new Playlist(_dialog, p)).ToList();
+            var playlists = _context.Playlists.AsEnumerable().Select(p => new Playlist(_translator, _dialog, p)).ToList();
             var mediaItems = _context.MediaItems.AsEnumerable().Select(p => new MediaItem(p)).ToList();
 
             foreach (var playlist in playlists)
@@ -85,7 +85,7 @@ namespace Maple
         public async Task<IList<Playlist>> GetAllPlaylistsAsync()
         {
             var data = await Task.Run(() => _context.Playlists.ToList());
-            var playlists = data.Select(p => new Playlist(_dialog, p));
+            var playlists = data.Select(p => new Playlist(_translator, _dialog, p));
             var mediaItems = await GetAllMediaItemsAsync();
 
             foreach (var playlist in playlists)
@@ -176,7 +176,7 @@ namespace Maple
                 var player = _context.Mediaplayers.FirstOrDefault(p => p.IsPrimary);
 
                 if (player != null)
-                    return new MainMediaPlayer(_manager, _mediaPlayer, player, GetPlaylistById(player.PlaylistId), _devices);
+                    return new MainMediaPlayer(_translator, _mediaPlayer, player, GetPlaylistById(player.PlaylistId), _devices);
 
                 return default(MediaPlayer);
             }
@@ -193,7 +193,7 @@ namespace Maple
                     var playlist = await GetPlaylistByIdAsync(player.PlaylistId);
 
                     if (playlist != null)
-                        return new MainMediaPlayer(_manager, _mediaPlayer, player, playlist, _devices);
+                        return new MainMediaPlayer(_translator, _mediaPlayer, player, playlist, _devices);
                 }
 
                 return default(MediaPlayer);
@@ -207,7 +207,7 @@ namespace Maple
                 var player = _context.Mediaplayers.FirstOrDefault(p => p.Id == id);
 
                 if (player != null)
-                    return new MediaPlayer(_manager, _mediaPlayer, player, GetPlaylistById(player.PlaylistId), _devices);
+                    return new MediaPlayer(_translator, _mediaPlayer, player, GetPlaylistById(player.PlaylistId), _devices);
 
                 return default(MediaPlayer);
             }
@@ -224,7 +224,7 @@ namespace Maple
                     var playlist = await GetPlaylistByIdAsync(player.PlaylistId);
 
                     if (playlist != null)
-                        return new MediaPlayer(_manager, _mediaPlayer, player, playlist, _devices);
+                        return new MediaPlayer(_translator, _mediaPlayer, player, playlist, _devices);
                 }
 
                 return default(MediaPlayer);
@@ -243,7 +243,7 @@ namespace Maple
                 var players = _context.Mediaplayers
                                       .Where(p => !p.IsPrimary)
                                       .AsEnumerable()
-                                      .Select(p => new MediaPlayer(_manager, _mediaPlayer, p, GetPlaylistById(p.PlaylistId), _devices));
+                                      .Select(p => new MediaPlayer(_translator, _mediaPlayer, p, GetPlaylistById(p.PlaylistId), _devices));
 
                 result.AddRange(players);
 
@@ -261,7 +261,7 @@ namespace Maple
                 foreach (var player in players)
                 {
                     var playlist = await GetPlaylistByIdAsync(player.PlaylistId);
-                    result.Add(new MediaPlayer(_manager, _mediaPlayer, player, playlist, _devices));
+                    result.Add(new MediaPlayer(_translator, _mediaPlayer, player, playlist, _devices));
                 }
 
                 return result;

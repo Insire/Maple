@@ -16,9 +16,11 @@ namespace Maple
     /// <seealso cref="Maple.Core.ObservableObject" />
     public class DialogViewModel : ObservableObject
     {
+        private readonly ITranslationService _translator;
         private readonly IYoutubeUrlParseService _service;
         private readonly IMediaItemMapper _mediaItemMapper;
         private readonly FileSystemViewModel _fileSystemViewModel;
+
         /// <summary>
         /// The dialog closed
         /// </summary>
@@ -136,6 +138,19 @@ namespace Maple
             private set { SetValue(ref _title, value); }
         }
 
+        private string _titleDetail;
+        /// <summary>
+        /// Gets the title.
+        /// </summary>
+        /// <value>
+        /// The title.
+        /// </value>
+        public string TitleDetail
+        {
+            get { return _titleDetail; }
+            private set { SetValue(ref _titleDetail, value); }
+        }
+
         private ObservableObject _context;
         /// <summary>
         /// Gets or sets the context.
@@ -154,8 +169,9 @@ namespace Maple
         /// </summary>
         /// <param name="service">The service.</param>
         /// <param name="mediaItemMapper">The media item mapper.</param>
-        public DialogViewModel(IYoutubeUrlParseService service, IMediaItemMapper mediaItemMapper, FileSystemViewModel fileSystemViewModel)
+        public DialogViewModel(ITranslationService translator, IYoutubeUrlParseService service, IMediaItemMapper mediaItemMapper, FileSystemViewModel fileSystemViewModel)
         {
+            _translator = translator ?? throw new ArgumentNullException(nameof(translator));
             _service = service ?? throw new ArgumentNullException(nameof(service));
             _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper));
             _fileSystemViewModel = fileSystemViewModel ?? throw new ArgumentNullException(nameof(fileSystemViewModel));
@@ -187,6 +203,7 @@ namespace Maple
             if (IsOpen)
                 throw new InvalidOperationException(Resources.DialogOpenAlready);
 
+            TitleDetail = string.Empty;
             Context = MessageDialogViewModel;
             Title = title;
             MessageDialogViewModel.Message = message;
@@ -205,6 +222,7 @@ namespace Maple
             if (IsOpen) // no exception spam, could probably be improved TODO ?
                 return Task.FromResult(0);
 
+            TitleDetail = string.Empty;
             Context = ExceptionDialogViewModel;
             Title = exception.GetType().Name;
             ExceptionDialogViewModel.Exception = exception;
@@ -226,9 +244,12 @@ namespace Maple
             var tuple = default((DialogResult Result, IList<IFileSystemFile> Files));
             var viewModel = new FileBrowserDialogViewModel(_fileSystemViewModel, options);
 
+            TitleDetail = string.Empty;
             Context = viewModel;
             Title = options.Title;
             IsCancelVisible = options.CanCancel;
+
+            _fileSystemViewModel.FileSystemInfoChanged += FileSystemInfoChanged;
 
             AcceptAction = () =>
             {
@@ -243,6 +264,8 @@ namespace Maple
             };
 
             await Open();
+
+            _fileSystemViewModel.FileSystemInfoChanged -= FileSystemInfoChanged;
 
             return tuple;
         }
@@ -260,14 +283,18 @@ namespace Maple
             var tuple = default((DialogResult Result, IFileSystemDirectory Directory));
             var viewModel = new FileBrowserDialogViewModel(_fileSystemViewModel, options);
 
+            TitleDetail = string.Empty;
             Context = viewModel;
             Title = options.Title;
             IsCancelVisible = options.CanCancel;
 
+            _fileSystemViewModel.FileSystemInfoChanged += FileSystemInfoChanged;
+
             AcceptAction = () =>
             {
                 var items = viewModel.FileSystemViewModel.SelectedItems;
-                tuple = (DialogResult.OK, items.FirstOrDefault() as IFileSystemDirectory);
+                items.Add(viewModel.FileSystemViewModel.SelectedItem);
+                tuple = (DialogResult.OK, items.Distinct().FirstOrDefault() as IFileSystemDirectory);
             };
 
             CancelAction = () =>
@@ -277,6 +304,8 @@ namespace Maple
             };
 
             await Open();
+
+            _fileSystemViewModel.FileSystemInfoChanged -= FileSystemInfoChanged;
 
             return tuple;
         }
@@ -302,8 +331,10 @@ namespace Maple
         {
             var result = new List<Data.MediaItem>();
             var viewmodel = new CreateMediaItem(_service, _mediaItemMapper);
+
+            TitleDetail = string.Empty;
             Context = viewmodel;
-            Title = Resources.VideoAdd;
+            Title = _translator.Translate(nameof(Resources.VideoAdd));
 
             AcceptAction = () =>
             {
@@ -396,6 +427,11 @@ namespace Maple
         public bool CanClose()
         {
             return IsOpen;
+        }
+
+        private void FileSystemInfoChanged(object sender, FileSystemInfoChangedEventArgs e)
+        {
+            TitleDetail = e.FileSystemInfo.FullName;
         }
     }
 }

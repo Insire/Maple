@@ -15,6 +15,7 @@ namespace Maple
     /// <seealso cref="Maple.Core.ISaveableViewModel" />
     public class Playlists : BaseDataListViewModel<Playlist, Data.Playlist>, ILoadableViewModel, ISaveableViewModel, IPlaylistsViewModel
     {
+        private readonly ITranslationService _translator;
         private readonly IMapleLog _log;
         private readonly DialogViewModel _dialogViewModel;
         private readonly Func<IMediaRepository> _repositoryFactory;
@@ -63,13 +64,14 @@ namespace Maple
         /// <param name="log">The log.</param>
         /// <param name="repo">The repo.</param>
         /// <param name="dialogViewModel">The dialog view model.</param>
-        public Playlists(IMapleLog log, Func<IMediaRepository> repo, DialogViewModel dialogViewModel, ISequenceProvider sequenceProvider)
+        public Playlists(ITranslationService translator, IMapleLog log, Func<IMediaRepository> repo, DialogViewModel dialogViewModel, ISequenceProvider sequenceProvider)
             : base()
         {
             _sequenceProvider = sequenceProvider ?? throw new ArgumentNullException(nameof(sequenceProvider));
             _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
             _log = log ?? throw new ArgumentNullException(nameof(log));
             _repositoryFactory = repo ?? throw new ArgumentNullException(nameof(repo));
+            _translator = translator ?? throw new ArgumentNullException(nameof(translator));
 
             AddCommand = new RelayCommand(Add, CanAdd);
         }
@@ -109,7 +111,7 @@ namespace Maple
         public void Add()
         {
             var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
-            var playlist = new Playlist(_dialogViewModel, new Data.Playlist
+            var playlist = new Playlist(_translator, _dialogViewModel, new Data.Playlist
             {
                 Title = Resources.New,
                 Description = string.Empty,

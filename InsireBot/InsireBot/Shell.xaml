@@ -60,16 +60,22 @@
                                    Identifier="RootDialog"
                                    IsOpen="{Binding Data.IsOpen, Source={StaticResource DialogProxy}}">
             <materialDesign:DialogHost.DialogContent>
-                <DockPanel DataContext="{Binding Data, Source={StaticResource DialogProxy}}">
+                <DockPanel DataContext="{Binding Data, Source={StaticResource DialogProxy}}"
+                           Height="506"
+                           Width="900"
+                           MaxHeight="506"
+                           MaxWidth="900">
                     <materialDesign:ColorZone Padding="4"
                                               DockPanel.Dock="Top"
                                               Mode="PrimaryMid">
                         <DockPanel LastChildFill="False">
-                            <TextBlock DockPanel.Dock="Left"
+                            <TextBlock DockPanel.Dock="Left" Margin="8,0,0,0"
                                        FontWeight="Medium"
-                                       Text="{Binding Title}"
                                        TextTrimming="CharacterEllipsis"
-                                       TextWrapping="NoWrap" />
+                                       TextWrapping="NoWrap" >
+                                <Run Text="{Binding Title, Mode=OneWay}"/>
+                                <Run Text="{Binding TitleDetail, Mode=OneWay}"/>
+                            </TextBlock>
                             <Button Command="{Binding CloseDialogCommand}"
                                     DockPanel.Dock="Right"
                                     Style="{StaticResource MaterialDesignToolForegroundButton}"
@@ -87,7 +93,7 @@
                                     Orientation="Horizontal">
                             <Button Command="{Binding AcceptDialogCommand}"
                                     Content="{local:Translation Accept}"
-                                    ToolTip="{local:Translation Accept}" />
+                                    ToolTip="{local:Translation Accept}" Margin="0,0,8,0"/>
                             <Button Command="{Binding CancelDialogCommand}"
                                     Content="{local:Translation Cancel}"
                                     ToolTip="{local:Translation Cancel}"

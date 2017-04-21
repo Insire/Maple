@@ -13,6 +13,8 @@ namespace Maple.Core
     {
         protected readonly BusyStack _busyStack;
 
+        public FileSystemInfoChangedEventHandler FileSystemInfoChanged;
+
         /// <summary>
         /// Gets the select command.
         /// </summary>
@@ -135,6 +137,8 @@ namespace Maple.Core
         {
             SelectedItem.Load();
             SelectedItem.LoadMetaData();
+
+            FileSystemInfoChanged?.Invoke(this, new FileSystemInfoChangedEventArgs(SelectedItem));
         }
 
         /// <summary>

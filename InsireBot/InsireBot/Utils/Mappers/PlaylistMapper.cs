@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Maple.Core;
+using System;
 
 namespace Maple
 {
@@ -9,6 +11,7 @@ namespace Maple
     public class PlaylistMapper : IPlaylistMapper
     {
         private readonly IMapper _mapper;
+        private readonly ITranslationService _translator;
 
         private DialogViewModel _dialogViewModel;
 
@@ -16,9 +19,10 @@ namespace Maple
         /// Initializes a new instance of the <see cref="PlaylistMapper"/> class.
         /// </summary>
         /// <param name="dialogViewModel">The dialog view model.</param>
-        public PlaylistMapper(DialogViewModel dialogViewModel)
+        public PlaylistMapper(ITranslationService translator, DialogViewModel dialogViewModel)
         {
-            _dialogViewModel = dialogViewModel;
+            _translator = translator ?? throw new ArgumentNullException(nameof(translator));
+            _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
 
             var config = new MapperConfiguration(cfg =>
             {
@@ -39,7 +43,7 @@ namespace Maple
         /// <returns></returns>
         public Playlist Get(Core.Playlist mediaitem)
         {
-            return new Playlist(_dialogViewModel, GetData(mediaitem));
+            return new Playlist(_translator, _dialogViewModel, GetData(mediaitem));
         }
 
         /// <summary>
@@ -49,7 +53,7 @@ namespace Maple
         /// <returns></returns>
         public Playlist Get(Data.Playlist mediaitem)
         {
-            return new Playlist(_dialogViewModel, mediaitem);
+            return new Playlist(_translator, _dialogViewModel, mediaitem);
         }
 
         /// <summary>

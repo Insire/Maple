@@ -25,6 +25,7 @@ namespace Maple
     [DebuggerDisplay("{Title}, {Sequence}")]
     public class Playlist : BaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier, IChangeState
     {
+        private readonly ITranslationService _translator;
         private readonly object _itemsLock;
         private readonly DialogViewModel _dialogViewModel;
         public int Count => Items?.Count ?? 0;
@@ -304,13 +305,14 @@ namespace Maple
         /// <param name="model">The model.</param>
         /// <exception cref="System.ArgumentNullException">dialogViewModel</exception>
         /// <exception cref="System.ArgumentException"></exception>
-        public Playlist(DialogViewModel dialogViewModel, Data.Playlist model)
+        public Playlist(ITranslationService translator, DialogViewModel dialogViewModel, Data.Playlist model)
             : base(model)
         {
             using (_busyStack.GetToken())
             {
                 _itemsLock = new object();
                 _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
+                _translator = translator ?? throw new ArgumentNullException(nameof(translator));
 
                 Items = new RangeObservableCollection<MediaItem>();
                 RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
@@ -393,7 +395,7 @@ namespace Maple
                 {
                     CanCancel = true,
                     MultiSelection = false,
-                    Title = Resources.SelectFolder,
+                    Title = _translator.Translate(nameof(Resources.SelectFolder)),
                 };
                 return _dialogViewModel.ShowFolderBrowserDialog(options);
             }
@@ -412,7 +414,7 @@ namespace Maple
                 {
                     CanCancel = true,
                     MultiSelection = false,
-                    Title = Resources.SelectFiles,
+                    Title = _translator.Translate(nameof(Resources.SelectFiles)),
                 };
                 return _dialogViewModel.ShowFileBrowserDialog(options);
             }
