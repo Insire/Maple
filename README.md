@@ -1,6 +1,6 @@
 ![logo](header.png)
 
-[![Build status](https://ci.appveyor.com/api/projects/status/2bgiexw53ktd5lhp?svg=true)](https://ci.appveyor.com/project/Insire/insirebot-v2)
+[![Build status](https://ci.appveyor.com/api/projects/status/mil447tc6xjo163u?svg=true)](https://ci.appveyor.com/project/Insire/maple)
 
 This is a rewrite of the original InsireBot. Which was planned to be a tool for semi and non professional livestreamers to provide music to them selfs and to their audience with high configureability.
 
@@ -56,5 +56,5 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ## Credits
-- Application Icon - by vngnc aka [Keno Böhme](http://www.kenoboeh.me/)
+- Application Icon - by vngnc aka [Keno BÃ¶hme](http://www.kenoboeh.me/)
 - General Feedback - [C# Discord Server](https://discord.gg/VCFhEDy)
