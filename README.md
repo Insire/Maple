@@ -4,7 +4,7 @@
 
 This is a rewrite of the original InsireBot. Which was planned to be a tool for semi and non professional livestreamers to provide music to them selfs and to their audience with high configureability.
 
-After a long hiatus, I'm continuing my rewrite and try to improve on my previously written code. You can see a "live" preview [here](https://github.com/Insire/Maple/blob/master/InsireBot/Resources/Images/2017-04-22-23-26-20.gif)
+After a long hiatus, I'm continuing my rewrite and try to improve on my previously written code. You can see a "live" preview [here](https://github.com/Insire/Maple/blob/master/InsireBot/Resources/Images/2017-04-22-23-26-20.gif). I also often refer to this project when explaining concepts to colleagues at work or during discussions in the [C# Discord Server](https://discord.gg/VCFhEDy).
 
 ![Mainwindow](MainWindow.gif)
 
@@ -33,6 +33,25 @@ After a long hiatus, I'm continuing my rewrite and try to improve on my previous
 - [EntityFramework](https://github.com/aspnet/EntityFramework6) - ORM mapper
 - [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json) - JSON framework 
 - [DryIoc](https://bitbucket.org/dadhi/dryioc) - IoC container
+
+## Useful Patterns, Concepts you may find here aswell
+- Repository pattern
+- MVVM pattern
+- Dependency Injection
+- Inversion of Control
+- Composition Root
+- various base implementations for INotifyPropertyChanged
+- various implementations of ICommand (inspired by MVVMLight)
+- how to setup MaterialDesignInXamlToolkit with MahApps.Metro
+- how to change the Colorprofile for MaterialDesignInXamlToolkit and MahApps.Metro during runtime
+- how to change your TaskbarIcon during runtime in a WPF app
+- how to change the Localization of a WPF app during runtime
+- how to save and load WPF WindowLocations
+- how to use Googles Youtube API
+- async Dialogs
+- WPF Dialogs for File- and Folderbrowsing
+- Unit Tests (very work in progress)
+
 
 ## MIT License
 Copyright (c) 2017 
