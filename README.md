@@ -1,6 +1,9 @@
 ![logo](header.png)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/mil447tc6xjo163u?svg=true)](https://ci.appveyor.com/project/Insire/maple)
+[![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/Insire/Maple/blob/master/license.md)
+[![.NET Framework](https://img.shields.io/badge/.NET%20Framework-4.6.2-orange.svg)](https://www.microsoft.com/net)
+
 
 This is a rewrite of the original InsireBot. Which was planned to be a tool for semi and non professional livestreamers to provide music to them selfs and to their audience with high configureability.
 
@@ -20,7 +23,7 @@ After a long hiatus, I'm continuing my rewrite and try to improve on my previous
 - Colorprofile Configuration, can be changed during runtime
 - Localization (German, English ...), can be changed during runtime
 
-## Libraries used
+## Dependencies
 - [MaterialDesignInXamlToolkit](https://github.com/ButchersBoy/MaterialDesignInXamlToolkit) - UI Library
 - [MahApps.Metro](https://github.com/MahApps/MahApps.Metro) - UI Library
 - [MahApps.Metro.IconPacks](https://github.com/MahApps/MahApps.Metro.IconPacks) - UI Library
