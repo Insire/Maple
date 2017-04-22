@@ -4,7 +4,7 @@
 
 This is a rewrite of the original InsireBot. Which was planned to be a tool for semi and non professional livestreamers to provide music to them selfs and to their audience with high configureability.
 
-After a long hiatus, I'm continuing my rewrite and try to improve on my previously written code.
+After a long hiatus, I'm continuing my rewrite and try to improve on my previously written code. You can see a "live" preview [here](https://github.com/Insire/Maple/blob/master/InsireBot/Resources/Images/2017-04-22-23-26-20.gif)
 
 ![Mainwindow](MainWindow.gif)
 
