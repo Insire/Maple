@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Maple.Tests
+namespace Maple.Test
 {
     [TestClass]
     public class DependencyInjectionFactoryTests
