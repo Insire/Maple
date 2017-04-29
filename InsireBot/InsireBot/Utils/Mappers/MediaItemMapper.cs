@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Maple.Data;
+using System;
 
 namespace Maple
 {
@@ -9,12 +11,14 @@ namespace Maple
     public class MediaItemMapper : IMediaItemMapper
     {
         private readonly IMapper _mapper;
-
+        private readonly IPlaylistContext _context;
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaItemMapper"/> class.
         /// </summary>
-        public MediaItemMapper()
+        public MediaItemMapper(IPlaylistContext context)
         {
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Data.MediaItem, Core.MediaItem>();
@@ -35,7 +39,7 @@ namespace Maple
         /// <returns></returns>
         public MediaItem Get(Core.MediaItem mediaitem)
         {
-            return new MediaItem(GetData(mediaitem));
+            return new MediaItem(GetData(mediaitem), _context);
         }
 
         /// <summary>
@@ -45,7 +49,7 @@ namespace Maple
         /// <returns></returns>
         public MediaItem Get(Data.MediaItem mediaitem)
         {
-            return new MediaItem(mediaitem);
+            return new MediaItem(mediaitem, _context);
         }
 
         /// <summary>

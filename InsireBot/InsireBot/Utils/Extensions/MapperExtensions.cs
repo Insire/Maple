@@ -3,6 +3,7 @@ using Maple.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Linq;
 
 namespace Maple
 {
@@ -22,6 +23,16 @@ namespace Maple
             return items.ForEach(mapper.Get);
         }
 
+        public static IEnumerable<MediaItem> GetMany(this IMediaItemMapper mapper, IEnumerable<Data.MediaItem> items, int playlistId)
+        {
+            return items.ForEach(p =>
+            {
+                var item = mapper.Get(p);
+                item.PlaylistId = playlistId;
+                return item;
+            });
+        }
+
         /// <summary>
         /// Gets the many.
         /// </summary>
@@ -31,6 +42,11 @@ namespace Maple
         public static IEnumerable<MediaItem> GetMany(this IMediaItemMapper mapper, IEnumerable<Data.MediaItem> items)
         {
             return items.ForEach(mapper.Get);
+        }
+
+        public static IList<MediaItem> GetManyAsList(this IMediaItemMapper mapper, IEnumerable<Data.MediaItem> items)
+        {
+            return items.ForEach(mapper.Get).ToList();
         }
 
         /// <summary>

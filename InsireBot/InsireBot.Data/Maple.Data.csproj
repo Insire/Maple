@@ -108,6 +108,7 @@
     <Compile Include="DTO\Option.cs" />
     <Compile Include="DTO\Playlist.cs" />
     <Compile Include="DTO\MediaItem.cs" />
+    <Compile Include="DTO\Raw.cs" />
     <Compile Include="Interfaces\IDataTransferObject.cs" />
     <Compile Include="OptionType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

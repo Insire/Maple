@@ -711,6 +711,16 @@
                                                                             <TextBlock Margin="8 0 0 0" Text="{Binding Name}">
                                                                                 <TextBlock.ContextMenu>
                                                                                     <ContextMenu>
+                                                                                        <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
+                                                                                            <MenuItem.Icon>
+                                                                                                <icons:PackIconMaterial Kind="Select" />
+                                                                                            </MenuItem.Icon>
+                                                                                        </MenuItem>
+                                                                                        <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
+                                                                                            <MenuItem.Icon>
+                                                                                                <icons:PackIconMaterial Kind="Refresh" />
+                                                                                            </MenuItem.Icon>
+                                                                                        </MenuItem>
                                                                                         <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
                                                                                             <MenuItem.Icon>
                                                                                                 <icons:PackIconMaterial Kind="Delete" />
@@ -723,9 +733,18 @@
                                                                     </DataTemplate>
 
                                                                     <DataTemplate DataType="{x:Type core:MapleDirectory}">
-                                                                        <ListBox ItemsSource="{Binding DefaultCollectionView}" SelectionMode="Extended">
+                                                                        <ListBox ItemsSource="{Binding DefaultCollectionView}"
+                                                                                 SelectionMode="Extended">
+                                                                            <i:Interaction.Behaviors>
+                                                                                <local:SelectedListBoxItemBehavior SelectedItems="{Binding Data.SelectedItems, Source={StaticResource ViewModelProxy}}" />
+                                                                            </i:Interaction.Behaviors>
                                                                             <ListBox.ContextMenu>
                                                                                 <ContextMenu>
+                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
+                                                                                        <MenuItem.Icon>
+                                                                                            <icons:PackIconMaterial Kind="Select" />
+                                                                                        </MenuItem.Icon>
+                                                                                    </MenuItem>
                                                                                     <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
                                                                                         <MenuItem.Icon>
                                                                                             <icons:PackIconMaterial Kind="Refresh" />
@@ -734,6 +753,7 @@
                                                                                 </ContextMenu>
                                                                             </ListBox.ContextMenu>
                                                                             <ListBox.Resources>
+
                                                                                 <DataTemplate DataType="{x:Type core:MapleDirectory}">
                                                                                     <StackPanel Orientation="Horizontal">
                                                                                         <icons:PackIconMaterial Foreground="{DynamicResource SecondaryAccentBrush}" Kind="Folder" />
@@ -745,9 +765,9 @@
                                                                                             </TextBlock.InputBindings>
                                                                                             <TextBlock.ContextMenu>
                                                                                                 <ContextMenu>
-                                                                                                    <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
+                                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
                                                                                                         <MenuItem.Icon>
-                                                                                                            <icons:PackIconMaterial Kind="Delete" />
+                                                                                                            <icons:PackIconMaterial Kind="Select" />
                                                                                                         </MenuItem.Icon>
                                                                                                     </MenuItem>
                                                                                                     <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
@@ -755,19 +775,31 @@
                                                                                                             <icons:PackIconMaterial Kind="Refresh" />
                                                                                                         </MenuItem.Icon>
                                                                                                     </MenuItem>
+                                                                                                    <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
+                                                                                                        <MenuItem.Icon>
+                                                                                                            <icons:PackIconMaterial Kind="Delete" />
+                                                                                                        </MenuItem.Icon>
+                                                                                                    </MenuItem>
                                                                                                 </ContextMenu>
                                                                                             </TextBlock.ContextMenu>
                                                                                         </TextBlock>
                                                                                     </StackPanel>
                                                                                 </DataTemplate>
+
                                                                             </ListBox.Resources>
                                                                         </ListBox>
                                                                     </DataTemplate>
 
                                                                     <DataTemplate DataType="{x:Type core:MapleDrive}">
-                                                                        <ListBox ItemsSource="{Binding DefaultCollectionView}" SelectionMode="Extended">
+                                                                        <ListBox ItemsSource="{Binding DefaultCollectionView}"
+                                                                                 SelectionMode="Extended">
                                                                             <ListBox.ContextMenu>
                                                                                 <ContextMenu>
+                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
+                                                                                        <MenuItem.Icon>
+                                                                                            <icons:PackIconMaterial Kind="Select" />
+                                                                                        </MenuItem.Icon>
+                                                                                    </MenuItem>
                                                                                     <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
                                                                                         <MenuItem.Icon>
                                                                                             <icons:PackIconMaterial Kind="Refresh" />
@@ -775,7 +807,11 @@
                                                                                     </MenuItem>
                                                                                 </ContextMenu>
                                                                             </ListBox.ContextMenu>
+                                                                            <i:Interaction.Behaviors>
+                                                                                <local:SelectedListBoxItemBehavior SelectedItems="{Binding Data.SelectedItems, Source={StaticResource ViewModelProxy}}" />
+                                                                            </i:Interaction.Behaviors>
                                                                             <ListBox.Resources>
+
                                                                                 <DataTemplate DataType="{x:Type core:MapleDirectory}">
                                                                                     <StackPanel Orientation="Horizontal">
                                                                                         <icons:PackIconMaterial Foreground="{DynamicResource SecondaryAccentBrush}" Kind="Folder" />
@@ -787,9 +823,9 @@
                                                                                             </TextBlock.InputBindings>
                                                                                             <TextBlock.ContextMenu>
                                                                                                 <ContextMenu>
-                                                                                                    <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
+                                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
                                                                                                         <MenuItem.Icon>
-                                                                                                            <icons:PackIconMaterial Kind="Delete" />
+                                                                                                            <icons:PackIconMaterial Kind="Select" />
                                                                                                         </MenuItem.Icon>
                                                                                                     </MenuItem>
                                                                                                     <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
@@ -797,11 +833,17 @@
                                                                                                             <icons:PackIconMaterial Kind="Refresh" />
                                                                                                         </MenuItem.Icon>
                                                                                                     </MenuItem>
+                                                                                                    <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
+                                                                                                        <MenuItem.Icon>
+                                                                                                            <icons:PackIconMaterial Kind="Delete" />
+                                                                                                        </MenuItem.Icon>
+                                                                                                    </MenuItem>
                                                                                                 </ContextMenu>
                                                                                             </TextBlock.ContextMenu>
                                                                                         </TextBlock>
                                                                                     </StackPanel>
                                                                                 </DataTemplate>
+
                                                                             </ListBox.Resources>
                                                                         </ListBox>
                                                                     </DataTemplate>
@@ -824,6 +866,11 @@
                                                                         <DockPanel Width="100">
                                                                             <DockPanel.ContextMenu>
                                                                                 <ContextMenu>
+                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
+                                                                                        <MenuItem.Icon>
+                                                                                            <icons:PackIconMaterial Kind="Select" />
+                                                                                        </MenuItem.Icon>
+                                                                                    </MenuItem>
                                                                                     <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
                                                                                         <MenuItem.Icon>
                                                                                             <icons:PackIconMaterial Kind="Delete" />
@@ -842,7 +889,6 @@
                                                                                                     VerticalAlignment="Center"
                                                                                                     Foreground="{DynamicResource SecondaryAccentBrush}"
                                                                                                     Kind="File" />
-
                                                                         </DockPanel>
                                                                     </DataTemplate>
 
@@ -852,6 +898,11 @@
                                                                                  SelectionMode="Extended">
                                                                             <ListBox.ContextMenu>
                                                                                 <ContextMenu>
+                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
+                                                                                        <MenuItem.Icon>
+                                                                                            <icons:PackIconMaterial Kind="Select" />
+                                                                                        </MenuItem.Icon>
+                                                                                    </MenuItem>
                                                                                     <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
                                                                                         <MenuItem.Icon>
                                                                                             <icons:PackIconMaterial Kind="Refresh" />
@@ -897,7 +948,6 @@
                                                                                                                 VerticalAlignment="Center"
                                                                                                                 Foreground="{DynamicResource SecondaryAccentBrush}"
                                                                                                                 Kind="Folder" />
-
                                                                                     </DockPanel>
                                                                                 </DataTemplate>
                                                                             </ListBox.Resources>
@@ -910,7 +960,16 @@
                                                                                  SelectionMode="Extended">
                                                                             <ListBox.ContextMenu>
                                                                                 <ContextMenu>
-                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="Refresh" />
+                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
+                                                                                        <MenuItem.Icon>
+                                                                                            <icons:PackIconMaterial Kind="Select" />
+                                                                                        </MenuItem.Icon>
+                                                                                    </MenuItem>
+                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
+                                                                                        <MenuItem.Icon>
+                                                                                            <icons:PackIconMaterial Kind="Refresh" />
+                                                                                        </MenuItem.Icon>
+                                                                                    </MenuItem>
                                                                                 </ContextMenu>
                                                                             </ListBox.ContextMenu>
                                                                             <ListBox.ItemsPanel>
@@ -923,14 +982,19 @@
                                                                                     <DockPanel Width="100">
                                                                                         <DockPanel.ContextMenu>
                                                                                             <ContextMenu>
-                                                                                                <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
+                                                                                                <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
                                                                                                     <MenuItem.Icon>
-                                                                                                        <icons:PackIconMaterial Kind="Delete" />
+                                                                                                        <icons:PackIconMaterial Kind="Select" />
                                                                                                     </MenuItem.Icon>
                                                                                                 </MenuItem>
                                                                                                 <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
                                                                                                     <MenuItem.Icon>
                                                                                                         <icons:PackIconMaterial Kind="Refresh" />
+                                                                                                    </MenuItem.Icon>
+                                                                                                </MenuItem>
+                                                                                                <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
+                                                                                                    <MenuItem.Icon>
+                                                                                                        <icons:PackIconMaterial Kind="Delete" />
                                                                                                     </MenuItem.Icon>
                                                                                                 </MenuItem>
                                                                                             </ContextMenu>
@@ -951,7 +1015,6 @@
                                                                                                                 VerticalAlignment="Center"
                                                                                                                 Foreground="{DynamicResource SecondaryAccentBrush}"
                                                                                                                 Kind="Folder" />
-
                                                                                     </DockPanel>
                                                                                 </DataTemplate>
                                                                             </ListBox.Resources>

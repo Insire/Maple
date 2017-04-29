@@ -4,10 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Maple.Data
 {
-    public abstract class BaseObject
+    public class Raw
     {
         public int Id { get; set; }
-        public int Sequence { get; set; }
+
+        public byte[] Data { get; set; }
 
         public DateTime CreatedOn { get; set; }
         public string CreatedBy { get; set; }

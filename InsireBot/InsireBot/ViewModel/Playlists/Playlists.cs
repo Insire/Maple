@@ -17,9 +17,9 @@ namespace Maple
     {
         private readonly ITranslationService _translator;
         private readonly IMapleLog _log;
-        private readonly DialogViewModel _dialogViewModel;
         private readonly Func<IMediaRepository> _repositoryFactory;
         private readonly ISequenceProvider _sequenceProvider;
+        private readonly IPlaylistMapper _playlistMapper;
 
         /// <summary>
         /// Gets the play command.
@@ -64,14 +64,14 @@ namespace Maple
         /// <param name="log">The log.</param>
         /// <param name="repo">The repo.</param>
         /// <param name="dialogViewModel">The dialog view model.</param>
-        public Playlists(ITranslationService translator, IMapleLog log, Func<IMediaRepository> repo, DialogViewModel dialogViewModel, ISequenceProvider sequenceProvider)
+        public Playlists(ITranslationService translator, IMapleLog log, IPlaylistMapper playlistMapper, Func<IMediaRepository> repo, ISequenceProvider sequenceProvider)
             : base()
         {
             _sequenceProvider = sequenceProvider ?? throw new ArgumentNullException(nameof(sequenceProvider));
-            _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
             _log = log ?? throw new ArgumentNullException(nameof(log));
             _repositoryFactory = repo ?? throw new ArgumentNullException(nameof(repo));
             _translator = translator ?? throw new ArgumentNullException(nameof(translator));
+            _playlistMapper = playlistMapper ?? throw new ArgumentNullException(nameof(playlistMapper));
 
             AddCommand = new RelayCommand(Add, CanAdd);
         }
@@ -81,7 +81,7 @@ namespace Maple
         /// </summary>
         public void Load()
         {
-            _log.Info($"{Resources.Loading} {Resources.Playlists}");
+            _log.Info($"{_translator.Translate(nameof(Resources.Loading))} {_translator.Translate(nameof(Resources.Playlists))}");
             Clear();
 
             using (var context = _repositoryFactory())
@@ -96,7 +96,7 @@ namespace Maple
         /// </summary>
         public void Save()
         {
-            _log.Info($"{Resources.Saving} {Resources.Playlists}");
+            _log.Info($"{_translator.Translate(Resources.Saving)} {_translator.Translate(Resources.Playlists)}");
             using (var context = _repositoryFactory())
             {
                 context.Save(this);
@@ -111,17 +111,7 @@ namespace Maple
         public void Add()
         {
             var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
-            var playlist = new Playlist(_translator, _dialogViewModel, new Data.Playlist
-            {
-                Title = Resources.New,
-                Description = string.Empty,
-                Location = string.Empty,
-                RepeatMode = 0,
-                IsShuffeling = false,
-                Sequence = sequence,
-            });
-
-            Add(playlist);
+            Add(_playlistMapper.GetNewPlaylist(sequence));
         }
 
         public Task SaveAsync()
@@ -131,7 +121,7 @@ namespace Maple
 
         public async Task LoadAsync()
         {
-            _log.Info($"{Resources.Loading} {Resources.Playlists}");
+            _log.Info($"{_translator.Translate(Resources.Loading)} {_translator.Translate(Resources.Playlists)}");
             Clear();
 
             using (var context = _repositoryFactory())

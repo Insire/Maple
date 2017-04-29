@@ -8,10 +8,13 @@ namespace Maple.Data
         public DbSet<MediaItem> MediaItems { get; set; }
         public DbSet<MediaPlayer> Mediaplayers { get; set; }
         public DbSet<Option> Options { get; set; }
+        public DbSet<Raw> Data { get; set; }
 
         public PlaylistContext()
             : base("Main")
         {
+            Configuration.ProxyCreationEnabled = true;
+            Configuration.LazyLoadingEnabled = true;
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

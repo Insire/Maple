@@ -217,8 +217,11 @@
     <Compile Include="Services\Localization\TranslationService.cs" />
     <Compile Include="Utils\IOUtils.cs" />
     <Compile Include="Utils\MapleException.cs" />
+    <Compile Include="Interfaces\IMediaPlayerMapper.cs" />
     <Compile Include="Utils\Mappers\MediaItemMapper.cs" />
+    <Compile Include="Utils\Mappers\MediaPlayerMapper.cs" />
     <Compile Include="Utils\Mappers\PlaylistMapper.cs" />
+    <Compile Include="Utils\SelectedListBoxItemBehavior.cs" />
     <Compile Include="Utils\SelectedTreeViewItemBehavior.cs" />
     <Compile Include="Utils\ShellSettings.cs" />
     <Compile Include="Enums\MediaPlayerType.cs" />

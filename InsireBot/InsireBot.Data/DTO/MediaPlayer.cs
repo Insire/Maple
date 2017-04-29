@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Maple.Data
 {
@@ -8,6 +9,7 @@ namespace Maple.Data
         public Playlist Playlist { get; set; }
         public int PlaylistId { get; set; }
 
+        [Required]
         public string Name { get; set; }
         public string DeviceName { get; set; }
         public bool IsPrimary { get; set; }

@@ -25,6 +25,7 @@ namespace Maple
     [DebuggerDisplay("{Title}, {Sequence}")]
     public class Playlist : BaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier, IChangeState
     {
+        private readonly IMediaItemMapper _mediaItemMapper;
         private readonly ITranslationService _translator;
         private readonly object _itemsLock;
         private readonly DialogViewModel _dialogViewModel;
@@ -305,7 +306,7 @@ namespace Maple
         /// <param name="model">The model.</param>
         /// <exception cref="System.ArgumentNullException">dialogViewModel</exception>
         /// <exception cref="System.ArgumentException"></exception>
-        public Playlist(ITranslationService translator, DialogViewModel dialogViewModel, Data.Playlist model)
+        public Playlist(ITranslationService translator, IMediaItemMapper mapper, DialogViewModel dialogViewModel, Data.Playlist model)
             : base(model)
         {
             using (_busyStack.GetToken())
@@ -313,6 +314,7 @@ namespace Maple
                 _itemsLock = new object();
                 _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
                 _translator = translator ?? throw new ArgumentNullException(nameof(translator));
+                _mediaItemMapper = mapper ?? throw new ArgumentNullException(nameof(translator));
 
                 Items = new RangeObservableCollection<MediaItem>();
                 RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
@@ -334,7 +336,7 @@ namespace Maple
                 if (model.MediaItems == null)
                     throw new ArgumentException($"{model.MediaItems} cannot be null");
 
-                model.MediaItems.ForEach(p => Items.Add(new MediaItem(p)));
+                Items.AddRange(_mediaItemMapper.GetMany(model.MediaItems));
 
                 Items.CollectionChanged += (o, e) =>
                 {
@@ -374,11 +376,7 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var items = await _dialogViewModel.ShowUrlParseDialog();
-                var result = items.Select(p => new MediaItem(p)
-                {
-                    PlaylistId = Id,
-                });
-                Items.AddRange(result);
+                Items.AddRange(_mediaItemMapper.GetMany(items, Id));
             }
         }
 
