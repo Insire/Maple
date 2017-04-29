@@ -1,8 +1,8 @@
 ﻿using Maple.Core;
 using Maple.Localization.Properties;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace Maple
 {
@@ -15,56 +15,11 @@ namespace Maple
     /// <seealso cref="Maple.Core.ISaveableViewModel" />
     public class MediaPlayers : BaseDataListViewModel<MediaPlayer, Data.MediaPlayer>, IMediaPlayersViewModel
     {
-        private readonly IMapleLog _log;
-        private readonly ITranslationService _manager;
         private readonly Func<IMediaPlayer> _playerFactory;
         private readonly AudioDevices _devices;
         private readonly DialogViewModel _dialog;
         private readonly Func<IMediaRepository> _repositoryFactory;
-
-        private bool _disposed;
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="MediaPlayers"/> is disposed.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if disposed; otherwise, <c>false</c>.
-        /// </value>
-        public bool Disposed
-        {
-            get { return _disposed; }
-            protected set { SetValue(ref _disposed, value); }
-        }
-
-        /// <summary>
-        /// Gets the load command.
-        /// </summary>
-        /// <value>
-        /// The load command.
-        /// </value>
-        public ICommand LoadCommand => new RelayCommand(Load, () => !IsLoaded);
-        /// <summary>
-        /// Gets the refresh command.
-        /// </summary>
-        /// <value>
-        /// The refresh command.
-        /// </value>
-        public ICommand RefreshCommand => new RelayCommand(Load);
-        /// <summary>
-        /// Gets the save command.
-        /// </summary>
-        /// <value>
-        /// The save command.
-        /// </value>
-        public ICommand SaveCommand => new RelayCommand(Save);
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is loaded.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is loaded; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsLoaded { get; private set; }
-
+        private readonly IMediaPlayerMapper _mediaPlayerMapper;
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaPlayers"/> class.
         /// </summary>
@@ -73,22 +28,22 @@ namespace Maple
         /// <param name="repo">The repo.</param>
         /// <param name="devices">The devices.</param>
         /// <param name="dialog">The dialog.</param>
-        public MediaPlayers(IMapleLog log, ITranslationService manager, Func<IMediaPlayer> playerFactory, Func<IMediaRepository> repo, AudioDevices devices, DialogViewModel dialog)
+        public MediaPlayers(IMapleLog log, ITranslationService translationService, IMediaPlayerMapper mediaPlayerMapper, Func<IMediaPlayer> playerFactory, Func<IMediaRepository> repo, AudioDevices devices, DialogViewModel dialog, ISequenceProvider sequenceProvider)
+            : base(log, translationService, sequenceProvider)
         {
-            _log = log ?? throw new ArgumentNullException(nameof(log));
-            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
             _playerFactory = playerFactory ?? throw new ArgumentNullException(nameof(playerFactory));
             _devices = devices ?? throw new ArgumentNullException(nameof(devices));
             _dialog = dialog ?? throw new ArgumentNullException(nameof(dialog));
             _repositoryFactory = repo ?? throw new ArgumentNullException(nameof(repo));
+            _mediaPlayerMapper = mediaPlayerMapper ?? throw new ArgumentNullException(nameof(mediaPlayerMapper));
         }
 
         /// <summary>
         /// Loads this instance.
         /// </summary>
-        public void Load()
+        public override void Load()
         {
-            _log.Info($"{Resources.Loading} {GetType().Name}");
+            _log.Info($"{_translationService.Translate(nameof(Resources.Loading))} {_translationService.Translate(nameof(Resources.MediaPlayers))}");
             Items.Clear();
 
             using (var context = _repositoryFactory())
@@ -107,29 +62,28 @@ namespace Maple
         /// <summary>
         /// Saves this instance.
         /// </summary>
-        public void Save()
+        public override void Save()
         {
-            _log.Info($"{Resources.Saving} {GetType().Name}");
+            _log.Info($"{_translationService.Translate(nameof(Resources.Saving))} {_translationService.Translate(nameof(Resources.MediaPlayers))}");
             using (var context = _repositoryFactory())
             {
                 context.Save(this);
             }
         }
 
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
+        public override void Add()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            throw new NotImplementedException();
+            // TODO
+            //var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
+            //Add(_mediaPlayerMapper.Get(sequence));
         }
 
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
         /// </summary>
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (Disposed)
                 return;
@@ -139,6 +93,8 @@ namespace Maple
                 foreach (var player in Items)
                     player?.Dispose();
 
+
+                Dispose(disposing);
                 // Free any other managed objects here.
             }
 
@@ -146,14 +102,14 @@ namespace Maple
             Disposed = true;
         }
 
-        public Task SaveAsync()
+        public override Task SaveAsync()
         {
             return Task.Run(() => Save());
         }
 
-        public async Task LoadAsync()
+        public override async Task LoadAsync()
         {
-            _log.Info($"{Resources.Loading} {GetType().Name}");
+            _log.Info($"{_translationService.Translate(nameof(Resources.Loading))} {_translationService.Translate(nameof(Resources.MediaPlayers))}");
             Items.Clear();
 
             using (var context = _repositoryFactory())

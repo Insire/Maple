@@ -25,6 +25,7 @@ namespace Maple
     [DebuggerDisplay("{Title}, {Sequence}")]
     public class Playlist : BaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier, IChangeState
     {
+        private readonly ISequenceProvider _sequenceProvider;
         private readonly IMediaItemMapper _mediaItemMapper;
         private readonly ITranslationService _translator;
         private readonly object _itemsLock;
@@ -302,19 +303,22 @@ namespace Maple
         /// <summary>
         /// Initializes a new instance of the <see cref="Playlist" /> class.
         /// </summary>
+        /// <param name="translator">The translator.</param>
+        /// <param name="mediaItemMapper">The media item mapper.</param>
         /// <param name="dialogViewModel">The dialog view model.</param>
         /// <param name="model">The model.</param>
         /// <exception cref="System.ArgumentNullException">dialogViewModel</exception>
         /// <exception cref="System.ArgumentException"></exception>
-        public Playlist(ITranslationService translator, IMediaItemMapper mapper, DialogViewModel dialogViewModel, Data.Playlist model)
+        public Playlist(ITranslationService translator, IMediaItemMapper mediaItemMapper, ISequenceProvider sequenceProvider, DialogViewModel dialogViewModel, Data.Playlist model)
             : base(model)
         {
             using (_busyStack.GetToken())
             {
                 _itemsLock = new object();
+                _sequenceProvider = sequenceProvider ?? throw new ArgumentNullException(nameof(sequenceProvider));
                 _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
                 _translator = translator ?? throw new ArgumentNullException(nameof(translator));
-                _mediaItemMapper = mapper ?? throw new ArgumentNullException(nameof(translator));
+                _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper));
 
                 Items = new RangeObservableCollection<MediaItem>();
                 RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
@@ -449,10 +453,8 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                if (Items?.Any() == true)
-                    item.Sequence = Items.Select(p => p.Sequence).Max() + 1;
-                else
-                    item.Sequence = 0;
+                var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
+                item.Sequence = sequence;
 
                 if (Items.Any() != true)
                     History.Push(item.Sequence);
@@ -474,19 +476,14 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var added = false;
-                var currentIndex = -1;
-                if (Items.Any())
-                {
-                    var indices = Items.Select(p => p.Sequence);
-                    currentIndex = (indices != null) ? indices.Max() : 0;
-                }
+                var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
 
                 foreach (var item in items)
                 {
-                    currentIndex++;
-                    item.Sequence = currentIndex;
+                    item.Sequence = sequence;
                     Add(item);
 
+                    sequence++;
                     added = true;
                 }
 

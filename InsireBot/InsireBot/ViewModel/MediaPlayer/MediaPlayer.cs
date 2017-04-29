@@ -2,6 +2,7 @@ using Maple.Core;
 using Maple.Localization.Properties;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 
@@ -13,7 +14,8 @@ namespace Maple
     /// <seealso cref="Maple.Core.BaseViewModel{Maple.Data.MediaPlayer}" />
     /// <seealso cref="System.IDisposable" />
     /// <seealso cref="Maple.Core.IChangeState" />
-    public class MediaPlayer : BaseViewModel<Data.MediaPlayer>, IDisposable, IChangeState
+    [DebuggerDisplay("{Name}, {Sequence}")]
+    public class MediaPlayer : BaseViewModel<Data.MediaPlayer>, IDisposable, IChangeState, ISequence
     {
         protected readonly ITranslationService _manager;
 
@@ -163,6 +165,19 @@ namespace Maple
             set { SetValue(ref _playlist, value, OnChanging: OnPlaylistChanging, OnChanged: OnPlaylistChanged); }
         }
 
+        private int _sequence;
+        /// <summary>
+        /// the index of this item if its part of a collection
+        /// </summary>
+        /// <value>
+        /// The sequence.
+        /// </value>
+        public int Sequence
+        {
+            get { return _sequence; }
+            set { SetValue(ref _sequence, value, OnChanged: () => Model.Sequence = value); }
+        }
+
         private string _name;
         /// <summary>
         /// Gets or sets the name.
@@ -242,6 +257,7 @@ namespace Maple
             _name = model.Name;
             _playlist = playlist;
             _audioDevices = devices;
+            _sequence = model.Sequence;
 
             _createdBy = model.CreatedBy;
             _createdOn = model.CreatedOn;

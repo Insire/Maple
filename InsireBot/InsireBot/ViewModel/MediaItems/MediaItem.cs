@@ -1,6 +1,7 @@
 ﻿using Maple.Core;
 using Maple.Data;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace Maple
     /// </summary>
     /// <seealso cref="Maple.Core.BaseViewModel{Maple.Data.MediaItem}" />
     /// <seealso cref="Maple.Core.IMediaItem" />
+    [DebuggerDisplay("{Title}, {Sequence} {Location}")]
     public class MediaItem : BaseViewModel<Data.MediaItem>, IMediaItem
     {
         private readonly IPlaylistContext _context;
@@ -44,7 +46,6 @@ namespace Maple
             get { return _sequence; }
             set { SetValue(ref _sequence, value, OnChanged: () => Model.Sequence = value); }
         }
-
 
         private int _playlistId;
         /// <summary>

@@ -331,6 +331,15 @@ namespace Maple.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mediaplayers.
+        /// </summary>
+        public static string MediaPlayers {
+            get {
+                return ResourceManager.GetString("MediaPlayers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Navigation wird geladen.
         /// </summary>
         public static string NavigationLoad {

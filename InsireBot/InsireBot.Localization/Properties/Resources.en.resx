@@ -312,4 +312,7 @@
   <data name="Filter" xml:space="preserve">
     <value>Filter</value>
   </data>
+  <data name="MediaPlayers" xml:space="preserve">
+    <value>media players</value>
+  </data>
 </root>

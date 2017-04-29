@@ -28,7 +28,7 @@ namespace Maple
 
         public bool IsBusy { get; private set; }
 
-        public MediaRepository(IPlaylistMapper playlistMapper, IMediaItemMapper mediaItemMapper, IMediaPlayerMapper mediaPlayerMapper, DialogViewModel dialog, IPlaylistContext context)
+        public MediaRepository(IPlaylistMapper playlistMapper, IMediaItemMapper mediaItemMapper, IMediaPlayerMapper mediaPlayerMapper, IPlaylistContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
 

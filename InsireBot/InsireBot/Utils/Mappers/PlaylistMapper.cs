@@ -14,6 +14,7 @@ namespace Maple
         private readonly IMapper _mapper;
         private readonly ITranslationService _translator;
         private readonly IMediaItemMapper _mediaItemMapper;
+        private readonly ISequenceProvider _sequenceProvider;
 
         private DialogViewModel _dialogViewModel;
 
@@ -21,8 +22,9 @@ namespace Maple
         /// Initializes a new instance of the <see cref="PlaylistMapper"/> class.
         /// </summary>
         /// <param name="dialogViewModel">The dialog view model.</param>
-        public PlaylistMapper(ITranslationService translator, IMediaItemMapper mediaItemMapper, DialogViewModel dialogViewModel)
+        public PlaylistMapper(ITranslationService translator, IMediaItemMapper mediaItemMapper, DialogViewModel dialogViewModel, ISequenceProvider sequenceProvider)
         {
+            _sequenceProvider = sequenceProvider ?? throw new ArgumentNullException(nameof(sequenceProvider));
             _translator = translator ?? throw new ArgumentNullException(nameof(translator));
             _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
             _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper));
@@ -41,7 +43,7 @@ namespace Maple
 
         public Playlist GetNewPlaylist(int sequence)
         {
-            return new Playlist(_translator, _mediaItemMapper, _dialogViewModel, new Data.Playlist
+            return new Playlist(_translator, _mediaItemMapper, _sequenceProvider, _dialogViewModel, new Data.Playlist
             {
                 Title = _translator.Translate(nameof(Resources.New)),
                 Description = string.Empty,
@@ -59,7 +61,7 @@ namespace Maple
         /// <returns></returns>
         public Playlist Get(Core.Playlist mediaitem)
         {
-            return new Playlist(_translator, _mediaItemMapper, _dialogViewModel, GetData(mediaitem));
+            return new Playlist(_translator, _mediaItemMapper, _sequenceProvider, _dialogViewModel, GetData(mediaitem));
         }
 
         /// <summary>
@@ -69,7 +71,7 @@ namespace Maple
         /// <returns></returns>
         public Playlist Get(Data.Playlist mediaitem)
         {
-            return new Playlist(_translator, _mediaItemMapper, _dialogViewModel, mediaitem);
+            return new Playlist(_translator, _mediaItemMapper, _sequenceProvider, _dialogViewModel, mediaitem);
         }
 
         /// <summary>

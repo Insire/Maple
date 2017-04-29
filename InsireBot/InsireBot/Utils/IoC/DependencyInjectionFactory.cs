@@ -59,6 +59,7 @@ namespace Maple
                 c.Register<IMediaRepository, MediaRepository>(setup: Setup.With(allowDisposableTransient: true));
 
                 c.Register<IPlaylistMapper, PlaylistMapper>();
+                c.Register<IMediaPlayerMapper, MediaPlayerMapper>();
                 c.Register<IMediaItemMapper, MediaItemMapper>();
                 c.Register<ISequenceProvider, SequenceService>();
                 c.Register<IYoutubeUrlParseService, UrlParseService>();

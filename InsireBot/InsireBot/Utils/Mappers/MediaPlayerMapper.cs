@@ -2,7 +2,7 @@
 using Maple.Core;
 using System;
 
-namespace Maple.Utils.Mappers
+namespace Maple
 {
     public class MediaPlayerMapper : IMediaPlayerMapper
     {
