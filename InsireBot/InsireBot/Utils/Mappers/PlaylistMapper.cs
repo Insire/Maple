@@ -12,6 +12,7 @@ namespace Maple
     public class PlaylistMapper : IPlaylistMapper
     {
         private readonly IMapper _mapper;
+        private readonly IMapleLog _log;
         private readonly ITranslationService _translator;
         private readonly IMediaItemMapper _mediaItemMapper;
         private readonly ISequenceProvider _sequenceProvider;
@@ -22,18 +23,22 @@ namespace Maple
         /// Initializes a new instance of the <see cref="PlaylistMapper"/> class.
         /// </summary>
         /// <param name="dialogViewModel">The dialog view model.</param>
-        public PlaylistMapper(ITranslationService translator, IMediaItemMapper mediaItemMapper, DialogViewModel dialogViewModel, ISequenceProvider sequenceProvider)
+        public PlaylistMapper(IMapleLog log, ITranslationService translator, IMediaItemMapper mediaItemMapper, DialogViewModel dialogViewModel, ISequenceProvider sequenceProvider)
         {
             _sequenceProvider = sequenceProvider ?? throw new ArgumentNullException(nameof(sequenceProvider));
             _translator = translator ?? throw new ArgumentNullException(nameof(translator));
             _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
             _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper));
+            _log = log ?? throw new ArgumentNullException(nameof(log));
 
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<Data.Playlist, Core.Playlist>();
+                cfg.CreateMap<Data.Playlist, Core.Playlist>()
+                    .Ignore(p => p.MediaItems); //TODO
                 cfg.CreateMap<Core.Playlist, Data.Playlist>()
                     .Ignore(p => p.IsDeleted)
+                    .Ignore(p => p.RowVersion) //TODO
+                    .Ignore(p => p.MediaItems) //TODO
                     .Ignore(p => p.IsNew);
             });
 

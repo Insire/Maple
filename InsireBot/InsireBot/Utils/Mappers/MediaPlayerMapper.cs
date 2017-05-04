@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Maple.Core;
+using Maple.Localization.Properties;
 using System;
 
 namespace Maple
@@ -31,9 +32,20 @@ namespace Maple
             //_mapper = config.CreateMapper();
         }
 
+        public MediaPlayer GetNewMediaPlayer(int sequence, Playlist playlist = null)
+        {
+            return new MediaPlayer(_translator, _mediaPlayer, _devices, playlist, new Data.MediaPlayer()
+            {
+                Sequence = sequence,
+                IsPrimary = false,
+                Name = _translator.Translate(nameof(Resources.New)),
+                Playlist = playlist?.Model,
+            });
+        }
+
         public MediaPlayer Get(Data.MediaPlayer player, Playlist playlist)
         {
-            return new MediaPlayer(_translator, _mediaPlayer, player, playlist, _devices);
+            return new MediaPlayer(_translator, _mediaPlayer, _devices, playlist, player);
         }
     }
 }

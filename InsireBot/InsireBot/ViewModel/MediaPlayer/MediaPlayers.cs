@@ -20,6 +20,7 @@ namespace Maple
         private readonly DialogViewModel _dialog;
         private readonly Func<IMediaRepository> _repositoryFactory;
         private readonly IMediaPlayerMapper _mediaPlayerMapper;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaPlayers"/> class.
         /// </summary>
@@ -71,12 +72,10 @@ namespace Maple
             }
         }
 
-        public override void Add()
+        public void Add()
         {
-            throw new NotImplementedException();
-            // TODO
-            //var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
-            //Add(_mediaPlayerMapper.Get(sequence));
+            var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
+            Add(_mediaPlayerMapper.GetNewMediaPlayer(sequence));
         }
 
         /// <summary>
@@ -93,8 +92,7 @@ namespace Maple
                 foreach (var player in Items)
                     player?.Dispose();
 
-
-                Dispose(disposing);
+                base.Dispose(disposing);
                 // Free any other managed objects here.
             }
 

@@ -10,8 +10,8 @@ namespace Maple
     /// <seealso cref="Maple.Core.BaseListViewModel{Maple.Playlist}" />
     public class CreatePlaylist : BaseListViewModel<Playlist>
     {
-        private IYoutubeUrlParseService _dataParsingService;
-        private IPlaylistMapper _mapper;
+        private readonly IYoutubeUrlParseService _dataParsingService;
+        private readonly IPlaylistMapper _mapper;
 
         private string _source;
         /// <summary>
@@ -64,7 +64,7 @@ namespace Maple
         {
             ParseCommand = new RelayCommand(async () =>
             {
-                using (BusyStack.GetToken())
+                using (_busyStack.GetToken())
                 {
                     Result = await _dataParsingService.Parse(Source, ParseResultType.Playlists);
 

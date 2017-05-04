@@ -455,6 +455,28 @@ namespace Maple
             }
         }
 
+        public void Save(IMediaItemsViewModel mediaItems, bool isRoot = true)
+        {
+            using (_busyStack.GetToken())
+            {
+                var saveRequired = false;
+                for (var i = 0; i < mediaItems.Items.Count; i++)
+                {
+                    saveRequired = true;
+                    Save(mediaItems.Items[i], false);
+
+                    if (i % _saveThreshold == 0)
+                    {
+                        _context.SaveChanges();
+                        saveRequired = false;
+                    }
+                }
+
+                if (isRoot || saveRequired)
+                    _context.SaveChanges();
+            }
+        }
+
         public void Dispose()
         {
             Dispose(true);

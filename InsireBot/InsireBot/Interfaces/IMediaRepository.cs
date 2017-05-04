@@ -104,5 +104,7 @@ namespace Maple
         /// </summary>
         /// <param name="playlists">The playlists.</param>
         void Save(Playlists playlists, bool isRoot = true);
+
+        void Save(IMediaItemsViewModel mediaItems, bool isRoot = true);
     }
 }

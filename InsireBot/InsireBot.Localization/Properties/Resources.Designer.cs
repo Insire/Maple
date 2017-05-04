@@ -322,6 +322,24 @@ namespace Maple.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wiedergabetitel.
+        /// </summary>
+        public static string MediaItem {
+            get {
+                return ResourceManager.GetString("MediaItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wiedergabetitel.
+        /// </summary>
+        public static string MediaItems {
+            get {
+                return ResourceManager.GetString("MediaItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zur Wiedergabeliste wechseln.
         /// </summary>
         public static string MediaPlayerCommand {

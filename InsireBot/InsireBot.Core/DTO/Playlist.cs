@@ -8,6 +8,8 @@ namespace Maple.Core
     /// </summary>
     public class Playlist
     {
+        public int Id { get; set; }
+        public int Sequence { get; set; }
         /// <summary>
         /// Gets or sets the title.
         /// </summary>

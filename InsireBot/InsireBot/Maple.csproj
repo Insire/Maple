@@ -240,6 +240,8 @@
     <Compile Include="ViewModel\Dialogs\ProgressDialogViewModel.cs" />
     <Compile Include="ViewModel\Interfaces\ICultureViewModel.cs" />
     <Compile Include="ViewModel\Interfaces\ISplashScreenViewModel.cs" />
+    <Compile Include="ViewModel\Interfaces\IMediaItemsViewModel.cs" />
+    <Compile Include="ViewModel\MediaItems\MediaItems.cs" />
     <Compile Include="ViewModel\MediaPlayer\AudioDevices.cs" />
     <Compile Include="ViewModel\Interfaces\IMediaPlayersViewModel.cs" />
     <Compile Include="ViewModel\MediaPlayer\MainMediaPlayer.cs" />

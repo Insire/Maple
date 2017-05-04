@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Maple.Core;
 using Maple.Data;
+using Maple.Localization.Properties;
 using System;
 
 namespace Maple
@@ -12,12 +14,15 @@ namespace Maple
     {
         private readonly IMapper _mapper;
         private readonly IPlaylistContext _context;
+        private readonly ITranslationService _translator;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaItemMapper"/> class.
         /// </summary>
-        public MediaItemMapper(IPlaylistContext context)
+        public MediaItemMapper(IPlaylistContext context, ITranslationService translator)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _translator = translator ?? throw new ArgumentNullException(nameof(translator));
 
             var config = new MapperConfiguration(cfg =>
             {
@@ -25,11 +30,24 @@ namespace Maple
                 cfg.CreateMap<Core.MediaItem, Data.MediaItem>()
                     .Ignore(p => p.IsDeleted)
                     .Ignore(p => p.IsNew)
+                    .Ignore(p => p.Raw)
+                    .Ignore(p => p.RawId)
+                    .Ignore(p => p.RowVersion)
                     .Ignore(p => p.Playlist);
             });
 
             config.AssertConfigurationIsValid();
             _mapper = config.CreateMapper();
+        }
+
+        public MediaItem GetNewMediaItem(int sequence, int playlistId)
+        {
+            return new MediaItem(new Data.MediaItem(), _context)
+            {
+                Title = _translator.Translate(nameof(Resources.New)),
+                Description = string.Empty,
+                PlaylistId = playlistId,
+            };
         }
 
         /// <summary>

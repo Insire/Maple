@@ -74,13 +74,13 @@ namespace Maple
         public Task SaveAsync()
         {
             Save();
-            return Task.FromResult(0);
+            return Task.CompletedTask;
         }
 
         public Task LoadAsync()
         {
             Load();
-            return Task.FromResult(0);
+            return Task.CompletedTask;
         }
     }
 }

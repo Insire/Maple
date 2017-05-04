@@ -1,10 +1,11 @@
 ﻿namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public interface IMediaItemMapper
     {
+        MediaItem GetNewMediaItem(int sequence, int playlistId);
         /// <summary>
         /// Gets the core.
         /// </summary>

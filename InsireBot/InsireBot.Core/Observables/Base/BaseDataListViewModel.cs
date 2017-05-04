@@ -1,5 +1,6 @@
 ﻿using Maple.Data;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,10 +11,12 @@ namespace Maple.Core
     /// <summary>
     /// ListViewModel implementation for ObservableObjects related to the DataAccessLayer (DB)
     /// </summary>
-    /// <typeparam name="T">a wrapper class implementing <see cref="BaseViewModel" /></typeparam>
-    /// <typeparam name="S">a DTO implementing <see cref="BaseObject" /></typeparam>
+    /// <typeparam name="TViewModel">a wrapper class implementing <see cref="BaseViewModel" /></typeparam>
+    /// <typeparam name="TModel">a DTO implementing <see cref="BaseObject" /></typeparam>
     /// <seealso cref="Maple.Core.BaseListViewModel{T}" />
-    public abstract class BaseDataListViewModel<T, S> : BaseListViewModel<T>, ILoadableViewModel, IDisposable where T : BaseViewModel<S>, ISequence where S : BaseObject
+    public abstract class BaseDataListViewModel<TViewModel, TModel> : BaseListViewModel<TViewModel>, ILoadableViewModel, IDisposable
+        where TViewModel : BaseViewModel<TModel>, ISequence
+        where TModel : BaseObject
     {
         protected readonly ISequenceProvider _sequenceProvider;
         protected readonly ITranslationService _translationService;
@@ -67,7 +70,7 @@ namespace Maple.Core
             _translationService = translationService ?? throw new ArgumentNullException(nameof(translationService));
             _sequenceProvider = sequenceProvider ?? throw new ArgumentNullException(nameof(sequenceProvider));
         }
-        public abstract void Add();
+
         public abstract void Load();
         public abstract void Save();
         public abstract Task LoadAsync();
@@ -77,24 +80,55 @@ namespace Maple.Core
         /// Removes the specified item.
         /// </summary>
         /// <param name="item">The item.</param>
-        public override void Remove(T item)
+        public override void Remove(TViewModel item)
         {
-            item.Model.IsDeleted = true;
-            base.Remove(item);
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+
+            using (_busyStack.GetToken())
+            {
+                while (Items.Contains(item))
+                {
+                    item.Model.IsDeleted = true;
+                    base.Remove(item);
+                }
+            }
         }
 
         /// <summary>
         /// Removes the range.
         /// </summary>
         /// <param name="items">The items.</param>
-        public override void RemoveRange(IEnumerable<T> items)
+        public override void RemoveRange(IEnumerable<TViewModel> items)
         {
-            base.RemoveRange(items);
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
 
-            items.ForEach(p => p.Model.IsDeleted = true);
+            using (_busyStack.GetToken())
+            {
+                items.ForEach(p => p.Model.IsDeleted = true);
+                base.RemoveRange(items);
+            }
         }
 
-        public override void Add(T item)
+        /// <summary>
+        /// Removes the range.
+        /// </summary>
+        /// <param name="items">The items.</param>
+        /// <exception cref="System.ArgumentNullException">items</exception>
+        public override void RemoveRange(IList items)
+        {
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
+
+            using (_busyStack.GetToken())
+            {
+                foreach (var item in items)
+                    Remove(item as TViewModel);
+            }
+        }
+
+        public override void Add(TViewModel item)
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
@@ -104,12 +138,12 @@ namespace Maple.Core
             base.Add(item);
         }
 
-        public override void AddRange(IEnumerable<T> items)
+        public override void AddRange(IEnumerable<TViewModel> items)
         {
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 
-            using (BusyStack.GetToken())
+            using (_busyStack.GetToken())
             {
                 var added = false;
                 var sequence = _sequenceProvider.Get(Items.Cast<ISequence>().ToList());

@@ -247,7 +247,7 @@ namespace Maple
         /// or
         /// playlist - playlist
         /// </exception>
-        public MediaPlayer(ITranslationService manager, IMediaPlayer player, Data.MediaPlayer model, Playlist playlist, AudioDevices devices)
+        public MediaPlayer(ITranslationService manager, IMediaPlayer player, AudioDevices devices, Playlist playlist, Data.MediaPlayer model)
             : base(model)
         {
             _manager = manager ?? throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} {Resources.IsRequired}");

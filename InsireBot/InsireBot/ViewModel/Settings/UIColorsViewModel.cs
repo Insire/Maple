@@ -186,7 +186,7 @@ namespace Maple
         public Task LoadAsync()
         {
             Load();
-            return Task.FromResult(0);
+            return Task.CompletedTask;
         }
     }
 }

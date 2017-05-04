@@ -315,4 +315,10 @@
   <data name="MediaPlayers" xml:space="preserve">
     <value>Mediaplayers</value>
   </data>
+  <data name="MediaItem" xml:space="preserve">
+    <value>Wiedergabetitel</value>
+  </data>
+  <data name="MediaItems" xml:space="preserve">
+    <value>Wiedergabetitel</value>
+  </data>
 </root>

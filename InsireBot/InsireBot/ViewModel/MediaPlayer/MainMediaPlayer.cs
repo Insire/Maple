@@ -4,7 +4,7 @@ using Maple.Localization.Properties;
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="Maple.MediaPlayer" />
     public class MainMediaPlayer : MediaPlayer
@@ -20,7 +20,7 @@ namespace Maple
         /// <param name="playlist">The playlist.</param>
         /// <param name="devices">The devices.</param>
         public MainMediaPlayer(ITranslationService manager, IMediaPlayer player, Data.MediaPlayer model, Playlist playlist, AudioDevices devices)
-            : base(manager, player, model, playlist, devices)
+            : base(manager, player, devices, playlist, model)
         {
             IsPrimary = model.IsPrimary;
 

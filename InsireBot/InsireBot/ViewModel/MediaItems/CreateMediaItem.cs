@@ -63,7 +63,7 @@ namespace Maple
         {
             ParseCommand = new RelayCommand(async () =>
             {
-                using (BusyStack.GetToken())
+                using (_busyStack.GetToken())
                 {
                     Result = await _dataParsingService.Parse(Source, ParseResultType.MediaItems);
 

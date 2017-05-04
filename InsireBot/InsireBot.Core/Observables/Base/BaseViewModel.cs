@@ -72,7 +72,8 @@ namespace Maple.Core
         /// Initializes a new instance of the <see cref="BaseViewModel{T}"/> class.
         /// </summary>
         /// <param name="model">The model.</param>
-        protected BaseViewModel(T model) : this()
+        protected BaseViewModel(T model)
+            : this()
         {
             Model = model;
         }
@@ -158,12 +159,22 @@ namespace Maple.Core
         private void ValidateInternal(string propertyName, CultureInfo culture = null)
         {
             var current = culture ?? Thread.CurrentThread.CurrentCulture;
-            _errors[propertyName].Clear();
+
+            if (_errors.ContainsKey(propertyName))
+                _errors[propertyName].Clear();
 
             foreach (var item in _rules[propertyName].Items)
             {
                 var result = item.Validate(_rules[propertyName].Value, current);
-                _errors[propertyName].Add(result.ErrorContent.ToString());
+                if (_errors.ContainsKey(propertyName))
+                    _errors[propertyName].Add(result.ErrorContent.ToString());
+                else
+                {
+                    _errors.Add(propertyName, new List<string>()
+                    {
+                        result.ErrorContent.ToString(),
+                    });
+                }
             }
 
             OnErrorsChanged(propertyName);

@@ -220,7 +220,7 @@ namespace Maple
         public Task ShowExceptionDialog(Exception exception)
         {
             if (IsOpen) // no exception spam, could probably be improved TODO ?
-                return Task.FromResult(0);
+                return Task.CompletedTask;
 
             TitleDetail = string.Empty;
             Context = ExceptionDialogViewModel;
