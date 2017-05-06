@@ -2,8 +2,6 @@
 using Maple.Data;
 using System;
 using System.Diagnostics;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace Maple
 {
@@ -16,7 +14,6 @@ namespace Maple
     public class MediaItem : BaseViewModel<Data.MediaItem>, IMediaItem
     {
         private readonly IPlaylistContext _context;
-        private Raw _raw;
 
         public bool IsNew => Model.IsNew;
         public bool IsDeleted => Model.IsDeleted;
@@ -182,7 +179,6 @@ namespace Maple
             : base(model)
         {
             _id = model.Id;
-            _raw = model.Raw;
             _playlistId = model.PlaylistId;
             _location = model.Location;
             _description = model.Description;
@@ -196,16 +192,6 @@ namespace Maple
             _updatedOn = model.UpdatedOn;
 
             _context = context ?? throw new ArgumentNullException(nameof(context));
-        }
-
-        public async Task<Stream> GetDataAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task SetDataAsync()
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>

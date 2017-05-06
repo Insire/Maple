@@ -42,7 +42,17 @@ namespace Maple
 
         public MediaItem GetNewMediaItem(int sequence, int playlistId)
         {
-            return new MediaItem(new Data.MediaItem(), _context)
+            return new MediaItem(GetDataNewMediaItem(playlistId), _context)
+            {
+                Title = _translator.Translate(nameof(Resources.New)),
+                Description = string.Empty,
+                PlaylistId = playlistId,
+            };
+        }
+
+        public Data.MediaItem GetDataNewMediaItem(int playlistId)
+        {
+            return new Data.MediaItem()
             {
                 Title = _translator.Translate(nameof(Resources.New)),
                 Description = string.Empty,

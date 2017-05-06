@@ -6,6 +6,8 @@
     public interface IMediaItemMapper
     {
         MediaItem GetNewMediaItem(int sequence, int playlistId);
+        Data.MediaItem GetDataNewMediaItem(int playlistId);
+
         /// <summary>
         /// Gets the core.
         /// </summary>

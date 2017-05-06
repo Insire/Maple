@@ -70,7 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DryIoc.dll">
-      <Version>2.10.6</Version>
+      <Version>2.10.7</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Net.Compilers">
       <Version>2.1.0</Version>
