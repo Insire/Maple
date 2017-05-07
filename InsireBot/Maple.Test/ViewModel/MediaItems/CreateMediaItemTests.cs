@@ -1,4 +1,3 @@
-using Maple;
 using Maple.Youtube;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;

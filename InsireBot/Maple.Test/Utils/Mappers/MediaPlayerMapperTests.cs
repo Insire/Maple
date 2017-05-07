@@ -1,4 +1,3 @@
-using Maple;
 using Maple.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;

@@ -1,4 +1,3 @@
-using Maple;
 using Maple.Core;
 using Maple.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
