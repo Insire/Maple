@@ -19,17 +19,17 @@ namespace Maple
             _mediaPlayer = mediaPlayer ?? throw new ArgumentNullException(nameof(mediaPlayer));
             _devices = devices ?? throw new ArgumentNullException(nameof(devices));
 
-            //var config = new MapperConfiguration(cfg =>
-            //{
-            //    cfg.CreateMap<Data.MediaPlayer, MediaPlayer>();
-            //    cfg.CreateMap<Core.MediaPlayer, Data.MediaPlayer>()
-            //        .Ignore(p => p.IsDeleted)
-            //        .Ignore(p => p.IsNew)
-            //        .Ignore(p => p.Playlist);
-            //});
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Data.MediaPlayer, MediaPlayer>();
+                cfg.CreateMap<Core.MediaPlayer, Data.MediaPlayer>()
+                    .Ignore(p => p.IsDeleted)
+                    .Ignore(p => p.IsNew)
+                    .Ignore(p => p.Playlist);
+            });
 
-            //config.AssertConfigurationIsValid();
-            //_mapper = config.CreateMapper();
+            config.AssertConfigurationIsValid();
+            _mapper = config.CreateMapper();
         }
 
         public MediaPlayer GetNewMediaPlayer(int sequence, Playlist playlist = null)
@@ -46,6 +46,36 @@ namespace Maple
         public MediaPlayer Get(Data.MediaPlayer player, Playlist playlist)
         {
             return new MediaPlayer(_translator, _mediaPlayer, _devices, playlist, player);
+        }
+
+        public MediaPlayer Get(Data.MediaPlayer model)
+        {
+            return new MediaPlayer(_translator, _mediaPlayer, _devices, null, model); //TODO
+        }
+
+        public MediaPlayer Get(Core.MediaPlayer dto)
+        {
+            return new MediaPlayer(_translator, _mediaPlayer, _devices, null, GetData(dto)); //TODO
+        }
+
+        public Data.MediaPlayer GetData(MediaPlayer viewModel)
+        {
+            return viewModel.Model;
+        }
+
+        public Data.MediaPlayer GetData(Core.MediaPlayer dto)
+        {
+            return _mapper.Map<Core.MediaPlayer, Data.MediaPlayer>(dto);
+        }
+
+        public Core.MediaPlayer GetCore(MediaPlayer viewModel)
+        {
+            return GetCore(viewModel.Model);
+        }
+
+        public Core.MediaPlayer GetCore(Data.MediaPlayer model)
+        {
+            return _mapper.Map<Data.MediaPlayer, Core.MediaPlayer>(model);
         }
     }
 }
