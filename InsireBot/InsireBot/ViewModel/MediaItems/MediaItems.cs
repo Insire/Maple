@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Maple.ViewModel.MediaItems
+namespace Maple
 {
     public class MediaItems : BaseDataListViewModel<MediaItem, Data.MediaItem>, ISaveableViewModel, IMediaItemsViewModel
     {

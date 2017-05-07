@@ -9,28 +9,26 @@ namespace Maple
     /// Provides logic to map between different domain objects of the Playlisttype
     /// </summary>
     /// <seealso cref="Maple.IPlaylistMapper" />
-    public class PlaylistMapper : IPlaylistMapper
+    public class PlaylistMapper : BaseMapper, IPlaylistMapper
     {
-        private readonly IMapper _mapper;
-        private readonly IMapleLog _log;
-        private readonly ITranslationService _translator;
         private readonly IMediaItemMapper _mediaItemMapper;
-        private readonly ISequenceProvider _sequenceProvider;
-
-        private DialogViewModel _dialogViewModel;
+        private readonly DialogViewModel _dialogViewModel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlaylistMapper"/> class.
         /// </summary>
         /// <param name="dialogViewModel">The dialog view model.</param>
-        public PlaylistMapper(IMapleLog log, ITranslationService translator, IMediaItemMapper mediaItemMapper, DialogViewModel dialogViewModel, ISequenceProvider sequenceProvider)
+        public PlaylistMapper(IMediaItemMapper mediaItemMapper, DialogViewModel dialogViewModel, ITranslationService translator, ISequenceProvider sequenceProvider, IMapleLog log)
+            : base(translator, sequenceProvider, log)
         {
-            _sequenceProvider = sequenceProvider ?? throw new ArgumentNullException(nameof(sequenceProvider));
-            _translator = translator ?? throw new ArgumentNullException(nameof(translator));
             _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
             _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper));
-            _log = log ?? throw new ArgumentNullException(nameof(log));
 
+            InitializeMapper();
+        }
+
+        protected override void InitializeMapper()
+        {
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Data.Playlist, Core.Playlist>()
@@ -48,9 +46,9 @@ namespace Maple
 
         public Playlist GetNewPlaylist(int sequence)
         {
-            return new Playlist(_translator, _mediaItemMapper, _sequenceProvider, _dialogViewModel, new Data.Playlist
+            return new Playlist(_translationService, _mediaItemMapper, _sequenceProvider, _dialogViewModel, new Data.Playlist
             {
-                Title = _translator.Translate(nameof(Resources.New)),
+                Title = _translationService.Translate(nameof(Resources.New)),
                 Description = string.Empty,
                 Location = string.Empty,
                 RepeatMode = 0,
@@ -66,7 +64,7 @@ namespace Maple
         /// <returns></returns>
         public Playlist Get(Core.Playlist mediaitem)
         {
-            return new Playlist(_translator, _mediaItemMapper, _sequenceProvider, _dialogViewModel, GetData(mediaitem));
+            return new Playlist(_translationService, _mediaItemMapper, _sequenceProvider, _dialogViewModel, GetData(mediaitem));
         }
 
         /// <summary>
@@ -76,7 +74,7 @@ namespace Maple
         /// <returns></returns>
         public Playlist Get(Data.Playlist mediaitem)
         {
-            return new Playlist(_translator, _mediaItemMapper, _sequenceProvider, _dialogViewModel, mediaitem);
+            return new Playlist(_translationService, _mediaItemMapper, _sequenceProvider, _dialogViewModel, mediaitem);
         }
 
         /// <summary>

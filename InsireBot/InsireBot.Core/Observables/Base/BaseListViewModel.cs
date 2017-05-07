@@ -40,7 +40,7 @@ namespace Maple.Core
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
-        public bool HasErrors => throw new NotImplementedException();
+        public bool HasErrors => _errors.Count>0;
 
         private bool _isBusy;
         /// <summary>

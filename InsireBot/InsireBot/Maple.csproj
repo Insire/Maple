@@ -222,6 +222,7 @@
     <Compile Include="Utils\MapleException.cs" />
     <Compile Include="Interfaces\IMediaPlayerMapper.cs" />
     <Compile Include="Interfaces\IBaseMapper.cs" />
+    <Compile Include="Utils\Mappers\Base\BaseMapper.cs" />
     <Compile Include="Utils\Mappers\MediaItemMapper.cs" />
     <Compile Include="Utils\Mappers\MediaPlayerMapper.cs" />
     <Compile Include="Utils\Mappers\PlaylistMapper.cs" />

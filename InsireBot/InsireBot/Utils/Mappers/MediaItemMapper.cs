@@ -10,20 +10,23 @@ namespace Maple
     /// Provides logic to map between different domain objects of the MediaItemType
     /// </summary>
     /// <seealso cref="Maple.IMediaItemMapper" />
-    public class MediaItemMapper : IMediaItemMapper
+    public class MediaItemMapper : BaseMapper, IMediaItemMapper
     {
-        private readonly IMapper _mapper;
         private readonly IPlaylistContext _context;
-        private readonly ITranslationService _translator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaItemMapper"/> class.
         /// </summary>
-        public MediaItemMapper(IPlaylistContext context, ITranslationService translator)
+        public MediaItemMapper(IPlaylistContext context, ITranslationService translator, ISequenceProvider sequenceProvider, IMapleLog log)
+            : base(translator, sequenceProvider, log)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _translator = translator ?? throw new ArgumentNullException(nameof(translator));
 
+            InitializeMapper();
+        }
+
+        protected override void InitializeMapper()
+        {
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Data.MediaItem, Core.MediaItem>();
@@ -44,7 +47,7 @@ namespace Maple
         {
             return new MediaItem(GetDataNewMediaItem(playlistId), _context)
             {
-                Title = _translator.Translate(nameof(Resources.New)),
+                Title = _translationService.Translate(nameof(Resources.New)),
                 Description = string.Empty,
                 PlaylistId = playlistId,
             };
@@ -54,7 +57,7 @@ namespace Maple
         {
             return new Data.MediaItem()
             {
-                Title = _translator.Translate(nameof(Resources.New)),
+                Title = _translationService.Translate(nameof(Resources.New)),
                 Description = string.Empty,
                 PlaylistId = playlistId,
             };
@@ -119,5 +122,7 @@ namespace Maple
         {
             return _mapper.Map<Core.MediaItem, Data.MediaItem>(mediaitem);
         }
+
+
     }
 }

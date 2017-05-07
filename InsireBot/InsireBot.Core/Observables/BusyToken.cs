@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Maple.Core
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="System.WeakReference" />
     /// <seealso cref="System.IDisposable" />
@@ -49,6 +50,16 @@ namespace Maple.Core
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        protected BusyToken(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context); // TODO
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace InsireBotCore
+namespace Maple.Core
 {
     /// <summary>
     ///

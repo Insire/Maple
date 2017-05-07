@@ -5,27 +5,28 @@ using System;
 
 namespace Maple
 {
-    public class MediaPlayerMapper : IMediaPlayerMapper
+    public class MediaPlayerMapper : BaseMapper, IMediaPlayerMapper
     {
-        private readonly IMapper _mapper;
-        private readonly ITranslationService _translator;
         private readonly IMediaPlayer _mediaPlayer;
-
         private readonly AudioDevices _devices;
 
-        public MediaPlayerMapper(ITranslationService translator, IMediaPlayer mediaPlayer, AudioDevices devices)
+        public MediaPlayerMapper(ITranslationService translator, IMediaPlayer mediaPlayer, AudioDevices devices, ISequenceProvider sequenceProvider, IMapleLog log)
+            : base(translator, sequenceProvider, log)
         {
-            _translator = translator ?? throw new ArgumentNullException(nameof(translator));
             _mediaPlayer = mediaPlayer ?? throw new ArgumentNullException(nameof(mediaPlayer));
             _devices = devices ?? throw new ArgumentNullException(nameof(devices));
 
-            var config = new MapperConfiguration(cfg =>
+            InitializeMapper();
+        }
+
+        protected override void InitializeMapper()
+        {
+            var config = new MapperConfiguration(cfg => // TODO
             {
                 cfg.CreateMap<Data.MediaPlayer, MediaPlayer>();
                 cfg.CreateMap<Core.MediaPlayer, Data.MediaPlayer>()
                     .Ignore(p => p.IsDeleted)
-                    .Ignore(p => p.IsNew)
-                    .Ignore(p => p.Playlist);
+                    .Ignore(p => p.IsNew);
             });
 
             config.AssertConfigurationIsValid();
@@ -34,28 +35,28 @@ namespace Maple
 
         public MediaPlayer GetNewMediaPlayer(int sequence, Playlist playlist = null)
         {
-            return new MediaPlayer(_translator, _mediaPlayer, _devices, playlist, new Data.MediaPlayer()
+            return new MediaPlayer(_translationService, _mediaPlayer, _devices, playlist, new Data.MediaPlayer()
             {
                 Sequence = sequence,
                 IsPrimary = false,
-                Name = _translator.Translate(nameof(Resources.New)),
+                Name = _translationService.Translate(nameof(Resources.New)),
                 Playlist = playlist?.Model,
             });
         }
 
         public MediaPlayer Get(Data.MediaPlayer player, Playlist playlist)
         {
-            return new MediaPlayer(_translator, _mediaPlayer, _devices, playlist, player);
+            return new MediaPlayer(_translationService, _mediaPlayer, _devices, playlist, player);
         }
 
         public MediaPlayer Get(Data.MediaPlayer model)
         {
-            return new MediaPlayer(_translator, _mediaPlayer, _devices, null, model); //TODO
+            return new MediaPlayer(_translationService, _mediaPlayer, _devices, null, model); //TODO
         }
 
         public MediaPlayer Get(Core.MediaPlayer dto)
         {
-            return new MediaPlayer(_translator, _mediaPlayer, _devices, null, GetData(dto)); //TODO
+            return new MediaPlayer(_translationService, _mediaPlayer, _devices, null, GetData(dto)); //TODO
         }
 
         public Data.MediaPlayer GetData(MediaPlayer viewModel)

@@ -1,3 +1,4 @@
+using Maple;
 using Maple.Core;
 using Maple.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,6 +13,8 @@ namespace Maple.Test.Utils.Mappers
 
         private Mock<IPlaylistContext> _mockPlaylistContext;
         private Mock<ITranslationService> _mockTranslationService;
+        private Mock<ISequenceProvider> _mockSequenceProvider;
+        private Mock<IMapleLog> _mockMapleLog;
 
         [TestInitialize]
         public void TestInitialize()
@@ -20,6 +23,8 @@ namespace Maple.Test.Utils.Mappers
 
             _mockPlaylistContext = _mockRepository.Create<IPlaylistContext>();
             _mockTranslationService = _mockRepository.Create<ITranslationService>();
+            _mockSequenceProvider = _mockRepository.Create<ISequenceProvider>();
+            _mockMapleLog = _mockRepository.Create<IMapleLog>();
         }
 
         [TestCleanup]
@@ -38,7 +43,9 @@ namespace Maple.Test.Utils.Mappers
         {
             return new MediaItemMapper(
                 _mockPlaylistContext.Object,
-                _mockTranslationService.Object);
+                _mockTranslationService.Object,
+                _mockSequenceProvider.Object,
+                _mockMapleLog.Object);
         }
     }
 }

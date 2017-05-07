@@ -50,7 +50,13 @@ namespace Maple
 
         public abstract void Stop();
 
-        public abstract void Dispose();
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected abstract void Dispose(bool disposing);
 
         public abstract bool CanPlay(IMediaItem item);
 

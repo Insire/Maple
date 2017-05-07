@@ -143,13 +143,7 @@ namespace Maple
             _volumeProvider.Volume = value / 100;
         }
 
-        public sealed override void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (Disposed)
                 return;
