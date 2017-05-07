@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace Maple
+namespace Maple.Core
 {
     public class IOUtils
     {

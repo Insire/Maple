@@ -114,6 +114,7 @@
     <Compile Include="Interfaces\IConfigurableWindowSettings.cs" />
     <Compile Include="Interfaces\IIocFrameworkElement.cs" />
     <Compile Include="Interfaces\ILoadableViewModel.cs" />
+    <Compile Include="IO\IOUtils.cs" />
     <Compile Include="IO\Util\SelectedTreeViewItemBehavior.cs" />
     <Compile Include="Services\Interfaces\IMapleLog.cs" />
     <Compile Include="Interfaces\IIsSelected.cs" />

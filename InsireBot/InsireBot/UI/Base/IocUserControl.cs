@@ -6,11 +6,11 @@ using System.Windows.Controls;
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="System.Windows.Controls.UserControl" />
     /// <seealso cref="Maple.Core.IIocFrameworkElement" />
-    public class IoCUserControl : UserControl, IIocFrameworkElement
+    public abstract class IoCUserControl : UserControl, IIocFrameworkElement
     {
         /// <summary>
         /// Gets the translation manager.

@@ -14,7 +14,7 @@ namespace Maple
     /// </summary>
     /// <seealso cref="Maple.ConfigurableWindow" />
     /// <seealso cref="Maple.Core.IIocFrameworkElement" />
-    public class IoCWindow : ConfigurableWindow, IIocFrameworkElement
+    public abstract class IoCWindow : ConfigurableWindow, IIocFrameworkElement
     {
         private IConfigurableWindowSettings _settings;
         private IUIColorsViewModel _colorsViewModel;

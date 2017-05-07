@@ -175,28 +175,28 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\IoCResourceDictionary.cs" />
-    <Compile Include="Controls\PackIcon.cs" />
-    <Compile Include="Controls\PackIconKind.cs" />
-    <Compile Include="Controls\SharedResourceDictionary.cs" />
+    <Compile Include="UI\IoCResourceDictionary.cs" />
+    <Compile Include="UI\PackIcon.cs" />
+    <Compile Include="Enums\PackIconKind.cs" />
+    <Compile Include="UI\Base\SharedResourceDictionary.cs" />
     <Compile Include="Enums\AudioFormats.cs" />
     <Compile Include="Enums\PlaybackState.cs" />
     <Compile Include="Interfaces\IMediaItemMapper.cs" />
     <Compile Include="Interfaces\IMediaPlayer.cs" />
     <Compile Include="Interfaces\IPlaylistMapper.cs" />
-    <Compile Include="Pages\MediaPlayersPage.xaml.cs">
+    <Compile Include="UI\UserControls\MediaPlayersPage.xaml.cs">
       <DependentUpon>MediaPlayersPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Options\OptionsPage.xaml.cs">
+    <Compile Include="UI\UserControls\Options\OptionsPage.xaml.cs">
       <DependentUpon>OptionsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Playlist\PlaylistsPage.xaml.cs">
+    <Compile Include="UI\UserControls\Playlist\PlaylistsPage.xaml.cs">
       <DependentUpon>PlaylistsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ConfigurableWindow.cs" />
-    <Compile Include="Controls\ConfigurableWindowSettings.cs" />
-    <Compile Include="Controls\IocUserControl.cs" />
-    <Compile Include="Controls\IoCWindow.cs" />
+    <Compile Include="UI\Base\ConfigurableWindow.cs" />
+    <Compile Include="UI\Base\ConfigurableWindowSettings.cs" />
+    <Compile Include="UI\Base\IocUserControl.cs" />
+    <Compile Include="UI\Base\IoCWindow.cs" />
     <Compile Include="Interfaces\IMediaRepository.cs" />
     <Compile Include="Services\DataAccess\MediaRepository.cs" />
     <Compile Include="Services\Version\IVersionService.cs" />
@@ -204,108 +204,111 @@
     <Compile Include="SplashScreen.xaml.cs">
       <DependentUpon>SplashScreen.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\BindingProxy.cs" />
+    <Compile Include="UI\BindingProxy.cs" />
     <Compile Include="Utils\Converters\BrushRoundConverter.cs" />
     <Compile Include="Utils\Converters\CaseConverter.cs" />
     <Compile Include="Utils\Converters\MathMultipleConverter.cs" />
-    <Compile Include="Utils\IoC\DependencyInjectionFactory.cs" />
+    <Compile Include="Utils\EventHandlers\AudioDeviceChangedEventArgs.cs" />
+    <Compile Include="Utils\EventHandlers\CompletedMediaItemEventEventArgs.cs" />
+    <Compile Include="Utils\EventHandlers\PlayingMediaItemEventArgs.cs" />
+    <Compile Include="Utils\EventHandlers\RepeatModeChangedEventEventArgs.cs" />
+    <Compile Include="Utils\EventHandlers\ShuffleModeChangedEventEventArgs.cs" />
+    <Compile Include="Utils\EventHandlers\UiPrimaryColorEventArgs.cs" />
+    <Compile Include="Utils\DependencyInjectionFactory.cs" />
     <Compile Include="Utils\Converters\DebugConverter.cs" />
-    <Compile Include="Utils\Extensions\MapperExtensions.cs" />
+    <Compile Include="Utils\Mappers\MapperExtensions.cs" />
     <Compile Include="Services\Localization\LanguageChangedEventManager.cs" />
     <Compile Include="Services\Localization\Providers\ITranslationProvider.cs" />
     <Compile Include="Services\Localization\Providers\ResxTranslationProvider.cs" />
     <Compile Include="Services\Localization\TranslationData.cs" />
     <Compile Include="Services\Localization\TranslationExtension.cs" />
     <Compile Include="Services\Localization\TranslationService.cs" />
-    <Compile Include="Utils\IOUtils.cs" />
-    <Compile Include="Utils\MapleException.cs" />
     <Compile Include="Interfaces\IMediaPlayerMapper.cs" />
     <Compile Include="Interfaces\IBaseMapper.cs" />
     <Compile Include="Utils\Mappers\Base\BaseMapper.cs" />
     <Compile Include="Utils\Mappers\MediaItemMapper.cs" />
     <Compile Include="Utils\Mappers\MediaPlayerMapper.cs" />
     <Compile Include="Utils\Mappers\PlaylistMapper.cs" />
-    <Compile Include="Utils\SelectedListBoxItemBehavior.cs" />
-    <Compile Include="Utils\SelectedTreeViewItemBehavior.cs" />
-    <Compile Include="Utils\ShellSettings.cs" />
+    <Compile Include="UI\Interactivity\SelectedListBoxItemBehavior.cs" />
+    <Compile Include="UI\Interactivity\SelectedTreeViewItemBehavior.cs" />
+    <Compile Include="UI\ShellSettings.cs" />
     <Compile Include="Enums\MediaPlayerType.cs" />
     <Compile Include="Enums\RepeatMode.cs" />
-    <Compile Include="Utils\EventHandler.cs" />
     <Compile Include="Utils\Converters\RadioButtonCheckedConverter.cs" />
-    <Compile Include="ViewModel\Dialogs\Base\DialogViewModel.cs" />
-    <Compile Include="ViewModel\Dialogs\ExceptionDialogViewModel.cs" />
-    <Compile Include="ViewModel\Dialogs\IO\FileBrowserDialogViewModel.cs" />
-    <Compile Include="ViewModel\Dialogs\IO\FileSystemBrowserOptions.cs" />
-    <Compile Include="ViewModel\Dialogs\IO\FolderBrowserDialogViewModel.cs" />
-    <Compile Include="ViewModel\Dialogs\MessageDialogViewModel.cs" />
-    <Compile Include="ViewModel\Dialogs\ProgressDialogViewModel.cs" />
-    <Compile Include="ViewModel\Interfaces\ICultureViewModel.cs" />
-    <Compile Include="ViewModel\Interfaces\ISplashScreenViewModel.cs" />
-    <Compile Include="ViewModel\Interfaces\IMediaItemsViewModel.cs" />
-    <Compile Include="ViewModel\MediaItems\MediaItems.cs" />
-    <Compile Include="ViewModel\MediaPlayer\AudioDevices.cs" />
-    <Compile Include="ViewModel\Interfaces\IMediaPlayersViewModel.cs" />
-    <Compile Include="ViewModel\MediaPlayer\MainMediaPlayer.cs" />
-    <Compile Include="ViewModel\MediaPlayer\MediaPlayers.cs" />
-    <Compile Include="ViewModel\Navigation\Scene.cs" />
-    <Compile Include="ViewModel\Interfaces\IPlaylistsViewModel.cs" />
-    <Compile Include="ViewModel\Interfaces\IUIColorsViewModel.cs" />
-    <Compile Include="ViewModel\MediaPlayer\AudioDevice.cs" />
-    <Compile Include="ViewModel\MediaItems\MediaItem.cs" />
-    <Compile Include="ViewModel\MediaPlayer\Base\BasePlayer.cs" />
-    <Compile Include="ViewModel\MediaPlayer\NAudio\WaveFormatFactory.cs" />
-    <Compile Include="ViewModel\MediaPlayer\NAudio\NAudioMediaPlayer.cs" />
-    <Compile Include="ViewModel\MediaPlayer\NAudio\PlaybackDeviceFactory.cs" />
-    <Compile Include="ViewModel\MediaPlayer\NAudio\WavePlayerFactory.cs" />
-    <Compile Include="ViewModel\Playlists\Playlists.cs" />
-    <Compile Include="ViewModel\Playlists\Playlist.cs" />
-    <Compile Include="Pages\MediaPlayerPage.xaml.cs">
+    <Compile Include="ViewModels\Dialogs\Base\DialogViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\ExceptionDialogViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\IO\FileBrowserDialogViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\IO\FileSystemBrowserOptions.cs" />
+    <Compile Include="ViewModels\Dialogs\IO\FolderBrowserDialogViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\MessageDialogViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\ProgressDialogViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ICultureViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ISplashScreenViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IMediaItemsViewModel.cs" />
+    <Compile Include="ViewModels\MediaItems\MediaItems.cs" />
+    <Compile Include="ViewModels\MediaPlayer\AudioDevices.cs" />
+    <Compile Include="ViewModels\Interfaces\IMediaPlayersViewModel.cs" />
+    <Compile Include="ViewModels\MediaPlayer\MainMediaPlayer.cs" />
+    <Compile Include="ViewModels\MediaPlayer\MediaPlayers.cs" />
+    <Compile Include="ViewModels\Navigation\Scene.cs" />
+    <Compile Include="ViewModels\Interfaces\IPlaylistsViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IUIColorsViewModel.cs" />
+    <Compile Include="ViewModels\MediaPlayer\AudioDevice.cs" />
+    <Compile Include="ViewModels\MediaItems\MediaItem.cs" />
+    <Compile Include="ViewModels\MediaPlayer\Base\BasePlayer.cs" />
+    <Compile Include="ViewModels\MediaPlayer\NAudio\WaveFormatFactory.cs" />
+    <Compile Include="ViewModels\MediaPlayer\NAudio\NAudioMediaPlayer.cs" />
+    <Compile Include="ViewModels\MediaPlayer\NAudio\PlaybackDeviceFactory.cs" />
+    <Compile Include="ViewModels\MediaPlayer\NAudio\WavePlayerFactory.cs" />
+    <Compile Include="ViewModels\Playlists\Playlists.cs" />
+    <Compile Include="ViewModels\Playlists\Playlist.cs" />
+    <Compile Include="UI\UserControls\MediaPlayerPage.xaml.cs">
       <DependentUpon>MediaPlayerPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Playlist\NewPlaylistOptionsPage.xaml.cs">
+    <Compile Include="UI\UserControls\Playlist\NewPlaylistOptionsPage.xaml.cs">
       <DependentUpon>NewPlaylistOptionsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Playlist\NewPlaylistPage.xaml.cs">
+    <Compile Include="UI\UserControls\Playlist\NewPlaylistPage.xaml.cs">
       <DependentUpon>NewPlaylistPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Options\ColorOptionsPage.xaml.cs">
+    <Compile Include="UI\UserControls\Options\ColorOptionsPage.xaml.cs">
       <DependentUpon>ColorOptionsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\MediaItems\CreateMediaItem.cs" />
-    <Compile Include="ViewModel\Playlists\CreatePlaylist.cs" />
-    <Compile Include="ViewModel\Settings\CultureViewModel.cs" />
-    <Compile Include="ViewModel\Settings\OptionsViewModel.cs" />
-    <Compile Include="ViewModel\ShellViewModel.cs" />
-    <Compile Include="ViewModel\SplashScreenViewModel.cs" />
-    <Compile Include="ViewModel\StatusbarViewModel.cs" />
-    <Compile Include="ViewModel\Settings\UIColorsViewModel.cs" />
-    <Compile Include="ViewModel\Navigation\Scenes.cs" />
-    <Compile Include="ViewModel\MediaPlayer\MediaPlayer.cs" />
-    <Page Include="Pages\MediaPlayerPage.xaml">
+    <Compile Include="ViewModels\MediaItems\CreateMediaItem.cs" />
+    <Compile Include="ViewModels\Playlists\CreatePlaylist.cs" />
+    <Compile Include="ViewModels\Settings\CultureViewModel.cs" />
+    <Compile Include="ViewModels\Settings\OptionsViewModel.cs" />
+    <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="ViewModels\SplashScreenViewModel.cs" />
+    <Compile Include="ViewModels\StatusbarViewModel.cs" />
+    <Compile Include="ViewModels\Settings\UIColorsViewModel.cs" />
+    <Compile Include="ViewModels\Navigation\Scenes.cs" />
+    <Compile Include="ViewModels\MediaPlayer\MediaPlayer.cs" />
+    <Page Include="UI\UserControls\MediaPlayerPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\MediaPlayersPage.xaml">
+    <Page Include="UI\UserControls\MediaPlayersPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Options\OptionsPage.xaml">
+    <Page Include="UI\UserControls\Options\OptionsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Playlist\NewPlaylistOptionsPage.xaml">
+    <Page Include="UI\UserControls\Playlist\NewPlaylistOptionsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Playlist\NewPlaylistPage.xaml">
+    <Page Include="UI\UserControls\Playlist\NewPlaylistPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Options\ColorOptionsPage.xaml">
+    <Page Include="UI\UserControls\Options\ColorOptionsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Playlist\PlaylistsPage.xaml">
+    <Page Include="UI\UserControls\Playlist\PlaylistsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

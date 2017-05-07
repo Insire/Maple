@@ -5,10 +5,10 @@ using System.Windows;
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="Maple.Core.IConfigurableWindowSettings" />
-    public class ConfigurableWindowSettings : IConfigurableWindowSettings
+    public abstract class ConfigurableWindowSettings : IConfigurableWindowSettings
     {
         private readonly ApplicationSettingsBase _settings;
 

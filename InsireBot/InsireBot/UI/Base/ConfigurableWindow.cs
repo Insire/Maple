@@ -8,7 +8,7 @@ using System.Windows.Threading;
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="MahApps.Metro.Controls.MetroWindow" />
     public abstract class ConfigurableWindow : MetroWindow
@@ -48,11 +48,11 @@ namespace Maple
         {
             base.OnLocationChanged(e);
 
-            // We need to delay this call because we are 
-            // notified of a location change before a 
-            // window state change.  That causes a problem 
-            // when maximizing the window because we record 
-            // the maximized window's location, which is not 
+            // We need to delay this call because we are
+            // notified of a location change before a
+            // window state change.  That causes a problem
+            // when maximizing the window because we record
+            // the maximized window's location, which is not
             // something worth saving.
             Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(() =>
             {
@@ -88,7 +88,7 @@ namespace Maple
 
             if (_isLoaded)
             {
-                // We don't want the Window to open in the 
+                // We don't want the Window to open in the
                 // minimized state, so ignore that value.
                 if (WindowState != WindowState.Minimized)
                     _settings.WindowState = WindowState;
