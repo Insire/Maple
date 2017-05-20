@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -17,17 +15,13 @@ namespace Maple.Core
     /// </summary>
     /// <typeparam name="TViewModel">a class implementing <see cref="ObservableObject" /></typeparam>
     /// <seealso cref="Maple.Core.ObservableObject" />
-    public abstract class BaseListViewModel<TViewModel> : ObservableObject, INotifyDataErrorInfo
+    public abstract class BaseListViewModel<TViewModel> : BaseViewModel<TViewModel>
         where TViewModel : INotifyPropertyChanged
     {
-        private readonly Dictionary<string, List<string>> _errors;
-        private readonly Dictionary<string, (List<BaseValidationRule> Items, object Value)> _rules;
-
         /// <summary>
         /// The items lock
         /// </summary>
         protected readonly object _itemsLock;
-        protected readonly BusyStack _busyStack;
 
         /// <summary>
         /// The selection changed event
@@ -37,24 +31,6 @@ namespace Maple.Core
         /// The selection changing event
         /// </summary>
         public EventHandler SelectionChanging;
-
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
-        public bool HasErrors => _errors.Count>0;
-
-        private bool _isBusy;
-        /// <summary>
-        /// Indicates if there is an operation running.
-        /// Modified by adding <see cref="BusyToken" /> to the <see cref="BusyStack" /> property
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is busy; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsBusy
-        {
-            get { return _isBusy; }
-            private set { SetValue(ref _isBusy, value); }
-        }
 
         private TViewModel _selectedItem;
         /// <summary>
@@ -156,12 +132,10 @@ namespace Maple.Core
         /// Initializes a new instance of the <see cref="BaseListViewModel{T}"/> class.
         /// </summary>
         public BaseListViewModel()
+            : base()
         {
             _itemsLock = new object();
-            _busyStack = new BusyStack();
-            _busyStack.OnChanged = (hasItems) => IsBusy = hasItems;
-            _errors = new Dictionary<string, List<string>>();
-            _rules = new Dictionary<string, (List<BaseValidationRule> Items, object Value)>();
+
 
             Items = new RangeObservableCollection<TViewModel>();
             Items.CollectionChanged += ItemsCollectionChanged;
@@ -180,7 +154,8 @@ namespace Maple.Core
         /// Initializes a new instance of the <see cref="BaseListViewModel{T}"/> class.
         /// </summary>
         /// <param name="items">The items.</param>
-        public BaseListViewModel(IList<TViewModel> items) : this()
+        public BaseListViewModel(IList<TViewModel> items)
+            : this()
         {
             Items.AddRange(items);
         }
@@ -189,7 +164,8 @@ namespace Maple.Core
         /// Initializes a new instance of the <see cref="BaseListViewModel{T}"/> class.
         /// </summary>
         /// <param name="items">The items.</param>
-        public BaseListViewModel(IEnumerable<TViewModel> items) : this()
+        public BaseListViewModel(IEnumerable<TViewModel> items)
+            : this()
         {
             Items.AddRange(items);
         }
@@ -339,89 +315,6 @@ namespace Maple.Core
         public virtual bool CanClear()
         {
             return Items?.Count > 0 && !IsBusy;
-        }
-
-        public IEnumerable GetErrors(string propertyName) //TODO
-        {
-            return !string.IsNullOrEmpty(propertyName) && _errors.ContainsKey(propertyName)
-              ? _errors[propertyName]
-              : Enumerable.Empty<string>();
-        }
-
-        public IEnumerable<List<string>> GetErrors() //TODO
-        {
-            foreach (var key in _errors.Keys)
-                yield return _errors[key];
-        }
-
-        protected virtual void OnErrorsChanged(string propertyName)
-        {
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-        }
-
-        protected void ClearErrors() //TODO
-        {
-            foreach (var propertyName in _errors.Keys.ToList())
-            {
-                _errors.Remove(propertyName);
-                OnErrorsChanged(propertyName);
-            }
-        }
-
-        protected void AddRule(object value, BaseValidationRule rule) //TODO
-        {
-            var propertyName = rule.PropertyName;
-            var result = (Items: new List<BaseValidationRule>(), Value: value);
-
-            if (_rules.ContainsKey(propertyName))
-                result = _rules[propertyName];
-
-            if (!result.Items.Contains(rule))
-                result.Items.Add(rule);
-
-            result.Value = value;
-
-            _rules[propertyName] = result;
-        }
-
-        protected virtual void Validate(string propertyName) //TODO
-        {
-            if (string.IsNullOrEmpty(propertyName))
-                ValidateAllInternal();
-            else
-                ValidateInternal(propertyName);
-        }
-
-        private void ValidateInternal(string propertyName, CultureInfo culture = null) //TODO
-        {
-            var current = culture ?? Thread.CurrentThread.CurrentCulture;
-
-            if (_errors.ContainsKey(propertyName))
-                _errors[propertyName].Clear();
-
-            foreach (var item in _rules[propertyName].Items)
-            {
-                var result = item.Validate(_rules[propertyName].Value, current);
-                if (_errors.ContainsKey(propertyName))
-                    _errors[propertyName].Add(result.ErrorContent.ToString());
-                else
-                {
-                    _errors.Add(propertyName, new List<string>()
-                    {
-                        result.ErrorContent.ToString(),
-                    });
-                }
-            }
-
-            OnErrorsChanged(propertyName);
-        }
-
-        private void ValidateAllInternal() //TODO
-        {
-            var current = Thread.CurrentThread.CurrentCulture;
-
-            foreach (var key in _errors.Keys)
-                ValidateInternal(key, current);
         }
     }
 }

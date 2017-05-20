@@ -137,6 +137,8 @@
     <Compile Include="Services\Interfaces\ISequenceProvider.cs" />
     <Compile Include="EventHandler.cs" />
     <Compile Include="Services\SequenceService.cs" />
+    <Compile Include="Services\Validation\IValidationService.cs" />
+    <Compile Include="Services\Validation\ValidationService.cs" />
     <Compile Include="Validation\Base\BaseValidationRule.cs" />
     <Compile Include="Validation\ListNotEmptyRule.cs" />
     <Compile Include="Validation\NotFalseRule.cs" />

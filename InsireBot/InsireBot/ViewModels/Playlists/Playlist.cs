@@ -368,11 +368,11 @@ namespace Maple
 
         private void IntializeValidation()
         {
-            AddRule(Title, new NotNullOrEmptyRule(nameof(Title)));
-            AddRule(Description, new NotNullOrEmptyRule(nameof(Description)));
-            AddRule(SelectedItem, new NotNullRule(nameof(SelectedItem)));
-            AddRule(RepeatModes, new NotNullRule(nameof(RepeatModes)));
-            AddRule(Items, new NotNullRule(nameof(Items)));
+            //AddRule(Title, new NotNullOrEmptyRule(nameof(Title)));
+            //AddRule(Description, new NotNullOrEmptyRule(nameof(Description)));
+            //AddRule(SelectedItem, new NotNullRule(nameof(SelectedItem)));
+            //AddRule(RepeatModes, new NotNullRule(nameof(RepeatModes)));
+            //AddRule(Items, new NotNullRule(nameof(Items)));
         }
 
         private async Task LoadFromUrl()

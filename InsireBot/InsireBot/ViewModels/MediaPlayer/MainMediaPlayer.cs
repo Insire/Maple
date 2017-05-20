@@ -35,7 +35,7 @@ namespace Maple
 
         private void IntializeValidation()
         {
-            AddRule(IsPrimary, new NotFalseRule(nameof(IsPrimary)));
+            //AddRule(IsPrimary, new NotFalseRule(nameof(IsPrimary)));
         }
 
         private void UpdateName()

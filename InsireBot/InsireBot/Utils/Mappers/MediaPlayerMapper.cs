@@ -23,8 +23,11 @@ namespace Maple
         {
             var config = new MapperConfiguration(cfg => // TODO
             {
-                cfg.CreateMap<Data.MediaPlayer, MediaPlayer>();
+                cfg.CreateMap<Data.MediaPlayer, Core.MediaPlayer>()
+                    .Ignore(p => p.Playlist);
+
                 cfg.CreateMap<Core.MediaPlayer, Data.MediaPlayer>()
+                    .Ignore(p => p.Playlist)
                     .Ignore(p => p.IsDeleted)
                     .Ignore(p => p.IsNew);
             });

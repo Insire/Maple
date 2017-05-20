@@ -8,7 +8,7 @@
     <local:IoCUserControl.Resources>
         <local:SharedResourceDictionary>
             <local:SharedResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Resources/Style.xaml" />
+                <ResourceDictionary Source="../../../Resources/Style.xaml" />
             </local:SharedResourceDictionary.MergedDictionaries>
         </local:SharedResourceDictionary>
     </local:IoCUserControl.Resources>

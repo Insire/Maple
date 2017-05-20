@@ -11,7 +11,7 @@ namespace Maple
     /// is created, it only merges the resources from the cache.
     /// </summary>
     /// <seealso cref="System.Windows.ResourceDictionary" />
-    public abstract class SharedResourceDictionary : ResourceDictionary
+    public class SharedResourceDictionary : ResourceDictionary
     {
         /// <summary>
         /// Internal cache of loaded dictionaries

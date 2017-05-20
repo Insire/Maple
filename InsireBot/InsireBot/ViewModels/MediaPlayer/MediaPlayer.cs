@@ -295,11 +295,11 @@ namespace Maple
 
         private void IntializeValidation()
         {
-            AddRule(Name, new NotNullOrEmptyRule(nameof(Name)));
-            AddRule(Player, new NotNullRule(nameof(Player)));
-            AddRule(Playlist, new NotNullRule(nameof(Playlist)));
-            AddRule(Disposed, new NotFalseRule(nameof(Disposed)));
-            AddRule(AudioDevices, new ListNotEmptyRule(nameof(AudioDevices)));
+            //AddRule(Name, new NotNullOrEmptyRule(nameof(Name)));
+            //AddRule(Player, new NotNullRule(nameof(Player)));
+            //AddRule(Playlist, new NotNullRule(nameof(Playlist)));
+            //AddRule(Disposed, new NotFalseRule(nameof(Disposed)));
+            //AddRule(AudioDevices, new ListNotEmptyRule(nameof(AudioDevices)));
         }
 
         private void Player_AudioDeviceChanging(object sender, EventArgs e)

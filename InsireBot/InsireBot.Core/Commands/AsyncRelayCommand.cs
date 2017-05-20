@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Maple.Core
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="System.Windows.Input.ICommand" />
     public class AsyncRelayCommand<T> : ICommand
     {
-        private readonly Func<bool> _canExecute = null;
+        private readonly Func<T, bool> _canExecute = null;
         private readonly Func<T, Task> _execute = null;
         private Task _task;
 
@@ -40,7 +41,7 @@ namespace Maple.Core
         /// <param name="methodToExecute">The method to execute.</param>
         /// <param name="canExecuteEvaluator">The can execute evaluator.</param>
         /// <exception cref="System.ArgumentNullException">canExecuteEvaluator</exception>
-        public AsyncRelayCommand(Func<T, Task> methodToExecute, Func<bool> canExecuteEvaluator) : this(methodToExecute)
+        public AsyncRelayCommand(Func<T, Task> methodToExecute, Func<T, bool> canExecuteEvaluator) : this(methodToExecute)
         {
             _canExecute = canExecuteEvaluator ?? throw new ArgumentNullException(nameof(canExecuteEvaluator));
         }
@@ -52,15 +53,21 @@ namespace Maple.Core
         /// <returns>
         /// true if this command can be executed; otherwise, false.
         /// </returns>
+        [DebuggerStepThrough]
         public bool CanExecute(object parameter)
         {
-            return _task == null || _task.IsCompleted;
+            return parameter is T obj
+                ? _task == null
+                    ? _canExecute(obj)
+                    : _task.IsCompleted == true && _canExecute(obj)
+                : false;
         }
 
         /// <summary>
         /// Defines the method to be called when the command is invoked.
         /// </summary>
         /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+        [DebuggerStepThrough]
         public async void Execute(object parameter)
         {
             _task = _execute((T)parameter);
@@ -70,7 +77,7 @@ namespace Maple.Core
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="System.Windows.Input.ICommand" />
     public class AsyncRelayCommand : ICommand
@@ -116,15 +123,19 @@ namespace Maple.Core
         /// <returns>
         /// true if this command can be executed; otherwise, false.
         /// </returns>
+        [DebuggerStepThrough]
         public bool CanExecute(object parameter)
         {
-            return _task == null || _task.IsCompleted;
+            return _task == null
+                ? _canExecute()
+                : _task?.IsCompleted == true && _canExecute();
         }
 
         /// <summary>
         /// Defines the method to be called when the command is invoked.
         /// </summary>
         /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+        [DebuggerStepThrough]
         public async void Execute(object parameter)
         {
             _task = _execute();

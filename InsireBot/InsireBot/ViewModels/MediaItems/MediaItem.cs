@@ -208,9 +208,9 @@ namespace Maple
 
         private void IntializeValidation()
         {
-            AddRule(Title, new NotNullOrEmptyRule(nameof(Title)));
-            AddRule(Description, new NotNullOrEmptyRule(nameof(Description)));
-            AddRule(Location, new NotNullOrEmptyRule(nameof(Location)));
+            //AddRule(Title, new NotNullOrEmptyRule(nameof(Title)));
+            //AddRule(Description, new NotNullOrEmptyRule(nameof(Description)));
+            //AddRule(Location, new NotNullOrEmptyRule(nameof(Location)));
         }
     }
 }

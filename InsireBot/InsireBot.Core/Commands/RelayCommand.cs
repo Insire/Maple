@@ -4,7 +4,7 @@ using System.Windows.Input;
 namespace Maple.Core
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="System.Windows.Input.ICommand" />
     public class RelayCommand : ICommand
@@ -37,7 +37,8 @@ namespace Maple.Core
         /// <param name="methodToExecute">The method to execute.</param>
         /// <param name="canExecuteEvaluator">The can execute evaluator.</param>
         /// <exception cref="System.ArgumentNullException">canExecuteEvaluator</exception>
-        public RelayCommand(Action methodToExecute, Func<bool> canExecuteEvaluator) : this(methodToExecute)
+        public RelayCommand(Action methodToExecute, Func<bool> canExecuteEvaluator)
+            : this(methodToExecute)
         {
             _canExecute = canExecuteEvaluator ?? throw new ArgumentNullException(nameof(canExecuteEvaluator));
         }
@@ -65,7 +66,7 @@ namespace Maple.Core
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="System.Windows.Input.ICommand" />
@@ -78,8 +79,9 @@ namespace Maple.Core
         /// Initializes a new instance of the <see cref="RelayCommand{T}"/> class.
         /// </summary>
         /// <param name="execute">The execute.</param>
-        public RelayCommand(Action<T> execute) : this(execute, null)
+        public RelayCommand(Action<T> execute)
         {
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
         }
 
         /// <summary>
@@ -89,9 +91,9 @@ namespace Maple.Core
         /// <param name="canExecute">The can execute.</param>
         /// <exception cref="System.ArgumentNullException">execute</exception>
         public RelayCommand(Action<T> execute, Predicate<T> canExecute)
+            :this(execute)
         {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecute = canExecute;
+            _canExecute = canExecute ?? throw new ArgumentNullException(nameof(canExecute));
         }
 
         /// <summary>
