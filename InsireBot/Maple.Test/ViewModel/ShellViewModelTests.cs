@@ -9,7 +9,7 @@ namespace Maple.Test.ViewModel
     {
         private MockRepository _mockRepository;
 
-        private Mock<ITranslationService> _mockTranslationService;
+        private Mock<ILocalizationService> _mockTranslationService;
         private Mock<Scenes> _mockScenes;
         private Mock<StatusbarViewModel> _mockStatusbarViewModel;
         private Mock<DialogViewModel> _mockDialogViewModel;
@@ -22,7 +22,7 @@ namespace Maple.Test.ViewModel
         {
             _mockRepository = new MockRepository(MockBehavior.Strict);
 
-            _mockTranslationService = _mockRepository.Create<ITranslationService>();
+            _mockTranslationService = _mockRepository.Create<ILocalizationService>();
             _mockScenes = _mockRepository.Create<Scenes>();
             _mockStatusbarViewModel = _mockRepository.Create<StatusbarViewModel>();
             _mockDialogViewModel = _mockRepository.Create<DialogViewModel>();

@@ -15,11 +15,11 @@ namespace Maple.Core
     /// <typeparam name="TModel">a DTO implementing <see cref="BaseObject" /></typeparam>
     /// <seealso cref="Maple.Core.BaseListViewModel{T}" />
     public abstract class BaseDataListViewModel<TViewModel, TModel> : BaseListViewModel<TViewModel>, ILoadableViewModel, IDisposable
-        where TViewModel : BaseViewModel<TModel>, ISequence
+        where TViewModel : BaseDataViewModel<TViewModel, TModel>, ISequence
         where TModel : BaseObject
     {
         protected readonly ISequenceProvider _sequenceProvider;
-        protected readonly ITranslationService _translationService;
+        protected readonly ILocalizationService _translationService;
         protected readonly IMapleLog _log;
 
         private bool _disposed;
@@ -64,7 +64,7 @@ namespace Maple.Core
         /// </value>
         public bool IsLoaded { get; protected set; }
 
-        public BaseDataListViewModel(IMapleLog log, ITranslationService translationService, ISequenceProvider sequenceProvider)
+        public BaseDataListViewModel(IMapleLog log, ILocalizationService translationService, ISequenceProvider sequenceProvider)
         {
             _log = log ?? throw new ArgumentNullException(nameof(log));
             _translationService = translationService ?? throw new ArgumentNullException(nameof(translationService));

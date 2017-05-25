@@ -1,4 +1,5 @@
-﻿using Maple.Core;
+﻿using FluentValidation;
+using Maple.Core;
 using Maple.Localization.Properties;
 
 namespace Maple
@@ -19,23 +20,18 @@ namespace Maple
         /// <param name="model">The model.</param>
         /// <param name="playlist">The playlist.</param>
         /// <param name="devices">The devices.</param>
-        public MainMediaPlayer(ITranslationService manager, IMediaPlayer player, Data.MediaPlayer model, Playlist playlist, AudioDevices devices)
-            : base(manager, player, devices, playlist, model)
+        public MainMediaPlayer(ILocalizationService manager, IMediaPlayer player, IValidator<MediaPlayer> validator, Data.MediaPlayer model, Playlist playlist, AudioDevices devices)
+            : base(manager, player, validator, devices, playlist, model)
         {
             IsPrimary = model.IsPrimary;
 
             _manager.PropertyChanged += (o, e) =>
               {
-                  if (e.PropertyName == nameof(ITranslationService.CurrentLanguage))
+                  if (e.PropertyName == nameof(ILocalizationService.CurrentLanguage))
                       UpdateName();
               };
 
             UpdateName();
-        }
-
-        private void IntializeValidation()
-        {
-            //AddRule(IsPrimary, new NotFalseRule(nameof(IsPrimary)));
         }
 
         private void UpdateName()

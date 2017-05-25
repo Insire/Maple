@@ -1,24 +1,29 @@
-﻿namespace Maple.Core
+﻿using FluentValidation;
+using System;
+
+namespace Maple.Core
 {
+
     /// <summary>
     ///
     /// </summary>
     /// <typeparam name="TModel"></typeparam>
-    public abstract class BaseViewModel<TViewModel> : ObservableObject
+    public abstract class BaseDataViewModel<TViewModel, TModel> : ObservableObject
     {
         /// <summary>
         /// The busy stack
         /// </summary>
         protected readonly BusyStack _busyStack;
+        protected readonly IValidator<TViewModel> _validator;
 
-        private TViewModel _model;
+        private TModel _model;
         /// <summary>
         /// Gets or sets the model.
         /// </summary>
         /// <value>
         /// The model.
         /// </value>
-        public TViewModel Model
+        public TModel Model
         {
             get { return _model; }
             protected set { SetValue(ref _model, value); }
@@ -31,7 +36,7 @@
             set { SetValue(ref _isBusy, value); }
         }
 
-        protected BaseViewModel()
+        protected BaseDataViewModel()
         {
             _busyStack = new BusyStack();
             _busyStack.OnChanged += (isBusy) => IsBusy = isBusy;
@@ -41,10 +46,11 @@
         /// Initializes a new instance of the <see cref="BaseViewModel{T}"/> class.
         /// </summary>
         /// <param name="model">The model.</param>
-        protected BaseViewModel(TViewModel model)
+        protected BaseDataViewModel(TModel model, IValidator<TViewModel> validator)
             : this()
         {
             Model = model;
+            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
     }
 }

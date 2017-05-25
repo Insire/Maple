@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Maple.Core;
 using Maple.Data;
 using Maple.Localization.Properties;
@@ -10,15 +11,15 @@ namespace Maple
     /// Provides logic to map between different domain objects of the MediaItemType
     /// </summary>
     /// <seealso cref="Maple.IMediaItemMapper" />
-    public class MediaItemMapper : BaseMapper, IMediaItemMapper
+    public class MediaItemMapper : BaseMapper<MediaItem>, IMediaItemMapper
     {
         private readonly IPlaylistContext _context;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaItemMapper"/> class.
         /// </summary>
-        public MediaItemMapper(IPlaylistContext context, ITranslationService translator, ISequenceProvider sequenceProvider, IMapleLog log)
-            : base(translator, sequenceProvider, log)
+        public MediaItemMapper(IPlaylistContext context, ILocalizationService translator, ISequenceProvider sequenceProvider, IMapleLog log, IValidator<MediaItem> validator)
+            : base(translator, sequenceProvider, log, validator)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
 
@@ -45,7 +46,7 @@ namespace Maple
 
         public MediaItem GetNewMediaItem(int sequence, int playlistId)
         {
-            return new MediaItem(GetDataNewMediaItem(playlistId), _context)
+            return new MediaItem(GetDataNewMediaItem(playlistId), _validator, _context)
             {
                 Title = _translationService.Translate(nameof(Resources.New)),
                 Description = string.Empty,
@@ -70,7 +71,7 @@ namespace Maple
         /// <returns></returns>
         public MediaItem Get(Core.MediaItem mediaitem)
         {
-            return new MediaItem(GetData(mediaitem), _context);
+            return new MediaItem(GetData(mediaitem), _validator, _context);
         }
 
         /// <summary>
@@ -80,7 +81,7 @@ namespace Maple
         /// <returns></returns>
         public MediaItem Get(Data.MediaItem mediaitem)
         {
-            return new MediaItem(mediaitem, _context);
+            return new MediaItem(mediaitem, _validator, _context);
         }
 
         /// <summary>

@@ -1,9 +1,8 @@
-﻿using Maple.Core;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Windows;
 
-namespace Maple
+namespace Maple.Core
 {
     /// <summary>
     /// Poco that holds localization data and supports changing it during runtime
@@ -12,19 +11,19 @@ namespace Maple
     /// <seealso cref="System.Windows.IWeakEventListener" />
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     /// <seealso cref="System.IDisposable" />
-    public class TranslationData : ObservableObject, IWeakEventListener, INotifyPropertyChanged, IDisposable
+    public class LocalizationDTO : ObservableObject, INotifyPropertyChanged, IDisposable
     {
         private readonly string _key;
-        private readonly ITranslationService _manager;
+        private readonly ILocalizationService _service;
         private readonly bool _toUpper;
 
-        public TranslationData(ITranslationService manager, string key, bool toUpper)
+        public LocalizationDTO(ILocalizationService service, string key, bool toUpper)
         {
-            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
+            _service = service ?? throw new ArgumentNullException(nameof(service));
             _key = key ?? throw new ArgumentNullException(nameof(key));
             _toUpper = toUpper;
 
-            LanguageChangedEventManager.AddListener(_manager, this);
+            WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(_service, "PropertyChanged", ValueChanged);
         }
 
         public void Dispose()
@@ -36,7 +35,7 @@ namespace Maple
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
-                LanguageChangedEventManager.RemoveListener(_manager, this);
+                WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.RemoveHandler(_service, "PropertyChanged", ValueChanged);
         }
 
         public object Value
@@ -44,22 +43,17 @@ namespace Maple
             get { return GetValue(); }
         }
 
-        public bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
+        private void ValueChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (managerType == typeof(LanguageChangedEventManager))
-            {
-                OnPropertyChanged(nameof(Value));
-                return true;
-            }
-            return false;
+            OnPropertyChanged(nameof(Value));
         }
 
         private string GetValue()
         {
             if (_toUpper)
-                return _manager?.Translate(_key).ToUpperInvariant();
+                return _service?.Translate(_key).ToUpperInvariant();
 
-            return _manager?.Translate(_key);
+            return _service?.Translate(_key);
         }
     }
 }

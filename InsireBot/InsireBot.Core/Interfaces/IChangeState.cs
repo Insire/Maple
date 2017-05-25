@@ -1,7 +1,7 @@
 ﻿namespace Maple.Core
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public interface IChangeState
     {

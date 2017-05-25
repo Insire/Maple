@@ -18,7 +18,7 @@ namespace Maple
     {
         private IConfigurableWindowSettings _settings;
         private IUIColorsViewModel _colorsViewModel;
-        public ITranslationService TranslationManager { get; private set; }
+        public ILocalizationService TranslationManager { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IoCWindow"/> class.
@@ -35,7 +35,7 @@ namespace Maple
         /// </summary>
         /// <param name="container">The container.</param>
         /// <param name="vm">The vm.</param>
-        public IoCWindow(ITranslationService container, IUIColorsViewModel vm) : base()
+        public IoCWindow(ILocalizationService container, IUIColorsViewModel vm) : base()
         {
             TranslationManager = container;
             _colorsViewModel = vm;

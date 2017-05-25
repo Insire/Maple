@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="InsireBot.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Maple.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="IsFirstRun" Type="System.Boolean" Scope="User">
@@ -13,9 +13,6 @@
     </Setting>
     <Setting Name="ShellWindowState" Type="System.Windows.WindowState" Scope="User">
       <Value Profile="(Default)">Normal</Value>
-    </Setting>
-    <Setting Name="StartUpCulture" Type="System.Globalization.CultureInfo" Scope="User">
-      <Value Profile="(Default)">en</Value>
     </Setting>
     <Setting Name="SwatchName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

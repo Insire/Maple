@@ -1,4 +1,5 @@
-﻿using Maple.Core;
+﻿using FluentValidation;
+using Maple.Core;
 using Maple.Data;
 using System;
 using System.Diagnostics;
@@ -11,7 +12,7 @@ namespace Maple
     /// <seealso cref="Maple.Core.BaseViewModel{Maple.Data.MediaItem}" />
     /// <seealso cref="Maple.Core.IMediaItem" />
     [DebuggerDisplay("{Title}, {Sequence} {Location}")]
-    public class MediaItem : BaseViewModel<Data.MediaItem>, IMediaItem
+    public class MediaItem : BaseDataViewModel<MediaItem, Data.MediaItem>, IMediaItem
     {
         private readonly IPlaylistContext _context;
 
@@ -175,8 +176,8 @@ namespace Maple
         /// Initializes a new instance of the <see cref="MediaItem"/> class.
         /// </summary>
         /// <param name="model">The model.</param>
-        public MediaItem(Data.MediaItem model, IPlaylistContext context)
-            : base(model)
+        public MediaItem(Data.MediaItem model, IValidator<MediaItem> validator, IPlaylistContext context)
+            : base(model, validator)
         {
             _id = model.Id;
             _playlistId = model.PlaylistId;
@@ -204,13 +205,6 @@ namespace Maple
         {
             var result = Title == string.Empty ? Location : Title;
             return result;
-        }
-
-        private void IntializeValidation()
-        {
-            //AddRule(Title, new NotNullOrEmptyRule(nameof(Title)));
-            //AddRule(Description, new NotNullOrEmptyRule(nameof(Description)));
-            //AddRule(Location, new NotNullOrEmptyRule(nameof(Location)));
         }
     }
 }

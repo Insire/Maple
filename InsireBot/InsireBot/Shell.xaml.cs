@@ -8,7 +8,7 @@ namespace Maple
     {
         private readonly ShellViewModel _datacontext;
 
-        public Shell(ITranslationService manager, IUIColorsViewModel vm, ShellViewModel datacontext) : base(manager, vm)
+        public Shell(ILocalizationService manager, IUIColorsViewModel vm, ShellViewModel datacontext) : base(manager, vm)
         {
             DataContext = datacontext ?? throw new ArgumentNullException(nameof(datacontext));
             _datacontext = datacontext;

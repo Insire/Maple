@@ -4,7 +4,7 @@ namespace Maple
 {
     public partial class ColorOptionsPage
     {
-        public ColorOptionsPage(ITranslationService manager) : base(manager)
+        public ColorOptionsPage(ILocalizationService manager) : base(manager)
         {
             InitializeComponent();
         }

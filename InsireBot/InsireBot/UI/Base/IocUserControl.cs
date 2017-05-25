@@ -18,7 +18,7 @@ namespace Maple
         /// <value>
         /// The translation manager.
         /// </value>
-        public ITranslationService TranslationManager { get; private set; }
+        public ILocalizationService TranslationManager { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IoCUserControl"/> class.
@@ -33,7 +33,7 @@ namespace Maple
         /// Initializes a new instance of the <see cref="IoCUserControl"/> class.
         /// </summary>
         /// <param name="manager">The manager.</param>
-        public IoCUserControl(ITranslationService manager) : base()
+        public IoCUserControl(ILocalizationService manager) : base()
         {
             TranslationManager = manager;
         }

@@ -4,7 +4,7 @@ namespace Maple
 {
     public partial class NewPlaylistOptionsPage
     {
-        public NewPlaylistOptionsPage(ITranslationService manager) : base(manager)
+        public NewPlaylistOptionsPage(ILocalizationService manager) : base(manager)
         {
             InitializeComponent();
         }

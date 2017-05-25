@@ -74,7 +74,7 @@ namespace Maple
         public IList<Playlist> GetAllPlaylists()
         {
             var playlists = _context.Playlists.AsEnumerable().Select(p => _playlistMapper.Get(p)).ToList();
-            var mediaItems = _context.MediaItems.AsEnumerable().Select(p => new MediaItem(p, _context)).ToList();
+            var mediaItems = _context.MediaItems.AsEnumerable().Select(p => _mediaItemMapper.Get(p)).ToList();
 
             foreach (var playlist in playlists)
                 playlist.AddRange(mediaItems.Where(p => p.PlaylistId == playlist.Id));

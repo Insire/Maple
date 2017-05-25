@@ -4,7 +4,7 @@ namespace Maple
 {
     public partial class MediaPlayerPage
     {
-        public MediaPlayerPage(ITranslationService manager) : base(manager)
+        public MediaPlayerPage(ILocalizationService manager) : base(manager)
         {
             InitializeComponent();
         }

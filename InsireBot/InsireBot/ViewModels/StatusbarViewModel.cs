@@ -10,7 +10,7 @@ namespace Maple
     public class StatusbarViewModel : ObservableObject
     {
         private readonly IMediaPlayersViewModel _mediaplayers;
-        private readonly ITranslationService _manager;
+        private readonly ILocalizationService _manager;
 
         private string _version;
         /// <summary>
@@ -56,14 +56,14 @@ namespace Maple
         /// </summary>
         /// <param name="manager">The manager.</param>
         /// <param name="mediaPlayers">The media players.</param>
-        public StatusbarViewModel(ITranslationService manager, IVersionService version, IMediaPlayersViewModel mediaPlayers)
+        public StatusbarViewModel(ILocalizationService manager, IVersionService version, IMediaPlayersViewModel mediaPlayers)
         {
             _mediaplayers = mediaPlayers;
 
             _manager = manager;
             _manager.PropertyChanged += (o, e) =>
               {
-                  if (e.PropertyName == $"{nameof(ITranslationService.CurrentLanguage)}")
+                  if (e.PropertyName == $"{nameof(ILocalizationService.CurrentLanguage)}")
                       UpdateLanguage();
               };
 

@@ -1,4 +1,5 @@
 ﻿using DryIoc;
+using FluentValidation;
 using Maple.Core;
 using Maple.Data;
 using Maple.Youtube;
@@ -18,9 +19,10 @@ namespace Maple
 
             RegisterViewModels();
             RegisterServices();
+            RegisterValidation();
             RegisterControls();
 
-            c.Resolve<ITranslationService>().Load();
+            c.Resolve<ILocalizationService>().Load();
 
             if (Debugger.IsAttached)
                 Debugging();
@@ -66,8 +68,16 @@ namespace Maple
 
                 c.Register<IMapleLog, LoggingService>(Reuse.Singleton);
                 c.Register<IVersionService, VersionService>(Reuse.Singleton);
-                c.Register<ITranslationService, TranslationService>(Reuse.Singleton);
+                c.Register<ILocalizationService, LocalizationService>(Reuse.Singleton);
                 c.Register<ITranslationProvider, ResxTranslationProvider>(Reuse.Singleton);
+            }
+
+            void RegisterValidation()
+            {
+                c.Register<IValidator<Playlist>, PlaylistValidator>(Reuse.Singleton);
+                c.Register<IValidator<Playlists>, PlaylistsValidator>(Reuse.Singleton);
+                c.Register<IValidator<MediaPlayer>, MediaPlayerValidator>(Reuse.Singleton);
+                c.Register<IValidator<MediaItem>, MediaItemValidator>(Reuse.Singleton);
             }
 
             void Debugging()
@@ -82,7 +92,6 @@ namespace Maple
                     Debug.WriteLine($"{item.ServiceType.Name.PadRight(30, '.')} registered with {item.Factory.FactoryID.ToString().PadRight(10, '.')} of type {item.Factory.ImplementationType.Name}");
                 }
             }
-
         }
 
         /// <summary>
@@ -96,7 +105,7 @@ namespace Maple
             RegisterViewModels();
             RegisterServices();
 
-            c.Resolve<ITranslationService>().Load();
+            c.Resolve<ILocalizationService>().Load();
 
             if (Debugger.IsAttached)
                 Debugging();
@@ -145,7 +154,7 @@ namespace Maple
                 c.Register<IMapleLog, LoggingService>(Reuse.Singleton);
                 c.Register<IYoutubeUrlParseService, UrlParseService>();
                 c.Register<ITranslationProvider, ResxTranslationProvider>(Reuse.Singleton);
-                c.Register<ITranslationService, TranslationService>(Reuse.Singleton);
+                c.Register<ILocalizationService, LocalizationService>(Reuse.Singleton);
                 c.Register<ISequenceProvider, SequenceService>();
                 c.Register<IVersionService, VersionService>(Reuse.Singleton);
             }

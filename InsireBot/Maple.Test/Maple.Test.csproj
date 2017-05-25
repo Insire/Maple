@@ -84,13 +84,6 @@
     <Compile Include="Services\LoggingServiceTests.cs" />
     <Compile Include="Services\MrlExtractionServiceTests.cs" />
     <Compile Include="Services\SequenceServiceTests.cs" />
-    <Compile Include="Utils\Mappers\MediaItemMapperTests.cs" />
-    <Compile Include="Utils\Mappers\MediaPlayerMapperTests.cs" />
-    <Compile Include="Utils\Mappers\PlaylistMapperTests.cs" />
-    <Compile Include="Validation\ListNotEmptyRuleTests.cs" />
-    <Compile Include="Validation\NotFalseRuleTests.cs" />
-    <Compile Include="Validation\NotNullOrEmptyRuleTests.cs" />
-    <Compile Include="Validation\NotNullRuleTests.cs" />
     <Compile Include="ViewModel\MediaItems\CreateMediaItemTests.cs" />
     <Compile Include="ViewModel\Navigation\ScenesTests.cs" />
     <Compile Include="ViewModel\Navigation\SceneTests.cs" />

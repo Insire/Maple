@@ -11,7 +11,7 @@ namespace Maple
     /// <seealso cref="Maple.Core.ISequence" />
     public class Scene : ObservableObject, ISequence
     {
-        private readonly ITranslationService _manager;
+        private readonly ILocalizationService _manager;
         private readonly BusyStack _busyStack;
 
         private bool _isBusy;
@@ -97,7 +97,7 @@ namespace Maple
         /// Initializes a new instance of the <see cref="Scene"/> class.
         /// </summary>
         /// <param name="manager">The manager.</param>
-        public Scene(ITranslationService manager)
+        public Scene(ILocalizationService manager)
         {
             _manager = manager ?? throw new ArgumentNullException(nameof(manager));
             _manager.PropertyChanged += (o, e) =>

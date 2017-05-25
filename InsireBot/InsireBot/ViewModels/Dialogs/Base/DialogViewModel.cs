@@ -16,7 +16,7 @@ namespace Maple
     /// <seealso cref="Maple.Core.ObservableObject" />
     public class DialogViewModel : ObservableObject
     {
-        private readonly ITranslationService _translator;
+        private readonly ILocalizationService _translator;
         private readonly IYoutubeUrlParseService _service;
         private readonly IMediaItemMapper _mediaItemMapper;
         private readonly FileSystemViewModel _fileSystemViewModel;
@@ -169,7 +169,7 @@ namespace Maple
         /// </summary>
         /// <param name="service">The service.</param>
         /// <param name="mediaItemMapper">The media item mapper.</param>
-        public DialogViewModel(ITranslationService translator, IYoutubeUrlParseService service, IMediaItemMapper mediaItemMapper, FileSystemViewModel fileSystemViewModel)
+        public DialogViewModel(ILocalizationService translator, IYoutubeUrlParseService service, IMediaItemMapper mediaItemMapper, FileSystemViewModel fileSystemViewModel)
         {
             _translator = translator ?? throw new ArgumentNullException(nameof(translator));
             _service = service ?? throw new ArgumentNullException(nameof(service));

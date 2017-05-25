@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Resources;
 
-namespace Maple
+namespace Maple.Core
 {
     public class ResxTranslationProvider : ITranslationProvider
     {
@@ -15,7 +15,7 @@ namespace Maple
         /// <param name="assembly">The assembly.</param>
         public ResxTranslationProvider()
         {
-            _resourceManager = new ResourceManager("Maple.Localization.Properties.Resources", typeof(Localization.Properties.Resources).Assembly);
+            _resourceManager = new ResourceManager(typeof(Localization.Properties.Resources));
         }
 
         /// <summary>

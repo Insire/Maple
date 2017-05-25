@@ -14,7 +14,7 @@ namespace Maple
     /// <seealso cref="Maple.Core.BaseListViewModel{Maple.Scene}" />
     public class Scenes : BaseListViewModel<Scene>
     {
-        private readonly ITranslationService _manager;
+        private readonly ILocalizationService _manager;
         private readonly IMapleLog _log;
 
         private bool _isExpanded;
@@ -76,7 +76,7 @@ namespace Maple
         /// </summary>
         /// <param name="manager">The manager.</param>
         /// <param name="log">The log.</param>
-        public Scenes(ITranslationService manager, IMapleLog log)
+        public Scenes(ILocalizationService manager, IMapleLog log)
         {
             _manager = manager ?? throw new ArgumentNullException(nameof(manager));
             _log = log ?? throw new ArgumentNullException(nameof(log));

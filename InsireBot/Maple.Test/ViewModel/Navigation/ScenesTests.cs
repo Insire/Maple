@@ -9,7 +9,7 @@ namespace Maple.Test.ViewModel.Navigation
     {
         private MockRepository _mockRepository;
 
-        private Mock<ITranslationService> _mockTranslationService;
+        private Mock<ILocalizationService> _mockTranslationService;
         private Mock<IMapleLog> _mockMapleLog;
 
         [TestInitialize]
@@ -17,7 +17,7 @@ namespace Maple.Test.ViewModel.Navigation
         {
             _mockRepository = new MockRepository(MockBehavior.Strict);
 
-            _mockTranslationService = _mockRepository.Create<ITranslationService>();
+            _mockTranslationService = _mockRepository.Create<ILocalizationService>();
             _mockMapleLog = _mockRepository.Create<IMapleLog>();
         }
 

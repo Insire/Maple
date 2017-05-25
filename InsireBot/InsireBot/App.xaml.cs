@@ -1,6 +1,5 @@
 ﻿using DryIoc;
 using Maple.Core;
-using Maple.Properties;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -17,7 +16,7 @@ namespace Maple
         {
             _container = DependencyInjectionFactory.Get();
 
-            var service = _container.Resolve<ITranslationService>();
+            var service = _container.Resolve<ILocalizationService>();
 
             InitializeResources(service);
             InitializeLocalization();
@@ -42,7 +41,7 @@ namespace Maple
         /// <remarks>
         /// order matters alot here, so be careful when modifying this
         /// </remarks>
-        private async Task<Shell> GetShell(ITranslationService service)
+        private async Task<Shell> GetShell(ILocalizationService service)
         {
             var log = _container.Resolve<IMapleLog>();
 
@@ -71,7 +70,7 @@ namespace Maple
         /// injecting the translation manager into a SharedResourcedictionary,
         /// so that hopefully all usages of the translation extension can be resolved inside of ResourceDictionaries
         /// </remarks>
-        private void InitializeResources(ITranslationService service)
+        private void InitializeResources(ILocalizationService service)
         {
             var url = new Uri("/Maple;component/Resources/Style.xaml", UriKind.RelativeOrAbsolute);
             var styles = new IoCResourceDictionary(service, url);
@@ -81,7 +80,7 @@ namespace Maple
 
         private void InitializeLocalization()
         {
-            Thread.CurrentThread.CurrentCulture = Settings.Default.StartUpCulture;
+            Thread.CurrentThread.CurrentCulture = Core.Properties.Settings.Default.StartUpCulture;
         }
 
         private IList<Task> LoadApplicationData()

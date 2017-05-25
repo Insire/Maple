@@ -128,7 +128,7 @@
                          SelectedItem="{Binding SelectedItem, IsAsync=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Loaded">
-                            <i:InvokeCommandAction Command="{Binding LoadCommand}" />
+                            <i:InvokeCommandAction Command="{Binding LoadCommand}" CommandParameter="{Binding}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                     <ListBox.ItemContainerStyle>

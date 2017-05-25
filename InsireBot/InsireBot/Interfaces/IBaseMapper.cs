@@ -4,7 +4,7 @@ using Maple.Data;
 namespace Maple
 {
     public interface IBaseMapper<TVieModel, TCoreModel, TDataModel>
-        where TVieModel : BaseViewModel<TDataModel>
+        where TVieModel : BaseDataViewModel<TVieModel, TDataModel>
         where TDataModel : BaseObject
     {
         TVieModel Get(TDataModel model);

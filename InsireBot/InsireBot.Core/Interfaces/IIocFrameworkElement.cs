@@ -11,6 +11,6 @@
         /// <value>
         /// The translation manager.
         /// </value>
-        ITranslationService TranslationManager { get; }
+        ILocalizationService TranslationManager { get; }
     }
 }

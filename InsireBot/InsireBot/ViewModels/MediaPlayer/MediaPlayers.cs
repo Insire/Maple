@@ -29,7 +29,7 @@ namespace Maple
         /// <param name="repo">The repo.</param>
         /// <param name="devices">The devices.</param>
         /// <param name="dialog">The dialog.</param>
-        public MediaPlayers(IMapleLog log, ITranslationService translationService, IMediaPlayerMapper mediaPlayerMapper, Func<IMediaPlayer> playerFactory, Func<IMediaRepository> repo, AudioDevices devices, DialogViewModel dialog, ISequenceProvider sequenceProvider)
+        public MediaPlayers(IMapleLog log, ILocalizationService translationService, IMediaPlayerMapper mediaPlayerMapper, Func<IMediaPlayer> playerFactory, Func<IMediaRepository> repo, AudioDevices devices, DialogViewModel dialog, ISequenceProvider sequenceProvider)
             : base(log, translationService, sequenceProvider)
         {
             _playerFactory = playerFactory ?? throw new ArgumentNullException(nameof(playerFactory));

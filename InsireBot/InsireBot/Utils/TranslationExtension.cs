@@ -33,7 +33,7 @@ namespace Maple
             if (TryGetIoCFrameWorkElement(serviceProvider, out IIocFrameworkElement element))
                 return ProvideValue(serviceProvider, element.TranslationManager);
 
-            if (TryGetTranslationManagerFromResources(serviceProvider, out ITranslationService manager))
+            if (TryGetTranslationManagerFromResources(serviceProvider, out ILocalizationService manager))
                 return ProvideValue(serviceProvider, manager);
 
             Debug.WriteLine($"{nameof(TranslationExtension)} ProvideValue {Key} failed");
@@ -51,15 +51,15 @@ namespace Maple
             return element != null;
         }
 
-        private bool TryGetTranslationManagerFromResources(IServiceProvider serviceProvider, out ITranslationService manager)
+        private bool TryGetTranslationManagerFromResources(IServiceProvider serviceProvider, out ILocalizationService manager)
         {
             var provider = serviceProvider.GetService(typeof(IRootObjectProvider)) as IRootObjectProvider;
             var dictionary = provider?.RootObject as ResourceDictionary;
-            var key = typeof(ITranslationService).Name;
+            var key = typeof(ILocalizationService).Name;
 
             if (dictionary?.Contains(key) == true)
             {
-                manager = dictionary[key] as ITranslationService;
+                manager = dictionary[key] as ILocalizationService;
                 return true;
             }
 
@@ -67,11 +67,11 @@ namespace Maple
             return false;
         }
 
-        private object ProvideValue(IServiceProvider serviceProvider, ITranslationService manager)
+        private object ProvideValue(IServiceProvider serviceProvider, ILocalizationService manager)
         {
             var binding = new Binding("Value")
             {
-                Source = new TranslationData(manager, Key, ToUpper)
+                Source = new LocalizationDTO(manager, Key, ToUpper)
             };
 
             return binding.ProvideValue(serviceProvider);

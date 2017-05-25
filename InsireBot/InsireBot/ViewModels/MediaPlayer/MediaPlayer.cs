@@ -1,3 +1,4 @@
+using FluentValidation;
 using Maple.Core;
 using Maple.Localization.Properties;
 using System;
@@ -15,9 +16,9 @@ namespace Maple
     /// <seealso cref="System.IDisposable" />
     /// <seealso cref="Maple.Core.IChangeState" />
     [DebuggerDisplay("{Name}, {Sequence}")]
-    public class MediaPlayer : BaseViewModel<Data.MediaPlayer>, IDisposable, IChangeState, ISequence
+    public class MediaPlayer : BaseDataViewModel<MediaPlayer, Data.MediaPlayer>, IDisposable, IChangeState, ISequence
     {
-        protected readonly ITranslationService _manager;
+        protected readonly ILocalizationService _manager;
 
         /// <summary>
         /// Gets a value indicating whether this instance is playing.
@@ -247,8 +248,8 @@ namespace Maple
         /// or
         /// playlist - playlist
         /// </exception>
-        public MediaPlayer(ITranslationService manager, IMediaPlayer player, AudioDevices devices, Playlist playlist, Data.MediaPlayer model)
-            : base(model)
+        public MediaPlayer(ILocalizationService manager, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, Data.MediaPlayer model)
+            : base(model, validator)
         {
             _manager = manager ?? throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} {Resources.IsRequired}");
             Player = player ?? throw new ArgumentNullException(nameof(player), $"{nameof(player)} {Resources.IsRequired}");
@@ -269,7 +270,6 @@ namespace Maple
 
             InitializeSubscriptions();
             InitiliazeCommands();
-            IntializeValidation();
         }
 
         private void InitializeSubscriptions()
@@ -291,15 +291,6 @@ namespace Maple
             ClearCommand = new RelayCommand(Clear, CanClear);
 
             UpdatePlaylistCommands();
-        }
-
-        private void IntializeValidation()
-        {
-            //AddRule(Name, new NotNullOrEmptyRule(nameof(Name)));
-            //AddRule(Player, new NotNullRule(nameof(Player)));
-            //AddRule(Playlist, new NotNullRule(nameof(Playlist)));
-            //AddRule(Disposed, new NotFalseRule(nameof(Disposed)));
-            //AddRule(AudioDevices, new ListNotEmptyRule(nameof(AudioDevices)));
         }
 
         private void Player_AudioDeviceChanging(object sender, EventArgs e)

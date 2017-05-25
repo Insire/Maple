@@ -51,7 +51,7 @@
                         </Border.Background>
 
                         <Button Command="{Binding Data, Source={StaticResource ApplyPrimaryProxy}}"
-                                CommandParameter="{Binding .}"
+                                CommandParameter="{Binding}"
                                 Content="Primary" />
                     </Border>
 
@@ -65,7 +65,7 @@
                         </Border.Background>
 
                         <Button Command="{Binding Data, Source={StaticResource ApplyAccentProxy}}"
-                                CommandParameter="{Binding .}"
+                                CommandParameter="{Binding}"
                                 Content="Accent" />
                     </Border>
 

@@ -1,5 +1,4 @@
-﻿using Maple.Core;
-using Maple.Localization.Properties;
+﻿using Maple.Localization.Properties;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -7,9 +6,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Maple
+namespace Maple.Core
 {
-    public class TranslationService : ObservableObject, ITranslationService
+    public class LocalizationService : ObservableObject, ILocalizationService
     {
         public ITranslationProvider TranslationProvider { get; private set; }
         public readonly IMapleLog _log;
@@ -37,7 +36,7 @@ namespace Maple
             }
         }
 
-        public TranslationService(ITranslationProvider provider, IMapleLog log)
+        public LocalizationService(ITranslationProvider provider, IMapleLog log)
         {
             _log = log ?? throw new ArgumentNullException(nameof(log));
             TranslationProvider = provider ?? throw new ArgumentNullException(nameof(provider));

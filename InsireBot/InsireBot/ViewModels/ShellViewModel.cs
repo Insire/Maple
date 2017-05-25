@@ -35,14 +35,14 @@ namespace Maple
             private set { SetValue(ref _scenes, value); }
         }
 
-        private ITranslationService _translationManager;
+        private ILocalizationService _translationManager;
         /// <summary>
         /// Gets the translation manager.
         /// </summary>
         /// <value>
         /// The translation manager.
         /// </value>
-        public ITranslationService TranslationManager
+        public ILocalizationService TranslationManager
         {
             get { return _translationManager; }
             private set { SetValue(ref _translationManager, value); }
@@ -111,7 +111,7 @@ namespace Maple
         /// <param name="mediaPlayers">The media players.</param>
         /// <param name="uiColorsViewModel">The UI colors view model.</param>
         /// <param name="optionsViewModel">The options view model.</param>
-        public ShellViewModel(ITranslationService translationManager,
+        public ShellViewModel(ILocalizationService translationManager,
                                 Scenes scenes,
                                 StatusbarViewModel statusBarViewModel,
                                 DialogViewModel dialogViewModel,

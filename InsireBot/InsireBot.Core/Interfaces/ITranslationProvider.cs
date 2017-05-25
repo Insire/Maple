@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 
-namespace Maple
+namespace Maple.Core
 {
     public interface ITranslationProvider
     {

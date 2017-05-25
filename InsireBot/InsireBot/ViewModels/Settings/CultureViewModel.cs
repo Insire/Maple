@@ -15,7 +15,7 @@ namespace Maple
     /// <seealso cref="Maple.Core.ISaveableViewModel" />
     public class CultureViewModel : ObservableObject, ICultureViewModel
     {
-        private readonly ITranslationService _manager;
+        private readonly ILocalizationService _manager;
         private readonly IMapleLog _log;
 
         private RangeObservableCollection<CultureInfo> _items;
@@ -72,7 +72,7 @@ namespace Maple
         /// Initializes a new instance of the <see cref="CultureViewModel"/> class.
         /// </summary>
         /// <param name="manager">The manager.</param>
-        public CultureViewModel(ITranslationService manager, IMapleLog log)
+        public CultureViewModel(ILocalizationService manager, IMapleLog log)
         {
             _log = log ?? throw new ArgumentNullException(nameof(log));
             _manager = manager ?? throw new ArgumentNullException(nameof(log));
@@ -101,7 +101,7 @@ namespace Maple
         {
             _log.Info($"{Resources.Loading} {Resources.Options}");
             _manager.Load();
-            SelectedCulture = Properties.Settings.Default.StartUpCulture;
+            SelectedCulture = Core.Properties.Settings.Default.StartUpCulture;
             IsLoaded = true;
         }
 
@@ -115,7 +115,7 @@ namespace Maple
         {
             _log.Info($"{Resources.Loading} {Resources.Options}");
             await _manager.LoadAsync();
-            SelectedCulture = Properties.Settings.Default.StartUpCulture;
+            SelectedCulture = Core.Properties.Settings.Default.StartUpCulture;
             IsLoaded = true;
         }
     }

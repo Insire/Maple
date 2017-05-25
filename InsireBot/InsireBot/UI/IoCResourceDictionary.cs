@@ -17,7 +17,7 @@ namespace Maple
         /// <value>
         /// The translation manager.
         /// </value>
-        public ITranslationService TranslationManager { get; private set; }
+        public ILocalizationService TranslationManager { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IoCResourceDictionary"/> class.
@@ -31,11 +31,11 @@ namespace Maple
         /// Initializes a new instance of the <see cref="IoCResourceDictionary"/> class.
         /// </summary>
         /// <param name="translationManager">The translation manager.</param>
-        public IoCResourceDictionary(ITranslationService service, Uri url) : base()
+        public IoCResourceDictionary(ILocalizationService service, Uri url) : base()
         {
             TranslationManager = service;
             Source = url;
-            Add(typeof(ITranslationService).Name, service);
+            Add(typeof(ILocalizationService).Name, service);
         }
     }
 }

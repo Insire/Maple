@@ -1,4 +1,5 @@
-﻿using Maple.Core;
+﻿using FluentValidation;
+using Maple.Core;
 using Maple.Localization.Properties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -23,11 +24,11 @@ namespace Maple
     /// <seealso cref="Maple.Core.IIdentifier" />
     /// <seealso cref="Maple.Core.IChangeState" />
     [DebuggerDisplay("{Title}, {Sequence}")]
-    public class Playlist : BaseViewModel<Data.Playlist>, IIsSelected, ISequence, IIdentifier, IChangeState
+    public class Playlist : BaseDataViewModel<Playlist, Data.Playlist>, IIsSelected, ISequence, IIdentifier, IChangeState
     {
         private readonly ISequenceProvider _sequenceProvider;
         private readonly IMediaItemMapper _mediaItemMapper;
-        private readonly ITranslationService _translator;
+        private readonly ILocalizationService _translator;
         private readonly object _itemsLock;
         private readonly DialogViewModel _dialogViewModel;
         public int Count => Items?.Count ?? 0;
@@ -309,8 +310,8 @@ namespace Maple
         /// <param name="model">The model.</param>
         /// <exception cref="System.ArgumentNullException">dialogViewModel</exception>
         /// <exception cref="System.ArgumentException"></exception>
-        public Playlist(ITranslationService translator, IMediaItemMapper mediaItemMapper, ISequenceProvider sequenceProvider, DialogViewModel dialogViewModel, Data.Playlist model)
-            : base(model)
+        public Playlist(ILocalizationService translator, IMediaItemMapper mediaItemMapper, ISequenceProvider sequenceProvider, IValidator<Playlist> validator, DialogViewModel dialogViewModel, Data.Playlist model)
+            : base(model, validator)
         {
             using (_busyStack.GetToken())
             {
@@ -368,11 +369,7 @@ namespace Maple
 
         private void IntializeValidation()
         {
-            //AddRule(Title, new NotNullOrEmptyRule(nameof(Title)));
-            //AddRule(Description, new NotNullOrEmptyRule(nameof(Description)));
-            //AddRule(SelectedItem, new NotNullRule(nameof(SelectedItem)));
-            //AddRule(RepeatModes, new NotNullRule(nameof(RepeatModes)));
-            //AddRule(Items, new NotNullRule(nameof(Items)));
+
         }
 
         private async Task LoadFromUrl()

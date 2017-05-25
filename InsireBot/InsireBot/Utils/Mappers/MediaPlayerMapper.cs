@@ -1,17 +1,18 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Maple.Core;
 using Maple.Localization.Properties;
 using System;
 
 namespace Maple
 {
-    public class MediaPlayerMapper : BaseMapper, IMediaPlayerMapper
+    public class MediaPlayerMapper : BaseMapper<MediaPlayer>, IMediaPlayerMapper
     {
         private readonly IMediaPlayer _mediaPlayer;
         private readonly AudioDevices _devices;
 
-        public MediaPlayerMapper(ITranslationService translator, IMediaPlayer mediaPlayer, AudioDevices devices, ISequenceProvider sequenceProvider, IMapleLog log)
-            : base(translator, sequenceProvider, log)
+        public MediaPlayerMapper(ILocalizationService translator, IMediaPlayer mediaPlayer, AudioDevices devices, ISequenceProvider sequenceProvider, IMapleLog log, IValidator<MediaPlayer> validator)
+            : base(translator, sequenceProvider, log, validator)
         {
             _mediaPlayer = mediaPlayer ?? throw new ArgumentNullException(nameof(mediaPlayer));
             _devices = devices ?? throw new ArgumentNullException(nameof(devices));
@@ -38,7 +39,7 @@ namespace Maple
 
         public MediaPlayer GetNewMediaPlayer(int sequence, Playlist playlist = null)
         {
-            return new MediaPlayer(_translationService, _mediaPlayer, _devices, playlist, new Data.MediaPlayer()
+            return new MediaPlayer(_translationService, _mediaPlayer, _validator, _devices, playlist, new Data.MediaPlayer()
             {
                 Sequence = sequence,
                 IsPrimary = false,
@@ -49,17 +50,17 @@ namespace Maple
 
         public MediaPlayer Get(Data.MediaPlayer player, Playlist playlist)
         {
-            return new MediaPlayer(_translationService, _mediaPlayer, _devices, playlist, player);
+            return new MediaPlayer(_translationService, _mediaPlayer, _validator, _devices, playlist, player);
         }
 
         public MediaPlayer Get(Data.MediaPlayer model)
         {
-            return new MediaPlayer(_translationService, _mediaPlayer, _devices, null, model); //TODO
+            return new MediaPlayer(_translationService, _mediaPlayer, _validator, _devices, null, model); //TODO
         }
 
         public MediaPlayer Get(Core.MediaPlayer dto)
         {
-            return new MediaPlayer(_translationService, _mediaPlayer, _devices, null, GetData(dto)); //TODO
+            return new MediaPlayer(_translationService, _mediaPlayer, _validator, _devices, null, GetData(dto)); //TODO
         }
 
         public Data.MediaPlayer GetData(MediaPlayer viewModel)
