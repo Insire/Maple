@@ -18,6 +18,8 @@ namespace Maple
         private readonly ILocalizationService _manager;
         private readonly IMapleLog _log;
 
+        public event LoadedEventHandler Loaded;
+
         private RangeObservableCollection<CultureInfo> _items;
         /// <summary>
         /// Gets or sets the items.
@@ -103,6 +105,7 @@ namespace Maple
             _manager.Load();
             SelectedCulture = Core.Properties.Settings.Default.StartUpCulture;
             IsLoaded = true;
+            Loaded?.Invoke(this, new LoadedEventEventArgs());
         }
 
         public async Task SaveAsync()
@@ -117,6 +120,7 @@ namespace Maple
             await _manager.LoadAsync();
             SelectedCulture = Core.Properties.Settings.Default.StartUpCulture;
             IsLoaded = true;
+            Loaded?.Invoke(this, new LoadedEventEventArgs());
         }
     }
 }

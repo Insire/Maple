@@ -53,7 +53,8 @@ namespace Maple
                 AddRange(context.GetAllPlaylists());
 
             SelectedItem = Items.FirstOrDefault();
-            IsLoaded = true;
+
+            OnLoaded();
         }
 
         /// <summary>
@@ -103,7 +104,7 @@ namespace Maple
             }
 
             SelectedItem = Items.FirstOrDefault();
-            IsLoaded = true;
+            OnLoaded();
         }
     }
 }

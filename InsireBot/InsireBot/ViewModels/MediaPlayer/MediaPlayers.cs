@@ -57,7 +57,7 @@ namespace Maple
                 Items.AddRange(context.GetAllOptionalMediaPlayers());
             }
 
-            IsLoaded = true;
+            OnLoaded();
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Maple
                 Items.AddRange(others);
             }
 
-            IsLoaded = true;
+            OnLoaded();
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Media;
 
-namespace Maple
+namespace Maple.Core
 {
     public delegate void UiPrimaryColorEventHandler(object sender, UiPrimaryColorEventArgs e);
 

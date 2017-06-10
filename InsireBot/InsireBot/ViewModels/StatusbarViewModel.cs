@@ -71,12 +71,17 @@ namespace Maple
 
             UpdateLanguage();
 
-            MainMediaPlayer = (MainMediaPlayer)_mediaplayers.Items.ToList().Find(p => p is MainMediaPlayer);
+            _mediaplayers.Loaded += (o, e) => UpdateMainMediaPlayer();
         }
 
         private void UpdateLanguage()
         {
             Language = $"({_manager.CurrentLanguage.TwoLetterISOLanguageName})";
+        }
+
+        private void UpdateMainMediaPlayer()
+        {
+            MainMediaPlayer = (MainMediaPlayer)_mediaplayers.Items.ToList().Find(p => p is MainMediaPlayer);
         }
 
         // TODO notifications?

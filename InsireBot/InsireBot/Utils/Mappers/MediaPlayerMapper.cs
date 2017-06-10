@@ -48,6 +48,11 @@ namespace Maple
             });
         }
 
+        public MainMediaPlayer GetMain(Data.MediaPlayer player, Playlist playlist)
+        {
+            return new MainMediaPlayer(_translationService, _mediaPlayer, _validator, _devices, playlist, player);
+        }
+
         public MediaPlayer Get(Data.MediaPlayer player, Playlist playlist)
         {
             return new MediaPlayer(_translationService, _mediaPlayer, _validator, _devices, playlist, player);

@@ -20,7 +20,7 @@ namespace Maple
         /// <param name="model">The model.</param>
         /// <param name="playlist">The playlist.</param>
         /// <param name="devices">The devices.</param>
-        public MainMediaPlayer(ILocalizationService manager, IMediaPlayer player, IValidator<MediaPlayer> validator, Data.MediaPlayer model, Playlist playlist, AudioDevices devices)
+        public MainMediaPlayer(ILocalizationService manager, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, Data.MediaPlayer model)
             : base(manager, player, validator, devices, playlist, model)
         {
             IsPrimary = model.IsPrimary;

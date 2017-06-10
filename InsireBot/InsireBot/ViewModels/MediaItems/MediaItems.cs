@@ -33,7 +33,7 @@ namespace Maple
                 AddRange(context.GetAllMediaItems());
 
             SelectedItem = Items.FirstOrDefault();
-            IsLoaded = true;
+            OnLoaded();
         }
 
         public override void Save()
@@ -57,7 +57,7 @@ namespace Maple
             }
 
             SelectedItem = Items.FirstOrDefault();
-            IsLoaded = true;
+            OnLoaded();
         }
 
         public override Task SaveAsync()

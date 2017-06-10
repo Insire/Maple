@@ -23,6 +23,9 @@ namespace Maple.Core
         protected readonly IMapleLog _log;
 
         private bool _disposed;
+
+        public event LoadedEventHandler Loaded;
+
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="MediaPlayers"/> is disposed.
         /// </summary>
@@ -160,6 +163,12 @@ namespace Maple.Core
                 if (SelectedItem == null && added)
                     SelectedItem = Items.First();
             }
+        }
+
+        protected virtual void OnLoaded()
+        {
+            IsLoaded = true;
+            Loaded?.Invoke(this, new LoadedEventEventArgs());
         }
 
         public void Dispose()

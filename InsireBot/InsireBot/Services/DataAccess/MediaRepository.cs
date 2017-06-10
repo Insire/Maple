@@ -193,7 +193,7 @@ namespace Maple
                     var playlist = await GetPlaylistByIdAsync(player.PlaylistId);
 
                     if (playlist != null)
-                        return _mediaPlayerMapper.Get(player, GetPlaylistById(player.PlaylistId));
+                        return _mediaPlayerMapper.GetMain(player, GetPlaylistById(player.PlaylistId));
                 }
 
                 return default(MediaPlayer);

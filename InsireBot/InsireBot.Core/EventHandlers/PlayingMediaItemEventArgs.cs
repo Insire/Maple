@@ -1,7 +1,6 @@
-﻿using Maple.Core;
-using System;
+﻿using System;
 
-namespace Maple
+namespace Maple.Core
 {
     public delegate void PlayingMediaItemEventHandler(object sender, PlayingMediaItemEventArgs e);
 

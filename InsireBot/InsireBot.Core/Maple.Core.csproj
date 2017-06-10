@@ -100,6 +100,11 @@
     <Compile Include="DTO\MediaPlayer.cs" />
     <Compile Include="DTO\Playlist.cs" />
     <Compile Include="Enums\PrivacyStatus.cs" />
+    <Compile Include="EventHandlers\CompletedMediaItemEventEventArgs.cs" />
+    <Compile Include="EventHandlers\LoadedEventEventArgs.cs" />
+    <Compile Include="EventHandlers\PlayingMediaItemEventArgs.cs" />
+    <Compile Include="EventHandlers\ShuffleModeChangedEventEventArgs.cs" />
+    <Compile Include="EventHandlers\UiPrimaryColorEventArgs.cs" />
     <Compile Include="Extensions\EventExtension.cs" />
     <Compile Include="Interfaces\ILocalizationService.cs" />
     <Compile Include="Interfaces\ITranslationProvider.cs" />

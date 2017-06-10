@@ -44,15 +44,28 @@
                                   DataContext="{Binding StatusbarViewModel}"
                                   DockPanel.Dock="Bottom"
                                   Mode="PrimaryMid">
-            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
-                <TextBlock>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="5"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="1">
                     <Run Text="{Binding Version, Mode=OneWay}" />
                     <Run Text="{Binding Language, Mode=OneWay}" />
                 </TextBlock>
-                <TextBlock Margin="5 0" Text="{local:Translation PlaylistCurrent}" />
-                <TextBlock Text="{Binding MainMediaPlayer.Playlist.Title, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBlock Margin="5 0" Text="{Binding MainMediaPlayer.Playlist.SelectedItem.Title, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
+
+                <TextBlock Grid.Column="3">
+                    <Run Text="{Binding MainMediaPlayer.Playlist.Title, Mode=OneWay}" />
+                    <Run Text="-"/>
+                    <Run Text="{Binding MainMediaPlayer.Playlist.SelectedItem.Title, Mode=OneWay}" />
+                </TextBlock>
+            </Grid>
         </materialDesign:ColorZone>
 
         <!--  DataContext ShellViewModel  -->

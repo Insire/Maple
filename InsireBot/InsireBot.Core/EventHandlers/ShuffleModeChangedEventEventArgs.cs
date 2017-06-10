@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Maple
+namespace Maple.Core
 {
     public delegate void ShuffleModeChangedEventHandler(object sender, ShuffleModeChangedEventEventArgs e);
 
