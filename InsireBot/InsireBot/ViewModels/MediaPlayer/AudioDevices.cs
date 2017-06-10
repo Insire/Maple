@@ -4,7 +4,7 @@ using System.Linq;
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="Maple.Core.BaseListViewModel{Maple.AudioDevice}" />
     public class AudioDevices : BaseListViewModel<AudioDevice>
@@ -12,9 +12,9 @@ namespace Maple
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioDevices"/> class.
         /// </summary>
-        public AudioDevices() : base()
+        public AudioDevices(IMapleLog log) : base()
         {
-            Items.AddRange(PlaybackDeviceFactory.GetAudioDevices().ToList());
+            Items.AddRange(PlaybackDeviceFactory.GetAudioDevices(log).ToList());
         }
     }
 }
