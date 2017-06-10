@@ -13,7 +13,7 @@ namespace Maple
     /// </summary>
     public class DependencyInjectionFactory
     {
-        public static IContainer Get()
+        public static IContainer Get(bool runsAsTestCase=false)
         {
             var c = new Container();
 

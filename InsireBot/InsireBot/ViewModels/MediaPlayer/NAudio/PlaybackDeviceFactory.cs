@@ -1,15 +1,19 @@
-﻿using NAudio.Wave;
+﻿using Maple.Core;
+using NAudio.Wave;
+using System;
 using System.Collections.Generic;
 
 namespace Maple
 {
     public class PlaybackDeviceFactory
     {
-        public static IEnumerable<AudioDevice> GetAudioDevices()
+        public static IEnumerable<AudioDevice> GetAudioDevices(IMapleLog log)
         {
             for (var i = 0; i < WaveOut.DeviceCount; i++)
             {
-                var cap = WaveOut.GetCapabilities(i);
+                var cap = GetCapabilities(i, log);
+                if (Equals(cap, default(WaveOutCapabilities)))
+                    break;
 
                 yield return new AudioDevice
                 {
@@ -17,6 +21,20 @@ namespace Maple
                     Name = cap.ProductName,
                     Sequence = i,
                 };
+            }
+
+        }
+
+        private static WaveOutCapabilities GetCapabilities(int index, IMapleLog log)
+        {
+            try
+            {
+                return WaveOut.GetCapabilities(index);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return default(WaveOutCapabilities);
             }
         }
     }
