@@ -36,7 +36,7 @@ After a long hiatus, I'm continuing my rewrite and try to improve on my previous
 - [EntityFramework](https://github.com/aspnet/EntityFramework6) - ORM mapper
 - [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json) - JSON framework 
 - [DryIoc](https://bitbucket.org/dadhi/dryioc) - IoC container
-- - [Fluent Validation](https://github.com/JeremySkinner/FluentValidation) - Validation
+- [Fluent Validation](https://github.com/JeremySkinner/FluentValidation) - Validation
 
 ## Useful Patterns, Concepts you may find here aswell
 - Repository pattern
