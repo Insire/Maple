@@ -16,7 +16,7 @@ namespace Maple
     /// <seealso cref="System.IDisposable" />
     /// <seealso cref="Maple.Core.IChangeState" />
     [DebuggerDisplay("{Name}, {Sequence}")]
-    public class MediaPlayer : BaseDataViewModel<MediaPlayer, Data.MediaPlayer>, IDisposable, IChangeState, ISequence
+    public class MediaPlayer : ValidableBaseDataViewModel<MediaPlayer, Data.MediaPlayer>, IDisposable, IChangeState, ISequence
     {
         protected readonly ILocalizationService _manager;
 
@@ -270,6 +270,8 @@ namespace Maple
 
             InitializeSubscriptions();
             InitiliazeCommands();
+
+            Validate();
         }
 
         private void InitializeSubscriptions()

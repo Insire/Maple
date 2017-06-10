@@ -1,5 +1,4 @@
 ﻿using Maple.Core;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -27,7 +26,7 @@ namespace Maple
             : base()
         {
             if (Debugger.IsAttached)
-                Assert.Fail($"The constructor without parameters of {nameof(IoCWindow)} exists only for compatibility reasons.");
+                Debug.Fail($"The constructor without parameters of {nameof(IoCWindow)} exists only for compatibility reasons.");
         }
 
         /// <summary>

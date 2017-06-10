@@ -43,8 +43,8 @@
                             <Button Grid.Row="0"
                                     Grid.Column="2"
                                     Command="{Binding ParseCommand}"
-                                    ToolTip="{local:Translation Parse}"
-                                    Style="{StaticResource ComputeButtonStyle}" />
+                                    Style="{StaticResource ComputeButtonStyle}"
+                                    ToolTip="{local:Translation Parse}" />
 
                             <Border Grid.Row="2"
                                     Grid.Column="0"
@@ -101,7 +101,7 @@
                     </materialDesign:TransitioningContent>
                 </ControlTemplate>
             </materialDesign:Card.Resources>
-            
+
             <ContentControl>
                 <ContentControl.Style>
                     <Style TargetType="{x:Type ContentControl}">

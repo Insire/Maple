@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using Maple.Core;
 using Maple.Localization.Properties;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,7 +23,7 @@ namespace Maple
     /// <seealso cref="Maple.Core.IIdentifier" />
     /// <seealso cref="Maple.Core.IChangeState" />
     [DebuggerDisplay("{Title}, {Sequence}")]
-    public class Playlist : BaseDataViewModel<Playlist, Data.Playlist>, IIsSelected, ISequence, IIdentifier, IChangeState
+    public class Playlist : ValidableBaseDataViewModel<Playlist, Data.Playlist>, IIsSelected, ISequence, IIdentifier, IChangeState
     {
         private readonly ISequenceProvider _sequenceProvider;
         private readonly IMediaItemMapper _mediaItemMapper;
@@ -353,6 +352,8 @@ namespace Maple
 
                 InitializeCommands();
                 IntializeValidation();
+
+                Validate();
             }
         }
 
@@ -697,8 +698,6 @@ namespace Maple
                             {
                                 var foundItem = previousItems.First();
                                 foundItem.IsSelected = true;
-
-                                Assert.IsTrue(previousItems.Count() > 1, "Warning SelectPrevious returned more than one value, when it should only return one");
 
                                 return foundItem;
                             }

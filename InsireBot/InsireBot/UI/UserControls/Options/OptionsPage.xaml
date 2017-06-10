@@ -25,7 +25,7 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <WrapPanel Orientation="Horizontal">
 
-                    <materialDesign:Flipper Style="{StaticResource MaterialDesignCardFlipper}" DataContext="{Binding CultureViewModel}">
+                    <materialDesign:Flipper DataContext="{Binding CultureViewModel}" Style="{StaticResource MaterialDesignCardFlipper}">
                         <materialDesign:Flipper.FrontContent>
                             <Grid Width="200" Height="256">
                                 <Grid.RowDefinitions>
@@ -46,7 +46,7 @@
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center">
                                     <TextBlock HorizontalAlignment="Center" Text="{Binding SelectedCulture.NativeName}" />
-                                    <Button Margin="0 4 0 0"
+                                    <Button Margin="0,4,0,0"
                                             Command="{x:Static materialDesign:Flipper.FlipCommand}"
                                             Style="{StaticResource MaterialDesignFlatButton}">
                                         <TextBlock Text="{local:Translation Edit, ToUpper=True}" />
@@ -67,14 +67,14 @@
                                                 Style="{StaticResource MaterialDesignToolForegroundButton}">
                                             <materialDesign:PackIcon HorizontalAlignment="Right" Kind="ArrowLeft" />
                                         </Button>
-                                        <TextBlock Margin="8 0 0 0"
+                                        <TextBlock Margin="8,0,0,0"
                                                    VerticalAlignment="Center"
                                                    Text="{local:Translation EditLanguage}" />
                                     </StackPanel>
                                 </materialDesign:ColorZone>
                                 <Grid Grid.Row="1"
                                       Width="172"
-                                      Margin="0 6 0 0"
+                                      Margin="0,6,0,0"
                                       HorizontalAlignment="Center"
                                       VerticalAlignment="Top">
                                     <ComboBox materialDesign:ComboBoxAssist.ShowSelectedItem="True"

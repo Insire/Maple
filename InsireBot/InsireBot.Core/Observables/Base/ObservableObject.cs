@@ -35,7 +35,7 @@ namespace Maple.Core
         /// <param name="OnChanged">The on changed action.</param>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns></returns>
-        protected bool SetValue<T>(ref T field, T value, Action OnChanging = null, Action OnChanged = null, [CallerMemberName]string propertyName = null)
+        protected virtual bool SetValue<T>(ref T field, T value, Action OnChanging = null, Action OnChanged = null, [CallerMemberName]string propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(field, value))
                 return false;

@@ -4,7 +4,8 @@ namespace Maple
 {
     public partial class PlaylistsPage
     {
-        public PlaylistsPage(ILocalizationService manager) : base(manager)
+        public PlaylistsPage(ILocalizationService manager)
+            : base(manager)
         {
             InitializeComponent();
         }

@@ -12,7 +12,7 @@ namespace Maple
     /// <seealso cref="Maple.Core.BaseViewModel{Maple.Data.MediaItem}" />
     /// <seealso cref="Maple.Core.IMediaItem" />
     [DebuggerDisplay("{Title}, {Sequence} {Location}")]
-    public class MediaItem : BaseDataViewModel<MediaItem, Data.MediaItem>, IMediaItem
+    public class MediaItem : ValidableBaseDataViewModel<MediaItem, Data.MediaItem>, IMediaItem
     {
         private readonly IPlaylistContext _context;
 
@@ -193,6 +193,8 @@ namespace Maple
             _updatedOn = model.UpdatedOn;
 
             _context = context ?? throw new ArgumentNullException(nameof(context));
+
+            Validate();
         }
 
         /// <summary>

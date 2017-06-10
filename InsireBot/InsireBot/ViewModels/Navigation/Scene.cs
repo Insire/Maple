@@ -107,7 +107,7 @@ namespace Maple
                       };
 
             _busyStack = new BusyStack();
-            _busyStack.OnChanged = (hasItems) => IsBusy = hasItems;
+            _busyStack.OnChanged += (hasItems) => IsBusy = hasItems;
         }
 
         private void UpdateDisplayName()

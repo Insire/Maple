@@ -1,6 +1,6 @@
 ﻿using Maple.Core;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Diagnostics;
 
 namespace Maple
 {
@@ -24,7 +24,7 @@ namespace Maple
         /// </summary>
         public IoCResourceDictionary() : base()
         {
-            Assert.Fail($"The constructor without parameters of {nameof(IoCResourceDictionary)} exists only for compatibility reasons.");
+            Debug.Fail($"The constructor without parameters of {nameof(IoCResourceDictionary)} exists only for compatibility reasons.");
         }
 
         /// <summary>

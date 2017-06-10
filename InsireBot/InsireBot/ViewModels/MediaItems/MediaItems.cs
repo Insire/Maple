@@ -38,7 +38,7 @@ namespace Maple
 
         public override void Save()
         {
-            _log.Info($"{_translationService.Translate(Resources.Saving)} {_translationService.Translate(Resources.MediaItems)}");
+            _log.Info($"{_translationService.Translate(nameof(Resources.Saving))} {_translationService.Translate(nameof(Resources.MediaItems))}");
             using (var context = _repositoryFactory())
             {
                 context.Save(this);
@@ -47,7 +47,7 @@ namespace Maple
 
         public override async Task LoadAsync()
         {
-            _log.Info($"{_translationService.Translate(Resources.Loading)} {_translationService.Translate(Resources.MediaItems)}");
+            _log.Info($"{_translationService.Translate(nameof(Resources.Loading))} {_translationService.Translate(nameof(Resources.MediaItems))}");
             Clear();
 
             using (var context = _repositoryFactory())

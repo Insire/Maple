@@ -1,9 +1,5 @@
-﻿using FluentValidation;
-using System;
-
-namespace Maple.Core
+﻿namespace Maple.Core
 {
-
     /// <summary>
     ///
     /// </summary>
@@ -14,7 +10,6 @@ namespace Maple.Core
         /// The busy stack
         /// </summary>
         protected readonly BusyStack _busyStack;
-        protected readonly IValidator<TViewModel> _validator;
 
         private TModel _model;
         /// <summary>
@@ -46,11 +41,10 @@ namespace Maple.Core
         /// Initializes a new instance of the <see cref="BaseViewModel{T}"/> class.
         /// </summary>
         /// <param name="model">The model.</param>
-        protected BaseDataViewModel(TModel model, IValidator<TViewModel> validator)
+        protected BaseDataViewModel(TModel model)
             : this()
         {
             Model = model;
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
     }
 }

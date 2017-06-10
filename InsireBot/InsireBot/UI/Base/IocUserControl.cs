@@ -1,5 +1,4 @@
 ﻿using Maple.Core;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.Windows.Controls;
 
@@ -26,7 +25,7 @@ namespace Maple
         public IoCUserControl() : base()
         {
             if (Debugger.IsAttached)
-                Assert.Fail($"The constructor without parameters of {nameof(IoCUserControl)} exists only for compatibility reasons.");
+                Debug.Fail($"The constructor without parameters of {nameof(IoCUserControl)} exists only for compatibility reasons.");
         }
 
         /// <summary>
