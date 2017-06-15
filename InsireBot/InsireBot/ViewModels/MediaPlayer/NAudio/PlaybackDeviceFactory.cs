@@ -7,7 +7,7 @@ namespace Maple
 {
     public class PlaybackDeviceFactory
     {
-        public static IEnumerable<AudioDevice> GetAudioDevices(IMapleLog log)
+        public static IEnumerable<AudioDevice> GetAudioDevices(ILoggingService log)
         {
             for (var i = 0; i < WaveOut.DeviceCount; i++)
             {
@@ -25,7 +25,7 @@ namespace Maple
 
         }
 
-        private static WaveOutCapabilities GetCapabilities(int index, IMapleLog log)
+        private static WaveOutCapabilities GetCapabilities(int index, ILoggingService log)
         {
             try
             {

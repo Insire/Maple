@@ -18,13 +18,11 @@ namespace Maple.Core
         where TViewModel : BaseDataViewModel<TViewModel, TModel>, ISequence
         where TModel : BaseObject
     {
-        protected readonly ISequenceProvider _sequenceProvider;
+        protected readonly ISequenceService _sequenceProvider;
         protected readonly ILocalizationService _translationService;
-        protected readonly IMapleLog _log;
+        protected readonly ILoggingService _log;
 
         private bool _disposed;
-
-        public event LoadedEventHandler Loaded;
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="MediaPlayers"/> is disposed.
@@ -59,19 +57,13 @@ namespace Maple.Core
         /// The save command.
         /// </value>
         public ICommand SaveCommand => new RelayCommand(Save);
-        /// <summary>
-        /// Gets a value indicating whether this instance is loaded.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is loaded; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsLoaded { get; protected set; }
 
-        public BaseDataListViewModel(IMapleLog log, ILocalizationService translationService, ISequenceProvider sequenceProvider)
+        public BaseDataListViewModel(ViewModelServiceContainer container)
+            : base(container.Messenger)
         {
-            _log = log ?? throw new ArgumentNullException(nameof(log));
-            _translationService = translationService ?? throw new ArgumentNullException(nameof(translationService));
-            _sequenceProvider = sequenceProvider ?? throw new ArgumentNullException(nameof(sequenceProvider));
+            _log = container.Log;
+            _translationService = container.LocalizationService;
+            _sequenceProvider = container.SequenceService;
         }
 
         public abstract Task LoadAsync();
@@ -161,12 +153,6 @@ namespace Maple.Core
                 if (SelectedItem == null && added)
                     SelectedItem = Items.First();
             }
-        }
-
-        protected virtual void OnLoaded()
-        {
-            IsLoaded = true;
-            Loaded?.Invoke(this, new LoadedEventEventArgs());
         }
 
         public void Dispose()

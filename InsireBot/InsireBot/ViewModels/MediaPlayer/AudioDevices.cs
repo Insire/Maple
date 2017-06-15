@@ -12,7 +12,8 @@ namespace Maple
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioDevices"/> class.
         /// </summary>
-        public AudioDevices(IMapleLog log) : base()
+        public AudioDevices(ILoggingService log, IMessenger messenger)
+            : base(messenger)
         {
             Items.AddRange(PlaybackDeviceFactory.GetAudioDevices(log).ToList());
         }

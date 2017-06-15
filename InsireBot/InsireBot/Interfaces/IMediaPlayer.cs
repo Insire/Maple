@@ -10,23 +10,6 @@ namespace Maple
     public interface IMediaPlayer : IDisposable
     {
         /// <summary>
-        /// Occurs when [completed media item].
-        /// </summary>
-        event CompletedMediaItemEventHandler CompletedMediaItem;
-        /// <summary>
-        /// Occurs when [playing media item].
-        /// </summary>
-        event PlayingMediaItemEventHandler PlayingMediaItem;
-        /// <summary>
-        /// Occurs when [audio device changed].
-        /// </summary>
-        event AudioDeviceChangedEventHandler AudioDeviceChanged;
-        /// <summary>
-        /// Occurs when [audio device changing].
-        /// </summary>
-        event EventHandler AudioDeviceChanging;
-
-        /// <summary>
         /// Gets a value indicating whether this <see cref="IMediaPlayer"/> is disposed.
         /// </summary>
         /// <value>

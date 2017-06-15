@@ -17,7 +17,7 @@ namespace Maple
             _container = await DependencyInjectionFactory.Get();
 
             var localizationService = _container.Resolve<ILocalizationService>();
-            var log = _container.Resolve<IMapleLog>();
+            var log = _container.Resolve<ILoggingService>();
 
             InitializeResources(localizationService);
             InitializeLocalization();
@@ -43,7 +43,7 @@ namespace Maple
         /// <remarks>
         /// order matters alot here, so be careful when modifying this
         /// </remarks>
-        private async Task<Shell> GetShell(ILocalizationService service, IMapleLog log)
+        private async Task<Shell> GetShell(ILocalizationService service, ILoggingService log)
         {
             using (var vm = _container.Resolve<ISplashScreenViewModel>())
             {
@@ -95,7 +95,7 @@ namespace Maple
 
         private void SaveState()
         {
-            var log = _container.Resolve<IMapleLog>();
+            var log = _container.Resolve<ILoggingService>();
             log.Info(Localization.Properties.Resources.SavingState);
 
             foreach (var item in _container.Resolve<IEnumerable<ILoadableViewModel>>())

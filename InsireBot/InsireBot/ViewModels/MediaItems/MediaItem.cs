@@ -16,25 +16,12 @@ namespace Maple
         public bool IsNew => Model.IsNew;
         public bool IsDeleted => Model.IsDeleted;
 
-        private int _id;
-        /// <summary>
-        /// Gets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
         public int Id
         {
-            get { return _id; }
+            get { return Model.Id; }
         }
 
         private int _sequence;
-        /// <summary>
-        /// Gets or sets the sequence.
-        /// </summary>
-        /// <value>
-        /// The sequence.
-        /// </value>
         public int Sequence
         {
             get { return _sequence; }
@@ -42,12 +29,6 @@ namespace Maple
         }
 
         private TimeSpan _duration;
-        /// <summary>
-        /// Gets the duration.
-        /// </summary>
-        /// <value>
-        /// The duration.
-        /// </value>
         public TimeSpan Duration
         {
             get { return _duration; }
@@ -55,12 +36,6 @@ namespace Maple
         }
 
         private PrivacyStatus _privacyStatus;
-        /// <summary>
-        /// Gets the privacy status.
-        /// </summary>
-        /// <value>
-        /// The privacy status.
-        /// </value>
         public PrivacyStatus PrivacyStatus
         {
             get { return _privacyStatus; }
@@ -68,12 +43,6 @@ namespace Maple
         }
 
         private string _title;
-        /// <summary>
-        /// Gets or sets the title.
-        /// </summary>
-        /// <value>
-        /// The title.
-        /// </value>
         public string Title
         {
             get { return _title; }
@@ -81,12 +50,6 @@ namespace Maple
         }
 
         private string _description;
-        /// <summary>
-        /// Gets or sets the description.
-        /// </summary>
-        /// <value>
-        /// The description.
-        /// </value>
         public string Description
         {
             get { return _description; }
@@ -94,12 +57,6 @@ namespace Maple
         }
 
         private string _location;
-        /// <summary>
-        /// Gets the location.
-        /// </summary>
-        /// <value>
-        /// The location.
-        /// </value>
         public string Location
         {
             get { return _location; }
@@ -107,12 +64,6 @@ namespace Maple
         }
 
         private bool _isSelected;
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is selected.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is selected; otherwise, <c>false</c>.
-        /// </value>
         public bool IsSelected
         {
             get { return _isSelected; }
@@ -166,10 +117,9 @@ namespace Maple
         /// Initializes a new instance of the <see cref="MediaItem"/> class.
         /// </summary>
         /// <param name="model">The model.</param>
-        public MediaItem(Data.MediaItem model, IValidator<MediaItem> validator)
-            : base(model, validator)
+        public MediaItem(Data.MediaItem model, IValidator<MediaItem> validator, IMessenger messenger)
+            : base(model, validator, messenger)
         {
-            _id = model.Id;
             _location = model.Location;
             _description = model.Description;
             _title = model.Title;

@@ -5,7 +5,7 @@ namespace Maple.Core
 {
     public sealed class NotifyTaskCompletion<TResult> : ObservableObject
     {
-        private readonly IMapleLog _log;
+        private readonly ILoggingService _log;
         private readonly Task<TResult> _task;
 
         public AggregateException Exception { get { return _task.Exception; } }
@@ -16,7 +16,7 @@ namespace Maple.Core
         public bool IsCanceled { get { return _task.IsCanceled; } }
         public bool IsFaulted { get { return _task.IsFaulted; } }
 
-        public NotifyTaskCompletion(Task<TResult> task, IMapleLog log)
+        public NotifyTaskCompletion(Task<TResult> task, ILoggingService log)
         {
             _task = task ?? throw new ArgumentNullException(nameof(task));
             _log = log ?? throw new ArgumentNullException(nameof(log));

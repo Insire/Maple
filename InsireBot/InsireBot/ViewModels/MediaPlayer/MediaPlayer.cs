@@ -18,6 +18,7 @@ namespace Maple
     [DebuggerDisplay("{Name}, {Sequence}")]
     public class MediaPlayer : ValidableBaseDataViewModel<MediaPlayer, Data.MediaPlayer>, IDisposable, IChangeState, ISequence
     {
+        private List<SubscriptionToken> _messageTokens;
         protected readonly ILocalizationService _manager;
 
         /// <summary>
@@ -248,10 +249,10 @@ namespace Maple
         /// or
         /// playlist - playlist
         /// </exception>
-        public MediaPlayer(ILocalizationService manager, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, Data.MediaPlayer model)
-            : base(model, validator)
+        public MediaPlayer(ViewModelServiceContainer container, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, Data.MediaPlayer model)
+            : base(model, validator, container)
         {
-            _manager = manager ?? throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} {Resources.IsRequired}");
+            _manager = container.LocalizationService;
             Player = player ?? throw new ArgumentNullException(nameof(player), $"{nameof(player)} {Resources.IsRequired}");
 
             _name = model.Name;
@@ -274,10 +275,13 @@ namespace Maple
 
         private void InitializeSubscriptions()
         {
-            Player.PlayingMediaItem += Player_PlayingMediaItem;
-            Player.CompletedMediaItem += MediaPlayer_CompletedMediaItem;
-            Player.AudioDeviceChanged += Player_AudioDeviceChanged;
-            Player.AudioDeviceChanging += Player_AudioDeviceChanging;
+            _messageTokens = new List<SubscriptionToken>
+            {
+                _messenger.Subscribe<PlayingMediaItemMessage>(Player_PlayingMediaItem, IsSenderEqualsPlayer),
+                _messenger.Subscribe<CompletedMediaItemMessage>(MediaPlayer_CompletedMediaItem, IsSenderEqualsPlayer),
+                _messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanging, IsSenderEqualsPlayer),
+                _messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanged, IsSenderEqualsPlayer),
+            };
         }
 
         private void InitiliazeCommands()
@@ -293,15 +297,20 @@ namespace Maple
             UpdatePlaylistCommands();
         }
 
-        private void Player_AudioDeviceChanging(object sender, EventArgs e)
+        private bool IsSenderEqualsPlayer(object sender)
+        {
+            return ReferenceEquals(sender, Player);
+        }
+
+        private void Player_AudioDeviceChanging(ViewModelSelectionChangingMessage<AudioDevice> e)
         {
             // TODO
         }
 
-        private void Player_AudioDeviceChanged(object sender, AudioDeviceChangedEventArgs e)
+        private void Player_AudioDeviceChanged(ViewModelSelectionChangingMessage<AudioDevice> e)
         {
-            if (!string.IsNullOrEmpty(e?.AudioDevice?.Name))
-                Model.DeviceName = e.AudioDevice.Name;
+            if (!string.IsNullOrEmpty(e?.Content?.Name))
+                Model.DeviceName = e.Content.Name;
         }
 
         private void OnPlaylistChanging()
@@ -327,12 +336,12 @@ namespace Maple
             }
         }
 
-        private void Player_PlayingMediaItem(object sender, PlayingMediaItemEventArgs e)
+        private void Player_PlayingMediaItem(PlayingMediaItemMessage e)
         {
             // TODO: sync state to other viewmodels
         }
 
-        private void MediaPlayer_CompletedMediaItem(object sender, CompletedMediaItemEventEventArgs e)
+        private void MediaPlayer_CompletedMediaItem(CompletedMediaItemMessage e)
         {
             Next();
         }
@@ -532,10 +541,8 @@ namespace Maple
 
             if (disposing)
             {
-                Player.PlayingMediaItem -= Player_PlayingMediaItem;
-                Player.CompletedMediaItem -= MediaPlayer_CompletedMediaItem;
-                Player.AudioDeviceChanged -= Player_AudioDeviceChanged;
-                Player.AudioDeviceChanging -= Player_AudioDeviceChanging;
+                foreach (var token in _messageTokens)
+                    _messenger.Unsubscribe<IMapleMessage>(token);
 
                 Player?.Dispose();
                 Player = null;

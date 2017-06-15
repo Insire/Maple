@@ -90,12 +90,29 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="DispatcherFactory.cs" />
     <Compile Include="Enums\PrivacyStatus.cs" />
-    <Compile Include="EventHandlers\CompletedMediaItemEventEventArgs.cs" />
-    <Compile Include="EventHandlers\LoadedEventEventArgs.cs" />
-    <Compile Include="EventHandlers\PlayingMediaItemEventArgs.cs" />
-    <Compile Include="EventHandlers\ShuffleModeChangedEventEventArgs.cs" />
-    <Compile Include="EventHandlers\UiPrimaryColorEventArgs.cs" />
+    <Compile Include="Enums\RepeatMode.cs" />
+    <Compile Include="EventAggregator\DefaultMessageProxy.cs" />
+    <Compile Include="EventAggregator\Interfaces\IMapleMessage.cs" />
+    <Compile Include="EventAggregator\Interfaces\IMapleMessageProxy.cs" />
+    <Compile Include="EventAggregator\Interfaces\IMapleMessageSubscription.cs" />
+    <Compile Include="EventAggregator\Interfaces\IMessenger.cs" />
+    <Compile Include="EventAggregator\MapleMessenger.cs" />
+    <Compile Include="EventAggregator\Messages\CancellableGenericMapleMessage.cs" />
+    <Compile Include="EventAggregator\Messages\GenericMapleMessage.cs" />
+    <Compile Include="EventAggregator\Messages\MapleMessageBase.cs" />
+    <Compile Include="EventAggregator\MapleMessengerSubscriptionException.cs" />
+    <Compile Include="EventAggregator\Subscriptions\StrongMapleMessageSubscription.cs" />
+    <Compile Include="EventAggregator\Subscriptions\SubscriptionItem.cs" />
+    <Compile Include="EventAggregator\Subscriptions\WeakMapleMessageSubscription.cs" />
+    <Compile Include="EventAggregator\Interfaces\ISubscriberErrorHandler.cs" />
+    <Compile Include="EventAggregator\SubscriptionToken.cs" />
+    <Compile Include="Messages\CompletedMediaItemMessage.cs" />
+    <Compile Include="Messages\LoadedMessage.cs" />
+    <Compile Include="Messages\LogMessageReceivedMessage.cs" />
+    <Compile Include="Messages\PlayingMediaItemMessage.cs" />
+    <Compile Include="Messages\RepeatModeChangedMessage.cs" />
     <Compile Include="Extensions\EventExtension.cs" />
+    <Compile Include="Messages\FileSystemInfoChangedMessage.cs" />
     <Compile Include="Interfaces\ILocalizationService.cs" />
     <Compile Include="Interfaces\ITranslationProvider.cs" />
     <Compile Include="IO\FileSystemBrowser.cs" />
@@ -110,6 +127,10 @@
     <Compile Include="Interfaces\ILoadableViewModel.cs" />
     <Compile Include="IO\IOUtils.cs" />
     <Compile Include="IO\Util\SelectedTreeViewItemBehavior.cs" />
+    <Compile Include="Messages\ShuffleModeChangedMessage.cs" />
+    <Compile Include="Messages\UiPrimaryColorChangedMessage.cs" />
+    <Compile Include="Messages\ViewModelSelectionChangedMessage.cs" />
+    <Compile Include="Messages\ViewModelSelectionChangingMessage.cs" />
     <Compile Include="Observables\Base\BaseDataViewModel.cs" />
     <Compile Include="Extensions\IValidatorExtensions.cs" />
     <Compile Include="Observables\Base\ValidableBaseDataViewModel.cs" />
@@ -120,7 +141,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Services\Interfaces\IMapleLog.cs" />
     <Compile Include="Interfaces\IIsSelected.cs" />
     <Compile Include="Interfaces\IMediaItem.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
@@ -137,11 +157,13 @@
     <Compile Include="IO\Base\MapleFileSystemContainerBase.cs" />
     <Compile Include="Observables\Base\BaseDataListViewModel.cs" />
     <Compile Include="IO\Base\MapleFileSystemBase.cs" />
-    <Compile Include="Services\Interfaces\ISequenceProvider.cs" />
-    <Compile Include="EventHandler.cs" />
+    <Compile Include="Services\Interfaces\ILoggingNotifcationService.cs" />
+    <Compile Include="Services\Interfaces\ILoggingService.cs" />
+    <Compile Include="Services\Interfaces\ISequenceService.cs" />
     <Compile Include="Services\Localization\LocalizationDTO.cs" />
     <Compile Include="Services\Localization\LocalizationService.cs" />
     <Compile Include="Services\Localization\Providers\ResxTranslationProvider.cs" />
+    <Compile Include="Services\LogNotifcationService.cs" />
     <Compile Include="Services\SequenceService.cs" />
     <Compile Include="Observables\BusyStack.cs" />
     <Compile Include="Observables\BusyToken.cs" />
@@ -153,8 +175,7 @@
     <Compile Include="Services\MrlExtractionService.cs" />
     <Compile Include="Observables\NotifyPropertyChangedExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\WinFormsService.cs" />
-    <Compile Include="Services\WinmmService.cs" />
+    <Compile Include="Services\ViewModelServiceContainer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

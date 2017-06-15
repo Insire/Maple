@@ -9,8 +9,6 @@ namespace Maple
         ICommand ApplyPrimaryCommand { get; }
         ICommand ToggleBaseCommand { get; }
 
-        event UiPrimaryColorEventHandler PrimaryColorChanged;
-
-        void OnPrimaryColorChanged(UiPrimaryColorEventArgs args);
+        void OnPrimaryColorChanged(UiPrimaryColorChangedMessage args);
     }
 }

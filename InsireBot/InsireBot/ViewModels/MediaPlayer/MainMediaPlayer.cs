@@ -8,8 +8,8 @@ namespace Maple
     {
         private const string _nameKey = nameof(Resources.MainMediaplayer);
 
-        public MainMediaPlayer(ILocalizationService manager, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, Data.MediaPlayer model)
-            : base(manager, player, validator, devices, playlist, model)
+        public MainMediaPlayer(ViewModelServiceContainer container, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, Data.MediaPlayer model)
+            : base(container, player, validator, devices, playlist, model)
         {
             IsPrimary = model.IsPrimary;
 

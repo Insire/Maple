@@ -7,7 +7,7 @@ namespace Maple
 {
     public class SplashScreenViewModel : ObservableObject, ISplashScreenViewModel
     {
-        private readonly IMapleLog _log;
+        private readonly IMessenger _messenger;
         private readonly Queue<string> _queue;
         private readonly System.Timers.Timer _timer;
 
@@ -37,13 +37,13 @@ namespace Maple
             _timer.Elapsed += _timer_Elapsed;
         }
 
-        private SplashScreenViewModel(IMapleLog log) : this()
+        private SplashScreenViewModel(IMessenger messenger) : this()
         {
-            _log = log ?? throw new ArgumentNullException(nameof(log));
-            _log.LogMessageReceived += LogMessageReceived;
+            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+            _messenger.Subscribe<LogMessageReceivedMessage>(LogMessageReceived);
         }
 
-        public SplashScreenViewModel(IMapleLog log, IVersionService version) : this(log)
+        public SplashScreenViewModel(IMessenger messenger, IVersionService version) : this(messenger)
         {
             Version = version.Get();
             InitializeCommands();
@@ -74,9 +74,9 @@ namespace Maple
             return !IsDisposed;
         }
 
-        private void LogMessageReceived(object sender, LogMessageReceivedEventEventArgs e)
+        private void LogMessageReceived(LogMessageReceivedMessage e)
         {
-            _queue.Enqueue(e.Message);
+            _queue.Enqueue(e.Content);
         }
 
         public void Dispose()

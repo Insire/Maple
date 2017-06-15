@@ -18,7 +18,5 @@ namespace Maple.Core
 
         ICommand LoadCommand { get; }
         ICommand RefreshCommand { get; }
-
-        event LoadedEventHandler Loaded;
     }
 }

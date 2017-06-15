@@ -4,9 +4,11 @@ using System.Runtime.CompilerServices;
 namespace Maple.Core
 {
     public abstract class BaseDataViewModel<TViewModel, TModel> : ObservableObject
+        where TModel : class
     {
         protected BusyStack BusyStack { get; }
         protected ChangeTracker ChangeTracker { get; }
+        protected IMessenger Messenger { get; }
 
         private TModel _model;
         public TModel Model
@@ -38,17 +40,18 @@ namespace Maple.Core
         }
 
 
-        protected BaseDataViewModel()
+        protected BaseDataViewModel(IMessenger messenger)
         {
+            Messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
             BusyStack = new BusyStack();
             BusyStack.OnChanged += (isBusy) => IsBusy = isBusy;
             ChangeTracker = new ChangeTracker();
         }
 
-        protected BaseDataViewModel(TModel model)
-            : this()
+        protected BaseDataViewModel(TModel model, IMessenger messenger)
+            : this(messenger)
         {
-            Model = model;
+            Model = model ?? throw new ArgumentNullException(nameof(model));
         }
     }
 }

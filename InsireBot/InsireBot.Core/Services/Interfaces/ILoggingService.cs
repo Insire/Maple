@@ -2,13 +2,8 @@
 
 namespace Maple.Core
 {
-    public interface IMapleLog
+    public interface ILoggingService
     {
-        event LogMessageReceivedEventHandler LogMessageReceived;
-
-        void Debug(object message);
-        void Debug(object message, Exception exception);
-
         //
         // Summary:
         //     Logs a message object with the log4net.Core.Level.Error level.

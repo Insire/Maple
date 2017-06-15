@@ -14,8 +14,8 @@ namespace Maple
 
         public ICommand PlayCommand { get; private set; }
 
-        public Playlists(ILocalizationService translationService, IMapleLog log, IPlaylistMapper playlistMapper, Func<IMediaRepository> repo, ISequenceProvider sequenceProvider)
-            : base(log, translationService, sequenceProvider)
+        public Playlists(ViewModelServiceContainer container, IPlaylistMapper playlistMapper, Func<IMediaRepository> repo)
+            : base(container)
         {
             _repositoryFactory = repo ?? throw new ArgumentNullException(nameof(repo));
             _playlistMapper = playlistMapper ?? throw new ArgumentNullException(nameof(playlistMapper));

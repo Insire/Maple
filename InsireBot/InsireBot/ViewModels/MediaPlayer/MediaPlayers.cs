@@ -13,6 +13,7 @@ namespace Maple
         private readonly DialogViewModel _dialog;
         private readonly Func<IMediaRepository> _repositoryFactory;
         private readonly IMediaPlayerMapper _mediaPlayerMapper;
+        private readonly ILoggingNotifcationService _notificationService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaPlayers"/> class.
@@ -22,14 +23,16 @@ namespace Maple
         /// <param name="repo">The repo.</param>
         /// <param name="devices">The devices.</param>
         /// <param name="dialog">The dialog.</param>
-        public MediaPlayers(IMapleLog log, ILocalizationService translationService, IMediaPlayerMapper mediaPlayerMapper, Func<IMediaPlayer> playerFactory, Func<IMediaRepository> repo, AudioDevices devices, DialogViewModel dialog, ISequenceProvider sequenceProvider)
-            : base(log, translationService, sequenceProvider)
+        public MediaPlayers(ViewModelServiceContainer container, IMediaPlayerMapper mediaPlayerMapper, Func<IMediaPlayer> playerFactory, Func<IMediaRepository> repo, AudioDevices devices, DialogViewModel dialog)
+            : base(container)
         {
             _playerFactory = playerFactory ?? throw new ArgumentNullException(nameof(playerFactory));
             _devices = devices ?? throw new ArgumentNullException(nameof(devices));
             _dialog = dialog ?? throw new ArgumentNullException(nameof(dialog));
             _repositoryFactory = repo ?? throw new ArgumentNullException(nameof(repo));
             _mediaPlayerMapper = mediaPlayerMapper ?? throw new ArgumentNullException(nameof(mediaPlayerMapper));
+
+            _notificationService = container.NotificationService;
         }
 
         private void SaveInternal()
@@ -76,7 +79,7 @@ namespace Maple
 
         public override async Task LoadAsync()
         {
-            _log.Info($"{_translationService.Translate(nameof(Resources.Loading))} {_translationService.Translate(nameof(Resources.MediaPlayers))}");
+            _notificationService.Info($"{_translationService.Translate(nameof(Resources.Loading))} {_translationService.Translate(nameof(Resources.MediaPlayers))}");
             Items.Clear();
 
             using (var context = _repositoryFactory())
@@ -85,6 +88,7 @@ namespace Maple
 
                 Items.Add(main);
                 SelectedItem = main;
+
                 var others = await context.GetAllOptionalMediaPlayersAsync();
                 Items.AddRange(others);
             }

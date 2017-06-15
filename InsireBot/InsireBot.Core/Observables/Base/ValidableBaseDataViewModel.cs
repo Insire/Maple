@@ -24,15 +24,15 @@ namespace Maple.Core
 
         public bool HasErrors => Errors.Any(p => !p.Value.IsValid);
 
-        protected ValidableBaseDataViewModel()
-            : base()
+        private ValidableBaseDataViewModel(IMessenger messenger)
+            : base(messenger)
         {
             _skipValidation = true;
             Errors = new Dictionary<string, ValidationResult>();
         }
 
-        protected ValidableBaseDataViewModel(TModel model, IValidator<TViewModel> validator)
-            : this()
+        protected ValidableBaseDataViewModel(TModel model, IValidator<TViewModel> validator, IMessenger messenger)
+            : this(messenger)
         {
             Validator = validator ?? throw new ArgumentNullException(nameof(validator)); //order is important in this case
             Model = model ?? throw new ArgumentNullException(nameof(model));

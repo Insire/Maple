@@ -52,7 +52,8 @@ namespace Maple
         /// </summary>
         /// <param name="dataParsingService">The data parsing service.</param>
         /// <param name="mapper">The mapper.</param>
-        public CreatePlaylist(IYoutubeUrlParseService dataParsingService, IPlaylistMapper mapper) : base()
+        public CreatePlaylist(IYoutubeUrlParseService dataParsingService, IPlaylistMapper mapper, IMessenger messenger)
+            : base(messenger)
         {
             _dataParsingService = dataParsingService;
             _mapper = mapper;

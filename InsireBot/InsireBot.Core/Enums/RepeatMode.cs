@@ -1,4 +1,4 @@
-﻿namespace Maple
+﻿namespace Maple.Core
 {
     /// <summary>
     /// defines what happens when the last <see cref="IMediaItem" /> of <see cref="Items" /> is <see cref="SetActive" /> and the <see cref="Next" /> is requested

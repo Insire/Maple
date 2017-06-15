@@ -8,8 +8,8 @@ namespace Maple.Youtube
 {
     public class UrlParseService : IYoutubeUrlParseService
     {
-        private IMapleLog _log;
-        public UrlParseService(IMapleLog log)
+        private ILoggingService _log;
+        public UrlParseService(ILoggingService log)
         {
             _log = log;
         }

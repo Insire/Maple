@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"><?define Maple_TargetDir=$(var.Maple.TargetDir)?>
+  <Product Id="*" Name="Maple" Language="1033" Version="0.0.0.1" Manufacturer="Peter Vietense" UpgradeCode="c39f36d1-0f6f-400a-a7b1-8d0f36aefb82">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of Maple is already installed." AllowDowngrades="no" />
+    <MediaTemplate />
+
+    <Feature Id="ProductFeature" Title="Maple" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentGroupRef Id="ProgramFilesFolder_files" />
+    </Feature>
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="Maple">
+          <Directory Id="en" Name="en" />
+          <Directory Id="Resources" Name="Resources" />
+          <Directory Id="x64_dir" Name="x64" />
+          <Directory Id="x86_dir" Name="x86" />
+        </Directory>
+      </Directory>
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+      <!-- <Component Id="ProductComponent"> -->
+        <!-- TODO: Insert files, registry keys, and other resources here. -->
+      <!-- </Component> -->
+      <Component Id="Maple.exe" Guid="e107e260-3fdd-431b-8b30-ac4930a8170e">
+        <File Id="Maple.exe" Name="Maple.exe" Source="$(var.Maple_TargetDir)Maple.exe" >
+          <Shortcut Id="startmenuFoobar10" Directory="ProgramMenuDir" Name="Maple 0.0.0.1" WorkingDirectory='INSTALLDIR' Icon="Foobar10.exe" IconIndex="0" Advertise="yes" />
+        </File>
+      </Component>
+      <Component Id="Maple.exe.config" Guid="fb004fb6-1bbf-49b2-957c-a5e0cdc0f1ea">
+        <File Id="Maple.exe.config" Name="Maple.exe.config" Source="$(var.Maple_TargetDir)Maple.exe.config" />
+      </Component>
+      <Component Id="Maple.Core.dll" Guid="8eb3b147-975f-4dea-a704-56cb82046ad3">
+        <File Id="Maple.Core.dll" Name="Maple.Core.dll" Source="$(var.Maple_TargetDir)Maple.Core.dll" />
+      </Component>
+      <Component Id="Maple.Data.dll" Guid="a776b8da-dd06-4617-83b9-a8dfb4c6b74c">
+        <File Id="Maple.Data.dll" Name="Maple.Data.dll" Source="$(var.Maple_TargetDir)Maple.Data.dll" />
+      </Component>
+      <Component Id="Maple.Localization.dll" Guid="1a26c89f-dfa4-4960-84fd-93d31421d526">
+        <File Id="Maple.Localization.dll" Name="Maple.Localization.dll" Source="$(var.Maple_TargetDir)Maple.Localization.dll" />
+      </Component>
+      <Component Id="Maple.Youtube.dll" Guid="28e6ce81-6147-4227-b935-7bab22144b96">
+        <File Id="Maple.Youtube.dll" Name="Maple.Youtube.dll" Source="$(var.Maple_TargetDir)Maple.Youtube.dll" />
+      </Component>
+      <Component Id="AutoMapper.dll" Guid="321d6305-e255-461f-b441-891c93478092">
+        <File Id="AutoMapper.dll" Name="AutoMapper.dll" Source="$(var.Maple_TargetDir)AutoMapper.dll" />
+      </Component>
+      <Component Id="DryIoc.dll" Guid="3c9441ec-7862-4ab3-bff3-03e3499ece1a">
+        <File Id="DryIoc.dll" Name="DryIoc.dll" Source="$(var.Maple_TargetDir)DryIoc.dll" />
+      </Component>
+      <Component Id="EntityFramework.dll" Guid="b9c1204a-87cc-4b1a-aa63-c4d54ace8dfc">
+        <File Id="EntityFramework.dll" Name="EntityFramework.dll" Source="$(var.Maple_TargetDir)EntityFramework.dll" />
+      </Component>
+      <Component Id="EntityFramework.SqlServer.dll" Guid="eabf673f-c4cf-4c23-a8b5-7b4ef724e72b">
+        <File Id="EntityFramework.SqlServer.dll" Name="EntityFramework.SqlServer.dll" Source="$(var.Maple_TargetDir)EntityFramework.SqlServer.dll" />
+      </Component>
+      <Component Id="FluentValidation.dll" Guid="570ce634-d91f-49ca-9424-af18d6f6dbef">
+        <File Id="FluentValidation.dll" Name="FluentValidation.dll" Source="$(var.Maple_TargetDir)FluentValidation.dll" />
+      </Component>
+      <Component Id="GongSolutions.Wpf.DragDrop.dll" Guid="4c1b391f-f8d7-4f49-8a6d-f1ed6b1dd6d2">
+        <File Id="GongSolutions.Wpf.DragDrop.dll" Name="GongSolutions.Wpf.DragDrop.dll" Source="$(var.Maple_TargetDir)GongSolutions.Wpf.DragDrop.dll" />
+      </Component>
+      <Component Id="MahApps.Metro.dll" Guid="12f39a99-3111-43f6-9165-15ea31bc22db">
+        <File Id="MahApps.Metro.dll" Name="MahApps.Metro.dll" Source="$(var.Maple_TargetDir)MahApps.Metro.dll" />
+      </Component>
+      <Component Id="MahApps.Metro.IconPacks.dll" Guid="064f344b-c4bb-45a8-afef-b6b8b9a29542">
+        <File Id="MahApps.Metro.IconPacks.dll" Name="MahApps.Metro.IconPacks.dll" Source="$(var.Maple_TargetDir)MahApps.Metro.IconPacks.dll" />
+      </Component>
+      <Component Id="MaterialDesignColors.dll" Guid="5a01f10a-1f56-43a7-8fb7-b105f48eaed9">
+        <File Id="MaterialDesignColors.dll" Name="MaterialDesignColors.dll" Source="$(var.Maple_TargetDir)MaterialDesignColors.dll" />
+      </Component>
+      <Component Id="MaterialDesignThemes.MahApps.dll" Guid="7ed5eee5-3f0c-49b2-a2a5-8c4546e5ecaf">
+        <File Id="MaterialDesignThemes.MahApps.dll" Name="MaterialDesignThemes.MahApps.dll" Source="$(var.Maple_TargetDir)MaterialDesignThemes.MahApps.dll" />
+      </Component>
+      <Component Id="MaterialDesignThemes.Wpf.dll" Guid="64a07c0c-7c5f-4589-b66b-a23f9a7cae35">
+        <File Id="MaterialDesignThemes.Wpf.dll" Name="MaterialDesignThemes.Wpf.dll" Source="$(var.Maple_TargetDir)MaterialDesignThemes.Wpf.dll" />
+      </Component>
+      <Component Id="NAudio.dll" Guid="63af3176-602d-4f06-a273-a604f6f61d0f">
+        <File Id="NAudio.dll" Name="NAudio.dll" Source="$(var.Maple_TargetDir)NAudio.dll" />
+      </Component>
+      <Component Id="System.AppContext.dll" Guid="8266878e-2523-4c64-a22b-4b9d345933fc">
+        <File Id="System.AppContext.dll" Name="System.AppContext.dll" Source="$(var.Maple_TargetDir)System.AppContext.dll" />
+      </Component>
+      <Component Id="System.Data.SQLite.dll" Guid="80e58cd7-ed5e-4eef-8184-867e413f87b9">
+        <File Id="System.Data.SQLite.dll" Name="System.Data.SQLite.dll" Source="$(var.Maple_TargetDir)System.Data.SQLite.dll" />
+      </Component>
+      <Component Id="System.Data.SQLite.EF6.dll" Guid="ce3dad40-42ef-4469-9063-09522312ea28">
+        <File Id="System.Data.SQLite.EF6.dll" Name="System.Data.SQLite.EF6.dll" Source="$(var.Maple_TargetDir)System.Data.SQLite.EF6.dll" />
+      </Component>
+      <Component Id="System.Data.SQLite.Linq.dll" Guid="6f27e2eb-f234-44e0-a50d-4eaa9ab6d1ff">
+        <File Id="System.Data.SQLite.Linq.dll" Name="System.Data.SQLite.Linq.dll" Source="$(var.Maple_TargetDir)System.Data.SQLite.Linq.dll" />
+      </Component>
+      <Component Id="System.Reflection.dll" Guid="852df313-cf15-411b-a658-c2189e5f52fa">
+        <File Id="System.Reflection.dll" Name="System.Reflection.dll" Source="$(var.Maple_TargetDir)System.Reflection.dll" />
+      </Component>
+      <Component Id="System.Runtime.dll" Guid="db25fc78-2dc9-4191-b134-d95cd14ab8eb">
+        <File Id="System.Runtime.dll" Name="System.Runtime.dll" Source="$(var.Maple_TargetDir)System.Runtime.dll" />
+      </Component>
+      <Component Id="System.Runtime.Extensions.dll" Guid="c43e0183-e319-403d-abc6-d9e5a5816b1f">
+        <File Id="System.Runtime.Extensions.dll" Name="System.Runtime.Extensions.dll" Source="$(var.Maple_TargetDir)System.Runtime.Extensions.dll" />
+      </Component>
+      <Component Id="System.ValueTuple.dll" Guid="07e3fcf5-244d-484d-9f60-aefb430a133b">
+        <File Id="System.ValueTuple.dll" Name="System.ValueTuple.dll" Source="$(var.Maple_TargetDir)System.ValueTuple.dll" />
+      </Component>
+      <Component Id="System.Windows.Interactivity.dll" Guid="57db8ea5-081b-4d67-bb53-ee6512e3c6c5">
+        <File Id="System.Windows.Interactivity.dll" Name="System.Windows.Interactivity.dll" Source="$(var.Maple_TargetDir)System.Windows.Interactivity.dll" />
+      </Component>
+      <Component Id="log4net.dll" Guid="555b9e89-3dd2-4750-9d27-3df43e64f304">
+        <File Id="log4net.dll" Name="log4net.dll" Source="$(var.Maple_TargetDir)log4net.dll" />
+      </Component>
+      <Component Id="YoutubeExtractor.dll" Guid="1b967f9d-7a0a-430f-873b-b90731b8226e">
+        <File Id="YoutubeExtractor.dll" Name="YoutubeExtractor.dll" Source="$(var.Maple_TargetDir)YoutubeExtractor.dll" />
+      </Component>
+      <Component Id="SQLite.CodeFirst.dll" Guid="9c5ed2fb-99d3-4846-8074-d4619af3596d">
+        <File Id="SQLite.CodeFirst.dll" Name="SQLite.CodeFirst.dll" Source="$(var.Maple_TargetDir)SQLite.CodeFirst.dll" />
+      </Component>
+      <Component Id="Google.Apis.YouTube.v3.dll" Guid="2ecfbcbb-615b-4868-a7e1-650a0549dfdc">
+        <File Id="Google.Apis.YouTube.v3.dll" Name="Google.Apis.YouTube.v3.dll" Source="$(var.Maple_TargetDir)Google.Apis.YouTube.v3.dll" />
+      </Component>
+      <Component Id="Google.Apis.Auth.dll" Guid="288adb2d-636c-4cc4-acc4-648f9cf220fd">
+        <File Id="Google.Apis.Auth.dll" Name="Google.Apis.Auth.dll" Source="$(var.Maple_TargetDir)Google.Apis.Auth.dll" />
+      </Component>
+      <Component Id="Google.Apis.dll" Guid="9df32b28-84f1-486a-962e-6970aec54e31">
+        <File Id="Google.Apis.dll" Name="Google.Apis.dll" Source="$(var.Maple_TargetDir)Google.Apis.dll" />
+      </Component>
+      <Component Id="Google.Apis.Core.dll" Guid="6ede1628-aa08-4d65-a77e-fbb81f79b581">
+        <File Id="Google.Apis.Core.dll" Name="Google.Apis.Core.dll" Source="$(var.Maple_TargetDir)Google.Apis.Core.dll" />
+      </Component>
+      <Component Id="Newtonsoft.Json.dll" Guid="866c69b0-47fd-48aa-b1f4-ffa0fc6db03f">
+        <File Id="Newtonsoft.Json.dll" Name="Newtonsoft.Json.dll" Source="$(var.Maple_TargetDir)Newtonsoft.Json.dll" />
+      </Component>
+      <Component Id="System.Net.Http.dll" Guid="72e35b0d-90af-40bb-9adc-9f84e9790944">
+        <File Id="System.Net.Http.dll" Name="System.Net.Http.dll" Source="$(var.Maple_TargetDir)System.Net.Http.dll" />
+      </Component>
+      <Component Id="System.Security.Cryptography.Algorithms.dll" Guid="af9c442d-ab07-4139-b82a-d8544734d4ae">
+        <File Id="System.Security.Cryptography.Algorithms.dll" Name="System.Security.Cryptography.Algorithms.dll" Source="$(var.Maple_TargetDir)System.Security.Cryptography.Algorithms.dll" />
+      </Component>
+      <Component Id="System.Security.Cryptography.Encoding.dll" Guid="e7d882dc-22c2-4701-af00-c2c76c03b97a">
+        <File Id="System.Security.Cryptography.Encoding.dll" Name="System.Security.Cryptography.Encoding.dll" Source="$(var.Maple_TargetDir)System.Security.Cryptography.Encoding.dll" />
+      </Component>
+      <Component Id="System.Security.Cryptography.Primitives.dll" Guid="ebc8d4d5-5013-4cd8-8dae-ae71f5c3a7ad">
+        <File Id="System.Security.Cryptography.Primitives.dll" Name="System.Security.Cryptography.Primitives.dll" Source="$(var.Maple_TargetDir)System.Security.Cryptography.Primitives.dll" />
+      </Component>
+      <Component Id="System.Security.Cryptography.X509Certificates.dll" Guid="ea473fe4-b4ef-4757-b3a5-5e2a461024bd">
+        <File Id="System.Security.Cryptography.X509Certificates.dll" Name="System.Security.Cryptography.X509Certificates.dll" Source="$(var.Maple_TargetDir)System.Security.Cryptography.X509Certificates.dll" />
+      </Component>
+      <Component Id="Zlib.Portable.dll" Guid="7ea3c927-188c-436d-9958-81fe95b65daa">
+        <File Id="Zlib.Portable.dll" Name="Zlib.Portable.dll" Source="$(var.Maple_TargetDir)Zlib.Portable.dll" />
+      </Component>
+      <Component Id="Google.Apis.Auth.PlatformServices.dll" Guid="9ce461fb-8afe-40df-8821-5cfcdbb7d973">
+        <File Id="Google.Apis.Auth.PlatformServices.dll" Name="Google.Apis.Auth.PlatformServices.dll" Source="$(var.Maple_TargetDir)Google.Apis.Auth.PlatformServices.dll" />
+      </Component>
+      <Component Id="Google.Apis.PlatformServices.dll" Guid="4dae421d-7c01-4471-9fe7-377a79f22278">
+        <File Id="Google.Apis.PlatformServices.dll" Name="Google.Apis.PlatformServices.dll" Source="$(var.Maple_TargetDir)Google.Apis.PlatformServices.dll" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ProgramFilesFolder_files" Directory="ProgramFilesFolder">
+      <Component Id="en_Maple.Localization.resources.dll" Guid="70ee8fe3-67ed-49a8-aab4-e8b21668f415">
+        <File Id="en_Maple.Localization.resources.dll" Name="Maple.Localization.resources.dll" Source="$(var.Maple_TargetDir)en\Maple.Localization.resources.dll" />
+      </Component>
+      <Component Id="sqlite" Guid="70ee8fe3-67ed-49a8-aab4-e8b21668f416">
+        <File Id="x86_SQLite.Interop.dll" Name="x86_SQLite.Interop.dll" Source="$(var.Maple_TargetDir)x86\SQLite.Interop.dll" />
+        <File Id="x64_SQLite.Interop.dll" Name="x64_SQLite.Interop.dll" Source="$(var.Maple_TargetDir)x64\SQLite.Interop.dll" />
+      </Component>
+      <Component Id="client_Secret" Guid="70ee8fe3-67ed-49a8-aab4-e8b21668f417">
+        <File Id="client_Secret.json" Name="client_secret.json" Source="$(var.Maple_TargetDir)Resources\client_secret.json" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

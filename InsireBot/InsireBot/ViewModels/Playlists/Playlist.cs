@@ -17,7 +17,7 @@ namespace Maple
     [DebuggerDisplay("{Title}, {Sequence}")]
     public class Playlist : ValidableBaseDataViewModel<Playlist, Data.Playlist>, IIsSelected, ISequence, IIdentifier, IChangeState
     {
-        private readonly ISequenceProvider _sequenceProvider;
+        private readonly ISequenceService _sequenceProvider;
         private readonly ILocalizationService _translator;
         private readonly object _itemsLock;
         private readonly DialogViewModel _dialogViewModel;
@@ -100,7 +100,12 @@ namespace Maple
         public MediaItem SelectedItem
         {
             get { return _selectedItem; }
-            set { SetValue(ref _selectedItem, value, OnChanging: OnSelectionChanging, OnChanged: OnSelectionChanged); }
+            set
+            {
+                SetValue(ref _selectedItem, value,
+                    OnChanging: () => Messenger.Publish(new ViewModelSelectionChangingMessage<MediaItem>(Items, _selectedItem)),
+                    OnChanged: () => Messenger.Publish(new ViewModelSelectionChangedMessage<MediaItem>(Items, value)));
+            }
         }
 
         private int _sequence;
@@ -109,8 +114,6 @@ namespace Maple
             get { return _sequence; }
             set { SetValue(ref _sequence, value, OnChanged: () => Model.Sequence = value); }
         }
-
-
 
         private PrivacyStatus _privacyStatus;
         /// <summary>
@@ -179,16 +182,16 @@ namespace Maple
             private set { SetValue(ref _repeatModes, value); }
         }
 
-        public Playlist(ILocalizationService translator, ISequenceProvider sequenceProvider, IValidator<Playlist> validator, DialogViewModel dialogViewModel, Data.Playlist model)
-            : base(model, validator)
+        public Playlist(ViewModelServiceContainer container, IValidator<Playlist> validator, DialogViewModel dialogViewModel, Data.Playlist model)
+            : base(model, validator, container.Messenger)
         {
             using (BusyStack.GetToken())
             {
                 _itemsLock = new object();
-                _sequenceProvider = sequenceProvider ?? throw new ArgumentNullException(nameof(sequenceProvider));
                 _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
-                _translator = translator ?? throw new ArgumentNullException(nameof(translator));
+                _sequenceProvider = container.SequenceService;
 
+                _translator = container.LocalizationService;
                 _title = model.Title;
                 _description = model.Description;
                 _repeatMode = (RepeatMode)model.RepeatMode;

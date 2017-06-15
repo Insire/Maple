@@ -45,7 +45,7 @@ namespace Maple
                 // save-/loadable ViewModels
                 c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IPlaylistsViewModel) }, typeof(Playlists), Reuse.Singleton);
                 c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IMediaPlayersViewModel) }, typeof(MediaPlayers), Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
-                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(ICultureViewModel) }, typeof(CultureViewModel), Reuse.Singleton);
+                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(ICultureViewModel) }, typeof(Cultures), Reuse.Singleton);
                 c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IUIColorsViewModel) }, typeof(UIColorsViewModel), Reuse.Singleton);
 
                 //generic ViewModels
@@ -56,6 +56,10 @@ namespace Maple
                 c.Register<StatusbarViewModel>(Reuse.Singleton);
                 c.Register<FileSystemViewModel>(Reuse.Singleton);
                 c.Register<OptionsViewModel>(Reuse.Singleton);
+
+                c.Register<CreateMediaItem>();
+                c.Register<CreatePlaylist>();
+
                 c.Register<ISplashScreenViewModel, SplashScreenViewModel>(Reuse.Singleton);
             };
 
@@ -64,6 +68,7 @@ namespace Maple
                 c.Register<IMediaPlayer, NAudioMediaPlayer>(setup: Setup.With(allowDisposableTransient: true));
                 c.Register<IMediaRepository, MediaRepository>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
 
+                c.Register<ViewModelServiceContainer>(Reuse.Singleton);
                 c.Register<PlaylistContext>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
 
                 c.Register<IPlaylistRepository, PlaylistRepository>(Reuse.Singleton);
@@ -73,13 +78,16 @@ namespace Maple
                 c.Register<IPlaylistMapper, PlaylistMapper>();
                 c.Register<IMediaPlayerMapper, MediaPlayerMapper>();
                 c.Register<IMediaItemMapper, MediaItemMapper>();
-                c.Register<ISequenceProvider, SequenceService>();
+                c.Register<ISequenceService, SequenceService>();
                 c.Register<IYoutubeUrlParseService, UrlParseService>();
 
-                c.Register<IMapleLog, LoggingService>(Reuse.Singleton);
                 c.Register<IVersionService, VersionService>(Reuse.Singleton);
                 c.Register<ILocalizationService, LocalizationService>(Reuse.Singleton);
                 c.Register<ITranslationProvider, ResxTranslationProvider>(Reuse.Singleton);
+                c.Register<IMessenger, MapleMessenger>(Reuse.Singleton);
+                c.Register<IMapleMessageProxy, DefaultMessageProxy>(Reuse.Singleton);
+                c.Register<ILoggingNotifcationService, LoggingNotifcationService>(Reuse.Singleton);
+                c.Register<ILoggingService, LoggingService>(Reuse.Singleton);
             }
 
             void RegisterValidation()
