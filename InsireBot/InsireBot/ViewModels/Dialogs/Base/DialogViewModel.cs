@@ -16,11 +16,13 @@ namespace Maple
     /// <seealso cref="Maple.Core.ObservableObject" />
     public class DialogViewModel : ObservableObject
     {
+        private readonly IMessenger _messenger;
         private readonly ILocalizationService _translator;
         private readonly IYoutubeUrlParseService _service;
         private readonly IMediaItemMapper _mediaItemMapper;
         private readonly FileSystemViewModel _fileSystemViewModel;
 
+        private readonly Func<CreateMediaItem> _createMediaItemFactory;
         /// <summary>
         /// The dialog closed
         /// </summary>
@@ -169,12 +171,15 @@ namespace Maple
         /// </summary>
         /// <param name="service">The service.</param>
         /// <param name="mediaItemMapper">The media item mapper.</param>
-        public DialogViewModel(ILocalizationService translator, IYoutubeUrlParseService service, IMediaItemMapper mediaItemMapper, FileSystemViewModel fileSystemViewModel)
+        public DialogViewModel(ILocalizationService translator, IYoutubeUrlParseService service, IMediaItemMapper mediaItemMapper, IMessenger messenger, FileSystemViewModel fileSystemViewModel,Func<CreateMediaItem> createMediaItemFactory)
         {
             _translator = translator ?? throw new ArgumentNullException(nameof(translator));
             _service = service ?? throw new ArgumentNullException(nameof(service));
             _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper));
             _fileSystemViewModel = fileSystemViewModel ?? throw new ArgumentNullException(nameof(fileSystemViewModel));
+            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+            _createMediaItemFactory = createMediaItemFactory ?? throw new ArgumentNullException(nameof(messenger));
+
 
             CloseDialogCommand = new RelayCommand(Close, () => CanClose());
             CancelDialogCommand = new RelayCommand(Cancel, () => CanCancel());
@@ -249,23 +254,22 @@ namespace Maple
             Title = options.Title;
             IsCancelVisible = options.CanCancel;
 
-            _fileSystemViewModel.FileSystemInfoChanged += FileSystemInfoChanged;
-
-            AcceptAction = () =>
+            using (_messenger.Subscribe<FileSystemInfoChangedMessage>(FileSystemInfoChanged))
             {
-                var items = viewModel.FileSystemViewModel.SelectedItems;
-                tuple = (DialogResult.OK, items.Select(p => p as IFileSystemFile).Where(p => p != null).ToList());
-            };
+                AcceptAction = () =>
+                {
+                    var items = viewModel.FileSystemViewModel.SelectedItems;
+                    tuple = (DialogResult.OK, items.Select(p => p as IFileSystemFile).Where(p => p != null).ToList());
+                };
 
-            CancelAction = () =>
-            {
-                var items = viewModel.FileSystemViewModel.SelectedItems;
-                tuple = (DialogResult.Cancel, new List<IFileSystemFile>());
-            };
+                CancelAction = () =>
+                {
+                    var items = viewModel.FileSystemViewModel.SelectedItems;
+                    tuple = (DialogResult.Cancel, new List<IFileSystemFile>());
+                };
 
-            await Open();
-
-            _fileSystemViewModel.FileSystemInfoChanged -= FileSystemInfoChanged;
+                await Open();
+            }
 
             return tuple;
         }
@@ -288,24 +292,24 @@ namespace Maple
             Title = options.Title;
             IsCancelVisible = options.CanCancel;
 
-            _fileSystemViewModel.FileSystemInfoChanged += FileSystemInfoChanged;
 
-            AcceptAction = () =>
+            using (_messenger.Subscribe<FileSystemInfoChangedMessage>(FileSystemInfoChanged))
             {
-                var items = viewModel.FileSystemViewModel.SelectedItems;
-                items.Add(viewModel.FileSystemViewModel.SelectedItem);
-                tuple = (DialogResult.OK, items.Distinct().FirstOrDefault() as IFileSystemDirectory);
-            };
+                AcceptAction = () =>
+                {
+                    var items = viewModel.FileSystemViewModel.SelectedItems;
+                    items.Add(viewModel.FileSystemViewModel.SelectedItem);
+                    tuple = (DialogResult.OK, items.Distinct().FirstOrDefault() as IFileSystemDirectory);
+                };
 
-            CancelAction = () =>
-            {
-                var items = viewModel.FileSystemViewModel.SelectedItems;
-                tuple = (DialogResult.Cancel, default(IFileSystemDirectory));
-            };
+                CancelAction = () =>
+                {
+                    var items = viewModel.FileSystemViewModel.SelectedItems;
+                    tuple = (DialogResult.Cancel, default(IFileSystemDirectory));
+                };
 
-            await Open();
-
-            _fileSystemViewModel.FileSystemInfoChanged -= FileSystemInfoChanged;
+                await Open();
+            }
 
             return tuple;
         }
@@ -330,17 +334,17 @@ namespace Maple
         public async Task<List<Data.MediaItem>> ShowUrlParseDialog()
         {
             var result = new List<Data.MediaItem>();
-            var viewmodel = new CreateMediaItem(_service, _mediaItemMapper);
+            var createMediaItem = _createMediaItemFactory();
 
             TitleDetail = string.Empty;
-            Context = viewmodel;
+            Context = createMediaItem;
             Title = _translator.Translate(nameof(Resources.VideoAdd));
 
             AcceptAction = () =>
             {
-                if (viewmodel.Result?.MediaItems?.Any() == true)
+                if (createMediaItem.Result?.MediaItems?.Any() == true)
                 {
-                    var items = _mediaItemMapper.GetManyData(viewmodel.Result.MediaItems);
+                    var items = _mediaItemMapper.GetManyData(createMediaItem.Result.MediaItems);
                     result.AddRange(items);
                 }
             };
@@ -429,9 +433,9 @@ namespace Maple
             return IsOpen;
         }
 
-        private void FileSystemInfoChanged(object sender, FileSystemInfoChangedEventArgs e)
+        private void FileSystemInfoChanged(FileSystemInfoChangedMessage e)
         {
-            TitleDetail = e.FileSystemInfo.FullName;
+            TitleDetail = e.Content.FullName;
         }
     }
 }

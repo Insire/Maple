@@ -11,7 +11,7 @@ namespace Maple.Core
     public class LocalizationService : ObservableObject, ILocalizationService
     {
         public ITranslationProvider TranslationProvider { get; private set; }
-        public readonly IMapleLog _log;
+        public readonly ILoggingService _log;
         /// <summary>
         /// Gets or sets the current language.
         /// </summary>
@@ -36,7 +36,7 @@ namespace Maple.Core
             }
         }
 
-        public LocalizationService(ITranslationProvider provider, IMapleLog log)
+        public LocalizationService(ITranslationProvider provider, ILoggingService log)
         {
             _log = log ?? throw new ArgumentNullException(nameof(log));
             TranslationProvider = provider ?? throw new ArgumentNullException(nameof(provider));

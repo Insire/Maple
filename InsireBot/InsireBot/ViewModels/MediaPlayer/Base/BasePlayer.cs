@@ -5,10 +5,12 @@ namespace Maple
 {
     public abstract class BasePlayer : ObservableObject, IMediaPlayer
     {
-        public abstract event CompletedMediaItemEventHandler CompletedMediaItem;
-        public event AudioDeviceChangedEventHandler AudioDeviceChanged;
-        public event EventHandler AudioDeviceChanging;
-        public abstract event PlayingMediaItemEventHandler PlayingMediaItem;
+        protected readonly IMessenger _messenger;
+        protected readonly ILoggingService _log;
+
+        protected abstract void Dispose(bool disposing);
+
+        public RangeObservableCollection<AudioDevice> Items { get; private set; }
 
         private AudioDevice _audioDevice;
         public AudioDevice AudioDevice
@@ -17,8 +19,8 @@ namespace Maple
             set
             {
                 SetValue(ref _audioDevice, value,
-                                OnChanging: () => AudioDeviceChanging?.Raise(this),
-                                OnChanged: () => AudioDeviceChanged?.Invoke(this, new AudioDeviceChangedEventArgs(value)));
+                                OnChanging: () => _messenger.Publish(new ViewModelSelectionChangingMessage<AudioDevice>(this, _audioDevice)),
+                                OnChanged: () => _messenger.Publish(new ViewModelSelectionChangingMessage<AudioDevice>(this, value)));
             }
         }
 
@@ -35,6 +37,14 @@ namespace Maple
             get { return _disposed; }
             protected set { SetValue(ref _disposed, value); }
         }
+
+        public BasePlayer(IMessenger messenger, AudioDevices audioDevices)
+        {
+            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+
+        }
+
+        public abstract bool CanPlay(IMediaItem item);
 
         public abstract bool IsPlaying { get; }
 
@@ -55,10 +65,6 @@ namespace Maple
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
-        protected abstract void Dispose(bool disposing);
-
-        public abstract bool CanPlay(IMediaItem item);
 
         public virtual bool CanStop()
         {

@@ -9,15 +9,19 @@ namespace Maple
     {
         protected IMapper _mapper;
         protected readonly ILocalizationService _translationService;
-        protected readonly ISequenceProvider _sequenceProvider;
-        protected readonly IMapleLog _log;
+        protected readonly ISequenceService _sequenceProvider;
+        protected readonly ILoggingService _log;
         protected readonly IValidator<T> _validator;
+        protected readonly IMessenger _messenger;
+        protected readonly ViewModelServiceContainer _container;
 
-        public BaseMapper(ILocalizationService translationService, ISequenceProvider sequenceProvider, IMapleLog log, IValidator<T> validator)
+        public BaseMapper(ViewModelServiceContainer container, IValidator<T> validator)
         {
-            _translationService = translationService ?? throw new ArgumentNullException(nameof(translationService));
-            _sequenceProvider = sequenceProvider ?? throw new ArgumentNullException(nameof(sequenceProvider));
-            _log = log ?? throw new ArgumentNullException(nameof(log));
+            _container = container;
+            _translationService = container.LocalizationService;
+            _sequenceProvider = container.SequenceService;
+            _log = container.Log;
+            _messenger = container.Messenger;
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
 

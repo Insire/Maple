@@ -15,7 +15,7 @@ namespace Maple
     public class Scenes : BaseListViewModel<Scene>
     {
         private readonly ILocalizationService _manager;
-        private readonly IMapleLog _log;
+        private readonly ILoggingService _log;
 
         private bool _isExpanded;
         /// <summary>
@@ -76,7 +76,8 @@ namespace Maple
         /// </summary>
         /// <param name="manager">The manager.</param>
         /// <param name="log">The log.</param>
-        public Scenes(ILocalizationService manager, IMapleLog log)
+        public Scenes(ILocalizationService manager, ILoggingService log, IMessenger messenger)
+            : base(messenger)
         {
             _manager = manager ?? throw new ArgumentNullException(nameof(manager));
             _log = log ?? throw new ArgumentNullException(nameof(log));

@@ -11,8 +11,8 @@ namespace Maple
         private readonly Func<IMediaRepository> _repositoryFactory;
         private readonly IMediaItemMapper _mediaItemMapper;
 
-        public MediaItems(IMapleLog log, ILocalizationService translationService, ISequenceProvider sequenceProvider, IMediaItemMapper mediaItemMapper, Func<IMediaRepository> repo)
-            : base(log, translationService, sequenceProvider)
+        public MediaItems(ViewModelServiceContainer container, IMediaItemMapper mediaItemMapper, Func<IMediaRepository> repo)
+            : base(container)
         {
             _repositoryFactory = repo ?? throw new ArgumentNullException(nameof(repo));
             _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper));

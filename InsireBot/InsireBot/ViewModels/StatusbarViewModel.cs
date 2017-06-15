@@ -1,4 +1,5 @@
 ﻿using Maple.Core;
+using System;
 using System.Linq;
 
 namespace Maple
@@ -9,8 +10,8 @@ namespace Maple
     /// <seealso cref="Maple.Core.ObservableObject" />
     public class StatusbarViewModel : ObservableObject
     {
-        private readonly IMediaPlayersViewModel _mediaplayers;
         private readonly ILocalizationService _manager;
+        private readonly IMessenger _messenger;
 
         private string _version;
         /// <summary>
@@ -56,11 +57,11 @@ namespace Maple
         /// </summary>
         /// <param name="manager">The manager.</param>
         /// <param name="mediaPlayers">The media players.</param>
-        public StatusbarViewModel(ILocalizationService manager, IVersionService version, IMediaPlayersViewModel mediaPlayers)
+        public StatusbarViewModel(ILocalizationService manager, IVersionService version, IMessenger messenger)
         {
-            _mediaplayers = mediaPlayers;
+            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
 
-            _manager = manager;
             _manager.PropertyChanged += (o, e) =>
               {
                   if (e.PropertyName == $"{nameof(ILocalizationService.CurrentLanguage)}")
@@ -71,7 +72,7 @@ namespace Maple
 
             UpdateLanguage();
 
-            _mediaplayers.Loaded += (o, e) => UpdateMainMediaPlayer();
+            _messenger.Subscribe<IMapleMessage>(UpdateMainMediaPlayer);
         }
 
         private void UpdateLanguage()
@@ -79,9 +80,10 @@ namespace Maple
             Language = $"({_manager.CurrentLanguage.TwoLetterISOLanguageName})";
         }
 
-        private void UpdateMainMediaPlayer()
+        private void UpdateMainMediaPlayer(IMapleMessage obj)
         {
-            MainMediaPlayer = (MainMediaPlayer)_mediaplayers.Items.ToList().Find(p => p is MainMediaPlayer);
+            //var main = obj.Sender as MainMediaPlayer;
+            //MainMediaPlayer = (MainMediaPlayer)_mediaplayers.Items.ToList().Find(p => p is MainMediaPlayer);
         }
 
         // TODO notifications?

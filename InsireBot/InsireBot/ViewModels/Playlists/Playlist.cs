@@ -25,21 +25,13 @@ namespace Maple
     [DebuggerDisplay("{Title}, {Sequence}")]
     public class Playlist : ValidableBaseDataViewModel<Playlist, Data.Playlist>, IIsSelected, ISequence, IIdentifier, IChangeState
     {
-        private readonly ISequenceProvider _sequenceProvider;
+        private readonly ISequenceService _sequenceProvider;
         private readonly IMediaItemMapper _mediaItemMapper;
         private readonly ILocalizationService _translator;
         private readonly object _itemsLock;
         private readonly DialogViewModel _dialogViewModel;
-        public int Count => Items?.Count ?? 0;
 
-        /// <summary>
-        /// The selection changed event
-        /// </summary>
-        public EventHandler SelectionChanged;
-        /// <summary>
-        /// The selection changing event
-        /// </summary>
-        public EventHandler SelectionChanging;
+        public int Count => Items?.Count ?? 0;
 
         /// <summary>
         /// Gets a value indicating whether this instance is new.
@@ -126,7 +118,12 @@ namespace Maple
         public MediaItem SelectedItem
         {
             get { return _selectedItem; }
-            set { SetValue(ref _selectedItem, value, OnChanging: () => SelectionChanging?.Raise(this), OnChanged: () => SelectionChanged?.Raise(this)); }
+            set
+            {
+                SetValue(ref _selectedItem, value,
+                    OnChanging: () => _messenger.Publish(new ViewModelSelectionChangingMessage<MediaItem>(Items, _selectedItem)),
+                    OnChanged: () => _messenger.Publish(new ViewModelSelectionChangedMessage<MediaItem>(Items, value)));
+            }
         }
 
         private int _sequence;
@@ -309,16 +306,16 @@ namespace Maple
         /// <param name="model">The model.</param>
         /// <exception cref="System.ArgumentNullException">dialogViewModel</exception>
         /// <exception cref="System.ArgumentException"></exception>
-        public Playlist(ILocalizationService translator, IMediaItemMapper mediaItemMapper, ISequenceProvider sequenceProvider, IValidator<Playlist> validator, DialogViewModel dialogViewModel, Data.Playlist model)
-            : base(model, validator)
+        public Playlist(ViewModelServiceContainer container, IMediaItemMapper mediaItemMapper, IValidator<Playlist> validator, DialogViewModel dialogViewModel, Data.Playlist model)
+            : base(model, validator, container)
         {
             using (_busyStack.GetToken())
             {
                 _itemsLock = new object();
-                _sequenceProvider = sequenceProvider ?? throw new ArgumentNullException(nameof(sequenceProvider));
                 _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
-                _translator = translator ?? throw new ArgumentNullException(nameof(translator));
                 _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper));
+                _sequenceProvider = container.SequenceService;
+                _translator = container.LocalizationService;
 
                 Items = new RangeObservableCollection<MediaItem>();
                 RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());

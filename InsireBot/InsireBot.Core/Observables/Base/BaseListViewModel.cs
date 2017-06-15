@@ -24,13 +24,12 @@ namespace Maple.Core
         protected readonly object _itemsLock;
 
         /// <summary>
-        /// The selection changed event
+        /// Gets a value indicating whether this instance is loaded.
         /// </summary>
-        public EventHandler SelectionChanged;
-        /// <summary>
-        /// The selection changing event
-        /// </summary>
-        public EventHandler SelectionChanging;
+        /// <value>
+        ///   <c>true</c> if this instance is loaded; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsLoaded { get; protected set; }
 
         private TViewModel _selectedItem;
         /// <summary>
@@ -47,9 +46,9 @@ namespace Maple.Core
                 if (EqualityComparer<TViewModel>.Default.Equals(_selectedItem, value))
                     return;
 
-                SelectionChanging?.Raise(this);
+                _messenger.Publish(new ViewModelSelectionChangingMessage<TViewModel>(Items, _selectedItem));
                 _selectedItem = value;
-                SelectionChanged?.Raise(this);
+                _messenger.Publish(new ViewModelSelectionChangedMessage<TViewModel>(Items, _selectedItem));
 
                 OnPropertyChanged();
             }
@@ -131,8 +130,8 @@ namespace Maple.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseListViewModel{T}"/> class.
         /// </summary>
-        public BaseListViewModel()
-            : base()
+        public BaseListViewModel(IMessenger messenger)
+            : base(messenger)
         {
             _itemsLock = new object();
 
@@ -154,8 +153,8 @@ namespace Maple.Core
         /// Initializes a new instance of the <see cref="BaseListViewModel{T}"/> class.
         /// </summary>
         /// <param name="items">The items.</param>
-        public BaseListViewModel(IList<TViewModel> items)
-            : this()
+        public BaseListViewModel(IList<TViewModel> items, IMessenger messenger)
+            : this(messenger)
         {
             Items.AddRange(items);
         }
@@ -164,8 +163,8 @@ namespace Maple.Core
         /// Initializes a new instance of the <see cref="BaseListViewModel{T}"/> class.
         /// </summary>
         /// <param name="items">The items.</param>
-        public BaseListViewModel(IEnumerable<TViewModel> items)
-            : this()
+        public BaseListViewModel(IEnumerable<TViewModel> items, IMessenger messenger)
+            : this(messenger)
         {
             Items.AddRange(items);
         }
@@ -180,6 +179,12 @@ namespace Maple.Core
         private void ItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged(nameof(Count));
+        }
+
+        protected virtual void OnLoaded()
+        {
+            IsLoaded = true;
+            _messenger.Publish(new LoadedMessage(this, this));
         }
 
         /// <summary>

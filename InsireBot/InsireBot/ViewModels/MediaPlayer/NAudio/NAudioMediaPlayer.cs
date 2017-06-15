@@ -6,7 +6,6 @@ namespace Maple
 {
     public class NAudioMediaPlayer : BasePlayer
     {
-        private readonly IMapleLog _log;
         private readonly MediaFoundationReader.MediaFoundationReaderSettings _settings;
 
         private int _volume;
@@ -18,18 +17,15 @@ namespace Maple
         public override int VolumeMax => 1;
         public override int VolumeMin => 0;
 
-        public override event PlayingMediaItemEventHandler PlayingMediaItem;
-        public override event CompletedMediaItemEventHandler CompletedMediaItem;
-
         public override int Volume
         {
             get { return _volume; }
             set { SetValue(ref _volume, value, OnChanged: () => SyncVolumeToVolumeProvider(value)); }
         }
 
-        public NAudioMediaPlayer(IMapleLog log) : base()
+        public NAudioMediaPlayer(ILoggingService log, IMessenger messenger, AudioDevices audioDevices)
+            : base(messenger, audioDevices)
         {
-            _log = log;
             _settings = new MediaFoundationReader.MediaFoundationReaderSettings
             {
                 RepositionInRead = true,
@@ -37,37 +33,23 @@ namespace Maple
                 RequestFloatOutput = false,
             };
 
-            AudioDeviceChanging += OnAudioDeviceChanging;
-            AudioDeviceChanged += OnAudioDeviceChanged;
-
             _player = WavePlayerFactory.GetPlayer();
             _player.PlaybackStopped += PlaybackStopped;
 
-            PlayingMediaItem += OnPlaybackStarted;
+            _messenger.Subscribe<PlayingMediaItemMessage>(OnPlaybackStarted);
 
             OnPropertyChanged(nameof(VolumeMin));
             OnPropertyChanged(nameof(VolumeMax));
         }
 
-        private void OnPlaybackStarted(object sender, PlayingMediaItemEventArgs e)
+        private void OnPlaybackStarted(PlayingMediaItemMessage e)
         {
-            _current = e.MediaItem;
-        }
-
-        private void OnAudioDeviceChanging(object sender, EventArgs e)
-        {
-
-        }
-
-        private void OnAudioDeviceChanged(object sender, AudioDeviceChangedEventArgs e)
-        {
-
+            _current = e.Content;
         }
 
         private void PlaybackStopped(object sender, StoppedEventArgs e)
         {
-            CompletedMediaItem?.Invoke(this, new CompletedMediaItemEventEventArgs(_current));
-
+            _messenger.Publish(new CompletedMediaItemMessage(this, _current));
             _current = null;
 
             OnPropertyChanged(nameof(IsPlaying));
@@ -121,7 +103,7 @@ namespace Maple
             _player.Init(_volumeProvider);
             _player.Play();
 
-            PlayingMediaItem?.Invoke(this, new PlayingMediaItemEventArgs(mediaItem));
+            _messenger.Publish(new PlayingMediaItemMessage(this, mediaItem));
         }
 
         public override void Stop()

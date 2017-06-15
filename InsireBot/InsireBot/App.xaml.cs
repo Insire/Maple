@@ -43,7 +43,7 @@ namespace Maple
         /// </remarks>
         private async Task<Shell> GetShell(ILocalizationService service)
         {
-            var log = _container.Resolve<IMapleLog>();
+            var log = _container.Resolve<ILoggingService>();
 
             using (var vm = _container.Resolve<ISplashScreenViewModel>())
             {
@@ -95,7 +95,7 @@ namespace Maple
 
         private void SaveState()
         {
-            var log = _container.Resolve<IMapleLog>();
+            var log = _container.Resolve<ILoggingService>();
             log.Info(Localization.Properties.Resources.SavingState);
 
             foreach (var item in _container.Resolve<IEnumerable<ILoadableViewModel>>())

@@ -2,7 +2,7 @@
 
 namespace Maple.Core
 {
-    public interface ISequenceProvider
+    public interface ISequenceService
     {
         int Get(IList<ISequence> items);
     }
