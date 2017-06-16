@@ -24,14 +24,23 @@ namespace Maple.Core
 
         public void Dispose()
         {
-            if (_hub.IsAlive && _hub.Target is IMessenger hub)
-            {
-                var unsubscribeMethod = typeof(IMessenger).GetMethod("Unsubscribe", new Type[] { typeof(SubscriptionToken) });
-                unsubscribeMethod = unsubscribeMethod.MakeGenericMethod(_messageType);
-                unsubscribeMethod.Invoke(hub, new object[] { this });
-            }
-
+            Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // free managed resources
+                if (_hub.IsAlive && _hub.Target is IMessenger hub)
+                {
+                    var unsubscribeMethod = typeof(IMessenger).GetMethod("Unsubscribe", new Type[] { typeof(SubscriptionToken) });
+                    unsubscribeMethod = unsubscribeMethod.MakeGenericMethod(_messageType);
+                    unsubscribeMethod.Invoke(hub, new object[] { this });
+                }
+            }
+            // free native resources if there are any.
         }
     }
 }

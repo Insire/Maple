@@ -135,14 +135,19 @@ namespace Maple
 
             if (disposing)
             {
-                _player.PlaybackStopped -= PlaybackStopped;
-                _player?.Dispose();
-                _player = null;
+                if (_player != null)
+                {
+                    _player.PlaybackStopped -= PlaybackStopped;
+                    _player?.Dispose();
+                    _player = null;
+                }
 
-                _reader?.Close();
-                _reader?.Dispose();
-                _reader = null;
-
+                if (_reader != null)
+                {
+                    _reader?.Close();
+                    _reader?.Dispose();
+                    _reader = null;
+                }
                 // Free any other managed objects here.
             }
 

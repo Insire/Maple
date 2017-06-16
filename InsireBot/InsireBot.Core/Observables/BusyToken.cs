@@ -38,8 +38,11 @@ namespace Maple.Core
             {
                 Disposing = true;
 
-                var stack = Target as BusyStack;
-                stack?.Pull();
+                if (Target != null)
+                {
+                    var stack = Target as BusyStack;
+                    stack?.Pull();
+                }
             }
         }
 
