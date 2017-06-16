@@ -546,9 +546,11 @@ namespace Maple
                 foreach (var token in _messageTokens)
                     _messenger.Unsubscribe<IMapleMessage>(token);
 
-                Player?.Dispose();
-                Player = null;
-
+                if (Player != null)
+                {
+                    Player?.Dispose();
+                    Player = null;
+                }
                 // Free any other managed objects here.
             }
 

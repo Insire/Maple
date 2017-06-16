@@ -9,7 +9,7 @@ namespace Maple
     {
         private readonly IMessenger _messenger;
         private readonly Queue<string> _queue;
-        private readonly System.Timers.Timer _timer;
+        private System.Timers.Timer _timer;
 
         private string _version;
         public string Version
@@ -92,10 +92,13 @@ namespace Maple
 
             if (disposing)
             {
-                _timer.Stop();
-                _timer.Elapsed -= _timer_Elapsed;
-                _timer.Dispose();
-
+                if (_timer != null)
+                {
+                    _timer.Stop();
+                    _timer.Elapsed -= _timer_Elapsed;
+                    _timer.Dispose();
+                    _timer = null;
+                }
                 // Free any other managed objects here.
             }
 

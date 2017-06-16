@@ -16,7 +16,7 @@ namespace Maple
     {
         private const int _saveThreshold = 100;
 
-        private readonly IPlaylistContext _context;
+        private IPlaylistContext _context;
 
         private readonly IPlaylistMapper _playlistMapper;
         private readonly IMediaPlayerMapper _mediaPlayerMapper;
@@ -491,7 +491,12 @@ namespace Maple
 
             if (disposing)
             {
-                _context.Dispose();
+                if (_context != null)
+                {
+                    _context.Dispose();
+                    _context = null;
+                }
+
                 // Free any other managed objects here.
             }
 
