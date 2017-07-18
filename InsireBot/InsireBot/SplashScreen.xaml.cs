@@ -5,7 +5,7 @@ namespace Maple
 {
     public partial class SplashScreen : IoCWindow
     {
-        public SplashScreen(ILocalizationService manager, IUIColorsViewModel vm, ISplashScreenViewModel datacontext) : base(manager, vm)
+        public SplashScreen(ILocalizationService manager, IMessenger messenger, ISplashScreenViewModel datacontext) : base(manager, messenger)
         {
             DataContext = datacontext ?? throw new ArgumentNullException(nameof(datacontext));
 

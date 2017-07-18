@@ -1,7 +1,6 @@
 ﻿using Maple.Core;
 using Maple.Localization.Properties;
-using System;
-using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -13,40 +12,10 @@ namespace Maple
     /// <seealso cref="Maple.Core.ObservableObject" />
     /// <seealso cref="Maple.Core.ILoadableViewModel" />
     /// <seealso cref="Maple.Core.ISaveableViewModel" />
-    public class CultureViewModel : ObservableObject, ICultureViewModel
+    public class Cultures : BaseListViewModel<Culture>, ICultureViewModel
     {
         private readonly ILocalizationService _manager;
-        private readonly IMapleLog _log;
-
-        public event LoadedEventHandler Loaded;
-
-        private RangeObservableCollection<CultureInfo> _items;
-        /// <summary>
-        /// Gets or sets the items.
-        /// </summary>
-        /// <value>
-        /// The items.
-        /// </value>
-        public RangeObservableCollection<CultureInfo> Items
-        {
-            get { return _items; }
-            set { SetValue(ref _items, value); }
-        }
-
-        private CultureInfo _selectedCulture;
-        /// <summary>
-        /// Gets or sets the selected culture.
-        /// </summary>
-        /// <value>
-        /// The selected culture.
-        /// </value>
-        public CultureInfo SelectedCulture
-        {
-            get { return _selectedCulture; }
-            set { SetValue(ref _selectedCulture, value, OnChanged: SyncCulture); }
-        }
-
-        public bool IsLoaded { get; private set; }
+        private readonly ILoggingService _log;
 
         /// <summary>
         /// Gets the refresh command.
@@ -74,17 +43,16 @@ namespace Maple
         /// Initializes a new instance of the <see cref="CultureViewModel"/> class.
         /// </summary>
         /// <param name="manager">The manager.</param>
-        public CultureViewModel(ILocalizationService manager, IMapleLog log)
+        public Cultures(ViewModelServiceContainer container)
+            : base(container.Messenger)
         {
-            _log = log ?? throw new ArgumentNullException(nameof(log));
-            _manager = manager ?? throw new ArgumentNullException(nameof(log));
-
-            Items = new RangeObservableCollection<CultureInfo>(_manager.Languages);
+            _log = container.Log;
+            _manager = container.LocalizationService;
         }
 
         private void SyncCulture()
         {
-            _manager.CurrentLanguage = SelectedCulture;
+            _manager.CurrentLanguage = SelectedItem.Model;
         }
 
         /// <summary>
@@ -103,9 +71,11 @@ namespace Maple
         {
             _log.Info($"{Resources.Loading} {Resources.Options}");
             _manager.Load();
-            SelectedCulture = Core.Properties.Settings.Default.StartUpCulture;
+
+            Initialise();
+
             IsLoaded = true;
-            Loaded?.Invoke(this, new LoadedEventEventArgs());
+            _messenger.Publish(new LoadedMessage(this, this));
         }
 
         public async Task SaveAsync()
@@ -118,9 +88,17 @@ namespace Maple
         {
             _log.Info($"{Resources.Loading} {Resources.Options}");
             await _manager.LoadAsync();
-            SelectedCulture = Core.Properties.Settings.Default.StartUpCulture;
+
+            Initialise();
+
             IsLoaded = true;
-            Loaded?.Invoke(this, new LoadedEventEventArgs());
+            _messenger.Publish(new LoadedMessage(this, this));
+        }
+
+        private void Initialise()
+        {
+            Items.AddRange(_manager.Languages.Select(p => new Culture(p, _messenger)).ToList());
+            SelectedItem = Items.FirstOrDefault(p => p.Model.LCID == Core.Properties.Settings.Default.StartUpCulture.LCID) ?? Items.First(p => p.Model.TwoLetterISOLanguageName == "en");
         }
     }
 }

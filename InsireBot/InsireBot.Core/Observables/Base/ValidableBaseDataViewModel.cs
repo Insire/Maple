@@ -15,7 +15,7 @@ namespace Maple.Core
         where TViewModel : BaseDataViewModel<TViewModel, TModel>, ISequence
         where TModel : BaseObject
     {
-        private bool _skipValidation;
+        private readonly bool _skipValidation = true;
         private IValidator<TViewModel> _validator;
 
         protected readonly IDictionary<string, ValidationResult> _errors;
@@ -39,18 +39,12 @@ namespace Maple.Core
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
 
-        protected ValidableBaseDataViewModel()
-            : base()
+        protected ValidableBaseDataViewModel(TModel model, IValidator<TViewModel> validator, ViewModelServiceContainer container)
+            : base(model, container.Messenger)
         {
-            _skipValidation = true;
             _errors = new Dictionary<string, ValidationResult>();
-        }
 
-        protected ValidableBaseDataViewModel(TModel model, IValidator<TViewModel> validator)
-            : this()
-        {
             _validator = validator ?? throw new ArgumentNullException(nameof(validator)); //order is important in this case
-            Model = model ?? throw new ArgumentNullException(nameof(model));
 
             _skipValidation = false;
         }

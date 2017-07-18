@@ -176,8 +176,8 @@ namespace Maple
         /// Initializes a new instance of the <see cref="MediaItem"/> class.
         /// </summary>
         /// <param name="model">The model.</param>
-        public MediaItem(Data.MediaItem model, IValidator<MediaItem> validator, IPlaylistContext context)
-            : base(model, validator)
+        public MediaItem(Data.MediaItem model, ViewModelServiceContainer container, IValidator<MediaItem> validator, IPlaylistContext context)
+            : base(model, validator, container)
         {
             _id = model.Id;
             _playlistId = model.PlaylistId;

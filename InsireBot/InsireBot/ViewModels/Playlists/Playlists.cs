@@ -32,8 +32,8 @@ namespace Maple
         /// <param name="log">The log.</param>
         /// <param name="repo">The repo.</param>
         /// <param name="dialogViewModel">The dialog view model.</param>
-        public Playlists(ILocalizationService translationService, IMapleLog log, IPlaylistMapper playlistMapper, Func<IMediaRepository> repo, ISequenceProvider sequenceProvider)
-            : base(log, translationService, sequenceProvider)
+        public Playlists(ViewModelServiceContainer container, IPlaylistMapper playlistMapper, Func<IMediaRepository> repo)
+            : base(container)
         {
             _repositoryFactory = repo ?? throw new ArgumentNullException(nameof(repo));
             _playlistMapper = playlistMapper ?? throw new ArgumentNullException(nameof(playlistMapper));

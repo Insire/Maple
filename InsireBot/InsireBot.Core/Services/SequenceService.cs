@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace Maple.Core
 {
-    public class SequenceService : ISequenceProvider
+    public class SequenceService : ISequenceService
     {
-        private readonly IMapleLog _log;
+        private readonly ILoggingService _log;
 
-        public SequenceService(IMapleLog log)
+        public SequenceService(ILoggingService log)
         {
             _log = log ?? throw new ArgumentNullException(nameof(log));
         }

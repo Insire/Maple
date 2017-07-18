@@ -29,7 +29,5 @@ namespace Maple.Core
         /// The refresh command.
         /// </value>
         ICommand RefreshCommand { get; }
-
-        event LoadedEventHandler Loaded;
     }
 }

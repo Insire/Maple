@@ -19,8 +19,8 @@ namespace Maple
         /// Initializes a new instance of the <see cref="PlaylistMapper"/> class.
         /// </summary>
         /// <param name="dialogViewModel">The dialog view model.</param>
-        public PlaylistMapper(IMediaItemMapper mediaItemMapper, DialogViewModel dialogViewModel, ILocalizationService translator, ISequenceProvider sequenceProvider, IMapleLog log, IValidator<Playlist> validator)
-            : base(translator, sequenceProvider, log, validator)
+        public PlaylistMapper(ViewModelServiceContainer container, IMediaItemMapper mediaItemMapper, DialogViewModel dialogViewModel, IValidator<Playlist> validator)
+            : base(container, validator)
         {
             _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
             _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper));
@@ -47,7 +47,7 @@ namespace Maple
 
         public Playlist GetNewPlaylist(int sequence)
         {
-            return new Playlist(_translationService, _mediaItemMapper, _sequenceProvider, _validator, _dialogViewModel, new Data.Playlist
+            return new Playlist(_container, _mediaItemMapper, _validator, _dialogViewModel, new Data.Playlist
             {
                 Title = _translationService.Translate(nameof(Resources.New)),
                 Description = string.Empty,
@@ -65,7 +65,7 @@ namespace Maple
         /// <returns></returns>
         public Playlist Get(Core.Playlist mediaitem)
         {
-            return new Playlist(_translationService, _mediaItemMapper, _sequenceProvider, _validator, _dialogViewModel, GetData(mediaitem));
+            return new Playlist(_container, _mediaItemMapper, _validator, _dialogViewModel, GetData(mediaitem));
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Maple
         /// <returns></returns>
         public Playlist Get(Data.Playlist mediaitem)
         {
-            return new Playlist(_translationService, _mediaItemMapper, _sequenceProvider, _validator, _dialogViewModel, mediaitem);
+            return new Playlist(_container, _mediaItemMapper, _validator, _dialogViewModel, mediaitem);
         }
 
         /// <summary>

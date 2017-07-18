@@ -1,15 +1,19 @@
-﻿namespace Maple.Core
+﻿using System;
+
+namespace Maple.Core
 {
     /// <summary>
     ///
     /// </summary>
     /// <typeparam name="TModel"></typeparam>
     public abstract class BaseDataViewModel<TViewModel, TModel> : ObservableObject
+        where TModel : class
     {
         /// <summary>
         /// The busy stack
         /// </summary>
         protected readonly BusyStack _busyStack;
+        protected readonly IMessenger _messenger;
 
         private TModel _model;
         /// <summary>
@@ -31,20 +35,22 @@
             set { SetValue(ref _isBusy, value); }
         }
 
-        protected BaseDataViewModel()
+        private BaseDataViewModel(IMessenger messenger)
         {
             _busyStack = new BusyStack();
             _busyStack.OnChanged += (isBusy) => IsBusy = isBusy;
+
+            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseViewModel{T}"/> class.
         /// </summary>
         /// <param name="model">The model.</param>
-        protected BaseDataViewModel(TModel model)
-            : this()
+        protected BaseDataViewModel(TModel model, IMessenger messenger)
+            : this(messenger)
         {
-            Model = model;
+            Model = model ?? throw new ArgumentNullException(nameof(model));
         }
     }
 }

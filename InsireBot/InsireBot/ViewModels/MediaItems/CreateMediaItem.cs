@@ -51,7 +51,8 @@ namespace Maple
         /// </summary>
         /// <param name="dataParsingService">The data parsing service.</param>
         /// <param name="mapper">The mapper.</param>
-        public CreateMediaItem(IYoutubeUrlParseService dataParsingService, IMediaItemMapper mapper) : base()
+        public CreateMediaItem(IYoutubeUrlParseService dataParsingService, IMediaItemMapper mapper, IMessenger messenger)
+            : base(messenger)
         {
             _dataParsingService = dataParsingService;
             _mapper = mapper;

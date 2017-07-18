@@ -1,4 +1,4 @@
-﻿namespace Maple
+﻿namespace Maple.Core
 {
     public enum RepeatMode
     {

@@ -18,8 +18,8 @@ namespace Maple
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaItemMapper"/> class.
         /// </summary>
-        public MediaItemMapper(IPlaylistContext context, ILocalizationService translator, ISequenceProvider sequenceProvider, IMapleLog log, IValidator<MediaItem> validator)
-            : base(translator, sequenceProvider, log, validator)
+        public MediaItemMapper(ViewModelServiceContainer container, IPlaylistContext context, IValidator<MediaItem> validator)
+            : base(container, validator)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
 
@@ -46,7 +46,7 @@ namespace Maple
 
         public MediaItem GetNewMediaItem(int sequence, int playlistId)
         {
-            return new MediaItem(GetDataNewMediaItem(playlistId), _validator, _context)
+            return new MediaItem(GetDataNewMediaItem(playlistId), _container, _validator, _context)
             {
                 Title = _translationService.Translate(nameof(Resources.New)),
                 Description = string.Empty,
@@ -71,7 +71,7 @@ namespace Maple
         /// <returns></returns>
         public MediaItem Get(Core.MediaItem mediaitem)
         {
-            return new MediaItem(GetData(mediaitem), _validator, _context);
+            return new MediaItem(GetData(mediaitem), _container, _validator, _context);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Maple
         /// <returns></returns>
         public MediaItem Get(Data.MediaItem mediaitem)
         {
-            return new MediaItem(mediaitem, _validator, _context);
+            return new MediaItem(mediaitem, _container, _validator, _context);
         }
 
         /// <summary>

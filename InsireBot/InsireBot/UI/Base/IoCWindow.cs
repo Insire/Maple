@@ -1,4 +1,5 @@
 ﻿using Maple.Core;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -16,7 +17,7 @@ namespace Maple
     public abstract class IoCWindow : ConfigurableWindow, IIocFrameworkElement
     {
         private IConfigurableWindowSettings _settings;
-        private IUIColorsViewModel _colorsViewModel;
+        private IMessenger _messenger;
         public ILocalizationService TranslationManager { get; private set; }
 
         /// <summary>
@@ -34,11 +35,13 @@ namespace Maple
         /// </summary>
         /// <param name="container">The container.</param>
         /// <param name="vm">The vm.</param>
-        public IoCWindow(ILocalizationService container, IUIColorsViewModel vm) : base()
+        public IoCWindow(ILocalizationService container, IMessenger messenger)
+            : base()
         {
-            TranslationManager = container;
-            _colorsViewModel = vm;
-            _colorsViewModel.PrimaryColorChanged += PrimaryColorChanged;
+            TranslationManager = container ?? throw new ArgumentNullException(nameof(container));
+            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+
+            _messenger.Subscribe<UiPrimaryColorChangedMessage>(PrimaryColorChanged);
         }
 
         /// <summary>
@@ -52,13 +55,13 @@ namespace Maple
             return _settings = _settings ?? new ShellSettings(this);
         }
 
-        private void PrimaryColorChanged(object sender, UiPrimaryColorEventArgs e)
+        private void PrimaryColorChanged(UiPrimaryColorChangedMessage e)
         {
             var data = string.Empty;
             if (PackIcon.TryGet(PackIconKind.ApplicationIcon, out data))
             {
                 var geo = Geometry.Parse(data);
-                Icon = SetImage(geo, e.Color);
+                Icon = SetImage(geo, e.Content);
             }
         }
 
