@@ -6,7 +6,10 @@ namespace Maple.Data
 {
     public abstract class BaseObject
     {
+        [Key]
+        [Column(Order = 1)]
         public int Id { get; set; }
+        [Column(Order = 2)]
         public int Sequence { get; set; }
 
         public DateTime CreatedOn { get; set; }
@@ -19,8 +22,9 @@ namespace Maple.Data
         public byte[] RowVersion { get; set; }
 
         [NotMapped]
-        public bool IsNew => Id == 0;
-        [NotMapped]
         public bool IsDeleted { get; set; }
+
+        [NotMapped]
+        public bool IsNew => Id == 0;
     }
 }

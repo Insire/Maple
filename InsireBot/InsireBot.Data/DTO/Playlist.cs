@@ -1,20 +1,31 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 
 namespace Maple.Data
 {
+    // tutorial http://www.entityframeworktutorial.net/code-first/configure-one-to-many-relationship-in-code-first.aspx
+
+    [DebuggerDisplay("{Title}, {SelectedItem}, {Sequence}")]
     public class Playlist : BaseObject
     {
-        public Playlist()
+        private ICollection<MediaItem> _mediaItems;
+        public virtual ICollection<MediaItem> MediaItems
         {
-            MediaItems = new List<MediaItem>();
+            get { return _mediaItems ?? (_mediaItems = new HashSet<MediaItem>()); }
+            set { _mediaItems = value; }
         }
 
-        public string Title { get; set; }
+        [MaxLength(100)]
         public string Description { get; set; }
         public string Location { get; set; }
-        public int RepeatMode { get; set; }
         public bool IsShuffeling { get; set; }
         public int PrivacyStatus { get; set; }
-        public ICollection<MediaItem> MediaItems { get; set; }
+        public int RepeatMode { get; set; }
+
+        [Required]
+        [MaxLength(50)]
+        public string Title { get; set; }
+
     }
 }

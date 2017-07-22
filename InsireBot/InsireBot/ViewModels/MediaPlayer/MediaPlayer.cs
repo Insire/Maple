@@ -12,7 +12,7 @@ namespace Maple
     /// <summary>
     ///
     /// </summary>
-    /// <seealso cref="Maple.Core.BaseViewModel{Maple.Data.MediaPlayer}" />
+    /// <seealso cref="Maple.Core.BaseViewModel{Maple.Data.Playlist}" />
     /// <seealso cref="System.IDisposable" />
     /// <seealso cref="Maple.Core.IChangeState" />
     [DebuggerDisplay("{Name}, {Sequence}")]
@@ -253,10 +253,8 @@ namespace Maple
         {
             _manager = manager ?? throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} {Resources.IsRequired}");
             Player = player ?? throw new ArgumentNullException(nameof(player), $"{nameof(player)} {Resources.IsRequired}");
-            Playlist = playlist ?? throw new ArgumentNullException(nameof(playlist), $"{nameof(playlist)} {Resources.IsRequired}");
 
             _name = model.Name;
-            _playlist = playlist;
             _audioDevices = devices;
             _sequence = model.Sequence;
 
@@ -313,7 +311,7 @@ namespace Maple
 
         private void OnPlaylistChanged()
         {
-            Model.PlaylistId = Playlist.Id;
+            Model.Playlist.Id = Playlist.Id;
             // TODO: maybe add optional endless playback
 
             UpdatePlaylistCommands();

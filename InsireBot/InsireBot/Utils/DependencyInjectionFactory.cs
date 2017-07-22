@@ -5,6 +5,7 @@ using Maple.Data;
 using Maple.Youtube;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Maple
 {
@@ -13,21 +14,25 @@ namespace Maple
     /// </summary>
     public class DependencyInjectionFactory
     {
-        public static IContainer Get()
+        public static Task<IContainer> Get()
         {
             var c = new Container();
+            return Task.Run(() => InitializeContainer());
 
-            RegisterViewModels();
-            RegisterServices();
-            RegisterValidation();
-            RegisterControls();
+            IContainer InitializeContainer()
+            {
+                RegisterViewModels();
+                RegisterServices();
+                RegisterValidation();
+                RegisterControls();
 
-            c.Resolve<ILocalizationService>().Load();
+                c.Resolve<ILocalizationService>().LoadAsync();
 
-            if (Debugger.IsAttached)
-                Debugging();
+                if (Debugger.IsAttached)
+                    Debugging();
 
-            return c;
+                return c;
+            }
 
             void RegisterControls()
             {
@@ -57,8 +62,13 @@ namespace Maple
             void RegisterServices()
             {
                 c.Register<IMediaPlayer, NAudioMediaPlayer>(setup: Setup.With(allowDisposableTransient: true));
-                c.Register<IPlaylistContext, PlaylistContext>(setup: Setup.With(allowDisposableTransient: true));
-                c.Register<IMediaRepository, MediaRepository>(setup: Setup.With(allowDisposableTransient: true));
+                c.Register<IMediaRepository, MediaRepository>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
+
+                c.Register<PlaylistContext>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
+
+                c.Register<IPlaylistRepository, PlaylistRepository>(Reuse.Singleton);
+                c.Register<IMediaItemRepository, MediaItemRepository>(Reuse.Singleton);
+                c.Register<IMediaPlayerRepository, MediaPlayerRepository>(Reuse.Singleton);
 
                 c.Register<IPlaylistMapper, PlaylistMapper>();
                 c.Register<IMediaPlayerMapper, MediaPlayerMapper>();

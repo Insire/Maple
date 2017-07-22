@@ -113,8 +113,13 @@ namespace Maple
         /// </value>
         public Stack<int> History { get; private set; }
 
+        private RangeObservableCollection<MediaItem> _items;
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public RangeObservableCollection<MediaItem> Items { get; private set; }
+        public RangeObservableCollection<MediaItem> Items
+        {
+            get { return _items; }
+            private set { SetValue(ref _items, value); }
+        }
 
         private MediaItem _selectedItem;
         /// <summary>
@@ -126,7 +131,7 @@ namespace Maple
         public MediaItem SelectedItem
         {
             get { return _selectedItem; }
-            set { SetValue(ref _selectedItem, value, OnChanging: () => SelectionChanging?.Raise(this), OnChanged: () => SelectionChanged?.Raise(this)); }
+            set { SetValue(ref _selectedItem, value, OnChanging: OnSelectionChanging, OnChanged: OnSelectionChanged); }
         }
 
         private int _sequence;
@@ -217,7 +222,6 @@ namespace Maple
         public int Id
         {
             get { return _id; }
-            private set { SetValue(ref _id, value, OnChanged: () => Model.Id = value); }
         }
 
         private ObservableCollection<RepeatMode> _repeatModes;
@@ -340,8 +344,6 @@ namespace Maple
                 if (model.MediaItems == null)
                     throw new ArgumentException($"{model.MediaItems} cannot be null");
 
-                Items.AddRange(_mediaItemMapper.GetMany(model.MediaItems));
-
                 Items.CollectionChanged += (o, e) =>
                 {
                     OnPropertyChanged(nameof(Count));
@@ -353,6 +355,7 @@ namespace Maple
                 InitializeCommands();
                 IntializeValidation();
 
+                EnableValidation();
                 Validate();
             }
         }
@@ -373,12 +376,23 @@ namespace Maple
 
         }
 
+        protected virtual void OnSelectionChanging()
+        {
+            SelectionChanging?.Raise(this);
+        }
+
+        protected virtual void OnSelectionChanged()
+        {
+            SelectionChanged?.Raise(this);
+        }
+
         private async Task LoadFromUrl()
         {
             using (_busyStack.GetToken())
             {
                 var items = await _dialogViewModel.ShowUrlParseDialog();
-                Items.AddRange(_mediaItemMapper.GetMany(items, Id));
+                throw new NotImplementedException();
+                //Items.AddRange(_mediaItemMapper.GetMany(items, Id));
             }
         }
 
@@ -457,7 +471,7 @@ namespace Maple
                 if (Items.Any() != true)
                     History.Push(item.Sequence);
 
-                item.PlaylistId = Id;
+                item.Playlist = this;
                 Items.Add(item);
 
                 if (SelectedItem == null)
@@ -480,12 +494,15 @@ namespace Maple
                 {
                     item.Sequence = sequence;
                     Add(item);
-
                     sequence++;
+
+                    //if (item.Id == Model.SelectedItem.Id)
+                    //    SelectedItem = item;
+
                     added = true;
                 }
 
-                if (SelectedItem == null && added)
+                if (SelectedItem == null && (added || Items.Count > 0))
                     SelectedItem = Items.First();
             }
         }

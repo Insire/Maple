@@ -2,7 +2,7 @@
 
 namespace Maple.Data
 {
-    public class PlaylistContext : DbContext, IPlaylistContext
+    public class PlaylistContext : DbContext
     {
         public DbSet<Playlist> Playlists { get; set; }
         public DbSet<MediaItem> MediaItems { get; set; }
@@ -13,12 +13,13 @@ namespace Maple.Data
         public PlaylistContext()
             : base("Main")
         {
-            Configuration.ProxyCreationEnabled = true;
-            Configuration.LazyLoadingEnabled = true;
+            Configuration.ProxyCreationEnabled = false;
+            Configuration.LazyLoadingEnabled = false;
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            ModelConfiguration.Configure(modelBuilder);
             Database.SetInitializer(new CreateSeedDatabaseIfNotExists<PlaylistContext>(modelBuilder));
         }
 

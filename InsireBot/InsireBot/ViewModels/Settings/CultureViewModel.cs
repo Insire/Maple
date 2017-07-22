@@ -54,21 +54,21 @@ namespace Maple
         /// <value>
         /// The refresh command.
         /// </value>
-        public ICommand RefreshCommand => new RelayCommand(Load);
+        public ICommand RefreshCommand => new AsyncRelayCommand(LoadAsync);
         /// <summary>
         /// Gets the load command.
         /// </summary>
         /// <value>
         /// The load command.
         /// </value>
-        public ICommand LoadCommand => new RelayCommand(Load, () => !IsLoaded);
+        public ICommand LoadCommand => new AsyncRelayCommand(LoadAsync, () => !IsLoaded);
         /// <summary>
         /// Gets the save command.
         /// </summary>
         /// <value>
         /// The save command.
         /// </value>
-        public ICommand SaveCommand => new RelayCommand(Save);
+        public ICommand SaveCommand => new AsyncRelayCommand(SaveAsync);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CultureViewModel"/> class.
@@ -85,27 +85,6 @@ namespace Maple
         private void SyncCulture()
         {
             _manager.CurrentLanguage = SelectedCulture;
-        }
-
-        /// <summary>
-        /// Saves this instance.
-        /// </summary>
-        public void Save()
-        {
-            _log.Info($"{Resources.Saving} {Resources.Options}");
-            _manager.Save();
-        }
-
-        /// <summary>
-        /// Loads this instance.
-        /// </summary>
-        public void Load()
-        {
-            _log.Info($"{Resources.Loading} {Resources.Options}");
-            _manager.Load();
-            SelectedCulture = Core.Properties.Settings.Default.StartUpCulture;
-            IsLoaded = true;
-            Loaded?.Invoke(this, new LoadedEventEventArgs());
         }
 
         public async Task SaveAsync()

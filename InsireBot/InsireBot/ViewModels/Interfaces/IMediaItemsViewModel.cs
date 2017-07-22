@@ -7,10 +7,8 @@ namespace Maple
     {
         RangeObservableCollection<MediaItem> Items { get; }
 
-        void Add(int playlistId);
-        void Load();
+        void Add(Playlist playlist);
         Task LoadAsync();
-        void Save();
         Task SaveAsync();
     }
 }

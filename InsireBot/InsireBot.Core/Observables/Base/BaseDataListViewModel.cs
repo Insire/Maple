@@ -44,21 +44,21 @@ namespace Maple.Core
         /// <value>
         /// The load command.
         /// </value>
-        public ICommand LoadCommand => new RelayCommand(Load, () => !IsLoaded);
+        public ICommand LoadCommand => new AsyncRelayCommand(LoadAsync, () => !IsLoaded);
         /// <summary>
         /// Gets the refresh command.
         /// </summary>
         /// <value>
         /// The refresh command.
         /// </value>
-        public ICommand RefreshCommand => new RelayCommand(Load);
+        public ICommand RefreshCommand => new AsyncRelayCommand(LoadAsync);
         /// <summary>
         /// Gets the save command.
         /// </summary>
         /// <value>
         /// The save command.
         /// </value>
-        public ICommand SaveCommand => new RelayCommand(Save);
+        public ICommand SaveCommand => new AsyncRelayCommand(SaveAsync);
         /// <summary>
         /// Gets a value indicating whether this instance is loaded.
         /// </summary>
@@ -74,8 +74,6 @@ namespace Maple.Core
             _sequenceProvider = sequenceProvider ?? throw new ArgumentNullException(nameof(sequenceProvider));
         }
 
-        public abstract void Load();
-        public abstract void Save();
         public abstract Task LoadAsync();
         public abstract Task SaveAsync();
 

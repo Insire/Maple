@@ -23,6 +23,27 @@ namespace Maple.Core
 
         public event LogMessageReceivedEventHandler LogMessageReceived;
 
+        public void Debug(object message)
+        {
+            var text = (string)message;
+
+            System.Diagnostics.Debug.WriteLine(text);
+            _log.Debug(text);
+        }
+
+        /// <summary>
+        /// Informations the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="exception">The exception.</param>
+        public void Debug(object message, Exception exception)
+        {
+            var text = (string)message;
+
+            System.Diagnostics.Debug.WriteLine(text);
+            _log.Debug(message, exception);
+        }
+
         /// <summary>
         /// Errors the specified message.
         /// </summary>
@@ -69,7 +90,6 @@ namespace Maple.Core
         {
             var text = (string)message;
 
-            Debug.WriteLine(text);
             _log.Info(text);
 
             LogMessageReceived?.Invoke(this, new LogMessageReceivedEventEventArgs(text));
@@ -84,7 +104,6 @@ namespace Maple.Core
         {
             var text = (string)message;
 
-            Debug.WriteLine(text);
             _log.Info(message, exception);
 
             LogMessageReceived?.Invoke(this, new LogMessageReceivedEventEventArgs(text));

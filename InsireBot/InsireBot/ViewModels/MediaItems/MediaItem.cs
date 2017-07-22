@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Maple.Core;
-using Maple.Data;
 using System;
 using System.Diagnostics;
 
@@ -14,8 +13,6 @@ namespace Maple
     [DebuggerDisplay("{Title}, {Sequence} {Location}")]
     public class MediaItem : ValidableBaseDataViewModel<MediaItem, Data.MediaItem>, IMediaItem
     {
-        private readonly IPlaylistContext _context;
-
         public bool IsNew => Model.IsNew;
         public bool IsDeleted => Model.IsDeleted;
 
@@ -29,7 +26,6 @@ namespace Maple
         public int Id
         {
             get { return _id; }
-            private set { SetValue(ref _id, value, OnChanged: () => Model.Id = value); }
         }
 
         private int _sequence;
@@ -43,19 +39,6 @@ namespace Maple
         {
             get { return _sequence; }
             set { SetValue(ref _sequence, value, OnChanged: () => Model.Sequence = value); }
-        }
-
-        private int _playlistId;
-        /// <summary>
-        /// Gets or sets the playlist identifier.
-        /// </summary>
-        /// <value>
-        /// The playlist identifier.
-        /// </value>
-        public int PlaylistId
-        {
-            get { return _playlistId; }
-            set { SetValue(ref _playlistId, value, OnChanged: () => Model.PlaylistId = value); }
         }
 
         private TimeSpan _duration;
@@ -140,7 +123,7 @@ namespace Maple
         public string CreatedBy
         {
             get { return _createdBy; }
-            set { SetValue(ref _createdBy, value, OnChanged: () => Model.CreatedBy = value); }
+            private set { SetValue(ref _createdBy, value, OnChanged: () => Model.CreatedBy = value); }
         }
 
         private string _updatedBy;
@@ -161,7 +144,14 @@ namespace Maple
         public DateTime CreatedOn
         {
             get { return _updatedOn; }
-            set { SetValue(ref _updatedOn, value, OnChanged: () => Model.CreatedOn = value); }
+            private set { SetValue(ref _updatedOn, value, OnChanged: () => Model.CreatedOn = value); }
+        }
+
+        private Playlist _playlist;
+        public Playlist Playlist
+        {
+            get { return _playlist; }
+            set { SetValue(ref _playlist, value, OnChanged: () => Model.Playlist = value.Model); }
         }
 
         /// <summary>
@@ -176,11 +166,10 @@ namespace Maple
         /// Initializes a new instance of the <see cref="MediaItem"/> class.
         /// </summary>
         /// <param name="model">The model.</param>
-        public MediaItem(Data.MediaItem model, IValidator<MediaItem> validator, IPlaylistContext context)
+        public MediaItem(Data.MediaItem model, IValidator<MediaItem> validator)
             : base(model, validator)
         {
             _id = model.Id;
-            _playlistId = model.PlaylistId;
             _location = model.Location;
             _description = model.Description;
             _title = model.Title;
@@ -191,8 +180,6 @@ namespace Maple
             _createdOn = model.CreatedOn;
             _updatedBy = model.UpdatedBy;
             _updatedOn = model.UpdatedOn;
-
-            _context = context ?? throw new ArgumentNullException(nameof(context));
 
             Validate();
         }

@@ -18,25 +18,13 @@ namespace Maple
             _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper));
         }
 
-        public void Add(int playlistId)
+        public void Add(Playlist playlist)
         {
             var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
-            Add(_mediaItemMapper.GetNewMediaItem(sequence, playlistId));
+            Add(_mediaItemMapper.GetNewMediaItem(sequence, playlist));
         }
 
-        public override void Load()
-        {
-            _log.Info($"{_translationService.Translate(nameof(Resources.Loading))} {_translationService.Translate(nameof(Resources.MediaItems))}");
-            Clear();
-
-            using (var context = _repositoryFactory())
-                AddRange(context.GetAllMediaItems());
-
-            SelectedItem = Items.FirstOrDefault();
-            OnLoaded();
-        }
-
-        public override void Save()
+        private void SaveInternal()
         {
             _log.Info($"{_translationService.Translate(nameof(Resources.Saving))} {_translationService.Translate(nameof(Resources.MediaItems))}");
             using (var context = _repositoryFactory())
@@ -52,7 +40,7 @@ namespace Maple
 
             using (var context = _repositoryFactory())
             {
-                var result = await context.GetAllMediaItemsAsync();
+                var result = await context.GetMediaItemsAsync();
                 AddRange(result);
             }
 
@@ -62,7 +50,7 @@ namespace Maple
 
         public override Task SaveAsync()
         {
-            return Task.Run(() => Save());
+            return Task.Run(() => SaveInternal());
         }
     }
 }

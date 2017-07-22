@@ -1,28 +1,30 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 
 namespace Maple.Data
 {
+    [DebuggerDisplay("{Title}, {Sequence}")]
     public class MediaItem : BaseObject
     {
-        [ForeignKey(nameof(PlaylistId))]
-        public virtual Playlist Playlist { get; set; }
         public int PlaylistId { get; set; }
+        [ForeignKey(nameof(PlaylistId))]
+        public Playlist Playlist { get; set; }
 
-        [Required]
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public Raw Raw { get; set; }
+
         /// <summary>
         /// Ticks
         /// </summary>
         public long Duration { get; set; }
+        public int PrivacyStatus { get; set; }
+        public string Description { get; set; }
 
         [Required]
+        [MaxLength(50)]
+        public string Title { get; set; }
+        [Required]
+        [MaxLength(2048)]
         public string Location { get; set; }
-        public int PrivacyStatus { get; set; }
-
-        [ForeignKey(nameof(RawId))]
-        public virtual Raw Raw { get; set; }
-        public int RawId { get; set; }
     }
 }

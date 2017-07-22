@@ -24,13 +24,6 @@ namespace Maple
         {
             var config = new MapperConfiguration(cfg => // TODO
             {
-                cfg.CreateMap<Data.MediaPlayer, Core.MediaPlayer>()
-                    .Ignore(p => p.Playlist);
-
-                cfg.CreateMap<Core.MediaPlayer, Data.MediaPlayer>()
-                    .Ignore(p => p.Playlist)
-                    .Ignore(p => p.IsDeleted)
-                    .Ignore(p => p.IsNew);
             });
 
             config.AssertConfigurationIsValid();
@@ -48,6 +41,16 @@ namespace Maple
             });
         }
 
+        public MediaPlayer Get(Data.MediaPlayer model)
+        {
+            throw new NotImplementedException(); // by design
+        }
+
+        public Data.MediaPlayer GetData(MediaPlayer viewModel)
+        {
+            return viewModel.Model;
+        }
+
         public MainMediaPlayer GetMain(Data.MediaPlayer player, Playlist playlist)
         {
             return new MainMediaPlayer(_translationService, _mediaPlayer, _validator, _devices, playlist, player);
@@ -56,36 +59,6 @@ namespace Maple
         public MediaPlayer Get(Data.MediaPlayer player, Playlist playlist)
         {
             return new MediaPlayer(_translationService, _mediaPlayer, _validator, _devices, playlist, player);
-        }
-
-        public MediaPlayer Get(Data.MediaPlayer model)
-        {
-            return new MediaPlayer(_translationService, _mediaPlayer, _validator, _devices, null, model); //TODO
-        }
-
-        public MediaPlayer Get(Core.MediaPlayer dto)
-        {
-            return new MediaPlayer(_translationService, _mediaPlayer, _validator, _devices, null, GetData(dto)); //TODO
-        }
-
-        public Data.MediaPlayer GetData(MediaPlayer viewModel)
-        {
-            return viewModel.Model;
-        }
-
-        public Data.MediaPlayer GetData(Core.MediaPlayer dto)
-        {
-            return _mapper.Map<Core.MediaPlayer, Data.MediaPlayer>(dto);
-        }
-
-        public Core.MediaPlayer GetCore(MediaPlayer viewModel)
-        {
-            return GetCore(viewModel.Model);
-        }
-
-        public Core.MediaPlayer GetCore(Data.MediaPlayer model)
-        {
-            return _mapper.Map<Data.MediaPlayer, Core.MediaPlayer>(model);
         }
     }
 }

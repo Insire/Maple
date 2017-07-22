@@ -51,7 +51,10 @@ namespace Maple.Core
         {
             _validator = validator ?? throw new ArgumentNullException(nameof(validator)); //order is important in this case
             Model = model ?? throw new ArgumentNullException(nameof(model));
+        }
 
+        protected void EnableValidation()
+        {
             _skipValidation = false;
         }
 

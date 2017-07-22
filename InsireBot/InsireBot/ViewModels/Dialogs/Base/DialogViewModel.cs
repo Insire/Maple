@@ -327,9 +327,9 @@ namespace Maple
         /// Shows the URL parse dialog.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<Data.MediaItem>> ShowUrlParseDialog()
+        public async Task<List<MediaItem>> ShowUrlParseDialog()
         {
-            var result = new List<Data.MediaItem>();
+            var result = new List<MediaItem>();
             var viewmodel = new CreateMediaItem(_service, _mediaItemMapper);
 
             TitleDetail = string.Empty;
@@ -340,7 +340,7 @@ namespace Maple
             {
                 if (viewmodel.Result?.MediaItems?.Any() == true)
                 {
-                    var items = _mediaItemMapper.GetManyData(viewmodel.Result.MediaItems);
+                    var items = _mediaItemMapper.GetMany(viewmodel.Result.MediaItems);
                     result.AddRange(items);
                 }
             };

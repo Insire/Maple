@@ -16,7 +16,9 @@ namespace Maple
     {
         private const int _saveThreshold = 100;
 
-        private readonly IPlaylistContext _context;
+        private readonly IMediaItemRepository _mediaItemRepository;
+        private readonly IMediaPlayerRepository _mediaPlayerRepository;
+        private readonly IPlaylistRepository _playlistRepository;
 
         private readonly IPlaylistMapper _playlistMapper;
         private readonly IMediaPlayerMapper _mediaPlayerMapper;
@@ -28,357 +30,37 @@ namespace Maple
 
         public bool IsBusy { get; private set; }
 
-        public MediaRepository(IPlaylistMapper playlistMapper, IMediaItemMapper mediaItemMapper, IMediaPlayerMapper mediaPlayerMapper, IPlaylistContext context)
+        public MediaRepository(IPlaylistMapper playlistMapper,
+                               IMediaItemMapper mediaItemMapper,
+                               IMediaPlayerMapper mediaPlayerMapper,
+                               IMediaItemRepository mediaItemRepository,
+                               IMediaPlayerRepository mediaPlayerRepository,
+                               IPlaylistRepository playlistRepository)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-
             _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper));
             _playlistMapper = playlistMapper ?? throw new ArgumentNullException(nameof(playlistMapper));
             _mediaPlayerMapper = mediaPlayerMapper ?? throw new ArgumentNullException(nameof(mediaPlayerMapper));
+
+            _mediaItemRepository = mediaItemRepository ?? throw new ArgumentNullException(nameof(mediaItemRepository));
+            _mediaPlayerRepository = mediaPlayerRepository ?? throw new ArgumentNullException(nameof(mediaPlayerRepository));
+            _playlistRepository = playlistRepository ?? throw new ArgumentNullException(nameof(playlistRepository));
 
             _busyStack = new BusyStack();
             _busyStack.OnChanged += (hasItems) => { IsBusy = hasItems; };
         }
 
-        /// <summary>
-        /// Gets the playlist by identifier.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns></returns>
-        public Playlist GetPlaylistById(int id)
+        public void Save(MediaItem viewModel)
         {
-            var playlist = _context.Playlists.FirstOrDefault(p => p.Id == id);
-
-            if (playlist == null)
-                return default(Playlist);
-
-            var viewModel = _playlistMapper.Get(playlist);
-            viewModel.AddRange(GetMediaItemByPlaylistId(playlist.Id));
-
-            return viewModel;
+            using (_busyStack.GetToken())
+                _mediaItemRepository.Save(viewModel.Model);
         }
 
-        public async Task<Playlist> GetPlaylistByIdAsync(int id)
-        {
-            var playlist = await Task.Run(() => _context.Playlists.FirstOrDefault(p => p.Id == id));
-
-            if (playlist == null)
-                return default(Playlist);
-
-            var viewModel = _playlistMapper.Get(playlist);
-            viewModel.AddRange(GetMediaItemByPlaylistId(playlist.Id));
-
-            return viewModel;
-        }
-
-        public IList<Playlist> GetAllPlaylists()
-        {
-            var playlists = _context.Playlists.AsEnumerable().Select(p => _playlistMapper.Get(p)).ToList();
-            var mediaItems = _context.MediaItems.AsEnumerable().Select(p => _mediaItemMapper.Get(p)).ToList();
-
-            foreach (var playlist in playlists)
-                playlist.AddRange(mediaItems.Where(p => p.PlaylistId == playlist.Id));
-
-            return playlists;
-        }
-
-        public async Task<IList<Playlist>> GetAllPlaylistsAsync()
-        {
-            var data = await Task.Run(() => _context.Playlists.ToList());
-            var playlists = data.Select(p => _playlistMapper.Get(p));
-            var mediaItems = await GetAllMediaItemsAsync();
-
-            foreach (var playlist in playlists)
-                playlist.AddRange(mediaItems.Where(p => p.PlaylistId == playlist.Id));
-
-            return playlists.ToList();
-        }
-
-        public void Save(Playlist playlist, bool isRoot = true)
+        public void Save(MediaItems viewModel)
         {
             using (_busyStack.GetToken())
             {
-                if (playlist.IsNew)
-                    Create(playlist);
-                else
-                {
-                    if (playlist.IsDeleted)
-                        Delete(playlist);
-                    else
-                        Update(playlist);
-                }
-
-                if (isRoot)
-                    _context.SaveChanges();
-            }
-        }
-
-        private void Delete(Playlist playlist)
-        {
-            _context.Set<Data.Playlist>().Remove(playlist.Model);
-        }
-
-        private void Create(Playlist playlist)
-        {
-            playlist.Model.CreatedBy = System.Security.Principal.WindowsIdentity.GetCurrent().User.Value;
-            playlist.Model.CreatedOn = DateTime.UtcNow;
-
-            _context.Set<Data.Playlist>().Add(playlist.Model);
-
-            foreach (var item in playlist.Items)
-                Save(item, false);
-        }
-
-        private void Update(Playlist playlist)
-        {
-            var model = playlist.Model;
-            var entity = _context.Playlists.Find(model.Id);
-
-            if (entity == null)
-                return;
-
-            playlist.UpdatedOn = DateTime.UtcNow;
-            playlist.UpdatedBy = System.Security.Principal.WindowsIdentity.GetCurrent().User.Value;
-
-            _context.Entry(entity).CurrentValues.SetValues(playlist.Model);
-
-            foreach (var item in playlist.Items)
-                Save(item, false);
-        }
-
-        public void Save(Playlists playlists, bool isRoot = true)
-        {
-            using (_busyStack.GetToken())
-            {
-                var saveRequired = false;
-                for (var i = 0; i < playlists.Items.Count; i++)
-                {
-                    saveRequired = true;
-                    Save(playlists.Items[i], false);
-
-                    if (i % _saveThreshold == 0)
-                    {
-                        _context.SaveChanges();
-                        saveRequired = false;
-                    }
-
-                }
-
-                if (isRoot || saveRequired)
-                    _context.SaveChanges();
-            }
-        }
-
-        public MediaPlayer GetMainMediaPlayer()
-        {
-            using (_busyStack.GetToken())
-            {
-                var player = _context.Mediaplayers.FirstOrDefault(p => p.IsPrimary);
-
-                if (player != null)
-                    return _mediaPlayerMapper.Get(player, GetPlaylistById(player.PlaylistId));
-
-                return default(MediaPlayer);
-            }
-        }
-
-        public async Task<MediaPlayer> GetMainMediaPlayerAsync()
-        {
-            using (_busyStack.GetToken())
-            {
-                var player = await Task.Run(() => _context.Mediaplayers.FirstOrDefault(p => p.IsPrimary));
-
-                if (player != null)
-                {
-                    var playlist = await GetPlaylistByIdAsync(player.PlaylistId);
-
-                    if (playlist != null)
-                        return _mediaPlayerMapper.GetMain(player, GetPlaylistById(player.PlaylistId));
-                }
-
-                return default(MediaPlayer);
-            }
-        }
-
-        public MediaPlayer GetMediaPlayerById(int id)
-        {
-            using (_busyStack.GetToken())
-            {
-                var player = _context.Mediaplayers.FirstOrDefault(p => p.Id == id);
-
-                if (player != null)
-                    return _mediaPlayerMapper.Get(player, GetPlaylistById(player.PlaylistId));
-
-                return default(MediaPlayer);
-            }
-        }
-
-        public async Task<MediaPlayer> GetMediaPlayerByIdAsync(int id)
-        {
-            using (_busyStack.GetToken())
-            {
-                var player = await Task.Run(() => _context.Mediaplayers.FirstOrDefault(p => p.Id == id));
-
-                if (player != null)
-                {
-                    var playlist = await GetPlaylistByIdAsync(player.PlaylistId);
-
-                    if (playlist != null)
-                        return _mediaPlayerMapper.Get(player, GetPlaylistById(player.PlaylistId));
-                }
-
-                return default(MediaPlayer);
-            }
-        }
-
-        /// <summary>
-        /// returns all non MainMediaPlayers
-        /// </summary>
-        /// <returns></returns>
-        public IList<MediaPlayer> GetAllOptionalMediaPlayers()
-        {
-            using (_busyStack.GetToken())
-            {
-                var result = new List<MediaPlayer>();
-                var players = _context.Mediaplayers
-                                      .Where(p => !p.IsPrimary)
-                                      .AsEnumerable()
-                                      .Select(p => _mediaPlayerMapper.Get(p, GetPlaylistById(p.PlaylistId)));
-
-                result.AddRange(players);
-
-                return result;
-            }
-        }
-
-        public async Task<IList<MediaPlayer>> GetAllOptionalMediaPlayersAsync()
-        {
-            using (_busyStack.GetToken())
-            {
-                var result = new List<MediaPlayer>();
-                var players = await Task.Run(() => _context.Mediaplayers.Where(p => !p.IsPrimary));
-
-                foreach (var player in players)
-                {
-                    var playlist = await GetPlaylistByIdAsync(player.PlaylistId);
-                    result.Add(_mediaPlayerMapper.Get(player, GetPlaylistById(player.PlaylistId)));
-                }
-
-                return result;
-            }
-        }
-
-        public void Save(MediaPlayer player, bool isRoot = true)
-        {
-            using (_busyStack.GetToken())
-            {
-                if (player.IsNew)
-                    Create(player);
-                else
-                {
-                    if (player.IsDeleted)
-                        Delete(player);
-                    else
-                        Update(player);
-                }
-
-                if (isRoot)
-                    _context.SaveChanges();
-            }
-        }
-
-        private void Delete(MediaPlayer player)
-        {
-            _context.Set<Data.MediaPlayer>().Remove(player.Model);
-        }
-
-        private void Create(MediaPlayer player)
-        {
-            player.Model.CreatedBy = System.Security.Principal.WindowsIdentity.GetCurrent().User.Value;
-            player.Model.CreatedOn = DateTime.UtcNow;
-
-            _context.Set<Data.MediaPlayer>().Add(player.Model);
-        }
-
-        private void Update(MediaPlayer player)
-        {
-            using (_busyStack.GetToken())
-            {
-                var model = player.Model;
-                var entity = _context.Mediaplayers.Find(model.Id);
-
-                if (entity == null)
-                    return;
-
-                player.Model.UpdatedOn = DateTime.UtcNow;
-                player.Model.UpdatedBy = System.Security.Principal.WindowsIdentity.GetCurrent().User.Value;
-
-                _context.Entry(entity).CurrentValues.SetValues(player.Model);
-            }
-        }
-
-        public void Save(IMediaPlayersViewModel players, bool isRoot = true)
-        {
-            using (_busyStack.GetToken())
-            {
-                var saveRequired = false;
-                for (var i = 0; i < players.Items.Count; i++)
-                {
-                    saveRequired = true;
-                    Save(players.Items[i], false);
-
-                    if (i % _saveThreshold == 0)
-                    {
-                        _context.SaveChanges();
-                        saveRequired = false;
-                    }
-                }
-
-                if (isRoot || saveRequired)
-                    _context.SaveChanges();
-            }
-        }
-
-        private void Delete(MediaItem item)
-        {
-            _context.Set<Data.MediaItem>().Remove(item.Model);
-        }
-
-        private void Create(MediaItem item)
-        {
-            item.Model.CreatedBy = System.Security.Principal.WindowsIdentity.GetCurrent().User.Value;
-            item.Model.CreatedOn = DateTime.UtcNow;
-
-            _context.Set<Data.MediaItem>().Add(item.Model);
-        }
-
-        private void Update(MediaItem item)
-        {
-            using (_busyStack.GetToken())
-            {
-                var model = item.Model;
-                var entity = _context.MediaItems.Find(model.Id);
-
-                if (entity == null)
-                    return;
-
-                entity.UpdatedOn = DateTime.UtcNow;
-                entity.UpdatedBy = System.Security.Principal.WindowsIdentity.GetCurrent().User.Value;
-
-                _context.Entry(entity).CurrentValues.SetValues(item.Model);
-            }
-        }
-
-        public MediaItem GetMediaItemById(int id)
-        {
-            using (_busyStack.GetToken())
-            {
-                var item = _context.MediaItems.FirstOrDefault(p => p.Id == id);
-
-                if (item != null)
-                    return _mediaItemMapper.Get(item);
-
-                return default(MediaItem);
+                foreach (var item in viewModel.Items)
+                    Save(item);
             }
         }
 
@@ -386,94 +68,104 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                var item = await Task.Run(() => _context.MediaItems.FirstOrDefault(p => p.Id == id));
-
-                if (item != null)
-                    return _mediaItemMapper.Get(item);
-
-                return default(MediaItem);
+                var item = await _mediaItemRepository.GetByIdAsync(id);
+                return _mediaItemMapper.Get(item);
             }
         }
 
-        public IList<MediaItem> GetMediaItemByPlaylistId(int id)
+        public async Task<IList<MediaItem>> GetMediaItemsAsync()
         {
             using (_busyStack.GetToken())
             {
-                return _context.MediaItems.Where(p => p.PlaylistId == id)
-                                          .AsEnumerable()
-                                          .Select(p => _mediaItemMapper.Get(p))
-                                          .ToList();
+                var items = await _mediaItemRepository.GetAsync();
+                return items.Select(p => _mediaItemMapper.Get(p))
+                            .ToList();
             }
         }
 
-        public async Task<IList<MediaItem>> GetMediaItemByPlaylistIdAsync(int id)
+        public async Task<MediaItem> GetMediaItemByPlaylistIdAsync(int id)
         {
             using (_busyStack.GetToken())
             {
-                var items = await Task.Run(() => _context.MediaItems.Where(p => p.PlaylistId == id).AsEnumerable());
-
-                return _mediaItemMapper.GetManyAsList(items);
+                var item = await _mediaItemRepository.GetMediaItemByPlaylistIdAsync(id);
+                return _mediaItemMapper.Get(item);
             }
         }
 
-        public IList<MediaItem> GetAllMediaItems()
+        public void Save(Playlist viewModel)
+        {
+            using (_busyStack.GetToken())
+                _playlistRepository.Save(viewModel.Model);
+        }
+
+        public void Save(Playlists viewModel)
         {
             using (_busyStack.GetToken())
             {
-                var items = _context.MediaItems.AsEnumerable();
-
-                return _mediaItemMapper.GetManyAsList(items);
+                foreach (var item in viewModel.Items)
+                    Save(item);
             }
         }
 
-        public async Task<IList<MediaItem>> GetAllMediaItemsAsync()
+        public async Task<Playlist> GetPlaylistByIdAsync(int id)
         {
             using (_busyStack.GetToken())
             {
-                var items = await Task.Run(() => _context.MediaItems.AsEnumerable());
-
-                return _mediaItemMapper.GetManyAsList(items);
+                var item = await _playlistRepository.GetByIdAsync(id);
+                return _playlistMapper.Get(item);
             }
         }
 
-        public void Save(MediaItem item, bool isRoot = true)
+        public async Task<IList<Playlist>> GetPlaylistsAsync()
         {
             using (_busyStack.GetToken())
             {
-                if (item.IsNew)
-                    Create(item);
-                else
-                {
-                    if (item.IsDeleted)
-                        Delete(item);
-                    else
-                        Update(item);
-                }
-
-                if (isRoot)
-                    _context.SaveChanges();
+                var items = await _playlistRepository.GetAsync();
+                return items.Select(p => _playlistMapper.Get(p))
+                            .ToList();
             }
         }
 
-        public void Save(IMediaItemsViewModel mediaItems, bool isRoot = true)
+        public void Save(MediaPlayer viewModel)
+        {
+            using (_busyStack.GetToken())
+                _mediaPlayerRepository.Save(viewModel.Model);
+        }
+
+        public void Save(MediaPlayers viewModel)  // performance (?)
         {
             using (_busyStack.GetToken())
             {
-                var saveRequired = false;
-                for (var i = 0; i < mediaItems.Items.Count; i++)
-                {
-                    saveRequired = true;
-                    Save(mediaItems.Items[i], false);
+                foreach (var item in viewModel.Items)
+                    Save(item);
+            }
+        }
 
-                    if (i % _saveThreshold == 0)
-                    {
-                        _context.SaveChanges();
-                        saveRequired = false;
-                    }
-                }
+        public async Task<MediaPlayer> GetMainMediaPlayerAsync()
+        {
+            using (_busyStack.GetToken())
+            {
+                var item = await _mediaPlayerRepository.GetMainMediaPlayerAsync();
+                return _mediaPlayerMapper.GetMain(item, _playlistMapper.Get(item.Playlist));
+            }
+        }
 
-                if (isRoot || saveRequired)
-                    _context.SaveChanges();
+        public async Task<MediaPlayer> GetMediaPlayerByIdAsync(int id)
+        {
+            using (_busyStack.GetToken())
+            {
+                var item = await _mediaPlayerRepository.GetByIdAsync(id);
+                return _mediaPlayerMapper.Get(item);
+            }
+        }
+
+        public async Task<IList<MediaPlayer>> GetAllOptionalMediaPlayersAsync()
+        {
+            using (_busyStack.GetToken())
+            {
+                var items = await _mediaPlayerRepository.GetOptionalMediaPlayersAsync();
+                return items.Select(p => _mediaPlayerMapper.Get(p))
+                            .ToList();
             }
         }
 
@@ -491,7 +183,7 @@ namespace Maple
 
             if (disposing)
             {
-                _context.Dispose();
+
                 // Free any other managed objects here.
             }
 

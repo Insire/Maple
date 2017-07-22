@@ -14,22 +14,23 @@ namespace Maple
 
         protected override async void OnStartup(StartupEventArgs e)
         {
-            _container = DependencyInjectionFactory.Get();
+            _container = await DependencyInjectionFactory.Get();
 
-            var service = _container.Resolve<ILocalizationService>();
+            var localizationService = _container.Resolve<ILocalizationService>();
+            var log = _container.Resolve<IMapleLog>();
 
-            InitializeResources(service);
+            InitializeResources(localizationService);
             InitializeLocalization();
 
-            var shell = await GetShell(service);
+            var shell = await GetShell(localizationService, log);
             shell.Show();
 
             base.OnStartup(e);
         }
 
-        protected override void OnExit(ExitEventArgs e)
+        protected override async void OnExit(ExitEventArgs e)
         {
-            SaveState();
+            await SaveState();
             ExitInternal(e);
         }
 
@@ -41,10 +42,8 @@ namespace Maple
         /// <remarks>
         /// order matters alot here, so be careful when modifying this
         /// </remarks>
-        private async Task<Shell> GetShell(ILocalizationService service)
+        private async Task<Shell> GetShell(ILocalizationService service, IMapleLog log)
         {
-            var log = _container.Resolve<IMapleLog>();
-
             using (var vm = _container.Resolve<ISplashScreenViewModel>())
             {
                 var shell = _container.Resolve<Shell>();
@@ -93,13 +92,17 @@ namespace Maple
             return tasks;
         }
 
-        private void SaveState()
+        private async Task SaveState()
         {
+            var tasks = new List<Task>();
+
             var log = _container.Resolve<IMapleLog>();
             log.Info(Localization.Properties.Resources.SavingState);
 
             foreach (var item in _container.Resolve<IEnumerable<ILoadableViewModel>>())
-                item.Save();
+                tasks.Add(item.SaveAsync());
+
+            await Task.WhenAll(tasks);
 
             log.Info(Localization.Properties.Resources.SavedState);
         }

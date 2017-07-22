@@ -3,9 +3,9 @@
     /// <summary>
     ///
     /// </summary>
-    public interface IMediaItemMapper : IBaseMapper<MediaItem, Core.MediaItem, Data.MediaItem>
+    public interface IMediaItemMapper : IBaseMapper<MediaItem, Data.MediaItem>
     {
-        MediaItem GetNewMediaItem(int sequence, int playlistId);
-        Data.MediaItem GetDataNewMediaItem(int playlistId);
+        MediaItem GetNewMediaItem(int sequence, Playlist playlist);
+        Data.MediaItem GetDataNewMediaItem(Data.Playlist playlist);
     }
 }

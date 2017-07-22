@@ -3,39 +3,36 @@ using Maple.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Maple.Test
 {
     [TestClass]
     public class DependencyInjectionFactoryTests
     {
-        private static IContainer _container;
 
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext context)
+        [TestMethod]
+        public async Task SanityMapleGetContainerTest()
         {
-            _container = DependencyInjectionFactory.Get();
+            var container = await DependencyInjectionFactory.Get();
+            container.VerifyResolutions();
         }
 
         [TestMethod]
-        public void SanityMapleGetContainerTest()
+        public async Task ResolveLoadablesAsList()
         {
-            _container.VerifyResolutions();
-        }
-
-        [TestMethod]
-        public void ResolveLoadablesAsList()
-        {
-            var loadables = _container.Resolve<IList<ILoadableViewModel>>();
+            var container = await DependencyInjectionFactory.Get();
+            var loadables = container.Resolve<IList<ILoadableViewModel>>();
 
             Assert.IsNotNull(loadables);
             Assert.IsTrue(loadables?.Count > 3, $"Only {loadables.Count} instance(s) found");
         }
 
         [TestMethod]
-        public void ResolveManyLoadablesAsList()
+        public async Task ResolveManyLoadablesAsList()
         {
-            var loadables = _container.ResolveMany<ILoadableViewModel>().ToList();
+            var container = await DependencyInjectionFactory.Get();
+            var loadables = container.ResolveMany<ILoadableViewModel>().ToList();
 
             Assert.IsNotNull(loadables);
             Assert.IsTrue(loadables?.Count > 3, $"Only {loadables.Count} instance(s) found");

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple", "InsireBot\Maple.csproj", "{FBD5595B-6859-4E8E-BDFA-C3169EF34985}"
 EndProject
@@ -28,6 +28,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Youtube", "InsireBot.Youtube\Maple.Youtube.csproj", "{B5BE546F-8D9F-4FB9-B235-AF05FD553F9E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Test", "Maple.Test\Maple.Test.csproj", "{60F95B05-E714-4E0F-BA97-44711EC74210}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Contracts", "Maple.Contracts\Maple.Contracts.csproj", "{E70C9432-ACA6-4AF8-B4CB-338930B980B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -150,6 +152,24 @@ Global
 		{60F95B05-E714-4E0F-BA97-44711EC74210}.Release|x64.Build.0 = Release|Any CPU
 		{60F95B05-E714-4E0F-BA97-44711EC74210}.Release|x86.ActiveCfg = Release|Any CPU
 		{60F95B05-E714-4E0F-BA97-44711EC74210}.Release|x86.Build.0 = Release|Any CPU
+		{E70C9432-ACA6-4AF8-B4CB-338930B980B8}.AppVeyor|Any CPU.ActiveCfg = Release|Any CPU
+		{E70C9432-ACA6-4AF8-B4CB-338930B980B8}.AppVeyor|Any CPU.Build.0 = Release|Any CPU
+		{E70C9432-ACA6-4AF8-B4CB-338930B980B8}.AppVeyor|x64.ActiveCfg = Release|Any CPU
+		{E70C9432-ACA6-4AF8-B4CB-338930B980B8}.AppVeyor|x64.Build.0 = Release|Any CPU
+		{E70C9432-ACA6-4AF8-B4CB-338930B980B8}.AppVeyor|x86.ActiveCfg = Release|Any CPU
+		{E70C9432-ACA6-4AF8-B4CB-338930B980B8}.AppVeyor|x86.Build.0 = Release|Any CPU
+		{E70C9432-ACA6-4AF8-B4CB-338930B980B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E70C9432-ACA6-4AF8-B4CB-338930B980B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E70C9432-ACA6-4AF8-B4CB-338930B980B8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E70C9432-ACA6-4AF8-B4CB-338930B980B8}.Debug|x64.Build.0 = Debug|Any CPU
+		{E70C9432-ACA6-4AF8-B4CB-338930B980B8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E70C9432-ACA6-4AF8-B4CB-338930B980B8}.Debug|x86.Build.0 = Debug|Any CPU
+		{E70C9432-ACA6-4AF8-B4CB-338930B980B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E70C9432-ACA6-4AF8-B4CB-338930B980B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E70C9432-ACA6-4AF8-B4CB-338930B980B8}.Release|x64.ActiveCfg = Release|Any CPU
+		{E70C9432-ACA6-4AF8-B4CB-338930B980B8}.Release|x64.Build.0 = Release|Any CPU
+		{E70C9432-ACA6-4AF8-B4CB-338930B980B8}.Release|x86.ActiveCfg = Release|Any CPU
+		{E70C9432-ACA6-4AF8-B4CB-338930B980B8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

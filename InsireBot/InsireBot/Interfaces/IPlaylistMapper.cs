@@ -3,7 +3,7 @@
     /// <summary>
     ///
     /// </summary>
-    public interface IPlaylistMapper : IBaseMapper<Playlist, Core.Playlist, Data.Playlist>
+    public interface IPlaylistMapper : IBaseMapper<Playlist, Data.Playlist>
     {
         /// <summary>
         /// Gets the new playlist.

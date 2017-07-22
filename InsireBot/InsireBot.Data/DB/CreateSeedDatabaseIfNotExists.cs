@@ -1,4 +1,5 @@
 ﻿using SQLite.CodeFirst;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Diagnostics;
@@ -64,7 +65,7 @@ namespace Maple.Data
         {
         }
 
-        public CreateSeedDatabaseIfNotExists(DbModelBuilder modelBuilder, System.Type historyEntityType)
+        public CreateSeedDatabaseIfNotExists(DbModelBuilder modelBuilder, Type historyEntityType)
             : base(modelBuilder, historyEntityType)
         {
         }
@@ -101,6 +102,10 @@ namespace Maple.Data
                            PrivacyStatus = 0,
                            RepeatMode = 1,
                            Sequence = i,
+                           CreatedBy = "SYSTEM",
+                           UpdatedBy = "SYSTEM",
+                           CreatedOn = DateTime.UtcNow,
+                           UpdatedOn = DateTime.UtcNow,
                        });
 
                 for (var j = 0; j < _mediaItemTitles.Count; j++)
@@ -113,9 +118,13 @@ namespace Maple.Data
                                 Duration = 60_000_000,
                                 Id = j,
                                 Location = "https://www.youtube.com/watch?v=oHg5SJYRHA0",
-                                PlaylistId = i,
+                                Playlist = context.Playlists.Find(i),
                                 PrivacyStatus = 0,
                                 Sequence = j,
+                                CreatedBy = "SYSTEM",
+                                UpdatedBy = "SYSTEM",
+                                CreatedOn = DateTime.UtcNow,
+                                UpdatedOn = DateTime.UtcNow,
                             });
                     index++;
 
@@ -135,8 +144,12 @@ namespace Maple.Data
                            Id = 1,
                            IsPrimary = true,
                            Name = "Main",
-                           PlaylistId = 1,
+                           Playlist = context.Playlists.Find(1),
                            Sequence = 0,
+                           CreatedBy = "SYSTEM",
+                           UpdatedBy = "SYSTEM",
+                           CreatedOn = DateTime.UtcNow,
+                           UpdatedOn = DateTime.UtcNow,
                        });
         }
 
@@ -151,6 +164,10 @@ namespace Maple.Data
                         Sequence = 0,
                         Type = (int)OptionType.Playlist,
                         Value = "1",
+                        CreatedBy = "SYSTEM",
+                        UpdatedBy = "SYSTEM",
+                        CreatedOn = DateTime.UtcNow,
+                        UpdatedOn = DateTime.UtcNow,
                     });
 
             if (context.Options.Find(2) == null)
@@ -162,6 +179,10 @@ namespace Maple.Data
                         Sequence = 10,
                         Type = (int)OptionType.MediaItem,
                         Value = "",
+                        CreatedBy = "SYSTEM",
+                        UpdatedBy = "SYSTEM",
+                        CreatedOn = DateTime.UtcNow,
+                        UpdatedOn = DateTime.UtcNow,
                     });
 
             if (context.Options.Find(3) == null)
@@ -173,6 +194,10 @@ namespace Maple.Data
                         Sequence = 20,
                         Type = (int)OptionType.MediaPlayer,
                         Value = "1",
+                        CreatedBy = "SYSTEM",
+                        UpdatedBy = "SYSTEM",
+                        CreatedOn = DateTime.UtcNow,
+                        UpdatedOn = DateTime.UtcNow,
                     });
 
             // 4
@@ -186,6 +211,10 @@ namespace Maple.Data
                         Sequence = 40,
                         Type = (int)OptionType.ColorProfile,
                         Value = "",
+                        CreatedBy = "SYSTEM",
+                        UpdatedBy = "SYSTEM",
+                        CreatedOn = DateTime.UtcNow,
+                        UpdatedOn = DateTime.UtcNow,
                     });
 
             if (context.Options.Find(6) == null)
@@ -197,6 +226,10 @@ namespace Maple.Data
                         Sequence = 50,
                         Type = (int)OptionType.ColorProfile,
                         Value = "",
+                        CreatedBy = "SYSTEM",
+                        UpdatedBy = "SYSTEM",
+                        CreatedOn = DateTime.UtcNow,
+                        UpdatedOn = DateTime.UtcNow,
                     });
 
             if (context.Options.Find(7) == null)
@@ -208,8 +241,11 @@ namespace Maple.Data
                         Sequence = 60,
                         Type = (int)OptionType.Scene,
                         Value = "",
+                        CreatedBy = "SYSTEM",
+                        UpdatedBy = "SYSTEM",
+                        CreatedOn = DateTime.UtcNow,
+                        UpdatedOn = DateTime.UtcNow,
                     });
-
         }
     }
 }

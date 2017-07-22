@@ -6,13 +6,6 @@ using System.Threading.Tasks;
 
 namespace Maple
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <seealso cref="Maple.Core.BaseDataListViewModel{Maple.MediaPlayer, Maple.Data.MediaPlayer}" />
-    /// <seealso cref="System.IDisposable" />
-    /// <seealso cref="Maple.Core.ILoadableViewModel" />
-    /// <seealso cref="Maple.Core.ISaveableViewModel" />
     public class MediaPlayers : BaseDataListViewModel<MediaPlayer, Data.MediaPlayer>, IMediaPlayersViewModel
     {
         private readonly Func<IMediaPlayer> _playerFactory;
@@ -39,31 +32,7 @@ namespace Maple
             _mediaPlayerMapper = mediaPlayerMapper ?? throw new ArgumentNullException(nameof(mediaPlayerMapper));
         }
 
-        /// <summary>
-        /// Loads this instance.
-        /// </summary>
-        public override void Load()
-        {
-            _log.Info($"{_translationService.Translate(nameof(Resources.Loading))} {_translationService.Translate(nameof(Resources.MediaPlayers))}");
-            Items.Clear();
-
-            using (var context = _repositoryFactory())
-            {
-                var main = context.GetMainMediaPlayer();
-
-                Items.Add(main);
-                SelectedItem = main;
-
-                Items.AddRange(context.GetAllOptionalMediaPlayers());
-            }
-
-            OnLoaded();
-        }
-
-        /// <summary>
-        /// Saves this instance.
-        /// </summary>
-        public override void Save()
+        private void SaveInternal()
         {
             _log.Info($"{_translationService.Translate(nameof(Resources.Saving))} {_translationService.Translate(nameof(Resources.MediaPlayers))}");
             using (var context = _repositoryFactory())
@@ -102,7 +71,7 @@ namespace Maple
 
         public override Task SaveAsync()
         {
-            return Task.Run(() => Save());
+            return Task.Run(() => SaveInternal());
         }
 
         public override async Task LoadAsync()
