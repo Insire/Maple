@@ -3,9 +3,9 @@ using NAudio.Wave;
 
 namespace Maple
 {
-    public class WavePlayerFactory
+    public class WavePlayerFactory : IWavePlayerFactory
     {
-        public static IWavePlayer GetPlayer(ILoggingService log)
+        public IWavePlayer GetPlayer(ILoggingService log)
         {
             var player = default(WaveOutEvent);
             try
