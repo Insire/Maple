@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.Entity;
 
 namespace Maple.Data
 {
@@ -13,7 +8,6 @@ namespace Maple.Data
         {
             ConfigureCoachEntity(modelBuilder);
             ConfigureMediaItemEntity(modelBuilder);
-            ConfigureSelfReferencingEntities(modelBuilder);
         }
 
         private static void ConfigureCoachEntity(DbModelBuilder modelBuilder)
@@ -28,13 +22,6 @@ namespace Maple.Data
                 .HasRequired(p => p.Playlist)
                 .WithMany(mediaItem => mediaItem.MediaItems)
                 .WillCascadeOnDelete(true);
-        }
-
-        private static void ConfigureSelfReferencingEntities(DbModelBuilder modelBuilder)
-        {
-            //modelBuilder.Entity<Foo>();
-            //modelBuilder.Entity<FooSelf>();
-            //modelBuilder.Entity<FooStep>();
         }
     }
 }

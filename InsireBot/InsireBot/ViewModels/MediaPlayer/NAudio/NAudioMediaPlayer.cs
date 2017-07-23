@@ -23,7 +23,7 @@ namespace Maple
             set { SetValue(ref _volume, value, OnChanged: () => SyncVolumeToVolumeProvider(value)); }
         }
 
-        public NAudioMediaPlayer(ILoggingService log, IMessenger messenger, AudioDevices audioDevices)
+        public NAudioMediaPlayer(ILoggingService log, IMessenger messenger, AudioDevices audioDevices, IWavePlayerFactory factory)
             : base(messenger, audioDevices)
         {
             _settings = new MediaFoundationReader.MediaFoundationReaderSettings
@@ -33,7 +33,7 @@ namespace Maple
                 RequestFloatOutput = false,
             };
 
-            _player = WavePlayerFactory.GetPlayer();
+            _player = factory.GetPlayer(log);
             _player.PlaybackStopped += PlaybackStopped;
 
             _messenger.Subscribe<PlayingMediaItemMessage>(OnPlaybackStarted);

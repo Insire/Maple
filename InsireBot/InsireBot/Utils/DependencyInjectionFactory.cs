@@ -66,6 +66,7 @@ namespace Maple
             void RegisterServices()
             {
                 c.Register<IMediaPlayer, NAudioMediaPlayer>(setup: Setup.With(allowDisposableTransient: true));
+                c.Register<IWavePlayerFactory, WavePlayerFactory>(Reuse.Singleton);
                 c.Register<IMediaRepository, MediaRepository>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
 
                 c.Register<ViewModelServiceContainer>(Reuse.Singleton);
@@ -84,8 +85,10 @@ namespace Maple
                 c.Register<IVersionService, VersionService>(Reuse.Singleton);
                 c.Register<ILocalizationService, LocalizationService>(Reuse.Singleton);
                 c.Register<ITranslationProvider, ResxTranslationProvider>(Reuse.Singleton);
+
                 c.Register<IMessenger, MapleMessenger>(Reuse.Singleton);
                 c.Register<IMapleMessageProxy, DefaultMessageProxy>(Reuse.Singleton);
+
                 c.Register<ILoggingNotifcationService, LoggingNotifcationService>(Reuse.Singleton);
                 c.Register<ILoggingService, LoggingService>(Reuse.Singleton);
             }

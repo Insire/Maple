@@ -1,15 +1,14 @@
 version: 1.0.{build}
 configuration: Release
 platform: Any CPU
-hosts:
-  api.nuget.org: 93.184.221.200
 cache:
 - InsireBot\packages -> InsireBot\**\packages.config
 before_build:
 - cmd: nuget restore InsireBot\Maple.sln
 build:
-  project: InsireBot\Maple.sln
-  verbosity: minimal
+    parallel: true
+    project: InsireBot\Maple.sln
+    verbosity: normal
 artifacts:
 - path: 'InsireBot/InsireBot/bin/$(configuration)'
   name: 'InsireBot-Binaries'
