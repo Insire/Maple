@@ -25,7 +25,10 @@ namespace Maple.Data
             else
             {
                 if (item.IsDeleted)
+                {
+                    context.Database.Log = (message) => Debug.WriteLine(message);
                     Delete(item, context);
+                }
                 else
                     Update(item, context);
             }
@@ -78,14 +81,8 @@ namespace Maple.Data
         {
             return Task.Run(() =>
             {
-                var items = default(List<T>);
                 using (var context = new PlaylistContext())
-                {
-                    context.Database.Log = (message) => Debug.WriteLine(message);
-                    items = GetInternalAsync(context);
-                }
-
-                return items;
+                    return GetInternalAsync(context);
             });
         }
 

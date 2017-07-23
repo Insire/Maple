@@ -4,7 +4,7 @@ namespace Maple.Core
 {
     public interface IRefreshable
     {
-        Task SaveAsync();
+        void Save();
         Task LoadAsync();
     }
 }

@@ -58,7 +58,7 @@ namespace Maple.Core
         /// <value>
         /// The save command.
         /// </value>
-        public ICommand SaveCommand => new AsyncRelayCommand(SaveAsync);
+        public ICommand SaveCommand => new RelayCommand(Save);
         /// <summary>
         /// Gets a value indicating whether this instance is loaded.
         /// </summary>
@@ -75,7 +75,7 @@ namespace Maple.Core
         }
 
         public abstract Task LoadAsync();
-        public abstract Task SaveAsync();
+        public abstract void Save();
 
         /// <summary>
         /// Removes the specified item.

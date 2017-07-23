@@ -43,9 +43,9 @@ namespace Maple
             return Items != null;
         }
 
-        public override Task SaveAsync()
+        public override void Save()
         {
-            return Task.Run(() => SaveInternal());
+            SaveInternal();
         }
 
         public override async Task LoadAsync()

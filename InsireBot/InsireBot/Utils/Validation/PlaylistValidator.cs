@@ -10,7 +10,6 @@ namespace Maple
         {
             RuleFor(playlist => playlist.Title).NotEmpty();
             RuleFor(playlist => playlist.Description).NotEmpty();
-            RuleFor(playlist => playlist.SelectedItem).NotEmpty();
             RuleFor(playlist => playlist.RepeatModes).NotEmpty();
             RuleFor(playlist => playlist.RepeatModes).NotEmpty();
 

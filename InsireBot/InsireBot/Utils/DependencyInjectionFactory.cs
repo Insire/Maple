@@ -28,8 +28,8 @@ namespace Maple
 
                 c.Resolve<ILocalizationService>().LoadAsync();
 
-                if (Debugger.IsAttached)
-                    Debugging();
+                //if (Debugger.IsAttached)
+                //    Debugging();
 
                 return c;
             }

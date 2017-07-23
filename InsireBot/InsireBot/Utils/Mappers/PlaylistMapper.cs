@@ -40,7 +40,7 @@ namespace Maple
 
         public Playlist GetNewPlaylist(int sequence)
         {
-            return new Playlist(_translationService, _mediaItemMapper, _sequenceProvider, _validator, _dialogViewModel, new Data.Playlist
+            return new Playlist(_translationService, _sequenceProvider, _validator, _dialogViewModel, new Data.Playlist
             {
                 Title = _translationService.Translate(nameof(Resources.New)),
                 Description = string.Empty,
@@ -51,9 +51,11 @@ namespace Maple
             });
         }
 
-        public Playlist Get(Data.Playlist mediaitem)
+        public Playlist Get(Data.Playlist model)
         {
-            return new Playlist(_translationService, _mediaItemMapper, _sequenceProvider, _validator, _dialogViewModel, mediaitem);
+            var result = new Playlist(_translationService, _sequenceProvider, _validator, _dialogViewModel, model);
+            result.AddRange(_mediaItemMapper.GetMany(model.MediaItems));
+            return result;
         }
 
         public Data.Playlist GetData(Playlist mediaitem)

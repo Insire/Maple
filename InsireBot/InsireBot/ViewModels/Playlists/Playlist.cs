@@ -26,7 +26,6 @@ namespace Maple
     public class Playlist : ValidableBaseDataViewModel<Playlist, Data.Playlist>, IIsSelected, ISequence, IIdentifier, IChangeState
     {
         private readonly ISequenceProvider _sequenceProvider;
-        private readonly IMediaItemMapper _mediaItemMapper;
         private readonly ILocalizationService _translator;
         private readonly object _itemsLock;
         private readonly DialogViewModel _dialogViewModel;
@@ -56,54 +55,13 @@ namespace Maple
         /// </value>
         public bool IsDeleted => Model.IsDeleted;
 
-        /// <summary>
-        /// Gets the load from file command.
-        /// </summary>
-        /// <value>
-        /// The load from file command.
-        /// </value>
+
         public ICommand LoadFromFileCommand { get; private set; }
-        /// <summary>
-        /// Gets the load from folder command.
-        /// </summary>
-        /// <value>
-        /// The load from folder command.
-        /// </value>
         public ICommand LoadFromFolderCommand { get; private set; }
-        /// <summary>
-        /// Gets the load from URL command.
-        /// </summary>
-        /// <value>
-        /// The load from URL command.
-        /// </value>
         public ICommand LoadFromUrlCommand { get; private set; }
-        /// <summary>
-        /// Gets or sets the remove range command.
-        /// </summary>
-        /// <value>
-        /// The remove range command.
-        /// </value>
         public ICommand RemoveRangeCommand { get; protected set; }
-        /// <summary>
-        /// Gets or sets the remove command.
-        /// </summary>
-        /// <value>
-        /// The remove command.
-        /// </value>
         public ICommand RemoveCommand { get; protected set; }
-        /// <summary>
-        /// Gets or sets the clear command.
-        /// </summary>
-        /// <value>
-        /// The clear command.
-        /// </value>
         public ICommand ClearCommand { get; protected set; }
-        /// <summary>
-        /// Gets or sets the add command.
-        /// </summary>
-        /// <value>
-        /// The add command.
-        /// </value>
         public ICommand AddCommand { get; protected set; }
         /// <summary>
         /// contains indices of played <see cref="IMediaItem" />
@@ -135,12 +93,6 @@ namespace Maple
         }
 
         private int _sequence;
-        /// <summary>
-        /// the index of this item if its part of a collection
-        /// </summary>
-        /// <value>
-        /// The sequence.
-        /// </value>
         public int Sequence
         {
             get { return _sequence; }
@@ -212,25 +164,7 @@ namespace Maple
             set { SetValue(ref _description, value, OnChanged: () => Model.Description = value); }
         }
 
-        private int _id;
-        /// <summary>
-        /// Gets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public int Id
-        {
-            get { return _id; }
-        }
-
         private ObservableCollection<RepeatMode> _repeatModes;
-        /// <summary>
-        /// Gets the repeat modes.
-        /// </summary>
-        /// <value>
-        /// The repeat modes.
-        /// </value>
         public ObservableCollection<RepeatMode> RepeatModes
         {
             get { return _repeatModes; }
@@ -251,69 +185,43 @@ namespace Maple
         }
 
         private ICollectionView _view;
-        /// <summary>
-        /// For grouping, sorting and filtering
-        /// </summary>
-        /// <value>
-        /// The view.
-        /// </value>
         public ICollectionView View
         {
             get { return _view; }
             protected set { SetValue(ref _view, value); }
         }
 
-        private string _createdBy;
+        public int Id
+        {
+            get { return Model.Id; }
+        }
+
         public string CreatedBy
         {
-            get { return _createdBy; }
-            set { SetValue(ref _createdBy, value, OnChanged: () => Model.CreatedBy = value); }
+            get { return Model.CreatedBy; }
         }
 
-        private string _updatedBy;
         public string UpdatedBy
         {
-            get { return _updatedBy; }
-            set { SetValue(ref _updatedBy, value, OnChanged: () => Model.UpdatedBy = value); }
+            get { return Model.UpdatedBy; }
         }
 
-        private DateTime _updatedOn;
         public DateTime UpdatedOn
         {
-            get { return _updatedOn; }
-            set { SetValue(ref _updatedOn, value, OnChanged: () => Model.UpdatedOn = value); }
+            get { return Model.UpdatedOn; }
         }
 
-        private DateTime _createdOn;
         public DateTime CreatedOn
         {
-            get { return _updatedOn; }
-            set { SetValue(ref _updatedOn, value, OnChanged: () => Model.CreatedOn = value); }
+            get { return Model.CreatedOn; }
         }
 
-        /// <summary>
-        /// Gets the <see cref="T"/> at the specified index.
-        /// </summary>
-        /// <value>
-        /// The <see cref="T"/>.
-        /// </value>
-        /// <param name="index">The index.</param>
-        /// <returns></returns>
         public MediaItem this[int index]
         {
             get { return Items[index]; }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Playlist" /> class.
-        /// </summary>
-        /// <param name="translator">The translator.</param>
-        /// <param name="mediaItemMapper">The media item mapper.</param>
-        /// <param name="dialogViewModel">The dialog view model.</param>
-        /// <param name="model">The model.</param>
-        /// <exception cref="System.ArgumentNullException">dialogViewModel</exception>
-        /// <exception cref="System.ArgumentException"></exception>
-        public Playlist(ILocalizationService translator, IMediaItemMapper mediaItemMapper, ISequenceProvider sequenceProvider, IValidator<Playlist> validator, DialogViewModel dialogViewModel, Data.Playlist model)
+        public Playlist(ILocalizationService translator, ISequenceProvider sequenceProvider, IValidator<Playlist> validator, DialogViewModel dialogViewModel, Data.Playlist model)
             : base(model, validator)
         {
             using (_busyStack.GetToken())
@@ -322,7 +230,6 @@ namespace Maple
                 _sequenceProvider = sequenceProvider ?? throw new ArgumentNullException(nameof(sequenceProvider));
                 _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
                 _translator = translator ?? throw new ArgumentNullException(nameof(translator));
-                _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper));
 
                 Items = new RangeObservableCollection<MediaItem>();
                 RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
@@ -332,14 +239,9 @@ namespace Maple
 
                 _title = model.Title;
                 _description = model.Description;
-                _id = model.Id;
                 _repeatMode = (RepeatMode)model.RepeatMode;
                 _isShuffeling = model.IsShuffeling;
                 _sequence = model.Sequence;
-                _createdBy = model.CreatedBy;
-                _createdOn = model.CreatedOn;
-                _updatedBy = model.UpdatedBy;
-                _updatedOn = model.UpdatedOn;
 
                 if (model.MediaItems == null)
                     throw new ArgumentException($"{model.MediaItems} cannot be null");
@@ -391,8 +293,7 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var items = await _dialogViewModel.ShowUrlParseDialog();
-                throw new NotImplementedException();
-                //Items.AddRange(_mediaItemMapper.GetMany(items, Id));
+                Items.AddRange(items);
             }
         }
 
@@ -441,26 +342,16 @@ namespace Maple
 
         public virtual void Clear()
         {
-            Items.Clear();
             History.Clear();
             SelectedItem = null;
+            RemoveRange(Items.AsEnumerable());
         }
 
-        /// <summary>
-        /// Determines whether this instance can clear.
-        /// </summary>
-        /// <returns>
-        ///   <c>true</c> if this instance can clear; otherwise, <c>false</c>.
-        /// </returns>
         private bool CanClear()
         {
             return Items?.Any() == true;
         }
 
-        /// <summary>
-        /// Adds the specified item.
-        /// </summary>
-        /// <param name="item">The item.</param>
         public virtual void Add(MediaItem item)
         {
             using (_busyStack.GetToken())
@@ -471,18 +362,20 @@ namespace Maple
                 if (Items.Any() != true)
                     History.Push(item.Sequence);
 
-                item.Playlist = this;
-                Items.Add(item);
+                AddInternal(item);
 
                 if (SelectedItem == null)
                     SelectedItem = Items.First();
             }
         }
 
-        /// <summary>
-        /// Adds the range.
-        /// </summary>
-        /// <param name="items">The items.</param>
+        private void AddInternal(MediaItem item)
+        {
+            item.Playlist = this;
+            Items.Add(item);
+            Model.MediaItems.Add(item.Model);
+        }
+
         public virtual void AddRange(IEnumerable<MediaItem> items)
         {
             using (_busyStack.GetToken())
@@ -496,9 +389,6 @@ namespace Maple
                     Add(item);
                     sequence++;
 
-                    //if (item.Id == Model.SelectedItem.Id)
-                    //    SelectedItem = item;
-
                     added = true;
                 }
 
@@ -507,54 +397,45 @@ namespace Maple
             }
         }
 
-        /// <summary>
-        /// Removes the specified item.
-        /// </summary>
-        /// <param name="item">The item.</param>
         public virtual void Remove(MediaItem item)
         {
             using (_busyStack.GetToken())
             {
                 while (Items.Contains(item))
-                    Items.Remove(item);
+                    RemoveInternal(item);
             }
         }
 
-        /// <summary>
-        /// Removes the range.
-        /// </summary>
-        /// <param name="items">The items.</param>
-        /// <exception cref="System.ArgumentNullException">items</exception>
+        private void RemoveInternal(MediaItem item)
+        {
+            Items.Remove(item);
+            item.Model.IsDeleted = true;
+        }
+
         public virtual void RemoveRange(IEnumerable<MediaItem> items)
         {
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 
             using (_busyStack.GetToken())
-                Items.RemoveRange(items);
+                RemoveRangeInternal(items.ToList());
         }
 
-        /// <summary>
-        /// Removes the range.
-        /// </summary>
-        /// <param name="items">The items.</param>
-        /// <exception cref="System.ArgumentNullException">items</exception>
         public virtual void RemoveRange(IList items)
         {
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 
             using (_busyStack.GetToken())
-                Items.RemoveRange(items);
+                RemoveRangeInternal(items.Cast<MediaItem>().ToList());
         }
 
-        /// <summary>
-        /// Determines whether this instance can remove the specified item.
-        /// </summary>
-        /// <param name="item">The item.</param>
-        /// <returns>
-        ///   <c>true</c> if this instance can remove the specified item; otherwise, <c>false</c>.
-        /// </returns>
+        private void RemoveRangeInternal(IEnumerable<MediaItem> items)
+        {
+            foreach (var item in items)
+                Remove(item);
+        }
+
         public virtual bool CanRemove(MediaItem item)
         {
             if (Items == null || Items.Count == 0 || item as MediaItem == null)
@@ -568,23 +449,11 @@ namespace Maple
             return CanClear() && items != null && items.Any(p => Items.Contains(p));
         }
 
-        /// <summary>
-        /// Determines whether this instance [can remove range] the specified items.
-        /// </summary>
-        /// <param name="items">The items.</param>
-        /// <returns>
-        ///   <c>true</c> if this instance [can remove range] the specified items; otherwise, <c>false</c>.
-        /// </returns>
         protected virtual bool CanRemoveRange(IList items)
         {
             return items == null ? false : CanRemoveRange(items.Cast<MediaItem>());
         }
 
-        /// <summary>
-        /// Nexts this instance.
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="System.NotImplementedException">RepeatMode</exception>
         public virtual MediaItem Next()
         {
             using (_busyStack.GetToken())
@@ -688,12 +557,6 @@ namespace Maple
                 return NextRepeatSingle();
         }
 
-        /// <summary>
-        /// Removes the last <see cref="MediaItem" /> from <seealso cref="History" /> and returns it
-        /// </summary>
-        /// <returns>
-        /// returns the last <see cref="MediaItem" /> from <seealso cref="History" />
-        /// </returns>
         public virtual MediaItem Previous()
         {
             using (_busyStack.GetToken())
@@ -725,23 +588,11 @@ namespace Maple
             }
         }
 
-        /// <summary>
-        /// Determines whether this instance can next.
-        /// </summary>
-        /// <returns>
-        ///   <c>true</c> if this instance can next; otherwise, <c>false</c>.
-        /// </returns>
         public bool CanNext()
         {
             return Items != null && Items.Any();
         }
 
-        /// <summary>
-        /// Determines whether this instance can previous.
-        /// </summary>
-        /// <returns>
-        ///   <c>true</c> if this instance can previous; otherwise, <c>false</c>.
-        /// </returns>
         public bool CanPrevious()
         {
             return History != null && History.Any();

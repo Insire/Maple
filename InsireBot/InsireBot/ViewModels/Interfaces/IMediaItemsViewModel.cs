@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 
 namespace Maple
 {
-    public interface IMediaItemsViewModel
+    public interface IMediaItemsViewModel : ISaveableViewModel
     {
         RangeObservableCollection<MediaItem> Items { get; }
 
         void Add(Playlist playlist);
         Task LoadAsync();
-        Task SaveAsync();
+        void Save();
     }
 }

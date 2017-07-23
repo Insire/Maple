@@ -68,7 +68,7 @@ namespace Maple
         /// <value>
         /// The save command.
         /// </value>
-        public ICommand SaveCommand => new AsyncRelayCommand(SaveAsync);
+        public ICommand SaveCommand => new RelayCommand(Save);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CultureViewModel"/> class.
@@ -87,10 +87,10 @@ namespace Maple
             _manager.CurrentLanguage = SelectedCulture;
         }
 
-        public async Task SaveAsync()
+        public void Save()
         {
             _log.Info($"{Resources.Saving} {Resources.Options}");
-            await _manager.SaveAsync();
+            _manager.Save();
         }
 
         public async Task LoadAsync()

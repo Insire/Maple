@@ -28,10 +28,11 @@ namespace Maple
             base.OnStartup(e);
         }
 
-        protected override async void OnExit(ExitEventArgs e)
+        protected override void OnExit(ExitEventArgs e)
         {
-            await SaveState();
+            SaveState();
             ExitInternal(e);
+
         }
 
         /// <summary>
@@ -92,17 +93,13 @@ namespace Maple
             return tasks;
         }
 
-        private async Task SaveState()
+        private void SaveState()
         {
-            var tasks = new List<Task>();
-
             var log = _container.Resolve<IMapleLog>();
             log.Info(Localization.Properties.Resources.SavingState);
 
             foreach (var item in _container.Resolve<IEnumerable<ILoadableViewModel>>())
-                tasks.Add(item.SaveAsync());
-
-            await Task.WhenAll(tasks);
+                item.Save();
 
             log.Info(Localization.Properties.Resources.SavedState);
         }

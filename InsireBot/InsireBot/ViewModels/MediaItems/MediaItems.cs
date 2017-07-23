@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Maple
 {
-    public class MediaItems : BaseDataListViewModel<MediaItem, Data.MediaItem>, ISaveableViewModel, IMediaItemsViewModel
+    public class MediaItems : BaseDataListViewModel<MediaItem, Data.MediaItem>, IMediaItemsViewModel
     {
         private readonly Func<IMediaRepository> _repositoryFactory;
         private readonly IMediaItemMapper _mediaItemMapper;
@@ -48,9 +48,9 @@ namespace Maple
             OnLoaded();
         }
 
-        public override Task SaveAsync()
+        public override void Save()
         {
-            return Task.Run(() => SaveInternal());
+            SaveInternal();
         }
     }
 }
