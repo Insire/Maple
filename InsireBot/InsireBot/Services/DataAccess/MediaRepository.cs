@@ -94,6 +94,9 @@ namespace Maple
 
         public void Save(Playlist viewModel)
         {
+            if (!viewModel.IsChanged)
+                return;
+
             using (_busyStack.GetToken())
                 _playlistRepository.Save(viewModel.Model);
         }

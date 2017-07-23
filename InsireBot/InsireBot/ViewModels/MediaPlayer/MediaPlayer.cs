@@ -342,7 +342,7 @@ namespace Maple
         /// </summary>
         public void Clear()
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
                 Playlist.Clear();
         }
 
@@ -363,7 +363,7 @@ namespace Maple
         /// <param name="mediaItems">The media items.</param>
         public void AddRange(IEnumerable<MediaItem> mediaItems)
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 foreach (var item in mediaItems)
                     Playlist.Add(item);
@@ -376,7 +376,7 @@ namespace Maple
         /// <param name="mediaItem">The media item.</param>
         public void Add(MediaItem mediaItem)
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 if (Playlist.Items.Any())
                 {
@@ -399,13 +399,13 @@ namespace Maple
         /// <param name="item">The item.</param>
         public void Remove(MediaItem item)
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
                 Playlist.Remove(item);
         }
 
         private bool CanRemove(MediaItem item)
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
                 return Playlist.CanRemove(item);
         }
 
@@ -414,7 +414,7 @@ namespace Maple
         /// </summary>
         public void Pause()
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
                 Player.Pause();
         }
 
@@ -423,7 +423,7 @@ namespace Maple
         /// </summary>
         public void Stop()
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
                 Player.Stop();
         }
 
@@ -432,7 +432,7 @@ namespace Maple
         /// </summary>
         public void Previous()
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 var item = Playlist.Previous();
                 Player.Play(item);
@@ -444,7 +444,7 @@ namespace Maple
         /// </summary>
         public void Next()
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 var item = Playlist.Next();
                 Player.Play(item);

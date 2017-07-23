@@ -14,14 +14,6 @@ using System.Windows.Input;
 
 namespace Maple
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <seealso cref="Maple.Core.BaseViewModel{Maple.Data.Playlist}" />
-    /// <seealso cref="Maple.Core.IIsSelected" />
-    /// <seealso cref="Maple.Core.ISequence" />
-    /// <seealso cref="Maple.Core.IIdentifier" />
-    /// <seealso cref="Maple.Core.IChangeState" />
     [DebuggerDisplay("{Title}, {Sequence}")]
     public class Playlist : ValidableBaseDataViewModel<Playlist, Data.Playlist>, IIsSelected, ISequence, IIdentifier, IChangeState
     {
@@ -29,32 +21,21 @@ namespace Maple
         private readonly ILocalizationService _translator;
         private readonly object _itemsLock;
         private readonly DialogViewModel _dialogViewModel;
+
+        public EventHandler SelectionChanged;
+        public EventHandler SelectionChanging;
+
+        public bool IsNew => Model.IsNew;
+        public bool IsDeleted => Model.IsDeleted;
         public int Count => Items?.Count ?? 0;
 
         /// <summary>
-        /// The selection changed event
-        /// </summary>
-        public EventHandler SelectionChanged;
-        /// <summary>
-        /// The selection changing event
-        /// </summary>
-        public EventHandler SelectionChanging;
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is new.
+        /// contains indices of played <see cref="IMediaItem" />
         /// </summary>
         /// <value>
-        ///   <c>true</c> if this instance is new; otherwise, <c>false</c>.
+        /// The history.
         /// </value>
-        public bool IsNew => Model.IsNew;
-        /// <summary>
-        /// Gets a value indicating whether this instance is deleted.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is deleted; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsDeleted => Model.IsDeleted;
-
+        public Stack<int> History { get; private set; }
 
         public ICommand LoadFromFileCommand { get; private set; }
         public ICommand LoadFromFolderCommand { get; private set; }
@@ -63,13 +44,43 @@ namespace Maple
         public ICommand RemoveCommand { get; protected set; }
         public ICommand ClearCommand { get; protected set; }
         public ICommand AddCommand { get; protected set; }
-        /// <summary>
-        /// contains indices of played <see cref="IMediaItem" />
-        /// </summary>
-        /// <value>
-        /// The history.
-        /// </value>
-        public Stack<int> History { get; private set; }
+
+        public int Id
+        {
+            get { return Model.Id; }
+        }
+
+        public string CreatedBy
+        {
+            get { return Model.CreatedBy; }
+        }
+
+        public string UpdatedBy
+        {
+            get { return Model.UpdatedBy; }
+        }
+
+        public DateTime UpdatedOn
+        {
+            get { return Model.UpdatedOn; }
+        }
+
+        public DateTime CreatedOn
+        {
+            get { return Model.CreatedOn; }
+        }
+
+        public MediaItem this[int index]
+        {
+            get { return Items[index]; }
+        }
+
+        private ICollectionView _view;
+        public ICollectionView View
+        {
+            get { return _view; }
+            protected set { SetValue(ref _view, value); }
+        }
 
         private RangeObservableCollection<MediaItem> _items;
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
@@ -98,6 +109,8 @@ namespace Maple
             get { return _sequence; }
             set { SetValue(ref _sequence, value, OnChanged: () => Model.Sequence = value); }
         }
+
+
 
         private PrivacyStatus _privacyStatus;
         /// <summary>
@@ -139,12 +152,6 @@ namespace Maple
         }
 
         private string _title;
-        /// <summary>
-        /// the title/name of this playlist (human readable identifier)
-        /// </summary>
-        /// <value>
-        /// The title.
-        /// </value>
         public string Title
         {
             get { return _title; }
@@ -152,16 +159,17 @@ namespace Maple
         }
 
         private string _description;
-        /// <summary>
-        /// the description of this playlist
-        /// </summary>
-        /// <value>
-        /// The description.
-        /// </value>
         public string Description
         {
             get { return _description; }
             set { SetValue(ref _description, value, OnChanged: () => Model.Description = value); }
+        }
+
+        private RepeatMode _repeatMode;
+        public RepeatMode RepeatMode
+        {
+            get { return _repeatMode; }
+            set { SetValue(ref _repeatMode, value, OnChanged: () => Model.RepeatMode = (int)value); }
         }
 
         private ObservableCollection<RepeatMode> _repeatModes;
@@ -171,71 +179,15 @@ namespace Maple
             private set { SetValue(ref _repeatModes, value); }
         }
 
-        private RepeatMode _repeatMode;
-        /// <summary>
-        /// defines what happens when the last <see cref="IMediaItem" /> of <see cref="Items" /> is <see cref="SetActive" /> and the <see cref="Next" /> is requested
-        /// </summary>
-        /// <value>
-        /// The repeat mode.
-        /// </value>
-        public RepeatMode RepeatMode
-        {
-            get { return _repeatMode; }
-            set { SetValue(ref _repeatMode, value, OnChanged: () => Model.RepeatMode = (int)value); }
-        }
-
-        private ICollectionView _view;
-        public ICollectionView View
-        {
-            get { return _view; }
-            protected set { SetValue(ref _view, value); }
-        }
-
-        public int Id
-        {
-            get { return Model.Id; }
-        }
-
-        public string CreatedBy
-        {
-            get { return Model.CreatedBy; }
-        }
-
-        public string UpdatedBy
-        {
-            get { return Model.UpdatedBy; }
-        }
-
-        public DateTime UpdatedOn
-        {
-            get { return Model.UpdatedOn; }
-        }
-
-        public DateTime CreatedOn
-        {
-            get { return Model.CreatedOn; }
-        }
-
-        public MediaItem this[int index]
-        {
-            get { return Items[index]; }
-        }
-
         public Playlist(ILocalizationService translator, ISequenceProvider sequenceProvider, IValidator<Playlist> validator, DialogViewModel dialogViewModel, Data.Playlist model)
             : base(model, validator)
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 _itemsLock = new object();
                 _sequenceProvider = sequenceProvider ?? throw new ArgumentNullException(nameof(sequenceProvider));
                 _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
                 _translator = translator ?? throw new ArgumentNullException(nameof(translator));
-
-                Items = new RangeObservableCollection<MediaItem>();
-                RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
-                History = new Stack<int>();
-
-                BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
 
                 _title = model.Title;
                 _description = model.Description;
@@ -243,21 +195,16 @@ namespace Maple
                 _isShuffeling = model.IsShuffeling;
                 _sequence = model.Sequence;
 
-                if (model.MediaItems == null)
-                    throw new ArgumentException($"{model.MediaItems} cannot be null");
+                RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
+                History = new Stack<int>();
 
-                Items.CollectionChanged += (o, e) =>
-                {
-                    OnPropertyChanged(nameof(Count));
-                };
-
+                Items = new RangeObservableCollection<MediaItem>();
+                Items.CollectionChanged += (o, e) => OnPropertyChanged(nameof(Count));
+                BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
                 View = CollectionViewSource.GetDefaultView(Items);
                 OnPropertyChanged(nameof(Count));
 
                 InitializeCommands();
-                IntializeValidation();
-
-                EnableValidation();
                 Validate();
             }
         }
@@ -273,11 +220,6 @@ namespace Maple
             ClearCommand = new RelayCommand(() => Clear(), CanClear);
         }
 
-        private void IntializeValidation()
-        {
-
-        }
-
         protected virtual void OnSelectionChanging()
         {
             SelectionChanging?.Raise(this);
@@ -290,7 +232,7 @@ namespace Maple
 
         private async Task LoadFromUrl()
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 var items = await _dialogViewModel.ShowUrlParseDialog();
                 Items.AddRange(items);
@@ -304,7 +246,7 @@ namespace Maple
 
         private Task LoadFromFolder()
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 var options = new FileSystemBrowserOptions()
                 {
@@ -323,7 +265,7 @@ namespace Maple
 
         private Task LoadFromFile()
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 var options = new FileSystemBrowserOptions()
                 {
@@ -354,7 +296,7 @@ namespace Maple
 
         public virtual void Add(MediaItem item)
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
                 item.Sequence = sequence;
@@ -378,7 +320,7 @@ namespace Maple
 
         public virtual void AddRange(IEnumerable<MediaItem> items)
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 var added = false;
                 var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
@@ -399,7 +341,7 @@ namespace Maple
 
         public virtual void Remove(MediaItem item)
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 while (Items.Contains(item))
                     RemoveInternal(item);
@@ -417,7 +359,7 @@ namespace Maple
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
                 RemoveRangeInternal(items.ToList());
         }
 
@@ -426,7 +368,7 @@ namespace Maple
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
                 RemoveRangeInternal(items.Cast<MediaItem>().ToList());
         }
 
@@ -456,7 +398,7 @@ namespace Maple
 
         public virtual MediaItem Next()
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 if (Items != null && Items.Any())
                 {
@@ -559,7 +501,7 @@ namespace Maple
 
         public virtual MediaItem Previous()
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 if (History?.Any() == true)
                 {

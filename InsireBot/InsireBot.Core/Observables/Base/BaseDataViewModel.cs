@@ -1,23 +1,14 @@
-﻿namespace Maple.Core
+﻿using System;
+using System.Runtime.CompilerServices;
+
+namespace Maple.Core
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TModel"></typeparam>
     public abstract class BaseDataViewModel<TViewModel, TModel> : ObservableObject
     {
-        /// <summary>
-        /// The busy stack
-        /// </summary>
-        protected readonly BusyStack _busyStack;
+        protected BusyStack BusyStack { get; }
+        protected ChangeTracker ChangeTracker { get; }
 
         private TModel _model;
-        /// <summary>
-        /// Gets or sets the model.
-        /// </summary>
-        /// <value>
-        /// The model.
-        /// </value>
         public TModel Model
         {
             get { return _model; }
@@ -31,16 +22,29 @@
             set { SetValue(ref _isBusy, value); }
         }
 
-        protected BaseDataViewModel()
+        public bool IsChanged
         {
-            _busyStack = new BusyStack();
-            _busyStack.OnChanged += (isBusy) => IsBusy = isBusy;
+            get { return ChangeTracker.HasChanged; }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BaseViewModel{T}"/> class.
-        /// </summary>
-        /// <param name="model">The model.</param>
+        protected override bool SetValue<T>(ref T field, T value, Action OnChanging = null, Action OnChanged = null, [CallerMemberName] string propertyName = null)
+        {
+            var result = base.SetValue(ref field, value, OnChanging, OnChanged, propertyName);
+
+            if (result && ChangeTracker.Update(value, propertyName))
+                OnPropertyChanged(nameof(IsChanged));
+
+            return result;
+        }
+
+
+        protected BaseDataViewModel()
+        {
+            BusyStack = new BusyStack();
+            BusyStack.OnChanged += (isBusy) => IsBusy = isBusy;
+            ChangeTracker = new ChangeTracker();
+        }
+
         protected BaseDataViewModel(TModel model)
             : this()
         {

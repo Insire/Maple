@@ -113,6 +113,7 @@
     <Compile Include="Observables\Base\BaseDataViewModel.cs" />
     <Compile Include="Extensions\IValidatorExtensions.cs" />
     <Compile Include="Observables\Base\ValidableBaseDataViewModel.cs" />
+    <Compile Include="Observables\ChangeTracker.cs" />
     <Compile Include="Observables\NotifyTaskCompletion.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
