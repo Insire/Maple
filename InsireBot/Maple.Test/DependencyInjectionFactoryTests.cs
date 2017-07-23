@@ -23,6 +23,10 @@ namespace Maple.Test
         public async Task ResolveLoadablesAsList()
         {
             var container = await DependencyInjectionFactory.Get();
+
+            var factory = Substitute.For<IWavePlayerFactory>();
+            container.UseInstance(factory);
+
             var loadables = container.Resolve<IList<ILoadableViewModel>>();
 
             Assert.IsNotNull(loadables);
