@@ -45,7 +45,7 @@
                                 <StackPanel Grid.Row="1"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center">
-                                    <TextBlock HorizontalAlignment="Center" Text="{Binding SelectedItem.NativeName}" />
+                                    <TextBlock HorizontalAlignment="Center" Text="{Binding SelectedItem.DisplayName}" />
                                     <Button Margin="0,4,0,0"
                                             Command="{x:Static materialDesign:Flipper.FlipCommand}"
                                             Style="{StaticResource MaterialDesignFlatButton}">
@@ -79,7 +79,7 @@
                                       VerticalAlignment="Top">
                                     <ComboBox materialDesign:ComboBoxAssist.ShowSelectedItem="True"
                                               materialDesign:HintAssist.Hint="{local:Translation Languages}"
-                                              DisplayMemberPath="NativeName"
+                                              DisplayMemberPath="DisplayName"
                                               ItemsSource="{Binding Items}"
                                               SelectedItem="{Binding SelectedItem}">
                                         <i:Interaction.Triggers>
