@@ -1,10 +1,10 @@
 ﻿using DryIoc;
 using Maple.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NSubstitute;
 
 namespace Maple.Test
 {
@@ -35,7 +35,6 @@ namespace Maple.Test
             var container = await DependencyInjectionFactory.Get();
 
             var factory = Substitute.For<IWavePlayerFactory>();
-            factory.GetPlayer(Arg.Any<ILoggingService>()).Re
             container.UseInstance(factory);
 
             var loadables = container.ResolveMany<ILoadableViewModel>().ToList();
