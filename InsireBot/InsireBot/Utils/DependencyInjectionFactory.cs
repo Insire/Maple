@@ -3,8 +3,6 @@ using FluentValidation;
 using Maple.Core;
 using Maple.Data;
 using Maple.Youtube;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Maple
@@ -66,6 +64,7 @@ namespace Maple
             void RegisterServices()
             {
                 c.Register<IMediaPlayer, NAudioMediaPlayer>(setup: Setup.With(allowDisposableTransient: true));
+                c.Register<IWavePlayerFactory, WavePlayerFactory>(Reuse.Singleton);
                 c.Register<IMediaRepository, MediaRepository>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
 
                 c.Register<ViewModelServiceContainer>(Reuse.Singleton);
@@ -84,8 +83,10 @@ namespace Maple
                 c.Register<IVersionService, VersionService>(Reuse.Singleton);
                 c.Register<ILocalizationService, LocalizationService>(Reuse.Singleton);
                 c.Register<ITranslationProvider, ResxTranslationProvider>(Reuse.Singleton);
+
                 c.Register<IMessenger, MapleMessenger>(Reuse.Singleton);
                 c.Register<IMapleMessageProxy, DefaultMessageProxy>(Reuse.Singleton);
+
                 c.Register<ILoggingNotifcationService, LoggingNotifcationService>(Reuse.Singleton);
                 c.Register<ILoggingService, LoggingService>(Reuse.Singleton);
             }
@@ -96,19 +97,6 @@ namespace Maple
                 c.Register<IValidator<Playlists>, PlaylistsValidator>(Reuse.Singleton);
                 c.Register<IValidator<MediaPlayer>, MediaPlayerValidator>(Reuse.Singleton);
                 c.Register<IValidator<MediaItem>, MediaItemValidator>(Reuse.Singleton);
-            }
-
-            void Debugging()
-            {
-                foreach (var item in c.VerifyResolutions())
-                {
-                    Debug.WriteLine($"{item.Key} registered with {item.Value}");
-                }
-
-                foreach (var item in c.GetServiceRegistrations().OrderBy(p => p.Factory.ImplementationType.ToString()).ToList())
-                {
-                    Debug.WriteLine($"{item.ServiceType.Name.PadRight(30, '.')} registered with {item.Factory.FactoryID.ToString().PadRight(10, '.')} of type {item.Factory.ImplementationType.Name}");
-                }
             }
         }
     }

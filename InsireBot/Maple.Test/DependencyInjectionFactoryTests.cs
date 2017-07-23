@@ -1,6 +1,7 @@
 ﻿using DryIoc;
 using Maple.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,6 +23,10 @@ namespace Maple.Test
         public async Task ResolveLoadablesAsList()
         {
             var container = await DependencyInjectionFactory.Get();
+
+            var factory = Substitute.For<IWavePlayerFactory>();
+            container.UseInstance(factory);
+
             var loadables = container.Resolve<IList<ILoadableViewModel>>();
 
             Assert.IsNotNull(loadables);
@@ -32,6 +37,10 @@ namespace Maple.Test
         public async Task ResolveManyLoadablesAsList()
         {
             var container = await DependencyInjectionFactory.Get();
+
+            var factory = Substitute.For<IWavePlayerFactory>();
+            container.UseInstance(factory);
+
             var loadables = container.ResolveMany<ILoadableViewModel>().ToList();
 
             Assert.IsNotNull(loadables);
