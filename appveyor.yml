@@ -9,6 +9,6 @@ build:
     parallel: true
     project: InsireBot\Maple.sln
     verbosity: normal
-artifacts:
-- path: 'InsireBot/InsireBot/bin/$(configuration)'
-  name: 'InsireBot-Binaries'
+#artifacts:
+#- path: 'InsireBot/InsireBot/bin/$(configuration)'
+#  name: 'InsireBot-Binaries'
