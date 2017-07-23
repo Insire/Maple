@@ -33,7 +33,7 @@ namespace Maple
                 RequestFloatOutput = false,
             };
 
-            _player = WavePlayerFactory.GetPlayer();
+            _player = WavePlayerFactory.GetPlayer(log);
             _player.PlaybackStopped += PlaybackStopped;
 
             _messenger.Subscribe<PlayingMediaItemMessage>(OnPlaybackStarted);
