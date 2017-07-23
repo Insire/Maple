@@ -119,7 +119,7 @@ namespace Maple
 
         private void SyncVolumeToVolumeProvider(int value)
         {
-            if (_volumeProvider == null && value <= 100 && value > 0)
+            if (_volumeProvider == null || value > 100 && value < 0)
                 return;
 
             _volumeProvider.Volume = value / 100;

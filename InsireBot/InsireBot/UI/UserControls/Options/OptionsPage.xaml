@@ -45,7 +45,7 @@
                                 <StackPanel Grid.Row="1"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center">
-                                    <TextBlock HorizontalAlignment="Center" Text="{Binding SelectedCulture.NativeName}" />
+                                    <TextBlock HorizontalAlignment="Center" Text="{Binding SelectedItem.NativeName}" />
                                     <Button Margin="0,4,0,0"
                                             Command="{x:Static materialDesign:Flipper.FlipCommand}"
                                             Style="{StaticResource MaterialDesignFlatButton}">
@@ -81,7 +81,7 @@
                                               materialDesign:HintAssist.Hint="{local:Translation Languages}"
                                               DisplayMemberPath="NativeName"
                                               ItemsSource="{Binding Items}"
-                                              SelectedItem="{Binding SelectedCulture}">
+                                              SelectedItem="{Binding SelectedItem}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="Loaded">
                                                 <i:InvokeCommandAction Command="{Binding LoadCommand}" />

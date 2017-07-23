@@ -9,145 +9,38 @@ using System.Windows.Input;
 
 namespace Maple
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <seealso cref="Maple.Core.BaseViewModel{Maple.Data.Playlist}" />
-    /// <seealso cref="System.IDisposable" />
-    /// <seealso cref="Maple.Core.IChangeState" />
     [DebuggerDisplay("{Name}, {Sequence}")]
     public class MediaPlayer : ValidableBaseDataViewModel<MediaPlayer, Data.MediaPlayer>, IDisposable, IChangeState, ISequence
     {
         private List<SubscriptionToken> _messageTokens;
         protected readonly ILocalizationService _manager;
 
-        /// <summary>
-        /// Gets a value indicating whether this instance is playing.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is playing; otherwise, <c>false</c>.
-        /// </value>
         public bool IsPlaying { get { return Player.IsPlaying; } }
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="MediaPlayer"/> is disposed.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if disposed; otherwise, <c>false</c>.
-        /// </value>
         public bool Disposed { get; private set; }
-        /// <summary>
-        /// Gets a value indicating whether this instance is new.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is new; otherwise, <c>false</c>.
-        /// </value>
+
         public bool IsNew => Model.IsNew;
-        /// <summary>
-        /// Gets a value indicating whether this instance is deleted.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is deleted; otherwise, <c>false</c>.
-        /// </value>
         public bool IsDeleted => Model.IsDeleted;
 
         private IMediaPlayer _player;
-        /// <summary>
-        /// Gets the player.
-        /// </summary>
-        /// <value>
-        /// The player.
-        /// </value>
         public IMediaPlayer Player
         {
             get { return _player; }
             private set { SetValue(ref _player, value); }
         }
 
-        /// <summary>
-        /// Gets the play command.
-        /// </summary>
-        /// <value>
-        /// The play command.
-        /// </value>
         public ICommand PlayCommand { get; private set; }
-        /// <summary>
-        /// Gets the pause command.
-        /// </summary>
-        /// <value>
-        /// The pause command.
-        /// </value>
         public ICommand PauseCommand { get; private set; }
-        /// <summary>
-        /// Gets the next command.
-        /// </summary>
-        /// <value>
-        /// The next command.
-        /// </value>
         public ICommand NextCommand { get; private set; }
-        /// <summary>
-        /// Gets the previous command.
-        /// </summary>
-        /// <value>
-        /// The previous command.
-        /// </value>
         public ICommand PreviousCommand { get; private set; }
-        /// <summary>
-        /// Gets the stop command.
-        /// </summary>
-        /// <value>
-        /// The stop command.
-        /// </value>
         public ICommand StopCommand { get; private set; }
-        /// <summary>
-        /// Gets the load from file command.
-        /// </summary>
-        /// <value>
-        /// The load from file command.
-        /// </value>
         public ICommand LoadFromFileCommand { get; private set; }
-        /// <summary>
-        /// Gets the load from folder command.
-        /// </summary>
-        /// <value>
-        /// The load from folder command.
-        /// </value>
         public ICommand LoadFromFolderCommand { get; private set; }
-        /// <summary>
-        /// Gets the load from URL command.
-        /// </summary>
-        /// <value>
-        /// The load from URL command.
-        /// </value>
         public ICommand LoadFromUrlCommand { get; private set; }
-        /// <summary>
-        /// Gets or sets the remove range command.
-        /// </summary>
-        /// <value>
-        /// The remove range command.
-        /// </value>
         public ICommand RemoveRangeCommand { get; protected set; }
-        /// <summary>
-        /// Gets or sets the remove command.
-        /// </summary>
-        /// <value>
-        /// The remove command.
-        /// </value>
         public ICommand RemoveCommand { get; protected set; }
-        /// <summary>
-        /// Gets or sets the clear command.
-        /// </summary>
-        /// <value>
-        /// The clear command.
-        /// </value>
         public ICommand ClearCommand { get; protected set; }
 
         private AudioDevices _audioDevices;
-        /// <summary>
-        /// Gets the audio devices.
-        /// </summary>
-        /// <value>
-        /// The audio devices.
-        /// </value>
         public AudioDevices AudioDevices
         {
             get { return _audioDevices; }
@@ -155,12 +48,6 @@ namespace Maple
         }
 
         private Playlist _playlist;
-        /// <summary>
-        /// Gets or sets the playlist.
-        /// </summary>
-        /// <value>
-        /// The playlist.
-        /// </value>
         public Playlist Playlist
         {
             get { return _playlist; }
@@ -168,12 +55,6 @@ namespace Maple
         }
 
         private int _sequence;
-        /// <summary>
-        /// the index of this item if its part of a collection
-        /// </summary>
-        /// <value>
-        /// The sequence.
-        /// </value>
         public int Sequence
         {
             get { return _sequence; }
@@ -181,12 +62,6 @@ namespace Maple
         }
 
         private string _name;
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
         public string Name
         {
             get { return _name; }
@@ -194,12 +69,6 @@ namespace Maple
         }
 
         private bool _isPrimary;
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is primary.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is primary; otherwise, <c>false</c>.
-        /// </value>
         public bool IsPrimary
         {
             get { return _isPrimary; }
@@ -234,23 +103,8 @@ namespace Maple
             set { SetValue(ref _updatedOn, value, OnChanged: () => Model.CreatedOn = value); }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MediaPlayer"/> class.
-        /// </summary>
-        /// <param name="manager">The manager.</param>
-        /// <param name="player">The player.</param>
-        /// <param name="model">The model.</param>
-        /// <param name="playlist">The playlist.</param>
-        /// <param name="devices">The devices.</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// manager - manager
-        /// or
-        /// player - player
-        /// or
-        /// playlist - playlist
-        /// </exception>
         public MediaPlayer(ViewModelServiceContainer container, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, Data.MediaPlayer model)
-            : base(model, validator, container)
+            : base(model, validator, container.Messenger)
         {
             _manager = container.LocalizationService;
             Player = player ?? throw new ArgumentNullException(nameof(player), $"{nameof(player)} {Resources.IsRequired}");
@@ -277,10 +131,10 @@ namespace Maple
         {
             _messageTokens = new List<SubscriptionToken>
             {
-                _messenger.Subscribe<PlayingMediaItemMessage>(Player_PlayingMediaItem, IsSenderEqualsPlayer),
-                _messenger.Subscribe<CompletedMediaItemMessage>(MediaPlayer_CompletedMediaItem, IsSenderEqualsPlayer),
-                _messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanging, IsSenderEqualsPlayer),
-                _messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanged, IsSenderEqualsPlayer),
+                Messenger.Subscribe<PlayingMediaItemMessage>(Player_PlayingMediaItem, IsSenderEqualsPlayer),
+                Messenger.Subscribe<CompletedMediaItemMessage>(MediaPlayer_CompletedMediaItem, IsSenderEqualsPlayer),
+                Messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanging, IsSenderEqualsPlayer),
+                Messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanged, IsSenderEqualsPlayer),
             };
         }
 
@@ -542,7 +396,7 @@ namespace Maple
             if (disposing)
             {
                 foreach (var token in _messageTokens)
-                    _messenger.Unsubscribe<IMapleMessage>(token);
+                    Messenger.Unsubscribe<IMapleMessage>(token);
 
                 Player?.Dispose();
                 Player = null;
