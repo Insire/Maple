@@ -1,4 +1,5 @@
 ﻿using Maple.Core;
+using Maple.Localization.Properties;
 using System;
 
 namespace Maple
@@ -11,8 +12,8 @@ namespace Maple
 
         public FolderBrowserDialogViewModel(FileSystemViewModel fileSystemViewModel, FileSystemBrowserOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
-            FileSystemViewModel = fileSystemViewModel ?? throw new ArgumentNullException(nameof(fileSystemViewModel));
+            _options = options ?? throw new ArgumentNullException(nameof(options), $"{nameof(options)} {Resources.IsRequired}");
+            FileSystemViewModel = fileSystemViewModel ?? throw new ArgumentNullException(nameof(fileSystemViewModel), $"{nameof(fileSystemViewModel)} {Resources.IsRequired}");
         }
     }
 }

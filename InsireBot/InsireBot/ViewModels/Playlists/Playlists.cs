@@ -14,11 +14,11 @@ namespace Maple
 
         public ICommand PlayCommand { get; private set; }
 
-        public Playlists(ViewModelServiceContainer container, IPlaylistMapper playlistMapper, Func<IMediaRepository> repo)
+        public Playlists(ViewModelServiceContainer container, IPlaylistMapper playlistMapper, Func<IMediaRepository> repositoryFactory)
             : base(container)
         {
-            _repositoryFactory = repo ?? throw new ArgumentNullException(nameof(repo));
-            _playlistMapper = playlistMapper ?? throw new ArgumentNullException(nameof(playlistMapper));
+            _repositoryFactory = repositoryFactory ?? throw new ArgumentNullException(nameof(repositoryFactory), $"{nameof(repositoryFactory)} {Resources.IsRequired}");
+            _playlistMapper = playlistMapper ?? throw new ArgumentNullException(nameof(playlistMapper), $"{nameof(playlistMapper)} {Resources.IsRequired}");
 
             AddCommand = new RelayCommand(Add, CanAdd);
         }

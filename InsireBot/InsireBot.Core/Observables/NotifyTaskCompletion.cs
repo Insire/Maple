@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maple.Localization.Properties;
+using System;
 using System.Threading.Tasks;
 
 namespace Maple.Core
@@ -18,8 +19,8 @@ namespace Maple.Core
 
         public NotifyTaskCompletion(Task<TResult> task, ILoggingService log)
         {
-            _task = task ?? throw new ArgumentNullException(nameof(task));
-            _log = log ?? throw new ArgumentNullException(nameof(log));
+            _task = task ?? throw new ArgumentNullException(nameof(task), $"{nameof(task)} {Resources.IsRequired}");
+            _log = log ?? throw new ArgumentNullException(nameof(log), $"{nameof(log)} {Resources.IsRequired}");
 
             if (!task.IsCompleted)
             {

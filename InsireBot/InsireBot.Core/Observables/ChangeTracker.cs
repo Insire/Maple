@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maple.Localization.Properties;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -24,7 +25,7 @@ namespace Maple.Core
         public bool Update(object changedValue, [CallerMemberName] string propertyName = null)
         {
             if (string.IsNullOrEmpty(propertyName))
-                throw new ArgumentNullException(nameof(propertyName));
+                throw new ArgumentNullException(nameof(propertyName), $"{nameof(propertyName)} {Resources.IsRequired}");
 
             if (_changes.ContainsKey(propertyName))
             {

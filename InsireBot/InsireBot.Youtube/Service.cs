@@ -20,55 +20,55 @@ namespace Maple.Youtube
         private const string _videoBaseUrl = @"https://www.youtube.com/watch?v=";
         private const string _playListBaseUrl = @"https://www.youtube.com/playlist?list=";
 
-        private YouTubeService _service;
+        private volatile YouTubeService _service;
         private readonly ILoggingService _log;
+        private readonly object _syncRoot;
+
         public Service(ILoggingService log)
         {
-            _log = log;
+            _log = log ?? throw new ArgumentNullException(nameof(log));
+            _syncRoot = new object();
         }
 
         private async Task<YouTubeService> GetService()
         {
-            if (_service == null)
-            {
-                _log.Info(Resources.YoutubeLoad);
-
-                UserCredential credential;
-                using (var stream = new FileStream(@"Resources\client_secret.json", FileMode.Open, FileAccess.Read, FileShare.Read))
-                {
-                    credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
-                        GoogleClientSecrets.Load(stream).Secrets,
-                        new[]
-                        {
-                            YouTubeService.Scope.YoutubeReadonly,
-                            YouTubeService.Scope.Youtube
-                        },
-                        "user",
-                        CancellationToken.None,
-                        new FileDataStore(GetType().ToString())
-                    );
-                }
-
-                var result = new YouTubeService(new BaseClientService.Initializer()
-                {
-                    HttpClientInitializer = credential,
-                    ApplicationName = GetType().ToString()
-                });
-
-                _log.Info(Resources.YoutubeLoaded);
-                _service = result;
-                return result;
-            }
-            else
-            {
+            if (_service != null)
                 return _service;
+
+            _log.Info(Resources.YoutubeLoad);
+
+            _service = new YouTubeService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = await GetCredential(),
+                ApplicationName = GetType().ToString()
+            });
+
+            _log.Info(Resources.YoutubeLoaded);
+
+            return _service;
+        }
+
+        private async Task<UserCredential> GetCredential()
+        {
+            using (var stream = new FileStream(@"Resources\client_secret.json", FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                var secretes = GoogleClientSecrets.Load(stream).Secrets;
+                var store = new FileDataStore(GetType().ToString());
+                var scopes = new[]
+{
+                    YouTubeService.Scope.YoutubeReadonly,
+                    YouTubeService.Scope.Youtube
+                };
+
+                return await GoogleWebAuthorizationBroker.AuthorizeAsync(secretes, scopes, "user", CancellationToken.None, store)
+                                                         .ConfigureAwait(false);
             }
         }
 
         public async Task<List<Data.Playlist>> GetPlaylists(string playlistId)
         {
             var result = new List<Data.Playlist>();
-            var youtubeService = await GetService();
+            var youtubeService = await GetService().ConfigureAwait(false);
 
             var request = youtubeService.Playlists.List("snippet,contentDetails");
             request.Id = playlistId;
@@ -98,7 +98,7 @@ namespace Maple.Youtube
 
         public async Task CreatePlaylist(Data.Playlist playlist, bool publicPlaylist = true)
         {
-            var youtubeService = await GetService();
+            var youtubeService = await GetService().ConfigureAwait(false);
 
             var newPlaylist = new Playlist()
             {
@@ -112,7 +112,9 @@ namespace Maple.Youtube
                     PrivacyStatus = publicPlaylist == true ? "public" : "private"
                 }
             };
-            newPlaylist = await youtubeService.Playlists.Insert(newPlaylist, "snippet,status").ExecuteAsync();
+            newPlaylist = await youtubeService.Playlists.Insert(newPlaylist, "snippet,status")
+                                                        .ExecuteAsync()
+                                                        .ConfigureAwait(false);
 
             foreach (var item in playlist.MediaItems)
             {
@@ -127,39 +129,51 @@ namespace Maple.Youtube
                 };
                 newVideo.Snippet.ResourceId.Kind = "youtube#video";
                 newVideo.Snippet.ResourceId.VideoId = GetVideoId(item);
-                newVideo = await youtubeService.PlaylistItems.Insert(newVideo, "snippet").ExecuteAsync();
+                newVideo = await youtubeService.PlaylistItems.Insert(newVideo, "snippet")
+                                                             .ExecuteAsync()
+                                                             .ConfigureAwait(false);
             }
         }
 
         public async Task DeletePlaylist(Data.Playlist playlist)
         {
-            var youtubeService = await GetService();
+            var youtubeService = await GetService().ConfigureAwait(false);
             var id = GetPlaylistId(playlist);
-            await youtubeService.Playlists.Delete(id).ExecuteAsync();
+
+            await youtubeService.Playlists.Delete(id)
+                                          .ExecuteAsync()
+                                          .ConfigureAwait(false);
         }
 
         public static string GetVideoId(Data.MediaItem item)
         {
             var url = new Uri(item.Location);
-            var result = HttpUtility.ParseQueryString(url.Query).Get("v");
+            var result = HttpUtility.ParseQueryString(url.Query)
+                                    .Get("v");
+
             return result;
         }
 
         public static string GetPlaylistId(Data.Playlist list)
         {
             var url = new Uri(list.Location);
-            var result = HttpUtility.ParseQueryString(url.Query).Get("list");
+            var result = HttpUtility.ParseQueryString(url.Query)
+                                    .Get("list");
+
             return result;
         }
 
         public async Task<IList<PlaylistItem>> GetPlaylistItems(string playlistId)
         {
             var result = new List<PlaylistItem>();
-            var youtubeService = await GetService();
+            var youtubeService = await GetService().ConfigureAwait(false);
 
             var request = youtubeService.PlaylistItems.List("snippet,contentDetails");
             request.PlaylistId = playlistId;
-            var response = await request.ExecuteAsync();
+
+            var response = await request.ExecuteAsync()
+                                        .ConfigureAwait(false);
+
 
             foreach (var item in response.Items)
             {
@@ -177,10 +191,12 @@ namespace Maple.Youtube
 
         public async Task DeletePlaylistItems(IList<PlaylistItem> playlistItems)
         {
-            var youtubeService = await GetService();
+            var youtubeService = await GetService().ConfigureAwait(false);
 
             foreach (var item in playlistItems)
-                await youtubeService.PlaylistItems.Delete(item.Id).ExecuteAsync();
+                await youtubeService.PlaylistItems.Delete(item.Id)
+                                                  .ExecuteAsync()
+                                                  .ConfigureAwait(false);
         }
 
         //TODO writing a async sync method for what i get from youtube vs that i generate myself as playlist
@@ -188,12 +204,13 @@ namespace Maple.Youtube
         public async Task<IList<Data.MediaItem>> GetVideo(string videoId)
         {
             var result = new List<Data.MediaItem>();
-            var youtubeService = await GetService();
+            var youtubeService = await GetService().ConfigureAwait(false);
 
             var request = youtubeService.Videos.List("snippet,contentDetails");
             request.Id = videoId;
 
-            var response = await request.ExecuteAsync();
+            var response = await request.ExecuteAsync()
+                                        .ConfigureAwait(false);
 
             foreach (var item in response.Items)
             {

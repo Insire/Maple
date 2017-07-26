@@ -22,8 +22,8 @@ namespace Maple
         public PlaylistMapper(ViewModelServiceContainer container, IMediaItemMapper mediaItemMapper, DialogViewModel dialogViewModel, IValidator<Playlist> validator)
             : base(container, validator)
         {
-            _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
-            _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper));
+            _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel), $"{nameof(dialogViewModel)} {Resources.IsRequired}");
+            _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper), $"{nameof(mediaItemMapper)} {Resources.IsRequired}");
 
             InitializeMapper();
         }

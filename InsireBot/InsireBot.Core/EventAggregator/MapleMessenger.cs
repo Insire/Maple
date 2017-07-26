@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maple.Localization.Properties;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,9 +16,9 @@ namespace Maple.Core
 
         public MapleMessenger(ITranslationProvider translationProvider, ILoggingService log, IMapleMessageProxy mapleMessageProxy)
         {
-            _translationProvider = translationProvider ?? throw new ArgumentNullException(nameof(translationProvider));
-            _log = log ?? throw new ArgumentNullException(nameof(log));
-            _mapleMessageProxy = mapleMessageProxy ?? throw new ArgumentNullException(nameof(mapleMessageProxy));
+            _translationProvider = translationProvider ?? throw new ArgumentNullException(nameof(translationProvider), $"{nameof(translationProvider)} {Resources.IsRequired}");
+            _log = log ?? throw new ArgumentNullException(nameof(log), $"{nameof(log)} {Resources.IsRequired}");
+            _mapleMessageProxy = mapleMessageProxy ?? throw new ArgumentNullException(nameof(mapleMessageProxy), $"{nameof(mapleMessageProxy)} {Resources.IsRequired}");
         }
 
         public SubscriptionToken Subscribe<TMessage>(Action<TMessage> deliveryAction)
@@ -96,13 +97,13 @@ namespace Maple.Core
                 where TMessage : class, IMapleMessage
         {
             if (deliveryAction == null)
-                throw new ArgumentNullException(nameof(deliveryAction));
+                throw new ArgumentNullException(nameof(deliveryAction), $"{nameof(deliveryAction)} {Resources.IsRequired}");
 
             if (messageFilter == null)
-                throw new ArgumentNullException(nameof(messageFilter));
+                throw new ArgumentNullException(nameof(messageFilter), $"{nameof(messageFilter)} {Resources.IsRequired}");
 
             if (proxy == null)
-                throw new ArgumentNullException(nameof(proxy));
+                throw new ArgumentNullException(nameof(proxy), $"{nameof(proxy)} {Resources.IsRequired}");
 
             lock (_SubscriptionsPadlock)
             {
@@ -124,7 +125,7 @@ namespace Maple.Core
                 where TMessage : class, IMapleMessage
         {
             if (subscriptionToken == null)
-                throw new ArgumentNullException(nameof(subscriptionToken));
+                throw new ArgumentNullException(nameof(subscriptionToken), $"{nameof(subscriptionToken)} {Resources.IsRequired}");
 
             lock (_SubscriptionsPadlock)
             {
@@ -140,7 +141,7 @@ namespace Maple.Core
                 where TMessage : class, IMapleMessage
         {
             if (message == null)
-                throw new ArgumentNullException(nameof(message));
+                throw new ArgumentNullException(nameof(message), $"{nameof(message)} {Resources.IsRequired}");
 
             List<SubscriptionItem> currentlySubscribed;
             lock (_SubscriptionsPadlock)

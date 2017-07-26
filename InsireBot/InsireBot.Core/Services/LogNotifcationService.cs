@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maple.Localization.Properties;
+using System;
 
 namespace Maple.Core
 {
@@ -9,8 +10,8 @@ namespace Maple.Core
 
         public LoggingNotifcationService(IMessenger messenger, ILoggingService log)
         {
-            _log = log ?? throw new ArgumentNullException(nameof(log));
-            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+            _log = log ?? throw new ArgumentNullException(nameof(log), $"{nameof(log)} {Resources.IsRequired}");
+            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");
         }
 
         public void Info(object message)

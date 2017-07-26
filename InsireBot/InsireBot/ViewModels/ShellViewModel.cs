@@ -1,4 +1,5 @@
 ﻿using Maple.Core;
+using Maple.Localization.Properties;
 using System;
 
 namespace Maple
@@ -119,13 +120,13 @@ namespace Maple
                                 IMediaPlayersViewModel mediaPlayers,
                                 OptionsViewModel optionsViewModel)
         {
-            TranslationManager = translationManager ?? throw new ArgumentNullException(nameof(translationManager));
-            Scenes = scenes ?? throw new ArgumentNullException(nameof(scenes));
-            StatusbarViewModel = statusBarViewModel ?? throw new ArgumentNullException(nameof(statusBarViewModel));
-            DialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
-            Playlists = playlists ?? throw new ArgumentNullException(nameof(playlists));
-            MediaPlayers = mediaPlayers ?? throw new ArgumentNullException(nameof(mediaPlayers));
-            OptionsViewModel = optionsViewModel ?? throw new ArgumentNullException(nameof(optionsViewModel));
+            TranslationManager = translationManager ?? throw new ArgumentNullException(nameof(translationManager), $"{nameof(translationManager)} {Resources.IsRequired}");
+            Scenes = scenes ?? throw new ArgumentNullException(nameof(scenes), $"{nameof(scenes)} {Resources.IsRequired}");
+            StatusbarViewModel = statusBarViewModel ?? throw new ArgumentNullException(nameof(statusBarViewModel), $"{nameof(statusBarViewModel)} {Resources.IsRequired}");
+            DialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel), $"{nameof(dialogViewModel)} {Resources.IsRequired}");
+            Playlists = playlists ?? throw new ArgumentNullException(nameof(playlists), $"{nameof(playlists)} {Resources.IsRequired}");
+            MediaPlayers = mediaPlayers ?? throw new ArgumentNullException(nameof(mediaPlayers), $"{nameof(mediaPlayers)} {Resources.IsRequired}");
+            OptionsViewModel = optionsViewModel ?? throw new ArgumentNullException(nameof(optionsViewModel), $"{nameof(optionsViewModel)} {Resources.IsRequired}");
         }
     }
 }

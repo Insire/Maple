@@ -12,12 +12,7 @@ namespace Maple.Core
     {
         public ITranslationProvider TranslationProvider { get; private set; }
         public readonly ILoggingService _log;
-        /// <summary>
-        /// Gets or sets the current language.
-        /// </summary>
-        /// <value>
-        /// The current language.
-        /// </value>
+
         private CultureInfo _currentLanguage;
         public CultureInfo CurrentLanguage
         {
@@ -38,8 +33,8 @@ namespace Maple.Core
 
         public LocalizationService(ITranslationProvider provider, ILoggingService log)
         {
-            _log = log ?? throw new ArgumentNullException(nameof(log));
-            TranslationProvider = provider ?? throw new ArgumentNullException(nameof(provider));
+            _log = log ?? throw new ArgumentNullException(nameof(log), $"{nameof(log)} {Resources.IsRequired}");
+            TranslationProvider = provider ?? throw new ArgumentNullException(nameof(provider), $"{nameof(provider)} {Resources.IsRequired}");
             _currentLanguage = Thread.CurrentThread.CurrentUICulture;
         }
 

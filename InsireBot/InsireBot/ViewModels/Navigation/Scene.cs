@@ -1,4 +1,5 @@
 ﻿using Maple.Core;
+using Maple.Localization.Properties;
 using System;
 using System.Windows;
 
@@ -99,7 +100,7 @@ namespace Maple
         /// <param name="manager">The manager.</param>
         public Scene(ILocalizationService manager)
         {
-            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
+            _manager = manager ?? throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} {Resources.IsRequired}");
             _manager.PropertyChanged += (o, e) =>
                       {
                           if (e.PropertyName == nameof(_manager.CurrentLanguage))

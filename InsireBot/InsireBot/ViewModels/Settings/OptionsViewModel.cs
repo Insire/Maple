@@ -1,4 +1,5 @@
 ﻿using Maple.Core;
+using Maple.Localization.Properties;
 using System;
 
 namespace Maple
@@ -21,8 +22,8 @@ namespace Maple
 
         public OptionsViewModel(IUIColorsViewModel colors, ICultureViewModel culture)
         {
-            UIColorsViewModel = colors ?? throw new ArgumentNullException(nameof(colors));
-            CultureViewModel = culture ?? throw new ArgumentNullException(nameof(culture));
+            UIColorsViewModel = colors ?? throw new ArgumentNullException(nameof(colors), $"{nameof(colors)} {Resources.IsRequired}");
+            CultureViewModel = culture ?? throw new ArgumentNullException(nameof(culture), $"{nameof(culture)} {Resources.IsRequired}");
         }
     }
 }

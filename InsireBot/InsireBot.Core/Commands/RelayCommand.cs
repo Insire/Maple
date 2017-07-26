@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maple.Localization.Properties;
+using System;
 using System.Windows.Input;
 
 namespace Maple.Core
@@ -28,7 +29,7 @@ namespace Maple.Core
         /// <exception cref="System.ArgumentNullException">methodToExecute</exception>
         public RelayCommand(Action methodToExecute)
         {
-            _execute = methodToExecute ?? throw new ArgumentNullException(nameof(methodToExecute));
+            _execute = methodToExecute ?? throw new ArgumentNullException(nameof(methodToExecute), $"{nameof(methodToExecute)} {Resources.IsRequired}");
         }
 
         /// <summary>
@@ -40,7 +41,7 @@ namespace Maple.Core
         public RelayCommand(Action methodToExecute, Func<bool> canExecuteEvaluator)
             : this(methodToExecute)
         {
-            _canExecute = canExecuteEvaluator ?? throw new ArgumentNullException(nameof(canExecuteEvaluator));
+            _canExecute = canExecuteEvaluator ?? throw new ArgumentNullException(nameof(canExecuteEvaluator), $"{nameof(canExecuteEvaluator)} {Resources.IsRequired}");
         }
 
         /// <summary>
@@ -81,7 +82,7 @@ namespace Maple.Core
         /// <param name="execute">The execute.</param>
         public RelayCommand(Action<T> execute)
         {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute), $"{nameof(execute)} {Resources.IsRequired}");
         }
 
         /// <summary>
@@ -91,9 +92,9 @@ namespace Maple.Core
         /// <param name="canExecute">The can execute.</param>
         /// <exception cref="System.ArgumentNullException">execute</exception>
         public RelayCommand(Action<T> execute, Predicate<T> canExecute)
-            :this(execute)
+            : this(execute)
         {
-            _canExecute = canExecute ?? throw new ArgumentNullException(nameof(canExecute));
+            _canExecute = canExecute ?? throw new ArgumentNullException(nameof(canExecute), $"{nameof(canExecute)} {Resources.IsRequired}");
         }
 
         /// <summary>

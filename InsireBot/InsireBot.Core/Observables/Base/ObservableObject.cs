@@ -25,16 +25,6 @@ namespace Maple.Core
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        /// <summary>
-        /// Sets the value.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="field">The field.</param>
-        /// <param name="value">The value.</param>
-        /// <param name="OnChanging">The on changing action.</param>
-        /// <param name="OnChanged">The on changed action.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <returns></returns>
         protected virtual bool SetValue<T>(ref T field, T value, Action OnChanging = null, Action OnChanged = null, [CallerMemberName]string propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(field, value))
