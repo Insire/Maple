@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maple.Localization.Properties;
+using System;
 using System.ComponentModel;
 using System.Windows;
 
@@ -19,8 +20,8 @@ namespace Maple.Core
 
         public LocalizationDTO(ILocalizationService service, string key, bool toUpper)
         {
-            _service = service ?? throw new ArgumentNullException(nameof(service));
-            _key = key ?? throw new ArgumentNullException(nameof(key));
+            _service = service ?? throw new ArgumentNullException(nameof(service), $"{nameof(service)} {Resources.IsRequired}");
+            _key = key ?? throw new ArgumentNullException(nameof(key), $"{nameof(key)} {Resources.IsRequired}");
             _toUpper = toUpper;
 
             WeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>.AddHandler(_service, "PropertyChanged", ValueChanged);

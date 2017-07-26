@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maple.Localization.Properties;
+using System;
 
 namespace Maple.Core
 {
@@ -33,11 +34,11 @@ namespace Maple.Core
 
         public StrongMapleMessageSubscription(ITranslationProvider translationProvider, SubscriptionToken subscriptionToken, Action<TMessage> deliveryAction, Func<TMessage, bool> messageFilter)
         {
-            SubscriptionToken = subscriptionToken ?? throw new ArgumentNullException(nameof(subscriptionToken));
-            DeliveryAction = deliveryAction ?? throw new ArgumentNullException(nameof(deliveryAction));
-            MessageFilter = messageFilter ?? throw new ArgumentNullException(nameof(messageFilter));
+            SubscriptionToken = subscriptionToken ?? throw new ArgumentNullException(nameof(subscriptionToken), $"{nameof(subscriptionToken)} {Resources.IsRequired}");
+            DeliveryAction = deliveryAction ?? throw new ArgumentNullException(nameof(deliveryAction), $"{nameof(deliveryAction)} {Resources.IsRequired}");
+            MessageFilter = messageFilter ?? throw new ArgumentNullException(nameof(messageFilter), $"{nameof(messageFilter)} {Resources.IsRequired}");
 
-            _translationProvider = translationProvider ?? throw new ArgumentNullException(nameof(translationProvider));
+            _translationProvider = translationProvider ?? throw new ArgumentNullException(nameof(translationProvider), $"{nameof(translationProvider)} {Resources.IsRequired}");
         }
     }
 }

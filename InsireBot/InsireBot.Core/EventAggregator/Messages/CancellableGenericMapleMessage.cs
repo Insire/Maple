@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maple.Localization.Properties;
+using System;
 
 namespace Maple.Core
 {
@@ -28,7 +29,7 @@ namespace Maple.Core
             : base(sender)
         {
             Content = content;
-            Cancel = cancelAction ?? throw new ArgumentNullException(nameof(cancelAction));
+            Cancel = cancelAction ?? throw new ArgumentNullException(nameof(cancelAction), $"{nameof(cancelAction)} {Resources.IsRequired}");
         }
     }
 }

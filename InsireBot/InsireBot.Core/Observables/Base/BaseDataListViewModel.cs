@@ -1,4 +1,5 @@
 ﻿using Maple.Data;
+using Maple.Localization.Properties;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -73,17 +74,17 @@ namespace Maple.Core
         /// Removes the specified item.
         /// </summary>
         /// <param name="item">The item.</param>
-        public override void Remove(TViewModel item)
+        public override void Remove(TViewModel viewModel)
         {
-            if (item == null)
-                throw new ArgumentNullException(nameof(item));
+            if (viewModel == null)
+                throw new ArgumentNullException(nameof(viewModel), $"{nameof(viewModel)} {Resources.IsRequired}");
 
             using (_busyStack.GetToken())
             {
-                while (Items.Contains(item))
+                while (Items.Contains(viewModel))
                 {
-                    item.Model.IsDeleted = true;
-                    base.Remove(item);
+                    viewModel.Model.IsDeleted = true;
+                    base.Remove(viewModel);
                 }
             }
         }
@@ -95,7 +96,7 @@ namespace Maple.Core
         public override void RemoveRange(IEnumerable<TViewModel> items)
         {
             if (items == null)
-                throw new ArgumentNullException(nameof(items));
+                throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
 
             using (_busyStack.GetToken())
             {
@@ -112,7 +113,7 @@ namespace Maple.Core
         public override void RemoveRange(IList items)
         {
             if (items == null)
-                throw new ArgumentNullException(nameof(items));
+                throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
 
             using (_busyStack.GetToken())
             {
@@ -121,20 +122,20 @@ namespace Maple.Core
             }
         }
 
-        public override void Add(TViewModel item)
+        public override void Add(TViewModel viewModel)
         {
-            if (item == null)
-                throw new ArgumentNullException(nameof(item));
+            if (viewModel == null)
+                throw new ArgumentNullException(nameof(viewModel), $"{nameof(viewModel)} {Resources.IsRequired}");
 
             var sequence = _sequenceProvider.Get(Items.Cast<ISequence>().ToList());
-            item.Sequence = sequence;
-            base.Add(item);
+            viewModel.Sequence = sequence;
+            base.Add(viewModel);
         }
 
         public override void AddRange(IEnumerable<TViewModel> items)
         {
             if (items == null)
-                throw new ArgumentNullException(nameof(items));
+                throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
 
             using (_busyStack.GetToken())
             {

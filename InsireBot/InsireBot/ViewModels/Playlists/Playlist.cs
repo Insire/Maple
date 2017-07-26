@@ -188,7 +188,7 @@ namespace Maple
             using (BusyStack.GetToken())
             {
                 _itemsLock = new object();
-                _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
+                _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel), $"{nameof(dialogViewModel)} {Resources.IsRequired}");
                 _sequenceProvider = container.SequenceService;
 
                 _translator = container.LocalizationService;
@@ -360,7 +360,7 @@ namespace Maple
         public virtual void RemoveRange(IEnumerable<MediaItem> items)
         {
             if (items == null)
-                throw new ArgumentNullException(nameof(items));
+                throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
 
             using (BusyStack.GetToken())
                 RemoveRangeInternal(items.ToList());
@@ -369,7 +369,7 @@ namespace Maple
         public virtual void RemoveRange(IList items)
         {
             if (items == null)
-                throw new ArgumentNullException(nameof(items));
+                throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
 
             using (BusyStack.GetToken())
                 RemoveRangeInternal(items.Cast<MediaItem>().ToList());

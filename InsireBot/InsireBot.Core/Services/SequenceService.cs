@@ -11,7 +11,7 @@ namespace Maple.Core
 
         public SequenceService(ILoggingService log)
         {
-            _log = log ?? throw new ArgumentNullException(nameof(log));
+            _log = log ?? throw new ArgumentNullException(nameof(log), $"{nameof(log)} {Resources.IsRequired}");
         }
 
         public int Get(IList<ISequence> items)

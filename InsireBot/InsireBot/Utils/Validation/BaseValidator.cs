@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Maple.Core;
+using Maple.Localization.Properties;
 using System;
 
 namespace Maple
@@ -10,7 +11,7 @@ namespace Maple
 
         public BaseValidator(ILocalizationService translationService)
         {
-            _translationService = translationService ?? throw new ArgumentNullException(nameof(translationService));
+            _translationService = translationService ?? throw new ArgumentNullException(nameof(translationService), $"{nameof(translationService)} {Resources.IsRequired}");
         }
     }
 }
