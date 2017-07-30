@@ -26,7 +26,6 @@ namespace Maple.Data
             "The Forgotten Tales",
             "Nightfall In Middle Earth",
             "A Night At The Opera",
-
             "Infinite",
             "The Slim Shady LP",
             "Marshall Mathers",
@@ -49,7 +48,6 @@ namespace Maple.Data
             "Sacred Mind",
             "Miracle Machine",
             "Grand Parade",
-
             "My Name Is",
             "Guilty Conscience",
             "Brain Damage",
