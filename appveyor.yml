@@ -15,5 +15,5 @@ artifacts:
 build_script:
   - choco install "msbuild-sonarqube-runner" -y
   - MSBuild.SonarQube.Runner.exe begin /k:"Maple" /d:"sonar.host.url=https://sonarqube.com" /d:"sonar.login=3914d8645377c1afd744baa842a00d50287f4993"
-  - msbuild "Maple.sln"
+  - msbuild "InsireBot\Maple.sln"
   - MSBuild.SonarQube.Runner.exe end /d:"sonar.login=3914d8645377c1afd744baa842a00d50287f4993"
