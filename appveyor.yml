@@ -6,8 +6,10 @@ branches:
   - master
   - Dev
 environment:
-  my_variable:
-    SonarToken: 3mBbvKwFSmV0pgVwRLH70+9YekT4I109T09+PlHRThu9rbVUybSPBZrrheWECXq+
+  SonarToken:
+    secure: 3mBbvKwFSmV0pgVwRLH70+9YekT4I109T09+PlHRThu9rbVUybSPBZrrheWECXq+
+  SonarProject:
+    secure: XBMwudirgqiNxzCuNA+rgYPCdCjNypfboJruML+pNKg=
 cache:
 - InsireBot\packages -> InsireBot\**\packages.config
 before_build:
@@ -21,6 +23,6 @@ artifacts:
   name: 'InsireBot-Binaries'
 build_script:
   - choco install "msbuild-sonarqube-runner" -y
-  - MSBuild.SonarQube.Runner.exe begin /k:"D4KL4CL9XXNHCDJRHGHF4" /n:"Maple" /d:"sonar.host.url=https://sonarqube.com" /d:"sonar.login=[SonarToken]"
+  - MSBuild.SonarQube.Runner.exe begin /k:"[SonarProject]" /n:"Maple" /d:"sonar.host.url=https://sonarqube.com" /d:"sonar.login=[SonarToken]"
   - msbuild "InsireBot\Maple.sln"
   - MSBuild.SonarQube.Runner.exe end /d:"sonar.login=[SonarToken]"
