@@ -79,7 +79,7 @@ namespace Maple
         public Scenes(ILocalizationService manager, ILoggingService log, IMessenger messenger)
             : base(messenger)
         {
-            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
+            _manager = manager ?? throw new ArgumentNullException(nameof(manager), Resources.IsRequired);
             _log = log ?? throw new ArgumentNullException(nameof(log));
 
             var content = new[]
@@ -181,7 +181,9 @@ namespace Maple
 
         private void OpenGithubPage()
         {
-            Process.Start(_manager.Translate(nameof(Resources.GithubProjectLink)));
+            using (Process.Start(_manager.Translate(nameof(Resources.GithubProjectLink))))
+            {
+            }
         }
     }
 }

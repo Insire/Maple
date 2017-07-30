@@ -25,7 +25,7 @@ namespace Maple
             _settings = CreateSettings();
 
             if (_settings == null)
-                throw new ArgumentNullException(nameof(_settings), "Cannot be null.");
+                throw new ArgumentNullException(nameof(_settings), $"{nameof(_settings)} {Localization.Properties.Resources.IsRequired}");
 
             Loaded += delegate { _isLoaded = true; };
 

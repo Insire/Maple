@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maple.Localization.Properties;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace Maple.Core
@@ -42,7 +43,7 @@ namespace Maple.Core
 
         protected BaseDataViewModel(IMessenger messenger)
         {
-            Messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+            Messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");
             BusyStack = new BusyStack();
             BusyStack.OnChanged += (isBusy) => IsBusy = isBusy;
             ChangeTracker = new ChangeTracker();

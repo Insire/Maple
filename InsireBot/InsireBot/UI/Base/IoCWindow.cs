@@ -9,20 +9,12 @@ using System.Windows.Media.Imaging;
 
 namespace Maple
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <seealso cref="Maple.ConfigurableWindow" />
-    /// <seealso cref="Maple.Core.IIocFrameworkElement" />
     public abstract class IoCWindow : ConfigurableWindow, IIocFrameworkElement
     {
         private IConfigurableWindowSettings _settings;
         private IMessenger _messenger;
         public ILocalizationService TranslationManager { get; private set; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IoCWindow"/> class.
-        /// </summary>
         public IoCWindow()
             : base()
         {
@@ -30,16 +22,11 @@ namespace Maple
                 Debug.Fail($"The constructor without parameters of {nameof(IoCWindow)} exists only for compatibility reasons.");
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IoCWindow"/> class.
-        /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="vm">The vm.</param>
         public IoCWindow(ILocalizationService container, IMessenger messenger)
             : base()
         {
-            TranslationManager = container ?? throw new ArgumentNullException(nameof(container));
-            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+            TranslationManager = container ?? throw new ArgumentNullException(nameof(container), $"{nameof(container)} {Localization.Properties.Resources.IsRequired}");
+            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Localization.Properties.Resources.IsRequired}");
 
             _messenger.Subscribe<UiPrimaryColorChangedMessage>(PrimaryColorChanged);
         }
@@ -65,12 +52,6 @@ namespace Maple
             }
         }
 
-        /// <summary>
-        /// Sets the image.
-        /// </summary>
-        /// <param name="geo">The geo.</param>
-        /// <param name="color">The color.</param>
-        /// <returns></returns>
         private BitmapSource SetImage(Geometry geo, Color color)
         {
             var canvas = new Canvas

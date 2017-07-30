@@ -1,5 +1,8 @@
 ﻿using Maple.Core;
+using Maple.Localization.Properties;
 using Maple.Youtube;
+using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Maple
@@ -12,21 +15,9 @@ namespace Maple
         private IYoutubeUrlParseService _dataParsingService;
         private IMediaItemMapper _mapper;
 
-        /// <summary>
-        /// Gets the parse command.
-        /// </summary>
-        /// <value>
-        /// The parse command.
-        /// </value>
         public ICommand ParseCommand { get; private set; }
 
         private string _source;
-        /// <summary>
-        /// Gets or sets the source.
-        /// </summary>
-        /// <value>
-        /// The source.
-        /// </value>
         public string Source
         {
             get { return _source; }
@@ -34,44 +25,37 @@ namespace Maple
         }
 
         private UrlParseResult _result;
-        /// <summary>
-        /// Gets the result.
-        /// </summary>
-        /// <value>
-        /// The result.
-        /// </value>
         public UrlParseResult Result
         {
             get { return _result; }
             private set { SetValue(ref _result, value); }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CreateMediaItem"/> class.
-        /// </summary>
-        /// <param name="dataParsingService">The data parsing service.</param>
-        /// <param name="mapper">The mapper.</param>
         public CreateMediaItem(IYoutubeUrlParseService dataParsingService, IMediaItemMapper mapper, IMessenger messenger)
             : base(messenger)
         {
-            _dataParsingService = dataParsingService;
-            _mapper = mapper;
+            _dataParsingService = dataParsingService ?? throw new ArgumentNullException(nameof(dataParsingService), $"{nameof(mapper)} {Resources.IsRequired}");
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), $"{nameof(mapper)} {Resources.IsRequired}");
 
             InitializeCommands();
         }
 
         private void InitializeCommands()
         {
-            ParseCommand = new RelayCommand(async () =>
-            {
-                using (_busyStack.GetToken())
-                {
-                    Result = await _dataParsingService.Parse(Source, ParseResultType.MediaItems);
+            ParseCommand = new AsyncRelayCommand(Parse, CanParse);
+        }
 
-                    if (Result.Count > 0 && Result.MediaItems?.Count > 0)
-                        Items.AddRange(_mapper.GetMany(Result.MediaItems));
-                }
-            }, () => !string.IsNullOrWhiteSpace(Source));
+        private async Task Parse()
+        {
+            Result = await _dataParsingService.Parse(Source, ParseResultType.MediaItems).ConfigureAwait(false);
+
+            if (Result.Count > 0 && Result.MediaItems?.Count > 0)
+                Items.AddRange(_mapper.GetMany(Result.MediaItems));
+        }
+
+        private bool CanParse()
+        {
+            return !string.IsNullOrWhiteSpace(Source);
         }
     }
 }

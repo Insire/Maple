@@ -20,17 +20,22 @@ namespace Maple
         /// </summary>
         /// <param name="manager">The manager.</param>
         /// <param name="playerFactory">The player factory.</param>
-        /// <param name="repo">The repo.</param>
+        /// <param name="repositoryFactory">The repo.</param>
         /// <param name="devices">The devices.</param>
         /// <param name="dialog">The dialog.</param>
-        public MediaPlayers(ViewModelServiceContainer container, IMediaPlayerMapper mediaPlayerMapper, Func<IMediaPlayer> playerFactory, Func<IMediaRepository> repo, AudioDevices devices, DialogViewModel dialog)
+        public MediaPlayers(ViewModelServiceContainer container,
+                            IMediaPlayerMapper mediaPlayerMapper,
+                            Func<IMediaPlayer> playerFactory,
+                            Func<IMediaRepository> repositoryFactory,
+                            AudioDevices devices,
+                            DialogViewModel dialog)
             : base(container)
         {
-            _playerFactory = playerFactory ?? throw new ArgumentNullException(nameof(playerFactory));
-            _devices = devices ?? throw new ArgumentNullException(nameof(devices));
-            _dialog = dialog ?? throw new ArgumentNullException(nameof(dialog));
-            _repositoryFactory = repo ?? throw new ArgumentNullException(nameof(repo));
-            _mediaPlayerMapper = mediaPlayerMapper ?? throw new ArgumentNullException(nameof(mediaPlayerMapper));
+            _playerFactory = playerFactory ?? throw new ArgumentNullException(nameof(playerFactory), $"{nameof(playerFactory)} {Resources.IsRequired}");
+            _devices = devices ?? throw new ArgumentNullException(nameof(devices), $"{nameof(devices)} {Resources.IsRequired}");
+            _dialog = dialog ?? throw new ArgumentNullException(nameof(dialog), $"{nameof(dialog)} {Resources.IsRequired}");
+            _repositoryFactory = repositoryFactory ?? throw new ArgumentNullException(nameof(repositoryFactory), $"{nameof(repositoryFactory)} {Resources.IsRequired}");
+            _mediaPlayerMapper = mediaPlayerMapper ?? throw new ArgumentNullException(nameof(mediaPlayerMapper), $"{nameof(mediaPlayerMapper)} {Resources.IsRequired}");
 
             _notificationService = container.NotificationService;
         }
@@ -74,7 +79,7 @@ namespace Maple
 
         public override void Save()
         {
-             SaveInternal();
+            SaveInternal();
         }
 
         public override async Task LoadAsync()

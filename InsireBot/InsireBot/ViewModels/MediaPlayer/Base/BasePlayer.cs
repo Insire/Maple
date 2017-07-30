@@ -1,4 +1,5 @@
 ﻿using Maple.Core;
+using Maple.Localization.Properties;
 using System;
 
 namespace Maple
@@ -40,7 +41,7 @@ namespace Maple
 
         public BasePlayer(IMessenger messenger, AudioDevices audioDevices)
         {
-            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");
 
         }
 

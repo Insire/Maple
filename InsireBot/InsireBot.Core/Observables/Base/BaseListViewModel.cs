@@ -18,26 +18,11 @@ namespace Maple.Core
     public abstract class BaseListViewModel<TViewModel> : BaseViewModel<TViewModel>
         where TViewModel : INotifyPropertyChanged
     {
-        /// <summary>
-        /// The items lock
-        /// </summary>
         protected readonly object _itemsLock;
 
-        /// <summary>
-        /// Gets a value indicating whether this instance is loaded.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is loaded; otherwise, <c>false</c>.
-        /// </value>
         public bool IsLoaded { get; protected set; }
 
         private TViewModel _selectedItem;
-        /// <summary>
-        /// Gets or sets the selected item.
-        /// </summary>
-        /// <value>
-        /// The selected item.
-        /// </value>
         public virtual TViewModel SelectedItem
         {
             get { return _selectedItem; }
@@ -78,12 +63,6 @@ namespace Maple.Core
             private set { SetValue(ref _view, value); }
         }
 
-        /// <summary>
-        /// Gets the count.
-        /// </summary>
-        /// <value>
-        /// The count.
-        /// </value>
         public int Count => Items?.Count ?? 0;
         /// <summary>
         /// Gets the <see cref="TViewModel"/> at the specified index.
@@ -98,38 +77,11 @@ namespace Maple.Core
             get { return Items[index]; }
         }
 
-        /// <summary>
-        /// Gets or sets the remove range command.
-        /// </summary>
-        /// <value>
-        /// The remove range command.
-        /// </value>
         public ICommand RemoveRangeCommand { get; private set; }
-        /// <summary>
-        /// Gets or sets the remove command.
-        /// </summary>
-        /// <value>
-        /// The remove command.
-        /// </value>
         public ICommand RemoveCommand { get; private set; }
-        /// <summary>
-        /// Gets or sets the clear command.
-        /// </summary>
-        /// <value>
-        /// The clear command.
-        /// </value>
         public ICommand ClearCommand { get; private set; }
-        /// <summary>
-        /// Gets or sets the add command.
-        /// </summary>
-        /// <value>
-        /// The add command.
-        /// </value>
         public ICommand AddCommand { get; protected set; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BaseListViewModel{T}"/> class.
-        /// </summary>
         public BaseListViewModel(IMessenger messenger)
             : base(messenger)
         {
@@ -149,20 +101,12 @@ namespace Maple.Core
             BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BaseListViewModel{T}"/> class.
-        /// </summary>
-        /// <param name="items">The items.</param>
         public BaseListViewModel(IList<TViewModel> items, IMessenger messenger)
             : this(messenger)
         {
             Items.AddRange(items);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BaseListViewModel{T}"/> class.
-        /// </summary>
-        /// <param name="items">The items.</param>
         public BaseListViewModel(IEnumerable<TViewModel> items, IMessenger messenger)
             : this(messenger)
         {
@@ -201,9 +145,6 @@ namespace Maple.Core
                 Items.Add(item);
         }
 
-        /// <summary>
-        /// Adds the range.
-        /// </summary>
         /// <param name="items">The items.</param>
         /// <exception cref="System.ArgumentNullException">items</exception>
         public virtual void AddRange(IEnumerable<TViewModel> items)
@@ -215,12 +156,6 @@ namespace Maple.Core
                 Items.AddRange(items);
         }
 
-        /// <summary>
-        /// Determines whether this instance can add.
-        /// </summary>
-        /// <returns>
-        ///   <c>true</c> if this instance can add; otherwise, <c>false</c>.
-        /// </returns>
         protected virtual bool CanAdd(TViewModel item)
         {
             return Items != null && item != null;
@@ -236,9 +171,6 @@ namespace Maple.Core
                 Items.Remove(item);
         }
 
-        /// <summary>
-        /// Removes the range.
-        /// </summary>
         /// <param name="items">The items.</param>
         /// <exception cref="System.ArgumentNullException">items</exception>
         public virtual void RemoveRange(IEnumerable<TViewModel> items)
@@ -250,9 +182,6 @@ namespace Maple.Core
                 Items.RemoveRange(items);
         }
 
-        /// <summary>
-        /// Removes the range.
-        /// </summary>
         /// <param name="items">The items.</param>
         /// <exception cref="System.ArgumentNullException">items</exception>
         public virtual void RemoveRange(IList items)
@@ -300,9 +229,6 @@ namespace Maple.Core
             return items == null ? false : CanRemoveRange(items.Cast<TViewModel>());
         }
 
-        /// <summary>
-        /// Clears this instance.
-        /// </summary>
         public virtual void Clear()
         {
             SelectedItem = default(TViewModel);
@@ -311,12 +237,6 @@ namespace Maple.Core
                 Items.Clear();
         }
 
-        /// <summary>
-        /// Determines whether this instance can clear.
-        /// </summary>
-        /// <returns>
-        ///   <c>true</c> if this instance can clear; otherwise, <c>false</c>.
-        /// </returns>
         public virtual bool CanClear()
         {
             return Items?.Count > 0 && !IsBusy;

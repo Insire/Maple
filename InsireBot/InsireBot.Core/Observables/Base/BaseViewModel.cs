@@ -1,26 +1,14 @@
-﻿using System;
+﻿using Maple.Localization.Properties;
+using System;
 
 namespace Maple.Core
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TModel"></typeparam>
     public abstract class BaseViewModel<TViewModel> : ObservableObject
     {
         protected readonly IMessenger _messenger;
-        /// <summary>
-        /// The busy stack
-        /// </summary>
         protected readonly BusyStack _busyStack;
 
         private TViewModel _model;
-        /// <summary>
-        /// Gets or sets the model.
-        /// </summary>
-        /// <value>
-        /// The model.
-        /// </value>
         public TViewModel Model
         {
             get { return _model; }
@@ -39,13 +27,9 @@ namespace Maple.Core
             _busyStack = new BusyStack();
             _busyStack.OnChanged += (isBusy) => IsBusy = isBusy;
 
-            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BaseViewModel{T}"/> class.
-        /// </summary>
-        /// <param name="model">The model.</param>
         protected BaseViewModel(TViewModel model, IMessenger messenger)
             : this(messenger)
         {

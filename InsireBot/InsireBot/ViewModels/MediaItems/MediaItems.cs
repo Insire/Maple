@@ -11,11 +11,11 @@ namespace Maple
         private readonly Func<IMediaRepository> _repositoryFactory;
         private readonly IMediaItemMapper _mediaItemMapper;
 
-        public MediaItems(ViewModelServiceContainer container, IMediaItemMapper mediaItemMapper, Func<IMediaRepository> repo)
+        public MediaItems(ViewModelServiceContainer container, IMediaItemMapper mediaItemMapper, Func<IMediaRepository> repositoryFactory)
             : base(container)
         {
-            _repositoryFactory = repo ?? throw new ArgumentNullException(nameof(repo));
-            _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper));
+            _repositoryFactory = repositoryFactory ?? throw new ArgumentNullException(nameof(repositoryFactory), $"{nameof(repositoryFactory)} {Resources.IsRequired}");
+            _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper), $"{nameof(mediaItemMapper)} {Resources.IsRequired}");
         }
 
         public void Add(Playlist playlist)

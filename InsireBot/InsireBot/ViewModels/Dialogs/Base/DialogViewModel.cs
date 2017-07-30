@@ -77,12 +77,12 @@ namespace Maple
 
         public DialogViewModel(ILocalizationService translator, IYoutubeUrlParseService service, IMediaItemMapper mediaItemMapper, IMessenger messenger, FileSystemViewModel fileSystemViewModel, Func<CreateMediaItem> createMediaItemFactory)
         {
-            _translator = translator ?? throw new ArgumentNullException(nameof(translator));
-            _service = service ?? throw new ArgumentNullException(nameof(service));
-            _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper));
-            _fileSystemViewModel = fileSystemViewModel ?? throw new ArgumentNullException(nameof(fileSystemViewModel));
-            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
-            _createMediaItemFactory = createMediaItemFactory ?? throw new ArgumentNullException(nameof(messenger));
+            _translator = translator ?? throw new ArgumentNullException(nameof(translator), $"{nameof(translator)} {Resources.IsRequired}");
+            _service = service ?? throw new ArgumentNullException(nameof(service), $"{nameof(service)} {Resources.IsRequired}");
+            _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper), $"{nameof(mediaItemMapper)} {Resources.IsRequired}");
+            _fileSystemViewModel = fileSystemViewModel ?? throw new ArgumentNullException(nameof(fileSystemViewModel), $"{nameof(fileSystemViewModel)} {Resources.IsRequired}");
+            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");
+            _createMediaItemFactory = createMediaItemFactory ?? throw new ArgumentNullException(nameof(createMediaItemFactory), $"{nameof(createMediaItemFactory)} {Resources.IsRequired}");
 
 
             CloseDialogCommand = new RelayCommand(Close, () => CanClose());
@@ -172,7 +172,7 @@ namespace Maple
                     tuple = (DialogResult.Cancel, new List<IFileSystemFile>());
                 };
 
-                await Open();
+                await Open().ConfigureAwait(false);
             }
 
             return tuple;
@@ -212,7 +212,7 @@ namespace Maple
                     tuple = (DialogResult.Cancel, default(IFileSystemDirectory));
                 };
 
-                await Open();
+                await Open().ConfigureAwait(false);
             }
 
             return tuple;
@@ -253,7 +253,7 @@ namespace Maple
                 }
             };
 
-            await Open();
+            await Open().ConfigureAwait(false);
 
             return result;
         }
@@ -310,7 +310,7 @@ namespace Maple
             {
                 DialogClosed += lambda;
                 IsOpen = true; // open dialog
-                await tcs.Task; // wait for dialog to close
+                await tcs.Task.ConfigureAwait(false); // wait for dialog to close
             }
             finally
             {

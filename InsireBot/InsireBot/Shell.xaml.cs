@@ -10,7 +10,7 @@ namespace Maple
 
         public Shell(ILocalizationService manager, IMessenger messenger, ShellViewModel datacontext) : base(manager, messenger)
         {
-            DataContext = datacontext ?? throw new ArgumentNullException(nameof(datacontext));
+            DataContext = datacontext ?? throw new ArgumentNullException(nameof(datacontext), $"{nameof(datacontext)} {Localization.Properties.Resources.IsRequired}");
             _datacontext = datacontext;
 
             InitializeComponent();

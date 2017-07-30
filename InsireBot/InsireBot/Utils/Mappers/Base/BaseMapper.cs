@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Maple.Core;
+using Maple.Localization.Properties;
 using System;
 
 namespace Maple
@@ -22,7 +23,7 @@ namespace Maple
             _sequenceProvider = container.SequenceService;
             _log = container.Log;
             _messenger = container.Messenger;
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+            _validator = validator ?? throw new ArgumentNullException(nameof(validator), $"{nameof(validator)} {Resources.IsRequired}");
         }
 
         protected abstract void InitializeMapper();

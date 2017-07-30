@@ -1,14 +1,28 @@
 version: 1.0.{build}
 configuration: Release
 platform: Any CPU
+branches:
+  only:
+  - master
+  - Dev
+environment:
+  SonarToken:
+    secure: 3mBbvKwFSmV0pgVwRLH70+9YekT4I109T09+PlHRThu9rbVUybSPBZrrheWECXq+
+  SonarProject:
+    secure: XBMwudirgqiNxzCuNA+rgYPCdCjNypfboJruML+pNKg=
 cache:
 - InsireBot\packages -> InsireBot\**\packages.config
 before_build:
-- cmd: nuget restore InsireBot\Maple.sln
+- cmd: nuget restore InsireBot\Maple.sln -Verbosity quiet
 build:
     parallel: true
     project: InsireBot\Maple.sln
-    verbosity: normal
+    verbosity: minimal
 artifacts:
 - path: 'InsireBot/InsireBot/bin/$(configuration)'
   name: 'InsireBot-Binaries'
+build_script:
+  - choco install "msbuild-sonarqube-runner" -y
+  - ps: MSBuild.SonarQube.Runner.exe begin /k:"D4KL4CL9XXNHCDJRHGHF4" /d:"sonar.host.url=https://sonarqube.com" /d:"sonar.login=3914d8645377c1afd744baa842a00d50287f4993"
+  - msbuild "InsireBot\Maple.sln"
+  - ps: MSBuild.SonarQube.Runner.exe end /d:"sonar.login=3914d8645377c1afd744baa842a00d50287f4993"

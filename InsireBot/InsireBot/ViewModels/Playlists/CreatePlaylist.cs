@@ -1,5 +1,6 @@
 ﻿using Maple.Core;
 using Maple.Youtube;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Maple
@@ -63,16 +64,23 @@ namespace Maple
 
         private void InitializeCommands()
         {
-            ParseCommand = new RelayCommand(async () =>
-            {
-                using (_busyStack.GetToken())
-                {
-                    Result = await _dataParsingService.Parse(Source, ParseResultType.Playlists);
+            ParseCommand = new AsyncRelayCommand(Parse, CanParse);
+        }
 
-                    if (Result.Count > 0 && Result.Playlists?.Count > 0)
-                        Items.AddRange(_mapper.GetMany(Result.Playlists));
-                }
-            }, () => !string.IsNullOrWhiteSpace(Source));
+        private async Task Parse()
+        {
+            using (_busyStack.GetToken())
+            {
+                Result = await _dataParsingService.Parse(Source, ParseResultType.Playlists).ConfigureAwait(false);
+
+                if (Result.Count > 0 && Result.Playlists?.Count > 0)
+                    Items.AddRange(_mapper.GetMany(Result.Playlists));
+            }
+        }
+
+        private bool CanParse()
+        {
+            return !string.IsNullOrWhiteSpace(Source);
         }
     }
 }

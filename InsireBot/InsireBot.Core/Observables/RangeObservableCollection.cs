@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maple.Localization.Properties;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -85,7 +86,7 @@ namespace Maple.Core
         public virtual void AddRange(IEnumerable<T> items)
         {
             if (items == null)
-                throw new ArgumentNullException(nameof(items));
+                throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
 
             using (_busyStack.GetToken())
             {
@@ -104,7 +105,7 @@ namespace Maple.Core
         public virtual void RemoveRange(IEnumerable<T> items)
         {
             if (items == null)
-                throw new ArgumentNullException(nameof(items));
+                throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
 
             using (_busyStack.GetToken())
             {
@@ -123,7 +124,7 @@ namespace Maple.Core
         public virtual void RemoveRange(IList items)
         {
             if (items == null)
-                throw new ArgumentNullException(nameof(items));
+                throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
 
             using (_busyStack.GetToken())
             {
@@ -142,7 +143,7 @@ namespace Maple.Core
         public virtual void RemoveRange(IList<T> items)
         {
             if (items == null)
-                throw new ArgumentNullException(nameof(items));
+                throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
 
             using (_busyStack.GetToken())
             {
