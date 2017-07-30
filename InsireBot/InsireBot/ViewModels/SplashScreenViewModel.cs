@@ -1,4 +1,5 @@
 ﻿using Maple.Core;
+using Maple.Localization.Properties;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
@@ -39,7 +40,7 @@ namespace Maple
 
         private SplashScreenViewModel(IMessenger messenger) : this()
         {
-            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");
             _messenger.Subscribe<LogMessageReceivedMessage>(LogMessageReceived);
         }
 

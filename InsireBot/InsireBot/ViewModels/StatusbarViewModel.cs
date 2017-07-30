@@ -1,6 +1,6 @@
 ﻿using Maple.Core;
+using Maple.Localization.Properties;
 using System;
-using System.Linq;
 
 namespace Maple
 {
@@ -59,8 +59,8 @@ namespace Maple
         /// <param name="mediaPlayers">The media players.</param>
         public StatusbarViewModel(ILocalizationService manager, IVersionService version, IMessenger messenger)
         {
-            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
-            _manager = manager ?? throw new ArgumentNullException(nameof(manager));
+            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");
+            _manager = manager ?? throw new ArgumentNullException(nameof(manager), $"{nameof(manager)} {Resources.IsRequired}");
 
             _manager.PropertyChanged += (o, e) =>
               {

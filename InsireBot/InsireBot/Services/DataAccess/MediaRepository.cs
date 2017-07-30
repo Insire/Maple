@@ -1,5 +1,6 @@
 ﻿using Maple.Core;
 using Maple.Data;
+using Maple.Localization.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,13 +38,13 @@ namespace Maple
                                IMediaPlayerRepository mediaPlayerRepository,
                                IPlaylistRepository playlistRepository)
         {
-            _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper));
-            _playlistMapper = playlistMapper ?? throw new ArgumentNullException(nameof(playlistMapper));
-            _mediaPlayerMapper = mediaPlayerMapper ?? throw new ArgumentNullException(nameof(mediaPlayerMapper));
+            _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper), $"{nameof(mediaItemMapper)} {Resources.IsRequired}");
+            _playlistMapper = playlistMapper ?? throw new ArgumentNullException(nameof(playlistMapper), $"{nameof(playlistMapper)} {Resources.IsRequired}");
+            _mediaPlayerMapper = mediaPlayerMapper ?? throw new ArgumentNullException(nameof(mediaPlayerMapper), $"{nameof(mediaPlayerMapper)} {Resources.IsRequired}");
 
-            _mediaItemRepository = mediaItemRepository ?? throw new ArgumentNullException(nameof(mediaItemRepository));
-            _mediaPlayerRepository = mediaPlayerRepository ?? throw new ArgumentNullException(nameof(mediaPlayerRepository));
-            _playlistRepository = playlistRepository ?? throw new ArgumentNullException(nameof(playlistRepository));
+            _mediaItemRepository = mediaItemRepository ?? throw new ArgumentNullException(nameof(mediaItemRepository), $"{nameof(mediaItemRepository)} {Resources.IsRequired}");
+            _mediaPlayerRepository = mediaPlayerRepository ?? throw new ArgumentNullException(nameof(mediaPlayerRepository), $"{nameof(mediaPlayerRepository)} {Resources.IsRequired}");
+            _playlistRepository = playlistRepository ?? throw new ArgumentNullException(nameof(playlistRepository), $"{nameof(playlistRepository)} {Resources.IsRequired}");
 
             _busyStack = new BusyStack();
             _busyStack.OnChanged += (hasItems) => { IsBusy = hasItems; };
@@ -68,7 +69,7 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                var item = await _mediaItemRepository.GetByIdAsync(id);
+                var item = await _mediaItemRepository.GetByIdAsync(id).ConfigureAwait(false);
                 return _mediaItemMapper.Get(item);
             }
         }
@@ -77,7 +78,7 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                var items = await _mediaItemRepository.GetAsync();
+                var items = await _mediaItemRepository.GetAsync().ConfigureAwait(false);
                 return items.Select(p => _mediaItemMapper.Get(p))
                             .ToList();
             }
@@ -87,7 +88,7 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                var item = await _mediaItemRepository.GetMediaItemByPlaylistIdAsync(id);
+                var item = await _mediaItemRepository.GetMediaItemByPlaylistIdAsync(id).ConfigureAwait(false);
                 return _mediaItemMapper.Get(item);
             }
         }
@@ -114,7 +115,7 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                var item = await _playlistRepository.GetByIdAsync(id);
+                var item = await _playlistRepository.GetByIdAsync(id).ConfigureAwait(false);
                 return _playlistMapper.Get(item);
             }
         }
@@ -123,7 +124,7 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                var items = await _playlistRepository.GetAsync();
+                var items = await _playlistRepository.GetAsync().ConfigureAwait(false);
                 return items.Select(p => _playlistMapper.Get(p))
                             .ToList();
             }
@@ -148,7 +149,7 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                var item = await _mediaPlayerRepository.GetMainMediaPlayerAsync();
+                var item = await _mediaPlayerRepository.GetMainMediaPlayerAsync().ConfigureAwait(false);
                 return _mediaPlayerMapper.GetMain(item, _playlistMapper.Get(item.Playlist));
             }
         }
@@ -157,7 +158,7 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                var item = await _mediaPlayerRepository.GetByIdAsync(id);
+                var item = await _mediaPlayerRepository.GetByIdAsync(id).ConfigureAwait(false);
                 return _mediaPlayerMapper.Get(item);
             }
         }
@@ -166,7 +167,7 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                var items = await _mediaPlayerRepository.GetOptionalMediaPlayersAsync();
+                var items = await _mediaPlayerRepository.GetOptionalMediaPlayersAsync().ConfigureAwait(false);
                 return items.Select(p => _mediaPlayerMapper.Get(p))
                             .ToList();
             }

@@ -14,8 +14,8 @@ namespace Maple
         public MediaPlayerMapper(ViewModelServiceContainer container, IMediaPlayer mediaPlayer, AudioDevices devices, IValidator<MediaPlayer> validator)
             : base(container, validator)
         {
-            _mediaPlayer = mediaPlayer ?? throw new ArgumentNullException(nameof(mediaPlayer));
-            _devices = devices ?? throw new ArgumentNullException(nameof(devices));
+            _mediaPlayer = mediaPlayer ?? throw new ArgumentNullException(nameof(mediaPlayer), $"{nameof(mediaPlayer)} {Resources.IsRequired}");
+            _devices = devices ?? throw new ArgumentNullException(nameof(devices), $"{nameof(devices)} {Resources.IsRequired}");
 
             InitializeMapper();
         }

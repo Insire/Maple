@@ -7,7 +7,7 @@ namespace Maple
     {
         public SplashScreen(ILocalizationService manager, IMessenger messenger, ISplashScreenViewModel datacontext) : base(manager, messenger)
         {
-            DataContext = datacontext ?? throw new ArgumentNullException(nameof(datacontext));
+            DataContext = datacontext ?? throw new ArgumentNullException(nameof(datacontext), $"{nameof(datacontext)} {Localization.Properties.Resources.IsRequired}");
 
             InitializeComponent();
         }

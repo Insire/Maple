@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maple.Localization.Properties;
+using System;
 
 namespace Maple.Core
 {
@@ -23,7 +24,7 @@ namespace Maple.Core
         public MapleMessageBase(object sender)
         {
             if (sender == null)
-                throw new ArgumentNullException(nameof(sender));
+                throw new ArgumentNullException(nameof(sender), $"{nameof(sender)} {Resources.IsRequired}");
 
             _sender = new WeakReference(sender);
         }

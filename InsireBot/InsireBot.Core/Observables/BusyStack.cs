@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maple.Localization.Properties;
+using System;
 using System.Collections.Concurrent;
 
 namespace Maple.Core
@@ -52,7 +53,7 @@ namespace Maple.Core
         public BusyStack(Action<bool> onChanged)
             : this()
         {
-            OnChanged = onChanged ?? throw new ArgumentNullException(nameof(onChanged));
+            OnChanged = onChanged ?? throw new ArgumentNullException(nameof(onChanged), $"{nameof(onChanged)} {Resources.IsRequired}");
         }
 
         /// <summary>

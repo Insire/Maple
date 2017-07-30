@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using Maple.Data;
+using Maple.Localization.Properties;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -34,8 +35,8 @@ namespace Maple.Core
         protected ValidableBaseDataViewModel(TModel model, IValidator<TViewModel> validator, IMessenger messenger)
             : this(messenger)
         {
-            Validator = validator ?? throw new ArgumentNullException(nameof(validator)); //order is important in this case
-            Model = model ?? throw new ArgumentNullException(nameof(model));
+            Validator = validator ?? throw new ArgumentNullException(nameof(validator), $"{nameof(validator)} {Resources.IsRequired}"); //order is important in this case
+            Model = model ?? throw new ArgumentNullException(nameof(model), $"{nameof(model)} {Resources.IsRequired}");
         }
 
         public virtual void Validate()
@@ -71,7 +72,7 @@ namespace Maple.Core
                 return;
 
             if (string.IsNullOrEmpty(propertyName))
-                throw new ArgumentNullException(propertyName);
+                throw new ArgumentNullException(propertyName, $"{nameof(propertyName)} {Resources.IsRequired}");
 
             AddOrUpdateValidationResults(Validator.Validate(this, propertyName), propertyName);
         }

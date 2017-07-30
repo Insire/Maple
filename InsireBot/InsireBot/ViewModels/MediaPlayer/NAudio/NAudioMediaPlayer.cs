@@ -1,4 +1,5 @@
 ﻿using Maple.Core;
+using Maple.Localization.Properties;
 using NAudio.Wave;
 using System;
 
@@ -81,7 +82,7 @@ namespace Maple
         public override void Pause()
         {
             if (_player == null)
-                throw new ArgumentNullException($"{nameof(_player)} is null");
+                throw new ArgumentNullException(nameof(_player), $"{nameof(_player)} {Resources.IsRequired}");
 
             if (_player?.PlaybackState != NAudio.Wave.PlaybackState.Playing)
                 throw new InvalidOperationException("Can't pause playback of a file, thats not being played back");
@@ -109,7 +110,7 @@ namespace Maple
         public override void Stop()
         {
             if (_player == null)
-                throw new ArgumentNullException($"{nameof(_player)} is null");
+                throw new ArgumentNullException(nameof(_player), $"{nameof(_player)} {Resources.IsRequired}");
 
             if (_player?.PlaybackState != NAudio.Wave.PlaybackState.Playing)
                 return;

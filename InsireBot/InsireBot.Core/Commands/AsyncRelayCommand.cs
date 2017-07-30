@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maple.Localization.Properties;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -32,7 +33,7 @@ namespace Maple.Core
         /// <exception cref="System.ArgumentNullException">methodToExecute</exception>
         public AsyncRelayCommand(Func<T, Task> methodToExecute)
         {
-            _execute = methodToExecute ?? throw new ArgumentNullException(nameof(methodToExecute));
+            _execute = methodToExecute ?? throw new ArgumentNullException(nameof(methodToExecute), $"{nameof(methodToExecute)} {Resources.IsRequired}");
         }
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace Maple.Core
         /// <exception cref="System.ArgumentNullException">canExecuteEvaluator</exception>
         public AsyncRelayCommand(Func<T, Task> methodToExecute, Func<T, bool> canExecuteEvaluator) : this(methodToExecute)
         {
-            _canExecute = canExecuteEvaluator ?? throw new ArgumentNullException(nameof(canExecuteEvaluator));
+            _canExecute = canExecuteEvaluator ?? throw new ArgumentNullException(nameof(canExecuteEvaluator), $"{nameof(canExecuteEvaluator)} {Resources.IsRequired}");
         }
 
         /// <summary>
@@ -102,7 +103,7 @@ namespace Maple.Core
         /// <exception cref="System.ArgumentNullException">methodToExecute</exception>
         public AsyncRelayCommand(Func<Task> methodToExecute)
         {
-            _execute = methodToExecute ?? throw new ArgumentNullException(nameof(methodToExecute));
+            _execute = methodToExecute ?? throw new ArgumentNullException(nameof(methodToExecute), $"{nameof(methodToExecute)} {Resources.IsRequired}");
         }
 
         /// <summary>
@@ -113,7 +114,7 @@ namespace Maple.Core
         /// <exception cref="System.ArgumentNullException">canExecuteEvaluator</exception>
         public AsyncRelayCommand(Func<Task> methodToExecute, Func<bool> canExecuteEvaluator) : this(methodToExecute)
         {
-            _canExecute = canExecuteEvaluator ?? throw new ArgumentNullException(nameof(canExecuteEvaluator));
+            _canExecute = canExecuteEvaluator ?? throw new ArgumentNullException(nameof(canExecuteEvaluator), $"{nameof(canExecuteEvaluator)} {Resources.IsRequired}");
         }
 
         /// <summary>
