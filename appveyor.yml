@@ -8,7 +8,7 @@ branches:
 cache:
 - InsireBot\packages -> InsireBot\**\packages.config
 before_build:
-- cmd: nuget restore InsireBot\Maple.sln -verbosity minimal
+- cmd: nuget restore InsireBot\Maple.sln
 build:
     parallel: true
     project: InsireBot\Maple.sln
