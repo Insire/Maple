@@ -18,6 +18,6 @@ artifacts:
   name: 'InsireBot-Binaries'
 build_script:
   - choco install "msbuild-sonarqube-runner" -y
-  - MSBuild.SonarQube.Runner.exe begin /k:"Maple" /d:"sonar.host.url=https://sonarqube.com" /d:"sonar.login=3914d8645377c1afd744baa842a00d50287f4993"
+  - MSBuild.SonarQube.Runner.exe begin /k:"Maple" /d:"sonar.host.url=https://sonarqube.com" /d:"sonar.login=D4KL4CL9XXNHCDJRHGHF4"
   - msbuild "InsireBot\Maple.sln"
-  - MSBuild.SonarQube.Runner.exe end /d:"sonar.login=3914d8645377c1afd744baa842a00d50287f4993" -x
+  - MSBuild.SonarQube.Runner.exe end /d:"sonar.login=D4KL4CL9XXNHCDJRHGHF4"
