@@ -3,9 +3,6 @@ using System.Windows.Threading;
 
 namespace Maple.Core
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public static class DispatcherFactory
     {
         /// <summary>
