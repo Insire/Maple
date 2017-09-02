@@ -23,10 +23,10 @@ namespace Maple.Youtube
                 {
                     case "youtu.be":
                         url = new Uri(url.AbsoluteUri.Replace(@"youtu.be/", @"youtube.com/watch?v="));
-                        return await Parse(url, type);
+                        return await Parse(url, type).ConfigureAwait(false);
 
                     case "www.youtube.com":
-                        return await Parse(url, type);
+                        return await Parse(url, type).ConfigureAwait(false);
 
                     default:
                         return new UrlParseResult(_log);
@@ -57,7 +57,7 @@ namespace Maple.Youtube
                     switch (key)
                     {
                         case "v":
-                            var videos = await youtubeService.GetVideo(id);
+                            var videos = await youtubeService.GetVideo(id).ConfigureAwait(false);
 
                             foreach (var video in videos)
                             {
@@ -67,7 +67,7 @@ namespace Maple.Youtube
                             break;
 
                         case "list":
-                            var playlists = await youtubeService.GetPlaylists(id);
+                            var playlists = await youtubeService.GetPlaylists(id).ConfigureAwait(false);
 
                             foreach (var playlist in playlists)
                             {

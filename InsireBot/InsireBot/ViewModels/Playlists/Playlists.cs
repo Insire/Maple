@@ -55,7 +55,7 @@ namespace Maple
 
             using (var context = _repositoryFactory())
             {
-                var result = await context.GetPlaylistsAsync();
+                var result = await context.GetPlaylistsAsync().ConfigureAwait(true);
                 AddRange(result);
             }
 

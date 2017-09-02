@@ -89,12 +89,12 @@ namespace Maple
 
             using (var context = _repositoryFactory())
             {
-                var main = await context.GetMainMediaPlayerAsync();
+                var main = await context.GetMainMediaPlayerAsync().ConfigureAwait(true);
 
                 Items.Add(main);
                 SelectedItem = main;
 
-                var others = await context.GetAllOptionalMediaPlayersAsync();
+                var others = await context.GetAllOptionalMediaPlayersAsync().ConfigureAwait(true);
                 Items.AddRange(others);
             }
 

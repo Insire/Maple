@@ -15,14 +15,14 @@ namespace Maple.Test
         [TestMethod]
         public async Task SanityMapleGetContainerTest()
         {
-            var container = await DependencyInjectionFactory.Get();
+            var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
             container.VerifyResolutions();
         }
 
         [TestMethod]
         public async Task ResolveLoadablesAsList()
         {
-            var container = await DependencyInjectionFactory.Get();
+            var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
 
             var factory = Substitute.For<IWavePlayerFactory>();
             container.UseInstance(factory);
@@ -36,7 +36,7 @@ namespace Maple.Test
         [TestMethod]
         public async Task ResolveManyLoadablesAsList()
         {
-            var container = await DependencyInjectionFactory.Get();
+            var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
 
             var factory = Substitute.For<IWavePlayerFactory>();
             container.UseInstance(factory);

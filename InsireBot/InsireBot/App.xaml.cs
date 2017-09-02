@@ -14,7 +14,8 @@ namespace Maple
 
         protected override async void OnStartup(StartupEventArgs e)
         {
-            _container = await DependencyInjectionFactory.Get();
+            _container = await DependencyInjectionFactory.Get()
+                                                         .ConfigureAwait(true);
 
             var localizationService = _container.Resolve<ILocalizationService>();
             var log = _container.Resolve<ILoggingService>();
@@ -22,7 +23,7 @@ namespace Maple
             InitializeResources(localizationService);
             InitializeLocalization();
 
-            var shell = await GetShell(localizationService, log);
+            var shell = await GetShell(localizationService, log).ConfigureAwait(true);
             shell.Show();
 
             base.OnStartup(e);
@@ -53,10 +54,10 @@ namespace Maple
                 shell.Loaded += (o, args) => screen.Close();
                 screen.Show();
 
-                await Task.WhenAll(LoadApplicationData());
+                await Task.WhenAll(LoadApplicationData()).ConfigureAwait(true);
 
                 log.Info(Localization.Properties.Resources.AppStart);
-                await Task.Delay(TimeSpan.FromSeconds(1));
+                await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(true);
 
                 return shell;
             }

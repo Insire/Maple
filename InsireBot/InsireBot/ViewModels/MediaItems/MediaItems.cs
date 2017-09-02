@@ -40,7 +40,7 @@ namespace Maple
 
             using (var context = _repositoryFactory())
             {
-                var result = await context.GetMediaItemsAsync();
+                var result = await context.GetMediaItemsAsync().ConfigureAwait(true);
                 AddRange(result);
             }
 

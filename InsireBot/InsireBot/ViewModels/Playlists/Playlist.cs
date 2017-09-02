@@ -237,7 +237,7 @@ namespace Maple
         {
             using (BusyStack.GetToken())
             {
-                var items = await _dialogViewModel.ShowUrlParseDialog();
+                var items = await _dialogViewModel.ShowUrlParseDialog().ConfigureAwait(true);
                 Items.AddRange(items);
             }
         }

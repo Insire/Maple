@@ -46,7 +46,7 @@ namespace Maple
         public async Task LoadAsync()
         {
             _log.Info($"{Resources.Loading} {Resources.Options}");
-            await _manager.LoadAsync();
+            await _manager.LoadAsync().ConfigureAwait(true);
 
             Initialise();
 

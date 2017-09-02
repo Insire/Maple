@@ -1,17 +1,17 @@
-﻿using Google.Apis.Auth.OAuth2;
-using Google.Apis.Services;
-using Google.Apis.Util.Store;
-using Google.Apis.YouTube.v3;
-using Google.Apis.YouTube.v3.Data;
-using Maple.Core;
-using Maple.Localization.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Services;
+using Google.Apis.Util.Store;
+using Google.Apis.YouTube.v3;
+using Google.Apis.YouTube.v3.Data;
+using Maple.Core;
+using Maple.Localization.Properties;
 
 namespace Maple.Youtube
 {
@@ -39,7 +39,7 @@ namespace Maple.Youtube
 
             _service = new YouTubeService(new BaseClientService.Initializer()
             {
-                HttpClientInitializer = await GetCredential(),
+                HttpClientInitializer = await GetCredential().ConfigureAwait(false),
                 ApplicationName = GetType().ToString()
             });
 
@@ -73,7 +73,7 @@ namespace Maple.Youtube
             var request = youtubeService.Playlists.List("snippet,contentDetails");
             request.Id = playlistId;
 
-            var response = await request.ExecuteAsync();
+            var response = await request.ExecuteAsync().ConfigureAwait(false);
 
             foreach (var item in response.Items)
             {
