@@ -1,8 +1,5 @@
 ﻿namespace Maple
 {
-    /// <summary>
-    ///
-    /// </summary>
     public interface IMediaItemMapper : IBaseMapper<MediaItem, Data.MediaItem>
     {
         MediaItem GetNewMediaItem(int sequence, Playlist playlist);

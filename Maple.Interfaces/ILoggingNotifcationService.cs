@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Maple.Core
+namespace Maple.Interfaces
 {
     /// <summary>
     /// forwards user friendly messages to the UI and to a <see cref="ILoggingService"/>

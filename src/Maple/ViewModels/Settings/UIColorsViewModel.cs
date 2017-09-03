@@ -1,11 +1,12 @@
-﻿using Maple.Core;
-using Maple.Localization.Properties;
-using MaterialDesignColors;
-using MaterialDesignThemes.Wpf;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Maple.Core;
+using Maple.Interfaces;
+using Maple.Localization.Properties;
+using MaterialDesignColors;
+using MaterialDesignThemes.Wpf;
 
 namespace Maple
 {

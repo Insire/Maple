@@ -220,16 +220,12 @@
     </ApplicationDefinition>
     <Compile Include="Interfaces\IBaseMapper.cs" />
     <Compile Include="Interfaces\IMediaItemMapper.cs" />
-    <Compile Include="Interfaces\IMediaPlayer.cs" />
     <Compile Include="Interfaces\IMediaPlayerMapper.cs" />
     <Compile Include="Interfaces\IMediaRepository.cs" />
     <Compile Include="Interfaces\IPlaylistMapper.cs" />
     <Compile Include="UI\IoCResourceDictionary.cs" />
     <Compile Include="UI\PackIcon.cs" />
-    <Compile Include="Enums\PackIconKind.cs" />
     <Compile Include="UI\Base\SharedResourceDictionary.cs" />
-    <Compile Include="Enums\AudioFormats.cs" />
-    <Compile Include="Enums\PlaybackState.cs" />
     <Compile Include="UI\UserControls\MediaPlayersPage.xaml.cs">
       <DependentUpon>MediaPlayersPage.xaml</DependentUpon>
     </Compile>
@@ -243,9 +239,8 @@
     <Compile Include="UI\Base\ConfigurableWindowSettings.cs" />
     <Compile Include="UI\Base\IocUserControl.cs" />
     <Compile Include="UI\Base\IoCWindow.cs" />
-    <Compile Include="Services\DataAccess\MediaRepository.cs" />
-    <Compile Include="Services\Version\IVersionService.cs" />
-    <Compile Include="Services\Version\VersionService.cs" />
+    <Compile Include="Services\MediaRepository.cs" />
+    <Compile Include="Services\VersionService.cs" />
     <Compile Include="SplashScreen.xaml.cs">
       <DependentUpon>SplashScreen.xaml</DependentUpon>
     </Compile>
@@ -263,7 +258,6 @@
     <Compile Include="UI\Interactivity\SelectedListBoxItemBehavior.cs" />
     <Compile Include="UI\Interactivity\SelectedTreeViewItemBehavior.cs" />
     <Compile Include="UI\ShellSettings.cs" />
-    <Compile Include="Enums\MediaPlayerType.cs" />
     <Compile Include="Utils\Converters\RadioButtonCheckedConverter.cs" />
     <Compile Include="Utils\TranslationExtension.cs" />
     <Compile Include="Utils\Validation\BaseValidator.cs" />
@@ -426,8 +420,12 @@
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Maple.Interfaces\Maple.Interfaces.csproj">
+      <Project>{500ABBBE-3284-4EB6-B582-2CCD391D3C16}</Project>
+      <Name>Maple.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Maple.Core\Maple.Core.csproj">
-      <Project>{21fa5854-0692-42e2-924e-a38cf3c7ff71}</Project>
+      <Project>{21FA5854-0692-42E2-924E-A38CF3C7FF71}</Project>
       <Name>Maple.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Maple.Data\Maple.Data.csproj">
@@ -435,7 +433,7 @@
       <Name>Maple.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\Maple.Localization\Maple.Localization.csproj">
-      <Project>{a073fc92-90e3-4541-8b52-6f7293187871}</Project>
+      <Project>{A073FC92-90E3-4541-8B52-6F7293187871}</Project>
       <Name>Maple.Localization</Name>
     </ProjectReference>
     <ProjectReference Include="..\Maple.Youtube\Maple.Youtube.csproj">

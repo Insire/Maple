@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Maple.Core
+namespace Maple.Interfaces
 {
     public interface ILoggingService
     {

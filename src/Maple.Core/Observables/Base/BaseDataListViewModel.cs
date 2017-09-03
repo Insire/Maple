@@ -1,11 +1,11 @@
-﻿using Maple.Data;
-using Maple.Localization.Properties;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Maple.Interfaces;
+using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
@@ -17,7 +17,7 @@ namespace Maple.Core
     /// <seealso cref="Maple.Core.BaseListViewModel{T}" />
     public abstract class BaseDataListViewModel<TViewModel, TModel> : BaseListViewModel<TViewModel>, ILoadableViewModel, IDisposable
         where TViewModel : BaseDataViewModel<TViewModel, TModel>, ISequence
-        where TModel : BaseObject
+        where TModel : class, IBaseObject
     {
         protected readonly ISequenceService _sequenceProvider;
         protected readonly ILocalizationService _translationService;
@@ -59,7 +59,7 @@ namespace Maple.Core
         /// </value>
         public ICommand SaveCommand => new RelayCommand(Save);
 
-        public BaseDataListViewModel(ViewModelServiceContainer container)
+        protected BaseDataListViewModel(ViewModelServiceContainer container)
             : base(container.Messenger)
         {
             _log = container.Log;

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Maple.Core;
+using Maple.Interfaces;
 using Maple.Localization.Properties;
 
 namespace Maple

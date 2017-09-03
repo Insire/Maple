@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using Maple.Interfaces;
 
 namespace Maple.Core
 {
@@ -20,8 +21,8 @@ namespace Maple.Core
             protected set { SetValue(ref _defaultCollectionView, value); }
         }
 
-        private RangeObservableCollection<IFileSystemInfo> _children;
-        public RangeObservableCollection<IFileSystemInfo> Children
+        private IRangeObservableCollection<IFileSystemInfo> _children;
+        public IRangeObservableCollection<IFileSystemInfo> Children
         {
             get { return _children; }
             private set { SetValue(ref _children, value); }
@@ -51,8 +52,8 @@ namespace Maple.Core
             using (_busyStack.GetToken())
             {
                 Filter = filter;
-                Children.ToList().ForEach(p => p.LoadMetaData());
-                Children.ToList().ForEach(p => p.Filter = filter);
+                Children.ForEach(p => p.LoadMetaData());
+                Children.ForEach(p => p.Filter = filter);
 
                 using (DefaultCollectionView.DeferRefresh())
                     DefaultCollectionView.Filter = SearchFilter;

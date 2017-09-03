@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 
-namespace Maple.Core
+namespace Maple.Interfaces
 {
     public interface ITranslationProvider
     {
         /// <summary>
-        /// Translates the specified key.
+        /// Translates the key into a localized value
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns></returns>

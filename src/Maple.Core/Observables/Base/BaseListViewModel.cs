@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
+using Maple.Interfaces;
 
 namespace Maple.Core
 {
@@ -39,12 +40,12 @@ namespace Maple.Core
             }
         }
 
-        private RangeObservableCollection<TViewModel> _items;
+        private IRangeObservableCollection<TViewModel> _items;
         /// <summary>
         /// Contains all the UI relevant Models and notifies about changes in the collection and inside the Models themself
         /// </summary>
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public RangeObservableCollection<TViewModel> Items
+        public IRangeObservableCollection<TViewModel> Items
         {
             get { return _items; }
             private set { SetValue(ref _items, value); }
@@ -82,7 +83,7 @@ namespace Maple.Core
         public ICommand ClearCommand { get; private set; }
         public ICommand AddCommand { get; protected set; }
 
-        public BaseListViewModel(IMessenger messenger)
+        protected BaseListViewModel(IMessenger messenger)
             : base(messenger)
         {
             _itemsLock = new object();
@@ -190,7 +191,7 @@ namespace Maple.Core
                 throw new ArgumentNullException(nameof(items));
 
             using (_busyStack.GetToken())
-                Items.RemoveRange(items);
+                Items.RemoveRange(items.Cast<TViewModel>());
         }
 
         /// <summary>

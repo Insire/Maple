@@ -93,8 +93,6 @@
     <Compile Include="Commands\AsyncRelayCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="DispatcherFactory.cs" />
-    <Compile Include="Enums\PrivacyStatus.cs" />
-    <Compile Include="Enums\RepeatMode.cs" />
     <Compile Include="EventAggregator\DefaultMessageProxy.cs" />
     <Compile Include="EventAggregator\Interfaces\IMapleMessage.cs" />
     <Compile Include="EventAggregator\Interfaces\IMapleMessageProxy.cs" />
@@ -119,14 +117,12 @@
     <Compile Include="Extensions\EventExtension.cs" />
     <Compile Include="Messages\FileSystemInfoChangedMessage.cs" />
     <Compile Include="Interfaces\ILocalizationService.cs" />
-    <Compile Include="Interfaces\ITranslationProvider.cs" />
     <Compile Include="IO\FileSystemBrowser.cs" />
     <Compile Include="IO\Interfaces\IDepth.cs" />
     <Compile Include="IO\Interfaces\IFileSystemDirectory.cs" />
     <Compile Include="IO\Interfaces\IFileSystemDrive.cs" />
     <Compile Include="IO\Interfaces\IFileSystemFile.cs" />
     <Compile Include="IO\Interfaces\IFileSystemInfo.cs" />
-    <Compile Include="Interfaces\IChangeState.cs" />
     <Compile Include="Interfaces\IConfigurableWindowSettings.cs" />
     <Compile Include="Interfaces\IIocFrameworkElement.cs" />
     <Compile Include="Interfaces\ILoadableViewModel.cs" />
@@ -146,13 +142,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\IIsSelected.cs" />
-    <Compile Include="Interfaces\IMediaItem.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
-    <Compile Include="Interfaces\IIdentifier.cs" />
-    <Compile Include="Interfaces\IRefreshable.cs" />
     <Compile Include="Interfaces\ISaveableViewModel.cs" />
-    <Compile Include="Interfaces\ISequence.cs" />
     <Compile Include="IO\Util\FileSystemDepth.cs" />
     <Compile Include="IO\Util\FileSystemExtensions.cs" />
     <Compile Include="IO\FileSystemViewModel.cs" />
@@ -162,9 +153,6 @@
     <Compile Include="IO\Base\MapleFileSystemContainerBase.cs" />
     <Compile Include="Observables\Base\BaseDataListViewModel.cs" />
     <Compile Include="IO\Base\MapleFileSystemBase.cs" />
-    <Compile Include="Services\Interfaces\ILoggingNotifcationService.cs" />
-    <Compile Include="Services\Interfaces\ILoggingService.cs" />
-    <Compile Include="Services\Interfaces\ISequenceService.cs" />
     <Compile Include="Services\Localization\LocalizationDTO.cs" />
     <Compile Include="Services\Localization\LocalizationService.cs" />
     <Compile Include="Services\Localization\Providers\ResxTranslationProvider.cs" />
@@ -191,6 +179,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Maple.Interfaces\Maple.Interfaces.csproj">
+      <Project>{500ABBBE-3284-4EB6-B582-2CCD391D3C16}</Project>
+      <Name>Maple.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Maple.Data\Maple.Data.csproj">
       <Project>{B3CD46BE-3C08-4BAE-AE60-A6D84A62400C}</Project>
       <Name>Maple.Data</Name>

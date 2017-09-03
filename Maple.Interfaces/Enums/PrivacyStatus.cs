@@ -1,8 +1,5 @@
-﻿namespace Maple.Core
+﻿namespace Maple.Interfaces
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public enum PrivacyStatus
     {
         None,

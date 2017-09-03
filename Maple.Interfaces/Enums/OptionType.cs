@@ -1,4 +1,4 @@
-﻿namespace Maple.Data
+﻿namespace Maple.Interfaces
 {
     public enum OptionType
     {

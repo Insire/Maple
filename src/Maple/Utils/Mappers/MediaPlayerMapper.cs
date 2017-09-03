@@ -1,12 +1,13 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using FluentValidation;
 using Maple.Core;
+using Maple.Interfaces;
 using Maple.Localization.Properties;
-using System;
 
 namespace Maple
 {
-    public class MediaPlayerMapper : BaseMapper<MediaPlayer>, IMediaPlayerMapper
+    public sealed class MediaPlayerMapper : BaseMapper<MediaPlayer>, IMediaPlayerMapper
     {
         private readonly IMediaPlayer _mediaPlayer;
         private readonly AudioDevices _devices;
@@ -27,7 +28,7 @@ namespace Maple
             });
 
             config.AssertConfigurationIsValid();
-            _mapper = config.CreateMapper();
+            Mapper = config.CreateMapper();
         }
 
         public MediaPlayer GetNewMediaPlayer(int sequence, Playlist playlist = null)

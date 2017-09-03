@@ -1,11 +1,12 @@
-using FluentValidation;
-using Maple.Core;
-using Maple.Localization.Properties;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
+using FluentValidation;
+using Maple.Core;
+using Maple.Interfaces;
+using Maple.Localization.Properties;
 
 namespace Maple
 {

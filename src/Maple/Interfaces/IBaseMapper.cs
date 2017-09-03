@@ -1,11 +1,11 @@
 ﻿using Maple.Core;
-using Maple.Data;
+using Maple.Interfaces;
 
 namespace Maple
 {
     public interface IBaseMapper<TVieModel, TDataModel>
         where TVieModel : BaseDataViewModel<TVieModel, TDataModel>
-        where TDataModel : BaseObject
+        where TDataModel : class, IBaseObject
     {
         TVieModel Get(TDataModel model);
 

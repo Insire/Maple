@@ -10,7 +10,7 @@ namespace Maple
     /// Provides logic to map between different domain objects of the Playlisttype
     /// </summary>
     /// <seealso cref="Maple.IPlaylistMapper" />
-    public class PlaylistMapper : BaseMapper<Playlist>, IPlaylistMapper
+    public sealed class PlaylistMapper : BaseMapper<Playlist>, IPlaylistMapper
     {
         private readonly IMediaItemMapper _mediaItemMapper;
         private readonly DialogViewModel _dialogViewModel;
@@ -35,7 +35,7 @@ namespace Maple
             });
 
             config.AssertConfigurationIsValid();
-            _mapper = config.CreateMapper();
+            Mapper = config.CreateMapper();
         }
 
         public Playlist GetNewPlaylist(int sequence)

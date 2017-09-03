@@ -1,7 +1,8 @@
-﻿using FluentValidation;
-using Maple.Core;
-using System;
+﻿using System;
 using System.Diagnostics;
+using FluentValidation;
+using Maple.Core;
+using Maple.Interfaces;
 
 namespace Maple
 {

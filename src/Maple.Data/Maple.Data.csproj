@@ -103,10 +103,8 @@
     <Compile Include="DTO\Playlist.cs" />
     <Compile Include="DTO\MediaItem.cs" />
     <Compile Include="DTO\Raw.cs" />
-    <Compile Include="OptionType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DB\CreateSeedDatabaseIfNotExists.cs" />
-    <Compile Include="Interfaces\IMapleRepository.cs" />
     <Compile Include="Interfaces\IMediaItemRepository.cs" />
     <Compile Include="Interfaces\IMediaPlayerRepository.cs" />
     <Compile Include="Interfaces\IPlaylistRepository.cs" />
@@ -132,7 +130,12 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Maple.Interfaces\Maple.Interfaces.csproj">
+      <Project>{500abbbe-3284-4eb6-b582-2ccd391d3c16}</Project>
+      <Name>Maple.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

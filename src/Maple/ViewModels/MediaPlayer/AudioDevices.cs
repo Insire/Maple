@@ -1,5 +1,6 @@
-﻿using Maple.Core;
-using System.Linq;
+﻿using System.Linq;
+using Maple.Core;
+using Maple.Interfaces;
 
 namespace Maple
 {
@@ -7,11 +8,8 @@ namespace Maple
     ///
     /// </summary>
     /// <seealso cref="Maple.Core.BaseListViewModel{Maple.AudioDevice}" />
-    public class AudioDevices : BaseListViewModel<AudioDevice>
+    public class AudioDevices : BaseListViewModel<IAudioDevice>
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AudioDevices"/> class.
-        /// </summary>
         public AudioDevices(ILoggingService log, IMessenger messenger)
             : base(messenger)
         {

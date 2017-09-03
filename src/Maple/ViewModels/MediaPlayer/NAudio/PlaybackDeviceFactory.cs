@@ -1,13 +1,13 @@
-﻿using Maple.Core;
-using NAudio.Wave;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Maple.Interfaces;
+using NAudio.Wave;
 
 namespace Maple
 {
     public class PlaybackDeviceFactory
     {
-        public static IEnumerable<AudioDevice> GetAudioDevices(ILoggingService log)
+        public static IEnumerable<IAudioDevice> GetAudioDevices(ILoggingService log)
         {
             for (var i = 0; i < WaveOut.DeviceCount; i++)
             {

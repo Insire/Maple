@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using FluentValidation;
 using Maple.Core;
+using Maple.Interfaces;
 using Maple.Localization.Properties;
 
 namespace Maple
@@ -82,9 +83,9 @@ namespace Maple
             protected set { SetValue(ref _view, value); }
         }
 
-        private RangeObservableCollection<MediaItem> _items;
+        private IRangeObservableCollection<MediaItem> _items;
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public RangeObservableCollection<MediaItem> Items
+        public IRangeObservableCollection<MediaItem> Items
         {
             get { return _items; }
             private set { SetValue(ref _items, value); }
@@ -175,8 +176,8 @@ namespace Maple
             set { SetValue(ref _repeatMode, value, OnChanged: () => Model.RepeatMode = (int)value); }
         }
 
-        private ObservableCollection<RepeatMode> _repeatModes;
-        public ObservableCollection<RepeatMode> RepeatModes
+        private IRangeObservableCollection<RepeatMode> _repeatModes;
+        public IRangeObservableCollection<RepeatMode> RepeatModes
         {
             get { return _repeatModes; }
             private set { SetValue(ref _repeatModes, value); }
@@ -198,7 +199,7 @@ namespace Maple
                 _isShuffeling = model.IsShuffeling;
                 _sequence = model.Sequence;
 
-                RepeatModes = new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
+                RepeatModes = new RangeObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
                 History = new Stack<int>();
 
                 Items = new RangeObservableCollection<MediaItem>();

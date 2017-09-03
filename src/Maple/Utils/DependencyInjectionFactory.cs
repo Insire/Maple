@@ -1,9 +1,10 @@
-﻿using DryIoc;
+﻿using System.Threading.Tasks;
+using DryIoc;
 using FluentValidation;
 using Maple.Core;
 using Maple.Data;
+using Maple.Interfaces;
 using Maple.Youtube;
-using System.Threading.Tasks;
 
 namespace Maple
 {
@@ -78,7 +79,7 @@ namespace Maple
                 c.Register<IMediaPlayerMapper, MediaPlayerMapper>();
                 c.Register<IMediaItemMapper, MediaItemMapper>();
                 c.Register<ISequenceService, SequenceService>();
-                c.Register<IYoutubeUrlParseService, UrlParseService>();
+                c.Register<IYoutubeUrlParser, YoutubeUrlParser>();
 
                 c.Register<IVersionService, VersionService>(Reuse.Singleton);
                 c.Register<ILocalizationService, LocalizationService>(Reuse.Singleton);

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using Maple.Interfaces;
 
 namespace Maple.Core
 {

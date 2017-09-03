@@ -1,8 +1,9 @@
-﻿using SQLite.CodeFirst;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Diagnostics;
+using Maple.Interfaces;
+using SQLite.CodeFirst;
 
 namespace Maple.Data
 {

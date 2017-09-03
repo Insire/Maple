@@ -1,7 +1,8 @@
-﻿using Maple.Core;
+﻿using System;
+using Maple.Core;
+using Maple.Interfaces;
 using Maple.Localization.Properties;
 using NAudio.Wave;
-using System;
 
 namespace Maple
 {

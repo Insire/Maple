@@ -1,7 +1,8 @@
-﻿using Maple.Localization.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Maple.Interfaces;
+using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
@@ -76,14 +77,6 @@ namespace Maple.Core
             return newItems.Where(p => !excludedIDs.Contains(p.Id));
         }
 
-        /// <summary>
-        /// Fors the each.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the source.</typeparam>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
-        /// <param name="baseCollection">The source items.</param>
-        /// <param name="action">The action.</param>
-        /// <returns></returns>
         public static IEnumerable<TResult> ForEach<TSource, TResult>(this IEnumerable<TSource> baseCollection, Func<TSource, TResult> action)
         {
             if (baseCollection == null)
@@ -96,13 +89,31 @@ namespace Maple.Core
                 yield return action(item);
         }
 
-        /// <summary>
-        /// Fors the each.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the source.</typeparam>
-        /// <param name="sourceItems">The source items.</param>
-        /// <param name="action">The action.</param>
         public static void ForEach<TSource>(this IEnumerable<TSource> baseCollection, Action<TSource> action)
+        {
+            if (baseCollection == null)
+                throw new ArgumentNullException(nameof(baseCollection), $"{nameof(baseCollection)} {Resources.IsRequired}");
+
+            if (action == null)
+                throw new ArgumentNullException(nameof(action), $"{nameof(action)} {Resources.IsRequired}");
+
+            foreach (var item in baseCollection)
+                action(item);
+        }
+
+        public static IEnumerable<TResult> ForEach<TSource, TResult>(this IRangeObservableCollection<TSource> baseCollection, Func<TSource, TResult> action)
+        {
+            if (baseCollection == null)
+                throw new ArgumentNullException(nameof(baseCollection), $"{nameof(baseCollection)} {Resources.IsRequired}");
+
+            if (action == null)
+                throw new ArgumentNullException(nameof(action), $"{nameof(action)} {Resources.IsRequired}");
+
+            foreach (var item in baseCollection)
+                yield return action(item);
+        }
+
+        public static void ForEach<TSource>(this IRangeObservableCollection<TSource> baseCollection, Action<TSource> action)
         {
             if (baseCollection == null)
                 throw new ArgumentNullException(nameof(baseCollection), $"{nameof(baseCollection)} {Resources.IsRequired}");

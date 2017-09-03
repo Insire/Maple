@@ -1,8 +1,10 @@
-﻿using Maple.Core;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interactivity;
+using Maple.Core;
+using Maple.Interfaces;
 
 namespace Maple
 {
@@ -16,9 +18,9 @@ namespace Maple
             _cache = new Dictionary<object, ListBox>();
         }
 
-        public RangeObservableCollection<object> SelectedItems
+        public IRangeObservableCollection<object> SelectedItems
         {
-            get { return (RangeObservableCollection<object>)GetValue(SelectedItemsProperty); }
+            get { return (IRangeObservableCollection<object>)GetValue(SelectedItemsProperty); }
             set { SetValue(SelectedItemsProperty, value); }
         }
 
@@ -51,8 +53,8 @@ namespace Maple
                 _currentSource = e.Source as ListBox;
             }
 
-            SelectedItems?.RemoveRange(e.RemovedItems);
-            SelectedItems?.AddRange(e.AddedItems);
+            SelectedItems?.RemoveRange(e.RemovedItems.Cast<object>());
+            SelectedItems?.AddRange(e.AddedItems.Cast<object>());
         }
 
         protected override void OnDetaching()

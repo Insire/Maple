@@ -2,7 +2,7 @@
 
 namespace Maple.Youtube
 {
-    public interface IYoutubeUrlParseService
+    public interface IYoutubeUrlParser
     {
         Task<UrlParseResult> Parse(string data, ParseResultType type);
     }

@@ -3,8 +3,8 @@
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                       xmlns:icons="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks"
+                      xmlns:interfaces="clr-namespace:Maple.Interfaces;assembly=Maple.Interfaces"
                       xmlns:local="clr-namespace:Maple"
-                      xmlns:core="clr-namespace:Maple.Core;assembly=Maple.Core"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -15,7 +15,7 @@
         <Style x:Key="BaseRepeatModeStyle"
                BasedOn="{StaticResource MaterialDesignFlatToggleButton}"
                TargetType="{x:Type ToggleButton}">
-            <Setter Property="Margin" Value="2 0" />
+            <Setter Property="Margin" Value="2,0" />
         </Style>
 
         <Style x:Key="NoneRepeatModeStyle"
@@ -172,7 +172,8 @@
                                                 Binding="{Binding Title}"
                                                 Header="{local:Translation Title}"
                                                 IsReadOnly="True" />
-                            <DataGridTextColumn Width="Auto" MinWidth="50"
+                            <DataGridTextColumn Width="Auto"
+                                                MinWidth="50"
                                                 Binding="{Binding Duration, StringFormat={}{0:c}}"
                                                 Header="{local:Translation Duration}"
                                                 IsReadOnly="True" />
@@ -244,15 +245,15 @@
                                         Orientation="Horizontal"
                                         ToolTip="{local:Translation PlaybackMode}">
 
-                                <RadioButton IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static core:RepeatMode.None}, UpdateSourceTrigger=PropertyChanged}"
+                                <RadioButton IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static interfaces:RepeatMode.None}, UpdateSourceTrigger=PropertyChanged}"
                                              Style="{StaticResource NoneRepeatModeStyle}"
                                              ToolTip="{local:Translation PlaybackModeNone}" />
 
-                                <RadioButton IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static core:RepeatMode.Single}, UpdateSourceTrigger=PropertyChanged}"
+                                <RadioButton IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static interfaces:RepeatMode.Single}, UpdateSourceTrigger=PropertyChanged}"
                                              Style="{StaticResource OneRepeatModeStyle}"
                                              ToolTip="{local:Translation PlaybackModeOne}" />
 
-                                <RadioButton IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static core:RepeatMode.All}, UpdateSourceTrigger=PropertyChanged}"
+                                <RadioButton IsChecked="{Binding RepeatMode, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static interfaces:RepeatMode.All}, UpdateSourceTrigger=PropertyChanged}"
                                              Style="{StaticResource AllRepeatModeStyle}"
                                              ToolTip="{local:Translation PlaybackModeAll}" />
 

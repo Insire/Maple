@@ -1,6 +1,7 @@
-﻿using Maple.Core;
+﻿using System;
+using Maple.Core;
+using Maple.Interfaces;
 using Maple.Localization.Properties;
-using System;
 
 namespace Maple
 {
@@ -11,17 +12,17 @@ namespace Maple
 
         protected abstract void Dispose(bool disposing);
 
-        public RangeObservableCollection<AudioDevice> Items { get; private set; }
+        public IRangeObservableCollection<AudioDevice> Items { get; private set; }
 
-        private AudioDevice _audioDevice;
-        public AudioDevice AudioDevice
+        private IAudioDevice _audioDevice;
+        public IAudioDevice AudioDevice
         {
             get { return _audioDevice; }
             set
             {
                 SetValue(ref _audioDevice, value,
-                                OnChanging: () => _messenger.Publish(new ViewModelSelectionChangingMessage<AudioDevice>(this, _audioDevice)),
-                                OnChanged: () => _messenger.Publish(new ViewModelSelectionChangingMessage<AudioDevice>(this, value)));
+                                OnChanging: () => _messenger.Publish(new ViewModelSelectionChangingMessage<IAudioDevice>(this, _audioDevice)),
+                                OnChanged: () => _messenger.Publish(new ViewModelSelectionChangingMessage<IAudioDevice>(this, value)));
             }
         }
 

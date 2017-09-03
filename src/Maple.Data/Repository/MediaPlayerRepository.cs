@@ -22,7 +22,7 @@ namespace Maple.Data
                              .FirstOrDefault(p => p.IsPrimary);
         }
 
-        public Task<List<MediaPlayer>> GetOptionalMediaPlayersAsync()
+        public Task<IReadOnlyCollection<MediaPlayer>> GetOptionalMediaPlayersAsync()
         {
             return Task.Run(() =>
             {
@@ -31,14 +31,14 @@ namespace Maple.Data
             });
         }
 
-        private List<MediaPlayer> GetOptionalMediaPlayersInternal(PlaylistContext context)
+        private IReadOnlyCollection<MediaPlayer> GetOptionalMediaPlayersInternal(PlaylistContext context)
         {
             return GetEntities(context).Include(p => p.Playlist)
                                             .Where(p => !p.IsPrimary)
                                             .ToList();
         }
 
-        protected override List<MediaPlayer> GetInternalAsync(PlaylistContext context)
+        protected override IReadOnlyCollection<MediaPlayer> GetInternalAsync(PlaylistContext context)
         {
             return GetEntities(context).Include(p => p.Playlist).ToList();
         }

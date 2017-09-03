@@ -1,18 +1,18 @@
-﻿using Maple.Core;
-using Maple.Localization.Properties;
-using Maple.Youtube;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Maple.Core;
+using Maple.Localization.Properties;
+using Maple.Youtube;
 
 namespace Maple
 {
     /// <summary>
     /// viewmodel for creating mediaitem from a string (path/url)
     /// </summary>
-    public class CreateMediaItem : BaseListViewModel<IMediaItem>
+    public class CreateMediaItem : BaseListViewModel<MediaItem>
     {
-        private IYoutubeUrlParseService _dataParsingService;
+        private IYoutubeUrlParser _dataParsingService;
         private IMediaItemMapper _mapper;
 
         public ICommand ParseCommand { get; private set; }
@@ -31,7 +31,7 @@ namespace Maple
             private set { SetValue(ref _result, value); }
         }
 
-        public CreateMediaItem(IYoutubeUrlParseService dataParsingService, IMediaItemMapper mapper, IMessenger messenger)
+        public CreateMediaItem(IYoutubeUrlParser dataParsingService, IMediaItemMapper mapper, IMessenger messenger)
             : base(messenger)
         {
             _dataParsingService = dataParsingService ?? throw new ArgumentNullException(nameof(dataParsingService), $"{nameof(mapper)} {Resources.IsRequired}");

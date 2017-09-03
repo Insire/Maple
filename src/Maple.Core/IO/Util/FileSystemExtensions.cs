@@ -10,7 +10,7 @@ namespace Maple.Core
 {
     public static class FileSystemExtensions
     {
-        public static List<IFileSystemInfo> GetChildren(this MapleFileSystemContainerBase directory, IDepth depth)
+        public static IEnumerable<IFileSystemInfo> GetChildren(this MapleFileSystemContainerBase directory, IDepth depth)
         {
             var result = new List<IFileSystemInfo>();
 
@@ -40,7 +40,7 @@ namespace Maple.Core
             }
         }
 
-        private static List<IFileSystemInfo> GetDirectories(string path, IDepth depth, IFileSystemDirectory parent)
+        private static IEnumerable<IFileSystemInfo> GetDirectories(string path, IDepth depth, IFileSystemDirectory parent)
         {
             var result = new List<IFileSystemInfo>();
             try
@@ -65,7 +65,7 @@ namespace Maple.Core
             return result;
         }
 
-        private static List<IFileSystemInfo> GetFiles(string path, IDepth depth, IFileSystemDirectory parent)
+        private static IEnumerable<IFileSystemInfo> GetFiles(string path, IDepth depth, IFileSystemDirectory parent)
         {
             var result = new List<IFileSystemInfo>();
             try

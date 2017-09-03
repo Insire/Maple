@@ -9,12 +9,13 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Maple.Interfaces;
 
 namespace Maple.Core
 {
     public abstract class ValidableBaseDataViewModel<TViewModel, TModel> : BaseDataViewModel<TViewModel, TModel>, INotifyDataErrorInfo
         where TViewModel : BaseDataViewModel<TViewModel, TModel>, ISequence
-        where TModel : BaseObject
+        where TModel : BaseObject, IBaseObject
     {
         private bool _skipValidation;
 

@@ -1,4 +1,4 @@
-﻿namespace Maple
+﻿namespace Maple.Interfaces
 {
     public enum AudioFormats
     {

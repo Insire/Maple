@@ -1,11 +1,12 @@
-﻿using Maple.Localization.Properties;
-using System;
+﻿using System;
 using System.Runtime.CompilerServices;
+using Maple.Interfaces;
+using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
     public abstract class BaseDataViewModel<TViewModel, TModel> : ObservableObject
-        where TModel : class
+        where TModel : class, IBaseObject
     {
         protected BusyStack BusyStack { get; }
         protected ChangeTracker ChangeTracker { get; }

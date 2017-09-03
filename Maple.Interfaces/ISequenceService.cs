@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Maple.Interfaces;
 
-namespace Maple.Core
+namespace Maple.Interfaces
 {
     public interface ISequenceService
     {

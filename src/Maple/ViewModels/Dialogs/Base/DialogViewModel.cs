@@ -1,24 +1,20 @@
-﻿using Maple.Core;
-using Maple.Localization.Properties;
-using Maple.Youtube;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Maple.Core;
+using Maple.Localization.Properties;
+using Maple.Youtube;
 
 namespace Maple
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <seealso cref="Maple.Core.ObservableObject" />
     public class DialogViewModel : ObservableObject
     {
         private readonly IMessenger _messenger;
         private readonly ILocalizationService _translator;
-        private readonly IYoutubeUrlParseService _service;
+        private readonly IYoutubeUrlParser _service;
         private readonly IMediaItemMapper _mediaItemMapper;
         private readonly FileSystemViewModel _fileSystemViewModel;
 
@@ -75,7 +71,7 @@ namespace Maple
             set { SetValue(ref _context, value); }
         }
 
-        public DialogViewModel(ILocalizationService translator, IYoutubeUrlParseService service, IMediaItemMapper mediaItemMapper, IMessenger messenger, FileSystemViewModel fileSystemViewModel, Func<CreateMediaItem> createMediaItemFactory)
+        public DialogViewModel(ILocalizationService translator, IYoutubeUrlParser service, IMediaItemMapper mediaItemMapper, IMessenger messenger, FileSystemViewModel fileSystemViewModel, Func<CreateMediaItem> createMediaItemFactory)
         {
             _translator = translator ?? throw new ArgumentNullException(nameof(translator), $"{nameof(translator)} {Resources.IsRequired}");
             _service = service ?? throw new ArgumentNullException(nameof(service), $"{nameof(service)} {Resources.IsRequired}");

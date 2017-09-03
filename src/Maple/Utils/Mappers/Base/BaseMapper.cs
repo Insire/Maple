@@ -1,14 +1,15 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using FluentValidation;
 using Maple.Core;
+using Maple.Interfaces;
 using Maple.Localization.Properties;
-using System;
 
 namespace Maple
 {
     public abstract class BaseMapper<T>
     {
-        protected IMapper _mapper;
+        protected IMapper Mapper { get; set; }
         protected readonly ILocalizationService _translationService;
         protected readonly ISequenceService _sequenceProvider;
         protected readonly ILoggingService _log;

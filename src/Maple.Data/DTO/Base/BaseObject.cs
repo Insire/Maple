@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Maple.Interfaces;
 
 namespace Maple.Data
 {
-    public abstract class BaseObject
+    public abstract class BaseObject : IBaseObject
     {
         [Key]
         [Column(Order = 1)]

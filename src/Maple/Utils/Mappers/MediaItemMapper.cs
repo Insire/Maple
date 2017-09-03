@@ -9,7 +9,7 @@ namespace Maple
     /// Provides logic to map between different domain objects of the MediaItemType
     /// </summary>
     /// <seealso cref="Maple.IMediaItemMapper" />
-    public class MediaItemMapper : BaseMapper<MediaItem>, IMediaItemMapper
+    public sealed class MediaItemMapper : BaseMapper<MediaItem>, IMediaItemMapper
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaItemMapper"/> class.
@@ -27,7 +27,7 @@ namespace Maple
             });
 
             config.AssertConfigurationIsValid();
-            _mapper = config.CreateMapper();
+            Mapper = config.CreateMapper();
         }
 
         public MediaItem GetNewMediaItem(int sequence, Playlist playlist)

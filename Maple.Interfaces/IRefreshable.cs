@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Maple.Core
+namespace Maple.Interfaces
 {
     public interface IRefreshable
     {

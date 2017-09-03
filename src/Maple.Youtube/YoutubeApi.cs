@@ -10,12 +10,12 @@ using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
-using Maple.Core;
+using Maple.Interfaces;
 using Maple.Localization.Properties;
 
 namespace Maple.Youtube
 {
-    public class Service
+    public class YoutubeApi
     {
         private const string _videoBaseUrl = @"https://www.youtube.com/watch?v=";
         private const string _playListBaseUrl = @"https://www.youtube.com/playlist?list=";
@@ -24,9 +24,9 @@ namespace Maple.Youtube
         private readonly ILoggingService _log;
         private readonly object _syncRoot;
 
-        public Service(ILoggingService log)
+        public YoutubeApi(ILoggingService log)
         {
-            _log = log ?? throw new ArgumentNullException(nameof(log));
+            _log = log ?? throw new ArgumentNullException(nameof(log), $"{nameof(log)} {Resources.IsRequired}");
             _syncRoot = new object();
         }
 

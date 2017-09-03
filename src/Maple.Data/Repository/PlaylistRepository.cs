@@ -11,7 +11,7 @@ namespace Maple.Data
             return context.Playlists;
         }
 
-        protected override List<Playlist> GetInternalAsync(PlaylistContext context)
+        protected override IReadOnlyCollection<Playlist> GetInternalAsync(PlaylistContext context)
         {
             return GetEntities(context).Include(p => p.MediaItems).ToList();
         }

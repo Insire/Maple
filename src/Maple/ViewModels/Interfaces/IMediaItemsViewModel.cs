@@ -1,11 +1,12 @@
-﻿using Maple.Core;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Maple.Core;
+using Maple.Interfaces;
 
 namespace Maple
 {
     public interface IMediaItemsViewModel : ISaveableViewModel
     {
-        RangeObservableCollection<MediaItem> Items { get; }
+        IRangeObservableCollection<MediaItem> Items { get; }
 
         void Add(Playlist playlist);
         Task LoadAsync();

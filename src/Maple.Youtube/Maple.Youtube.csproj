@@ -105,18 +105,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ParseResultType.cs" />
-    <Compile Include="IYoutubeUrlParseService.cs" />
+    <Compile Include="IYoutubeUrlParser.cs" />
+    <Compile Include="Utility\ParseResultType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service.cs" />
-    <Compile Include="UrlParseService.cs" />
-    <Compile Include="UrlParseResult.cs" />
+    <Compile Include="Utility\UrlParseResult.cs" />
+    <Compile Include="YoutubeApi.cs" />
+    <Compile Include="YoutubeUrlParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Maple.Interfaces\Maple.Interfaces.csproj">
+      <Project>{500abbbe-3284-4eb6-b582-2ccd391d3c16}</Project>
+      <Name>Maple.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Maple.Core\Maple.Core.csproj">
       <Project>{21fa5854-0692-42e2-924e-a38cf3c7ff71}</Project>
       <Name>Maple.Core</Name>
@@ -130,6 +134,7 @@
       <Name>Maple.Localization</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

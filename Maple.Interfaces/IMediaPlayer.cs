@@ -1,12 +1,7 @@
-﻿using Maple.Core;
-using System;
+﻿using System;
 
-namespace Maple
+namespace Maple.Interfaces
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <seealso cref="System.IDisposable" />
     public interface IMediaPlayer : IDisposable
     {
         /// <summary>
@@ -88,6 +83,6 @@ namespace Maple
         /// <value>
         /// The audio device.
         /// </value>
-        AudioDevice AudioDevice { get; set; }
+        IAudioDevice AudioDevice { get; set; }
     }
 }

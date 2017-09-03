@@ -1,4 +1,6 @@
-﻿namespace Maple.Core
+﻿using Maple.Interfaces;
+
+namespace Maple.Core
 {
     public class CompletedMediaItemMessage : GenericMapleMessage<IMediaItem>
     {

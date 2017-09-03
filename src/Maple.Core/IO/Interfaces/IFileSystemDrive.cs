@@ -1,7 +1,9 @@
-﻿namespace Maple.Core
+﻿using Maple.Interfaces;
+
+namespace Maple.Core
 {
     public interface IFileSystemDrive : IFileSystemInfo
     {
-        RangeObservableCollection<IFileSystemInfo> Children { get; }
+        IRangeObservableCollection<IFileSystemInfo> Children { get; }
     }
 }

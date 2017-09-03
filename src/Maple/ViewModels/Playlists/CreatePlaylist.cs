@@ -11,7 +11,7 @@ namespace Maple
     /// <seealso cref="Maple.Core.BaseListViewModel{Maple.Playlist}" />
     public class CreatePlaylist : BaseListViewModel<Playlist>
     {
-        private readonly IYoutubeUrlParseService _dataParsingService;
+        private readonly IYoutubeUrlParser _dataParsingService;
         private readonly IPlaylistMapper _mapper;
 
         private string _source;
@@ -53,7 +53,7 @@ namespace Maple
         /// </summary>
         /// <param name="dataParsingService">The data parsing service.</param>
         /// <param name="mapper">The mapper.</param>
-        public CreatePlaylist(IYoutubeUrlParseService dataParsingService, IPlaylistMapper mapper, IMessenger messenger)
+        public CreatePlaylist(IYoutubeUrlParser dataParsingService, IPlaylistMapper mapper, IMessenger messenger)
             : base(messenger)
         {
             _dataParsingService = dataParsingService;

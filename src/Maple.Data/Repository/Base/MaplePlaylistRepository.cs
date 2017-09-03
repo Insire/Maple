@@ -4,11 +4,12 @@ using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Maple.Interfaces;
 
 namespace Maple.Data
 {
-    public abstract class MaplePlaylistRepository<T>
-        where T : BaseObject
+    public abstract class MaplePlaylistRepository<T> : IMapleRepository<T>
+        where T : class, IBaseObject
     {
         public void Save(T item)
         {
@@ -77,7 +78,7 @@ namespace Maple.Data
             return GetEntities(context).FirstOrDefault(p => p.Id == id);
         }
 
-        public Task<List<T>> GetAsync()
+        public Task<IReadOnlyCollection<T>> GetAsync()
         {
             return Task.Run(() =>
             {
@@ -86,7 +87,7 @@ namespace Maple.Data
             });
         }
 
-        protected virtual List<T> GetInternalAsync(PlaylistContext context)
+        protected virtual IReadOnlyCollection<T> GetInternalAsync(PlaylistContext context)
         {
             return GetEntities(context).ToList();
         }

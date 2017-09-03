@@ -1,11 +1,12 @@
-﻿using MahApps.Metro.IconPacks;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
+using MahApps.Metro.IconPacks;
+using Maple.Interfaces;
 
 namespace Maple
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <seealso cref="MahApps.Metro.IconPacks.PackIcon{Maple.PackIconKind}" />
     public class PackIcon : PackIcon<PackIconKind>
