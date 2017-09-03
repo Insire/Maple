@@ -14,8 +14,9 @@ namespace Maple
 
         protected override async void OnStartup(StartupEventArgs e)
         {
-            _container = await DependencyInjectionFactory.Get()
-                                                         .ConfigureAwait(true);
+            DispatcherUnhandledException += App_DispatcherUnhandledException;
+
+            _container = await DependencyInjectionFactory.Get().ConfigureAwait(true);
 
             var localizationService = _container.Resolve<ILocalizationService>();
             var log = _container.Resolve<ILoggingService>();
@@ -29,11 +30,20 @@ namespace Maple
             base.OnStartup(e);
         }
 
+        private async void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            var log = _container?.Resolve<ILoggingService>();
+            var dialog = _container?.Resolve<DialogViewModel>();
+
+            log.Error(e.Exception);
+
+            await dialog.ShowExceptionDialog(e.Exception).ConfigureAwait(true);
+        }
+
         protected override void OnExit(ExitEventArgs e)
         {
             SaveState();
             ExitInternal(e);
-
         }
 
         /// <summary>
@@ -107,6 +117,8 @@ namespace Maple
 
         private void ExitInternal(ExitEventArgs e)
         {
+            DispatcherUnhandledException -= App_DispatcherUnhandledException;
+
             _container.Dispose();
             base.OnExit(e);
         }

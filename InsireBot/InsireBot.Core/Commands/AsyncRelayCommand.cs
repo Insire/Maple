@@ -73,7 +73,7 @@ namespace Maple.Core
         {
             _task = _execute((T)parameter);
 
-            await _task.ConfigureAwait(false);
+            await _task.ConfigureAwait(true);
         }
     }
 
@@ -141,7 +141,7 @@ namespace Maple.Core
         {
             _task = _execute();
 
-            await _task.ConfigureAwait(false);
+            await _task.ConfigureAwait(true);
         }
     }
 }

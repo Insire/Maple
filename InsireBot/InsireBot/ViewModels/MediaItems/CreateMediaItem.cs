@@ -47,7 +47,8 @@ namespace Maple
 
         private async Task Parse()
         {
-            Result = await _dataParsingService.Parse(Source, ParseResultType.MediaItems).ConfigureAwait(false);
+            Result = await _dataParsingService.Parse(Source, ParseResultType.MediaItems)
+                                              .ConfigureAwait(true);
 
             if (Result.Count > 0 && Result.MediaItems?.Count > 0)
                 Items.AddRange(_mapper.GetMany(Result.MediaItems));

@@ -71,7 +71,8 @@ namespace Maple
         {
             using (_busyStack.GetToken())
             {
-                Result = await _dataParsingService.Parse(Source, ParseResultType.Playlists).ConfigureAwait(false);
+                Result = await _dataParsingService.Parse(Source, ParseResultType.Playlists)
+                                                  .ConfigureAwait(true);
 
                 if (Result.Count > 0 && Result.Playlists?.Count > 0)
                     Items.AddRange(_mapper.GetMany(Result.Playlists));
