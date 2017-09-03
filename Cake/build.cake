@@ -31,10 +31,7 @@ Task("VSWhereAll")
     .Does(()=>
     {
         foreach(var item in VSWhereAll())
-        {
-            Information(item);
             Information(item.FullPath);
-        }
     });
 
 Task("Gather-BuildRequirements")

@@ -16,7 +16,7 @@ branches:
 #---------------------------------#
 cache:
   - .\packages -> .\**\packages.config
-  - tools -> setup.cake
+  - .\Cake\tools -> setup.cake
 
 #---------------------------------#
 #  Build Script                   #
@@ -28,5 +28,5 @@ build_script:
 #  Build Artifacts                #
 #---------------------------------#
 artifacts:
-  - path: './Maple/bin/$(configuration)'
+  - path: './src/Maple/bin/$(configuration)'
     name: '.-Binaries'
