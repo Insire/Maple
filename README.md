@@ -13,7 +13,7 @@ After a long hiatus, I'm continuing my rewrite and try to improve on my previous
 
 ## Compile Requirements:
  - Visual Studio 2017 Community Edition or better
- - .NET Framework 4.6.2, C# 7
+ - .NET Framework 4.7, C# 7
  - Windows 10 (lower versions may run down till Windows 7)
 
 ## Features
@@ -34,7 +34,7 @@ After a long hiatus, I'm continuing my rewrite and try to improve on my previous
 - [NAudio](https://github.com/naudio/NAudio) - Audio and MIDI library
 - [System.Data.SQLite](https://system.data.sqlite.org/index.html/doc/trunk/www/index.wiki) - ADO.NET provider for sqlite
 - [EntityFramework](https://github.com/aspnet/EntityFramework6) - ORM mapper
-- [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json) - JSON framework 
+- [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json) - JSON framework
 - [DryIoc](https://bitbucket.org/dadhi/dryioc) - IoC container
 - [Fluent Validation](https://github.com/JeremySkinner/FluentValidation) - Validation
 
@@ -58,7 +58,7 @@ After a long hiatus, I'm continuing my rewrite and try to improve on my previous
 
 
 ## MIT License
-Copyright (c) 2017 
+Copyright (c) 2017
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

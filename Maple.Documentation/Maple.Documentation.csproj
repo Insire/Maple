@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\license.md" Link="license.md" />
+    <None Include="..\README.md" Link="README.md" />
+  </ItemGroup>
+
+</Project>

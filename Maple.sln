@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Youtube", "src\Maple.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Test", "src\Maple.Test\Maple.Test.csproj", "{60F95B05-E714-4E0F-BA97-44711EC74210}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Documentation", "Maple.Documentation\Maple.Documentation.csproj", "{32EBE046-87CB-4245-A262-E5B0A8745246}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{60F95B05-E714-4E0F-BA97-44711EC74210}.Release|Any CPU.Build.0 = Release|Any CPU
 		{60F95B05-E714-4E0F-BA97-44711EC74210}.Release|x86.ActiveCfg = Release|Any CPU
 		{60F95B05-E714-4E0F-BA97-44711EC74210}.Release|x86.Build.0 = Release|Any CPU
+		{32EBE046-87CB-4245-A262-E5B0A8745246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32EBE046-87CB-4245-A262-E5B0A8745246}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{32EBE046-87CB-4245-A262-E5B0A8745246}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32EBE046-87CB-4245-A262-E5B0A8745246}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
