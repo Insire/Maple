@@ -21,7 +21,7 @@ cache:
 #  Build Script                   #
 #---------------------------------#
 build_script:
-  - ps: .\build.ps1
+  - ps: .\Cake\build.ps1
   
 #---------------------------------#
 #  Build Artifacts                #
