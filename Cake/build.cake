@@ -38,13 +38,13 @@ Task("Gather-BuildRequirements")
     .IsDependentOn("VSWhereAll")
     .Does(() =>
     {
-    var tools = new List<string>()
-    {
-        @".\Common7\IDE\Extensions\TestPlatform\vstest.console.exe",
-        @".\Common7\IDE\MSTest.exe",
-        @".\MSBuild\15.0\Bin\MSBuild.exe",
-        @".\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe",
-    };
+        var tools = new List<string>()
+        {
+            @".\Common7\IDE\Extensions\TestPlatform\vstest.console.exe",
+            @".\Common7\IDE\MSTest.exe",
+            @".\MSBuild\15.0\Bin\MSBuild.exe",
+            @".\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe",
+        };
 
         // source https://docs.microsoft.com/en-us/visualstudio/install/workload-and-component-ids
         var products = new List<string>
