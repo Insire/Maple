@@ -52,6 +52,9 @@ Task("Gather-BuildRequirements")
         "Microsoft.VisualStudio.Product.FeedbackClient",
     };
 
+    var foundMSBuild = false;
+    var foundVSTest = false;
+
     foreach(var product in products)
     {
         foreach(var directory in VSWhereProducts(product))
@@ -61,12 +64,24 @@ Task("Gather-BuildRequirements")
                 var toolPath = directory.CombineWithFilePath(tool);
                 if(FileExists(toolPath))
                 {
-                    Information(tool+ " found in: "+ toolPath);
                     Context.Tools.RegisterFile(toolPath);
+                    if(tool.Contains("MSBuild.exe"))
+                        foundMSBuild = true;
+                    if(tool.Contains("vstest.console.exe"))
+                        foundVSTest = true;
                 }
             }
         }
     }
+
+    if(!foundMSBuild)
+        Warning("MSBuild not found");
+
+    if(!foundVSTest)
+        Warning("VSTest not found");
+
+    if(foundMSBuild && foundVSTest)
+        Information("Required tools have been found.");
 });
 
 Task("Clean")
@@ -116,11 +131,21 @@ Task("Build")
     .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
     {
-        MSBuild(solutionPath, settings => settings
-            .SetConfiguration(configuration)
-            .SetDetailedSummary(false)
-            .SetMaxCpuCount(0)
-            .SetMSBuildPlatform(MSBuildPlatform.Automatic));
+        var msBuildPath = Context.Tools.Resolve("msbuild.exe");
+
+        var settings = new MSBuildSettings();
+
+        if(msBuildPath != null)
+            settings.ToolPath = msBuildPath;
+        else
+            settings.ToolVersion = MSBuildToolVersion.VS2017;
+
+        settings.SetConfiguration(configuration)
+                .SetDetailedSummary(false)
+                .SetMaxCpuCount(0)
+                .SetMSBuildPlatform(MSBuildPlatform.Automatic);
+
+        MSBuild(solutionPath, settings);
     }); 
 
  Task("Run-Unit-Tests")
@@ -129,12 +154,16 @@ Task("Build")
     {
         // http://cakebuild.net/blog/2017/03/vswhere-and-visual-studio-2017-support
         var testAssemblies = new List<FilePath>();
+        var vsTest = Context.Tools.Resolve("vstest.console.exe");
+        
         var settings = new VSTestSettings()
         {
-            ToolPath = Context.Tools.Resolve("vstest.console.exe"),
             Parallel = true,
             InIsolation = true,
         };
+
+        if(vsTest!= null)
+            settings.ToolPath = Context.Tools.Resolve("vstest.console.exe");
 
         Information("Gathering Test-Assemblies");
         foreach(var path in testsDirectories)
