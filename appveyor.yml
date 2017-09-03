@@ -7,25 +7,25 @@ platform: Any CPU
 #---------------------------------#
 branches:
   only:
-  - master
-  - Dev
+    - master
+    - Dev
 
 #---------------------------------#
 #  Build Cache                    #
 #---------------------------------#
 cache:
-- .\packages -> .\**\packages.config
-- tools -> setup.cake
+  - .\packages -> .\**\packages.config
+  - tools -> setup.cake
 
 #---------------------------------#
 #  Build Script                   #
 #---------------------------------#
 build_script:
-  - ps: .\build.ps1 -Target Default
+  - ps: .\build.ps1
   
 #---------------------------------#
 #  Build Artifacts                #
 #---------------------------------#
 artifacts:
-- path: './Maple/bin/$(configuration)'
-  name: '.-Binaries'
+  - path: './Maple/bin/$(configuration)'
+    name: '.-Binaries'
