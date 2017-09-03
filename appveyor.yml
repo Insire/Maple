@@ -21,7 +21,7 @@ cache:
 #  Build Script                   #
 #---------------------------------#
 build_script:
-  - ps: .\Cake\build.ps1 --ExecutionPolicy ByPass --File build.ps1 --target "Default"
+  - ps: powershell -ExecutionPolicy ByPass -File ".\Cake\build.ps1" -target "Default" -Script ".\Cake\build.cake"
   
 #---------------------------------#
 #  Build Artifacts                #

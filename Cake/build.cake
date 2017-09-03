@@ -148,7 +148,7 @@ Task("Build")
             }
         }
 
-        VSTest(files,settings);
+        VSTest(testAssemblies,settings);
     });
 
 //////////////////////////////////////////////////////////////////////
