@@ -90,28 +90,27 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\InsireBot.Core\Maple.Core.csproj">
+    <ProjectReference Include="..\Maple.Core\Maple.Core.csproj">
       <Project>{21fa5854-0692-42e2-924e-a38cf3c7ff71}</Project>
       <Name>Maple.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\InsireBot.Data\Maple.Data.csproj">
+    <ProjectReference Include="..\Maple.Data\Maple.Data.csproj">
       <Project>{b3cd46be-3c08-4bae-ae60-a6d84a62400c}</Project>
       <Name>Maple.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\InsireBot.Localization\Maple.Localization.csproj">
+    <ProjectReference Include="..\Maple.Localization\Maple.Localization.csproj">
       <Project>{a073fc92-90e3-4541-8b52-6f7293187871}</Project>
       <Name>Maple.Localization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\InsireBot.Youtube\Maple.Youtube.csproj">
+    <ProjectReference Include="..\Maple.Youtube\Maple.Youtube.csproj">
       <Project>{b5be546f-8d9f-4fb9-b235-af05fd553f9e}</Project>
       <Name>Maple.Youtube</Name>
     </ProjectReference>
-    <ProjectReference Include="..\InsireBot\Maple.csproj">
+    <ProjectReference Include="..\Maple\Maple.csproj">
       <Project>{fbd5595b-6859-4e8e-bdfa-c3169ef34985}</Project>
       <Name>Maple</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

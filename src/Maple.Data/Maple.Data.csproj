@@ -133,12 +133,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="..\InsireBot.Localization\Maple.Localization.csproj">
-      <Project>{A073FC92-90E3-4541-8B52-6F7293187871}</Project>
-      <Name>Maple.Localization</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

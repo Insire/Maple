@@ -416,24 +416,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\InsireBot.Core\Maple.Core.csproj">
-      <Project>{21fa5854-0692-42e2-924e-a38cf3c7ff71}</Project>
-      <Name>Maple.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\InsireBot.Data\Maple.Data.csproj">
-      <Project>{b3cd46be-3c08-4bae-ae60-a6d84a62400c}</Project>
-      <Name>Maple.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\InsireBot.Localization\Maple.Localization.csproj">
-      <Project>{A073FC92-90E3-4541-8B52-6F7293187871}</Project>
-      <Name>Maple.Localization</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\InsireBot.Youtube\Maple.Youtube.csproj">
-      <Project>{B5BE546F-8D9F-4FB9-B235-AF05FD553F9E}</Project>
-      <Name>Maple.Youtube</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="..\Resources\Images\logo.ico">
       <Link>Resources\logo.ico</Link>
     </Resource>
@@ -446,7 +428,24 @@
   <ItemGroup>
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Maple.Core\Maple.Core.csproj">
+      <Project>{21fa5854-0692-42e2-924e-a38cf3c7ff71}</Project>
+      <Name>Maple.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Maple.Data\Maple.Data.csproj">
+      <Project>{b3cd46be-3c08-4bae-ae60-a6d84a62400c}</Project>
+      <Name>Maple.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Maple.Localization\Maple.Localization.csproj">
+      <Project>{a073fc92-90e3-4541-8b52-6f7293187871}</Project>
+      <Name>Maple.Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Maple.Youtube\Maple.Youtube.csproj">
+      <Project>{b5be546f-8d9f-4fb9-b235-af05fd553f9e}</Project>
+      <Name>Maple.Youtube</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
