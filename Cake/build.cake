@@ -27,9 +27,20 @@ var testsDirectories = new List<string>();
 // TASKS
 //////////////////////////////////////////////////////////////////////
 
+Task("VSWhereAll")
+    .Does(()=>
+    {
+        foreach(var item in VSWhereAll())
+        {
+            Information(item);
+            Information(item.FullPath);
+        }
+    });
+
 Task("Gather-BuildRequirements")
+    .IsDependentOn("VSWhereAll")
     .Does(() =>
-{
+    {
     var tools = new List<string>()
     {
         @".\Common7\IDE\Extensions\TestPlatform\vstest.console.exe",
@@ -38,51 +49,51 @@ Task("Gather-BuildRequirements")
         @".\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe",
     };
 
-    // source https://docs.microsoft.com/en-us/visualstudio/install/workload-and-component-ids
-    var products = new List<string>
-    {
-        "Microsoft.VisualStudio.Product.Enterprise",
-        "Microsoft.VisualStudio.Product.Professional",
-        "Microsoft.VisualStudio.Product.Community",
-        "Microsoft.VisualStudio.Product.TeamExplorer",
-        "Microsoft.VisualStudio.Product.BuildTools",
-        "Microsoft.VisualStudio.Product.TestAgent",
-        "Microsoft.VisualStudio.Product.TestController",
-        "Microsoft.VisualStudio.Product.TestProfessional",
-        "Microsoft.VisualStudio.Product.FeedbackClient",
-    };
-
-    var foundMSBuild = false;
-    var foundVSTest = false;
-
-    foreach(var product in products)
-    {
-        foreach(var directory in VSWhereProducts(product))
+        // source https://docs.microsoft.com/en-us/visualstudio/install/workload-and-component-ids
+        var products = new List<string>
         {
-            foreach(var tool in tools)
+            "Microsoft.VisualStudio.Product.Enterprise",
+            "Microsoft.VisualStudio.Product.Professional",
+            "Microsoft.VisualStudio.Product.Community",
+            "Microsoft.VisualStudio.Product.TeamExplorer",
+            "Microsoft.VisualStudio.Product.BuildTools",
+            "Microsoft.VisualStudio.Product.TestAgent",
+            "Microsoft.VisualStudio.Product.TestController",
+            "Microsoft.VisualStudio.Product.TestProfessional",
+            "Microsoft.VisualStudio.Product.FeedbackClient",
+        };
+
+        var foundMSBuild = false;
+        var foundVSTest = false;
+
+        foreach(var product in products)
+        {
+            foreach(var directory in VSWhereProducts(product))
             {
-                var toolPath = directory.CombineWithFilePath(tool);
-                if(FileExists(toolPath))
+                foreach(var tool in tools)
                 {
-                    Context.Tools.RegisterFile(toolPath);
-                    if(tool.Contains("MSBuild.exe"))
-                        foundMSBuild = true;
-                    if(tool.Contains("vstest.console.exe"))
-                        foundVSTest = true;
+                    var toolPath = directory.CombineWithFilePath(tool);
+                    if(FileExists(toolPath))
+                    {
+                        Context.Tools.RegisterFile(toolPath);
+                        if(tool.Contains("MSBuild.exe"))
+                            foundMSBuild = true;
+                        if(tool.Contains("vstest.console.exe"))
+                            foundVSTest = true;
+                    }
                 }
             }
         }
-    }
 
-    if(!foundMSBuild)
-        Warning("MSBuild not found");
+        if(!foundMSBuild)
+            Warning("MSBuild not found");
 
-    if(!foundVSTest)
-        Warning("VSTest not found");
+        if(!foundVSTest)
+            Warning("VSTest not found");
 
-    if(foundMSBuild && foundVSTest)
-        Information("Required tools have been found.");
-});
+        if(foundMSBuild && foundVSTest)
+            Information("Required tools have been found.");
+    });
 
 Task("Clean")
     .IsDependentOn("Gather-BuildRequirements")
