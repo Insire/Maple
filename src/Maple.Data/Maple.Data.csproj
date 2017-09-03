@@ -131,8 +131,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Maple.Interfaces\Maple.Interfaces.csproj">
-      <Project>{500abbbe-3284-4eb6-b582-2ccd391d3c16}</Project>
+    <ProjectReference Include="..\Maple.Interfaces\Maple.Interfaces.csproj">
+      <Project>{6D75CEE7-C990-4632-BC19-7F56DB880F35}</Project>
       <Name>Maple.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>

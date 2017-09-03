@@ -6,13 +6,13 @@ branches:
   - master
   - Dev
 cache:
-- InsireBot\packages -> InsireBot\**\packages.config
+- .\packages -> .\**\packages.config
 before_build:
-- cmd: nuget restore InsireBot\Maple.sln -Verbosity quiet
+- cmd: nuget restore .\Maple.sln -Verbosity quiet
 build:
     parallel: true
-    project: InsireBot\Maple.sln
+    project: .\Maple.sln
     verbosity: minimal
 artifacts:
-- path: 'InsireBot/InsireBot/bin/$(configuration)'
-  name: 'InsireBot-Binaries'
+- path: './Maple/bin/$(configuration)'
+  name: '.-Binaries'

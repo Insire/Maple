@@ -179,13 +179,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Maple.Interfaces\Maple.Interfaces.csproj">
-      <Project>{500ABBBE-3284-4EB6-B582-2CCD391D3C16}</Project>
-      <Name>Maple.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Maple.Data\Maple.Data.csproj">
       <Project>{B3CD46BE-3C08-4BAE-AE60-A6D84A62400C}</Project>
       <Name>Maple.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Maple.Interfaces\Maple.Interfaces.csproj">
+      <Project>{6D75CEE7-C990-4632-BC19-7F56DB880F35}</Project>
+      <Name>Maple.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\Maple.Localization\Maple.Localization.csproj">
       <Project>{A073FC92-90E3-4541-8B52-6F7293187871}</Project>
