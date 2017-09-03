@@ -77,7 +77,7 @@ namespace Maple
         /// <param name="windowLocationProp">The window location property.</param>
         /// <param name="windowSizeProp">The window size property.</param>
         /// <param name="windowStateProp">The window state property.</param>
-        public ConfigurableWindowSettings(ApplicationSettingsBase settings, string isFirstRunProp, string windowLocationProp, string windowSizeProp, string windowStateProp)
+        protected ConfigurableWindowSettings(ApplicationSettingsBase settings, string isFirstRunProp, string windowLocationProp, string windowSizeProp, string windowStateProp)
         {
             _settings = settings;
 

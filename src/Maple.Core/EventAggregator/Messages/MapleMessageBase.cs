@@ -21,7 +21,7 @@ namespace Maple.Core
             }
         }
 
-        public MapleMessageBase(object sender)
+        protected MapleMessageBase(object sender)
         {
             if (sender == null)
                 throw new ArgumentNullException(nameof(sender), $"{nameof(sender)} {Resources.IsRequired}");

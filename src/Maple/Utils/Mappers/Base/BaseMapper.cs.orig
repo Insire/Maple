@@ -2,8 +2,13 @@
 using AutoMapper;
 using FluentValidation;
 using Maple.Core;
+<<<<<<< HEAD:src/Maple/Utils/Mappers/Base/BaseMapper.cs
 using Maple.Interfaces;
 using Maple.Localization.Properties;
+=======
+using Maple.Localization.Properties;
+using System;
+>>>>>>> 9cb32a6e41a967e659a3ce3c4d265c5d45de420d:InsireBot/InsireBot/Utils/Mappers/Base/BaseMapper.cs
 
 namespace Maple
 {
@@ -17,7 +22,7 @@ namespace Maple
         protected readonly IMessenger _messenger;
         protected readonly ViewModelServiceContainer _container;
 
-        protected BaseMapper(ViewModelServiceContainer container, IValidator<T> validator)
+        public BaseMapper(ViewModelServiceContainer container, IValidator<T> validator)
         {
             _container = container;
             _translationService = container.LocalizationService;

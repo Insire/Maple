@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Maple.Core
 {
-    public class IOUtils
+    public static class IOUtils
     {
         public static bool IsLocalFile(string path)
         {

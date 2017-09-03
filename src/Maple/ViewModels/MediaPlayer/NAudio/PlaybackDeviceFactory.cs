@@ -5,7 +5,7 @@ using NAudio.Wave;
 
 namespace Maple
 {
-    public class PlaybackDeviceFactory
+    public static class PlaybackDeviceFactory
     {
         public static IEnumerable<IAudioDevice> GetAudioDevices(ILoggingService log)
         {

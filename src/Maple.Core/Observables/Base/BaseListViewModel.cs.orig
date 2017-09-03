@@ -83,7 +83,11 @@ namespace Maple.Core
         public ICommand ClearCommand { get; private set; }
         public ICommand AddCommand { get; protected set; }
 
+<<<<<<< HEAD:src/Maple.Core/Observables/Base/BaseListViewModel.cs
         protected BaseListViewModel(IMessenger messenger)
+=======
+        public BaseListViewModel(IMessenger messenger)
+>>>>>>> 9cb32a6e41a967e659a3ce3c4d265c5d45de420d:InsireBot/InsireBot.Core/Observables/Base/BaseListViewModel.cs
             : base(messenger)
         {
             _itemsLock = new object();
@@ -102,13 +106,13 @@ namespace Maple.Core
             BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
         }
 
-        protected BaseListViewModel(IList<TViewModel> items, IMessenger messenger)
+        public BaseListViewModel(IList<TViewModel> items, IMessenger messenger)
             : this(messenger)
         {
             Items.AddRange(items);
         }
 
-        protected BaseListViewModel(IEnumerable<TViewModel> items, IMessenger messenger)
+        public BaseListViewModel(IEnumerable<TViewModel> items, IMessenger messenger)
             : this(messenger)
         {
             Items.AddRange(items);

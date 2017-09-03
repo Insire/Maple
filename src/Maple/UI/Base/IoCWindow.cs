@@ -16,14 +16,14 @@ namespace Maple
         private IMessenger _messenger;
         public ILocalizationService TranslationManager { get; private set; }
 
-        public IoCWindow()
+        protected IoCWindow()
             : base()
         {
             if (Debugger.IsAttached)
                 Debug.Fail($"The constructor without parameters of {nameof(IoCWindow)} exists only for compatibility reasons.");
         }
 
-        public IoCWindow(ILocalizationService container, IMessenger messenger)
+        protected IoCWindow(ILocalizationService container, IMessenger messenger)
             : base()
         {
             TranslationManager = container ?? throw new ArgumentNullException(nameof(container), $"{nameof(container)} {Localization.Properties.Resources.IsRequired}");

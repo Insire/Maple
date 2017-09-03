@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maple.Localization.Properties;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Maple.Interfaces;
@@ -6,6 +7,9 @@ using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
+    /// <summary>
+    ///
+    /// </summary>
     public static class LinqExtensions
     {
         /// <summary>
@@ -74,6 +78,17 @@ namespace Maple.Core
             return newItems.Where(p => !excludedIDs.Contains(p.Id));
         }
 
+<<<<<<< HEAD:src/Maple.Core/Extensions/LinqExtensions.cs
+=======
+        /// <summary>
+        /// Fors the each.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="baseCollection">The source items.</param>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+>>>>>>> 9cb32a6e41a967e659a3ce3c4d265c5d45de420d:InsireBot/InsireBot.Core/Extensions/LinqExtensions.cs
         public static IEnumerable<TResult> ForEach<TSource, TResult>(this IEnumerable<TSource> baseCollection, Func<TSource, TResult> action)
         {
             if (baseCollection == null)
@@ -86,6 +101,15 @@ namespace Maple.Core
                 yield return action(item);
         }
 
+<<<<<<< HEAD:src/Maple.Core/Extensions/LinqExtensions.cs
+=======
+        /// <summary>
+        /// Fors the each.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source.</typeparam>
+        /// <param name="sourceItems">The source items.</param>
+        /// <param name="action">The action.</param>
+>>>>>>> 9cb32a6e41a967e659a3ce3c4d265c5d45de420d:InsireBot/InsireBot.Core/Extensions/LinqExtensions.cs
         public static void ForEach<TSource>(this IEnumerable<TSource> baseCollection, Action<TSource> action)
         {
             if (baseCollection == null)
@@ -95,6 +119,7 @@ namespace Maple.Core
                 throw new ArgumentNullException(nameof(action), $"{nameof(action)} {Resources.IsRequired}");
 
             foreach (var item in baseCollection)
+<<<<<<< HEAD:src/Maple.Core/Extensions/LinqExtensions.cs
                 action(item);
         }
 
@@ -119,6 +144,8 @@ namespace Maple.Core
                 throw new ArgumentNullException(nameof(action), $"{nameof(action)} {Resources.IsRequired}");
 
             foreach (var item in baseCollection)
+=======
+>>>>>>> 9cb32a6e41a967e659a3ce3c4d265c5d45de420d:InsireBot/InsireBot.Core/Extensions/LinqExtensions.cs
                 action(item);
         }
     }

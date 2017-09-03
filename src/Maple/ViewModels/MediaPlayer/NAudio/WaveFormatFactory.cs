@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Maple
 {
-    public class WaveFormatFactory
+    public static class WaveFormatFactory
     {
         public static WaveFormat GetWaveFormat(string fileName)
         {

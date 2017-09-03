@@ -11,7 +11,7 @@ namespace Maple
     /// <summary>
     /// Factory class that provides an Instance of <see cref="IContainer"/>
     /// </summary>
-    public class DependencyInjectionFactory
+    public static class DependencyInjectionFactory
     {
         public static Task<IContainer> Get()
         {

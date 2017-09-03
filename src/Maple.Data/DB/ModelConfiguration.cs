@@ -2,7 +2,7 @@
 
 namespace Maple.Data
 {
-    public class ModelConfiguration
+    public static class ModelConfiguration
     {
         public static void Configure(DbModelBuilder modelBuilder)
         {

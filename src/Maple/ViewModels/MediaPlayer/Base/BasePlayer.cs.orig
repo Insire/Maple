@@ -1,7 +1,13 @@
+<<<<<<< HEAD:src/Maple/ViewModels/MediaPlayer/Base/BasePlayer.cs
 ﻿using System;
 using Maple.Core;
 using Maple.Interfaces;
 using Maple.Localization.Properties;
+=======
+﻿using Maple.Core;
+using Maple.Localization.Properties;
+using System;
+>>>>>>> 9cb32a6e41a967e659a3ce3c4d265c5d45de420d:InsireBot/InsireBot/ViewModels/MediaPlayer/Base/BasePlayer.cs
 
 namespace Maple
 {
@@ -40,7 +46,7 @@ namespace Maple
             protected set { SetValue(ref _disposed, value); }
         }
 
-        protected BasePlayer(IMessenger messenger, AudioDevices audioDevices)
+        public BasePlayer(IMessenger messenger, AudioDevices audioDevices)
         {
             _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");
 
