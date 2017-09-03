@@ -6,16 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D65C950A-327A-496D-A49C-B45E8F97C610}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		..\appveyor.yml = ..\appveyor.yml
-		Resources\client_secret.json = Resources\client_secret.json
-		..\license.md = ..\license.md
-		local.runsettings = local.runsettings
-		Resources\Images\logo.ico = Resources\Images\logo.ico
-		Resources\Images\logo.png = Resources\Images\logo.png
-		Resources\Images\logo_small.ico = Resources\Images\logo_small.ico
-		Resources\Images\logo_withoutbackground.png = Resources\Images\logo_withoutbackground.png
-		..\README.md = ..\README.md
-		Settings.XamlStyler = Settings.XamlStyler
+		.runsettings = .runsettings
+		.XamlStyler = .XamlStyler
+		src\Resources\client_secret.json = src\Resources\client_secret.json
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple", "src\Maple\Maple.csproj", "{FBD5595B-6859-4E8E-BDFA-C3169EF34985}"
