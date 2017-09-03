@@ -1,18 +1,31 @@
 version: 1.0.{build}
 configuration: Release
 platform: Any CPU
+
+#---------------------------------#
+#        Branches to build        #
+#---------------------------------#
 branches:
   only:
   - master
   - Dev
+
+#---------------------------------#
+#  Build Cache                    #
+#---------------------------------#
 cache:
 - .\packages -> .\**\packages.config
-before_build:
-- cmd: nuget restore .\Maple.sln -Verbosity quiet
-build:
-    parallel: true
-    project: .\Maple.sln
-    verbosity: minimal
+- tools -> setup.cake
+
+#---------------------------------#
+#  Build Script                   #
+#---------------------------------#
+build_script:
+  - ps: .\build.ps1 -Target Default
+  
+#---------------------------------#
+#  Build Artifacts                #
+#---------------------------------#
 artifacts:
 - path: './Maple/bin/$(configuration)'
   name: '.-Binaries'

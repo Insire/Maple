@@ -210,3 +210,10 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+
+# Cake
+*Cake/tools/Addins
+*Cake/tools/Cake
+*Cake/tools/vswhere
+*Cake/tools/nuget.exe
+*Cake/tools/packages.config.md5sum

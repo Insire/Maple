@@ -27,6 +27,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple.Documentation", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple.Interfaces", "src\Maple.Interfaces\Maple.Interfaces.csproj", "{6D75CEE7-C990-4632-BC19-7F56DB880F35}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cake", "Cake", "{E463B2A9-3556-4651-8EEA-0239E20B5393}"
+	ProjectSection(SolutionItems) = preProject
+		Cake\build.cake = Cake\build.cake
+		Cake\build.ps1 = Cake\build.ps1
+		Cake\cake.config = Cake\cake.config
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,6 +109,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E463B2A9-3556-4651-8EEA-0239E20B5393} = {D65C950A-327A-496D-A49C-B45E8F97C610}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FB7AD8CC-4699-4B9E-B17E-DF2F7CF26C7A}

@@ -179,7 +179,7 @@ if(-Not $SkipToolPackageRestore.IsPresent) {
         $md5Hash | Out-File $PACKAGES_CONFIG_MD5 -Encoding "ASCII"
     }
     Write-Verbose -Message ($NuGetOutput | out-string)
-    
+
     Pop-Location
 }
 
