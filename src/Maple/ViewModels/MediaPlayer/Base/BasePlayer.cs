@@ -9,10 +9,15 @@ namespace Maple
     {
         protected readonly IMessenger _messenger;
         protected readonly ILoggingService _log;
+        private IRangeObservableCollection<AudioDevice> _items;
 
         protected abstract void Dispose(bool disposing);
 
-        public IRangeObservableCollection<AudioDevice> Items { get; private set; }
+        public IRangeObservableCollection<AudioDevice> Items
+        {
+            get { return _items; }
+            private set { SetValue(ref _items, value); }
+        }
 
         private IAudioDevice _audioDevice;
         public IAudioDevice AudioDevice

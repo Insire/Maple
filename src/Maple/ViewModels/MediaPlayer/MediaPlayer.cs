@@ -17,7 +17,7 @@ namespace Maple
         protected readonly ILocalizationService _manager;
 
         public bool IsPlaying { get { return Player.IsPlaying; } }
-        public bool Disposed { get; private set; }
+        protected bool Disposed { get; private set; }
 
         public bool IsNew => Model.IsNew;
         public bool IsDeleted => Model.IsDeleted;
@@ -34,12 +34,30 @@ namespace Maple
         public ICommand NextCommand { get; private set; }
         public ICommand PreviousCommand { get; private set; }
         public ICommand StopCommand { get; private set; }
-        public ICommand LoadFromFileCommand { get; private set; }
-        public ICommand LoadFromFolderCommand { get; private set; }
-        public ICommand LoadFromUrlCommand { get; private set; }
         public ICommand RemoveRangeCommand { get; protected set; }
         public ICommand RemoveCommand { get; protected set; }
         public ICommand ClearCommand { get; protected set; }
+
+        private ICommand _loadFromFileCommand;
+        public ICommand LoadFromFileCommand
+        {
+            get { return _loadFromFileCommand; }
+            private set { SetValue(ref _loadFromFileCommand, value); }
+        }
+
+        private ICommand _loadFromFolderCommand;
+        public ICommand LoadFromFolderCommand
+        {
+            get { return _loadFromFolderCommand; }
+            private set { SetValue(ref _loadFromFolderCommand, value); }
+        }
+
+        private ICommand _loadFromUrlCommand;
+        public ICommand LoadFromUrlCommand
+        {
+            get { return _loadFromUrlCommand; }
+            private set { SetValue(ref _loadFromUrlCommand, value); }
+        }
 
         private AudioDevices _audioDevices;
         public AudioDevices AudioDevices

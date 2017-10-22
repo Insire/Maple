@@ -18,5 +18,17 @@ namespace Maple.Core
             : base(string.Format(ERROR_TEXT, messageType, reason), innerException)
         {
         }
+
+        public MapleMessengerSubscriptionException()
+        {
+        }
+
+        public MapleMessengerSubscriptionException(string message) : base(message)
+        {
+        }
+
+        public MapleMessengerSubscriptionException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
     }
 }

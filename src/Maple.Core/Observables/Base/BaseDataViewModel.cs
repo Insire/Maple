@@ -41,7 +41,6 @@ namespace Maple.Core
             return result;
         }
 
-
         protected BaseDataViewModel(IMessenger messenger)
         {
             Messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");
