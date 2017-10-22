@@ -27,35 +27,57 @@ namespace Maple
 
         private static PaletteHelper _paletteHelper = new PaletteHelper();
 
+        private bool _isLoaded;
         /// <summary>
         /// Gets a value indicating whether this instance is loaded.
         /// </summary>
         /// <value>
         ///   <c>true</c> if this instance is loaded; otherwise, <c>false</c>.
         /// </value>
-        public bool IsLoaded { get; private set; }
+        public bool IsLoaded
+        {
+            get { return _isLoaded; }
+            private set { SetValue(ref _isLoaded, value); }
+        }
 
+        private ICommand _toggleBaseCommand;
         /// <summary>
         /// Gets the toggle base command.
         /// </summary>
         /// <value>
         /// The toggle base command.
         /// </value>
-        public ICommand ToggleBaseCommand { get; private set; }
+        public ICommand ToggleBaseCommand
+        {
+            get { return _toggleBaseCommand; }
+            private set { SetValue(ref _toggleBaseCommand, value); }
+        }
+
+        private ICommand _applyPrimaryCommand;
         /// <summary>
         /// Gets the apply primary command.
         /// </summary>
         /// <value>
         /// The apply primary command.
         /// </value>
-        public ICommand ApplyPrimaryCommand { get; private set; }
+        public ICommand ApplyPrimaryCommand
+        {
+            get { return _applyPrimaryCommand; }
+            private set { SetValue(ref _applyPrimaryCommand, value); }
+        }
+
+        private ICommand _applyAccentCommand;
         /// <summary>
         /// Gets the apply accent command.
         /// </summary>
         /// <value>
         /// The apply accent command.
         /// </value>
-        public ICommand ApplyAccentCommand { get; private set; }
+        public ICommand ApplyAccentCommand
+        {
+            get { return _applyAccentCommand; }
+            private set { SetValue(ref _applyAccentCommand, value); }
+        }
 
         /// <summary>
         /// Gets the refresh command.

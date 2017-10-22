@@ -8,7 +8,12 @@ namespace Maple
     {
         private FileSystemBrowserOptions _options;
 
-        public FileSystemViewModel FileSystemViewModel { get; private set; }
+        private FileSystemViewModel _fileSystemViewModel;
+        public FileSystemViewModel FileSystemViewModel
+        {
+            get { return _fileSystemViewModel; }
+            private set { SetValue(ref _fileSystemViewModel, value); }
+        }
 
         public FileBrowserDialogViewModel(FileSystemViewModel fileSystemViewModel, FileSystemBrowserOptions options)
         {

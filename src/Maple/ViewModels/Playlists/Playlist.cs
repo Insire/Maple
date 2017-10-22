@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -208,20 +207,16 @@ namespace Maple
                 View = CollectionViewSource.GetDefaultView(Items);
                 OnPropertyChanged(nameof(Count));
 
-                InitializeCommands();
+                LoadFromFileCommand = new AsyncRelayCommand(LoadFromFile, () => CanLoadFromFile());
+                LoadFromFolderCommand = new AsyncRelayCommand(LoadFromFolder, () => CanLoadFromFolder());
+                LoadFromUrlCommand = new AsyncRelayCommand(LoadFromUrl, () => CanLoadFromUrl());
+
+                RemoveCommand = new RelayCommand<MediaItem>(Remove, CanRemove);
+                RemoveRangeCommand = new RelayCommand<IList>(RemoveRange, CanRemoveRange);
+                ClearCommand = new RelayCommand(() => Clear(), CanClear);
+
                 Validate();
             }
-        }
-
-        private void InitializeCommands()
-        {
-            LoadFromFileCommand = new AsyncRelayCommand(LoadFromFile, () => CanLoadFromFile());
-            LoadFromFolderCommand = new AsyncRelayCommand(LoadFromFolder, () => CanLoadFromFolder());
-            LoadFromUrlCommand = new AsyncRelayCommand(LoadFromUrl, () => CanLoadFromUrl());
-
-            RemoveCommand = new RelayCommand<MediaItem>(Remove, CanRemove);
-            RemoveRangeCommand = new RelayCommand<IList>(RemoveRange, CanRemoveRange);
-            ClearCommand = new RelayCommand(() => Clear(), CanClear);
         }
 
         protected virtual void OnSelectionChanging()

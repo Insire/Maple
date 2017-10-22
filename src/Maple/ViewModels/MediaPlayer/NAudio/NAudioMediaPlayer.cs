@@ -55,9 +55,6 @@ namespace Maple
             _current = null;
 
             OnPropertyChanged(nameof(IsPlaying));
-            OnPropertyChanged(nameof(CanPlay));
-            OnPropertyChanged(nameof(CanStop));
-            OnPropertyChanged(nameof(CanPause));
         }
 
         public override bool IsPlaying

@@ -13,6 +13,8 @@ namespace Maple
         private readonly Queue<string> _queue;
         private System.Timers.Timer _timer;
 
+        protected bool IsDisposed { get; private set; }
+
         private string _version;
         public string Version
         {
@@ -27,10 +29,19 @@ namespace Maple
             private set { SetValue(ref _message, value); }
         }
 
-        public bool IsDisposed { get; private set; }
+        private ICommand _loadCommand;
+        public ICommand LoadCommand
+        {
+            get { return _loadCommand; }
+            private set { SetValue(ref _loadCommand, value); }
+        }
 
-        public ICommand LoadCommand { get; private set; }
-        public ICommand DisposeCommand { get; private set; }
+        private ICommand _disposeCommand;
+        public ICommand DisposeCommand
+        {
+            get { return _disposeCommand; }
+            private set { SetValue(ref _disposeCommand, value); }
+        }
 
         private SplashScreenViewModel()
         {

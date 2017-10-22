@@ -7,8 +7,13 @@ namespace Maple
     public class FolderBrowserDialogViewModel : ObservableObject
     {
         private FileSystemBrowserOptions _options;
+        private FileSystemViewModel _fileSystemViewModel;
 
-        public FileSystemViewModel FileSystemViewModel { get; private set; }
+        public FileSystemViewModel FileSystemViewModel
+        {
+            get { return _fileSystemViewModel; }
+            private set { SetValue(ref _fileSystemViewModel, value); }
+        }
 
         public FolderBrowserDialogViewModel(FileSystemViewModel fileSystemViewModel, FileSystemBrowserOptions options)
         {
