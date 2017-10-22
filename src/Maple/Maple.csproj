@@ -148,6 +148,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\Resources\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Interfaces\IBaseMapper.cs" />
     <Compile Include="Interfaces\IMediaItemMapper.cs" />
     <Compile Include="Interfaces\IMediaPlayerMapper.cs" />
