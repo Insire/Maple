@@ -36,7 +36,6 @@
     <PackageReference Include="Expression.Blend.Sdk" Version="1.0.2" />
     <PackageReference Include="FluentValidation" Version="7.2.0" />
     <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="Microsoft.Net.Compilers" Version="2.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="SQLite.CodeFirst" Version="1.4.0.20" />
     <PackageReference Include="System.Collections" Version="4.3.0" />

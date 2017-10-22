@@ -36,7 +36,6 @@
     <PackageReference Include="Google.Apis.Auth" Version="1.29.2" />
     <PackageReference Include="Google.Apis.Core" Version="1.29.2" />
     <PackageReference Include="Google.Apis.YouTube.v3" Version="1.29.2.1006" />
-    <PackageReference Include="Microsoft.Net.Compilers" Version="2.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="System.AppContext" Version="4.3.0" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
