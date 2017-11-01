@@ -177,7 +177,7 @@ namespace Maple
 
         private bool CanOpenMediaPlayerView()
         {
-            return Items?.Any(p => p.Content.GetType() == typeof(ColorOptionsPage)) == true;
+            return Items?.Any(p => p.Content.GetType() == typeof(MediaPlayerPage)) == true;
         }
 
         private void OpenGithubPage()
