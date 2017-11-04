@@ -3,7 +3,6 @@ configuration: Release
 platform: Any CPU
 image:
   - Visual Studio 2017
-  - Visual Studio 2017 Preview
 
 #---------------------------------#
 #        Branches to build        #
