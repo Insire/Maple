@@ -138,9 +138,6 @@
   <data name="NavigationLoaded" xml:space="preserve">
     <value>Loaded navigation</value>
   </data>
-  <data name="GithubProjectLink" xml:space="preserve">
-    <value>https://github.com/Insire/InsireBot-V2</value>
-  </data>
   <data name="Options" xml:space="preserve">
     <value>Options</value>
   </data>
@@ -320,5 +317,29 @@
   </data>
   <data name="MediaItems" xml:space="preserve">
     <value>Media items</value>
+  </data>
+  <data name="ExceptionMessageFalseCondition" xml:space="preserve">
+    <value>The given condition is false.</value>
+  </data>
+  <data name="ExceptionMessageTrueCondition" xml:space="preserve">
+    <value>The given condition is true.</value>
+  </data>
+  <data name="ExceptionMessageEqualValues" xml:space="preserve">
+    <value>Values must be equal.</value>
+  </data>
+  <data name="ExceptionMessageNotEqualValues" xml:space="preserve">
+    <value>Values must not be equal.</value>
+  </data>
+  <data name="ExceptionMessageCollectionNullOrEmpty" xml:space="preserve">
+    <value>Collection must not be null or empty.</value>
+  </data>
+  <data name="ExceptionMessageMissingDirectory" xml:space="preserve">
+    <value>Cannot find:</value>
+  </data>
+  <data name="ExceptionMessageMissingFile" xml:space="preserve">
+    <value>Cannot find:</value>
+  </data>
+  <data name="ExceptionMessageStringNullEmpyOrWhiteSpace" xml:space="preserve">
+    <value>String mus not be null, empty or whitespace.</value>
   </data>
 </root>

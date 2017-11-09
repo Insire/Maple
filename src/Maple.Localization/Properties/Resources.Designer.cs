@@ -214,6 +214,78 @@ namespace Maple.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Liste darf nicht null oder leer sein..
+        /// </summary>
+        public static string ExceptionMessageCollectionNullOrEmpty {
+            get {
+                return ResourceManager.GetString("ExceptionMessageCollectionNullOrEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Werte müssen gleich sein..
+        /// </summary>
+        public static string ExceptionMessageEqualValues {
+            get {
+                return ResourceManager.GetString("ExceptionMessageEqualValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Die angegebene Bedingung ist falsch..
+        /// </summary>
+        public static string ExceptionMessageFalseCondition {
+            get {
+                return ResourceManager.GetString("ExceptionMessageFalseCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Folgendes Verzeichnis wurde nicht gefunden:.
+        /// </summary>
+        public static string ExceptionMessageMissingDirectory {
+            get {
+                return ResourceManager.GetString("ExceptionMessageMissingDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Folgende Datei wurde nicht gefunden:.
+        /// </summary>
+        public static string ExceptionMessageMissingFile {
+            get {
+                return ResourceManager.GetString("ExceptionMessageMissingFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Werte dürfen nicht gleich sein..
+        /// </summary>
+        public static string ExceptionMessageNotEqualValues {
+            get {
+                return ResourceManager.GetString("ExceptionMessageNotEqualValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to String darf nicht null, leer oder nur Leerraum enthalten..
+        /// </summary>
+        public static string ExceptionMessageStringNullEmpyOrWhiteSpace {
+            get {
+                return ResourceManager.GetString("ExceptionMessageStringNullEmpyOrWhiteSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Die angegebene Bedingung ist wahr..
+        /// </summary>
+        public static string ExceptionMessageTrueCondition {
+            get {
+                return ResourceManager.GetString("ExceptionMessageTrueCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Eine Wiedergabeliste aus einer Datei importieren.
         /// </summary>
         public static string FilePlaylistImport {

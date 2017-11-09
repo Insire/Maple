@@ -1,15 +1,15 @@
-﻿using DryIoc;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using DryIoc;
 using Maple.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Maple.Test
 {
     [TestClass]
-    public class DependencyInjectionFactoryTests
+    public sealed class DependencyInjectionFactoryTests
     {
 
         [TestMethod]
