@@ -90,6 +90,7 @@ namespace Maple
 
                 c.Register<ILoggingNotifcationService, LoggingNotifcationService>(Reuse.Singleton);
                 c.Register<ILoggingService, LoggingService>(Reuse.Singleton);
+                c.Register<ILoggingService, DetailLoggingService>(setup: Setup.Decorator);
             }
 
             void RegisterValidation()

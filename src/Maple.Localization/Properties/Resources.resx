@@ -321,4 +321,28 @@
   <data name="MediaItems" xml:space="preserve">
     <value>Wiedergabetitel</value>
   </data>
+  <data name="ExceptionMessageFalseCondition" xml:space="preserve">
+    <value>Die angegebene Bedingung ist falsch.</value>
+  </data>
+  <data name="ExceptionMessageTrueCondition" xml:space="preserve">
+    <value>Die angegebene Bedingung ist wahr.</value>
+  </data>
+  <data name="ExceptionMessageEqualValues" xml:space="preserve">
+    <value>Werte müssen gleich sein.</value>
+  </data>
+  <data name="ExceptionMessageNotEqualValues" xml:space="preserve">
+    <value>Werte dürfen nicht gleich sein.</value>
+  </data>
+  <data name="ExceptionMessageCollectionNullOrEmpty" xml:space="preserve">
+    <value>Liste darf nicht null oder leer sein.</value>
+  </data>
+  <data name="ExceptionMessageStringNullEmpyOrWhiteSpace" xml:space="preserve">
+    <value>String darf nicht null, leer oder nur Leerraum enthalten.</value>
+  </data>
+  <data name="ExceptionMessageMissingDirectory" xml:space="preserve">
+    <value>Folgendes Verzeichnis wurde nicht gefunden:</value>
+  </data>
+  <data name="ExceptionMessageMissingFile" xml:space="preserve">
+    <value>Folgende Datei wurde nicht gefunden:</value>
+  </data>
 </root>
