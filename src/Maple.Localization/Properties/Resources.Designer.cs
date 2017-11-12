@@ -286,6 +286,15 @@ namespace Maple.Localization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ein unerwarteter Fehler ist aufgetreten..
+        /// </summary>
+        public static string ExceptionMessageUnhandled {
+            get {
+                return ResourceManager.GetString("ExceptionMessageUnhandled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Eine Wiedergabeliste aus einer Datei importieren.
         /// </summary>
         public static string FilePlaylistImport {

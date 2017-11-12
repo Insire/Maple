@@ -36,6 +36,11 @@ namespace Maple
             var log = _container?.Resolve<ILoggingService>();
             var dialog = _container?.Resolve<DialogViewModel>();
 
+            log.Info(Localization.Properties.Resources.ExceptionMessageUnhandled);
+
+            if (e.Exception.InnerException != null)
+                log.Info(e.Exception.InnerException);
+
             log.Error(e.Exception);
 
             await dialog.ShowExceptionDialog(e.Exception).ConfigureAwait(true);

@@ -345,4 +345,7 @@
   <data name="ExceptionMessageMissingFile" xml:space="preserve">
     <value>Folgende Datei wurde nicht gefunden:</value>
   </data>
+  <data name="ExceptionMessageUnhandled" xml:space="preserve">
+    <value>Ein unerwarteter Fehler ist aufgetreten.</value>
+  </data>
 </root>

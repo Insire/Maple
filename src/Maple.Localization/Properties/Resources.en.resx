@@ -342,4 +342,7 @@
   <data name="ExceptionMessageStringNullEmpyOrWhiteSpace" xml:space="preserve">
     <value>String mus not be null, empty or whitespace.</value>
   </data>
+  <data name="ExceptionMessageUnhandled" xml:space="preserve">
+    <value>An unexpected error occured.</value>
+  </data>
 </root>

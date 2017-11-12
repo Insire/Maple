@@ -79,19 +79,19 @@
     <ApplicationIcon>..\Resources\Images\logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.1.1" />
+    <PackageReference Include="AutoMapper" Version="6.2.0" />
     <PackageReference Include="Costura.Fody" Version="1.6.2" />
     <PackageReference Include="DryIoc.dll">
       <Version>2.12.5</Version>
     </PackageReference>
     <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="FluentValidation" Version="7.2.1" />
-    <PackageReference Include="Fody" Version="2.2.0" />
+    <PackageReference Include="Fody" Version="2.2.1" />
     <PackageReference Include="gong-wpf-dragdrop" Version="1.1.0" />
     <PackageReference Include="Google.Apis" Version="1.30.0" />
     <PackageReference Include="Google.Apis.Auth" Version="1.30.0" />
     <PackageReference Include="Google.Apis.Core" Version="1.30.0" />
-    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.30.0.1006" />
+    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.30.0.1035" />
     <PackageReference Include="MahApps.Metro" Version="1.5.0" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="1.9.1" />
     <PackageReference Include="MaterialDesignColors" Version="1.1.3" />
