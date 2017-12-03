@@ -212,12 +212,14 @@ _Pvt_Extensions/
 ModelManifest.xml
 
 # Cake
-*Cake/Cake/tools/*
-*Cake/tools/Cake*
-*Cake/tools/Cake.Incubator*
-*Cake/tools/vswhere*
-*Cake/tools/nuget.exe
-*Cake/tools/packages.config.md5sum
+/tools/*
+/tools/Cake.Bakery/*
+/Cake/tools/Addins/*
+/Cake/tools/Cake/*
+/Cake/tools/Cake.Bakery/*
+/Cake/tools/vswhere*/*
+/Cake/tools/nuget.exe
+/Cake/tools/packages.config.md5sum
 
 # Merge
 *.orig
