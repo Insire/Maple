@@ -10,8 +10,6 @@
                                 xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf">
 
     <!--  Remember: the order of these styles matters, since they depend on each other. If one references for a style not yet declared, you get random RuntimeErrors  -->
-    <local:BrushRoundConverter x:Key="BrushRoundConverter" />
-    <local:MathMultipleConverter x:Key="MathMlpMultipleConverter" Operation="Multiply" />
 
     <!--#region Default values-->
     <sys:Double x:Key="DefaultSpacing">5</sys:Double>
@@ -361,7 +359,7 @@
                                         Grid.Column="1"
                                         Grid.ColumnSpan="2"
                                         Background="{TemplateBinding Foreground,
-                                                                     Converter={StaticResource BrushRoundConverter}}"
+                                                                     Converter={local:BrushRoundConverter}}"
                                         IsHitTestVisible="False"
                                         Opacity="0" />
 
@@ -369,7 +367,7 @@
                                         Grid.Column="1"
                                         Grid.ColumnSpan="2"
                                         Background="{TemplateBinding Foreground,
-                                                                     Converter={StaticResource BrushRoundConverter}}"
+                                                                     Converter={local:BrushRoundConverter}}"
                                         IsHitTestVisible="False"
                                         Opacity="0" />
 
@@ -381,7 +379,7 @@
                                                 HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                 VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                                                 Feedback="{TemplateBinding Foreground,
-                                                                           Converter={StaticResource BrushRoundConverter}}"
+                                                                           Converter={local:BrushRoundConverter}}"
                                                 Focusable="False"
                                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
                                         <ContentPresenter x:Name="PART_Header" ContentSource="Header" />
@@ -395,7 +393,7 @@
                                             Grid.ColumnSpan="2"
                                             Margin="-16 0 0 0">
                                     <StackPanel.Height>
-                                        <MultiBinding Converter="{StaticResource MathMlpMultipleConverter}">
+                                        <MultiBinding Converter="{local:MathMultipleConverter Operation=Multiply}">
                                             <Binding ElementName="ItemsHost" Path="ActualHeight" />
                                             <Binding ElementName="ScaleHost" Path="Scale" />
                                         </MultiBinding>

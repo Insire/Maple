@@ -178,11 +178,12 @@
       <DependentUpon>SplashScreen.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\BindingProxy.cs" />
-    <Compile Include="Utils\Converters\BrushRoundConverter.cs" />
-    <Compile Include="Utils\Converters\CaseConverter.cs" />
-    <Compile Include="Utils\Converters\MathMultipleConverter.cs" />
+    <Compile Include="UI\Base\ConverterMarkupExtension.cs" />
+    <Compile Include="UI\MarkupExtensions\BrushRoundConverter.cs" />
+    <Compile Include="UI\MarkupExtensions\CaseConverter.cs" />
+    <Compile Include="UI\MarkupExtensions\MathMultipleConverter.cs" />
+    <Compile Include="UI\UserControls\DebugConverter.cs" />
     <Compile Include="Utils\DependencyInjectionFactory.cs" />
-    <Compile Include="Utils\Converters\DebugConverter.cs" />
     <Compile Include="Utils\Mappers\MapperExtensions.cs" />
     <Compile Include="Utils\Mappers\Base\BaseMapper.cs" />
     <Compile Include="Utils\Mappers\MediaItemMapper.cs" />
@@ -191,8 +192,9 @@
     <Compile Include="UI\Interactivity\SelectedListBoxItemBehavior.cs" />
     <Compile Include="UI\Interactivity\SelectedTreeViewItemBehavior.cs" />
     <Compile Include="UI\ShellSettings.cs" />
-    <Compile Include="Utils\Converters\RadioButtonCheckedConverter.cs" />
-    <Compile Include="Utils\TranslationExtension.cs" />
+    <Compile Include="UI\MarkupExtensions\RadioButtonCheckedConverter.cs" />
+    <Compile Include="UI\Base\MultiConverterMarkupExtension.cs" />
+    <Compile Include="UI\MarkupExtensions\TranslationExtension.cs" />
     <Compile Include="Utils\Validation\BaseValidator.cs" />
     <Compile Include="Utils\Validation\MediaItemValidator.cs" />
     <Compile Include="Utils\Validation\MediaPlayerValidator.cs" />

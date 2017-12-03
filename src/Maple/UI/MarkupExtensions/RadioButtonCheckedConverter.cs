@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Globalization;
 using System.Windows.Data;
 
 namespace Maple
@@ -9,7 +7,7 @@ namespace Maple
     ///
     /// </summary>
     /// <seealso cref="System.Windows.Data.IValueConverter" />
-    public class DebugConverter : IValueConverter
+    public class RadioButtonCheckedConverter : ConverterMarkupExtension<RadioButtonCheckedConverter>, IValueConverter
     {
         /// <summary>
         /// Converts a value.
@@ -21,10 +19,9 @@ namespace Maple
         /// <returns>
         /// A converted value. If the method returns null, the valid null value is used.
         /// </returns>
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            Debugger.Break();
-            return value;
+            return value.Equals(parameter);
         }
 
         /// <summary>
@@ -37,10 +34,9 @@ namespace Maple
         /// <returns>
         /// A converted value. If the method returns null, the valid null value is used.
         /// </returns>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            Debugger.Break();
-            return value;
+            return value.Equals(true) ? parameter : Binding.DoNothing;
         }
     }
 }
