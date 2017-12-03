@@ -1,5 +1,5 @@
-﻿using NAudio.Wave;
-using System.IO;
+﻿using System.IO;
+using NAudio.Wave;
 
 namespace Maple
 {

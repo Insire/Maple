@@ -1,6 +1,6 @@
-﻿using Maple.Core;
-using System;
+﻿using System;
 using System.Diagnostics;
+using Maple.Core;
 
 namespace Maple
 {

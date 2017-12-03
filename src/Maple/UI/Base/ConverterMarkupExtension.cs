@@ -12,10 +12,7 @@ namespace Maple
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            if (_debugConverter == null)
-                _debugConverter = new T();
-
-            return _debugConverter;
+            return _debugConverter ?? (_debugConverter = new T());
         }
 
         public abstract object Convert(object value, Type targetType, object parameter, CultureInfo culture);

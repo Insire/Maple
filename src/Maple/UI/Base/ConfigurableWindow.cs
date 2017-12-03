@@ -1,9 +1,9 @@
-﻿using MahApps.Metro.Controls;
-using Maple.Core;
-using System;
+﻿using System;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
+using MahApps.Metro.Controls;
+using Maple.Core;
 
 namespace Maple
 {

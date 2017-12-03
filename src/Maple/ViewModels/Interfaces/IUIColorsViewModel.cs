@@ -1,5 +1,5 @@
-﻿using Maple.Core;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+using Maple.Core;
 
 namespace Maple
 {

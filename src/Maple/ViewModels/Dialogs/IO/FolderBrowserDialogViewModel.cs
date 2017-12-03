@@ -1,6 +1,6 @@
-﻿using Maple.Core;
+﻿using System;
+using Maple.Core;
 using Maple.Localization.Properties;
-using System;
 
 namespace Maple
 {
