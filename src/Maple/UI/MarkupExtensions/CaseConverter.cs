@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace Maple
 {
-    public class CaseConverter : IValueConverter
+    public class CaseConverter : ConverterMarkupExtension<CaseConverter>, IValueConverter
     {
         public CharacterCasing Case { get; set; }
 
@@ -13,7 +13,7 @@ namespace Maple
             Case = CharacterCasing.Upper;
         }
 
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value is string str)
             {
@@ -32,9 +32,9 @@ namespace Maple
             return string.Empty;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public override object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Binding.DoNothing;
         }
     }
 }

@@ -5,12 +5,12 @@ using System.Windows.Media;
 
 namespace Maple
 {
-    public class BrushRoundConverter : IValueConverter
+    public class BrushRoundConverter : ConverterMarkupExtension<BrushRoundConverter>, IValueConverter
     {
         public Brush HighValue { get; set; } = Brushes.White;
         public Brush LowValue { get; set; } = Brushes.Black;
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var solidColorBrush = value as SolidColorBrush;
             if (solidColorBrush == null)
@@ -23,7 +23,7 @@ namespace Maple
             return brightness < 123 ? LowValue : HighValue;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return Binding.DoNothing;
         }

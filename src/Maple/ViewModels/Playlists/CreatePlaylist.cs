@@ -1,7 +1,7 @@
-﻿using Maple.Core;
-using Maple.Youtube;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows.Input;
+using Maple.Core;
+using Maple.Youtube;
 
 namespace Maple
 {

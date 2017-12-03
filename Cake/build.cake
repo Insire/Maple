@@ -7,8 +7,6 @@
 
 var solutionPath ="../Maple.sln";
 var platform = "anyCPU";
-var testSettingsPath = "../.runsettings";
-var testResultsPath ="../testResults.trx";
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -154,7 +152,7 @@ Task("Build")
                 .SetMSBuildPlatform(MSBuildPlatform.Automatic);
 
         MSBuild(solutionPath, settings);
-    }); 
+    });
 
  Task("Run-Unit-Tests")
     .IsDependentOn("Build")
@@ -163,7 +161,7 @@ Task("Build")
         // http://cakebuild.net/blog/2017/03/vswhere-and-visual-studio-2017-support
         var testAssemblies = new List<FilePath>();
         var vsTest = Context.Tools.Resolve("vstest.console.exe");
-        
+
         var settings = new VSTestSettings()
         {
             Parallel = true,
@@ -177,7 +175,7 @@ Task("Build")
         foreach(var path in testsDirectories)
         {
             var files = GetFiles(path + "/*.Test.dll");
-            
+
             foreach(var file in files)
             {
                 testAssemblies.Add(file);
@@ -185,7 +183,7 @@ Task("Build")
             }
         }
 
-        VSTest(testAssemblies,settings);
+        VSTest(testAssemblies, settings);
     });
 
 //////////////////////////////////////////////////////////////////////

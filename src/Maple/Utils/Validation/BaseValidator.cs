@@ -1,7 +1,7 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 using Maple.Core;
 using Maple.Localization.Properties;
-using System;
 
 namespace Maple
 {
