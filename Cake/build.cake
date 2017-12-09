@@ -1,4 +1,5 @@
 #tool "nuget:?package=vswhere"
+#tool "nuget:?package=Cake.Bakery"
 
 #addin Cake.Incubator
 //////////////////////////////////////////////////////////////////////
