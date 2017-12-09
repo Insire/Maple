@@ -168,9 +168,7 @@ namespace Maple.Core
         private void PublishAsyncInternal<TMessage>(TMessage message, AsyncCallback callback)
             where TMessage : class, IMapleMessage
         {
-            Action publishAction = () => { PublishInternal(message); };
-
-            publishAction.BeginInvoke(callback, null);
+            ((Action)(() => { PublishInternal(message); })).BeginInvoke(callback, null);
         }
     }
 }

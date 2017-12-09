@@ -301,7 +301,7 @@ namespace Maple
         public async Task Open()
         {
             var tcs = new TaskCompletionSource<object>();
-            EventHandler lambda = (s, e) => tcs.TrySetResult(null);
+            void lambda(object s, EventArgs e) => tcs.TrySetResult(null);
             try
             {
                 DialogClosed += lambda;

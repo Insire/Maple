@@ -21,6 +21,8 @@ namespace Maple
         {
             _log = container.Log;
             _manager = container.LocalizationService;
+
+            _messenger.Subscribe<ViewModelSelectionChangedMessage<Culture>>(UpdateCulture);
         }
 
         private void SyncCulture()
@@ -59,6 +61,12 @@ namespace Maple
         {
             Items.AddRange(_manager.Languages.Select(p => new Culture(p, _messenger)).ToList());
             SelectedItem = Items.FirstOrDefault(p => p.Model.LCID == Core.Properties.Settings.Default.StartUpCulture.LCID) ?? Items.First(p => p.Model.TwoLetterISOLanguageName == "en");
+        }
+
+        private void UpdateCulture(ViewModelSelectionChangedMessage<Culture> obj)
+        {
+            if (obj.Content?.Model != null)
+                _manager.CurrentLanguage = obj.Content.Model;
         }
     }
 }

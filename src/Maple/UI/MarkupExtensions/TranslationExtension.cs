@@ -30,10 +30,10 @@ namespace Maple
         /// </returns>
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            if (TryGetIoCFrameWorkElement(serviceProvider, out IIocFrameworkElement element))
+            if (TryGetIoCFrameWorkElement(serviceProvider, out var element))
                 return ProvideValue(serviceProvider, element.TranslationManager);
 
-            if (TryGetTranslationManagerFromResources(serviceProvider, out ILocalizationService manager))
+            if (TryGetTranslationManagerFromResources(serviceProvider, out var manager))
                 return ProvideValue(serviceProvider, manager);
 
             Debug.WriteLine($"{nameof(TranslationExtension)} ProvideValue {Key} failed");

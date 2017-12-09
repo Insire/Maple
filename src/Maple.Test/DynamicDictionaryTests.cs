@@ -47,7 +47,9 @@ namespace Maple.Test
             dic["C"] = "C";
             dic["D"] = 1;
 
+#pragma warning disable IDE0039 // Use local function
             Func<int> someFunc = () => 1234;
+#pragma warning restore IDE0039 // Use local function
             dic.action = someFunc;
 
             ((int)dic.Count).ShouldBe(5);
