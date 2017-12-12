@@ -11,7 +11,7 @@ namespace Maple
     {
         private readonly Func<IMediaPlayer> _playerFactory;
         private readonly AudioDevices _devices;
-        private readonly DialogViewModel _dialog;
+        private readonly IDialogViewModel _dialog;
         private readonly Func<IMediaRepository> _repositoryFactory;
         private readonly IMediaPlayerMapper _mediaPlayerMapper;
         private readonly ILoggingNotifcationService _notificationService;
@@ -29,7 +29,7 @@ namespace Maple
                             Func<IMediaPlayer> playerFactory,
                             Func<IMediaRepository> repositoryFactory,
                             AudioDevices devices,
-                            DialogViewModel dialog)
+                            IDialogViewModel dialog)
             : base(container)
         {
             _playerFactory = playerFactory ?? throw new ArgumentNullException(nameof(playerFactory), $"{nameof(playerFactory)} {Resources.IsRequired}");

@@ -10,7 +10,7 @@ using Maple.Youtube;
 
 namespace Maple
 {
-    public class DialogViewModel : ObservableObject
+    public class DialogViewModel : ObservableObject, IDialogViewModel
     {
         private readonly IMessenger _messenger;
         private readonly ILocalizationService _translator;

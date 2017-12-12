@@ -51,7 +51,7 @@ namespace Maple
                 c.Register<Scenes>(Reuse.Singleton);
                 c.Register<AudioDevices>(Reuse.Singleton);
                 c.Register<ShellViewModel>(Reuse.Singleton);
-                c.Register<DialogViewModel>(Reuse.Singleton);
+                c.Register<IDialogViewModel, DialogViewModel>(Reuse.Singleton);
                 c.Register<StatusbarViewModel>(Reuse.Singleton);
                 c.Register<FileSystemViewModel>(Reuse.Singleton);
                 c.Register<OptionsViewModel>(Reuse.Singleton);

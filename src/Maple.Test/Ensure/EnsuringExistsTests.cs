@@ -7,7 +7,7 @@ using Shouldly;
 namespace Maple.Test
 {
     [TestClass]
-    internal sealed class EnsuringExistsTests
+    public sealed class EnsuringExistsTests
     {
         [TestMethod]
         public void When_ensuring_directoryInfo_exists()

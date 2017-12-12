@@ -21,8 +21,7 @@ namespace Maple
         private readonly ISequenceService _sequenceProvider;
         private readonly ILocalizationService _translator;
         private readonly object _itemsLock;
-        private readonly DialogViewModel _dialogViewModel;
-        private readonly CollectionViewSource _collectionViewSource;
+        private readonly IDialogViewModel _dialogViewModel;
 
         public EventHandler SelectionChanged;
         public EventHandler SelectionChanging;
@@ -184,7 +183,7 @@ namespace Maple
             private set { SetValue(ref _repeatModes, (IRangeObservableCollection<RepeatMode>)value); }
         }
 
-        public Playlist(ViewModelServiceContainer container, IValidator<Playlist> validator, DialogViewModel dialogViewModel, Data.Playlist model)
+        public Playlist(ViewModelServiceContainer container, IValidator<Playlist> validator, IDialogViewModel dialogViewModel, Data.Playlist model)
             : base(model, validator, container.Messenger)
         {
             using (BusyStack.GetToken())

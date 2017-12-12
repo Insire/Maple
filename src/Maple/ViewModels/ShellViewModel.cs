@@ -49,14 +49,14 @@ namespace Maple
             private set { SetValue(ref _translationManager, value); }
         }
 
-        private DialogViewModel _dialogViewModel;
+        private IDialogViewModel _dialogViewModel;
         /// <summary>
         /// Gets the dialog view model.
         /// </summary>
         /// <value>
         /// The dialog view model.
         /// </value>
-        public DialogViewModel DialogViewModel
+        public IDialogViewModel DialogViewModel
         {
             get { return _dialogViewModel; }
             private set { SetValue(ref _dialogViewModel, value); }
@@ -115,7 +115,7 @@ namespace Maple
         public ShellViewModel(ILocalizationService translationManager,
                                 Scenes scenes,
                                 StatusbarViewModel statusBarViewModel,
-                                DialogViewModel dialogViewModel,
+                                IDialogViewModel dialogViewModel,
                                 IPlaylistsViewModel playlists,
                                 IMediaPlayersViewModel mediaPlayers,
                                 OptionsViewModel optionsViewModel)

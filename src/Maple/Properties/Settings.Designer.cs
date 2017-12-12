@@ -13,13 +13,16 @@ namespace Maple.Properties
 
 
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.3.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.5.0.0")]
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
+    {
 
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
 
-        public static Settings Default {
-            get {
+        public static Settings Default
+        {
+            get
+            {
                 return defaultInstance;
             }
         }
@@ -27,11 +30,14 @@ namespace Maple.Properties
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool IsFirstRun {
-            get {
+        public bool IsFirstRun
+        {
+            get
+            {
                 return ((bool)(this["IsFirstRun"]));
             }
-            set {
+            set
+            {
                 this["IsFirstRun"] = value;
             }
         }
@@ -39,11 +45,14 @@ namespace Maple.Properties
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0,0")]
-        public global::System.Windows.Point ShellWindowLocation {
-            get {
+        public global::System.Windows.Point ShellWindowLocation
+        {
+            get
+            {
                 return ((global::System.Windows.Point)(this["ShellWindowLocation"]));
             }
-            set {
+            set
+            {
                 this["ShellWindowLocation"] = value;
             }
         }
@@ -51,11 +60,14 @@ namespace Maple.Properties
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0,0")]
-        public global::System.Windows.Size ShellWindowSize {
-            get {
+        public global::System.Windows.Size ShellWindowSize
+        {
+            get
+            {
                 return ((global::System.Windows.Size)(this["ShellWindowSize"]));
             }
-            set {
+            set
+            {
                 this["ShellWindowSize"] = value;
             }
         }
@@ -63,11 +75,14 @@ namespace Maple.Properties
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
-        public global::System.Windows.WindowState ShellWindowState {
-            get {
+        public global::System.Windows.WindowState ShellWindowState
+        {
+            get
+            {
                 return ((global::System.Windows.WindowState)(this["ShellWindowState"]));
             }
-            set {
+            set
+            {
                 this["ShellWindowState"] = value;
             }
         }
@@ -75,11 +90,14 @@ namespace Maple.Properties
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string SwatchName {
-            get {
+        public string SwatchName
+        {
+            get
+            {
                 return ((string)(this["SwatchName"]));
             }
-            set {
+            set
+            {
                 this["SwatchName"] = value;
             }
         }
@@ -87,11 +105,14 @@ namespace Maple.Properties
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string AccentName {
-            get {
+        public string AccentName
+        {
+            get
+            {
                 return ((string)(this["AccentName"]));
             }
-            set {
+            set
+            {
                 this["AccentName"] = value;
             }
         }
@@ -99,11 +120,14 @@ namespace Maple.Properties
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool UseDarkTheme {
-            get {
+        public bool UseDarkTheme
+        {
+            get
+            {
                 return ((bool)(this["UseDarkTheme"]));
             }
-            set {
+            set
+            {
                 this["UseDarkTheme"] = value;
             }
         }

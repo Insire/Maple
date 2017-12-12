@@ -13,7 +13,7 @@ namespace Maple
     public sealed class PlaylistMapper : BaseMapper<Playlist>, IPlaylistMapper
     {
         private readonly IMediaItemMapper _mediaItemMapper;
-        private readonly DialogViewModel _dialogViewModel;
+        private readonly IDialogViewModel _dialogViewModel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlaylistMapper"/> class.
