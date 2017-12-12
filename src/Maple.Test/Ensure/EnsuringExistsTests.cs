@@ -15,7 +15,7 @@ namespace Maple.Test
             var nonExistingDirectoryPath = Path.GetRandomFileName();
             var nonExistingDirInfo = new DirectoryInfo(nonExistingDirectoryPath);
 
-            Should.Throw<DirectoryNotFoundException>(() => Ensure.Exists(nonExistingDirInfo)).Message.ShouldBe($"{Resources.ExceptionMessageMissingDirectory} {nonExistingDirInfo.FullName}");
+            Should.Throw<DirectoryNotFoundException>(() => Ensure.Exists(nonExistingDirInfo)).Message.ShouldBe($"{Resources.ExceptionMessageMissingDirectory}{nonExistingDirInfo.FullName}");
 
             nonExistingDirInfo.Create();
 
@@ -37,7 +37,7 @@ namespace Maple.Test
             var nonExistingFilePath = Path.GetRandomFileName();
             var nonExistingFileInfo = new FileInfo(nonExistingFilePath);
 
-            Should.Throw<FileNotFoundException>(() => Ensure.Exists(nonExistingFileInfo)).Message.ShouldBe($"{Resources.ExceptionMessageMissingFile} {nonExistingFileInfo.FullName}");
+            Should.Throw<FileNotFoundException>(() => Ensure.Exists(nonExistingFileInfo)).Message.ShouldBe($"{Resources.ExceptionMessageMissingFile}{nonExistingFileInfo.FullName}");
 
             nonExistingFileInfo.Create();
 

@@ -15,7 +15,7 @@ namespace Maple.Test.ViewModels.Playlists
         private static IContainer _container;
 
         [ClassInitialize]
-        public static async Task TestInitialize()
+        public static async Task ClassInitialize(TestContext context)
         {
             _container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
             _container.UseInstance(CreateViewModelServiceContainer());

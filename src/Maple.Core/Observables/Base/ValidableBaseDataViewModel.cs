@@ -105,7 +105,7 @@ namespace Maple.Core
             else
                 Errors.Add(propertyName, result);
 
-            if (hadErrors != result.IsValid)
+            if (hadErrors != (result?.IsValid ?? false))
                 return;
 
             OnErrorsChanged(propertyName);

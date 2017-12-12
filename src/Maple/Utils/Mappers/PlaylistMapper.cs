@@ -19,7 +19,7 @@ namespace Maple
         /// Initializes a new instance of the <see cref="PlaylistMapper"/> class.
         /// </summary>
         /// <param name="dialogViewModel">The dialog view model.</param>
-        public PlaylistMapper(ViewModelServiceContainer container, IMediaItemMapper mediaItemMapper, DialogViewModel dialogViewModel, IValidator<Playlist> validator)
+        public PlaylistMapper(ViewModelServiceContainer container, IMediaItemMapper mediaItemMapper, IDialogViewModel dialogViewModel, IValidator<Playlist> validator)
             : base(container, validator)
         {
             _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel), $"{nameof(dialogViewModel)} {Resources.IsRequired}");
