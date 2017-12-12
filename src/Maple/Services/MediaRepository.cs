@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Maple.Core;
@@ -181,6 +182,7 @@ namespace Maple
             }
         }
 
+        [DebuggerStepThrough]
         public void Dispose()
         {
             Dispose(true);

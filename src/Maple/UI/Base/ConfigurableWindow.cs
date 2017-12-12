@@ -7,10 +7,6 @@ using Maple.Core;
 
 namespace Maple
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <seealso cref="MahApps.Metro.Controls.MetroWindow" />
     public abstract class ConfigurableWindow : MetroWindow
     {
         private bool _isLoaded;
@@ -103,8 +99,8 @@ namespace Maple
         void ApplySettings()
         {
             var size = _settings.WindowSize;
-            Width = size.Width;
-            Height = size.Height;
+            SetCurrentValue(WidthProperty, size.Width);
+            SetCurrentValue(HeightProperty, size.Height);
 
             var loccation = _settings.WindowLocation;
 
@@ -122,15 +118,15 @@ namespace Maple
             {
                 WindowStartupLocation = WindowStartupLocation.Manual;
 
-                Left = loccation.X;
-                Top = loccation.Y;
+                SetCurrentValue(LeftProperty, loccation.X);
+                SetCurrentValue(TopProperty, loccation.Y);
 
                 // We need to wait until the HWND window is initialized before
                 // setting the state, to ensure that this works correctly on
                 // a multi-monitor system.  Thanks to Andrew Smith for this fix.
                 SourceInitialized += delegate
                 {
-                    WindowState = _settings.WindowState;
+                    SetCurrentValue(WindowStateProperty, _settings.WindowState);
                 };
             }
         }

@@ -6,12 +6,17 @@
                       xmlns:interfaces="clr-namespace:Maple.Interfaces;assembly=Maple.Interfaces"
                       xmlns:local="clr-namespace:Maple"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding MediaPlayers.LoadCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
+
     <local:IoCUserControl.Resources>
+        <local:BindingProxy x:Key="PlaylistRemoveCommandProxy" Data="{Binding MediaPlayers.SelectedItem.Playlist.RemoveCommand}" />
+        <local:BindingProxy x:Key="PlaylistRemoveRangeCommandProxy" Data="{Binding MediaPlayers.SelectedItem.Playlist.RemoveRangeCommand}" />
+
         <Style x:Key="BaseRepeatModeStyle"
                BasedOn="{StaticResource MaterialDesignFlatToggleButton}"
                TargetType="{x:Type ToggleButton}">
@@ -76,6 +81,22 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <ContextMenu x:Key="RowMenu" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+            <MenuItem Command="{Binding Data, Source={StaticResource PlaylistRemoveCommandProxy}}"
+                      CommandParameter="{Binding}"
+                      Header="{local:Translation Remove}">
+                <MenuItem.Icon>
+                    <icons:PackIconMaterial Kind="PlaylistMinus" />
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+
+        <Style x:Key="DefaultRowStyle"
+               BasedOn="{StaticResource {x:Type DataGridRow}}"
+               TargetType="{x:Type DataGridRow}">
+            <Setter Property="ContextMenu" Value="{StaticResource RowMenu}" />
+        </Style>
     </local:IoCUserControl.Resources>
 
     <!--  DataContext ShellViewModel  -->
@@ -114,7 +135,9 @@
                               CanUserResizeRows="False"
                               IsReadOnly="True"
                               ItemsSource="{Binding Playlist.View}"
+                              RowStyle="{StaticResource DefaultRowStyle}"
                               SelectedItem="{Binding Playlist.SelectedItem}"
+
                               SelectionMode="Extended">
                         <DataGrid.ContextMenu>
                             <ContextMenu>
@@ -132,11 +155,6 @@
                                     <MenuItem Command="{Binding LoadFromUrlCommand}" Header="{local:Translation YoutubePlaylistImport}">
                                         <MenuItem.Icon>
                                             <icons:PackIconMaterial Kind="YoutubePlay" />
-                                        </MenuItem.Icon>
-                                    </MenuItem>
-                                    <MenuItem Command="{Binding RemoveCommand}" Header="{local:Translation Remove}">
-                                        <MenuItem.Icon>
-                                            <icons:PackIconMaterial Kind="PlaylistMinus" />
                                         </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Command="{Binding ClearCommand}" Header="{local:Translation Clear}">

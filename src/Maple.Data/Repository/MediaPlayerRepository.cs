@@ -19,7 +19,8 @@ namespace Maple.Data
         private MediaPlayer GetMainMediaPlayerInternal(PlaylistContext context)
         {
             return GetEntities(context).Include(p => p.Playlist)
-                             .FirstOrDefault(p => p.IsPrimary);
+                                        .Include(p => p.Playlist.MediaItems)
+                                        .FirstOrDefault(p => p.IsPrimary);
         }
 
         public Task<IReadOnlyCollection<MediaPlayer>> GetOptionalMediaPlayersAsync()

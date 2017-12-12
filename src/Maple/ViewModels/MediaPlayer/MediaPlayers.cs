@@ -86,17 +86,17 @@ namespace Maple
         public override async Task LoadAsync()
         {
             _notificationService.Info($"{_translationService.Translate(nameof(Resources.Loading))} {_translationService.Translate(nameof(Resources.MediaPlayers))}");
-            Items.Clear();
+            Clear();
 
             using (var context = _repositoryFactory())
             {
                 var main = await context.GetMainMediaPlayerAsync().ConfigureAwait(true);
 
-                Items.Add(main);
+                Add(main);
                 SelectedItem = main;
 
                 var others = await context.GetAllOptionalMediaPlayersAsync().ConfigureAwait(true);
-                Items.AddRange(others);
+                AddRange(others);
             }
 
             OnLoaded();

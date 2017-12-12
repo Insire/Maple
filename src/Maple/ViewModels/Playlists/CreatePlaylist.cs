@@ -75,7 +75,7 @@ namespace Maple
                                                   .ConfigureAwait(true);
 
                 if (Result.Count > 0 && Result.Playlists?.Count > 0)
-                    Items.AddRange(_mapper.GetMany(Result.Playlists));
+                    AddRange(_mapper.GetMany(Result.Playlists));
             }
         }
 

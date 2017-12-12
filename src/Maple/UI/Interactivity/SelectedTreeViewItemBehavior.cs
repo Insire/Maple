@@ -32,13 +32,13 @@ namespace Maple
                                                                                 nameof(SelectedItem),
                                                                                 typeof(object),
                                                                                 typeof(SelectedTreeViewItemBehavior),
-                                                                                new UIPropertyMetadata(null, OnSelectedItemChanged));
+                                                                                new UIPropertyMetadata(default(object), OnSelectedItemChanged));
 
         private static void OnSelectedItemChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             var item = e.NewValue as TreeViewItem;
 
-            item?.SetValue(TreeViewItem.IsSelectedProperty, true);
+            item?.SetCurrentValue(TreeViewItem.IsSelectedProperty, true);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Maple
 
         private void OnTreeViewSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            SelectedItem = e.NewValue;
+            SetCurrentValue(SelectedItemProperty, e.NewValue);
         }
     }
 }

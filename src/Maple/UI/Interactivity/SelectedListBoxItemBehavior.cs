@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interactivity;
@@ -10,14 +9,6 @@ namespace Maple
 {
     public class SelectedListBoxItemBehavior : Behavior<ListBox>
     {
-        private static Dictionary<object, ListBox> _cache;
-        private static ListBox _currentSource;
-
-        static SelectedListBoxItemBehavior()
-        {
-            _cache = new Dictionary<object, ListBox>();
-        }
-
         public IRangeObservableCollection<object> SelectedItems
         {
             get { return (IRangeObservableCollection<object>)GetValue(SelectedItemsProperty); }
@@ -25,16 +16,16 @@ namespace Maple
         }
 
         public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register(
-                                                                                nameof(SelectedItems),
-                                                                                typeof(RangeObservableCollection<object>),
-                                                                                typeof(SelectedListBoxItemBehavior),
-                                                                                new UIPropertyMetadata(new RangeObservableCollection<object>(), OnSelectionChanged));
+            nameof(SelectedItems),
+            typeof(IRangeObservableCollection<object>),
+            typeof(SelectedListBoxItemBehavior),
+            new UIPropertyMetadata(new RangeObservableCollection<object>(), OnSelectedItemsChanged)); // providing a new RangeObservableCollection is actually a bug here, as its the same collection across all instances of this behavior
 
-        private static void OnSelectionChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        private static void OnSelectedItemsChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             var item = e.NewValue as ListBoxItem;
 
-            item?.SetValue(ListBoxItem.IsSelectedProperty, true);
+            item?.SetCurrentValue(ListBoxItem.IsSelectedProperty, true);
         }
 
         protected override void OnAttached()
@@ -47,12 +38,6 @@ namespace Maple
 
         private void SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!ReferenceEquals(_currentSource, e.Source))
-            {
-                SelectedItems.Clear();
-                _currentSource = e.Source as ListBox;
-            }
-
             SelectedItems?.RemoveRange(e.RemovedItems.Cast<object>());
             SelectedItems?.AddRange(e.AddedItems.Cast<object>());
         }

@@ -49,7 +49,7 @@ namespace Maple
             if (PackIcon.TryGet(PackIconKind.ApplicationIcon, out data))
             {
                 var geo = Geometry.Parse(data);
-                Icon = SetImage(geo, e.Content);
+                SetCurrentValue(IconProperty, SetImage(geo, e.Content));
             }
         }
 

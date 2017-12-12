@@ -13,7 +13,7 @@ namespace Maple
         public AudioDevices(ILoggingService log, IMessenger messenger)
             : base(messenger)
         {
-            Items.AddRange(PlaybackDeviceFactory.GetAudioDevices(log).ToList());
+            AddRange(PlaybackDeviceFactory.GetAudioDevices(log).ToList());
         }
     }
 }

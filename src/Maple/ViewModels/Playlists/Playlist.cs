@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -21,6 +22,7 @@ namespace Maple
         private readonly ILocalizationService _translator;
         private readonly object _itemsLock;
         private readonly DialogViewModel _dialogViewModel;
+        private readonly CollectionViewSource _collectionViewSource;
 
         public EventHandler SelectionChanged;
         public EventHandler SelectionChanging;
@@ -37,9 +39,9 @@ namespace Maple
         /// </value>
         public Stack<int> History { get; private set; }
 
-        public ICommand LoadFromFileCommand { get; private set; }
-        public ICommand LoadFromFolderCommand { get; private set; }
-        public ICommand LoadFromUrlCommand { get; private set; }
+        public IAsyncCommand LoadFromFileCommand { get; private set; }
+        public IAsyncCommand LoadFromFolderCommand { get; private set; }
+        public IAsyncCommand LoadFromUrlCommand { get; private set; }
         public ICommand RemoveRangeCommand { get; protected set; }
         public ICommand RemoveCommand { get; protected set; }
         public ICommand ClearCommand { get; protected set; }
@@ -72,7 +74,7 @@ namespace Maple
 
         public MediaItem this[int index]
         {
-            get { return Items[index]; }
+            get { return _items[index]; }
         }
 
         private ICollectionView _view;
@@ -84,10 +86,10 @@ namespace Maple
 
         private IRangeObservableCollection<MediaItem> _items;
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public IRangeObservableCollection<MediaItem> Items
+        public IReadOnlyCollection<MediaItem> Items
         {
-            get { return _items; }
-            private set { SetValue(ref _items, value); }
+            get { return (IReadOnlyCollection<MediaItem>)_items; }
+            private set { SetValue(ref _items, (IRangeObservableCollection<MediaItem>)value); }
         }
 
         private MediaItem _selectedItem;
@@ -104,7 +106,7 @@ namespace Maple
             {
                 SetValue(ref _selectedItem, value,
                     OnChanging: () => Messenger.Publish(new ViewModelSelectionChangingMessage<MediaItem>(Items, _selectedItem)),
-                    OnChanged: () => Messenger.Publish(new ViewModelSelectionChangedMessage<MediaItem>(Items, value)));
+                    OnChanged: () => Messenger.Publish(new ViewModelSelectionChangedMessage<MediaItem>(_items, value)));
             }
         }
 
@@ -176,10 +178,10 @@ namespace Maple
         }
 
         private IRangeObservableCollection<RepeatMode> _repeatModes;
-        public IRangeObservableCollection<RepeatMode> RepeatModes
+        public IReadOnlyCollection<RepeatMode> RepeatModes
         {
-            get { return _repeatModes; }
-            private set { SetValue(ref _repeatModes, value); }
+            get { return (IReadOnlyCollection<RepeatMode>)_repeatModes; }
+            private set { SetValue(ref _repeatModes, (IRangeObservableCollection<RepeatMode>)value); }
         }
 
         public Playlist(ViewModelServiceContainer container, IValidator<Playlist> validator, DialogViewModel dialogViewModel, Data.Playlist model)
@@ -202,16 +204,17 @@ namespace Maple
                 History = new Stack<int>();
 
                 Items = new RangeObservableCollection<MediaItem>();
-                Items.CollectionChanged += (o, e) => OnPropertyChanged(nameof(Count));
+                _items.CollectionChanged += (o, e) => OnPropertyChanged(nameof(Count));
+
                 BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
                 View = CollectionViewSource.GetDefaultView(Items);
                 OnPropertyChanged(nameof(Count));
 
-                LoadFromFileCommand = new AsyncRelayCommand(LoadFromFile, () => CanLoadFromFile());
-                LoadFromFolderCommand = new AsyncRelayCommand(LoadFromFolder, () => CanLoadFromFolder());
-                LoadFromUrlCommand = new AsyncRelayCommand(LoadFromUrl, () => CanLoadFromUrl());
+                LoadFromFileCommand = AsyncCommand.Create(LoadFromFile, () => CanLoadFromFile());
+                LoadFromFolderCommand = AsyncCommand.Create(LoadFromFolder, () => CanLoadFromFolder());
+                LoadFromUrlCommand = AsyncCommand.Create(LoadFromUrl, () => CanLoadFromUrl());
 
-                RemoveCommand = new RelayCommand<MediaItem>(Remove, CanRemove);
+                RemoveCommand = new RelayCommand<object>(Remove, CanRemove);
                 RemoveRangeCommand = new RelayCommand<IList>(RemoveRange, CanRemoveRange);
                 ClearCommand = new RelayCommand(() => Clear(), CanClear);
 
@@ -234,7 +237,7 @@ namespace Maple
             using (BusyStack.GetToken())
             {
                 var items = await _dialogViewModel.ShowUrlParseDialog().ConfigureAwait(true);
-                Items.AddRange(items);
+                AddRange(items);
             }
         }
 
@@ -243,7 +246,7 @@ namespace Maple
             return !IsBusy;
         }
 
-        private Task LoadFromFolder()
+        private async Task LoadFromFolder(CancellationToken token)
         {
             using (BusyStack.GetToken())
             {
@@ -253,7 +256,10 @@ namespace Maple
                     MultiSelection = false,
                     Title = _translator.Translate(nameof(Resources.SelectFolder)),
                 };
-                return _dialogViewModel.ShowFolderBrowserDialog(options);
+
+                (var Result, var MediaItems) = await _dialogViewModel.ShowMediaItemFolderSelectionDialog(options, token).ConfigureAwait(true);
+                if (Result)
+                    AddRange(MediaItems);
             }
         }
 
@@ -262,7 +268,7 @@ namespace Maple
             return !IsBusy;
         }
 
-        private Task LoadFromFile()
+        private async Task LoadFromFile(CancellationToken token)
         {
             using (BusyStack.GetToken())
             {
@@ -272,7 +278,10 @@ namespace Maple
                     MultiSelection = false,
                     Title = _translator.Translate(nameof(Resources.SelectFiles)),
                 };
-                return _dialogViewModel.ShowFileBrowserDialog(options);
+
+                (var Result, var MediaItems) = await _dialogViewModel.ShowMediaItemSelectionDialog(options, token).ConfigureAwait(true);
+                if (Result)
+                    AddRange(MediaItems);
             }
         }
 
@@ -313,7 +322,7 @@ namespace Maple
         private void AddInternal(MediaItem item)
         {
             item.Playlist = this;
-            Items.Add(item);
+            _items.Add(item);
             Model.MediaItems.Add(item.Model);
         }
 
@@ -338,6 +347,11 @@ namespace Maple
             }
         }
 
+        public void Remove(object item)
+        {
+            Remove(item as MediaItem);
+        }
+
         public virtual void Remove(MediaItem item)
         {
             using (BusyStack.GetToken())
@@ -349,7 +363,7 @@ namespace Maple
 
         private void RemoveInternal(MediaItem item)
         {
-            Items.Remove(item);
+            _items.Remove(item);
             item.Model.IsDeleted = true;
         }
 
@@ -377,12 +391,16 @@ namespace Maple
                 Remove(item);
         }
 
-        public virtual bool CanRemove(MediaItem item)
+        public virtual bool CanRemove(object item)
         {
-            if (Items == null || Items.Count == 0 || item as MediaItem == null)
+            if (Items == null || Items.Count == 0)
                 return false;
 
-            return Items.Contains(item) && !IsBusy;
+            var mediaItem = item as MediaItem;
+            if (mediaItem == null)
+                return false;
+
+            return Items.Contains(mediaItem) && !IsBusy;
         }
 
         protected virtual bool CanRemoveRange(IEnumerable<MediaItem> items)

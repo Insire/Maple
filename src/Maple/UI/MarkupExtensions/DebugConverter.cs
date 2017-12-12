@@ -5,6 +5,7 @@ using System.Windows.Data;
 
 namespace Maple
 {
+    [ValueConversion(typeof(object), typeof(object))]
     public class DebugConverter : ConverterMarkupExtension<DebugConverter>, IValueConverter
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -12,7 +13,6 @@ namespace Maple
             Debugger.Break();
             return value;
         }
-
 
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
