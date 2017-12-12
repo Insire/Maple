@@ -130,7 +130,7 @@ namespace Maple
             {
                 AddRange(content);
 
-                SelectedItem = Items[0];
+                SelectedItem = this[0];
 
                 using (View.DeferRefresh())
                 {

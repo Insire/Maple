@@ -5,6 +5,7 @@ using System.Windows.Media;
 
 namespace Maple
 {
+    [ValueConversion(typeof(SolidColorBrush), typeof(Brush))]
     public class BrushRoundConverter : ConverterMarkupExtension<BrushRoundConverter>, IValueConverter
     {
         public Brush HighValue { get; set; } = Brushes.White;

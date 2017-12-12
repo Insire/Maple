@@ -138,7 +138,9 @@ namespace Maple
             _updatedOn = model.UpdatedOn;
 
             if (AudioDevices.Items.Count > 0)
-                Player.AudioDevice = AudioDevices.Items.FirstOrDefault(p => p.Name == Model.DeviceName) ?? AudioDevices.Items[0];
+                Player.AudioDevice = AudioDevices.Items.FirstOrDefault(p => p.Name == Model.DeviceName) ?? AudioDevices[0];
+
+            Playlist = playlist;
 
             InitializeSubscriptions();
             InitiliazeCommands();
@@ -193,8 +195,10 @@ namespace Maple
 
         private void OnPlaylistChanged()
         {
-            Model.Playlist.Id = Playlist.Id;
+            Model.Playlist = Playlist.Model;
             // TODO: maybe add optional endless playback
+
+            OnPropertyChanged(nameof(Playlist.View));
 
             UpdatePlaylistCommands();
         }
@@ -271,7 +275,7 @@ namespace Maple
                 else
                     mediaItem.Sequence = 0;
 
-                Playlist.Items.Add(mediaItem);
+                Playlist.Add(mediaItem);
             }
         }
 

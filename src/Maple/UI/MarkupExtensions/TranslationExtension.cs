@@ -8,6 +8,7 @@ using Maple.Core;
 
 namespace Maple
 {
+    [ValueConversion(typeof(string), typeof(string))]
     public sealed class TranslationExtension : MarkupExtension
     {
         public TranslationExtension(string key)

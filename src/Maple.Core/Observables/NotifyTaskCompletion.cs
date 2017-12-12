@@ -1,83 +1,70 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
-using Maple.Interfaces;
 using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
-    public sealed class NotifyTaskCompletion<TResult> : ObservableObject
+    public sealed class NotifyTaskCompletion<TResult> : INotifyPropertyChanged
     {
-        private readonly ILoggingService _log;
-        private readonly Task<TResult> _task;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public AggregateException Exception { get { return _task.Exception; } }
-        public TaskStatus Status { get { return _task.Status; } }
+        public Task<TResult> Task { get; private set; }
+        public Task TaskCompletion { get; private set; }
+        public TResult Result => (Task.Status == TaskStatus.RanToCompletion) ? Task.Result : default(TResult);
 
-        public bool IsCompleted { get { return _task.IsCompleted; } }
-        public bool IsNotCompleted { get { return !_task.IsCompleted; } }
-        public bool IsCanceled { get { return _task.IsCanceled; } }
-        public bool IsFaulted { get { return _task.IsFaulted; } }
+        public TaskStatus Status { get { return Task.Status; } }
+        public bool IsCompleted { get { return Task.IsCompleted; } }
+        public bool IsNotCompleted { get { return !Task.IsCompleted; } }
+        public bool IsSuccessfullyCompleted => Task.Status == TaskStatus.RanToCompletion;
 
-        public NotifyTaskCompletion(Task<TResult> task, ILoggingService log)
+        public bool IsCanceled { get { return Task.IsCanceled; } }
+        public bool IsFaulted { get { return Task.IsFaulted; } }
+        public AggregateException Exception { get { return Task.Exception; } }
+        public Exception InnerException => Exception?.InnerException;
+        public string ErrorMessage => InnerException?.Message;
+
+        public NotifyTaskCompletion(Task<TResult> task)
         {
-            _task = task ?? throw new ArgumentNullException(nameof(task), $"{nameof(task)} {Resources.IsRequired}");
-            _log = log ?? throw new ArgumentNullException(nameof(log), $"{nameof(log)} {Resources.IsRequired}");
-
-            if (!task.IsCompleted)
-            {
-                var _ = WatchTaskAsync(task);
-            }
+            Task = task ?? throw new ArgumentNullException(nameof(task), $"{nameof(task)} {Resources.IsRequired}");
+            TaskCompletion = WatchTaskAsync(task);
         }
 
         private async Task WatchTaskAsync(Task task)
         {
             try
             {
-                await task.ConfigureAwait(false);
+                await task.ConfigureAwait(true);
             }
-            catch (Exception ex)
+            catch
             {
-                _log.Error(ex);
+                // no need to catch, since we capture the exception through the property task
             }
 
-            OnPropertyChanged(nameof(Status));
-            OnPropertyChanged(nameof(IsCompleted));
-            OnPropertyChanged(nameof(IsNotCompleted));
+            var propertyChanged = PropertyChanged;
+            if (propertyChanged == null)
+                return;
+
+            propertyChanged(this, new PropertyChangedEventArgs(nameof(Status)));
+            propertyChanged(this, new PropertyChangedEventArgs(nameof(IsCompleted)));
+            propertyChanged(this, new PropertyChangedEventArgs(nameof(IsNotCompleted)));
 
             if (task.IsCanceled)
-                OnPropertyChanged(nameof(IsCanceled));
+            {
+                propertyChanged(this, new PropertyChangedEventArgs(nameof(IsCanceled)));
+            }
             else if (task.IsFaulted)
             {
-                OnPropertyChanged(nameof(IsFaulted));
-                OnPropertyChanged(nameof(Exception));
-                OnPropertyChanged(nameof(InnerException));
-                OnPropertyChanged(nameof(ErrorMessage));
+                propertyChanged(this, new PropertyChangedEventArgs(nameof(IsFaulted)));
+                propertyChanged(this, new PropertyChangedEventArgs(nameof(Exception)));
+                propertyChanged(this, new PropertyChangedEventArgs(nameof(InnerException)));
+                propertyChanged(this, new PropertyChangedEventArgs(nameof(ErrorMessage)));
             }
             else
             {
-                OnPropertyChanged(nameof(IsSuccessfullyCompleted));
-                OnPropertyChanged(nameof(Result));
+                propertyChanged(this, new PropertyChangedEventArgs(nameof(IsSuccessfullyCompleted)));
+                propertyChanged(this, new PropertyChangedEventArgs(nameof(Result)));
             }
-        }
-
-        public TResult Result
-        {
-            get { return (_task.Status == TaskStatus.RanToCompletion) ? _task.Result : default(TResult); }
-        }
-
-        public bool IsSuccessfullyCompleted
-        {
-            get { return _task.Status == TaskStatus.RanToCompletion; }
-        }
-
-        public Exception InnerException
-        {
-            get { return Exception?.InnerException; }
-        }
-
-        public string ErrorMessage
-        {
-            get { return InnerException?.Message; }
         }
     }
 }

@@ -51,7 +51,7 @@ namespace Maple
                                               .ConfigureAwait(true);
 
             if (Result.Count > 0 && Result.MediaItems?.Count > 0)
-                Items.AddRange(_mapper.GetMany(Result.MediaItems));
+                AddRange(_mapper.GetMany(Result.MediaItems));
         }
 
         private bool CanParse()

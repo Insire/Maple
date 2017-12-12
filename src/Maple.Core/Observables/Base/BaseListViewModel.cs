@@ -34,7 +34,7 @@ namespace Maple.Core
 
                 _messenger.Publish(new ViewModelSelectionChangingMessage<TViewModel>(Items, _selectedItem));
                 _selectedItem = value;
-                _messenger.Publish(new ViewModelSelectionChangedMessage<TViewModel>(Items, _selectedItem));
+                _messenger.Publish(new ViewModelSelectionChangedMessage<TViewModel>(_items, _selectedItem));
 
                 OnPropertyChanged();
             }
@@ -45,10 +45,10 @@ namespace Maple.Core
         /// Contains all the UI relevant Models and notifies about changes in the collection and inside the Models themself
         /// </summary>
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public IRangeObservableCollection<TViewModel> Items
+        public IReadOnlyCollection<TViewModel> Items
         {
-            get { return _items; }
-            private set { SetValue(ref _items, value); }
+            get { return (IReadOnlyCollection<TViewModel>)_items; }
+            private set { SetValue(ref _items, (IRangeObservableCollection<TViewModel>)value); }
         }
 
         private ICollectionView _view;
@@ -75,7 +75,7 @@ namespace Maple.Core
         /// <returns></returns>
         public TViewModel this[int index]
         {
-            get { return Items[index]; }
+            get { return _items[index]; }
         }
 
         public ICommand RemoveRangeCommand { get; private set; }
@@ -90,7 +90,7 @@ namespace Maple.Core
 
 
             Items = new RangeObservableCollection<TViewModel>();
-            Items.CollectionChanged += ItemsCollectionChanged;
+            _items.CollectionChanged += ItemsCollectionChanged;
 
             View = CollectionViewSource.GetDefaultView(Items);
 
@@ -105,13 +105,13 @@ namespace Maple.Core
         protected BaseListViewModel(IList<TViewModel> items, IMessenger messenger)
             : this(messenger)
         {
-            Items.AddRange(items);
+            AddRange(items);
         }
 
         protected BaseListViewModel(IEnumerable<TViewModel> items, IMessenger messenger)
             : this(messenger)
         {
-            Items.AddRange(items);
+            AddRange(items);
         }
 
         private void InitializeCommands()
@@ -143,7 +143,7 @@ namespace Maple.Core
                 throw new ArgumentNullException(nameof(item));
 
             using (_busyStack.GetToken())
-                Items.Add(item);
+                _items.Add(item);
         }
 
         /// <param name="items">The items.</param>
@@ -154,7 +154,7 @@ namespace Maple.Core
                 throw new ArgumentNullException(nameof(items));
 
             using (_busyStack.GetToken())
-                Items.AddRange(items);
+                _items.AddRange(items);
         }
 
         protected virtual bool CanAdd(TViewModel item)
@@ -169,7 +169,7 @@ namespace Maple.Core
         public virtual void Remove(TViewModel item)
         {
             using (_busyStack.GetToken())
-                Items.Remove(item);
+                _items.Remove(item);
         }
 
         /// <param name="items">The items.</param>
@@ -180,7 +180,7 @@ namespace Maple.Core
                 throw new ArgumentNullException(nameof(items));
 
             using (_busyStack.GetToken())
-                Items.RemoveRange(items);
+                _items.RemoveRange(items);
         }
 
         /// <param name="items">The items.</param>
@@ -191,7 +191,7 @@ namespace Maple.Core
                 throw new ArgumentNullException(nameof(items));
 
             using (_busyStack.GetToken())
-                Items.RemoveRange(items.Cast<TViewModel>());
+                _items.RemoveRange(items.Cast<TViewModel>());
         }
 
         /// <summary>
@@ -235,7 +235,7 @@ namespace Maple.Core
             SelectedItem = default(TViewModel);
 
             using (_busyStack.GetToken())
-                Items.Clear();
+                _items.Clear();
         }
 
         public virtual bool CanClear()

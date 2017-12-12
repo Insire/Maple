@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
 using Maple.Core;
 using Maple.Localization.Properties;
@@ -141,12 +141,12 @@ namespace Maple
         /// </summary>
         /// <returns></returns>
         /// <exception cref="System.InvalidOperationException"></exception>
-        public async Task<(DialogResult Result, IList<IFileSystemFile> Files)> ShowFileBrowserDialog(FileSystemBrowserOptions options)
+        public async Task<(bool Result, IList<IFileSystemFile> Files)> ShowFileBrowserDialog(FileSystemBrowserOptions options, CancellationToken token)
         {
             if (IsOpen)
                 throw new InvalidOperationException(Resources.DialogOpenAlready);
 
-            var tuple = default((DialogResult Result, IList<IFileSystemFile> Files));
+            var tuple = default((bool Result, IList<IFileSystemFile> Files));
             var viewModel = new FileBrowserDialogViewModel(_fileSystemViewModel, options);
 
             TitleDetail = string.Empty;
@@ -159,19 +159,52 @@ namespace Maple
                 AcceptAction = () =>
                 {
                     var items = viewModel.FileSystemViewModel.SelectedItems;
-                    tuple = (DialogResult.OK, items.Select(p => p as IFileSystemFile).Where(p => p != null).ToList());
+                    tuple = (true, items.Select(p => p as IFileSystemFile).Where(p => p != null).ToList());
                 };
 
                 CancelAction = () =>
                 {
                     var items = viewModel.FileSystemViewModel.SelectedItems;
-                    tuple = (DialogResult.Cancel, new List<IFileSystemFile>());
+                    tuple = (false, new List<IFileSystemFile>());
                 };
 
-                await Open().ConfigureAwait(false);
+                await Open(token).ConfigureAwait(false);
             }
 
             return tuple;
+        }
+
+        public async Task<(bool Result, ICollection<MediaItem> MediaItems)> ShowMediaItemSelectionDialog(FileSystemBrowserOptions options, CancellationToken token)
+        {
+            var mediaItems = new List<MediaItem>();
+            (var Result, var Files) = await ShowFileBrowserDialog(options, token).ConfigureAwait(true);
+
+            if (!Result)
+                return (Result, mediaItems);
+
+            foreach (var file in Files)
+            {
+                // TODO parse the files and generate mediaitems from them
+            }
+
+            return (Result, mediaItems);
+        }
+
+        public async Task<(bool Result, ICollection<MediaItem> MediaItems)> ShowMediaItemFolderSelectionDialog(FileSystemBrowserOptions options, CancellationToken token)
+        {
+            var mediaItems = new List<MediaItem>();
+            (var Result, var Folder) = await ShowFolderBrowserDialog(options, token).ConfigureAwait(true);
+
+            if (!Result)
+                return (Result, mediaItems);
+
+            foreach (var file in Folder.Children)
+            {
+                // TODO get the files from the folder
+                // TODO parse the files from the folder and generate mediaitems from them
+            }
+
+            return (Result, mediaItems);
         }
 
         /// <summary>
@@ -179,12 +212,12 @@ namespace Maple
         /// </summary>
         /// <returns></returns>
         /// <exception cref="System.InvalidOperationException"></exception>
-        public async Task<(DialogResult Result, IFileSystemDirectory Directory)> ShowFolderBrowserDialog(FileSystemBrowserOptions options)
+        public async Task<(bool Result, IFileSystemDirectory Directory)> ShowFolderBrowserDialog(FileSystemBrowserOptions options, CancellationToken token)
         {
             if (IsOpen)
                 throw new InvalidOperationException(Resources.DialogOpenAlready);
 
-            var tuple = default((DialogResult Result, IFileSystemDirectory Directory));
+            var tuple = default((bool Result, IFileSystemDirectory Directory));
             var viewModel = new FileBrowserDialogViewModel(_fileSystemViewModel, options);
 
             TitleDetail = string.Empty;
@@ -192,23 +225,22 @@ namespace Maple
             Title = options.Title;
             IsCancelVisible = options.CanCancel;
 
-
             using (_messenger.Subscribe<FileSystemInfoChangedMessage>(FileSystemInfoChanged))
             {
                 AcceptAction = () =>
                 {
                     var items = viewModel.FileSystemViewModel.SelectedItems;
                     items.Add(viewModel.FileSystemViewModel.SelectedItem);
-                    tuple = (DialogResult.OK, items.Distinct().FirstOrDefault() as IFileSystemDirectory);
+                    tuple = (true, items.Distinct().FirstOrDefault() as IFileSystemDirectory);
                 };
 
                 CancelAction = () =>
                 {
                     var items = viewModel.FileSystemViewModel.SelectedItems;
-                    tuple = (DialogResult.Cancel, default(IFileSystemDirectory));
+                    tuple = (false, default(IFileSystemDirectory));
                 };
 
-                await Open().ConfigureAwait(false);
+                await Open(token).ConfigureAwait(false);
             }
 
             return tuple;
@@ -294,13 +326,19 @@ namespace Maple
             return CanClose() && (CanCancelFunc?.Invoke() ?? true) == true;
         }
 
+        public Task Open()
+        {
+            return Open(CancellationToken.None);
+        }
+
         /// <summary>
         /// Opens this instance.
         /// </summary>
         /// <returns></returns>
-        public async Task Open()
+        public async Task Open(CancellationToken token)
         {
             var tcs = new TaskCompletionSource<object>();
+            var registration = token.Register(() => tcs.TrySetCanceled());
             void lambda(object s, EventArgs e) => tcs.TrySetResult(null);
             try
             {
@@ -311,6 +349,7 @@ namespace Maple
             finally
             {
                 DialogClosed -= lambda;
+                registration.Dispose();
             }
         }
 

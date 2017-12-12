@@ -5,6 +5,7 @@ using MaterialDesignThemes.Wpf.Converters;
 
 namespace Maple
 {
+    [ValueConversion(typeof(object[]), typeof(double))]
     public sealed class MathMultipleConverter : MultiConverterMarkupExtension<MathMultipleConverter>, IMultiValueConverter
     {
         public MathOperation Operation { get; set; }
@@ -14,7 +15,7 @@ namespace Maple
             if (value == null || value.Length < 2 || value[0] == null || value[1] == null)
                 return Binding.DoNothing;
 
-            if (!double.TryParse(value[0].ToString(), out double value1) || !double.TryParse(value[1].ToString(), out double value2))
+            if (!double.TryParse(value[0].ToString(), out var value1) || !double.TryParse(value[1].ToString(), out var value2))
                 return 0;
 
             switch (Operation)

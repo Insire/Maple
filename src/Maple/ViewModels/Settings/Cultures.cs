@@ -59,7 +59,7 @@ namespace Maple
 
         private void Initialise()
         {
-            Items.AddRange(_manager.Languages.Select(p => new Culture(p, _messenger)).ToList());
+            AddRange(_manager.Languages.Select(p => new Culture(p, _messenger)).ToList());
             SelectedItem = Items.FirstOrDefault(p => p.Model.LCID == Core.Properties.Settings.Default.StartUpCulture.LCID) ?? Items.First(p => p.Model.TwoLetterISOLanguageName == "en");
         }
 

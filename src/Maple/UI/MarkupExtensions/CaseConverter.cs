@@ -4,6 +4,7 @@ using System.Windows.Data;
 
 namespace Maple
 {
+    [ValueConversion(typeof(string), typeof(string))]
     public class CaseConverter : ConverterMarkupExtension<CaseConverter>, IValueConverter
     {
         public CharacterCasing Case { get; set; }
