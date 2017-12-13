@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Maple.Core;
@@ -13,10 +12,8 @@ namespace Maple
         private readonly ILocalizationService _manager;
         private readonly ILoggingService _log;
 
-        private IEnumerable<SubscriptionToken> _messageTokens;
-
-        public ICommand RefreshCommand => new AsyncRelayCommand(LoadAsync);
-        public ICommand LoadCommand => new AsyncRelayCommand(LoadAsync, () => !IsLoaded);
+        public ICommand RefreshCommand => AsyncCommand.Create(LoadAsync);
+        public ICommand LoadCommand => AsyncCommand.Create(LoadAsync, () => !IsLoaded);
         public ICommand SaveCommand => new RelayCommand(Save);
 
         public Cultures(ViewModelServiceContainer container)

@@ -64,7 +64,7 @@ namespace Maple
 
         private void InitializeCommands()
         {
-            ParseCommand = new AsyncRelayCommand(Parse, CanParse);
+            ParseCommand = AsyncCommand.Create(Parse, CanParse);
         }
 
         private async Task Parse()

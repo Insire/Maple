@@ -13,11 +13,9 @@ namespace Maple
     [DebuggerDisplay("{Name}, {Sequence}")]
     public class MediaPlayer : ValidableBaseDataViewModel<MediaPlayer, MediaPlayerModel>, IDisposable, IChangeState, ISequence
     {
-        private IEnumerable<SubscriptionToken> _messageTokens;
         protected readonly ILocalizationService _manager;
 
         public bool IsPlaying { get { return Player.IsPlaying; } }
-        protected bool Disposed { get; private set; }
 
         public bool IsNew => Model.IsNew;
         public bool IsDeleted => Model.IsDeleted;
@@ -150,13 +148,10 @@ namespace Maple
 
         private void InitializeSubscriptions()
         {
-            _messageTokens = new List<SubscriptionToken>
-            {
-                Messenger.Subscribe<PlayingMediaItemMessage>(Player_PlayingMediaItem, IsSenderEqualsPlayer),
-                Messenger.Subscribe<CompletedMediaItemMessage>(MediaPlayer_CompletedMediaItem, IsSenderEqualsPlayer),
-                Messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanging, IsSenderEqualsPlayer),
-                Messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanged, IsSenderEqualsPlayer),
-            };
+            MessageTokens.Add(Messenger.Subscribe<PlayingMediaItemMessage>(Player_PlayingMediaItem, IsSenderEqualsPlayer));
+            MessageTokens.Add(Messenger.Subscribe<CompletedMediaItemMessage>(MediaPlayer_CompletedMediaItem, IsSenderEqualsPlayer));
+            MessageTokens.Add(Messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanging, IsSenderEqualsPlayer));
+            MessageTokens.Add(Messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanged, IsSenderEqualsPlayer));
         }
 
         private void InitiliazeCommands()
@@ -408,19 +403,10 @@ namespace Maple
         }
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
         /// </summary>
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (Disposed)
                 return;
@@ -430,19 +416,13 @@ namespace Maple
 
             if (disposing)
             {
-                if (_messageTokens != null)
-                {
-                    foreach (var token in _messageTokens)
-                        Messenger.Unsubscribe<IMapleMessage>(token);
-
-                    _messageTokens = null;
-                }
-
                 if (Player != null)
                 {
                     Player?.Dispose();
                     Player = null;
                 }
+
+                base.Dispose(disposing);
                 // Free any other managed objects here.
             }
 

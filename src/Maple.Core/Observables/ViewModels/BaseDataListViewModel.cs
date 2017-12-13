@@ -29,14 +29,14 @@ namespace Maple.Core
         /// <value>
         /// The load command.
         /// </value>
-        public ICommand LoadCommand => new AsyncRelayCommand(LoadAsync, () => !IsLoaded);
+        public ICommand LoadCommand => AsyncCommand.Create(LoadAsync, () => !IsLoaded);
         /// <summary>
         /// Gets the refresh command.
         /// </summary>
         /// <value>
         /// The refresh command.
         /// </value>
-        public ICommand RefreshCommand => new AsyncRelayCommand(LoadAsync);
+        public ICommand RefreshCommand => AsyncCommand.Create(LoadAsync);
         /// <summary>
         /// Gets the save command.
         /// </summary>

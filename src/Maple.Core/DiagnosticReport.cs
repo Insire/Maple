@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32;
+using Humanizer;
 
 namespace Maple.Core
 {
@@ -131,7 +132,7 @@ namespace Maple.Core
             Format(SystemHeaders[8], Environment.UserDomainName + "\\" + Environment.UserName);
             Format(SystemHeaders[6], GetProcessorName());
             Format(SystemHeaders[7], Environment.ProcessorCount);
-            Format(SystemHeaders[5], GetInstalledMemoryInGigaBytes().ToString("N0") + "GB");
+            Format(SystemHeaders[5], GetInstalledMemoryInGigaBytes());
             Format(SystemHeaders[9], Environment.SystemDirectory);
             Format(SystemHeaders[10], Environment.CurrentDirectory);
 
@@ -167,11 +168,12 @@ namespace Maple.Core
 
                 if (d.IsReady)
                 {
+
                     driveFormat = d.DriveFormat;
                     volumeLabel = d.VolumeLabel;
-                    capacity = UnitConverter.BytesToGigaBytes(d.TotalSize);
-                    free = UnitConverter.BytesToGigaBytes(d.TotalFreeSpace);
-                    available = UnitConverter.BytesToGigaBytes(d.AvailableFreeSpace);
+                    capacity = d.TotalSize.Bytes().Gigabytes;
+                    free = d.TotalFreeSpace.Bytes().Gigabytes;
+                    available = d.AvailableFreeSpace.Bytes().Gigabytes;
                 }
 
                 row[2] = driveFormat;
@@ -269,7 +271,7 @@ namespace Maple.Core
                 Format(ProcessHeaders[4], IsOptimized());
                 Format(ProcessHeaders[5], Environment.Is64BitProcess);
                 Format(ProcessHeaders[6], ApplicationHelper.IsProcessLargeAddressAware());
-                Format(ProcessHeaders[16], UnitConverter.BytesToMegaBytes(Environment.WorkingSet).ToString("N0") + "MB");
+                Format(ProcessHeaders[16], Environment.WorkingSet.Bytes().Humanize());
                 Format(ProcessHeaders[12], pVerInfo.FileVersion);
                 Format(ProcessHeaders[13], pVerInfo.ProductVersion);
                 Format(ProcessHeaders[14], pVerInfo.Language);
@@ -476,10 +478,10 @@ namespace Maple.Core
             return key?.GetValue("ProcessorNameString").ToString() ?? "Not Found";
         }
 
-        private static long GetInstalledMemoryInGigaBytes()
+        private static string GetInstalledMemoryInGigaBytes()
         {
             GetPhysicallyInstalledSystemMemory(out var installedMemoryKb);
-            return (long)UnitConverter.KiloBytesToMegaBytes(installedMemoryKb).MegaBytesToGigaBytes();
+            return installedMemoryKb.Bytes().Humanize();
         }
 
         private static string GetSeperator(string title, int count)
