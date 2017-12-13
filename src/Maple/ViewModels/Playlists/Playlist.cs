@@ -202,7 +202,7 @@ namespace Maple
                 _items.CollectionChanged += (o, e) => OnPropertyChanged(nameof(Count));
 
                 BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
-                View = CollectionViewSource.GetDefaultView(Items);
+                View = CollectionViewSource.GetDefaultView(Items); // TODO add sorting by sequence
                 OnPropertyChanged(nameof(Count));
 
                 LoadFromFileCommand = AsyncCommand.Create(LoadFromFile, () => CanLoadFromFile());
@@ -215,9 +215,16 @@ namespace Maple
 
                 AddRange(_mediaItemMapper.GetMany(model.MediaItems));
 
+                MessageTokens.Add(Messenger.Subscribe<PlayingMediaItemMessage>(OnPlaybackItemChanged, m => m.PlaylistId == Id));
+
                 Validate();
             }
             SkipChangeTracking = false;
+        }
+
+        private void OnPlaybackItemChanged(PlayingMediaItemMessage message)
+        {
+            _history.Push(message.Content.Sequence);
         }
 
         private async Task LoadFromUrl()
@@ -299,9 +306,6 @@ namespace Maple
             {
                 var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
                 item.Sequence = sequence;
-
-                if (Items.Any() != true)
-                    _history.Push(item.Sequence);
 
                 AddInternal(item);
 

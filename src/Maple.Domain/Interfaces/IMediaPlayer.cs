@@ -5,13 +5,6 @@ namespace Maple.Domain
     public interface IMediaPlayer : IDisposable
     {
         /// <summary>
-        /// Gets a value indicating whether this <see cref="IMediaPlayer"/> is disposed.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if disposed; otherwise, <c>false</c>.
-        /// </value>
-        bool Disposed { get; }
-        /// <summary>
         /// Gets a value indicating whether this instance is playing.
         /// </summary>
         /// <value>
@@ -23,7 +16,7 @@ namespace Maple.Domain
         /// Plays the specified item.
         /// </summary>
         /// <param name="item">The item.</param>
-        void Play(IMediaItem item);
+        bool Play(IMediaItem item);
         /// <summary>
         /// Pauses this instance.
         /// </summary>

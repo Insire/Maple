@@ -161,7 +161,7 @@ namespace Maple
 
         private void InitiliazeCommands()
         {
-            PlayCommand = new RelayCommand<MediaItem>(Player.Play, CanPlay);
+            PlayCommand = new RelayCommand<MediaItem>(Play, CanPlay);
             PreviousCommand = new RelayCommand(Previous, () => Playlist?.CanPrevious() == true && CanPrevious());
             NextCommand = new RelayCommand(Next, () => Playlist?.CanNext() == true && CanNext());
             PauseCommand = new RelayCommand(Pause, () => CanPause());
@@ -170,6 +170,18 @@ namespace Maple
             ClearCommand = new RelayCommand(Clear, CanClear);
 
             UpdatePlaylistCommands();
+        }
+
+        public void Play(MediaItem mediaItem)
+        {
+            if (mediaItem == null)
+                throw new ArgumentNullException(nameof(mediaItem), $"{nameof(mediaItem)} {Resources.IsRequired}");
+
+            if (!Playlist.Items.Contains(mediaItem))
+                throw new ArgumentException("Cant play an item thats not part of the playlist"); // TODO localize
+
+            if (Player.Play(mediaItem))
+                Messenger.Publish(new PlayingMediaItemMessage(this, mediaItem, Playlist.Id));
         }
 
         private bool IsSenderEqualsPlayer(object sender)
