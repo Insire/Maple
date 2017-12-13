@@ -1,12 +1,13 @@
 ﻿using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using Maple.Domain;
 
 namespace Maple.Data
 {
-    public class MediaItemRepository : MaplePlaylistRepository<MediaItem>, IMediaItemRepository
+    public class MediaItemRepository : MaplePlaylistRepository<MediaItemModel>, IMediaItemRepository
     {
-        public Task<MediaItem> GetMediaItemByPlaylistIdAsync(int id)
+        public Task<MediaItemModel> GetMediaItemByPlaylistIdAsync(int id)
         {
             return Task.Run(() =>
             {
@@ -15,12 +16,12 @@ namespace Maple.Data
             });
         }
 
-        protected override DbSet<MediaItem> GetEntities(PlaylistContext context)
+        protected override DbSet<MediaItemModel> GetEntities(PlaylistContext context)
         {
             return context.MediaItems;
         }
 
-        private MediaItem GetMediaItemByPlaylistIdInternalAsync(int id, PlaylistContext context)
+        private MediaItemModel GetMediaItemByPlaylistIdInternalAsync(int id, PlaylistContext context)
         {
             return context.MediaItems.FirstOrDefault(p => p.Playlist.Id == id);
         }

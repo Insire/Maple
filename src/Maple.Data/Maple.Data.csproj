@@ -73,12 +73,6 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="DB\ModelConfiguration.cs" />
-    <Compile Include="DTO\Base\BaseObject.cs" />
-    <Compile Include="DTO\MediaPlayer.cs" />
-    <Compile Include="DTO\Option.cs" />
-    <Compile Include="DTO\Playlist.cs" />
-    <Compile Include="DTO\MediaItem.cs" />
-    <Compile Include="DTO\Raw.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DB\CreateSeedDatabaseIfNotExists.cs" />
     <Compile Include="Interfaces\IMediaItemRepository.cs" />
@@ -108,9 +102,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Maple.Interfaces\Maple.Interfaces.csproj">
+    <ProjectReference Include="..\Maple.Domain\Maple.Domain.csproj">
       <Project>{9d7d05a6-8271-4836-a7bb-5b2abeccbd81}</Project>
-      <Name>Maple.Interfaces</Name>
+      <Name>Maple.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

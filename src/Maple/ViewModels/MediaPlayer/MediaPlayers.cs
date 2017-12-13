@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Maple.Core;
-using Maple.Interfaces;
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple
 {
-    public class MediaPlayers : BaseDataListViewModel<MediaPlayer, Data.MediaPlayer>, IMediaPlayersViewModel
+    public class MediaPlayers : BaseDataListViewModel<MediaPlayer, MediaPlayerModel>, IMediaPlayersViewModel
     {
         private readonly Func<IMediaPlayer> _playerFactory;
         private readonly AudioDevices _devices;

@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using Maple.Interfaces;
+using Maple.Domain;
 
 namespace Maple
 {

@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
-using Maple.Interfaces;
+using Maple.Domain;
 
 namespace Maple.Core
 {

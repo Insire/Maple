@@ -5,13 +5,13 @@ using System.Linq;
 using System.Windows.Input;
 using FluentValidation;
 using Maple.Core;
-using Maple.Interfaces;
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple
 {
     [DebuggerDisplay("{Name}, {Sequence}")]
-    public class MediaPlayer : ValidableBaseDataViewModel<MediaPlayer, Data.MediaPlayer>, IDisposable, IChangeState, ISequence
+    public class MediaPlayer : ValidableBaseDataViewModel<MediaPlayer, MediaPlayerModel>, IDisposable, IChangeState, ISequence
     {
         private List<SubscriptionToken> _messageTokens;
         protected readonly ILocalizationService _manager;
@@ -122,7 +122,7 @@ namespace Maple
             set { SetValue(ref _updatedOn, value, OnChanged: () => Model.CreatedOn = value); }
         }
 
-        public MediaPlayer(ViewModelServiceContainer container, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, Data.MediaPlayer model)
+        public MediaPlayer(ViewModelServiceContainer container, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, MediaPlayerModel model)
             : base(model, validator, container.Messenger)
         {
             _manager = container.LocalizationService;

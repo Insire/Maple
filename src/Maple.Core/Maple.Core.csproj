@@ -174,9 +174,9 @@
       <Project>{B3CD46BE-3C08-4BAE-AE60-A6D84A62400C}</Project>
       <Name>Maple.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Maple.Interfaces\Maple.Interfaces.csproj">
-      <Project>{9D7D05A6-8271-4836-A7BB-5B2ABECCBD81}</Project>
-      <Name>Maple.Interfaces</Name>
+    <ProjectReference Include="..\Maple.Domain\Maple.Domain.csproj">
+      <Project>{9d7d05a6-8271-4836-a7bb-5b2abeccbd81}</Project>
+      <Name>Maple.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\Maple.Localization\Maple.Localization.csproj">
       <Project>{A073FC92-90E3-4541-8B52-6F7293187871}</Project>

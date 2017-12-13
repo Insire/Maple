@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Maple.Core;
-using Maple.Interfaces;
+using Maple.Domain;
 
 namespace Maple
 {

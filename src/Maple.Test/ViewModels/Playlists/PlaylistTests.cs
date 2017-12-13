@@ -6,7 +6,7 @@ using DryIoc;
 using FluentValidation;
 using FluentValidation.Results;
 using Maple.Core;
-using Maple.Interfaces;
+using Maple.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 
@@ -75,7 +75,7 @@ namespace Maple.Test.ViewModels.Playlists
         [TestMethod]
         public void Playlist_ShouldThrowForEmptyModel()
         {
-            Assert.ThrowsException<ArgumentNullException>(() => CreatePlaylist(default(Data.Playlist)));
+            Assert.ThrowsException<ArgumentNullException>(() => CreatePlaylist(default(Domain.PlaylistModel)));
         }
 
         [TestMethod]
@@ -265,7 +265,7 @@ namespace Maple.Test.ViewModels.Playlists
             var playlist = CreatePlaylist(CreateModelPlaylist());
             var mediaItems = new List<MediaItem>()
             {
-                CreateMediaItem(new Data.MediaItem()),
+                CreateMediaItem(new Domain.MediaItemModel()),
             };
 
             Assert.AreEqual(4, playlist.Count);
@@ -281,9 +281,9 @@ namespace Maple.Test.ViewModels.Playlists
             var playlist = CreatePlaylist(CreateModelPlaylist());
             var mediaItems = new List<MediaItem>()
             {
-                CreateMediaItem(new Data.MediaItem()),
-                CreateMediaItem(new Data.MediaItem()),
-                CreateMediaItem(new Data.MediaItem()),
+                CreateMediaItem(new Domain.MediaItemModel()),
+                CreateMediaItem(new Domain.MediaItemModel()),
+                CreateMediaItem(new Domain.MediaItemModel()),
             };
 
             Assert.AreEqual(4, playlist.Count);
@@ -334,9 +334,37 @@ namespace Maple.Test.ViewModels.Playlists
             CreatePlaylist(CreateModelPlaylist());
         }
 
-        private Data.MediaItem CreateModelMediaItem()
+        [TestMethod]
+        public void Playlist_ShouldSynchronizeItemsWithModel()
         {
-            return new Data.MediaItem()
+            throw new NotImplementedException();
+            CreatePlaylist(CreateModelPlaylist());
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldAddItemsFromFileDialog()
+        {
+            throw new NotImplementedException();
+            CreatePlaylist(CreateModelPlaylist());
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldAddItemsFromFolderDialog()
+        {
+            throw new NotImplementedException();
+            CreatePlaylist(CreateModelPlaylist());
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldAddItemsFromUrlDialog()
+        {
+            throw new NotImplementedException();
+            CreatePlaylist(CreateModelPlaylist());
+        }
+
+        private Domain.MediaItemModel CreateModelMediaItem()
+        {
+            return new Domain.MediaItemModel()
             {
                 CreatedBy = _context.FullyQualifiedTestClassName,
                 CreatedOn = DateTime.UtcNow,
@@ -353,9 +381,9 @@ namespace Maple.Test.ViewModels.Playlists
             };
         }
 
-        private Data.Playlist CreateModelPlaylist()
+        private Domain.PlaylistModel CreateModelPlaylist()
         {
-            var playlist = new Data.Playlist()
+            var playlist = new Domain.PlaylistModel()
             {
                 CreatedBy = _context.FullyQualifiedTestClassName,
                 CreatedOn = DateTime.UtcNow,
@@ -364,7 +392,7 @@ namespace Maple.Test.ViewModels.Playlists
                 IsDeleted = false,
                 IsShuffeling = false,
                 Location = "Memory",
-                MediaItems = new List<Data.MediaItem>(),
+                MediaItems = new List<Domain.MediaItemModel>(),
                 PrivacyStatus = (int)PrivacyStatus.None,
                 RepeatMode = (int)RepeatMode.None,
                 Sequence = 1,
@@ -376,11 +404,11 @@ namespace Maple.Test.ViewModels.Playlists
             return PopulatePlaylist(playlist);
         }
 
-        private Data.Playlist PopulatePlaylist(Data.Playlist playlist)
+        private Domain.PlaylistModel PopulatePlaylist(Domain.PlaylistModel playlist)
         {
             for (var i = 0; i < 4; i++)
             {
-                playlist.MediaItems.Add(new Data.MediaItem()
+                playlist.MediaItems.Add(new Domain.MediaItemModel()
                 {
                     CreatedBy = _context.FullyQualifiedTestClassName,
                     CreatedOn = DateTime.UtcNow,
@@ -402,13 +430,13 @@ namespace Maple.Test.ViewModels.Playlists
             return playlist;
         }
 
-        private Playlist CreatePlaylist(Data.Playlist model)
+        private Playlist CreatePlaylist(Domain.PlaylistModel model)
         {
             var mapper = _container.Resolve<IPlaylistMapper>();
             return mapper.Get(model);
         }
 
-        private MediaItem CreateMediaItem(Data.MediaItem model)
+        private MediaItem CreateMediaItem(Domain.MediaItemModel model)
         {
             var mapper = _container.Resolve<IMediaItemMapper>();
             return mapper.Get(model);

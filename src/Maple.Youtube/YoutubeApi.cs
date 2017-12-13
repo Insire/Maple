@@ -10,7 +10,7 @@ using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
-using Maple.Interfaces;
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple.Youtube
@@ -65,9 +65,9 @@ namespace Maple.Youtube
             }
         }
 
-        public async Task<List<Data.Playlist>> GetPlaylists(string playlistId)
+        public async Task<List<Domain.PlaylistModel>> GetPlaylists(string playlistId)
         {
-            var result = new List<Data.Playlist>();
+            var result = new List<Domain.PlaylistModel>();
             var youtubeService = await GetService().ConfigureAwait(false);
 
             var request = youtubeService.Playlists.List("snippet,contentDetails");
@@ -80,7 +80,7 @@ namespace Maple.Youtube
                 var nextPageToken = "";
                 while (nextPageToken != null)
                 {
-                    var playlist = new Data.Playlist
+                    var playlist = new Domain.PlaylistModel
                     {
                         Title = item.Snippet.Title,
                         Location = $"{_playListBaseUrl}{item.Id}",
@@ -96,11 +96,11 @@ namespace Maple.Youtube
             return result;
         }
 
-        public async Task CreatePlaylist(Data.Playlist playlist, bool publicPlaylist = true)
+        public async Task CreatePlaylist(Domain.PlaylistModel playlist, bool publicPlaylist = true)
         {
             var youtubeService = await GetService().ConfigureAwait(false);
 
-            var newPlaylist = new Playlist()
+            var newPlaylist = new Google.Apis.YouTube.v3.Data.Playlist()
             {
                 Snippet = new PlaylistSnippet()
                 {
@@ -135,7 +135,7 @@ namespace Maple.Youtube
             }
         }
 
-        public async Task DeletePlaylist(Data.Playlist playlist)
+        public async Task DeletePlaylist(Domain.PlaylistModel playlist)
         {
             var youtubeService = await GetService().ConfigureAwait(false);
             var id = GetPlaylistId(playlist);
@@ -145,7 +145,7 @@ namespace Maple.Youtube
                                           .ConfigureAwait(false);
         }
 
-        public static string GetVideoId(Data.MediaItem item)
+        public static string GetVideoId(Domain.MediaItemModel item)
         {
             var url = new Uri(item.Location);
             var result = HttpUtility.ParseQueryString(url.Query)
@@ -154,7 +154,7 @@ namespace Maple.Youtube
             return result;
         }
 
-        public static string GetPlaylistId(Data.Playlist list)
+        public static string GetPlaylistId(Domain.PlaylistModel list)
         {
             var url = new Uri(list.Location);
             var result = HttpUtility.ParseQueryString(url.Query)
@@ -201,9 +201,9 @@ namespace Maple.Youtube
 
         //TODO writing a async sync method for what i get from youtube vs that i generate myself as playlist
 
-        public async Task<IList<Data.MediaItem>> GetVideo(string videoId)
+        public async Task<IList<Domain.MediaItemModel>> GetVideo(string videoId)
         {
-            var result = new List<Data.MediaItem>();
+            var result = new List<Domain.MediaItemModel>();
             var youtubeService = await GetService().ConfigureAwait(false);
 
             var request = youtubeService.Videos.List("snippet,contentDetails");
@@ -217,7 +217,7 @@ namespace Maple.Youtube
                 var nextPageToken = "";
                 while (nextPageToken != null)
                 {
-                    var video = new Data.MediaItem
+                    var video = new Domain.MediaItemModel
                     {
                         Title = item.Snippet.Title,
                         Location = $"{_videoBaseUrl}{videoId}",

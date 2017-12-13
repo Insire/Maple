@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using DryIoc;
 using Maple.Core;
-using Maple.Interfaces;
+using Maple.Domain;
 
 namespace Maple
 {

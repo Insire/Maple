@@ -1,8 +1,8 @@
-﻿using Maple.Interfaces;
+﻿using Maple.Domain;
 
 namespace Maple.Data
 {
-    public interface IPlaylistRepository : IMapleRepository<Playlist>
+    public interface IPlaylistRepository : IMapleRepository<PlaylistModel>
     {
     }
 }

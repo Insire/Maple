@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Maple.Interfaces;
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple.Core

@@ -3,7 +3,7 @@ using DryIoc;
 using FluentValidation;
 using Maple.Core;
 using Maple.Data;
-using Maple.Interfaces;
+using Maple.Domain;
 using Maple.Youtube;
 
 namespace Maple

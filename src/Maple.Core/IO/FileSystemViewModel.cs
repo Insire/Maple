@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
-using Maple.Interfaces;
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple.Core

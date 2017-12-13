@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interactivity;
 using Maple.Core;
-using Maple.Interfaces;
+using Maple.Domain;
 
 namespace Maple
 {

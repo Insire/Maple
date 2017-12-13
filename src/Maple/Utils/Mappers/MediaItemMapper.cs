@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Maple.Core;
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple
@@ -40,9 +41,9 @@ namespace Maple
             };
         }
 
-        public Data.MediaItem GetDataNewMediaItem(Data.Playlist playlist)
+        public MediaItemModel GetDataNewMediaItem(PlaylistModel playlist)
         {
-            return new Data.MediaItem()
+            return new MediaItemModel()
             {
                 Title = _translationService.Translate(nameof(Resources.New)),
                 Description = string.Empty,
@@ -50,7 +51,7 @@ namespace Maple
             };
         }
 
-        public MediaItem Get(Data.MediaItem mediaitem)
+        public MediaItem Get(MediaItemModel mediaitem)
         {
             return new MediaItem(mediaitem, _validator, _messenger);
         }
@@ -60,7 +61,7 @@ namespace Maple
         /// </summary>
         /// <param name="mediaitem">The mediaitem.</param>
         /// <returns></returns>
-        public Data.MediaItem GetData(MediaItem mediaitem)
+        public MediaItemModel GetData(MediaItem mediaitem)
         {
             return mediaitem.Model;
         }

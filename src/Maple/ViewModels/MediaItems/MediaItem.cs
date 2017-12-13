@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using FluentValidation;
 using Maple.Core;
-using Maple.Interfaces;
+using Maple.Domain;
 
 namespace Maple
 {
@@ -12,7 +12,7 @@ namespace Maple
     /// <seealso cref="Maple.Core.BaseViewModel{Maple.Data.MediaItem}" />
     /// <seealso cref="Maple.Core.IMediaItem" />
     [DebuggerDisplay("{Title}, {Sequence} {Location}")]
-    public class MediaItem : ValidableBaseDataViewModel<MediaItem, Data.MediaItem>, IMediaItem
+    public class MediaItem : ValidableBaseDataViewModel<MediaItem, MediaItemModel>, IMediaItem
     {
         public bool IsNew => Model.IsNew;
         public bool IsDeleted => Model.IsDeleted;
@@ -118,7 +118,7 @@ namespace Maple
         /// Initializes a new instance of the <see cref="MediaItem"/> class.
         /// </summary>
         /// <param name="model">The model.</param>
-        public MediaItem(Data.MediaItem model, IValidator<MediaItem> validator, IMessenger messenger)
+        public MediaItem(MediaItemModel model, IValidator<MediaItem> validator, IMessenger messenger)
             : base(model, validator, messenger)
         {
             _location = model.Location;

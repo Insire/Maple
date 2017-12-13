@@ -2,6 +2,7 @@
 using AutoMapper;
 using FluentValidation;
 using Maple.Core;
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple
@@ -40,7 +41,7 @@ namespace Maple
 
         public Playlist GetNewPlaylist(int sequence)
         {
-            return new Playlist(_container, _validator, _dialogViewModel, _mediaItemMapper, new Data.Playlist
+            return new Playlist(_container, _validator, _dialogViewModel, _mediaItemMapper, new PlaylistModel
             {
                 Title = _translationService.Translate(nameof(Resources.New)),
                 Description = string.Empty,
@@ -51,12 +52,12 @@ namespace Maple
             });
         }
 
-        public Playlist Get(Data.Playlist model)
+        public Playlist Get(PlaylistModel model)
         {
             return new Playlist(_container, _validator, _dialogViewModel, _mediaItemMapper, model);
         }
 
-        public Data.Playlist GetData(Playlist mediaitem)
+        public PlaylistModel GetData(Playlist mediaitem)
         {
             return mediaitem.Model;
         }

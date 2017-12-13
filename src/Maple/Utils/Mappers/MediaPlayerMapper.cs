@@ -2,7 +2,7 @@
 using AutoMapper;
 using FluentValidation;
 using Maple.Core;
-using Maple.Interfaces;
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple
@@ -33,7 +33,7 @@ namespace Maple
 
         public MediaPlayer GetNewMediaPlayer(int sequence, Playlist playlist = null)
         {
-            return new MediaPlayer(_container, _mediaPlayer, _validator, _devices, playlist, new Data.MediaPlayer()
+            return new MediaPlayer(_container, _mediaPlayer, _validator, _devices, playlist, new MediaPlayerModel()
             {
                 Sequence = sequence,
                 IsPrimary = false,
@@ -42,22 +42,22 @@ namespace Maple
             });
         }
 
-        public MediaPlayer Get(Data.MediaPlayer model)
+        public MediaPlayer Get(MediaPlayerModel model)
         {
             throw new NotImplementedException(); // by design
         }
 
-        public Data.MediaPlayer GetData(MediaPlayer viewModel)
+        public MediaPlayerModel GetData(MediaPlayer viewModel)
         {
             return viewModel.Model;
         }
 
-        public MainMediaPlayer GetMain(Data.MediaPlayer player, Playlist playlist)
+        public MainMediaPlayer GetMain(MediaPlayerModel player, Playlist playlist)
         {
             return new MainMediaPlayer(_container, _mediaPlayer, _validator, _devices, playlist, player);
         }
 
-        public MediaPlayer Get(Data.MediaPlayer player, Playlist playlist)
+        public MediaPlayer Get(MediaPlayerModel player, Playlist playlist)
         {
             return new MediaPlayer(_container, _mediaPlayer, _validator, _devices, playlist, player);
         }

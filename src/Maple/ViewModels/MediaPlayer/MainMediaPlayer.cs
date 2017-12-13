@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Maple.Core;
-using Maple.Interfaces;
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple
@@ -9,7 +9,7 @@ namespace Maple
     {
         private const string _nameKey = nameof(Resources.MainMediaplayer);
 
-        public MainMediaPlayer(ViewModelServiceContainer container, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, Data.MediaPlayer model)
+        public MainMediaPlayer(ViewModelServiceContainer container, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, MediaPlayerModel model)
             : base(container, player, validator, devices, playlist, model)
         {
             IsPrimary = model.IsPrimary;

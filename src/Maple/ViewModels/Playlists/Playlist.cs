@@ -10,13 +10,13 @@ using System.Windows.Data;
 using System.Windows.Input;
 using FluentValidation;
 using Maple.Core;
-using Maple.Interfaces;
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple
 {
     [DebuggerDisplay("{Title}, {Sequence}")]
-    public class Playlist : ValidableBaseDataViewModel<Playlist, Data.Playlist>, IIsSelected, ISequence, IIdentifier, IChangeState
+    public class Playlist : ValidableBaseDataViewModel<Playlist, PlaylistModel>, IIsSelected, ISequence, IIdentifier, IChangeState
     {
         private readonly IMediaItemMapper _mediaItemMapper;
         private readonly ISequenceService _sequenceProvider;
@@ -173,7 +173,7 @@ namespace Maple
             private set { SetValue(ref _repeatModes, (IRangeObservableCollection<RepeatMode>)value); }
         }
 
-        public Playlist(ViewModelServiceContainer container, IValidator<Playlist> validator, IDialogViewModel dialogViewModel, IMediaItemMapper mediaItemMapper, Data.Playlist model)
+        public Playlist(ViewModelServiceContainer container, IValidator<Playlist> validator, IDialogViewModel dialogViewModel, IMediaItemMapper mediaItemMapper, PlaylistModel model)
             : base(model, validator, container?.Messenger)
         {
             if (container == null)

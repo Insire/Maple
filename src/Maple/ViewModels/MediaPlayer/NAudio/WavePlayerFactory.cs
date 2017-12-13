@@ -1,4 +1,4 @@
-﻿using Maple.Interfaces;
+﻿using Maple.Domain;
 using NAudio.Wave;
 
 namespace Maple

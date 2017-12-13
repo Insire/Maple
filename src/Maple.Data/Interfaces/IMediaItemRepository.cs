@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
-using Maple.Interfaces;
+using Maple.Domain;
 
 namespace Maple.Data
 {
-    public interface IMediaItemRepository : IMapleRepository<MediaItem>
+    public interface IMediaItemRepository : IMapleRepository<MediaItemModel>
     {
-        Task<MediaItem> GetMediaItemByPlaylistIdAsync(int id);
+        Task<MediaItemModel> GetMediaItemByPlaylistIdAsync(int id);
     }
 }

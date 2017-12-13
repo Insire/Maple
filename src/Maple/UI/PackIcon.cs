@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using MahApps.Metro.IconPacks;
-using Maple.Interfaces;
+using Maple.Domain;
 
 namespace Maple
 {

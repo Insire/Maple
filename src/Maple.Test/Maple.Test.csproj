@@ -88,9 +88,9 @@
       <Project>{b3cd46be-3c08-4bae-ae60-a6d84a62400c}</Project>
       <Name>Maple.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Maple.Interfaces\Maple.Interfaces.csproj">
+    <ProjectReference Include="..\Maple.Domain\Maple.Domain.csproj">
       <Project>{9d7d05a6-8271-4836-a7bb-5b2abeccbd81}</Project>
-      <Name>Maple.Interfaces</Name>
+      <Name>Maple.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\Maple.Localization\Maple.Localization.csproj">
       <Project>{a073fc92-90e3-4541-8b52-6f7293187871}</Project>
