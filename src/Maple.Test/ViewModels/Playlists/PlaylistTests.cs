@@ -75,7 +75,7 @@ namespace Maple.Test.ViewModels.Playlists
         [TestMethod]
         public void Playlist_ShouldThrowForEmptyModel()
         {
-            Assert.ThrowsException<ArgumentNullException>(() => CreatePlaylist(default(Domain.PlaylistModel)));
+            Assert.ThrowsException<ArgumentNullException>(() => CreatePlaylist(default(PlaylistModel)));
         }
 
         [TestMethod]
@@ -309,8 +309,93 @@ namespace Maple.Test.ViewModels.Playlists
         [TestMethod]
         public void Playlist_ShouldRunNext()
         {
-            throw new NotImplementedException();
-            CreatePlaylist(CreateModelPlaylist());
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+            playlist.RepeatMode = RepeatMode.None;
+            var mediaItem = playlist.Next();
+
+            Assert.IsNotNull(mediaItem);
+            Assert.AreEqual(playlist[1], mediaItem);
+            Assert.AreNotEqual(playlist.SelectedItem, mediaItem);
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldRunNextWithRepeatModeNone()
+        {
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+            playlist.RepeatMode = RepeatMode.None;
+            playlist.SelectedItem = playlist[3];
+
+            var mediaItem = playlist.Next();
+
+            Assert.IsNull(mediaItem);
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldRunNextWithRepeatModeAll()
+        {
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+            playlist.RepeatMode = RepeatMode.All;
+            playlist.SelectedItem = playlist[3];
+
+            var mediaItem = playlist.Next();
+
+            Assert.IsNotNull(mediaItem);
+            Assert.AreEqual(playlist[0], mediaItem);
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldRunNextWithRepeatModeAllWhileShuffeling()
+        {
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+            playlist.RepeatMode = RepeatMode.All;
+            playlist.IsShuffeling = true;
+            playlist.SelectedItem = playlist[3];
+
+            var mediaItem = playlist.Next();
+
+            Assert.IsNotNull(mediaItem);
+            Assert.AreNotEqual(playlist.SelectedItem, mediaItem);
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldRunNextWithRepeatModeNoneWhileShuffeling()
+        {
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+            playlist.RepeatMode = RepeatMode.None;
+            playlist.IsShuffeling = true;
+            playlist.SelectedItem = playlist[3];
+
+            var mediaItem = playlist.Next();
+
+            Assert.IsNotNull(mediaItem);
+            Assert.AreNotEqual(playlist.SelectedItem, mediaItem);
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldRunNextWithRepeatModeSingleWhileShuffeling()
+        {
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+            playlist.RepeatMode = RepeatMode.Single;
+            playlist.IsShuffeling = true;
+
+            var mediaItem = playlist.Next();
+
+            Assert.IsNotNull(mediaItem);
+            Assert.AreEqual(playlist[0], mediaItem);
+            Assert.AreEqual(playlist.SelectedItem, mediaItem);
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldRunNextWithRepeatModeSingle()
+        {
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+            playlist.RepeatMode = RepeatMode.Single;
+
+            var mediaItem = playlist.Next();
+
+            Assert.IsNotNull(mediaItem);
+            Assert.AreEqual(playlist[0], mediaItem);
+            Assert.AreEqual(playlist.SelectedItem, mediaItem);
         }
 
         [TestMethod]
@@ -362,9 +447,9 @@ namespace Maple.Test.ViewModels.Playlists
             CreatePlaylist(CreateModelPlaylist());
         }
 
-        private Domain.MediaItemModel CreateModelMediaItem()
+        private MediaItemModel CreateModelMediaItem()
         {
-            return new Domain.MediaItemModel()
+            return new MediaItemModel()
             {
                 CreatedBy = _context.FullyQualifiedTestClassName,
                 CreatedOn = DateTime.UtcNow,
@@ -381,9 +466,9 @@ namespace Maple.Test.ViewModels.Playlists
             };
         }
 
-        private Domain.PlaylistModel CreateModelPlaylist()
+        private PlaylistModel CreateModelPlaylist()
         {
-            var playlist = new Domain.PlaylistModel()
+            var playlist = new PlaylistModel()
             {
                 CreatedBy = _context.FullyQualifiedTestClassName,
                 CreatedOn = DateTime.UtcNow,
@@ -392,7 +477,7 @@ namespace Maple.Test.ViewModels.Playlists
                 IsDeleted = false,
                 IsShuffeling = false,
                 Location = "Memory",
-                MediaItems = new List<Domain.MediaItemModel>(),
+                MediaItems = new List<MediaItemModel>(),
                 PrivacyStatus = (int)PrivacyStatus.None,
                 RepeatMode = (int)RepeatMode.None,
                 Sequence = 1,
@@ -404,11 +489,11 @@ namespace Maple.Test.ViewModels.Playlists
             return PopulatePlaylist(playlist);
         }
 
-        private Domain.PlaylistModel PopulatePlaylist(Domain.PlaylistModel playlist)
+        private PlaylistModel PopulatePlaylist(PlaylistModel playlist)
         {
             for (var i = 0; i < 4; i++)
             {
-                playlist.MediaItems.Add(new Domain.MediaItemModel()
+                playlist.MediaItems.Add(new MediaItemModel()
                 {
                     CreatedBy = _context.FullyQualifiedTestClassName,
                     CreatedOn = DateTime.UtcNow,
@@ -422,7 +507,7 @@ namespace Maple.Test.ViewModels.Playlists
                     Playlist = playlist,
                     PlaylistId = playlist.Id,
                     PrivacyStatus = (int)PrivacyStatus.None,
-                    Sequence = 1,
+                    Sequence = 0,
                     Title = $"Title for {_context.FullyQualifiedTestClassName} MediaItem number {i}",
                 });
             }
@@ -430,13 +515,13 @@ namespace Maple.Test.ViewModels.Playlists
             return playlist;
         }
 
-        private Playlist CreatePlaylist(Domain.PlaylistModel model)
+        private Playlist CreatePlaylist(PlaylistModel model)
         {
             var mapper = _container.Resolve<IPlaylistMapper>();
             return mapper.Get(model);
         }
 
-        private MediaItem CreateMediaItem(Domain.MediaItemModel model)
+        private MediaItem CreateMediaItem(MediaItemModel model)
         {
             var mapper = _container.Resolve<IMediaItemMapper>();
             return mapper.Get(model);

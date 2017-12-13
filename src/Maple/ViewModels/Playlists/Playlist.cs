@@ -337,7 +337,7 @@ namespace Maple
                         throw new ArgumentNullException(nameof(item), $"{nameof(item)} {Resources.IsRequired}");
 
                     item.Sequence = sequence;
-                    Add(item);
+                    AddInternal(item);
                     sequence++;
 
                     added = true;
@@ -417,29 +417,31 @@ namespace Maple
             return items == null ? false : CanRemoveRange(items.Cast<MediaItem>());
         }
 
+        /// <summary>
+        /// Returns the next MediaItem from the Items collection according to their respective sequence and the current RepeatMode
+        /// </summary>
+        /// <returns></returns>
         public virtual MediaItem Next()
         {
             using (BusyStack.GetToken())
             {
                 if (Items != null && Items.Any())
                 {
-                    if (IsShuffeling)
-                        return NextShuffle();
-                    else
+                    switch (RepeatMode)
                     {
-                        switch (RepeatMode)
-                        {
-                            case RepeatMode.All: return NextRepeatAll();
+                        case RepeatMode.All:
+                            return IsShuffeling ? NextShuffle() : NextRepeatAll();
 
-                            case RepeatMode.None: return NextRepeatNone();
+                        case RepeatMode.None:
+                            return IsShuffeling ? NextShuffle() : NextRepeatNone();
 
-                            case RepeatMode.Single: return NextRepeatSingle();
+                        case RepeatMode.Single: return NextRepeatSingle();
 
-                            default:
-                                throw new NotImplementedException(nameof(RepeatMode));
-                        }
+                        default:
+                            throw new NotImplementedException(nameof(RepeatMode));
                     }
                 }
+
                 return null;
             }
         }
