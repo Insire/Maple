@@ -53,6 +53,7 @@
     <Compile Include="..\Resources\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="IYoutubeApi.cs" />
     <Compile Include="IYoutubeUrlParser.cs" />
     <Compile Include="Utility\ParseResultType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -69,10 +70,6 @@
     <ProjectReference Include="..\Maple.Core\Maple.Core.csproj">
       <Project>{21fa5854-0692-42e2-924e-a38cf3c7ff71}</Project>
       <Name>Maple.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Maple.Data\Maple.Data.csproj">
-      <Project>{B3CD46BE-3C08-4BAE-AE60-A6D84A62400C}</Project>
-      <Name>Maple.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\Maple.Domain\Maple.Domain.csproj">
       <Project>{9d7d05a6-8271-4836-a7bb-5b2abeccbd81}</Project>

@@ -11,8 +11,8 @@ namespace Maple.Youtube
 
         public int Count => RefreshCount();
         public ParseResultType Type { get; private set; }
-        public IList<MediaItemModel> MediaItems { get; private set; }
-        public IList<PlaylistModel> Playlists { get; private set; }
+        public ICollection<MediaItemModel> MediaItems { get; private set; }
+        public ICollection<PlaylistModel> Playlists { get; private set; }
 
         private UrlParseResult(ILoggingService log)
         {
@@ -107,9 +107,9 @@ namespace Maple.Youtube
         private void Log()
         {
             if (Count != 1)
-                _log.Info($"API Call for {Type} returned {Count} Entries");
+                _log.Info($"API Call for {Type} returned {Count} Entries");  // TODO localization
             else
-                _log.Info($"API Call for {Type} returned {Count} Entry");
+                _log.Info($"API Call for {Type} returned {Count} Entry");  // TODO localization
         }
 
         private int RefreshCount()
@@ -129,7 +129,7 @@ namespace Maple.Youtube
                         return Playlists.Count;
                     return 0;
                 default:
-                    _log.Warn("DataParsingServiceResult misses an Implementation of DataParsingServiceResultType");
+                    _log.Warn("DataParsingServiceResult misses an Implementation of DataParsingServiceResultType"); // TODO localization
                     return 0;
             }
         }

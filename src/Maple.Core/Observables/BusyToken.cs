@@ -62,7 +62,7 @@ namespace Maple.Core
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            base.GetObjectData(info, context); // TODO
+            base.GetObjectData(info, context);
         }
     }
 }

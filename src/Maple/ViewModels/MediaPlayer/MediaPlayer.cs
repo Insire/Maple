@@ -179,7 +179,7 @@ namespace Maple
 
         private void Player_AudioDeviceChanging(ViewModelSelectionChangingMessage<AudioDevice> e)
         {
-            // TODO
+            // TODO handle Player_AudioDeviceChanging
         }
 
         private void Player_AudioDeviceChanged(ViewModelSelectionChangingMessage<AudioDevice> e)

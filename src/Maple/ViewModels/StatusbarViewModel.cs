@@ -5,10 +5,6 @@ using Maple.Localization.Properties;
 
 namespace Maple
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <seealso cref="Maple.Core.ObservableObject" />
     public class StatusbarViewModel : ObservableObject
     {
         private readonly IMessenger _messenger;
@@ -77,6 +73,6 @@ namespace Maple
             MainMediaPlayer = message.Content as MainMediaPlayer;
         }
 
-        // TODO notifications?
+        // TODO add message queue and notify user about important notifications
     }
 }

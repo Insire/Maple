@@ -23,7 +23,7 @@ namespace Maple
 
         protected override void InitializeMapper()
         {
-            var config = new MapperConfiguration(cfg => // TODO
+            var config = new MapperConfiguration(cfg => // TODO mapper configuration
             {
             });
 
