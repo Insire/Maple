@@ -18,6 +18,7 @@ namespace Maple
     [DebuggerDisplay("{Title}, {Sequence}")]
     public class Playlist : ValidableBaseDataViewModel<Playlist, Data.Playlist>, IIsSelected, ISequence, IIdentifier, IChangeState
     {
+        private readonly IMediaItemMapper _mediaItemMapper;
         private readonly ISequenceService _sequenceProvider;
         private readonly ILocalizationService _translator;
         private readonly IDialogViewModel _dialogViewModel;
@@ -34,7 +35,6 @@ namespace Maple
         public ICommand RemoveRangeCommand { get; protected set; }
         public ICommand RemoveCommand { get; protected set; }
         public ICommand ClearCommand { get; protected set; }
-        public ICommand AddCommand { get; protected set; }
 
         public int Id
         {
@@ -173,13 +173,14 @@ namespace Maple
             private set { SetValue(ref _repeatModes, (IRangeObservableCollection<RepeatMode>)value); }
         }
 
-        public Playlist(ViewModelServiceContainer container, IValidator<Playlist> validator, IDialogViewModel dialogViewModel, Data.Playlist model)
+        public Playlist(ViewModelServiceContainer container, IValidator<Playlist> validator, IDialogViewModel dialogViewModel, IMediaItemMapper mediaItemMapper, Data.Playlist model)
             : base(model, validator, container.Messenger)
         {
             SkipChangeTracking = true;
             using (BusyStack.GetToken())
             {
                 _itemsLock = new object();
+                _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper), $"{nameof(mediaItemMapper)} {Resources.IsRequired}");
                 _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel), $"{nameof(dialogViewModel)} {Resources.IsRequired}");
                 _sequenceProvider = container.SequenceService;
 
@@ -207,6 +208,8 @@ namespace Maple
                 RemoveCommand = new RelayCommand<object>(Remove, CanRemove);
                 RemoveRangeCommand = new RelayCommand<IList>(RemoveRange, CanRemoveRange);
                 ClearCommand = new RelayCommand(() => Clear(), CanClear);
+
+                AddRange(_mediaItemMapper.GetMany(model.MediaItems));
 
                 Validate();
             }

@@ -59,12 +59,11 @@ namespace Maple.Test.ViewModels.Playlists
             Assert.AreEqual(model, playlist.Model);
             Assert.AreEqual(PrivacyStatus.None, playlist.PrivacyStatus);
             Assert.AreEqual(RepeatMode.None, playlist.RepeatMode);
-            Assert.AreEqual(null, playlist.SelectedItem);
+            Assert.AreEqual(playlist[0], playlist.SelectedItem);
             Assert.AreEqual(1, playlist.Sequence);
             Assert.AreEqual($"Title for {_context.FullyQualifiedTestClassName} Playlist", playlist.Title);
 
             Assert.IsNotNull(playlist.View);
-            Assert.IsNotNull(playlist.AddCommand);
             Assert.IsNotNull(playlist.ClearCommand);
             Assert.IsNotNull(playlist.LoadFromFileCommand);
             Assert.IsNotNull(playlist.LoadFromFolderCommand);
@@ -82,19 +81,25 @@ namespace Maple.Test.ViewModels.Playlists
         [TestMethod]
         public void ShouldThrowForEmptyContainer()
         {
-            Assert.ThrowsException<ArgumentNullException>(() => new Playlist(null, _container.Resolve<IValidator<Playlist>>(), _container.Resolve<IDialogViewModel>(), CreateModelPlaylist()));
+            Assert.ThrowsException<ArgumentNullException>(() => new Playlist(null, _container.Resolve<IValidator<Playlist>>(), _container.Resolve<IDialogViewModel>(), _container.Resolve<IMediaItemMapper>(), CreateModelPlaylist()));
         }
 
         [TestMethod]
         public void ShouldThrowForEmptyValidator()
         {
-            Assert.ThrowsException<ArgumentNullException>(() => new Playlist(_container.Resolve<ViewModelServiceContainer>(), null, _container.Resolve<IDialogViewModel>(), CreateModelPlaylist()));
+            Assert.ThrowsException<ArgumentNullException>(() => new Playlist(_container.Resolve<ViewModelServiceContainer>(), null, _container.Resolve<IDialogViewModel>(), _container.Resolve<IMediaItemMapper>(), CreateModelPlaylist()));
         }
 
         [TestMethod]
         public void ShouldThrowForEmptyViewModel()
         {
-            Assert.ThrowsException<ArgumentNullException>(() => new Playlist(_container.Resolve<ViewModelServiceContainer>(), _container.Resolve<IValidator<Playlist>>(), null, CreateModelPlaylist()));
+            Assert.ThrowsException<ArgumentNullException>(() => new Playlist(_container.Resolve<ViewModelServiceContainer>(), _container.Resolve<IValidator<Playlist>>(), null, _container.Resolve<IMediaItemMapper>(), CreateModelPlaylist()));
+        }
+
+        [TestMethod]
+        public void ShouldThrowForEmptyMediaItemMapper()
+        {
+            Assert.ThrowsException<ArgumentNullException>(() => new Playlist(_container.Resolve<ViewModelServiceContainer>(), _container.Resolve<IValidator<Playlist>>(), _container.Resolve<IDialogViewModel>(), null, CreateModelPlaylist()));
         }
 
         [TestMethod]
