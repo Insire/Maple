@@ -174,12 +174,16 @@ namespace Maple
         }
 
         public Playlist(ViewModelServiceContainer container, IValidator<Playlist> validator, IDialogViewModel dialogViewModel, IMediaItemMapper mediaItemMapper, Data.Playlist model)
-            : base(model, validator, container.Messenger)
+            : base(model, validator, container?.Messenger)
         {
+            if (container == null)
+                throw new ArgumentNullException(nameof(container), $"{nameof(container)} {Resources.IsRequired}");
+
             SkipChangeTracking = true;
             using (BusyStack.GetToken())
             {
                 _itemsLock = new object();
+
                 _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper), $"{nameof(mediaItemMapper)} {Resources.IsRequired}");
                 _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel), $"{nameof(dialogViewModel)} {Resources.IsRequired}");
                 _sequenceProvider = container.SequenceService;

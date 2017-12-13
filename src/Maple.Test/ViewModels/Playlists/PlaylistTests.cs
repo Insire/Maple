@@ -38,7 +38,7 @@ namespace Maple.Test.ViewModels.Playlists
         }
 
         [TestMethod]
-        public void ShouldRunConstructorWithoutErrors()
+        public void Playlist_ShouldRunConstructorWithoutErrors()
         {
             var model = CreateModelPlaylist();
             var playlist = CreatePlaylist(model);
@@ -73,37 +73,37 @@ namespace Maple.Test.ViewModels.Playlists
         }
 
         [TestMethod]
-        public void ShouldThrowForEmptyModel()
+        public void Playlist_ShouldThrowForEmptyModel()
         {
             Assert.ThrowsException<ArgumentNullException>(() => CreatePlaylist(default(Data.Playlist)));
         }
 
         [TestMethod]
-        public void ShouldThrowForEmptyContainer()
+        public void Playlist_ShouldThrowForEmptyContainer()
         {
             Assert.ThrowsException<ArgumentNullException>(() => new Playlist(null, _container.Resolve<IValidator<Playlist>>(), _container.Resolve<IDialogViewModel>(), _container.Resolve<IMediaItemMapper>(), CreateModelPlaylist()));
         }
 
         [TestMethod]
-        public void ShouldThrowForEmptyValidator()
+        public void Playlist_ShouldThrowForEmptyValidator()
         {
             Assert.ThrowsException<ArgumentNullException>(() => new Playlist(_container.Resolve<ViewModelServiceContainer>(), null, _container.Resolve<IDialogViewModel>(), _container.Resolve<IMediaItemMapper>(), CreateModelPlaylist()));
         }
 
         [TestMethod]
-        public void ShouldThrowForEmptyViewModel()
+        public void Playlist_ShouldThrowForEmptyViewModel()
         {
             Assert.ThrowsException<ArgumentNullException>(() => new Playlist(_container.Resolve<ViewModelServiceContainer>(), _container.Resolve<IValidator<Playlist>>(), null, _container.Resolve<IMediaItemMapper>(), CreateModelPlaylist()));
         }
 
         [TestMethod]
-        public void ShouldThrowForEmptyMediaItemMapper()
+        public void Playlist_ShouldThrowForEmptyMediaItemMapper()
         {
             Assert.ThrowsException<ArgumentNullException>(() => new Playlist(_container.Resolve<ViewModelServiceContainer>(), _container.Resolve<IValidator<Playlist>>(), _container.Resolve<IDialogViewModel>(), null, CreateModelPlaylist()));
         }
 
         [TestMethod]
-        public void ShouldRunClear()
+        public void Playlist_ShouldRunClear()
         {
             var playlist = CreatePlaylist(CreateModelPlaylist());
 
@@ -115,7 +115,7 @@ namespace Maple.Test.ViewModels.Playlists
         }
 
         [TestMethod]
-        public void ShouldAdd()
+        public void Playlist_ShouldAdd()
         {
             var mediaItem = CreateMediaItem(CreateModelMediaItem());
             var playlist = CreatePlaylist(CreateModelPlaylist());
@@ -128,49 +128,207 @@ namespace Maple.Test.ViewModels.Playlists
         }
 
         [TestMethod]
-        public void ShouldAddRanage()
+        public void Playlist_ShouldThrowAddForNull()
+        {
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+
+            Assert.ThrowsException<ArgumentNullException>(() => playlist.Add(null));
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldAddRange()
+        {
+            var mediaItems = new List<MediaItem>()
+            {
+                CreateMediaItem(CreateModelMediaItem()),
+                CreateMediaItem(CreateModelMediaItem()),
+                CreateMediaItem(CreateModelMediaItem()),
+            };
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+
+            Assert.AreEqual(4, playlist.Count);
+
+            playlist.AddRange(mediaItems);
+
+            Assert.AreEqual(7, playlist.Count);
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldHandleAddRangeForEmptyCollection()
+        {
+            var mediaItems = new List<MediaItem>();
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+
+            Assert.AreEqual(4, playlist.Count);
+
+            playlist.AddRange(mediaItems);
+
+            Assert.AreEqual(4, playlist.Count);
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldThrowAddRangeForNull()
+        {
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+
+            Assert.AreEqual(4, playlist.Count);
+
+            Assert.ThrowsException<ArgumentNullException>(() => playlist.AddRange(null));
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldHandleAddRangeForDuplicateEntries()
+        {
+            var mediaItem = CreateMediaItem(CreateModelMediaItem());
+            var mediaItems = new List<MediaItem>()
+            {
+                mediaItem,
+                mediaItem,
+                mediaItem,
+            };
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+
+            Assert.AreEqual(4, playlist.Count);
+
+            playlist.AddRange(mediaItems);
+
+            Assert.AreEqual(7, playlist.Count);
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldRemove()
+        {
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+
+            Assert.AreEqual(4, playlist.Count);
+
+            playlist.Remove(playlist[0]);
+
+            Assert.AreEqual(3, playlist.Count);
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldThrowRemoveForNull()
+        {
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+
+            Assert.ThrowsException<ArgumentNullException>(() => playlist.Remove(null));
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldRemoveRange()
+        {
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+            var mediaItems = new List<MediaItem>()
+            {
+                playlist[0],
+                playlist[1],
+                playlist[2],
+            };
+
+            Assert.AreEqual(4, playlist.Count);
+
+            playlist.RemoveRange(mediaItems);
+
+            Assert.AreEqual(1, playlist.Count);
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldThrowRemoveRangeForNull()
+        {
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+
+            Assert.ThrowsException<ArgumentNullException>(() => playlist.RemoveRange(null));
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldHandleRemoveRangeForSameItem()
+        {
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+            var mediaItems = new List<MediaItem>()
+            {
+                playlist[0],
+                playlist[0],
+                playlist[0],
+            };
+
+            Assert.AreEqual(4, playlist.Count);
+
+            playlist.RemoveRange(mediaItems);
+
+            Assert.AreEqual(3, playlist.Count);
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldHandleRemoveRangeForUnknownItem()
+        {
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+            var mediaItems = new List<MediaItem>()
+            {
+                CreateMediaItem(new Data.MediaItem()),
+            };
+
+            Assert.AreEqual(4, playlist.Count);
+
+            playlist.RemoveRange(mediaItems);
+
+            Assert.AreEqual(4, playlist.Count);
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldHandleRemoveRangeForUnknownItems()
+        {
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+            var mediaItems = new List<MediaItem>()
+            {
+                CreateMediaItem(new Data.MediaItem()),
+                CreateMediaItem(new Data.MediaItem()),
+                CreateMediaItem(new Data.MediaItem()),
+            };
+
+            Assert.AreEqual(4, playlist.Count);
+
+            playlist.RemoveRange(mediaItems);
+
+            Assert.AreEqual(4, playlist.Count);
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldHandleRemoveRangeForEmptyCollection()
+        {
+            var playlist = CreatePlaylist(CreateModelPlaylist());
+            var mediaItems = new List<MediaItem>();
+
+            Assert.AreEqual(4, playlist.Count);
+
+            playlist.RemoveRange(mediaItems);
+
+            Assert.AreEqual(4, playlist.Count);
+        }
+
+        [TestMethod]
+        public void Playlist_ShouldRunNext()
         {
             throw new NotImplementedException();
             CreatePlaylist(CreateModelPlaylist());
         }
 
         [TestMethod]
-        public void ShouldRemove()
+        public void Playlist_ShouldRunPrevious()
         {
             throw new NotImplementedException();
             CreatePlaylist(CreateModelPlaylist());
         }
 
         [TestMethod]
-        public void ShouldRemoveRange()
+        public void Playlist_ShouldRaiseSelectionChanging()
         {
             throw new NotImplementedException();
             CreatePlaylist(CreateModelPlaylist());
         }
 
         [TestMethod]
-        public void ShouldRunNext()
-        {
-            throw new NotImplementedException();
-            CreatePlaylist(CreateModelPlaylist());
-        }
-
-        [TestMethod]
-        public void ShouldRunPrevious()
-        {
-            throw new NotImplementedException();
-            CreatePlaylist(CreateModelPlaylist());
-        }
-
-        [TestMethod]
-        public void ShouldRaiseSelectionChanging()
-        {
-            throw new NotImplementedException();
-            CreatePlaylist(CreateModelPlaylist());
-        }
-
-        [TestMethod]
-        public void ShouldRaiseSelectionChanged()
+        public void Playlist_ShouldRaiseSelectionChanged()
         {
             throw new NotImplementedException();
             CreatePlaylist(CreateModelPlaylist());
