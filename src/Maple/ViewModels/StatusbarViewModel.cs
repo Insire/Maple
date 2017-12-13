@@ -1,14 +1,10 @@
-﻿using System;
-using Maple.Core;
+﻿using Maple.Core;
 using Maple.Domain;
-using Maple.Localization.Properties;
 
 namespace Maple
 {
-    public class StatusbarViewModel : ObservableObject
+    public class StatusbarViewModel : ViewModel
     {
-        private readonly IMessenger _messenger;
-
         private string _version;
         /// <summary>
         /// Gets the version.
@@ -54,13 +50,12 @@ namespace Maple
         /// <param name="manager">The manager.</param>
         /// <param name="mediaPlayers">The media players.</param>
         public StatusbarViewModel(IVersionService version, IMessenger messenger)
+            : base(messenger)
         {
-            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");
-
             Version = version.Get();
 
-            _messenger.Subscribe<ViewModelSelectionChangedMessage<Culture>>(UpdateLanguage);
-            _messenger.Subscribe<ViewModelSelectionChangedMessage<MediaPlayer>>(UpdateMediaPlayer);
+            MessageTokens.Add(Messenger.Subscribe<ViewModelSelectionChangedMessage<Culture>>(UpdateLanguage));
+            MessageTokens.Add(Messenger.Subscribe<ViewModelSelectionChangedMessage<MediaPlayer>>(UpdateMediaPlayer));
         }
 
         private void UpdateLanguage(ViewModelSelectionChangedMessage<Culture> message)

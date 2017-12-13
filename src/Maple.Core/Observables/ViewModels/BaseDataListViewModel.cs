@@ -23,20 +23,6 @@ namespace Maple.Core
         protected readonly ILocalizationService _translationService;
         protected readonly ILoggingService _log;
 
-        private bool _disposed;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="MediaPlayers"/> is disposed.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if disposed; otherwise, <c>false</c>.
-        /// </value>
-        public bool Disposed
-        {
-            get { return _disposed; }
-            protected set { SetValue(ref _disposed, value); }
-        }
-
         /// <summary>
         /// Gets the load command.
         /// </summary>
@@ -79,7 +65,7 @@ namespace Maple.Core
             if (viewModel == null)
                 throw new ArgumentNullException(nameof(viewModel), $"{nameof(viewModel)} {Resources.IsRequired}");
 
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 while (Items.Contains(viewModel))
                 {
@@ -98,7 +84,7 @@ namespace Maple.Core
             if (items == null)
                 throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
 
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 items.ForEach(p => p.Model.IsDeleted = true);
                 base.RemoveRange(items);
@@ -115,7 +101,7 @@ namespace Maple.Core
             if (items == null)
                 throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
 
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 foreach (var item in items)
                     Remove(item as TViewModel);
@@ -137,7 +123,7 @@ namespace Maple.Core
             if (items == null)
                 throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
 
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 var added = false;
                 var sequence = _sequenceProvider.Get(Items.Cast<ISequence>().ToList());
@@ -154,30 +140,6 @@ namespace Maple.Core
                 if (SelectedItem == null && added)
                     SelectedItem = Items.First();
             }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Releases unmanaged and - optionally - managed resources.
-        /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (Disposed)
-                return;
-
-            if (disposing)
-            {
-                // Free any other managed objects here.
-            }
-
-            // Free any unmanaged objects here.
-            Disposed = true;
         }
     }
 }

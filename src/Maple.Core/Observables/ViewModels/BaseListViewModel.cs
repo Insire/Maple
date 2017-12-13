@@ -16,7 +16,7 @@ namespace Maple.Core
     /// </summary>
     /// <typeparam name="TViewModel">a class implementing <see cref="ObservableObject" /></typeparam>
     /// <seealso cref="Maple.Core.ObservableObject" />
-    public abstract class BaseListViewModel<TViewModel> : BaseViewModel<TViewModel>
+    public abstract class BaseListViewModel<TViewModel> : ViewModel
         where TViewModel : INotifyPropertyChanged
     {
         protected readonly object _itemsLock;
@@ -32,9 +32,9 @@ namespace Maple.Core
                 if (EqualityComparer<TViewModel>.Default.Equals(_selectedItem, value))
                     return;
 
-                _messenger.Publish(new ViewModelSelectionChangingMessage<TViewModel>(Items, _selectedItem));
+                Messenger.Publish(new ViewModelSelectionChangingMessage<TViewModel>(Items, _selectedItem));
                 _selectedItem = value;
-                _messenger.Publish(new ViewModelSelectionChangedMessage<TViewModel>(_items, _selectedItem));
+                Messenger.Publish(new ViewModelSelectionChangedMessage<TViewModel>(_items, _selectedItem));
 
                 OnPropertyChanged();
             }
@@ -129,7 +129,7 @@ namespace Maple.Core
         protected virtual void OnLoaded()
         {
             IsLoaded = true;
-            _messenger.Publish(new LoadedMessage(this, this));
+            Messenger.Publish(new LoadedMessage(this, this));
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace Maple.Core
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
 
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
                 _items.Add(item);
         }
 
@@ -153,7 +153,7 @@ namespace Maple.Core
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
                 _items.AddRange(items);
         }
 
@@ -168,7 +168,7 @@ namespace Maple.Core
         /// <param name="item">The item.</param>
         public virtual void Remove(TViewModel item)
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
                 _items.Remove(item);
         }
 
@@ -179,7 +179,7 @@ namespace Maple.Core
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
                 _items.RemoveRange(items);
         }
 
@@ -190,7 +190,7 @@ namespace Maple.Core
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
                 _items.RemoveRange(items.Cast<TViewModel>());
         }
 
@@ -234,7 +234,7 @@ namespace Maple.Core
         {
             SelectedItem = default(TViewModel);
 
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
                 _items.Clear();
         }
 

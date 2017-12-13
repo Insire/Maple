@@ -6,11 +6,7 @@ using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <seealso cref="System.Windows.Input.ICommand" />
+    [Obsolete]
     public class AsyncRelayCommand<T> : ICommand
     {
         private readonly Func<T, bool> _canExecute = null;
@@ -77,10 +73,7 @@ namespace Maple.Core
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <seealso cref="System.Windows.Input.ICommand" />
+    [Obsolete]
     public class AsyncRelayCommand : ICommand
     {
         private readonly Func<bool> _canExecute = null;

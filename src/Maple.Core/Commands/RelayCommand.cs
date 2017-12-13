@@ -5,10 +5,6 @@ using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <seealso cref="System.Windows.Input.ICommand" />
     public class RelayCommand : ICommand
     {
         private readonly Action _execute = null;
@@ -68,11 +64,6 @@ namespace Maple.Core
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <seealso cref="System.Windows.Input.ICommand" />
     public class RelayCommand<T> : ICommand
     {
         private readonly Action<T> _execute = null;

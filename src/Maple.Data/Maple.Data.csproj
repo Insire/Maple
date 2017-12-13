@@ -75,9 +75,9 @@
     <Compile Include="DB\ModelConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DB\CreateSeedDatabaseIfNotExists.cs" />
-    <Compile Include="Interfaces\IMediaItemRepository.cs" />
-    <Compile Include="Interfaces\IMediaPlayerRepository.cs" />
-    <Compile Include="Interfaces\IPlaylistRepository.cs" />
+    <Compile Include="Repository\Base\IMediaItemRepository.cs" />
+    <Compile Include="Repository\Base\IMediaPlayerRepository.cs" />
+    <Compile Include="Repository\Base\IPlaylistRepository.cs" />
     <Compile Include="Repository\Base\MaplePlaylistRepository.cs" />
     <Compile Include="Repository\MediaItemRepository.cs" />
     <Compile Include="DB\PlaylistContext.cs" />

@@ -154,7 +154,7 @@
     <Compile Include="UI\MarkupExtensions\RadioButtonCheckedConverter.cs" />
     <Compile Include="UI\MarkupExtensions\Base\MultiConverterMarkupExtension.cs" />
     <Compile Include="UI\MarkupExtensions\TranslationExtension.cs" />
-    <Compile Include="Utils\Validation\BaseValidator.cs" />
+    <Compile Include="Utils\Validation\Base\BaseValidator.cs" />
     <Compile Include="Utils\Validation\MediaItemValidator.cs" />
     <Compile Include="Utils\Validation\MediaPlayerValidator.cs" />
     <Compile Include="Utils\Validation\PlaylistsValidator.cs" />

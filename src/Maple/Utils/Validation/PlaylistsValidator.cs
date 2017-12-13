@@ -3,7 +3,6 @@ using Maple.Core;
 
 namespace Maple
 {
-
     public class PlaylistsValidator : BaseValidator<Playlists>, IValidator<Playlists>
     {
         public PlaylistsValidator(ILocalizationService translationService, IValidator<Playlist> playlistValidator)

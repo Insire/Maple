@@ -13,7 +13,7 @@ namespace Maple
     [DebuggerDisplay("{Name}, {Sequence}")]
     public class MediaPlayer : ValidableBaseDataViewModel<MediaPlayer, MediaPlayerModel>, IDisposable, IChangeState, ISequence
     {
-        private List<SubscriptionToken> _messageTokens;
+        private IEnumerable<SubscriptionToken> _messageTokens;
         protected readonly ILocalizationService _manager;
 
         public bool IsPlaying { get { return Player.IsPlaying; } }
@@ -418,8 +418,13 @@ namespace Maple
 
             if (disposing)
             {
-                foreach (var token in _messageTokens)
-                    Messenger.Unsubscribe<IMapleMessage>(token);
+                if (_messageTokens != null)
+                {
+                    foreach (var token in _messageTokens)
+                        Messenger.Unsubscribe<IMapleMessage>(token);
+
+                    _messageTokens = null;
+                }
 
                 if (Player != null)
                 {

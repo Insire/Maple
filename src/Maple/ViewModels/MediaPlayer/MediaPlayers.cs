@@ -70,7 +70,6 @@ namespace Maple
                 foreach (var player in Items)
                     player?.Dispose();
 
-                base.Dispose(disposing);
                 // Free any other managed objects here.
             }
 

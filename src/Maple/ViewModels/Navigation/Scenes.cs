@@ -126,7 +126,7 @@ namespace Maple
                 },
             };
 
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 AddRange(content);
 

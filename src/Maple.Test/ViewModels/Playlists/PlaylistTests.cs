@@ -265,7 +265,7 @@ namespace Maple.Test.ViewModels.Playlists
             var playlist = CreatePlaylist(CreateModelPlaylist());
             var mediaItems = new List<MediaItem>()
             {
-                CreateMediaItem(new Domain.MediaItemModel()),
+                CreateMediaItem(new MediaItemModel()),
             };
 
             Assert.AreEqual(4, playlist.Count);
@@ -281,9 +281,9 @@ namespace Maple.Test.ViewModels.Playlists
             var playlist = CreatePlaylist(CreateModelPlaylist());
             var mediaItems = new List<MediaItem>()
             {
-                CreateMediaItem(new Domain.MediaItemModel()),
-                CreateMediaItem(new Domain.MediaItemModel()),
-                CreateMediaItem(new Domain.MediaItemModel()),
+                CreateMediaItem(new MediaItemModel()),
+                CreateMediaItem(new MediaItemModel()),
+                CreateMediaItem(new MediaItemModel()),
             };
 
             Assert.AreEqual(4, playlist.Count);

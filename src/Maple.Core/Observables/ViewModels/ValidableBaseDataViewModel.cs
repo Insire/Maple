@@ -25,21 +25,13 @@ namespace Maple.Core
 
         public bool HasErrors => Errors.Any(p => !p.Value.IsValid);
 
-        private ValidableBaseDataViewModel(IMessenger messenger)
-            : base(messenger)
+        protected ValidableBaseDataViewModel(TModel model, IValidator<TViewModel> validator, IMessenger messenger)
+            : base(model, messenger)
         {
             SkipChangeTracking = true;
             SkipValidation = true;
 
             Errors = new Dictionary<string, ValidationResult>();
-
-            SkipChangeTracking = false;
-        }
-
-        protected ValidableBaseDataViewModel(TModel model, IValidator<TViewModel> validator, IMessenger messenger)
-            : this(messenger)
-        {
-            SkipChangeTracking = true;
 
             Validator = validator ?? throw new ArgumentNullException(nameof(validator), $"{nameof(validator)} {Resources.IsRequired}"); //order is important in this case
             Model = model ?? throw new ArgumentNullException(nameof(model), $"{nameof(model)} {Resources.IsRequired}");
@@ -89,7 +81,7 @@ namespace Maple.Core
         {
             base.OnPropertyChanged(propertyName);
 
-            if (SkipValidation)
+            if (this == null || SkipValidation)
                 return;
 
             AddOrUpdateValidationResults(Validator.Validate(this, propertyName), propertyName);

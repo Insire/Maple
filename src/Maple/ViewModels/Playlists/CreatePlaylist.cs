@@ -69,7 +69,7 @@ namespace Maple
 
         private async Task Parse()
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 Result = await _dataParsingService.Parse(Source, ParseResultType.Playlists)
                                                   .ConfigureAwait(true);

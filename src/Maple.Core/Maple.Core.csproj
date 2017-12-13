@@ -70,7 +70,7 @@
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Helpers\ApplicationHelper.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
-    <Compile Include="Commands\AsyncRelayCommand.cs" />
+    <Compile Include="Commands\Obsolete\AsyncRelayCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="DiagnosticReport.cs" />
     <Compile Include="DiagnosticReportType.cs" />
@@ -116,9 +116,10 @@
     <Compile Include="Messages\ViewModelSelectionChangedMessage.cs" />
     <Compile Include="Messages\ViewModelSelectionChangingMessage.cs" />
     <Compile Include="Helpers\NetworkHelper.cs" />
-    <Compile Include="Observables\Base\BaseDataViewModel.cs" />
+    <Compile Include="Observables\ViewModels\BaseDataViewModel.cs" />
     <Compile Include="Extensions\IValidatorExtensions.cs" />
-    <Compile Include="Observables\Base\ValidableBaseDataViewModel.cs" />
+    <Compile Include="Observables\ViewModels\ValidableBaseDataViewModel.cs" />
+    <Compile Include="Observables\ViewModels\ViewModel.cs" />
     <Compile Include="Observables\ChangeTracker.cs" />
     <Compile Include="Observables\NotifyTaskCompletion.cs" />
     <Compile Include="ProcessExecutionResult.cs" />
@@ -137,7 +138,7 @@
     <Compile Include="IO\MapleDrive.cs" />
     <Compile Include="IO\MapleFile.cs" />
     <Compile Include="IO\Base\MapleFileSystemContainerBase.cs" />
-    <Compile Include="Observables\Base\BaseDataListViewModel.cs" />
+    <Compile Include="Observables\ViewModels\BaseDataListViewModel.cs" />
     <Compile Include="IO\Base\MapleFileSystemBase.cs" />
     <Compile Include="Services\DetailLoggingService.cs" />
     <Compile Include="Services\Localization\LocalizationDTO.cs" />
@@ -149,8 +150,8 @@
     <Compile Include="Observables\BusyToken.cs" />
     <Compile Include="Observables\Base\ObservableObject.cs" />
     <Compile Include="Observables\RangeObservableCollection.cs" />
-    <Compile Include="Observables\Base\BaseViewModel.cs" />
-    <Compile Include="Observables\Base\BaseListViewModel.cs" />
+    <Compile Include="Observables\ViewModels\BaseViewModel.cs" />
+    <Compile Include="Observables\ViewModels\BaseListViewModel.cs" />
     <Compile Include="Services\LoggingService.cs" />
     <Compile Include="Services\MrlExtractionService.cs" />
     <Compile Include="Observables\NotifyPropertyChangedExtension.cs" />

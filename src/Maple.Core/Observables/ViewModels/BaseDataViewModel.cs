@@ -1,31 +1,14 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using Maple.Domain;
-using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
-    public abstract class BaseDataViewModel<TViewModel, TModel> : ObservableObject
+    public abstract class BaseDataViewModel<TViewModel, TModel> : BaseViewModel<TModel>
         where TModel : class, IBaseObject
     {
-        protected BusyStack BusyStack { get; }
         protected ChangeTracker ChangeTracker { get; }
-        protected IMessenger Messenger { get; }
         protected bool SkipChangeTracking { get; set; }
-
-        private TModel _model;
-        public TModel Model
-        {
-            get { return _model; }
-            protected set { SetValue(ref _model, value); }
-        }
-
-        private bool _isBusy;
-        public bool IsBusy
-        {
-            get { return _isBusy; }
-            set { SetValue(ref _isBusy, value); }
-        }
 
         public bool IsChanged
         {
@@ -45,23 +28,12 @@ namespace Maple.Core
             return result;
         }
 
-        protected BaseDataViewModel(IMessenger messenger)
-        {
-            SkipChangeTracking = true;
-
-            Messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");
-            BusyStack = new BusyStack();
-            BusyStack.OnChanged += (isBusy) => IsBusy = isBusy;
-            ChangeTracker = new ChangeTracker();
-
-            SkipChangeTracking = false;
-        }
-
         protected BaseDataViewModel(TModel model, IMessenger messenger)
-            : this(messenger)
+            : base(model, messenger)
         {
             SkipChangeTracking = true;
 
+            ChangeTracker = new ChangeTracker();
             Model = model ?? throw new ArgumentNullException(nameof(model));
 
             SkipChangeTracking = false;
