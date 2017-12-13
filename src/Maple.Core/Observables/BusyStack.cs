@@ -1,6 +1,6 @@
-﻿using Maple.Localization.Properties;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
+using Maple.Localization.Properties;
 
 namespace Maple.Core
 {

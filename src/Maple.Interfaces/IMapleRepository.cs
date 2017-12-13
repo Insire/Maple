@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Maple.Interfaces;
 
 namespace Maple.Interfaces
 {

@@ -1,7 +1,7 @@
-﻿using Maple.Localization.Properties;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Windows.Input;
+using Maple.Localization.Properties;
 
 namespace Maple.Core
 {

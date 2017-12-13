@@ -1,11 +1,11 @@
-﻿using Maple.Localization.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Maple.Interfaces;
+using Maple.Localization.Properties;
 
 namespace Maple.Core
 {

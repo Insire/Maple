@@ -1,15 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using DryIoc;
 using FluentValidation;
-using Maple;
+using FluentValidation.Results;
 using Maple.Core;
 using Maple.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
-using DryIoc;
-using System;
-using System.Collections.Generic;
-using FluentValidation.Results;
-using System.Linq;
 
 namespace Maple.Test.ViewModels.Playlists
 {
