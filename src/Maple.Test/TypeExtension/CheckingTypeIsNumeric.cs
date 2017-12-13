@@ -9,7 +9,7 @@ namespace Maple.Test
     public sealed class CheckingTypeIsNumeric
     {
         [TestMethod]
-        public void Run()
+        public void RunIsNumericExtenionsTests()
         {
             typeof(bool).IsNumeric().ShouldBeFalse();
             typeof(string).IsNumeric().ShouldBeFalse();

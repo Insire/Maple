@@ -5,8 +5,8 @@
     /// </summary>
     public enum RepeatMode
     {
-        None,           // play everything thats in the playlist once
-        Single,         // play the currently selected MediaItem repeatedly
-        All,            // play and repeat everything in the playlist
+        None = 0,           // play everything thats in the playlist once
+        Single = 1 << 0,         // play the currently selected MediaItem repeatedly
+        All = 1 << 1,            // play and repeat everything in the playlist
     }
 }

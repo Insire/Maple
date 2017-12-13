@@ -11,6 +11,7 @@ namespace Maple.Core
         protected BusyStack BusyStack { get; }
         protected ChangeTracker ChangeTracker { get; }
         protected IMessenger Messenger { get; }
+        protected bool SkipChangeTracking { get; set; }
 
         private TModel _model;
         public TModel Model
@@ -35,24 +36,35 @@ namespace Maple.Core
         {
             var result = base.SetValue(ref field, value, OnChanging, OnChanged, propertyName);
 
-            if (result && ChangeTracker.Update(value, propertyName))
-                OnPropertyChanged(nameof(IsChanged));
+            if (result)
+            {
+                if (!SkipChangeTracking && ChangeTracker.Update(value, propertyName))
+                    OnPropertyChanged(nameof(IsChanged));
+            }
 
             return result;
         }
 
         protected BaseDataViewModel(IMessenger messenger)
         {
+            SkipChangeTracking = true;
+
             Messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");
             BusyStack = new BusyStack();
             BusyStack.OnChanged += (isBusy) => IsBusy = isBusy;
             ChangeTracker = new ChangeTracker();
+
+            SkipChangeTracking = false;
         }
 
         protected BaseDataViewModel(TModel model, IMessenger messenger)
             : this(messenger)
         {
+            SkipChangeTracking = true;
+
             Model = model ?? throw new ArgumentNullException(nameof(model));
+
+            SkipChangeTracking = false;
         }
     }
 }

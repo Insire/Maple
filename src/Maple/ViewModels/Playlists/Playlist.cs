@@ -20,23 +20,13 @@ namespace Maple
     {
         private readonly ISequenceService _sequenceProvider;
         private readonly ILocalizationService _translator;
-        private readonly object _itemsLock;
         private readonly IDialogViewModel _dialogViewModel;
-
-        public EventHandler SelectionChanged;
-        public EventHandler SelectionChanging;
+        private readonly object _itemsLock;
+        private readonly Stack<int> _history;
 
         public bool IsNew => Model.IsNew;
         public bool IsDeleted => Model.IsDeleted;
         public int Count => Items?.Count ?? 0;
-
-        /// <summary>
-        /// contains indices of played <see cref="IMediaItem" />
-        /// </summary>
-        /// <value>
-        /// The history.
-        /// </value>
-        public Stack<int> History { get; private set; }
 
         public IAsyncCommand LoadFromFileCommand { get; private set; }
         public IAsyncCommand LoadFromFolderCommand { get; private set; }
@@ -186,6 +176,7 @@ namespace Maple
         public Playlist(ViewModelServiceContainer container, IValidator<Playlist> validator, IDialogViewModel dialogViewModel, Data.Playlist model)
             : base(model, validator, container.Messenger)
         {
+            SkipChangeTracking = true;
             using (BusyStack.GetToken())
             {
                 _itemsLock = new object();
@@ -200,7 +191,7 @@ namespace Maple
                 _sequence = model.Sequence;
 
                 RepeatModes = new RangeObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
-                History = new Stack<int>();
+                _history = new Stack<int>();
 
                 Items = new RangeObservableCollection<MediaItem>();
                 _items.CollectionChanged += (o, e) => OnPropertyChanged(nameof(Count));
@@ -219,16 +210,7 @@ namespace Maple
 
                 Validate();
             }
-        }
-
-        protected virtual void OnSelectionChanging()
-        {
-            SelectionChanging?.Raise(this);
-        }
-
-        protected virtual void OnSelectionChanged()
-        {
-            SelectionChanged?.Raise(this);
+            SkipChangeTracking = false;
         }
 
         private async Task LoadFromUrl()
@@ -291,7 +273,7 @@ namespace Maple
 
         public virtual void Clear()
         {
-            History.Clear();
+            _history.Clear();
             SelectedItem = null;
             RemoveRange(Items.AsEnumerable());
         }
@@ -303,13 +285,16 @@ namespace Maple
 
         public virtual void Add(MediaItem item)
         {
+            if (item == null)
+                throw new ArgumentNullException(nameof(item), $"{nameof(item)} {Resources.IsRequired}");
+
             using (BusyStack.GetToken())
             {
                 var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
                 item.Sequence = sequence;
 
                 if (Items.Any() != true)
-                    History.Push(item.Sequence);
+                    _history.Push(item.Sequence);
 
                 AddInternal(item);
 
@@ -327,13 +312,23 @@ namespace Maple
 
         public virtual void AddRange(IEnumerable<MediaItem> items)
         {
+            if (items == null)
+                throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
+
             using (BusyStack.GetToken())
             {
                 var added = false;
                 var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
+                var collection = items.ToList();
+                var item = default(MediaItem);
 
-                foreach (var item in items)
+                for (var i = 0; i < collection.Count; i++)
                 {
+                    item = collection[i];
+
+                    if (item == null)
+                        throw new ArgumentNullException(nameof(item), $"{nameof(item)} {Resources.IsRequired}");
+
                     item.Sequence = sequence;
                     Add(item);
                     sequence++;
@@ -346,13 +341,16 @@ namespace Maple
             }
         }
 
-        public void Remove(object item)
+        private void Remove(object item)
         {
             Remove(item as MediaItem);
         }
 
         public virtual void Remove(MediaItem item)
         {
+            if (item == null)
+                throw new ArgumentNullException(nameof(item), $"{nameof(item)} {Resources.IsRequired}");
+
             using (BusyStack.GetToken())
             {
                 while (Items.Contains(item))
@@ -375,7 +373,7 @@ namespace Maple
                 RemoveRangeInternal(items.ToList());
         }
 
-        public virtual void RemoveRange(IList items)
+        private void RemoveRange(IList items)
         {
             if (items == null)
                 throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
@@ -519,12 +517,12 @@ namespace Maple
         {
             using (BusyStack.GetToken())
             {
-                if (History?.Any() == true)
+                if (_history?.Any() == true)
                 {
                     Items.ToList().ForEach(p => p.IsSelected = false);      // deselect all items in the list
-                    while (History.Any())
+                    while (_history.Any())
                     {
-                        var previous = History.Pop();
+                        var previous = _history.Pop();
 
                         if (previous == SelectedItem?.Sequence) // the most recent item in the history, is the just played item, so we wanna skip that
                             continue;
@@ -553,7 +551,7 @@ namespace Maple
 
         public bool CanPrevious()
         {
-            return History != null && History.Any();
+            return _history != null && _history.Any();
         }
     }
 }

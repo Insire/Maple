@@ -8,7 +8,7 @@ namespace Maple.Test
     public sealed class CheckingATypeImplementsTests
     {
         [TestMethod]
-        public void Run()
+        public void RunImplementsExtensionsTests()
         {
             typeof(MyClassBase).Implements<MyClassBase>().ShouldBeTrue();
             typeof(MyClassBase).Implements<MyClassA>().ShouldBeFalse();

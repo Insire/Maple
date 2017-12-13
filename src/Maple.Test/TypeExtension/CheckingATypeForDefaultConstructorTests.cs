@@ -9,7 +9,7 @@ namespace Maple.Test
     public sealed class CheckingATypeForDefaultConstructorTests
     {
         [TestMethod]
-        public void Run()
+        public void RunHasDefaultConstructorExtensionsTests()
         {
             typeof(SampleClassA).HasDefaultConstructor().ShouldBeFalse();
             typeof(SampleClassAA).HasDefaultConstructor().ShouldBeTrue();

@@ -2,7 +2,7 @@
 {
     public enum PrivacyStatus
     {
-        None,
-        Restricted
+        None = 0,
+        Restricted = 1 << 0
     }
 }

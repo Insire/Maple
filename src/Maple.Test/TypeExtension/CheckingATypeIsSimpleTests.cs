@@ -9,7 +9,7 @@ namespace Maple.Test
     public sealed class CheckingATypeIsSimpleTests
     {
         [TestMethod]
-        public void Run()
+        public void RunIsSimpleTypeExtenionsTests()
         {
             typeof(byte[]).IsSimpleType().ShouldBeTrue();
             typeof(byte).IsSimpleType().ShouldBeTrue();
