@@ -10,7 +10,7 @@ namespace Maple.Test
     public sealed class CheckingTypeCodesTests
     {
         [TestMethod]
-        public void Run()
+        public void RunGetTypeCodeExtensionTests()
         {
             typeof(bool).GetTypeCode().ShouldBe(TypeCode.Boolean);
             typeof(char).GetTypeCode().ShouldBe(TypeCode.Char);

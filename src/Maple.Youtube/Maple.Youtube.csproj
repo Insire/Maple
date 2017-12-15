@@ -7,7 +7,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Maple.Youtube</RootNamespace>
     <AssemblyName>Maple.Youtube</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,28 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Google.Apis" Version="1.31.1" />
-    <PackageReference Include="Google.Apis.Auth" Version="1.31.1" />
-    <PackageReference Include="Google.Apis.Core" Version="1.31.1" />
-    <PackageReference Include="Google.Apis.YouTube.v3" Version="1.31.1.1063" />
+    <PackageReference Include="Google.Apis.YouTube.v3">
+      <Version>1.31.1.1063</Version>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="System.AppContext" Version="4.3.0" />
-    <PackageReference Include="System.Collections" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.Tools" Version="4.3.0" />
-    <PackageReference Include="System.IO" Version="4.3.0" />
-    <PackageReference Include="System.Linq" Version="4.3.0" />
-    <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
-    <PackageReference Include="System.Net.Http" Version="4.3.3" />
-    <PackageReference Include="System.Reflection" Version="4.3.0" />
-    <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Runtime" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
-    <PackageReference Include="System.Security.Cryptography.Encoding" Version="4.3.0" />
-    <PackageReference Include="System.Security.Cryptography.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
-    <PackageReference Include="System.Threading" Version="4.3.0" />
     <PackageReference Include="Zlib.Portable.Signed" Version="1.11.0" />
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +54,7 @@
     <Compile Include="..\Resources\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="IYoutubeApi.cs" />
     <Compile Include="IYoutubeUrlParser.cs" />
     <Compile Include="Utility\ParseResultType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -79,20 +63,18 @@
     <Compile Include="YoutubeUrlParser.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Maple.Core\Maple.Core.csproj">
       <Project>{21fa5854-0692-42e2-924e-a38cf3c7ff71}</Project>
       <Name>Maple.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Maple.Data\Maple.Data.csproj">
-      <Project>{B3CD46BE-3C08-4BAE-AE60-A6D84A62400C}</Project>
-      <Name>Maple.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Maple.Interfaces\Maple.Interfaces.csproj">
-      <Project>{6D75CEE7-C990-4632-BC19-7F56DB880F35}</Project>
-      <Name>Maple.Interfaces</Name>
+    <ProjectReference Include="..\Maple.Domain\Maple.Domain.csproj">
+      <Project>{9d7d05a6-8271-4836-a7bb-5b2abeccbd81}</Project>
+      <Name>Maple.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\Maple.Localization\Maple.Localization.csproj">
       <Project>{A073FC92-90E3-4541-8B52-6F7293187871}</Project>

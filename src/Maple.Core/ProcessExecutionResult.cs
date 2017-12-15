@@ -8,7 +8,8 @@ namespace Maple.Core
     /// </summary>
     public sealed class ProcessExecutionResult : IDisposable
     {
-        private readonly Process _process;
+        private Process _process;
+        private bool _disposed;
 
         internal ProcessExecutionResult(Process process, string[] standardOutput, string[] standardError)
         {
@@ -49,12 +50,30 @@ namespace Maple.Core
             return selector(_process);
         }
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
         /// <summary>
         /// Releases all resources used by the underlying process.
         /// </summary>
-        public void Dispose()
+        private void Dispose(bool disposing)
         {
-            _process?.Dispose();
+            if (_disposed)
+                return;
+
+            if (disposing)
+            {
+                if (_process != null)
+                {
+                    _process.Dispose();
+                    _process = null;
+                }
+            }
+
+            _disposed = true;
         }
     }
 }

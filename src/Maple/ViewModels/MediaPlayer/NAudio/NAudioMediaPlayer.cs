@@ -1,17 +1,15 @@
 ﻿using System;
 using Maple.Core;
-using Maple.Interfaces;
+using Maple.Domain;
 using Maple.Localization.Properties;
 using NAudio.Wave;
 
 namespace Maple
 {
-    public class NAudioMediaPlayer : BasePlayer
+    public sealed class NAudioMediaPlayer : BasePlayer
     {
         private readonly MediaFoundationReader.MediaFoundationReaderSettings _settings;
 
-        private int _volume;
-        private IMediaItem _current;
         private IWavePlayer _player;
         private WaveStream _reader;
         private VolumeWaveProvider16 _volumeProvider;
@@ -19,6 +17,7 @@ namespace Maple
         public override int VolumeMax => 1;
         public override int VolumeMin => 0;
 
+        private int _volume;
         public override int Volume
         {
             get { return _volume; }
@@ -38,7 +37,7 @@ namespace Maple
             _player = factory.GetPlayer(log);
             _player.PlaybackStopped += PlaybackStopped;
 
-            _messenger.Subscribe<PlayingMediaItemMessage>(OnPlaybackStarted);
+            Messenger.Subscribe<PlayingMediaItemMessage>(OnPlaybackStarted);
 
             OnPropertyChanged(nameof(VolumeMin));
             OnPropertyChanged(nameof(VolumeMax));
@@ -46,13 +45,13 @@ namespace Maple
 
         private void OnPlaybackStarted(PlayingMediaItemMessage e)
         {
-            _current = e.Content;
+            Current = e.Content;
         }
 
         private void PlaybackStopped(object sender, StoppedEventArgs e)
         {
-            _messenger.Publish(new CompletedMediaItemMessage(this, _current));
-            _current = null;
+            Messenger.Publish(new CompletedMediaItemMessage(this, Current));
+            Current = null;
 
             OnPropertyChanged(nameof(IsPlaying));
         }
@@ -83,15 +82,15 @@ namespace Maple
                 throw new ArgumentNullException(nameof(_player), $"{nameof(_player)} {Resources.IsRequired}");
 
             if (_player?.PlaybackState != NAudio.Wave.PlaybackState.Playing)
-                throw new InvalidOperationException("Can't pause playback of a file, thats not being played back");
+                throw new InvalidOperationException("Can't pause playback of a file, thats not being played back"); // TODO localize
 
             _player.Pause();
         }
 
-        public override void Play(IMediaItem mediaItem)
+        public override bool Play(IMediaItem mediaItem)
         {
             if (_player?.PlaybackState == NAudio.Wave.PlaybackState.Playing)
-                throw new InvalidOperationException("Can't play a file, when already playing");
+                throw new InvalidOperationException("Can't play a file, when already playing"); // TODO localize
 
             _reader = new MediaFoundationReader(mediaItem.Location, _settings);
 
@@ -102,7 +101,7 @@ namespace Maple
             _player.Init(_volumeProvider);
             _player.Play();
 
-            _messenger.Publish(new PlayingMediaItemMessage(this, mediaItem));
+            return true;
         }
 
         public override void Stop()
@@ -134,6 +133,8 @@ namespace Maple
 
             if (disposing)
             {
+                base.Dispose(disposing);
+
                 if (_player != null)
                 {
                     _player.PlaybackStopped -= PlaybackStopped;
@@ -147,6 +148,7 @@ namespace Maple
                     _reader?.Dispose();
                     _reader = null;
                 }
+
                 // Free any other managed objects here.
             }
 

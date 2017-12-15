@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Maple.Interfaces;
+using Maple.Domain;
 using NAudio.Wave;
 
 namespace Maple

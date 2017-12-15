@@ -3,24 +3,26 @@ using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
-using Maple.Interfaces;
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple.Youtube
 {
     public class YoutubeUrlParser : IYoutubeUrlParser
     {
-        private const string _pattern = @"(?:http|https|)(?::\/\/|)(?:www.|m.|)(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\|\/feeds\/api\/videos\/|\/user\S*[^\w\-\s]|\S*[^\w\-\s]))([\w\-]*)[a-z0-9;:@?&%=+\/\$_.-]*";
+        private const string YoutubeUrlPattern = @"(?:http|https|)(?::\/\/|)(?:www.|m.|)(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\|\/feeds\/api\/videos\/|\/user\S*[^\w\-\s]|\S*[^\w\-\s]))([\w\-]*)[a-z0-9;:@?&%=+\/\$_.-]*";
+        private const string YoutubeDomain = "www.youtube.com";
+        private const string YoutuDomain = "youtu.be";
 
         private readonly ILoggingService _log;
-        private readonly YoutubeApi _api;
+        private readonly IYoutubeApi _api;
         private readonly Regex _urlPattern;
 
         public YoutubeUrlParser(ILoggingService log)
         {
             _log = log ?? throw new ArgumentNullException(nameof(log), $"{nameof(log)} {Resources.IsRequired}");
 
-            _urlPattern = new Regex(_pattern, RegexOptions.Compiled);
+            _urlPattern = new Regex(YoutubeUrlPattern, RegexOptions.Compiled);
             _api = new YoutubeApi(_log);
         }
 
@@ -40,11 +42,11 @@ namespace Maple.Youtube
                 {
                     switch (url.DnsSafeHost)
                     {
-                        case "youtu.be":
+                        case YoutuDomain:
                             url = new Uri(url.AbsoluteUri.Replace(@"youtu.be/", @"youtube.com/watch?v="));
                             return await Parse(url, type).ConfigureAwait(false);
 
-                        case "www.youtube.com":
+                        case YoutubeDomain:
                             return await Parse(url, type).ConfigureAwait(false);
                     }
                 }

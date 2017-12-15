@@ -2,16 +2,16 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Maple.Core;
-using Maple.Interfaces;
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple
 {
-    public class MediaPlayers : BaseDataListViewModel<MediaPlayer, Data.MediaPlayer>, IMediaPlayersViewModel
+    public class MediaPlayers : BaseDataListViewModel<MediaPlayer, MediaPlayerModel>, IMediaPlayersViewModel
     {
         private readonly Func<IMediaPlayer> _playerFactory;
         private readonly AudioDevices _devices;
-        private readonly DialogViewModel _dialog;
+        private readonly IDialogViewModel _dialog;
         private readonly Func<IMediaRepository> _repositoryFactory;
         private readonly IMediaPlayerMapper _mediaPlayerMapper;
         private readonly ILoggingNotifcationService _notificationService;
@@ -29,7 +29,7 @@ namespace Maple
                             Func<IMediaPlayer> playerFactory,
                             Func<IMediaRepository> repositoryFactory,
                             AudioDevices devices,
-                            DialogViewModel dialog)
+                            IDialogViewModel dialog)
             : base(container)
         {
             _playerFactory = playerFactory ?? throw new ArgumentNullException(nameof(playerFactory), $"{nameof(playerFactory)} {Resources.IsRequired}");
@@ -70,7 +70,6 @@ namespace Maple
                 foreach (var player in Items)
                     player?.Dispose();
 
-                base.Dispose(disposing);
                 // Free any other managed objects here.
             }
 

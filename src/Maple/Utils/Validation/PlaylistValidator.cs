@@ -9,12 +9,24 @@ namespace Maple
             : base(translationService)
         {
             RuleFor(playlist => playlist.Title).NotEmpty();
-            RuleFor(playlist => playlist.Description).NotEmpty();
-            RuleFor(playlist => playlist.RepeatModes).NotEmpty();
-            RuleFor(playlist => playlist.RepeatModes).NotEmpty();
+            RuleFor(playlist => playlist.Title).Length(1, 1024);
 
-            RuleFor(playlist => playlist.Items).NotEmpty()
-                                               .SetCollectionValidator(mediaItemValidator);
+            RuleFor(playlist => playlist.Description).NotEmpty();
+            RuleFor(playlist => playlist.Description).Length(0, 1024);
+
+            RuleFor(playlist => playlist.PrivacyStatus).NotNull();
+
+            RuleFor(playlist => playlist.UpdatedBy).NotEmpty();
+            RuleFor(playlist => playlist.UpdatedBy).NotEmpty();
+            RuleFor(playlist => playlist.CreatedBy).NotEmpty();
+            RuleFor(playlist => playlist.CreatedOn).NotEmpty();
+
+            RuleFor(playlist => playlist.RepeatModes).NotEmpty();
+            RuleFor(playlist => playlist.RepeatMode).NotNull();
+
+            RuleFor(playlist => playlist.SelectedItem).NotNull();
+            RuleFor(playlist => playlist.Items).NotNull();
+            RuleFor(playlist => playlist.Items).SetCollectionValidator(mediaItemValidator);
         }
     }
 }

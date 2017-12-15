@@ -1,8 +1,10 @@
-﻿namespace Maple
+﻿using Maple.Domain;
+
+namespace Maple
 {
-    public interface IMediaItemMapper : IBaseMapper<MediaItem, Data.MediaItem>
+    public interface IMediaItemMapper : IBaseMapper<MediaItem, MediaItemModel>
     {
         MediaItem GetNewMediaItem(int sequence, Playlist playlist);
-        Data.MediaItem GetDataNewMediaItem(Data.Playlist playlist);
+        MediaItemModel GetDataNewMediaItem(PlaylistModel playlist);
     }
 }

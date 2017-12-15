@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Maple.Core;
-using Maple.Interfaces;
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple
@@ -12,8 +12,8 @@ namespace Maple
         private readonly ILocalizationService _manager;
         private readonly ILoggingService _log;
 
-        public ICommand RefreshCommand => new AsyncRelayCommand(LoadAsync);
-        public ICommand LoadCommand => new AsyncRelayCommand(LoadAsync, () => !IsLoaded);
+        public ICommand RefreshCommand => AsyncCommand.Create(LoadAsync);
+        public ICommand LoadCommand => AsyncCommand.Create(LoadAsync, () => !IsLoaded);
         public ICommand SaveCommand => new RelayCommand(Save);
 
         public Cultures(ViewModelServiceContainer container)
@@ -22,7 +22,7 @@ namespace Maple
             _log = container.Log;
             _manager = container.LocalizationService;
 
-            _messenger.Subscribe<ViewModelSelectionChangedMessage<Culture>>(UpdateCulture);
+            MessageTokens.Add(Messenger.Subscribe<ViewModelSelectionChangedMessage<Culture>>(UpdateCulture));
         }
 
         private void SyncCulture()
@@ -54,12 +54,12 @@ namespace Maple
             Initialise();
 
             IsLoaded = true;
-            _messenger.Publish(new LoadedMessage(this, this));
+            Messenger.Publish(new LoadedMessage(this, this));
         }
 
         private void Initialise()
         {
-            AddRange(_manager.Languages.Select(p => new Culture(p, _messenger)).ToList());
+            AddRange(_manager.Languages.Select(p => new Culture(p, Messenger)).ToList());
             SelectedItem = Items.FirstOrDefault(p => p.Model.LCID == Core.Properties.Settings.Default.StartUpCulture.LCID) ?? Items.First(p => p.Model.TwoLetterISOLanguageName == "en");
         }
 

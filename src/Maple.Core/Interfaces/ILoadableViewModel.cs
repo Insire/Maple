@@ -1,5 +1,5 @@
 ﻿using System.Windows.Input;
-using Maple.Interfaces;
+using Maple.Domain;
 
 namespace Maple.Core
 {

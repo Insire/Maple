@@ -1,11 +1,14 @@
-﻿using Maple.Interfaces;
+﻿using Maple.Domain;
 
 namespace Maple.Core
 {
     public class PlayingMediaItemMessage : GenericMapleMessage<IMediaItem>
     {
-        public PlayingMediaItemMessage(object sender, IMediaItem mediaItem) : base(sender, mediaItem)
+        public int PlaylistId { get; }
+        public PlayingMediaItemMessage(object sender, IMediaItem mediaItem, int playlistId)
+            : base(sender, mediaItem)
         {
+            PlaylistId = playlistId;
         }
     }
 }

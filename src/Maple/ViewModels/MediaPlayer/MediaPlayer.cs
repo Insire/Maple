@@ -5,19 +5,17 @@ using System.Linq;
 using System.Windows.Input;
 using FluentValidation;
 using Maple.Core;
-using Maple.Interfaces;
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple
 {
     [DebuggerDisplay("{Name}, {Sequence}")]
-    public class MediaPlayer : ValidableBaseDataViewModel<MediaPlayer, Data.MediaPlayer>, IDisposable, IChangeState, ISequence
+    public class MediaPlayer : ValidableBaseDataViewModel<MediaPlayer, MediaPlayerModel>, IDisposable, IChangeState, ISequence
     {
-        private List<SubscriptionToken> _messageTokens;
         protected readonly ILocalizationService _manager;
 
         public bool IsPlaying { get { return Player.IsPlaying; } }
-        protected bool Disposed { get; private set; }
 
         public bool IsNew => Model.IsNew;
         public bool IsDeleted => Model.IsDeleted;
@@ -122,7 +120,7 @@ namespace Maple
             set { SetValue(ref _updatedOn, value, OnChanged: () => Model.CreatedOn = value); }
         }
 
-        public MediaPlayer(ViewModelServiceContainer container, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, Data.MediaPlayer model)
+        public MediaPlayer(ViewModelServiceContainer container, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, MediaPlayerModel model)
             : base(model, validator, container.Messenger)
         {
             _manager = container.LocalizationService;
@@ -150,18 +148,15 @@ namespace Maple
 
         private void InitializeSubscriptions()
         {
-            _messageTokens = new List<SubscriptionToken>
-            {
-                Messenger.Subscribe<PlayingMediaItemMessage>(Player_PlayingMediaItem, IsSenderEqualsPlayer),
-                Messenger.Subscribe<CompletedMediaItemMessage>(MediaPlayer_CompletedMediaItem, IsSenderEqualsPlayer),
-                Messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanging, IsSenderEqualsPlayer),
-                Messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanged, IsSenderEqualsPlayer),
-            };
+            MessageTokens.Add(Messenger.Subscribe<PlayingMediaItemMessage>(Player_PlayingMediaItem, IsSenderEqualsPlayer));
+            MessageTokens.Add(Messenger.Subscribe<CompletedMediaItemMessage>(MediaPlayer_CompletedMediaItem, IsSenderEqualsPlayer));
+            MessageTokens.Add(Messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanging, IsSenderEqualsPlayer));
+            MessageTokens.Add(Messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanged, IsSenderEqualsPlayer));
         }
 
         private void InitiliazeCommands()
         {
-            PlayCommand = new RelayCommand<MediaItem>(Player.Play, CanPlay);
+            PlayCommand = new RelayCommand<MediaItem>(Play, CanPlay);
             PreviousCommand = new RelayCommand(Previous, () => Playlist?.CanPrevious() == true && CanPrevious());
             NextCommand = new RelayCommand(Next, () => Playlist?.CanNext() == true && CanNext());
             PauseCommand = new RelayCommand(Pause, () => CanPause());
@@ -172,6 +167,18 @@ namespace Maple
             UpdatePlaylistCommands();
         }
 
+        public void Play(MediaItem mediaItem)
+        {
+            if (mediaItem == null)
+                throw new ArgumentNullException(nameof(mediaItem), $"{nameof(mediaItem)} {Resources.IsRequired}");
+
+            if (!Playlist.Items.Contains(mediaItem))
+                throw new ArgumentException("Cant play an item thats not part of the playlist"); // TODO localize
+
+            if (Player.Play(mediaItem))
+                Messenger.Publish(new PlayingMediaItemMessage(this, mediaItem, Playlist.Id));
+        }
+
         private bool IsSenderEqualsPlayer(object sender)
         {
             return ReferenceEquals(sender, Player);
@@ -179,7 +186,7 @@ namespace Maple
 
         private void Player_AudioDeviceChanging(ViewModelSelectionChangingMessage<AudioDevice> e)
         {
-            // TODO
+            // TODO handle Player_AudioDeviceChanging
         }
 
         private void Player_AudioDeviceChanged(ViewModelSelectionChangingMessage<AudioDevice> e)
@@ -396,19 +403,10 @@ namespace Maple
         }
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
         /// </summary>
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (Disposed)
                 return;
@@ -418,14 +416,13 @@ namespace Maple
 
             if (disposing)
             {
-                foreach (var token in _messageTokens)
-                    Messenger.Unsubscribe<IMapleMessage>(token);
-
                 if (Player != null)
                 {
                     Player?.Dispose();
                     Player = null;
                 }
+
+                base.Dispose(disposing);
                 // Free any other managed objects here.
             }
 

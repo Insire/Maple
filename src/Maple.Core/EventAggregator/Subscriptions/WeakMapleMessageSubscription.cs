@@ -1,5 +1,5 @@
 ﻿using System;
-using Maple.Interfaces;
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple.Core

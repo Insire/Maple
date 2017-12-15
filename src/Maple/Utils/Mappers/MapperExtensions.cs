@@ -13,22 +13,22 @@ namespace Maple
     public static class MapperExtensions
     {
 
-        public static IEnumerable<MediaItem> GetMany(this IMediaItemMapper mapper, IEnumerable<Data.MediaItem> items)
+        public static IEnumerable<MediaItem> GetMany(this IMediaItemMapper mapper, IEnumerable<Domain.MediaItemModel> items)
         {
             return items.ForEach(mapper.Get);
         }
 
-        public static IList<MediaItem> GetManyAsList(this IMediaItemMapper mapper, IEnumerable<Data.MediaItem> items)
+        public static IList<MediaItem> GetManyAsList(this IMediaItemMapper mapper, IEnumerable<Domain.MediaItemModel> items)
         {
             return items.ForEach(mapper.Get).ToList();
         }
 
-        public static IEnumerable<Playlist> GetMany(this IPlaylistMapper mapper, IEnumerable<Data.Playlist> items)
+        public static IEnumerable<Playlist> GetMany(this IPlaylistMapper mapper, IEnumerable<Domain.PlaylistModel> items)
         {
             return items.ForEach(mapper.Get);
         }
 
-        public static IEnumerable<Data.Playlist> GetManyData(this IPlaylistMapper mapper, IEnumerable<Playlist> items)
+        public static IEnumerable<Domain.PlaylistModel> GetManyData(this IPlaylistMapper mapper, IEnumerable<Playlist> items)
         {
             return items.ForEach(mapper.GetData);
         }

@@ -3,7 +3,7 @@ using DryIoc;
 using FluentValidation;
 using Maple.Core;
 using Maple.Data;
-using Maple.Interfaces;
+using Maple.Domain;
 using Maple.Youtube;
 
 namespace Maple
@@ -48,16 +48,16 @@ namespace Maple
                 c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IUIColorsViewModel) }, typeof(UIColorsViewModel), Reuse.Singleton);
 
                 //generic ViewModels
-                c.Register<Scenes>(Reuse.Singleton);
-                c.Register<AudioDevices>(Reuse.Singleton);
+                c.Register<Scenes>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
+                c.Register<AudioDevices>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
                 c.Register<ShellViewModel>(Reuse.Singleton);
-                c.Register<DialogViewModel>(Reuse.Singleton);
-                c.Register<StatusbarViewModel>(Reuse.Singleton);
+                c.Register<IDialogViewModel, DialogViewModel>(Reuse.Singleton);
+                c.Register<StatusbarViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
                 c.Register<FileSystemViewModel>(Reuse.Singleton);
-                c.Register<OptionsViewModel>(Reuse.Singleton);
+                c.Register<OptionsViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
 
-                c.Register<CreateMediaItem>();
-                c.Register<CreatePlaylist>();
+                c.Register<CreateMediaItem>(setup: Setup.With(allowDisposableTransient: true));
+                c.Register<CreatePlaylist>(setup: Setup.With(allowDisposableTransient: true));
 
                 c.Register<ISplashScreenViewModel, SplashScreenViewModel>(Reuse.Singleton);
             };

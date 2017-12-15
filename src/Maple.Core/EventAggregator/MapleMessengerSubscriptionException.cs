@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Maple.Core
 {
     /// <summary>
     /// Thrown when an exceptions occurs while subscribing to a message type
     /// </summary>
+    [Serializable]
     public class MapleMessengerSubscriptionException : Exception
     {
         private const string ERROR_TEXT = "Unable to add subscription for {0} : {1}";
@@ -28,6 +30,11 @@ namespace Maple.Core
         }
 
         public MapleMessengerSubscriptionException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+
+        protected MapleMessengerSubscriptionException(SerializationInfo serializationInfo, StreamingContext streamingContext)
+            : base(serializationInfo, streamingContext)
         {
         }
     }

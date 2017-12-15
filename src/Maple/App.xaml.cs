@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using DryIoc;
 using Maple.Core;
-using Maple.Interfaces;
+using Maple.Domain;
 
 namespace Maple
 {
@@ -34,7 +34,7 @@ namespace Maple
         private async void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             var log = _container?.Resolve<ILoggingService>();
-            var dialog = _container?.Resolve<DialogViewModel>();
+            var dialog = _container?.Resolve<IDialogViewModel>();
 
             log.Info(Localization.Properties.Resources.ExceptionMessageUnhandled);
 

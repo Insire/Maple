@@ -1,6 +1,6 @@
 ﻿using System;
 using log4net;
-using Maple.Interfaces;
+using Maple.Domain;
 
 namespace Maple.Core
 {

@@ -7,9 +7,9 @@ namespace Maple
     {
         public string DisplayName => Model.DisplayName;
 
-        public Culture(CultureInfo info, IMessenger messenger) : base(info, messenger)
+        public Culture(CultureInfo info, IMessenger messenger)
+            : base(info, messenger)
         {
-
         }
     }
 }

@@ -10,7 +10,7 @@ using Maple.Youtube;
 
 namespace Maple
 {
-    public class DialogViewModel : ObservableObject
+    public class DialogViewModel : ObservableObject, IDialogViewModel
     {
         private readonly IMessenger _messenger;
         private readonly ILocalizationService _translator;
@@ -263,7 +263,7 @@ namespace Maple
         /// Shows the URL parse dialog.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MediaItem>> ShowUrlParseDialog()
+        public async Task<ICollection<MediaItem>> ShowUrlParseDialog(CancellationToken token)
         {
             var result = new List<MediaItem>();
             var viewmodel = new CreateMediaItem(_service, _mediaItemMapper, _messenger);
@@ -281,7 +281,7 @@ namespace Maple
                 }
             };
 
-            await Open().ConfigureAwait(false);
+            await Open(token).ConfigureAwait(false);
 
             return result;
         }

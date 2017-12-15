@@ -1,10 +1,12 @@
-﻿namespace Maple
-{
-    public interface IMediaPlayerMapper : IBaseMapper<MediaPlayer, Data.MediaPlayer>
-    {
-        MainMediaPlayer GetMain(Data.MediaPlayer player, Playlist playlist);
+﻿using Maple.Domain;
 
-        MediaPlayer Get(Data.MediaPlayer player, Playlist playlist);
+namespace Maple
+{
+    public interface IMediaPlayerMapper : IBaseMapper<MediaPlayer, MediaPlayerModel>
+    {
+        MainMediaPlayer GetMain(MediaPlayerModel player, Playlist playlist);
+
+        MediaPlayer Get(MediaPlayerModel player, Playlist playlist);
         MediaPlayer GetNewMediaPlayer(int sequence, Playlist playlist = null);
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Diagnostics;
-using Maple.Interfaces;
+using Maple.Domain;
 using SQLite.CodeFirst;
 
 namespace Maple.Data
@@ -91,7 +91,7 @@ namespace Maple.Data
             for (var i = 0; i < _playlistTitles.Count; i++)
             {
                 context.Playlists
-                       .Add(new Playlist
+                       .Add(new PlaylistModel
                        {
                            Title = _playlistTitles[i],
                            Description = "Test playlist with 3 entries",
@@ -110,7 +110,7 @@ namespace Maple.Data
                 for (var j = 0; j < _mediaItemTitles.Count; j++)
                 {
                     context.MediaItems
-                            .Add(new MediaItem
+                            .Add(new MediaItemModel
                             {
                                 Title = _mediaItemTitles[j],
                                 Description = "A popular youtube video",
@@ -138,7 +138,7 @@ namespace Maple.Data
         {
             if (context.Mediaplayers.Find(1) == null)
                 context.Mediaplayers
-                       .Add(new MediaPlayer
+                       .Add(new MediaPlayerModel
                        {
                            Id = 1,
                            IsPrimary = true,
@@ -156,7 +156,7 @@ namespace Maple.Data
         {
             if (context.Options.Find(1) == null)
                 context.Options
-                    .Add(new Option
+                    .Add(new OptionModel
                     {
                         Id = 1,
                         Key = "SelectedPlaylist",
@@ -171,7 +171,7 @@ namespace Maple.Data
 
             if (context.Options.Find(2) == null)
                 context.Options
-                    .Add(new Option
+                    .Add(new OptionModel
                     {
                         Id = 2,
                         Key = "SelectedMediaItem",
@@ -186,7 +186,7 @@ namespace Maple.Data
 
             if (context.Options.Find(3) == null)
                 context.Options
-                    .Add(new Option
+                    .Add(new OptionModel
                     {
                         Id = 3,
                         Key = "SelectedMediaPlayer",
@@ -203,7 +203,7 @@ namespace Maple.Data
 
             if (context.Options.Find(5) == null)
                 context.Options
-                    .Add(new Option
+                    .Add(new OptionModel
                     {
                         Id = 5,
                         Key = "SelectedPrimary",
@@ -218,7 +218,7 @@ namespace Maple.Data
 
             if (context.Options.Find(6) == null)
                 context.Options
-                    .Add(new Option
+                    .Add(new OptionModel
                     {
                         Id = 6,
                         Key = "SelectedAccent",
@@ -233,7 +233,7 @@ namespace Maple.Data
 
             if (context.Options.Find(7) == null)
                 context.Options
-                    .Add(new Option
+                    .Add(new OptionModel
                     {
                         Id = 7,
                         Key = "SelectedScene",

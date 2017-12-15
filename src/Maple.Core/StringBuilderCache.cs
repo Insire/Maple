@@ -24,7 +24,8 @@ namespace Maple.Core
         public static StringBuilder Acquire()
         {
             var result = _cache;
-            if (result == null) { return new StringBuilder(); }
+            if (result == null)
+                return new StringBuilder();
 
             result.Clear();
             _cache = null; // of that if caller forgets to release and return it is not kept alive by this class

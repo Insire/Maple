@@ -2,6 +2,7 @@
 using AutoMapper;
 using FluentValidation;
 using Maple.Core;
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple
@@ -13,13 +14,13 @@ namespace Maple
     public sealed class PlaylistMapper : BaseMapper<Playlist>, IPlaylistMapper
     {
         private readonly IMediaItemMapper _mediaItemMapper;
-        private readonly DialogViewModel _dialogViewModel;
+        private readonly IDialogViewModel _dialogViewModel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlaylistMapper"/> class.
         /// </summary>
         /// <param name="dialogViewModel">The dialog view model.</param>
-        public PlaylistMapper(ViewModelServiceContainer container, IMediaItemMapper mediaItemMapper, DialogViewModel dialogViewModel, IValidator<Playlist> validator)
+        public PlaylistMapper(ViewModelServiceContainer container, IMediaItemMapper mediaItemMapper, IDialogViewModel dialogViewModel, IValidator<Playlist> validator)
             : base(container, validator)
         {
             _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel), $"{nameof(dialogViewModel)} {Resources.IsRequired}");
@@ -40,7 +41,7 @@ namespace Maple
 
         public Playlist GetNewPlaylist(int sequence)
         {
-            return new Playlist(_container, _validator, _dialogViewModel, new Data.Playlist
+            return new Playlist(_container, _validator, _dialogViewModel, _mediaItemMapper, new PlaylistModel
             {
                 Title = _translationService.Translate(nameof(Resources.New)),
                 Description = string.Empty,
@@ -51,14 +52,12 @@ namespace Maple
             });
         }
 
-        public Playlist Get(Data.Playlist model)
+        public Playlist Get(PlaylistModel model)
         {
-            var result = new Playlist(_container, _validator, _dialogViewModel, model);
-            result.AddRange(_mediaItemMapper.GetMany(model.MediaItems));
-            return result;
+            return new Playlist(_container, _validator, _dialogViewModel, _mediaItemMapper, model);
         }
 
-        public Data.Playlist GetData(Playlist mediaitem)
+        public PlaylistModel GetData(Playlist mediaitem)
         {
             return mediaitem.Model;
         }

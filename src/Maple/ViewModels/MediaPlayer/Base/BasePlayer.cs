@@ -1,18 +1,13 @@
-﻿using System;
-using Maple.Core;
-using Maple.Interfaces;
-using Maple.Localization.Properties;
+﻿using Maple.Core;
+using Maple.Domain;
 
 namespace Maple
 {
-    public abstract class BasePlayer : ObservableObject, IMediaPlayer
+    public abstract class BasePlayer : ViewModel, IMediaPlayer
     {
-        protected readonly IMessenger _messenger;
         protected readonly ILoggingService _log;
+
         private IRangeObservableCollection<AudioDevice> _items;
-
-        protected abstract void Dispose(bool disposing);
-
         public IRangeObservableCollection<AudioDevice> Items
         {
             get { return _items; }
@@ -26,8 +21,8 @@ namespace Maple
             set
             {
                 SetValue(ref _audioDevice, value,
-                                OnChanging: () => _messenger.Publish(new ViewModelSelectionChangingMessage<IAudioDevice>(this, _audioDevice)),
-                                OnChanged: () => _messenger.Publish(new ViewModelSelectionChangingMessage<IAudioDevice>(this, value)));
+                                OnChanging: () => Messenger.Publish(new ViewModelSelectionChangingMessage<IAudioDevice>(this, _audioDevice)),
+                                OnChanged: () => Messenger.Publish(new ViewModelSelectionChangingMessage<IAudioDevice>(this, value)));
             }
         }
 
@@ -38,17 +33,9 @@ namespace Maple
             set { SetValue(ref _current, value); }
         }
 
-        private bool _disposed;
-        public bool Disposed
-        {
-            get { return _disposed; }
-            protected set { SetValue(ref _disposed, value); }
-        }
-
         protected BasePlayer(IMessenger messenger, AudioDevices audioDevices)
+            : base(messenger)
         {
-            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");
-
         }
 
         public abstract bool CanPlay(IMediaItem item);
@@ -61,17 +48,11 @@ namespace Maple
 
         public abstract int VolumeMin { get; }
 
-        public abstract void Play(IMediaItem mediaItem);
+        public abstract bool Play(IMediaItem mediaItem);
 
         public abstract void Pause();
 
         public abstract void Stop();
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
 
         public virtual bool CanStop()
         {

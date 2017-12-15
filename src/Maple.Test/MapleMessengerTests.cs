@@ -1,6 +1,6 @@
-﻿using Maple.Core;
+﻿using System;
+using Maple.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace Maple.Test
 {

@@ -1,8 +1,8 @@
-﻿using Maple.Localization.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
@@ -61,11 +61,11 @@ namespace Maple.Core
                 return true;
             }
         }
-    }
 
-    public class ChangeGroup
-    {
-        public object OriginalValue { get; set; }
-        public object NewValue { get; set; }
+        private class ChangeGroup
+        {
+            public object OriginalValue { get; set; }
+            public object NewValue { get; set; }
+        }
     }
 }

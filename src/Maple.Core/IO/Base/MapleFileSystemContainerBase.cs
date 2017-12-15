@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-using Maple.Interfaces;
+using Maple.Domain;
 
 namespace Maple.Core
 {
