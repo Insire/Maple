@@ -725,10 +725,6 @@
                                                                                        SelectedEntriesList="{Binding Data.SelectedItemsList, Source={StaticResource ViewModelProxy}}"
                                                                                        SelectionMode="Extended">
 
-                                                                            <i:Interaction.Behaviors>
-                                                                                <local:SelectedListBoxItemBehavior SelectedItems="{Binding Data.SelectedItems, Source={StaticResource ViewModelProxy}}" />
-                                                                            </i:Interaction.Behaviors>
-
                                                                             <local:ListBox.Resources>
                                                                                 <DataTemplate DataType="{x:Type core:MapleDirectory}">
                                                                                     <Border Background="Transparent" ContextMenu="{StaticResource FileContextMenu}">
@@ -756,10 +752,6 @@
                                                                                        ItemsSource="{Binding DefaultCollectionView}"
                                                                                        SelectedEntriesList="{Binding Data.SelectedItemsList, Source={StaticResource ViewModelProxy}}"
                                                                                        SelectionMode="Extended">
-
-                                                                            <i:Interaction.Behaviors>
-                                                                                <local:SelectedListBoxItemBehavior SelectedItems="{Binding Data.SelectedItems, Source={StaticResource ViewModelProxy}}" />
-                                                                            </i:Interaction.Behaviors>
 
                                                                             <local:ListBox.Resources>
 

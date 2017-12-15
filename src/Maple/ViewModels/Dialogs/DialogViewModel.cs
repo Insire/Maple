@@ -139,6 +139,8 @@ namespace Maple
             if (!Result)
                 return (Result, mediaItems);
 
+            // should handle items depending on options
+
             foreach (var file in Folder.Children)
             {
                 // TODO get the files from the folder
@@ -172,7 +174,7 @@ namespace Maple
                 {
                     var items = viewModel.FileSystemViewModel.SelectedItems;
                     items.Add(viewModel.FileSystemViewModel.SelectedItem);
-                    tuple = (true, items.Distinct().FirstOrDefault() as IFileSystemDirectory);
+                    tuple = (true, items.Distinct().FirstOrDefault() as IFileSystemDirectory); // TODO handle multi select option
                 };
 
                 CancelAction = () =>

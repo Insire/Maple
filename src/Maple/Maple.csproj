@@ -158,7 +158,6 @@
     <Compile Include="Utils\Mappers\MediaItemMapper.cs" />
     <Compile Include="Utils\Mappers\MediaPlayerMapper.cs" />
     <Compile Include="Utils\Mappers\PlaylistMapper.cs" />
-    <Compile Include="UI\Interactivity\SelectedListBoxItemBehavior.cs" />
     <Compile Include="UI\Interactivity\SelectedTreeViewItemBehavior.cs" />
     <Compile Include="UI\ShellSettings.cs" />
     <Compile Include="UI\MarkupExtensions\RadioButtonCheckedConverter.cs" />
