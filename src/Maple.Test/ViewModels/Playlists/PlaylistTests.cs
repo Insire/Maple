@@ -565,7 +565,7 @@ namespace Maple.Test.ViewModels.Playlists
                 CreateMediaItem(new MediaItemModel(), container),
             };
             var dialogViewModel = Substitute.For<IDialogViewModel>();
-            dialogViewModel.ShowMediaItemFolderSelectionDialog(NSubstitute.Arg.Any<FileSystemBrowserOptions>(), NSubstitute.Arg.Any<CancellationToken>()).Returns((true, mediaItems));
+            dialogViewModel.ShowMediaItemFolderSelectionDialog(NSubstitute.Arg.Any<FileSystemFolderBrowserOptions>(), NSubstitute.Arg.Any<CancellationToken>()).Returns((true, mediaItems));
             container.UseInstance(typeof(IDialogViewModel), dialogViewModel, IfAlreadyRegistered: IfAlreadyRegistered.Replace);
 
             var playlist = CreatePlaylist(CreateModelPlaylist(), container);

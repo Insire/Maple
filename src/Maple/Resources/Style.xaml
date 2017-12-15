@@ -1078,7 +1078,7 @@
     <!--#region local:DataTemplates-->
 
     <!--#region Dialogs-->
-    <DataTemplate DataType="{x:Type local:ExceptionDialogViewModel}">
+    <DataTemplate DataType="{x:Type local:ExceptionContentDialogViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*" />
@@ -1098,7 +1098,7 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type local:MessageDialogViewModel}">
+    <DataTemplate DataType="{x:Type local:MessageContentDialogViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*" />
@@ -1118,15 +1118,15 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type local:FileBrowserDialogViewModel}">
+    <DataTemplate DataType="{x:Type local:FileBrowserContentDialogViewModel}">
         <core:FileSystemBrowser Style="{StaticResource BaseFileSystemBrowserStyle}" />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type local:FolderBrowserDialogViewModel}">
+    <DataTemplate DataType="{x:Type local:FolderBrowserContentDialogViewModel}">
         <core:FileSystemBrowser Style="{StaticResource BaseFileSystemBrowserStyle}" />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type local:ProgressDialogViewModel}" />
+    <DataTemplate DataType="{x:Type local:ProgressContentDialogViewModel}" />
     <!--#endregion-->
 
     <DataTemplate DataType="{x:Type local:CreateMediaItem}">

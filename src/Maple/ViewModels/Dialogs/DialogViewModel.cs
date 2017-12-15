@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Maple.Core;
 using Maple.Localization.Properties;
 using Maple.Youtube;
 
 namespace Maple
 {
-    public class DialogViewModel : ObservableObject, IDialogViewModel
+    public class DialogViewModel : DialogBaseViewModel, IDialogViewModel
     {
-        private readonly IMessenger _messenger;
         private readonly ILocalizationService _translator;
         private readonly IYoutubeUrlParser _service;
         private readonly IMediaItemMapper _mediaItemMapper;
@@ -20,64 +18,13 @@ namespace Maple
 
         private readonly Func<CreateMediaItem> _createMediaItemFactory;
 
-        public EventHandler DialogClosed;
-
-        public ExceptionDialogViewModel ExceptionDialogViewModel { get; private set; }
-        public MessageDialogViewModel MessageDialogViewModel { get; private set; }
-        public ProgressDialogViewModel ProgressDialogViewModel { get; private set; }
-
-        public ICommand CloseDialogCommand { get; private set; }
-        public ICommand CancelDialogCommand { get; private set; }
-        public ICommand AcceptDialogCommand { get; private set; }
-
-        public Action AcceptAction { get; set; }
-        public Action CancelAction { get; set; }
-
-        public Func<bool> CanCancelFunc { get; set; }
-        public Func<bool> CanAcceptFunc { get; set; }
-
-        private bool _isOpen;
-        public bool IsOpen
-        {
-            get { return _isOpen; }
-            set { SetValue(ref _isOpen, value, OnChanged: OnOpenChanged); }
-        }
-
-        private bool _isCancelVisible;
-        public bool IsCancelVisible
-        {
-            get { return _isCancelVisible; }
-            set { SetValue(ref _isCancelVisible, value); }
-        }
-
-        private string _title;
-        public string Title
-        {
-            get { return _title; }
-            private set { SetValue(ref _title, value); }
-        }
-
-        private string _titleDetail;
-        public string TitleDetail
-        {
-            get { return _titleDetail; }
-            private set { SetValue(ref _titleDetail, value); }
-        }
-
-        private ObservableObject _context;
-        public ObservableObject Context
-        {
-            get { return _context; }
-            set { SetValue(ref _context, value); }
-        }
-
         public DialogViewModel(ILocalizationService translator, IYoutubeUrlParser service, IMediaItemMapper mediaItemMapper, IMessenger messenger, FileSystemViewModel fileSystemViewModel, Func<CreateMediaItem> createMediaItemFactory)
+            : base(messenger)
         {
             _translator = translator ?? throw new ArgumentNullException(nameof(translator), $"{nameof(translator)} {Resources.IsRequired}");
             _service = service ?? throw new ArgumentNullException(nameof(service), $"{nameof(service)} {Resources.IsRequired}");
             _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper), $"{nameof(mediaItemMapper)} {Resources.IsRequired}");
             _fileSystemViewModel = fileSystemViewModel ?? throw new ArgumentNullException(nameof(fileSystemViewModel), $"{nameof(fileSystemViewModel)} {Resources.IsRequired}");
-            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");
             _createMediaItemFactory = createMediaItemFactory ?? throw new ArgumentNullException(nameof(createMediaItemFactory), $"{nameof(createMediaItemFactory)} {Resources.IsRequired}");
 
 
@@ -85,15 +32,9 @@ namespace Maple
             CancelDialogCommand = new RelayCommand(Cancel, () => CanCancel());
             AcceptDialogCommand = new RelayCommand(Accept, () => CanAccept());
 
-            ExceptionDialogViewModel = new ExceptionDialogViewModel();
-            MessageDialogViewModel = new MessageDialogViewModel();
-            ProgressDialogViewModel = new ProgressDialogViewModel();
-        }
-
-        private void OnOpenChanged()
-        {
-            if (!IsOpen)
-                DialogClosed?.Invoke(this, EventArgs.Empty);
+            ExceptionDialogViewModel = new ExceptionContentDialogViewModel();
+            MessageDialogViewModel = new MessageContentDialogViewModel();
+            ProgressDialogViewModel = new ProgressContentDialogViewModel();
         }
 
         /// <summary>
@@ -147,14 +88,14 @@ namespace Maple
                 throw new InvalidOperationException(Resources.DialogOpenAlready);
 
             var tuple = default((bool Result, IList<IFileSystemFile> Files));
-            var viewModel = new FileBrowserDialogViewModel(_fileSystemViewModel, options);
+            var viewModel = new FileBrowserContentDialogViewModel(_fileSystemViewModel, options);
 
             TitleDetail = string.Empty;
             Context = viewModel;
             Title = options.Title;
             IsCancelVisible = options.CanCancel;
 
-            using (_messenger.Subscribe<FileSystemInfoChangedMessage>(FileSystemInfoChanged))
+            using (Messenger.Subscribe<FileSystemInfoChangedMessage>(FileSystemInfoChanged))
             {
                 AcceptAction = () =>
                 {
@@ -190,7 +131,7 @@ namespace Maple
             return (Result, mediaItems);
         }
 
-        public async Task<(bool Result, ICollection<MediaItem> MediaItems)> ShowMediaItemFolderSelectionDialog(FileSystemBrowserOptions options, CancellationToken token)
+        public async Task<(bool Result, ICollection<MediaItem> MediaItems)> ShowMediaItemFolderSelectionDialog(FileSystemFolderBrowserOptions options, CancellationToken token)
         {
             var mediaItems = new List<MediaItem>();
             (var Result, var Folder) = await ShowFolderBrowserDialog(options, token).ConfigureAwait(true);
@@ -218,14 +159,14 @@ namespace Maple
                 throw new InvalidOperationException(Resources.DialogOpenAlready);
 
             var tuple = default((bool Result, IFileSystemDirectory Directory));
-            var viewModel = new FileBrowserDialogViewModel(_fileSystemViewModel, options);
+            var viewModel = new FileBrowserContentDialogViewModel(_fileSystemViewModel, options);
 
             TitleDetail = string.Empty;
             Context = viewModel;
             Title = options.Title;
             IsCancelVisible = options.CanCancel;
 
-            using (_messenger.Subscribe<FileSystemInfoChangedMessage>(FileSystemInfoChanged))
+            using (Messenger.Subscribe<FileSystemInfoChangedMessage>(FileSystemInfoChanged))
             {
                 AcceptAction = () =>
                 {
@@ -266,7 +207,7 @@ namespace Maple
         public async Task<ICollection<MediaItem>> ShowUrlParseDialog(CancellationToken token)
         {
             var result = new List<MediaItem>();
-            var viewmodel = new CreateMediaItem(_service, _mediaItemMapper, _messenger);
+            var viewmodel = new CreateMediaItem(_service, _mediaItemMapper, Messenger);
 
             TitleDetail = string.Empty;
             Context = viewmodel;
@@ -286,91 +227,6 @@ namespace Maple
             return result;
         }
 
-        /// <summary>
-        /// Accepts this instance.
-        /// </summary>
-        public void Accept()
-        {
-            Close();
-            AcceptAction?.Invoke();
-        }
-
-        /// <summary>
-        /// Determines whether this instance can accept.
-        /// </summary>
-        /// <returns>
-        ///   <c>true</c> if this instance can accept; otherwise, <c>false</c>.
-        /// </returns>
-        public bool CanAccept()
-        {
-            return CanClose() && (CanAcceptFunc?.Invoke() ?? true) == true;
-        }
-
-        /// <summary>
-        /// Cancels this instance.
-        /// </summary>
-        public void Cancel()
-        {
-            Close();
-            CancelAction?.Invoke();
-        }
-
-        /// <summary>
-        /// Determines whether this instance can cancel.
-        /// </summary>
-        /// <returns>
-        ///   <c>true</c> if this instance can cancel; otherwise, <c>false</c>.
-        /// </returns>
-        public bool CanCancel()
-        {
-            return CanClose() && (CanCancelFunc?.Invoke() ?? true) == true;
-        }
-
-        public Task Open()
-        {
-            return Open(CancellationToken.None);
-        }
-
-        /// <summary>
-        /// Opens this instance.
-        /// </summary>
-        /// <returns></returns>
-        public async Task Open(CancellationToken token)
-        {
-            var tcs = new TaskCompletionSource<object>();
-            var registration = token.Register(() => tcs.TrySetCanceled());
-            void lambda(object s, EventArgs e) => tcs.TrySetResult(null);
-            try
-            {
-                DialogClosed += lambda;
-                IsOpen = true; // open dialog
-                await tcs.Task.ConfigureAwait(false); // wait for dialog to close
-            }
-            finally
-            {
-                DialogClosed -= lambda;
-                registration.Dispose();
-            }
-        }
-
-        /// <summary>
-        /// Closes this instance.
-        /// </summary>
-        public void Close()
-        {
-            IsOpen = false;
-        }
-
-        /// <summary>
-        /// Determines whether this instance can close.
-        /// </summary>
-        /// <returns>
-        ///   <c>true</c> if this instance can close; otherwise, <c>false</c>.
-        /// </returns>
-        public bool CanClose()
-        {
-            return IsOpen;
-        }
 
         private void FileSystemInfoChanged(FileSystemInfoChangedMessage e)
         {

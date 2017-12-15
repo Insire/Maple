@@ -3,7 +3,7 @@ using Maple.Core;
 
 namespace Maple
 {
-    public class ExceptionDialogViewModel : ObservableObject
+    public class ExceptionContentDialogViewModel : ObservableObject
     {
         private Exception _exception;
         public Exception Exception
