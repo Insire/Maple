@@ -122,6 +122,7 @@
     <Compile Include="Interfaces\IMediaPlayerMapper.cs" />
     <Compile Include="Interfaces\IMediaRepository.cs" />
     <Compile Include="Interfaces\IPlaylistMapper.cs" />
+    <Compile Include="UI\ListBox.cs" />
     <Compile Include="UI\IoCResourceDictionary.cs" />
     <Compile Include="UI\PackIcon.cs" />
     <Compile Include="UI\Base\SharedResourceDictionary.cs" />

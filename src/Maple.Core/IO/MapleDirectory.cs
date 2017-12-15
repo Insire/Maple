@@ -6,10 +6,10 @@ namespace Maple.Core
     [DebuggerDisplay("Directory: {Name} IsContainer: {IsContainer}")]
     public class MapleDirectory : MapleFileSystemContainerBase, IFileSystemDirectory
     {
-
-        public MapleDirectory(DirectoryInfo info, IDepth depth, IFileSystemDirectory parent) : base(info.Name, info.FullName, depth, parent)
+        public MapleDirectory(DirectoryInfo info, IDepth depth, IFileSystemDirectory parent, IMessenger messenger)
+            : base(info.Name, info.FullName, depth, parent, messenger)
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 if (!Depth.IsMaxReached)
                     Refresh();

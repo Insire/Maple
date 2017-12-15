@@ -10,15 +10,15 @@ namespace Maple.Core
 {
     public static class FileSystemExtensions
     {
-        public static IEnumerable<IFileSystemInfo> GetChildren(this MapleFileSystemContainerBase directory, IDepth depth)
+        public static IEnumerable<IFileSystemInfo> GetChildren(this MapleFileSystemContainerBase directory, IDepth depth, IMessenger messenger)
         {
             var result = new List<IFileSystemInfo>();
 
             if (!CanAccess(directory.FullName) && directory.DirectoryIsEmpty())
                 return result;
 
-            result.AddRange(GetDirectories(directory.FullName, depth, directory));
-            result.AddRange(GetFiles(directory.FullName, depth, directory));
+            result.AddRange(GetDirectories(directory.FullName, depth, directory, messenger));
+            result.AddRange(GetFiles(directory.FullName, depth, directory, messenger));
 
             return result;
         }
@@ -40,7 +40,7 @@ namespace Maple.Core
             }
         }
 
-        private static IEnumerable<IFileSystemInfo> GetDirectories(string path, IDepth depth, IFileSystemDirectory parent)
+        private static IEnumerable<IFileSystemInfo> GetDirectories(string path, IDepth depth, IFileSystemDirectory parent, IMessenger messenger)
         {
             var result = new List<IFileSystemInfo>();
             try
@@ -52,7 +52,7 @@ namespace Maple.Core
                                                         && !p.Attributes.HasFlag(FileAttributes.System)
                                                         && !p.Attributes.HasFlag(FileAttributes.Offline)
                                                         && !p.Attributes.HasFlag(FileAttributes.Encrypted))
-                                            .Select(p => new MapleDirectory(p, depth, parent))
+                                            .Select(p => new MapleDirectory(p, depth, parent, messenger))
                                             .ToList();
 
                 result.AddRange(directories);
@@ -65,7 +65,7 @@ namespace Maple.Core
             return result;
         }
 
-        private static IEnumerable<IFileSystemInfo> GetFiles(string path, IDepth depth, IFileSystemDirectory parent)
+        private static IEnumerable<IFileSystemInfo> GetFiles(string path, IDepth depth, IFileSystemDirectory parent, IMessenger messenger)
         {
             var result = new List<IFileSystemInfo>();
             try
@@ -77,7 +77,7 @@ namespace Maple.Core
                                                     && !p.Attributes.HasFlag(FileAttributes.System)
                                                     && !p.Attributes.HasFlag(FileAttributes.Offline)
                                                     && !p.Attributes.HasFlag(FileAttributes.Encrypted))
-                                        .Select(p => new MapleFile(p, depth, parent))
+                                        .Select(p => new MapleFile(p, depth, parent, messenger))
                                         .ToList();
 
                 result.AddRange(files);

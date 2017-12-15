@@ -318,7 +318,6 @@
     <Style x:Key="BaseFileSystemBrowserStyle" TargetType="{x:Type core:FileSystemBrowser}">
 
         <Style.Resources>
-            <local:BindingProxy x:Key="ViewModelProxy" Data="{Binding FileSystemViewModel}" />
 
             <Style x:Key="{x:Type TreeViewItem}" TargetType="{x:Type TreeViewItem}">
                 <Setter Property="Background" Value="Transparent" />
@@ -582,6 +581,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type core:FileSystemBrowser}">
                     <Grid>
+                        <Grid.Resources>
+                            <local:BindingProxy x:Key="ViewModelProxy" Data="{Binding}" />
+                        </Grid.Resources>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.4*" MinWidth="100" />
                             <ColumnDefinition Width="Auto" />
@@ -608,12 +610,12 @@
                                                    TextTrimming="CharacterEllipsis">
                                             <TextBlock.ContextMenu>
                                                 <ContextMenu>
-                                                    <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
+                                                    <MenuItem Command="{Binding DeleteCommand}" Header="{local:Translation Delete}">
                                                         <MenuItem.Icon>
                                                             <icons:PackIconMaterial Kind="Delete" />
                                                         </MenuItem.Icon>
                                                     </MenuItem>
-                                                    <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
+                                                    <MenuItem Command="{Binding RefreshCommand}" Header="{local:Translation Refresh}">
                                                         <MenuItem.Icon>
                                                             <icons:PackIconMaterial Kind="Refresh" />
                                                         </MenuItem.Icon>
@@ -633,12 +635,12 @@
                                                    TextTrimming="CharacterEllipsis">
                                             <TextBlock.ContextMenu>
                                                 <ContextMenu>
-                                                    <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
+                                                    <MenuItem Command="{Binding DeleteCommand}" Header="{local:Translation Delete}">
                                                         <MenuItem.Icon>
                                                             <icons:PackIconMaterial Kind="Delete" />
                                                         </MenuItem.Icon>
                                                     </MenuItem>
-                                                    <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
+                                                    <MenuItem Command="{Binding RefreshCommand}" Header="{local:Translation Refresh}">
                                                         <MenuItem.Icon>
                                                             <icons:PackIconMaterial Kind="Refresh" />
                                                         </MenuItem.Icon>
@@ -706,44 +708,53 @@
                                                                     <DataTemplate DataType="{x:Type core:MapleFile}">
                                                                         <StackPanel Orientation="Horizontal">
                                                                             <icons:PackIconMaterial Foreground="{DynamicResource SecondaryAccentBrush}" Kind="File" />
-                                                                            <TextBlock Margin="8 0 0 0" Text="{Binding Name}">
-                                                                                <TextBlock.ContextMenu>
-                                                                                    <ContextMenu>
-                                                                                        <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
-                                                                                            <MenuItem.Icon>
-                                                                                                <icons:PackIconMaterial Kind="Select" />
-                                                                                            </MenuItem.Icon>
-                                                                                        </MenuItem>
-                                                                                        <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
-                                                                                            <MenuItem.Icon>
-                                                                                                <icons:PackIconMaterial Kind="Refresh" />
-                                                                                            </MenuItem.Icon>
-                                                                                        </MenuItem>
-                                                                                        <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
-                                                                                            <MenuItem.Icon>
-                                                                                                <icons:PackIconMaterial Kind="Delete" />
-                                                                                            </MenuItem.Icon>
-                                                                                        </MenuItem>
-                                                                                    </ContextMenu>
-                                                                                </TextBlock.ContextMenu>
-                                                                            </TextBlock>
-                                                                        </StackPanel>
-                                                                    </DataTemplate>
+                                                                            <TextBlock Margin="8 0 0 0" Text="{Binding Name}" />
 
-                                                                    <DataTemplate DataType="{x:Type core:MapleDirectory}">
-                                                                        <ListBox ItemsSource="{Binding DefaultCollectionView}"
-                                                                                 SelectionMode="Extended">
-                                                                            <i:Interaction.Behaviors>
-                                                                                <local:SelectedListBoxItemBehavior SelectedItems="{Binding Data.SelectedItems, Source={StaticResource ViewModelProxy}}" />
-                                                                            </i:Interaction.Behaviors>
-                                                                            <ListBox.ContextMenu>
+                                                                            <StackPanel.Resources>
+                                                                                <local:BindingProxy x:Key="MapleFileProxy" Data="{Binding}" />
+                                                                            </StackPanel.Resources>
+
+                                                                            <StackPanel.ContextMenu>
                                                                                 <ContextMenu>
-                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
+                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
+                                                                                              CommandParameter="{Binding Data, Source={StaticResource MapleFileProxy}}"
+                                                                                              Header="{local:Translation Select}">
                                                                                         <MenuItem.Icon>
                                                                                             <icons:PackIconMaterial Kind="Select" />
                                                                                         </MenuItem.Icon>
                                                                                     </MenuItem>
-                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
+                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="{local:Translation Refresh}">
+                                                                                        <MenuItem.Icon>
+                                                                                            <icons:PackIconMaterial Kind="Refresh" />
+                                                                                        </MenuItem.Icon>
+                                                                                    </MenuItem>
+                                                                                    <MenuItem Command="{Binding DeleteCommand}" Header="{local:Translation Delete}">
+                                                                                        <MenuItem.Icon>
+                                                                                            <icons:PackIconMaterial Kind="Delete" />
+                                                                                        </MenuItem.Icon>
+                                                                                    </MenuItem>
+                                                                                </ContextMenu>
+                                                                            </StackPanel.ContextMenu>
+                                                                        </StackPanel>
+                                                                    </DataTemplate>
+
+                                                                    <DataTemplate DataType="{x:Type core:MapleDirectory}">
+                                                                        <ListBox ItemsSource="{Binding DefaultCollectionView}" SelectionMode="Extended">
+
+                                                                            <i:Interaction.Behaviors>
+                                                                                <local:SelectedListBoxItemBehavior SelectedItems="{Binding Data.SelectedItems, Source={StaticResource ViewModelProxy}}" />
+                                                                            </i:Interaction.Behaviors>
+
+                                                                            <ListBox.ContextMenu>
+                                                                                <ContextMenu>
+                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
+                                                                                              CommandParameter="{Binding}"
+                                                                                              Header="{local:Translation Select}">
+                                                                                        <MenuItem.Icon>
+                                                                                            <icons:PackIconMaterial Kind="Select" />
+                                                                                        </MenuItem.Icon>
+                                                                                    </MenuItem>
+                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="{local:Translation Refresh}">
                                                                                         <MenuItem.Icon>
                                                                                             <icons:PackIconMaterial Kind="Refresh" />
                                                                                         </MenuItem.Icon>
@@ -758,22 +769,24 @@
                                                                                         <TextBlock Margin="8 0 0 0" Text="{Binding Name}">
                                                                                             <TextBlock.InputBindings>
                                                                                                 <MouseBinding Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
-                                                                                                              CommandParameter="{Binding}"
+                                                                                                              CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DockPanel}}}"
                                                                                                               Gesture="LeftDoubleClick" />
                                                                                             </TextBlock.InputBindings>
                                                                                             <TextBlock.ContextMenu>
                                                                                                 <ContextMenu>
-                                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
+                                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
+                                                                                                              CommandParameter="{Binding}"
+                                                                                                              Header="{local:Translation Select}">
                                                                                                         <MenuItem.Icon>
                                                                                                             <icons:PackIconMaterial Kind="Select" />
                                                                                                         </MenuItem.Icon>
                                                                                                     </MenuItem>
-                                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
+                                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="{local:Translation Refresh}">
                                                                                                         <MenuItem.Icon>
                                                                                                             <icons:PackIconMaterial Kind="Refresh" />
                                                                                                         </MenuItem.Icon>
                                                                                                     </MenuItem>
-                                                                                                    <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
+                                                                                                    <MenuItem Command="{Binding DeleteCommand}" Header="{local:Translation Delete}">
                                                                                                         <MenuItem.Icon>
                                                                                                             <icons:PackIconMaterial Kind="Delete" />
                                                                                                         </MenuItem.Icon>
@@ -789,25 +802,28 @@
                                                                     </DataTemplate>
 
                                                                     <DataTemplate DataType="{x:Type core:MapleDrive}">
-                                                                        <ListBox ItemsSource="{Binding DefaultCollectionView}"
-                                                                                 SelectionMode="Extended">
+                                                                        <ListBox ItemsSource="{Binding DefaultCollectionView}" SelectionMode="Extended">
                                                                             <ListBox.ContextMenu>
                                                                                 <ContextMenu>
-                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
+                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
+                                                                                              CommandParameter="{Binding}"
+                                                                                              Header="{local:Translation Select}">
                                                                                         <MenuItem.Icon>
                                                                                             <icons:PackIconMaterial Kind="Select" />
                                                                                         </MenuItem.Icon>
                                                                                     </MenuItem>
-                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
+                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="{local:Translation Refresh}">
                                                                                         <MenuItem.Icon>
                                                                                             <icons:PackIconMaterial Kind="Refresh" />
                                                                                         </MenuItem.Icon>
                                                                                     </MenuItem>
                                                                                 </ContextMenu>
                                                                             </ListBox.ContextMenu>
+
                                                                             <i:Interaction.Behaviors>
                                                                                 <local:SelectedListBoxItemBehavior SelectedItems="{Binding Data.SelectedItems, Source={StaticResource ViewModelProxy}}" />
                                                                             </i:Interaction.Behaviors>
+
                                                                             <ListBox.Resources>
 
                                                                                 <DataTemplate DataType="{x:Type core:MapleDirectory}">
@@ -816,22 +832,24 @@
                                                                                         <TextBlock Margin="8 0 0 0" Text="{Binding Name}">
                                                                                             <TextBlock.InputBindings>
                                                                                                 <MouseBinding Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
-                                                                                                              CommandParameter="{Binding}"
+                                                                                                              CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DockPanel}}}"
                                                                                                               Gesture="LeftDoubleClick" />
                                                                                             </TextBlock.InputBindings>
                                                                                             <TextBlock.ContextMenu>
                                                                                                 <ContextMenu>
-                                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
+                                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
+                                                                                                              CommandParameter="{Binding}"
+                                                                                                              Header="{local:Translation Select}">
                                                                                                         <MenuItem.Icon>
                                                                                                             <icons:PackIconMaterial Kind="Select" />
                                                                                                         </MenuItem.Icon>
                                                                                                     </MenuItem>
-                                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
+                                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="{local:Translation Refresh}">
                                                                                                         <MenuItem.Icon>
                                                                                                             <icons:PackIconMaterial Kind="Refresh" />
                                                                                                         </MenuItem.Icon>
                                                                                                     </MenuItem>
-                                                                                                    <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
+                                                                                                    <MenuItem Command="{Binding DeleteCommand}" Header="{local:Translation Delete}">
                                                                                                         <MenuItem.Icon>
                                                                                                             <icons:PackIconMaterial Kind="Delete" />
                                                                                                         </MenuItem.Icon>
@@ -862,20 +880,28 @@
 
                                                                     <DataTemplate DataType="{x:Type core:MapleFile}">
                                                                         <DockPanel Width="100">
+
+                                                                            <DockPanel.Resources>
+                                                                                <local:BindingProxy x:Key="MapleFileProxy" Data="{Binding}" />
+                                                                            </DockPanel.Resources>
+
                                                                             <DockPanel.ContextMenu>
                                                                                 <ContextMenu>
-                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
+                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
+                                                                                              CommandParameter="{Binding}"
+                                                                                              Header="{local:Translation Select}">
                                                                                         <MenuItem.Icon>
                                                                                             <icons:PackIconMaterial Kind="Select" />
                                                                                         </MenuItem.Icon>
                                                                                     </MenuItem>
-                                                                                    <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
+                                                                                    <MenuItem Command="{Binding DeleteCommand}" Header="{local:Translation Delete}">
                                                                                         <MenuItem.Icon>
                                                                                             <icons:PackIconMaterial Kind="Delete" />
                                                                                         </MenuItem.Icon>
                                                                                     </MenuItem>
                                                                                 </ContextMenu>
                                                                             </DockPanel.ContextMenu>
+
                                                                             <TextBlock HorizontalAlignment="Center"
                                                                                        DockPanel.Dock="Bottom"
                                                                                        Text="{Binding Name}"
@@ -896,12 +922,14 @@
                                                                                  SelectionMode="Extended">
                                                                             <ListBox.ContextMenu>
                                                                                 <ContextMenu>
-                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
+                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
+                                                                                              CommandParameter="{Binding}"
+                                                                                              Header="{local:Translation Select}">
                                                                                         <MenuItem.Icon>
                                                                                             <icons:PackIconMaterial Kind="Select" />
                                                                                         </MenuItem.Icon>
                                                                                     </MenuItem>
-                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
+                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="{local:Translation Refresh}">
                                                                                         <MenuItem.Icon>
                                                                                             <icons:PackIconMaterial Kind="Refresh" />
                                                                                         </MenuItem.Icon>
@@ -918,21 +946,22 @@
                                                                                     <DockPanel Width="100">
                                                                                         <DockPanel.ContextMenu>
                                                                                             <ContextMenu>
-                                                                                                <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
-                                                                                                    <MenuItem.Icon>
-                                                                                                        <icons:PackIconMaterial Kind="Delete" />
-                                                                                                    </MenuItem.Icon>
-                                                                                                </MenuItem>
-                                                                                                <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
+                                                                                                <MenuItem Command="{Binding RefreshCommand}" Header="{local:Translation Refresh}">
                                                                                                     <MenuItem.Icon>
                                                                                                         <icons:PackIconMaterial Kind="Refresh" />
                                                                                                     </MenuItem.Icon>
                                                                                                 </MenuItem>
+                                                                                                <MenuItem Command="{Binding DeleteCommand}" Header="{local:Translation Delete}">
+                                                                                                    <MenuItem.Icon>
+                                                                                                        <icons:PackIconMaterial Kind="Delete" />
+                                                                                                    </MenuItem.Icon>
+                                                                                                </MenuItem>
+
                                                                                             </ContextMenu>
                                                                                         </DockPanel.ContextMenu>
                                                                                         <DockPanel.InputBindings>
                                                                                             <MouseBinding Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
-                                                                                                          CommandParameter="{Binding}"
+                                                                                                          CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DockPanel}}}"
                                                                                                           Gesture="LeftDoubleClick" />
                                                                                         </DockPanel.InputBindings>
                                                                                         <TextBlock HorizontalAlignment="Center"
@@ -958,12 +987,14 @@
                                                                                  SelectionMode="Extended">
                                                                             <ListBox.ContextMenu>
                                                                                 <ContextMenu>
-                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
+                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
+                                                                                              CommandParameter="{Binding}"
+                                                                                              Header="{local:Translation Select}">
                                                                                         <MenuItem.Icon>
                                                                                             <icons:PackIconMaterial Kind="Select" />
                                                                                         </MenuItem.Icon>
                                                                                     </MenuItem>
-                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
+                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="{local:Translation Refresh}">
                                                                                         <MenuItem.Icon>
                                                                                             <icons:PackIconMaterial Kind="Refresh" />
                                                                                         </MenuItem.Icon>
@@ -980,17 +1011,19 @@
                                                                                     <DockPanel Width="100">
                                                                                         <DockPanel.ContextMenu>
                                                                                             <ContextMenu>
-                                                                                                <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
+                                                                                                <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
+                                                                                                          CommandParameter="{Binding}"
+                                                                                                          Header="{local:Translation Select}">
                                                                                                     <MenuItem.Icon>
                                                                                                         <icons:PackIconMaterial Kind="Select" />
                                                                                                     </MenuItem.Icon>
                                                                                                 </MenuItem>
-                                                                                                <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
+                                                                                                <MenuItem Command="{Binding RefreshCommand}" Header="{local:Translation Refresh}">
                                                                                                     <MenuItem.Icon>
                                                                                                         <icons:PackIconMaterial Kind="Refresh" />
                                                                                                     </MenuItem.Icon>
                                                                                                 </MenuItem>
-                                                                                                <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
+                                                                                                <MenuItem Command="{Binding DeleteCommand}" Header="{local:Translation Delete}">
                                                                                                     <MenuItem.Icon>
                                                                                                         <icons:PackIconMaterial Kind="Delete" />
                                                                                                     </MenuItem.Icon>
@@ -999,7 +1032,7 @@
                                                                                         </DockPanel.ContextMenu>
                                                                                         <DockPanel.InputBindings>
                                                                                             <MouseBinding Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
-                                                                                                          CommandParameter="{Binding}"
+                                                                                                          CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DockPanel}}}"
                                                                                                           Gesture="LeftDoubleClick" />
                                                                                         </DockPanel.InputBindings>
                                                                                         <TextBlock HorizontalAlignment="Center"

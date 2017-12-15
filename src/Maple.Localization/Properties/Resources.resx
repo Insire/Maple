@@ -348,4 +348,13 @@
   <data name="ExceptionMessageUnhandled" xml:space="preserve">
     <value>Ein unerwarteter Fehler ist aufgetreten.</value>
   </data>
+  <data name="Select" xml:space="preserve">
+    <value>Auswählen</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Aktualisieren</value>
+  </data>
 </root>

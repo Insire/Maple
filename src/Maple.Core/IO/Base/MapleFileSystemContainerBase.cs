@@ -28,9 +28,10 @@ namespace Maple.Core
             private set { SetValue(ref _children, value); }
         }
 
-        protected MapleFileSystemContainerBase(string name, string fullName, IDepth depth, IFileSystemDirectory parent) : base(name, fullName, depth, parent)
+        protected MapleFileSystemContainerBase(string name, string fullName, IDepth depth, IFileSystemDirectory parent, IMessenger messenger)
+            : base(name, fullName, depth, parent, messenger)
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 IsContainer = true;
 
@@ -49,7 +50,7 @@ namespace Maple.Core
 
         public override void OnFilterChanged(string filter)
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 Filter = filter;
                 Children.ForEach(p => p.LoadMetaData());
@@ -62,10 +63,10 @@ namespace Maple.Core
 
         public override void Refresh()
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 Children.Clear();
-                Children.AddRange(FileSystemExtensions.GetChildren(this, Depth));
+                Children.AddRange(FileSystemExtensions.GetChildren(this, Depth, Messenger));
                 HasContainers = Children.Any(p => p is MapleFileSystemContainerBase);
 
                 OnFilterChanged(string.Empty);

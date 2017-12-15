@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Windows.Input;
+using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
-    public abstract class MapleFileSystemBase : ObservableObject, IFileSystemInfo
+    public abstract class MapleFileSystemBase : ViewModel, IFileSystemInfo
     {
-        protected readonly BusyStack _busyStack;
-
         public static bool NoFilesFilter(object obj)
         {
             if (obj is IFileSystemFile)
@@ -70,13 +69,6 @@ namespace Maple.Core
             protected set { SetValue(ref _exists, value); }
         }
 
-        private bool _isBusy;
-        public bool IsBusy
-        {
-            get { return _isBusy; }
-            private set { SetValue(ref _isBusy, value); }
-        }
-
         private bool _isLoaded;
         public bool IsLoaded
         {
@@ -126,11 +118,9 @@ namespace Maple.Core
             protected set { SetValue(ref _depth, value); }
         }
 
-        private MapleFileSystemBase()
+        private MapleFileSystemBase(IMessenger messenger)
+            : base(messenger)
         {
-            _busyStack = new BusyStack();
-            _busyStack.OnChanged += (hasItems) => IsBusy = hasItems;
-
             LoadCommand = new RelayCommand(Load, CanLoad);
             RefreshCommand = new RelayCommand(Refresh, CanRefresh);
             DeleteCommand = new RelayCommand(Delete, CanDelete);
@@ -141,21 +131,22 @@ namespace Maple.Core
             HasContainers = false;
         }
 
-        protected MapleFileSystemBase(string name, string fullName, IDepth depth, IFileSystemDirectory parent) : this()
+        protected MapleFileSystemBase(string name, string fullName, IDepth depth, IFileSystemDirectory parent, IMessenger messenger)
+            : this(messenger)
         {
             if (string.IsNullOrEmpty(name))
-                throw new ArgumentException($"{nameof(Name)} can't be empty.", nameof(Name));
+                throw new ArgumentNullException(nameof(name), $"{nameof(name)} {Resources.IsRequired}");
 
             if (string.IsNullOrEmpty(fullName))
-                throw new ArgumentException($"{nameof(FullName)} can't be empty.", nameof(FullName));
+                throw new ArgumentNullException(nameof(fullName), $"{nameof(fullName)} {Resources.IsRequired}");
 
             if (depth == null)
-                throw new ArgumentException($"{nameof(Depth)} can't be empty.", nameof(Depth));
+                throw new ArgumentNullException(nameof(depth), $"{nameof(depth)} {Resources.IsRequired}");
 
             if (!(this is IFileSystemDrive) && parent == null)
-                throw new ArgumentException($"{nameof(Parent)} can't be empty.", nameof(Parent));
+                throw new ArgumentNullException(nameof(parent), $"{nameof(parent)} {Resources.IsRequired}");
 
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 Depth = depth;
                 Depth.Current++;
