@@ -4,7 +4,7 @@ using Maple.Localization.Properties;
 
 namespace Maple
 {
-    public class FileBrowserDialogViewModel : ObservableObject
+    public class FileBrowserContentDialogViewModel : ObservableObject
     {
         private FileSystemBrowserOptions _options;
 
@@ -15,7 +15,7 @@ namespace Maple
             private set { SetValue(ref _fileSystemViewModel, value); }
         }
 
-        public FileBrowserDialogViewModel(FileSystemViewModel fileSystemViewModel, FileSystemBrowserOptions options)
+        public FileBrowserContentDialogViewModel(FileSystemViewModel fileSystemViewModel, FileSystemBrowserOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options), $"{nameof(options)} {Resources.IsRequired}");
             FileSystemViewModel = fileSystemViewModel ?? throw new ArgumentNullException(nameof(fileSystemViewModel), $"{nameof(fileSystemViewModel)} {Resources.IsRequired}");

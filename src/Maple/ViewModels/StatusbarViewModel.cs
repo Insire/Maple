@@ -1,5 +1,7 @@
-﻿using Maple.Core;
+﻿using System;
+using Maple.Core;
 using Maple.Domain;
+using Maple.Localization.Properties;
 
 namespace Maple
 {
@@ -52,6 +54,9 @@ namespace Maple
         public StatusbarViewModel(IVersionService version, IMessenger messenger)
             : base(messenger)
         {
+            if (version == null)
+                throw new ArgumentNullException(nameof(version), $"{nameof(version)} {Resources.IsRequired}");
+
             Version = version.Get();
 
             MessageTokens.Add(Messenger.Subscribe<ViewModelSelectionChangedMessage<Culture>>(UpdateLanguage));

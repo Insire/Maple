@@ -345,4 +345,13 @@
   <data name="ExceptionMessageUnhandled" xml:space="preserve">
     <value>An unexpected error occured.</value>
   </data>
+  <data name="Select" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
 </root>

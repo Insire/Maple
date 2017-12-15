@@ -1,35 +1,47 @@
-﻿using System;
+﻿using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using Maple.Domain;
-using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
-    public class FileSystemViewModel : ObservableObject
+    public class FileSystemViewModel : ViewModel
     {
-        private readonly IMessenger _messenger;
-
-        protected readonly BusyStack _busyStack;
-
-        public ICommand SelectCommand { get; private set; }
+        private ICommand _selectCommand;
+        /// <summary>
+        /// command to update the selected folder or drive in the master view
+        /// </summary>
+        public ICommand SelectCommand
+        {
+            get { return _selectCommand; }
+            private set { SetValue(ref _selectCommand, value); }
+        }
 
         private IRangeObservableCollection<IFileSystemInfo> _selectedItems;
+        /// <summary>
+        /// contains either folders or files ready to be used somewhere else
+        /// </summary>
         public IRangeObservableCollection<IFileSystemInfo> SelectedItems
         {
             get { return _selectedItems; }
             private set { SetValue(ref _selectedItems, value); }
         }
 
-        private IRangeObservableCollection<IFileSystemInfo> _selectedDetailItems;
-        public IRangeObservableCollection<IFileSystemInfo> SelectedDetailItems
+        private IList _selectedItemsList;
+        /// <summary>
+        /// bound to contain selected folders and files from the detail view
+        /// </summary>
+        public IList SelectedItemsList
         {
-            get { return _selectedDetailItems; }
-            set { SetValue(ref _selectedDetailItems, value); }
+            get { return _selectedItemsList; }
+            set { SetValue(ref _selectedItemsList, value, OnChanged: OnSelectedItemsListChanged); }
         }
 
         private IRangeObservableCollection<MapleDrive> _drives;
+        /// <summary>
+        /// the currently available drives of the filesystem
+        /// </summary>
         public IRangeObservableCollection<MapleDrive> Drives
         {
             get { return _drives; }
@@ -37,20 +49,19 @@ namespace Maple.Core
         }
 
         private MapleFileSystemContainerBase _selectedItem;
+        /// <summary>
+        /// the selected item in the master view
+        /// </summary>
         public MapleFileSystemContainerBase SelectedItem
         {
             get { return _selectedItem; }
             set { SetValue(ref _selectedItem, value, OnChanged: OnSelectedItemChanged); }
         }
 
-        private bool _isBusy;
-        public bool IsBusy
-        {
-            get { return _isBusy; }
-            private set { SetValue(ref _isBusy, value); }
-        }
-
         private string _filter;
+        /// <summary>
+        /// text to search for in the items in the detailview (source is the master view)
+        /// </summary>
         public string Filter
         {
             get { return _filter; }
@@ -58,55 +69,53 @@ namespace Maple.Core
         }
 
         private bool _displayListView;
+        /// <summary>
+        /// flag to switch between different display styles for the detail view
+        /// </summary>
         public bool DisplayListView
         {
             get { return _displayListView; }
             set { SetValue(ref _displayListView, value); }
         }
 
-        private FileSystemViewModel()
+        public FileSystemViewModel(IMessenger messenger, ILoggingService loggingService)
+            : base(messenger)
         {
-            _busyStack = new BusyStack();
-            _busyStack.OnChanged += (hasItems) => IsBusy = hasItems;
-
-            SelectCommand = new RelayCommand<IFileSystemInfo>(SetSelectedItem, CanSetSelectedItem);
-        }
-
-        public FileSystemViewModel(IMessenger messenger)
-            : this()
-        {
-            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");
-
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 DisplayListView = false;
 
                 Drives = new RangeObservableCollection<MapleDrive>();
                 SelectedItems = new RangeObservableCollection<IFileSystemInfo>();
-                SelectedDetailItems = new RangeObservableCollection<IFileSystemInfo>();
 
                 var drives = DriveInfo.GetDrives()
                                         .Where(p => p.IsReady && p.DriveType != DriveType.CDRom && p.DriveType != DriveType.Unknown)
-                                        .Select(p => new MapleDrive(p, new FileSystemDepth(0)))
+                                        .Select(p => new MapleDrive(p, new FileSystemDepth(0), Messenger, loggingService))
                                         .ToList();
                 Drives.AddRange(drives);
+
+                SelectCommand = new RelayCommand<object>(SetSelectedItem, CanSetSelectedItem);
             }
+        }
+
+        private void OnSelectedItemsListChanged()
+        {
+            SelectedItems.Clear();
+            SelectedItems.AddRange(SelectedItemsList.Cast<IFileSystemInfo>());
         }
 
         private void OnSelectedItemChanged()
         {
+            if (SelectedItem == null)
+                return;
+
             SelectedItem.Load();
             SelectedItem.LoadMetaData();
 
-            _messenger.Publish(new FileSystemInfoChangedMessage(this, SelectedItem));
+            Messenger.Publish(new FileSystemInfoChangedMessage(this, SelectedItem));
         }
 
-        /// <summary>
-        /// Sets the selected item.
-        /// </summary>
-        /// <param name="item">The item.</param>
-        /// <autogeneratedoc />
-        public void SetSelectedItem(IFileSystemInfo item)
+        public void SetSelectedItem(object item)
         {
             var value = item as MapleFileSystemContainerBase;
 
@@ -118,8 +127,11 @@ namespace Maple.Core
             SelectedItem.Parent.IsSelected = true;
         }
 
-        private bool CanSetSelectedItem(IFileSystemInfo item)
+        private bool CanSetSelectedItem(object item)
         {
+            if (item == null)
+                return false;
+
             var value = item as MapleFileSystemContainerBase;
 
             return value != null && value != SelectedItem;

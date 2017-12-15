@@ -39,7 +39,7 @@ namespace Maple
             log.Info(Localization.Properties.Resources.ExceptionMessageUnhandled);
 
             if (e.Exception.InnerException != null)
-                log.Info(e.Exception.InnerException);
+                log.Error(e.Exception.InnerException);
 
             log.Error(e.Exception);
 
@@ -49,6 +49,7 @@ namespace Maple
         protected override void OnExit(ExitEventArgs e)
         {
             SaveState();
+            DisposeResources();
             ExitInternal(e);
         }
 
@@ -119,6 +120,11 @@ namespace Maple
                 item.Save();
 
             log.Info(Localization.Properties.Resources.SavedState);
+        }
+
+        private void DisposeResources()
+        {
+            // TODO get and dispose claimed resources
         }
 
         private void ExitInternal(ExitEventArgs e)

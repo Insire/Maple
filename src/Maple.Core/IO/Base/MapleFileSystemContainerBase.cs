@@ -1,12 +1,16 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using Maple.Domain;
+using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
     public abstract class MapleFileSystemContainerBase : MapleFileSystemBase, IFileSystemDirectory
     {
+        private readonly ILoggingService _loggingService;
+
         private ICollectionView _noFilesCollectionView;
         public ICollectionView NoFilesCollectionView
         {
@@ -28,9 +32,10 @@ namespace Maple.Core
             private set { SetValue(ref _children, value); }
         }
 
-        protected MapleFileSystemContainerBase(string name, string fullName, IDepth depth, IFileSystemDirectory parent) : base(name, fullName, depth, parent)
+        protected MapleFileSystemContainerBase(string name, string fullName, IDepth depth, IFileSystemDirectory parent, IMessenger messenger, ILoggingService loggingService)
+            : base(name, fullName, depth, parent, messenger)
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 IsContainer = true;
 
@@ -44,12 +49,14 @@ namespace Maple.Core
 
                 using (DefaultCollectionView.DeferRefresh())
                     DefaultCollectionView.Filter = SearchFilter;
+
+                _loggingService = loggingService ?? throw new ArgumentNullException(nameof(loggingService), $"{nameof(loggingService)} {Resources.IsRequired}");
             }
         }
 
         public override void OnFilterChanged(string filter)
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 Filter = filter;
                 Children.ForEach(p => p.LoadMetaData());
@@ -62,10 +69,10 @@ namespace Maple.Core
 
         public override void Refresh()
         {
-            using (_busyStack.GetToken())
+            using (BusyStack.GetToken())
             {
                 Children.Clear();
-                Children.AddRange(FileSystemExtensions.GetChildren(this, Depth));
+                Children.AddRange(FileSystemExtensions.GetChildren(this, Depth, Messenger, _loggingService));
                 HasContainers = Children.Any(p => p is MapleFileSystemContainerBase);
 
                 OnFilterChanged(string.Empty);

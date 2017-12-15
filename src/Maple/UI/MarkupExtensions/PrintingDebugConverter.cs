@@ -6,17 +6,17 @@ using System.Windows.Data;
 namespace Maple
 {
     [ValueConversion(typeof(object), typeof(object))]
-    public class DebugConverter : ConverterMarkupExtension<DebugConverter>, IValueConverter
+    public class PrintingDebugConverter : ConverterMarkupExtension<PrintingDebugConverter>, IValueConverter
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Debugger.Break();
+            Debug.WriteLine(value);
             return value;
         }
 
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Debugger.Break();
+            Debug.WriteLine(value);
             return value;
         }
     }

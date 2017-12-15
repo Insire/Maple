@@ -245,8 +245,9 @@ namespace Maple
         {
             using (BusyStack.GetToken())
             {
-                var options = new FileSystemBrowserOptions()
+                var options = new FileSystemFolderBrowserOptions()
                 {
+                    IncludeSubFolders = false,
                     CanCancel = true,
                     MultiSelection = false,
                     Title = _translator.Translate(nameof(Resources.SelectFolder)),

@@ -41,6 +41,8 @@ namespace Maple
 
             void RegisterViewModels()
             {
+                // TODO register disposeables
+
                 // save-/loadable ViewModels
                 c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IPlaylistsViewModel) }, typeof(Playlists), Reuse.Singleton);
                 c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IMediaPlayersViewModel) }, typeof(MediaPlayers), Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
@@ -53,7 +55,7 @@ namespace Maple
                 c.Register<ShellViewModel>(Reuse.Singleton);
                 c.Register<IDialogViewModel, DialogViewModel>(Reuse.Singleton);
                 c.Register<StatusbarViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
-                c.Register<FileSystemViewModel>(Reuse.Singleton);
+                c.Register<FileSystemViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
                 c.Register<OptionsViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
 
                 c.Register<CreateMediaItem>(setup: Setup.With(allowDisposableTransient: true));

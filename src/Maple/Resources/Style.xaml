@@ -103,6 +103,10 @@
     </Style>
     <!--#endregion  DataGrid Styles-->
 
+    <!--#region ListBox-->
+    <Style BasedOn="{StaticResource {x:Type ListBox}}" TargetType="{x:Type local:ListBox}" />
+    <!--#endregion ListBox-->
+
     <!--#region  Window Styles-->
     <Style x:Key="BaseWindowStyle"
            BasedOn="{StaticResource {x:Type metro:MetroWindow}}"
@@ -318,8 +322,6 @@
     <Style x:Key="BaseFileSystemBrowserStyle" TargetType="{x:Type core:FileSystemBrowser}">
 
         <Style.Resources>
-            <local:BindingProxy x:Key="ViewModelProxy" Data="{Binding FileSystemViewModel}" />
-
             <Style x:Key="{x:Type TreeViewItem}" TargetType="{x:Type TreeViewItem}">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="BorderThickness" Value="0" />
@@ -582,6 +584,30 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type core:FileSystemBrowser}">
                     <Grid>
+                        <Grid.Resources>
+                            <local:BindingProxy x:Key="ViewModelProxy" Data="{Binding}" />
+
+                            <ContextMenu x:Key="FileContextMenu" DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource Self}, Converter={local:PrintingDebugConverter}}">
+                                <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
+                                          CommandParameter="{Binding}"
+                                          Header="{local:Translation Select}">
+                                    <MenuItem.Icon>
+                                        <icons:PackIconMaterial Kind="Select" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Command="{Binding RefreshCommand}" Header="{local:Translation Refresh}">
+                                    <MenuItem.Icon>
+                                        <icons:PackIconMaterial Kind="Refresh" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Command="{Binding DeleteCommand}" Header="{local:Translation Delete}">
+                                    <MenuItem.Icon>
+                                        <icons:PackIconMaterial Kind="Delete" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+
+                        </Grid.Resources>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.4*" MinWidth="100" />
                             <ColumnDefinition Width="Auto" />
@@ -601,54 +627,30 @@
                                   ScrollViewer.VerticalScrollBarVisibility="Auto">
                             <TreeView.Resources>
                                 <HierarchicalDataTemplate DataType="{x:Type core:MapleDirectory}" ItemsSource="{Binding Children}">
-                                    <StackPanel Orientation="Horizontal">
-                                        <icons:PackIconMaterial Foreground="{DynamicResource SecondaryAccentBrush}" Kind="Folder" />
-                                        <TextBlock Margin="8 0 0 0"
-                                                   Text="{Binding Name}"
-                                                   TextTrimming="CharacterEllipsis">
-                                            <TextBlock.ContextMenu>
-                                                <ContextMenu>
-                                                    <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
-                                                        <MenuItem.Icon>
-                                                            <icons:PackIconMaterial Kind="Delete" />
-                                                        </MenuItem.Icon>
-                                                    </MenuItem>
-                                                    <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
-                                                        <MenuItem.Icon>
-                                                            <icons:PackIconMaterial Kind="Refresh" />
-                                                        </MenuItem.Icon>
-                                                    </MenuItem>
-                                                </ContextMenu>
-                                            </TextBlock.ContextMenu>
-                                        </TextBlock>
-                                    </StackPanel>
-
+                                    <Border Background="Transparent" ContextMenu="{StaticResource FileContextMenu}">
+                                        <DockPanel>
+                                            <icons:PackIconMaterial DockPanel.Dock="Left"
+                                                                    Foreground="{DynamicResource SecondaryAccentBrush}"
+                                                                    Kind="Folder" />
+                                            <TextBlock Margin="8 0 0 0"
+                                                       Text="{Binding Name}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                        </DockPanel>
+                                    </Border>
                                 </HierarchicalDataTemplate>
 
                                 <HierarchicalDataTemplate DataType="{x:Type core:MapleDrive}" ItemsSource="{Binding Children}">
-                                    <StackPanel Orientation="Horizontal">
-                                        <icons:PackIconEntypo Foreground="{DynamicResource SecondaryAccentBrush}" Kind="Drive" />
-                                        <TextBlock Margin="8 0 0 0"
-                                                   Text="{Binding Name}"
-                                                   TextTrimming="CharacterEllipsis">
-                                            <TextBlock.ContextMenu>
-                                                <ContextMenu>
-                                                    <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
-                                                        <MenuItem.Icon>
-                                                            <icons:PackIconMaterial Kind="Delete" />
-                                                        </MenuItem.Icon>
-                                                    </MenuItem>
-                                                    <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
-                                                        <MenuItem.Icon>
-                                                            <icons:PackIconMaterial Kind="Refresh" />
-                                                        </MenuItem.Icon>
-                                                    </MenuItem>
-                                                </ContextMenu>
-                                            </TextBlock.ContextMenu>
-                                        </TextBlock>
-                                    </StackPanel>
+                                    <Border Background="Transparent" ContextMenu="{StaticResource FileContextMenu}">
+                                        <DockPanel>
+                                            <icons:PackIconEntypo Foreground="{DynamicResource SecondaryAccentBrush}" Kind="Drive" />
+                                            <TextBlock Margin="8 0 0 0"
+                                                       Text="{Binding Name}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                        </DockPanel>
+                                    </Border>
                                 </HierarchicalDataTemplate>
                             </TreeView.Resources>
+
                             <i:Interaction.Behaviors>
                                 <local:SelectedTreeViewItemBehavior SelectedItem="{Binding SelectedItem, Mode=TwoWay}" />
                             </i:Interaction.Behaviors>
@@ -702,148 +704,83 @@
                                                         <ControlTemplate TargetType="{x:Type ContentControl}">
                                                             <ContentPresenter Content="{Binding SelectedItem, Mode=TwoWay}">
                                                                 <ContentPresenter.Resources>
-
                                                                     <DataTemplate DataType="{x:Type core:MapleFile}">
-                                                                        <StackPanel Orientation="Horizontal">
-                                                                            <icons:PackIconMaterial Foreground="{DynamicResource SecondaryAccentBrush}" Kind="File" />
-                                                                            <TextBlock Margin="8 0 0 0" Text="{Binding Name}">
-                                                                                <TextBlock.ContextMenu>
-                                                                                    <ContextMenu>
-                                                                                        <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
-                                                                                            <MenuItem.Icon>
-                                                                                                <icons:PackIconMaterial Kind="Select" />
-                                                                                            </MenuItem.Icon>
-                                                                                        </MenuItem>
-                                                                                        <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
-                                                                                            <MenuItem.Icon>
-                                                                                                <icons:PackIconMaterial Kind="Refresh" />
-                                                                                            </MenuItem.Icon>
-                                                                                        </MenuItem>
-                                                                                        <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
-                                                                                            <MenuItem.Icon>
-                                                                                                <icons:PackIconMaterial Kind="Delete" />
-                                                                                            </MenuItem.Icon>
-                                                                                        </MenuItem>
-                                                                                    </ContextMenu>
-                                                                                </TextBlock.ContextMenu>
-                                                                            </TextBlock>
-                                                                        </StackPanel>
+                                                                        <Border Background="Transparent" ContextMenu="{StaticResource FileContextMenu}">
+                                                                            <DockPanel>
+                                                                                <icons:PackIconMaterial DockPanel.Dock="Left"
+                                                                                                        Foreground="{DynamicResource SecondaryAccentBrush}"
+                                                                                                        Kind="File" />
+                                                                                <TextBlock Margin="8 0 0 0" Text="{Binding Name}" />
+
+                                                                                <DockPanel.Resources>
+                                                                                    <local:BindingProxy x:Key="MapleFileProxy" Data="{Binding}" />
+                                                                                </DockPanel.Resources>
+                                                                            </DockPanel>
+                                                                        </Border>
                                                                     </DataTemplate>
 
                                                                     <DataTemplate DataType="{x:Type core:MapleDirectory}">
-                                                                        <ListBox ItemsSource="{Binding DefaultCollectionView}"
-                                                                                 SelectionMode="Extended">
-                                                                            <i:Interaction.Behaviors>
-                                                                                <local:SelectedListBoxItemBehavior SelectedItems="{Binding Data.SelectedItems, Source={StaticResource ViewModelProxy}}" />
-                                                                            </i:Interaction.Behaviors>
-                                                                            <ListBox.ContextMenu>
-                                                                                <ContextMenu>
-                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
-                                                                                        <MenuItem.Icon>
-                                                                                            <icons:PackIconMaterial Kind="Select" />
-                                                                                        </MenuItem.Icon>
-                                                                                    </MenuItem>
-                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
-                                                                                        <MenuItem.Icon>
-                                                                                            <icons:PackIconMaterial Kind="Refresh" />
-                                                                                        </MenuItem.Icon>
-                                                                                    </MenuItem>
-                                                                                </ContextMenu>
-                                                                            </ListBox.ContextMenu>
-                                                                            <ListBox.Resources>
+                                                                        <local:ListBox ContextMenu="{StaticResource FileContextMenu}"
+                                                                                       ItemsSource="{Binding DefaultCollectionView}"
+                                                                                       SelectedEntriesList="{Binding Data.SelectedItemsList, Source={StaticResource ViewModelProxy}}"
+                                                                                       SelectionMode="Extended">
 
+                                                                            <local:ListBox.Resources>
                                                                                 <DataTemplate DataType="{x:Type core:MapleDirectory}">
-                                                                                    <StackPanel Orientation="Horizontal">
-                                                                                        <icons:PackIconMaterial Foreground="{DynamicResource SecondaryAccentBrush}" Kind="Folder" />
-                                                                                        <TextBlock Margin="8 0 0 0" Text="{Binding Name}">
-                                                                                            <TextBlock.InputBindings>
+                                                                                    <Border Background="Transparent" ContextMenu="{StaticResource FileContextMenu}">
+                                                                                        <DockPanel>
+                                                                                            <icons:PackIconMaterial DockPanel.Dock="Left"
+                                                                                                                    Foreground="{DynamicResource SecondaryAccentBrush}"
+                                                                                                                    Kind="Folder" />
+                                                                                            <TextBlock Margin="8 0 0 0" Text="{Binding Name}" />
+
+                                                                                            <DockPanel.InputBindings>
                                                                                                 <MouseBinding Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
-                                                                                                              CommandParameter="{Binding}"
+                                                                                                              CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DockPanel}}}"
                                                                                                               Gesture="LeftDoubleClick" />
-                                                                                            </TextBlock.InputBindings>
-                                                                                            <TextBlock.ContextMenu>
-                                                                                                <ContextMenu>
-                                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
-                                                                                                        <MenuItem.Icon>
-                                                                                                            <icons:PackIconMaterial Kind="Select" />
-                                                                                                        </MenuItem.Icon>
-                                                                                                    </MenuItem>
-                                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
-                                                                                                        <MenuItem.Icon>
-                                                                                                            <icons:PackIconMaterial Kind="Refresh" />
-                                                                                                        </MenuItem.Icon>
-                                                                                                    </MenuItem>
-                                                                                                    <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
-                                                                                                        <MenuItem.Icon>
-                                                                                                            <icons:PackIconMaterial Kind="Delete" />
-                                                                                                        </MenuItem.Icon>
-                                                                                                    </MenuItem>
-                                                                                                </ContextMenu>
-                                                                                            </TextBlock.ContextMenu>
-                                                                                        </TextBlock>
-                                                                                    </StackPanel>
+                                                                                            </DockPanel.InputBindings>
+                                                                                        </DockPanel>
+                                                                                    </Border>
                                                                                 </DataTemplate>
 
-                                                                            </ListBox.Resources>
-                                                                        </ListBox>
+                                                                            </local:ListBox.Resources>
+                                                                        </local:ListBox>
                                                                     </DataTemplate>
 
                                                                     <DataTemplate DataType="{x:Type core:MapleDrive}">
-                                                                        <ListBox ItemsSource="{Binding DefaultCollectionView}"
-                                                                                 SelectionMode="Extended">
-                                                                            <ListBox.ContextMenu>
-                                                                                <ContextMenu>
-                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
-                                                                                        <MenuItem.Icon>
-                                                                                            <icons:PackIconMaterial Kind="Select" />
-                                                                                        </MenuItem.Icon>
-                                                                                    </MenuItem>
-                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
-                                                                                        <MenuItem.Icon>
-                                                                                            <icons:PackIconMaterial Kind="Refresh" />
-                                                                                        </MenuItem.Icon>
-                                                                                    </MenuItem>
-                                                                                </ContextMenu>
-                                                                            </ListBox.ContextMenu>
-                                                                            <i:Interaction.Behaviors>
-                                                                                <local:SelectedListBoxItemBehavior SelectedItems="{Binding Data.SelectedItems, Source={StaticResource ViewModelProxy}}" />
-                                                                            </i:Interaction.Behaviors>
-                                                                            <ListBox.Resources>
+                                                                        <local:ListBox ContextMenu="{StaticResource FileContextMenu}"
+                                                                                       ItemsSource="{Binding DefaultCollectionView}"
+                                                                                       SelectedEntriesList="{Binding Data.SelectedItemsList, Source={StaticResource ViewModelProxy}}"
+                                                                                       SelectionMode="Extended">
+
+                                                                            <local:ListBox.Resources>
 
                                                                                 <DataTemplate DataType="{x:Type core:MapleDirectory}">
-                                                                                    <StackPanel Orientation="Horizontal">
-                                                                                        <icons:PackIconMaterial Foreground="{DynamicResource SecondaryAccentBrush}" Kind="Folder" />
-                                                                                        <TextBlock Margin="8 0 0 0" Text="{Binding Name}">
-                                                                                            <TextBlock.InputBindings>
+                                                                                    <Border Background="Transparent" ContextMenu="{StaticResource FileContextMenu}">
+                                                                                        <DockPanel>
+                                                                                            <icons:PackIconMaterial DockPanel.Dock="Left"
+                                                                                                                    Focusable="False"
+                                                                                                                    Foreground="{DynamicResource SecondaryAccentBrush}"
+                                                                                                                    Kind="Folder" />
+                                                                                            <TextBlock Margin="8 0 0 0"
+                                                                                                       Focusable="False"
+                                                                                                       Text="{Binding Name}" />
+
+                                                                                            <DockPanel.Resources>
+                                                                                                <local:BindingProxy x:Key="MapleDirectoryProxy" Data="{Binding}" />
+                                                                                            </DockPanel.Resources>
+
+                                                                                            <DockPanel.InputBindings>
                                                                                                 <MouseBinding Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
-                                                                                                              CommandParameter="{Binding}"
+                                                                                                              CommandParameter="{Binding Data, Source={StaticResource MapleDirectoryProxy}}"
                                                                                                               Gesture="LeftDoubleClick" />
-                                                                                            </TextBlock.InputBindings>
-                                                                                            <TextBlock.ContextMenu>
-                                                                                                <ContextMenu>
-                                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
-                                                                                                        <MenuItem.Icon>
-                                                                                                            <icons:PackIconMaterial Kind="Select" />
-                                                                                                        </MenuItem.Icon>
-                                                                                                    </MenuItem>
-                                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
-                                                                                                        <MenuItem.Icon>
-                                                                                                            <icons:PackIconMaterial Kind="Refresh" />
-                                                                                                        </MenuItem.Icon>
-                                                                                                    </MenuItem>
-                                                                                                    <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
-                                                                                                        <MenuItem.Icon>
-                                                                                                            <icons:PackIconMaterial Kind="Delete" />
-                                                                                                        </MenuItem.Icon>
-                                                                                                    </MenuItem>
-                                                                                                </ContextMenu>
-                                                                                            </TextBlock.ContextMenu>
-                                                                                        </TextBlock>
-                                                                                    </StackPanel>
+                                                                                            </DockPanel.InputBindings>
+                                                                                        </DockPanel>
+                                                                                    </Border>
                                                                                 </DataTemplate>
 
-                                                                            </ListBox.Resources>
-                                                                        </ListBox>
+                                                                            </local:ListBox.Resources>
+                                                                        </local:ListBox>
                                                                     </DataTemplate>
 
                                                                 </ContentPresenter.Resources>
@@ -861,162 +798,111 @@
                                                                 <ContentPresenter.Resources>
 
                                                                     <DataTemplate DataType="{x:Type core:MapleFile}">
-                                                                        <DockPanel Width="100">
-                                                                            <DockPanel.ContextMenu>
-                                                                                <ContextMenu>
-                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
-                                                                                        <MenuItem.Icon>
-                                                                                            <icons:PackIconMaterial Kind="Select" />
-                                                                                        </MenuItem.Icon>
-                                                                                    </MenuItem>
-                                                                                    <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
-                                                                                        <MenuItem.Icon>
-                                                                                            <icons:PackIconMaterial Kind="Delete" />
-                                                                                        </MenuItem.Icon>
-                                                                                    </MenuItem>
-                                                                                </ContextMenu>
-                                                                            </DockPanel.ContextMenu>
-                                                                            <TextBlock HorizontalAlignment="Center"
-                                                                                       DockPanel.Dock="Bottom"
-                                                                                       Text="{Binding Name}"
-                                                                                       TextTrimming="CharacterEllipsis" />
+                                                                        <Border Background="Transparent" ContextMenu="{StaticResource FileContextMenu}">
+                                                                            <DockPanel Width="100">
 
-                                                                            <icons:PackIconMaterial Width="66"
-                                                                                                    Height="66"
-                                                                                                    HorizontalAlignment="Center"
-                                                                                                    VerticalAlignment="Center"
-                                                                                                    Foreground="{DynamicResource SecondaryAccentBrush}"
-                                                                                                    Kind="File" />
-                                                                        </DockPanel>
+                                                                                <TextBlock HorizontalAlignment="Center"
+                                                                                           DockPanel.Dock="Bottom"
+                                                                                           Text="{Binding Name}"
+                                                                                           TextTrimming="CharacterEllipsis" />
+
+                                                                                <icons:PackIconMaterial Width="66"
+                                                                                                        Height="66"
+                                                                                                        HorizontalAlignment="Center"
+                                                                                                        VerticalAlignment="Center"
+                                                                                                        Foreground="{DynamicResource SecondaryAccentBrush}"
+                                                                                                        Kind="File" />
+                                                                            </DockPanel>
+                                                                        </Border>
                                                                     </DataTemplate>
 
                                                                     <DataTemplate DataType="{x:Type core:MapleDirectory}">
-                                                                        <ListBox ItemsSource="{Binding DefaultCollectionView}"
-                                                                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                                                                 SelectionMode="Extended">
-                                                                            <ListBox.ContextMenu>
-                                                                                <ContextMenu>
-                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
-                                                                                        <MenuItem.Icon>
-                                                                                            <icons:PackIconMaterial Kind="Select" />
-                                                                                        </MenuItem.Icon>
-                                                                                    </MenuItem>
-                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
-                                                                                        <MenuItem.Icon>
-                                                                                            <icons:PackIconMaterial Kind="Refresh" />
-                                                                                        </MenuItem.Icon>
-                                                                                    </MenuItem>
-                                                                                </ContextMenu>
-                                                                            </ListBox.ContextMenu>
-                                                                            <ListBox.ItemsPanel>
+                                                                        <local:ListBox ContextMenu="{StaticResource FileContextMenu}"
+                                                                                       ItemsSource="{Binding DefaultCollectionView}"
+                                                                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                                                       SelectedEntriesList="{Binding Data.SelectedItemsList, Source={StaticResource ViewModelProxy}}"
+                                                                                       SelectionMode="Extended">
+
+                                                                            <local:ListBox.ItemsPanel>
                                                                                 <ItemsPanelTemplate>
                                                                                     <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
                                                                                 </ItemsPanelTemplate>
-                                                                            </ListBox.ItemsPanel>
-                                                                            <ListBox.Resources>
+                                                                            </local:ListBox.ItemsPanel>
+                                                                            <local:ListBox.Resources>
                                                                                 <DataTemplate DataType="{x:Type core:MapleDirectory}">
-                                                                                    <DockPanel Width="100">
-                                                                                        <DockPanel.ContextMenu>
-                                                                                            <ContextMenu>
-                                                                                                <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
-                                                                                                    <MenuItem.Icon>
-                                                                                                        <icons:PackIconMaterial Kind="Delete" />
-                                                                                                    </MenuItem.Icon>
-                                                                                                </MenuItem>
-                                                                                                <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
-                                                                                                    <MenuItem.Icon>
-                                                                                                        <icons:PackIconMaterial Kind="Refresh" />
-                                                                                                    </MenuItem.Icon>
-                                                                                                </MenuItem>
-                                                                                            </ContextMenu>
-                                                                                        </DockPanel.ContextMenu>
-                                                                                        <DockPanel.InputBindings>
-                                                                                            <MouseBinding Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
-                                                                                                          CommandParameter="{Binding}"
-                                                                                                          Gesture="LeftDoubleClick" />
-                                                                                        </DockPanel.InputBindings>
-                                                                                        <TextBlock HorizontalAlignment="Center"
-                                                                                                   DockPanel.Dock="Bottom"
-                                                                                                   Text="{Binding Name}"
-                                                                                                   TextTrimming="CharacterEllipsis" />
+                                                                                    <Border Background="Transparent" ContextMenu="{StaticResource FileContextMenu}">
+                                                                                        <DockPanel Width="100">
+                                                                                            <TextBlock HorizontalAlignment="Center"
+                                                                                                       DockPanel.Dock="Bottom"
+                                                                                                       Text="{Binding Name}"
+                                                                                                       TextTrimming="CharacterEllipsis" />
 
-                                                                                        <icons:PackIconMaterial Width="66"
-                                                                                                                Height="66"
-                                                                                                                HorizontalAlignment="Center"
-                                                                                                                VerticalAlignment="Center"
-                                                                                                                Foreground="{DynamicResource SecondaryAccentBrush}"
-                                                                                                                Kind="Folder" />
-                                                                                    </DockPanel>
+                                                                                            <icons:PackIconMaterial Width="66"
+                                                                                                                    Height="66"
+                                                                                                                    HorizontalAlignment="Center"
+                                                                                                                    VerticalAlignment="Center"
+                                                                                                                    Foreground="{DynamicResource SecondaryAccentBrush}"
+                                                                                                                    Kind="Folder" />
+
+                                                                                            <DockPanel.Resources>
+                                                                                                <local:BindingProxy x:Key="MapleDirectoryProxy" Data="{Binding}" />
+                                                                                            </DockPanel.Resources>
+
+                                                                                            <DockPanel.InputBindings>
+                                                                                                <MouseBinding Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
+                                                                                                              CommandParameter="{Binding Data, Source={StaticResource MapleDirectoryProxy}}"
+                                                                                                              Gesture="LeftDoubleClick" />
+                                                                                            </DockPanel.InputBindings>
+                                                                                        </DockPanel>
+                                                                                    </Border>
                                                                                 </DataTemplate>
-                                                                            </ListBox.Resources>
-                                                                        </ListBox>
+                                                                            </local:ListBox.Resources>
+                                                                        </local:ListBox>
                                                                     </DataTemplate>
 
                                                                     <DataTemplate DataType="{x:Type core:MapleDrive}">
-                                                                        <ListBox ItemsSource="{Binding DefaultCollectionView}"
-                                                                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                                                                 SelectionMode="Extended">
-                                                                            <ListBox.ContextMenu>
-                                                                                <ContextMenu>
-                                                                                    <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
-                                                                                        <MenuItem.Icon>
-                                                                                            <icons:PackIconMaterial Kind="Select" />
-                                                                                        </MenuItem.Icon>
-                                                                                    </MenuItem>
-                                                                                    <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
-                                                                                        <MenuItem.Icon>
-                                                                                            <icons:PackIconMaterial Kind="Refresh" />
-                                                                                        </MenuItem.Icon>
-                                                                                    </MenuItem>
-                                                                                </ContextMenu>
-                                                                            </ListBox.ContextMenu>
-                                                                            <ListBox.ItemsPanel>
+                                                                        <local:ListBox ContextMenu="{StaticResource FileContextMenu}"
+                                                                                       ItemsSource="{Binding DefaultCollectionView}"
+                                                                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                                                       SelectedEntriesList="{Binding Data.SelectedItemsList, Source={StaticResource ViewModelProxy}}"
+                                                                                       SelectionMode="Extended">
+                                                                            <local:ListBox.ItemsPanel>
                                                                                 <ItemsPanelTemplate>
                                                                                     <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
                                                                                 </ItemsPanelTemplate>
-                                                                            </ListBox.ItemsPanel>
-                                                                            <ListBox.Resources>
+                                                                            </local:ListBox.ItemsPanel>
+                                                                            <local:ListBox.Resources>
                                                                                 <DataTemplate DataType="{x:Type core:MapleDirectory}">
-                                                                                    <DockPanel Width="100">
-                                                                                        <DockPanel.ContextMenu>
-                                                                                            <ContextMenu>
-                                                                                                <MenuItem Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}" Header="Select">
-                                                                                                    <MenuItem.Icon>
-                                                                                                        <icons:PackIconMaterial Kind="Select" />
-                                                                                                    </MenuItem.Icon>
-                                                                                                </MenuItem>
-                                                                                                <MenuItem Command="{Binding RefreshCommand}" Header="Refresh">
-                                                                                                    <MenuItem.Icon>
-                                                                                                        <icons:PackIconMaterial Kind="Refresh" />
-                                                                                                    </MenuItem.Icon>
-                                                                                                </MenuItem>
-                                                                                                <MenuItem Command="{Binding DeleteCommand}" Header="Delete">
-                                                                                                    <MenuItem.Icon>
-                                                                                                        <icons:PackIconMaterial Kind="Delete" />
-                                                                                                    </MenuItem.Icon>
-                                                                                                </MenuItem>
-                                                                                            </ContextMenu>
-                                                                                        </DockPanel.ContextMenu>
-                                                                                        <DockPanel.InputBindings>
-                                                                                            <MouseBinding Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
-                                                                                                          CommandParameter="{Binding}"
-                                                                                                          Gesture="LeftDoubleClick" />
-                                                                                        </DockPanel.InputBindings>
-                                                                                        <TextBlock HorizontalAlignment="Center"
-                                                                                                   DockPanel.Dock="Bottom"
-                                                                                                   Text="{Binding Name}"
-                                                                                                   TextTrimming="CharacterEllipsis" />
+                                                                                    <Border Background="Transparent" ContextMenu="{StaticResource FileContextMenu}">
+                                                                                        <DockPanel Width="100">
 
-                                                                                        <icons:PackIconMaterial Width="66"
-                                                                                                                Height="66"
-                                                                                                                HorizontalAlignment="Center"
-                                                                                                                VerticalAlignment="Center"
-                                                                                                                Foreground="{DynamicResource SecondaryAccentBrush}"
-                                                                                                                Kind="Folder" />
-                                                                                    </DockPanel>
+                                                                                            <TextBlock HorizontalAlignment="Center"
+                                                                                                       DockPanel.Dock="Bottom"
+                                                                                                       Text="{Binding Name}"
+                                                                                                       TextTrimming="CharacterEllipsis" />
+
+                                                                                            <icons:PackIconMaterial Width="66"
+                                                                                                                    Height="66"
+                                                                                                                    HorizontalAlignment="Center"
+                                                                                                                    VerticalAlignment="Center"
+                                                                                                                    Foreground="{DynamicResource SecondaryAccentBrush}"
+                                                                                                                    Kind="Folder" />
+
+                                                                                            <DockPanel.Resources>
+                                                                                                <local:BindingProxy x:Key="MapleDirectoryProxy" Data="{Binding}" />
+                                                                                            </DockPanel.Resources>
+
+                                                                                            <DockPanel.InputBindings>
+                                                                                                <MouseBinding Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
+                                                                                                              CommandParameter="{Binding Data, Source={StaticResource MapleDirectoryProxy}}"
+                                                                                                              Gesture="LeftDoubleClick" />
+                                                                                            </DockPanel.InputBindings>
+
+                                                                                        </DockPanel>
+                                                                                    </Border>
                                                                                 </DataTemplate>
-                                                                            </ListBox.Resources>
-                                                                        </ListBox>
+                                                                            </local:ListBox.Resources>
+                                                                        </local:ListBox>
                                                                     </DataTemplate>
 
                                                                 </ContentPresenter.Resources>
@@ -1078,7 +964,7 @@
     <!--#region local:DataTemplates-->
 
     <!--#region Dialogs-->
-    <DataTemplate DataType="{x:Type local:ExceptionDialogViewModel}">
+    <DataTemplate DataType="{x:Type local:ExceptionContentDialogViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*" />
@@ -1098,7 +984,7 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type local:MessageDialogViewModel}">
+    <DataTemplate DataType="{x:Type local:MessageContentDialogViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*" />
@@ -1118,15 +1004,15 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type local:FileBrowserDialogViewModel}">
+    <DataTemplate DataType="{x:Type local:FileBrowserContentDialogViewModel}">
         <core:FileSystemBrowser Style="{StaticResource BaseFileSystemBrowserStyle}" />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type local:FolderBrowserDialogViewModel}">
+    <DataTemplate DataType="{x:Type local:FolderBrowserContentDialogViewModel}">
         <core:FileSystemBrowser Style="{StaticResource BaseFileSystemBrowserStyle}" />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type local:ProgressDialogViewModel}" />
+    <DataTemplate DataType="{x:Type local:ProgressContentDialogViewModel}" />
     <!--#endregion-->
 
     <DataTemplate DataType="{x:Type local:CreateMediaItem}">

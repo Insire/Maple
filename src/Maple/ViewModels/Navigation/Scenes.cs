@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Maple.Core;
 using Maple.Domain;
@@ -77,7 +78,7 @@ namespace Maple
         /// </summary>
         /// <param name="manager">The manager.</param>
         /// <param name="log">The log.</param>
-        public Scenes(ILocalizationService manager, ILoggingService log, IMessenger messenger)
+        public Scenes(ILocalizationService manager, ILoggingService log, IMessenger messenger, FileSystemViewModel fileSystemViewModel)
             : base(messenger)
         {
             _manager = manager ?? throw new ArgumentNullException(nameof(manager), Resources.IsRequired);
@@ -89,7 +90,7 @@ namespace Maple
                 {
                     Content = new MediaPlayerPage(_manager),
                     Key = nameof(Resources.Playback),
-                    IsSelected = true,
+                    IsSelected = false,
                     Sequence = 100,
                 },
 
@@ -123,6 +124,22 @@ namespace Maple
                     Key = nameof(Resources.Director),
                     IsSelected = false,
                     Sequence = 150,
+                },
+
+                new Scene(_manager)
+                {
+                    Content = new ContentPresenter()
+                    {
+                        Content = new FileBrowserContentDialogViewModel(fileSystemViewModel, new FileSystemBrowserOptions()
+                        {
+                            CanCancel=false,
+                            MultiSelection= true,
+                            Title="Test"
+                        })
+                    },
+                    Key = nameof(Resources.Director),
+                    IsSelected = true,
+                    Sequence = 700,
                 },
             };
 
