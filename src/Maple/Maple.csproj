@@ -122,8 +122,11 @@
     <Compile Include="Interfaces\IMediaPlayerMapper.cs" />
     <Compile Include="Interfaces\IMediaRepository.cs" />
     <Compile Include="Interfaces\IPlaylistMapper.cs" />
+    <Compile Include="UI\FileSystemBrowserDetailTemplateSelector.cs" />
     <Compile Include="UI\ListBox.cs" />
     <Compile Include="UI\IoCResourceDictionary.cs" />
+    <Compile Include="UI\MarkupExtensions\BreakingDebugConverter.cs" />
+    <Compile Include="UI\MarkupExtensions\PrintingDebugConverter.cs" />
     <Compile Include="UI\PackIcon.cs" />
     <Compile Include="UI\Base\SharedResourceDictionary.cs" />
     <Compile Include="UI\UserControls\MediaPlayersPage.xaml.cs">
@@ -149,7 +152,6 @@
     <Compile Include="UI\MarkupExtensions\BrushRoundConverter.cs" />
     <Compile Include="UI\MarkupExtensions\CaseConverter.cs" />
     <Compile Include="UI\MarkupExtensions\MathMultipleConverter.cs" />
-    <Compile Include="UI\MarkupExtensions\DebugConverter.cs" />
     <Compile Include="Utils\DependencyInjectionFactory.cs" />
     <Compile Include="Utils\Mappers\MapperExtensions.cs" />
     <Compile Include="Utils\Mappers\Base\BaseMapper.cs" />

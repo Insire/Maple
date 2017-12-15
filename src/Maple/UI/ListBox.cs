@@ -10,7 +10,7 @@ namespace Maple
             nameof(SelectedEntriesList),
             typeof(IList),
             typeof(ListBox),
-            new PropertyMetadata(null));
+            new FrameworkPropertyMetadata(default(IList), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public IList SelectedEntriesList
         {

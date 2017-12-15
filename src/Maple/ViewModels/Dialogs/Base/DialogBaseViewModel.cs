@@ -75,8 +75,8 @@ namespace Maple
         /// </summary>
         public void Accept()
         {
-            Close();
             AcceptAction?.Invoke();
+            Close();
         }
 
         /// <summary>
@@ -95,8 +95,8 @@ namespace Maple
         /// </summary>
         public void Cancel()
         {
-            Close();
             CancelAction?.Invoke();
+            Close();
         }
 
         /// <summary>
