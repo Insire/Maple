@@ -7,7 +7,7 @@ using Maple.Domain;
 
 namespace Maple
 {
-    public class SelectedListBoxItemBehavior : Behavior<ListBox>
+    public class SelectedListBoxItemBehavior : Behavior<System.Windows.Controls.ListBox>
     {
         public IRangeObservableCollection<object> SelectedItems
         {

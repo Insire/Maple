@@ -39,7 +39,7 @@ namespace Maple
             log.Info(Localization.Properties.Resources.ExceptionMessageUnhandled);
 
             if (e.Exception.InnerException != null)
-                log.Info(e.Exception.InnerException);
+                log.Error(e.Exception.InnerException);
 
             log.Error(e.Exception);
 
