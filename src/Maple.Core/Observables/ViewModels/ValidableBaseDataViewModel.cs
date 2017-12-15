@@ -19,11 +19,11 @@ namespace Maple.Core
         protected bool SkipValidation { get; set; }
 
         protected IValidator<TViewModel> Validator { get; }
-        protected IDictionary<string, ValidationResult> Errors { get; }
+        protected IDictionary<string, ValidationResult> Messages { get; }
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
-        public bool HasErrors => Errors.Any(p => !p.Value.IsValid);
+        public bool HasErrors => Messages.Any(p => !p.Value.IsValid);
 
         protected ValidableBaseDataViewModel(TModel model, IValidator<TViewModel> validator, IMessenger messenger)
             : base(model, messenger)
@@ -31,7 +31,7 @@ namespace Maple.Core
             SkipChangeTracking = true;
             SkipValidation = true;
 
-            Errors = new Dictionary<string, ValidationResult>();
+            Messages = new Dictionary<string, ValidationResult>();
 
             Validator = validator ?? throw new ArgumentNullException(nameof(validator), $"{nameof(validator)} {Resources.IsRequired}"); //order is important in this case
             Model = model ?? throw new ArgumentNullException(nameof(model), $"{nameof(model)} {Resources.IsRequired}");
@@ -52,12 +52,12 @@ namespace Maple.Core
         public IEnumerable GetErrors(string propertyName)
         {
             if (string.IsNullOrEmpty(propertyName))
-                return Errors.SelectMany(p => p.Value.Errors.Select(f => f.ErrorMessage));
+                return Messages.SelectMany(p => p.Value.Errors.Select(f => f.ErrorMessage));
 
-            if (Errors?.ContainsKey(propertyName) != true)
+            if (Messages?.ContainsKey(propertyName) != true)
                 return Enumerable.Empty<string>();
 
-            return Errors[propertyName].Errors.Select(p => p.ErrorMessage);
+            return Messages[propertyName].Errors.Select(p => p.ErrorMessage);
         }
 
         /// <summary>
@@ -97,15 +97,15 @@ namespace Maple.Core
 
             var hadErrors = false;
 
-            if (Errors.ContainsKey(propertyName))
+            if (Messages.ContainsKey(propertyName))
             {
-                hadErrors = Errors[propertyName].Errors.Count > 0;
+                hadErrors = Messages[propertyName].Errors.Count > 0;
 
-                Errors[propertyName].Errors.Clear();
-                Errors[propertyName] = result;
+                Messages[propertyName].Errors.Clear();
+                Messages[propertyName] = result;
             }
             else
-                Errors.Add(propertyName, result);
+                Messages.Add(propertyName, result);
 
             if (hadErrors != (result?.IsValid ?? false))
                 return;
@@ -114,7 +114,7 @@ namespace Maple.Core
 
             if (Debugger.IsAttached)
             {
-                foreach (var item in Errors[propertyName].Errors)
+                foreach (var item in Messages[propertyName].Errors)
                     Debug.WriteLine(item);
             }
         }

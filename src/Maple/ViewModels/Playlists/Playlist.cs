@@ -95,7 +95,7 @@ namespace Maple
             {
                 SetValue(ref _selectedItem, value,
                     OnChanging: () => Messenger.Publish(new ViewModelSelectionChangingMessage<MediaItem>(Items, _selectedItem)),
-                    OnChanged: () => Messenger.Publish(new ViewModelSelectionChangedMessage<MediaItem>(_items, value)));
+                    OnChanged: () => Messenger.Publish(new ViewModelSelectionChangedMessage<MediaItem>(Items, value)));
             }
         }
 
@@ -215,7 +215,7 @@ namespace Maple
 
                 AddRange(_mediaItemMapper.GetMany(model.MediaItems));
 
-                MessageTokens.Add(Messenger.Subscribe<PlayingMediaItemMessage>(OnPlaybackItemChanged, m => m.PlaylistId == Id));
+                MessageTokens.Add(Messenger.Subscribe<PlayingMediaItemMessage>(OnPlaybackItemChanged, m => m.PlaylistId == Id && _items.Contains(m.Content)));
 
                 Validate();
             }
@@ -227,11 +227,11 @@ namespace Maple
             _history.Push(message.Content.Sequence);
         }
 
-        private async Task LoadFromUrl()
+        private async Task LoadFromUrl(CancellationToken token)
         {
             using (BusyStack.GetToken())
             {
-                var items = await _dialogViewModel.ShowUrlParseDialog().ConfigureAwait(true);
+                var items = await _dialogViewModel.ShowUrlParseDialog(token).ConfigureAwait(true);
                 AddRange(items);
             }
         }
@@ -318,7 +318,9 @@ namespace Maple
         {
             item.Playlist = this;
             _items.Add(item);
-            Model.MediaItems.Add(item.Model);
+
+            if (!Model.MediaItems.Contains(item.Model))
+                Model.MediaItems.Add(item.Model);
         }
 
         public virtual void AddRange(IEnumerable<MediaItem> items)
@@ -371,6 +373,9 @@ namespace Maple
 
         private void RemoveInternal(MediaItem item)
         {
+            if (SelectedItem == item)
+                SelectedItem = Next();
+
             _items.Remove(item);
             item.Model.IsDeleted = true;
         }
@@ -530,15 +535,16 @@ namespace Maple
         {
             using (BusyStack.GetToken())
             {
+                Items.ToList().ForEach(p => p.IsSelected = false);      // deselect all items in the list
+
                 if (_history?.Any() == true)
                 {
-                    Items.ToList().ForEach(p => p.IsSelected = false);      // deselect all items in the list
                     while (_history.Any())
                     {
                         var previous = _history.Pop();
 
-                        if (previous == SelectedItem?.Sequence) // the most recent item in the history, is the just played item, so we wanna skip that
-                            continue;
+                        //if (previous == SelectedItem?.Sequence) // the most recent item in the history, is the just played item, so we wanna skip that
+                        //    continue;
 
                         if (previous > -1)
                         {

@@ -15,6 +15,6 @@ namespace Maple
         Task<(bool Result, ICollection<MediaItem> MediaItems)> ShowMediaItemSelectionDialog(FileSystemBrowserOptions options, CancellationToken token);
         Task ShowMessageDialog(string message, string title);
         Task ShowProgressDialog();
-        Task<List<MediaItem>> ShowUrlParseDialog();
+        Task<ICollection<MediaItem>> ShowUrlParseDialog(CancellationToken token);
     }
 }

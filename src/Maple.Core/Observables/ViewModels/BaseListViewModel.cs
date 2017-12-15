@@ -34,7 +34,7 @@ namespace Maple.Core
 
                 Messenger.Publish(new ViewModelSelectionChangingMessage<TViewModel>(Items, _selectedItem));
                 _selectedItem = value;
-                Messenger.Publish(new ViewModelSelectionChangedMessage<TViewModel>(_items, _selectedItem));
+                Messenger.Publish(new ViewModelSelectionChangedMessage<TViewModel>(Items, _selectedItem));
 
                 OnPropertyChanged();
             }

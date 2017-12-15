@@ -20,6 +20,17 @@ namespace Maple.Test
         }
 
         [TestMethod]
+        public async Task ResolveMessengerTest()
+        {
+            var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+
+            var messenger = Substitute.For<IMessenger>();
+            container.UseInstance(typeof(IMessenger), messenger, IfAlreadyRegistered: IfAlreadyRegistered.Replace);
+
+            Assert.AreEqual(messenger, container.Resolve<IMessenger>());
+        }
+
+        [TestMethod]
         public async Task ResolveLoadablesAsList()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
