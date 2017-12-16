@@ -213,13 +213,13 @@ ModelManifest.xml
 
 # Cake
 /tools/*
-/tools/Cake.Bakery/*
-/Cake/tools/Addins/*
-/Cake/tools/Cake/*
-/Cake/tools/Cake.Bakery*/*
-/Cake/tools/vswhere*/*
+/Cake/tools/Addins*
+/Cake/tools/Cake*
+/Cake/tools/Cake.Bakery*
+/Cake/tools/vswhere*
 /Cake/tools/nuget.exe
 /Cake/tools/packages.config.md5sum
+/Cake/tools/squirrel.windows*
 
 # Merge
 *.orig
