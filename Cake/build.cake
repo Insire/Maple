@@ -230,13 +230,14 @@ Task("Pack-Application")
             NoPackageAnalysis           = false,
             Files                       = new[]
             {
-                new NuSpecContent{ Source=".",Target="lib\\net45", Exclude="*.pdb"},
-                new NuSpecContent{ Source=".\\Resources\\",Target="net45\\Resources\\", Exclude="*.pdb"},
-                new NuSpecContent{ Source=".\\x64\\*",Target="lib\\net45\\", Exclude="*.pdb"},
-                new NuSpecContent{ Source=".\\x86\\*",Target="lib\\net45\\", Exclude="*.pdb"},
+                new NuSpecContent{ Source="*",Target="lib\\net45", Exclude="*.pdb"},
+                new NuSpecContent{ Source=".\\Resources\\",Target="lib\\net45\\Resources\\", Exclude="*.pdb"},
+                new NuSpecContent{ Source=".\\x64\\*",Target="lib\\net45\\x64\\", Exclude="*.pdb"},
+                new NuSpecContent{ Source=".\\x86\\*",Target="lib\\net45\\x86\\", Exclude="*.pdb"},
             },
-            BasePath                    = "..\\src\\Maple\\bin\\Release\\",
-            OutputDirectory             = ReleasePath,
+            BasePath                    = new DirectoryPath("..\\src\\Maple\\bin\\Release\\"),
+            OutputDirectory             = new DirectoryPath(ReleasePath),
+            KeepTemporaryNuSpecFile     = false,
         };
 
         NuGetPack(settings);
@@ -244,9 +245,10 @@ Task("Pack-Application")
 
 Task("Create-Installer")
     .WithCriteria(()=> assemblyInfoParseResult != null)
+    .IsDependentOn("Parse-AssemblyInfo")
     .IsDependentOn("Pack-Application")
-	.Does(() => {
-
+	.Does(() =>
+    {
 		var settings = new SquirrelSettings()
         {
             NoMsi = true,
@@ -257,9 +259,9 @@ Task("Create-Installer")
             ShortCutLocations = "Desktop,StartMenu",
         };
 
-        Information(settings.Dump());
+        var nupkg = new DirectoryPath(ReleasePath).CombineWithFilePath(new FilePath($".\\Maple.{assemblyInfoParseResult.AssemblyVersion}.nupkg"));
 
-		Squirrel(new FilePath($"..\\Maple.{assemblyInfoParseResult.AssemblyVersion}.nupkg"), settings);
+		Squirrel(nupkg, settings, true, false);
 	});
 
 Task("CleanUp")
@@ -269,7 +271,7 @@ Task("CleanUp")
     {
         var root = new DirectoryPath(ReleasePath);
         var source = root.CombineWithFilePath(new FilePath("Setup.exe"));
-        var target = root.CombineWithFilePath(new FilePath($"..\\Release\\Maple{assemblyInfoParseResult.AssemblyVersion}.exe"));
+        var target = root.CombineWithFilePath(new FilePath($".\\Maple{assemblyInfoParseResult.AssemblyVersion}.exe"));
 
         MoveFile(source,target);
     });
