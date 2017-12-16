@@ -17,7 +17,6 @@ branches:
 #---------------------------------#
 cache:
   - .\packages -> .\**\packages.config
-  - .\Cake\tools -> setup.cake
 
 #---------------------------------#
 #  Build Script                   #
