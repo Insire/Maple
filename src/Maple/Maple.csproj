@@ -82,6 +82,9 @@
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.0.11" />
     <PackageReference Include="NAudio" Version="1.8.4" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="squirrel.windows">
+      <Version>1.7.8</Version>
+    </PackageReference>
     <PackageReference Include="System.Data.SQLite" Version="1.0.106" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.106" />
     <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.106" />

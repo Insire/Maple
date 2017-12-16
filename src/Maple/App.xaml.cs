@@ -6,6 +6,7 @@ using System.Windows;
 using DryIoc;
 using Maple.Core;
 using Maple.Domain;
+using Squirrel;
 
 namespace Maple
 {
@@ -99,6 +100,12 @@ namespace Maple
         private void InitializeLocalization()
         {
             Thread.CurrentThread.CurrentCulture = Core.Properties.Settings.Default.StartUpCulture;
+        }
+
+        private async Task LoadUpdates()
+        {
+            using (var manager = new UpdateManager("https://github.com/Insire/Maple/releases/latest"))
+                await manager.UpdateApp().ConfigureAwait(true);
         }
 
         private IList<Task> LoadApplicationData()

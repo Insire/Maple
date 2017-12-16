@@ -1,26 +1,29 @@
 #tool "nuget:?package=vswhere"
 #tool "nuget:?package=Cake.Bakery"
+#tool "Squirrel.Windows"
 
 #addin Cake.Incubator
+#addin Cake.Squirrel
 //////////////////////////////////////////////////////////////////////
 // Constants
 //////////////////////////////////////////////////////////////////////
 
-var solutionPath ="../Maple.sln";
-var platform = "anyCPU";
-
+const string SolutionPath ="..\\Maple.sln";
+const string Platform = "anyCPU";
+const string Configuration = "Release";
+const string ReleasePath = "..\\Release\\";
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
 
 var target = Argument("target", "Default");
-var configuration = Argument("configuration", "Release");
 
 //////////////////////////////////////////////////////////////////////
-// Enviroment information
+// Enviroment information and other local variables
 //////////////////////////////////////////////////////////////////////
 
 var testsDirectories = new List<string>();
+var assemblyInfoParseResult = default(AssemblyInfoParseResult);
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
@@ -91,11 +94,13 @@ Task("Gather-BuildRequirements")
             Information("Required tools have been found.");
     });
 
-Task("Clean")
+
+
+Task("Clean-Solution")
     .IsDependentOn("Gather-BuildRequirements")
     .Does(() =>
     {
-        var solution = ParseSolution(solutionPath);
+        var solution = ParseSolution(SolutionPath);
 
         foreach(var project in solution.Projects)
         {
@@ -106,7 +111,7 @@ Task("Clean")
             if(project.Name == "Cake")
                 continue;
 
-            var customProject = ParseProject(project.Path, configuration: configuration, platform: platform);
+            var customProject = ParseProject(project.Path, configuration: Configuration, platform: Platform);
 
             CleanDirectory(customProject.OutputPath.FullPath);
 
@@ -120,8 +125,15 @@ Task("Clean")
         }
     });
 
+Task("Clean-Release")
+    .Does(() =>
+    {
+        CleanDirectory(new DirectoryPath(ReleasePath));
+    });
+
 Task("Restore-NuGet-Packages")
-    .IsDependentOn("Clean")
+    .IsDependentOn("Clean-Solution")
+    .IsDependentOn("Clean-Release")
     .Does(() =>
     {
         var settings = new NuGetRestoreSettings()
@@ -131,7 +143,7 @@ Task("Restore-NuGet-Packages")
             NoCache = true,
         };
 
-        NuGetRestore(solutionPath, settings);
+        NuGetRestore(SolutionPath, settings);
     });
 
 Task("Build")
@@ -147,12 +159,12 @@ Task("Build")
         else
             settings.ToolVersion = MSBuildToolVersion.VS2017;
 
-        settings.SetConfiguration(configuration)
+        settings.SetConfiguration(Configuration)
                 .SetDetailedSummary(false)
                 .SetMaxCpuCount(0)
                 .SetMSBuildPlatform(MSBuildPlatform.Automatic);
 
-        MSBuild(solutionPath, settings);
+        MSBuild(SolutionPath, settings);
     });
 
  Task("Run-Unit-Tests")
@@ -187,12 +199,84 @@ Task("Build")
         VSTest(testAssemblies, settings);
     });
 
+Task("Parse-AssemblyInfo")
+    .Does(() =>
+    {
+        assemblyInfoParseResult = ParseAssemblyInfo("..\\src\\Resources\\SharedAssemblyInfo.cs");
+    });
+
+Task("Pack-Application")
+    .WithCriteria(()=> assemblyInfoParseResult != null)
+    .IsDependentOn("Parse-AssemblyInfo")
+    .IsDependentOn("Run-Unit-Tests")
+    .Does(()=>
+    {
+        var settings = new NuGetPackSettings()
+        {
+            Id                          = "Maple",
+            Version                     = $"{assemblyInfoParseResult.AssemblyVersion}",
+            Authors                     = new[] {"Insire"},
+            Owners                      = new[] {"Insire"},
+            Description                 = "Maple is a windows desktop application designed to support semi and non professional streamers in playing back local audio files and streaming content from the internet to their favorite playback device",
+            Summary                     = "",
+            ProjectUrl                  = new Uri(@"https://github.com/Insire/Maple/"),
+            IconUrl                     = new Uri(@"https://github.com/Insire/Maple/blob/master/src/Resources/Images/logo.ico"),
+            LicenseUrl                  = new Uri(@"https://github.com/Insire/Maple/blob/master/license.md"),
+            Copyright                   = $"Insire © {DateTime.Today.Year}",
+            ReleaseNotes                = new[]{""},
+            Tags                        = new[]{"Maple", "Materia Player", "MediaPlayer", "Material", "WPF", "Windows", "C#", "Csharp", "Material Design"},
+            RequireLicenseAcceptance    = true,
+            Symbols                     = false,
+            NoPackageAnalysis           = false,
+            Files                       = new[]
+            {
+                new NuSpecContent{ Source=".",Target="lib\\net45", Exclude="*.pdb"},
+                new NuSpecContent{ Source=".\\Resources\\",Target="net45\\Resources\\", Exclude="*.pdb"},
+                new NuSpecContent{ Source=".\\x64\\*",Target="lib\\net45\\", Exclude="*.pdb"},
+                new NuSpecContent{ Source=".\\x86\\*",Target="lib\\net45\\", Exclude="*.pdb"},
+            },
+            BasePath                    = "..\\src\\Maple\\bin\\Release\\",
+            OutputDirectory             = ReleasePath,
+        };
+
+        NuGetPack(settings);
+    });
+
+Task("Create-Installer")
+    .WithCriteria(()=> assemblyInfoParseResult != null)
+    .IsDependentOn("Pack-Application")
+	.Does(() => {
+		var settings = new SquirrelSettings()
+        {
+            NoMsi = true,
+            Silent = true,
+            ReleaseDirectory = new DirectoryPath(ReleasePath),
+            Icon = new FilePath("..\\src\\Resources\\Images\\logo.ico"),
+            SetupIcon =  new FilePath("..\\src\\Resources\\Images\\logo.ico"),
+            ShortCutLocations = "Desktop,StartMenu",
+        };
+
+		Squirrel(new FilePath($"..\\Maple.{assemblyInfoParseResult.AssemblyVersion}.nupkg"), settings);
+	});
+
+Task("CleanUp")
+    .WithCriteria(()=> assemblyInfoParseResult != null)
+    .IsDependentOn("Create-Installer")
+    .Does(()=>
+    {
+        var root = new DirectoryPath(ReleasePath);
+        var source = root.CombineWithFilePath(new FilePath("Setup.exe"));
+        var target = root.CombineWithFilePath(new FilePath($"..\\Release\\Maple{assemblyInfoParseResult.AssemblyVersion}.exe"));
+
+        MoveFile(source,target);
+    });
+
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("Run-Unit-Tests");
+    .IsDependentOn("CleanUp");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
