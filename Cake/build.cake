@@ -246,6 +246,7 @@ Task("Create-Installer")
     .WithCriteria(()=> assemblyInfoParseResult != null)
     .IsDependentOn("Pack-Application")
 	.Does(() => {
+
 		var settings = new SquirrelSettings()
         {
             NoMsi = true,
@@ -255,6 +256,8 @@ Task("Create-Installer")
             SetupIcon =  new FilePath("..\\src\\Resources\\Images\\logo.ico"),
             ShortCutLocations = "Desktop,StartMenu",
         };
+
+        Information(settings.Dump());
 
 		Squirrel(new FilePath($"..\\Maple.{assemblyInfoParseResult.AssemblyVersion}.nupkg"), settings);
 	});
