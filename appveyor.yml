@@ -44,12 +44,16 @@ artifacts:
 #---------------------------------#
 test: off
 
+on_success:
+  - echo %APPVEYOR_REPO_TAG%
+  - echo APPVEYOR_REPO_TAG = %APPVEYOR_REPO_TAG%
+
 #---------------------------------#
 #  Deploy to GitHub Releases      #
 #---------------------------------#
 deploy:
   #release: Maple-v$(appveyor_build_version)
-  #description: 'Auto generated build'
+  description: 'Auto generated build' # is required to be set
   #tag: 'Test tag'
   #realease: 'Test release name'
   provider: GitHub
@@ -59,7 +63,6 @@ deploy:
   draft: true
   prerelease: true
   force_update: true
-  appveyor_repo_tag: true
   on:
     branch: master                # release from master branch only
-    appveyor_repo_tag: true
+    APPVEYOR_REPO_TAG: true       # deploy on tag push only
