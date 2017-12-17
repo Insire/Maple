@@ -9,6 +9,9 @@ skip_commits:
     - appveyor.yml
     - README.md
 
+environment:
+  APPVEYOR_REPO_TAG: true
+
 #---------------------------------#
 #        Branches to build        #
 #---------------------------------#
