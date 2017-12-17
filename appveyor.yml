@@ -44,7 +44,7 @@ artifacts:
 #---------------------------------#
 test: off
 
-on_success:
+before_build:
   - echo APPVEYOR_REPO_TAG = %APPVEYOR_REPO_TAG%
   - echo APPVEYOR_REPO_TAG = true
   - echo %APPVEYOR_REPO_TAG%
