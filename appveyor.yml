@@ -4,6 +4,11 @@ platform: Any CPU
 image:
   - Visual Studio 2017
 
+skip_commits:
+  files:
+    - appveyor.yml
+    - README.md
+
 #---------------------------------#
 #        Branches to build        #
 #---------------------------------#
@@ -43,12 +48,14 @@ test: off
 #  Deploy to GitHub Releases      #
 #---------------------------------#
 deploy:
-  release: Maple-v$(appveyor_build_version)
-  description: 'Release description'
+  #release: Maple-v$(appveyor_build_version)
+  #description: 'Auto generated build'
+  #tag: 'Test tag'
+  #realease: 'Test release name'
   provider: GitHub
   auth_token:
     secure: Yo5d5V9sj0vLGZl6XQ1N4aNajAja6FTmPkRyr1Ft3Vg5fhPTFCPuh4d0LqcQvNZy # your encrypted token from GitHub
-  artifact: Binaries,Installer,AutoUpdates
+  artifact: Binaries.zip,Installer.zip,AutoUpdates.zip
   draft: true
   prerelease: true
   force_update: true
