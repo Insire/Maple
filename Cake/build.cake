@@ -227,16 +227,17 @@ Task("Pack-Application")
     .IsDependentOn("Run-Unit-Tests")
     .Does(()=>
     {
+        Information(new FilePath("..\\src\\Resources\\Images\\logo.ico").MakeAbsolute(Context.Environment));
         var settings = new NuGetPackSettings()
         {
             Id                          = "Maple",
             Version                     = $"{assemblyInfoParseResult.AssemblyVersion}",
             Authors                     = new[] {"Insire"},
             Owners                      = new[] {"Insire"},
-            Description                 = "Maple",
-            Summary                     = "",
+            Description                 = $"Maple v{assemblyInfoParseResult.AssemblyVersion}",
+            Summary                     = "Maple is a windows desktop application designed to support semi and non professional streamers in playing back local audio files and streaming content from the internet to their favorite playback device",
             ProjectUrl                  = new Uri(@"https://github.com/Insire/Maple/"),
-            IconUrl                     = new Uri(@"https://github.com/Insire/Maple/blob/master/src/Resources/Images/logo.ico"),
+            IconUrl                      = new Uri(new FilePath("..\\src\\Resources\\Images\\logo.ico").MakeAbsolute(Context.Environment).FullPath, UriKind.Absolute),
             LicenseUrl                  = new Uri(@"https://github.com/Insire/Maple/blob/master/license.md"),
             Copyright                   = $"© {DateTime.Today.Year} Insire",
             ReleaseNotes                = new[]{""},
@@ -303,23 +304,6 @@ Task("Compress-Installer") // this task might be obsolete for squirrel - might b
 
         ZipCompress(installer, archive.CombineWithFilePath(new FilePath(".\\MapleSetup.zip")), new[]{source});
     });
-
-// Task("ReleaseOnGithub")
-//     .IsDependentOn("Compress-Installer")
-//     .Does(()=>
-//     {
-//         var isDraftRelease = true;
-//         var isPreRelease = true;
-//         var settings = new OctoDeploySettings()
-//         {
-//             AccessToken = "", // PAT
-//             Owner ="Insire",
-//             Repository ="Maple",
-//         };
-
-//         // via octodeploy
-//         PublishReleaseWithArtifact("tag","title","release notes",isDraftRelease,isPreRelease,new FilePath("artifacts"),"artifactname","mimetype",settings);
-//     });
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
