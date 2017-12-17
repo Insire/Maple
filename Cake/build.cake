@@ -11,7 +11,8 @@
 const string SolutionPath ="..\\Maple.sln";
 const string Platform = "anyCPU";
 const string Configuration = "Release";
-const string ReleasePath = "..\\Release\\";
+const string ReleasePath = ".\\Package";
+const string InstallerPath = ".\\Installer";
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
@@ -128,7 +129,13 @@ Task("Clean-Solution")
 Task("Clean-Release")
     .Does(() =>
     {
-        CleanDirectory(new DirectoryPath(ReleasePath));
+        var release = new DirectoryPath(ReleasePath);
+        EnsureDirectoryExists(release);
+        CleanDirectory(release);
+
+        var installer = new DirectoryPath(InstallerPath);
+        EnsureDirectoryExists(InstallerPath);
+        CleanDirectory(InstallerPath);
     });
 
 Task("Restore-NuGet-Packages")
@@ -139,7 +146,7 @@ Task("Restore-NuGet-Packages")
         var settings = new NuGetRestoreSettings()
         {
             DisableParallelProcessing = false,
-            Verbosity = NuGetVerbosity.Quiet, //Detailed, Normal, Quiet
+            Verbosity = NuGetVerbosity.Quiet,
             NoCache = true,
         };
 
@@ -243,23 +250,34 @@ Task("Pack-Application")
         NuGetPack(settings);
     });
 
+Task("Move-Package")
+    .WithCriteria(()=> assemblyInfoParseResult != null)
+    .IsDependentOn("Pack-Application")
+    .Does(() =>
+    {
+        var source = new DirectoryPath(ReleasePath).CombineWithFilePath(new FilePath($".\\Maple.{assemblyInfoParseResult.AssemblyVersion}.nupkg"));
+        var target = new DirectoryPath(InstallerPath).CombineWithFilePath(new FilePath($".\\Maple.{assemblyInfoParseResult.AssemblyVersion}.nupkg"));
+
+        MoveFile(source, target);
+    });
+
 Task("Create-Installer")
     .WithCriteria(()=> assemblyInfoParseResult != null)
     .IsDependentOn("Parse-AssemblyInfo")
-    .IsDependentOn("Pack-Application")
+    .IsDependentOn("Move-Package")
 	.Does(() =>
     {
 		var settings = new SquirrelSettings()
         {
             NoMsi = true,
             Silent = true,
-            ReleaseDirectory = new DirectoryPath(ReleasePath),
+            ReleaseDirectory = new DirectoryPath(InstallerPath),
             Icon = new FilePath("..\\src\\Resources\\Images\\logo.ico"),
             SetupIcon =  new FilePath("..\\src\\Resources\\Images\\logo.ico"),
             ShortCutLocations = "Desktop,StartMenu",
         };
 
-        var nupkg = new DirectoryPath(ReleasePath).CombineWithFilePath(new FilePath($".\\Maple.{assemblyInfoParseResult.AssemblyVersion}.nupkg"));
+        var nupkg = new DirectoryPath(InstallerPath).CombineWithFilePath(new FilePath($".\\Maple.{assemblyInfoParseResult.AssemblyVersion}.nupkg"));
 
 		Squirrel(nupkg, settings, true, false);
 	});
@@ -269,11 +287,11 @@ Task("CleanUp")
     .IsDependentOn("Create-Installer")
     .Does(()=>
     {
-        var root = new DirectoryPath(ReleasePath);
+        var root = new DirectoryPath(InstallerPath);
         var source = root.CombineWithFilePath(new FilePath("Setup.exe"));
         var target = root.CombineWithFilePath(new FilePath($".\\Maple{assemblyInfoParseResult.AssemblyVersion}.exe"));
 
-        MoveFile(source,target);
+        MoveFile(source, target);
     });
 
 //////////////////////////////////////////////////////////////////////
