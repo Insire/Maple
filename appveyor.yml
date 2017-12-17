@@ -59,6 +59,7 @@ deploy:
   draft: true
   prerelease: true
   force_update: true
+  appveyor_repo_tag: true
   on:
     branch: master                # release from master branch only
     appveyor_repo_tag: true
