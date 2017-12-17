@@ -32,5 +32,5 @@ artifacts:
     name: '.Binaries'
   - path: './Cake/Archive/'
     name: 'Installer'
-  - path: '.Cake/Releases/'
+  - path: './Cake/Releases/'
     name: 'AutoUpdates'
