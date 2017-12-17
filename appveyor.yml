@@ -47,11 +47,6 @@ artifacts:
 #---------------------------------#
 test: off
 
-before_build:
-  - echo APPVEYOR_REPO_TAG = %APPVEYOR_REPO_TAG%
-  - echo APPVEYOR_REPO_TAG = true
-  - echo %APPVEYOR_REPO_TAG%
-
 #---------------------------------#
 #  Deploy to GitHub Releases      #
 #---------------------------------#
@@ -63,7 +58,7 @@ deploy:
   provider: GitHub
   auth_token:
     secure: Yo5d5V9sj0vLGZl6XQ1N4aNajAja6FTmPkRyr1Ft3Vg5fhPTFCPuh4d0LqcQvNZy # your encrypted token from GitHub
-  artifact: Binaries.zip,Installer.zip,AutoUpdates.zip
+  artifact: Binaries,Installer,AutoUpdates
   draft: true
   prerelease: true
   force_update: true
