@@ -197,7 +197,10 @@ Task("Build")
             InIsolation = true,
         };
 
-        if(vsTest!= null)
+        if(BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+            settings.Logger = "AppVeyor";
+
+        if(vsTest != null)
             settings.ToolPath = Context.Tools.Resolve("vstest.console.exe");
 
         Information("Gathering Test-Assemblies");
@@ -305,12 +308,20 @@ Task("Compress-Installer") // this task might be obsolete for squirrel - might b
         ZipCompress(installer, archive.CombineWithFilePath(new FilePath(".\\MapleSetup.zip")), new[]{source});
     });
 
+Task("Update-BuildServerEnvironment")
+    .WithCriteria(()=> BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+    .IsDependentOn("Parse-AssemblyInfo")
+    .Does(()=>
+    {
+        BuildSystem.AppVeyor.UpdateBuildVersion(assemblyInfoParseResult.AssemblyVersion);
+    });
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("Compress-Installer");
+    .IsDependentOn("Compress-Installer")
+    .IsDependentOn("Update-BuildServerEnvironment");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION

@@ -1,6 +1,7 @@
-version: 0.0.{build}
-configuration: Release
+version: 0.0.1
 platform: Any CPU
+configuration: Release
+
 image:
   - Visual Studio 2017
 
