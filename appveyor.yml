@@ -29,4 +29,8 @@ build_script:
 #---------------------------------#
 artifacts:
   - path: './src/Maple/bin/$(configuration)'
-    name: '.-Binaries'
+    name: '.Binaries'
+  - path: './Cake/Archive/'
+    name: 'Installer'
+  - path: '.Cake/Releases/'
+    name: 'AutoUpdates'
