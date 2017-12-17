@@ -4,6 +4,9 @@
 
 #addin Cake.Incubator
 #addin Cake.Squirrel
+#addin nuget:?package=SharpZipLib
+#addin nuget:?package=Cake.Compression
+
 //////////////////////////////////////////////////////////////////////
 // Constants
 //////////////////////////////////////////////////////////////////////
@@ -13,6 +16,8 @@ const string Platform = "anyCPU";
 const string Configuration = "Release";
 const string PackagePath = ".\\Package";
 const string InstallerPath = ".\\Releases";
+const string ArchivePath = ".\\Archive";
+
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
@@ -95,8 +100,6 @@ Task("Gather-BuildRequirements")
             Information("Required tools have been found.");
     });
 
-
-
 Task("Clean-Solution")
     .IsDependentOn("Gather-BuildRequirements")
     .Does(() =>
@@ -126,21 +129,26 @@ Task("Clean-Solution")
         }
     });
 
-Task("Clean-Release")
+Task("Clean-Folders")
     .Does(() =>
     {
-        var release = new DirectoryPath(PackagePath);
-        EnsureDirectoryExists(release);
-        CleanDirectory(release);
+        var folders = new[]
+        {
+            new DirectoryPath(PackagePath),
+            new DirectoryPath(InstallerPath),
+            new DirectoryPath(ArchivePath),
+        };
 
-        var installer = new DirectoryPath(InstallerPath);
-        EnsureDirectoryExists(InstallerPath);
-        CleanDirectory(InstallerPath);
+        foreach(var folder in folders)
+        {
+            EnsureDirectoryExists(folder);
+            CleanDirectory(folder);
+        }
     });
 
 Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean-Solution")
-    .IsDependentOn("Clean-Release")
+    .IsDependentOn("Clean-Folders")
     .Does(() =>
     {
         var settings = new NuGetRestoreSettings()
@@ -252,7 +260,6 @@ Task("Pack-Application")
 
 Task("Create-Installer")
     .WithCriteria(()=> assemblyInfoParseResult != null)
-    .IsDependentOn("Parse-AssemblyInfo")
     .IsDependentOn("Pack-Application")
 	.Does(() =>
     {
@@ -260,7 +267,7 @@ Task("Create-Installer")
         {
             NoMsi = true,
             Silent = true,
-            // ReleaseDirectory = new DirectoryPath(InstallerPath), // breaks Squirrel, Default is Releases
+            ReleaseDirectory = new DirectoryPath(InstallerPath), // breaks Squirrel if not set to "Releases", maybe? idk anymore
             Icon = new FilePath("..\\src\\Resources\\Images\\logo.ico"),
             SetupIcon =  new FilePath("..\\src\\Resources\\Images\\logo.ico"),
             ShortCutLocations = "Desktop,StartMenu",
@@ -272,16 +279,35 @@ Task("Create-Installer")
 		 Squirrel(nupkg, settings);
 	});
 
-Task("CleanUp")
+Task("Rename-Installer")
     .WithCriteria(()=> assemblyInfoParseResult != null)
     .IsDependentOn("Create-Installer")
     .Does(()=>
     {
         var root = new DirectoryPath(InstallerPath);
         var source = root.CombineWithFilePath(new FilePath("Setup.exe"));
-        var target = root.CombineWithFilePath(new FilePath($".\\Maple{assemblyInfoParseResult.AssemblyVersion}.exe"));
+        var target = root.CombineWithFilePath(new FilePath($".\\MapleSetup-v{assemblyInfoParseResult.AssemblyVersion}.exe"));
 
         MoveFile(source, target);
+    });
+
+Task("Compress-Installer") // this task might be obsolete for squirrel - might break the auto updater?
+    .WithCriteria(()=> assemblyInfoParseResult != null)
+    .IsDependentOn("Rename-Installer")
+    .Does(()=>
+    {
+        var installer = new DirectoryPath(InstallerPath);
+        var archive = new DirectoryPath(ArchivePath);
+        var source = installer.CombineWithFilePath(new FilePath($".\\MapleSetup-v{assemblyInfoParseResult.AssemblyVersion}.exe"));
+
+        ZipCompress(installer, archive.CombineWithFilePath(new FilePath(".\\MapleSetup.zip")), new[]{source});
+    });
+
+Task("ReleaseOnGithub")
+    .IsDependentOn("Compress-Installer")
+    .Does(()=>
+    {
+        // via octodeploy
     });
 
 //////////////////////////////////////////////////////////////////////
@@ -289,7 +315,7 @@ Task("CleanUp")
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("CleanUp");
+    .IsDependentOn("Compress-Installer");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
