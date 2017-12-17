@@ -45,8 +45,9 @@ artifacts:
 test: off
 
 on_success:
-  - echo %APPVEYOR_REPO_TAG%
   - echo APPVEYOR_REPO_TAG = %APPVEYOR_REPO_TAG%
+  - echo APPVEYOR_REPO_TAG = true
+  - echo %APPVEYOR_REPO_TAG%
 
 #---------------------------------#
 #  Deploy to GitHub Releases      #
