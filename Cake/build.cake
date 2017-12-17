@@ -11,8 +11,8 @@
 const string SolutionPath ="..\\Maple.sln";
 const string Platform = "anyCPU";
 const string Configuration = "Release";
-const string ReleasePath = ".\\Package";
-const string InstallerPath = ".\\Installer";
+const string PackagePath = ".\\Package";
+const string InstallerPath = ".\\Releases";
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
@@ -129,7 +129,7 @@ Task("Clean-Solution")
 Task("Clean-Release")
     .Does(() =>
     {
-        var release = new DirectoryPath(ReleasePath);
+        var release = new DirectoryPath(PackagePath);
         EnsureDirectoryExists(release);
         CleanDirectory(release);
 
@@ -224,7 +224,7 @@ Task("Pack-Application")
             Version                     = $"{assemblyInfoParseResult.AssemblyVersion}",
             Authors                     = new[] {"Insire"},
             Owners                      = new[] {"Insire"},
-            Description                 = "Maple is a windows desktop application designed to support semi and non professional streamers in playing back local audio files and streaming content from the internet to their favorite playback device",
+            Description                 = "Maple",
             Summary                     = "",
             ProjectUrl                  = new Uri(@"https://github.com/Insire/Maple/"),
             IconUrl                     = new Uri(@"https://github.com/Insire/Maple/blob/master/src/Resources/Images/logo.ico"),
@@ -243,46 +243,33 @@ Task("Pack-Application")
                 new NuSpecContent{ Source=".\\x86\\*",Target="lib\\net471\\x86\\", Exclude="*.pdb"},
             },
             BasePath                    = new DirectoryPath("..\\src\\Maple\\bin\\Release\\"),
-            OutputDirectory             = new DirectoryPath(ReleasePath),
+            OutputDirectory             = new DirectoryPath(PackagePath),
             KeepTemporaryNuSpecFile     = false,
         };
 
         NuGetPack(settings);
-        // NuGetPack(new FilePath("..\\src\\Maple\\Maple.csproj") ,settings);
-    });
-
-Task("Move-Package")
-    .WithCriteria(()=> assemblyInfoParseResult != null)
-    .IsDependentOn("Pack-Application")
-    .Does(() =>
-    {
-        var source = new DirectoryPath(ReleasePath).CombineWithFilePath(new FilePath($".\\Maple.{assemblyInfoParseResult.AssemblyVersion}.nupkg"));
-        var target = new DirectoryPath(InstallerPath).CombineWithFilePath(new FilePath($".\\Maple.{assemblyInfoParseResult.AssemblyVersion}.nupkg"));
-
-        MoveFile(source, target);
     });
 
 Task("Create-Installer")
     .WithCriteria(()=> assemblyInfoParseResult != null)
     .IsDependentOn("Parse-AssemblyInfo")
-    //.IsDependentOn("Move-Package")
+    .IsDependentOn("Pack-Application")
 	.Does(() =>
     {
 		var settings = new SquirrelSettings()
         {
             NoMsi = true,
             Silent = true,
-            ReleaseDirectory = new DirectoryPath(InstallerPath),
+            // ReleaseDirectory = new DirectoryPath(InstallerPath), // breaks Squirrel, Default is Releases
             Icon = new FilePath("..\\src\\Resources\\Images\\logo.ico"),
             SetupIcon =  new FilePath("..\\src\\Resources\\Images\\logo.ico"),
             ShortCutLocations = "Desktop,StartMenu",
         };
 
-        var nupkg = new DirectoryPath(InstallerPath).CombineWithFilePath(new FilePath($".\\MyPackage.0.0.1.nupkg"));
-        // var nupkg = new DirectoryPath(InstallerPath).CombineWithFilePath(new FilePath($".\\Maple.{assemblyInfoParseResult.AssemblyVersion}.nupkg"));
+        // nupkg file cant be in the Releases folder
+        var nupkg = new DirectoryPath(PackagePath).CombineWithFilePath(new FilePath($".\\Maple.{assemblyInfoParseResult.AssemblyVersion}.nupkg"));
 
-		Squirrel(nupkg);
-		// Squirrel(nupkg, settings, true, false);
+		 Squirrel(nupkg, settings);
 	});
 
 Task("CleanUp")
