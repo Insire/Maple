@@ -1,6 +1,6 @@
 #tool "nuget:?package=vswhere"
 #tool "nuget:?package=Cake.Bakery"
-#tool "Squirrel.Windows"
+#tool "nuget:?package=Squirrel.Windows"
 
 #addin Cake.Incubator
 #addin Cake.Squirrel
@@ -229,7 +229,7 @@ Task("Pack-Application")
             ProjectUrl                  = new Uri(@"https://github.com/Insire/Maple/"),
             IconUrl                     = new Uri(@"https://github.com/Insire/Maple/blob/master/src/Resources/Images/logo.ico"),
             LicenseUrl                  = new Uri(@"https://github.com/Insire/Maple/blob/master/license.md"),
-            Copyright                   = $"Insire © {DateTime.Today.Year}",
+            Copyright                   = $"© {DateTime.Today.Year} Insire",
             ReleaseNotes                = new[]{""},
             Tags                        = new[]{"Maple", "Materia Player", "MediaPlayer", "Material", "WPF", "Windows", "C#", "Csharp", "Material Design"},
             RequireLicenseAcceptance    = true,
@@ -237,10 +237,10 @@ Task("Pack-Application")
             NoPackageAnalysis           = false,
             Files                       = new[]
             {
-                new NuSpecContent{ Source="*",Target="lib\\net45", Exclude="*.pdb"},
-                new NuSpecContent{ Source=".\\Resources\\",Target="lib\\net45\\Resources\\", Exclude="*.pdb"},
-                new NuSpecContent{ Source=".\\x64\\*",Target="lib\\net45\\x64\\", Exclude="*.pdb"},
-                new NuSpecContent{ Source=".\\x86\\*",Target="lib\\net45\\x86\\", Exclude="*.pdb"},
+                new NuSpecContent{ Source="*",Target="lib\\net471", Exclude="*.pdb"},
+                new NuSpecContent{ Source=".\\Resources\\",Target="lib\\net471\\Resources\\", Exclude="*.pdb"},
+                new NuSpecContent{ Source=".\\x64\\*",Target="lib\\net471\\x64\\", Exclude="*.pdb"},
+                new NuSpecContent{ Source=".\\x86\\*",Target="lib\\net471\\x86\\", Exclude="*.pdb"},
             },
             BasePath                    = new DirectoryPath("..\\src\\Maple\\bin\\Release\\"),
             OutputDirectory             = new DirectoryPath(ReleasePath),
@@ -248,6 +248,7 @@ Task("Pack-Application")
         };
 
         NuGetPack(settings);
+        // NuGetPack(new FilePath("..\\src\\Maple\\Maple.csproj") ,settings);
     });
 
 Task("Move-Package")
@@ -264,7 +265,7 @@ Task("Move-Package")
 Task("Create-Installer")
     .WithCriteria(()=> assemblyInfoParseResult != null)
     .IsDependentOn("Parse-AssemblyInfo")
-    .IsDependentOn("Move-Package")
+    //.IsDependentOn("Move-Package")
 	.Does(() =>
     {
 		var settings = new SquirrelSettings()
@@ -277,9 +278,11 @@ Task("Create-Installer")
             ShortCutLocations = "Desktop,StartMenu",
         };
 
-        var nupkg = new DirectoryPath(InstallerPath).CombineWithFilePath(new FilePath($".\\Maple.{assemblyInfoParseResult.AssemblyVersion}.nupkg"));
+        var nupkg = new DirectoryPath(InstallerPath).CombineWithFilePath(new FilePath($".\\MyPackage.0.0.1.nupkg"));
+        // var nupkg = new DirectoryPath(InstallerPath).CombineWithFilePath(new FilePath($".\\Maple.{assemblyInfoParseResult.AssemblyVersion}.nupkg"));
 
-		Squirrel(nupkg, settings, true, false);
+		Squirrel(nupkg);
+		// Squirrel(nupkg, settings, true, false);
 	});
 
 Task("CleanUp")

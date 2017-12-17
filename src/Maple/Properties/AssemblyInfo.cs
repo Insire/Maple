@@ -1,8 +1,9 @@
-﻿using System.Reflection;
+﻿using System.Runtime.InteropServices;
+using System.Reflection;
 using System.Windows;
 
 [assembly: AssemblyTitle("Maple")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Maple is a windows desktop application designed to support semi and non professional streamers in playing back local audio files and streaming content from the internet to their favorite playback device")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCulture("")]
 
