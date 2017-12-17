@@ -6,6 +6,7 @@
 #addin Cake.Squirrel
 #addin nuget:?package=SharpZipLib
 #addin nuget:?package=Cake.Compression
+#addin nuget:?package=Cake.OctoDeploy
 
 //////////////////////////////////////////////////////////////////////
 // Constants
@@ -303,12 +304,22 @@ Task("Compress-Installer") // this task might be obsolete for squirrel - might b
         ZipCompress(installer, archive.CombineWithFilePath(new FilePath(".\\MapleSetup.zip")), new[]{source});
     });
 
-Task("ReleaseOnGithub")
-    .IsDependentOn("Compress-Installer")
-    .Does(()=>
-    {
-        // via octodeploy
-    });
+// Task("ReleaseOnGithub")
+//     .IsDependentOn("Compress-Installer")
+//     .Does(()=>
+//     {
+//         var isDraftRelease = true;
+//         var isPreRelease = true;
+//         var settings = new OctoDeploySettings()
+//         {
+//             AccessToken = "", // PAT
+//             Owner ="Insire",
+//             Repository ="Maple",
+//         };
+
+//         // via octodeploy
+//         PublishReleaseWithArtifact("tag","title","release notes",isDraftRelease,isPreRelease,new FilePath("artifacts"),"artifactname","mimetype",settings);
+//     });
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
