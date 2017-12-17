@@ -313,7 +313,8 @@ Task("Update-BuildServerEnvironment")
     .IsDependentOn("Parse-AssemblyInfo")
     .Does(()=>
     {
-        BuildSystem.AppVeyor.UpdateBuildVersion(assemblyInfoParseResult.AssemblyVersion);
+        // TODO not really sure how to increment the build number
+        // BuildSystem.AppVeyor.UpdateBuildVersion(assemblyInfoParseResult.AssemblyVersion);
 
         var settings = new FileSetSettings()
         {
