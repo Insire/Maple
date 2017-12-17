@@ -5,6 +5,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("0.0.1")]
 [assembly: ComVisible(false)]
 [assembly: AssemblyProduct("Maple")]
-[assembly: AssemblyCopyright("Copyright © 2017")]
+[assembly: AssemblyCopyright("© 2017 Insire")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyTrademark("")]

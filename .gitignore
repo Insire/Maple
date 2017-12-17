@@ -220,6 +220,9 @@ ModelManifest.xml
 /Cake/tools/nuget.exe
 /Cake/tools/packages.config.md5sum
 /Cake/tools/squirrel.windows*
+/Cake/Archive/*
+/Cake/Package/*
+/Cake/Releases/*
 
 # Merge
 *.orig

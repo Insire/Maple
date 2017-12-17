@@ -1,9 +1,13 @@
 #tool "nuget:?package=vswhere"
 #tool "nuget:?package=Cake.Bakery"
-#tool "Squirrel.Windows"
+#tool "nuget:?package=Squirrel.Windows"
 
 #addin Cake.Incubator
 #addin Cake.Squirrel
+#addin nuget:?package=SharpZipLib
+#addin nuget:?package=Cake.Compression
+#addin nuget:?package=Cake.OctoDeploy
+
 //////////////////////////////////////////////////////////////////////
 // Constants
 //////////////////////////////////////////////////////////////////////
@@ -11,7 +15,10 @@
 const string SolutionPath ="..\\Maple.sln";
 const string Platform = "anyCPU";
 const string Configuration = "Release";
-const string ReleasePath = "..\\Release\\";
+const string PackagePath = ".\\Package";
+const string InstallerPath = ".\\Releases";
+const string ArchivePath = ".\\Archive";
+
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
@@ -94,8 +101,6 @@ Task("Gather-BuildRequirements")
             Information("Required tools have been found.");
     });
 
-
-
 Task("Clean-Solution")
     .IsDependentOn("Gather-BuildRequirements")
     .Does(() =>
@@ -125,21 +130,32 @@ Task("Clean-Solution")
         }
     });
 
-Task("Clean-Release")
+Task("Clean-Folders")
     .Does(() =>
     {
-        CleanDirectory(new DirectoryPath(ReleasePath));
+        var folders = new[]
+        {
+            new DirectoryPath(PackagePath),
+            new DirectoryPath(InstallerPath),
+            new DirectoryPath(ArchivePath),
+        };
+
+        foreach(var folder in folders)
+        {
+            EnsureDirectoryExists(folder);
+            CleanDirectory(folder);
+        }
     });
 
 Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean-Solution")
-    .IsDependentOn("Clean-Release")
+    .IsDependentOn("Clean-Folders")
     .Does(() =>
     {
         var settings = new NuGetRestoreSettings()
         {
             DisableParallelProcessing = false,
-            Verbosity = NuGetVerbosity.Quiet, //Detailed, Normal, Quiet
+            Verbosity = NuGetVerbosity.Quiet,
             NoCache = true,
         };
 
@@ -217,12 +233,12 @@ Task("Pack-Application")
             Version                     = $"{assemblyInfoParseResult.AssemblyVersion}",
             Authors                     = new[] {"Insire"},
             Owners                      = new[] {"Insire"},
-            Description                 = "Maple is a windows desktop application designed to support semi and non professional streamers in playing back local audio files and streaming content from the internet to their favorite playback device",
+            Description                 = "Maple",
             Summary                     = "",
             ProjectUrl                  = new Uri(@"https://github.com/Insire/Maple/"),
             IconUrl                     = new Uri(@"https://github.com/Insire/Maple/blob/master/src/Resources/Images/logo.ico"),
             LicenseUrl                  = new Uri(@"https://github.com/Insire/Maple/blob/master/license.md"),
-            Copyright                   = $"Insire © {DateTime.Today.Year}",
+            Copyright                   = $"© {DateTime.Today.Year} Insire",
             ReleaseNotes                = new[]{""},
             Tags                        = new[]{"Maple", "Materia Player", "MediaPlayer", "Material", "WPF", "Windows", "C#", "Csharp", "Material Design"},
             RequireLicenseAcceptance    = true,
@@ -230,13 +246,14 @@ Task("Pack-Application")
             NoPackageAnalysis           = false,
             Files                       = new[]
             {
-                new NuSpecContent{ Source=".",Target="lib\\net45", Exclude="*.pdb"},
-                new NuSpecContent{ Source=".\\Resources\\",Target="net45\\Resources\\", Exclude="*.pdb"},
-                new NuSpecContent{ Source=".\\x64\\*",Target="lib\\net45\\", Exclude="*.pdb"},
-                new NuSpecContent{ Source=".\\x86\\*",Target="lib\\net45\\", Exclude="*.pdb"},
+                new NuSpecContent{ Source="*",Target="lib\\net471", Exclude="*.pdb"},
+                new NuSpecContent{ Source=".\\Resources\\",Target="lib\\net471\\Resources\\", Exclude="*.pdb"},
+                new NuSpecContent{ Source=".\\x64\\*",Target="lib\\net471\\x64\\", Exclude="*.pdb"},
+                new NuSpecContent{ Source=".\\x86\\*",Target="lib\\net471\\x86\\", Exclude="*.pdb"},
             },
-            BasePath                    = "..\\src\\Maple\\bin\\Release\\",
-            OutputDirectory             = ReleasePath,
+            BasePath                    = new DirectoryPath("..\\src\\Maple\\bin\\Release\\"),
+            OutputDirectory             = new DirectoryPath(PackagePath),
+            KeepTemporaryNuSpecFile     = false,
         };
 
         NuGetPack(settings);
@@ -245,38 +262,71 @@ Task("Pack-Application")
 Task("Create-Installer")
     .WithCriteria(()=> assemblyInfoParseResult != null)
     .IsDependentOn("Pack-Application")
-	.Does(() => {
+	.Does(() =>
+    {
 		var settings = new SquirrelSettings()
         {
             NoMsi = true,
             Silent = true,
-            ReleaseDirectory = new DirectoryPath(ReleasePath),
+            ReleaseDirectory = new DirectoryPath(InstallerPath), // breaks Squirrel if not set to "Releases", maybe? idk anymore
             Icon = new FilePath("..\\src\\Resources\\Images\\logo.ico"),
             SetupIcon =  new FilePath("..\\src\\Resources\\Images\\logo.ico"),
             ShortCutLocations = "Desktop,StartMenu",
         };
 
-		Squirrel(new FilePath($"..\\Maple.{assemblyInfoParseResult.AssemblyVersion}.nupkg"), settings);
+        // nupkg file cant be in the Releases folder
+        var nupkg = new DirectoryPath(PackagePath).CombineWithFilePath(new FilePath($".\\Maple.{assemblyInfoParseResult.AssemblyVersion}.nupkg"));
+
+		 Squirrel(nupkg, settings);
 	});
 
-Task("CleanUp")
+Task("Rename-Installer")
     .WithCriteria(()=> assemblyInfoParseResult != null)
     .IsDependentOn("Create-Installer")
     .Does(()=>
     {
-        var root = new DirectoryPath(ReleasePath);
+        var root = new DirectoryPath(InstallerPath);
         var source = root.CombineWithFilePath(new FilePath("Setup.exe"));
-        var target = root.CombineWithFilePath(new FilePath($"..\\Release\\Maple{assemblyInfoParseResult.AssemblyVersion}.exe"));
+        var target = root.CombineWithFilePath(new FilePath($".\\MapleSetup-v{assemblyInfoParseResult.AssemblyVersion}.exe"));
 
-        MoveFile(source,target);
+        MoveFile(source, target);
     });
+
+Task("Compress-Installer") // this task might be obsolete for squirrel - might break the auto updater?
+    .WithCriteria(()=> assemblyInfoParseResult != null)
+    .IsDependentOn("Rename-Installer")
+    .Does(()=>
+    {
+        var installer = new DirectoryPath(InstallerPath);
+        var archive = new DirectoryPath(ArchivePath);
+        var source = installer.CombineWithFilePath(new FilePath($".\\MapleSetup-v{assemblyInfoParseResult.AssemblyVersion}.exe"));
+
+        ZipCompress(installer, archive.CombineWithFilePath(new FilePath(".\\MapleSetup.zip")), new[]{source});
+    });
+
+// Task("ReleaseOnGithub")
+//     .IsDependentOn("Compress-Installer")
+//     .Does(()=>
+//     {
+//         var isDraftRelease = true;
+//         var isPreRelease = true;
+//         var settings = new OctoDeploySettings()
+//         {
+//             AccessToken = "", // PAT
+//             Owner ="Insire",
+//             Repository ="Maple",
+//         };
+
+//         // via octodeploy
+//         PublishReleaseWithArtifact("tag","title","release notes",isDraftRelease,isPreRelease,new FilePath("artifacts"),"artifactname","mimetype",settings);
+//     });
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("CleanUp");
+    .IsDependentOn("Compress-Installer");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
