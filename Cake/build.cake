@@ -2,12 +2,12 @@
 #tool "nuget:?package=Cake.Bakery"
 #tool "nuget:?package=Squirrel.Windows"
 
-#addin Cake.Incubator
-#addin Cake.Squirrel
-#addin nuget:?package=SharpZipLib
-#addin nuget:?package=Cake.Compression
-#addin nuget:?package=Cake.OctoDeploy
-
+#addin "Cake.Incubator"
+#addin "Cake.Squirrel"
+#addin "Cake.FileSet"
+#addin "nuget:?package=SharpZipLib"
+#addin "nuget:?package=Cake.Compression"
+#addin "nuget:?package=Microsoft.Extensions.FileSystemGlobbing&version=1.1.1"
 //////////////////////////////////////////////////////////////////////
 // Constants
 //////////////////////////////////////////////////////////////////////
@@ -197,8 +197,8 @@ Task("Build")
             InIsolation = true,
         };
 
-        if(BuildSystem.AppVeyor.IsRunningOnAppVeyor)
-            settings.Logger = "AppVeyor";
+        // if(BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+            settings.Logger = "trx";
 
         if(vsTest != null)
             settings.ToolPath = Context.Tools.Resolve("vstest.console.exe");
@@ -314,6 +314,21 @@ Task("Update-BuildServerEnvironment")
     .Does(()=>
     {
         BuildSystem.AppVeyor.UpdateBuildVersion(assemblyInfoParseResult.AssemblyVersion);
+
+        var settings = new FileSetSettings()
+        {
+            BasePath=".\\TestResults",
+            Includes = new string[]{"*.trx"},
+            Excludes = new string[]{},
+            CaseSensitive = false,
+        };
+        var files = GetFileSet(settings);
+
+        foreach(var file in files)
+        {
+            Information($"Testffile {file.FullPath} found and uploading....");
+            BuildSystem.AppVeyor.UploadTestResults(file, AppVeyorTestResultsType.MSTest);
+        }
     });
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
