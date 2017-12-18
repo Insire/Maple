@@ -46,12 +46,12 @@ artifacts:
     name: 'Installer'
   - path: './Cake/Releases/Maple-$(appveyor_build_version)-full.nupkg'
     type: NuGetPackage
-    #name: 'NuGetPackage'
+    name: 'NuGetPackage'
   - path: './Cake/Releases/Setup.exe'
-    #type: File
+    type: File
     name: 'Installer'
   - path: './Cake/Releases/RELEASES'
-    #type: File
+    type: File
     name: 'Release'
 
 #---------------------------------#
@@ -72,5 +72,5 @@ deploy:
   prerelease: true
   force_update: true
   on:
-    branch: master                # release from master branch only
+    branch: master, autoupdater   # release from these branches only
     APPVEYOR_REPO_TAG: true       # deploy on tag push only
