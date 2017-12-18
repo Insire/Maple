@@ -44,10 +44,15 @@ artifacts:
     name: 'Binaries'
   - path: './Cake/Archive/'
     name: 'Installer'
-
-  - path: './Cake/Releases/Maple-{build}-full.nupkg'
-  - path: './Cake/Releases/MapleSetup-v{build}.exe'
+  - path: './Cake/Releases/Maple-$(appveyor_build_version)-full.nupkg'
+    type: NuGetPackage
+    name: 'NuGetPackage'
+  - path: './Cake/Releases/MapleSetup-v$(appveyor_build_version).exe'
+    type: File
+    name: 'Installer'
   - path: './Cake/Releases/RELEASES'
+    type: File
+    name: 'Release'
 
 #---------------------------------#
 #  Unit Tests                     #
@@ -65,7 +70,7 @@ deploy:
   provider: GitHub
   auth_token:
     secure: Yo5d5V9sj0vLGZl6XQ1N4aNajAja6FTmPkRyr1Ft3Vg5fhPTFCPuh4d0LqcQvNZy # your encrypted token from GitHub
-  artifact: Binaries,Installer,'./Cake/Releases/Maple-{build}-full.nupkg','./Cake/Releases/MapleSetup-v{build}.exe','./Cake/Releases/RELEASES'
+  artifact: Binaries,Installer,NuGetPackage,Installer,Release
   draft: true
   prerelease: true
   force_update: true
