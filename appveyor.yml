@@ -67,10 +67,10 @@ deploy:
   provider: GitHub
   auth_token:
     secure: Yo5d5V9sj0vLGZl6XQ1N4aNajAja6FTmPkRyr1Ft3Vg5fhPTFCPuh4d0LqcQvNZy # your encrypted token from GitHub
-  artifact: Binaries,Installer,'./Cake/Releases/Maple-$(appveyor_build_version)-full.nupkg','./Cake/Releases/Setup.exe','./Cake/Releases/RELEASES'
+  artifact: Binaries,Installer,NuGetPackage,Installer,Release
   draft: true
   prerelease: true
   force_update: true
   on:
-    branch: master, autoupdater   # release from these branches only
+    branch: master                # release from these branches only
     APPVEYOR_REPO_TAG: true       # deploy on tag push only
