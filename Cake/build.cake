@@ -356,7 +356,7 @@ Task(InstallerRenameTask)
         var source = root.CombineWithFilePath(new FilePath("Setup.exe"));
         var target = root.CombineWithFilePath(new FilePath($".\\MapleSetup-v{assemblyInfoParseResult.AssemblyVersion}.exe"));
 
-        MoveFile(source, target);
+        CopyFile(source, target);
     });
 
 Task(InstallerCompressionTask) // this task might be obsolete for squirrel - might break the auto updater?
