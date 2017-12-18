@@ -116,6 +116,12 @@ Task(GatherBuildRequirementTask)
 
         if(foundMSBuild && foundVSTest)
             Information("Required tools have been found.");
+
+        if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        {
+            var appveyorRepoTag = EnvironmentVariable("APPVEYOR_REPO_TAG") ;
+            Information($"APPVEYOR_REPO_TAG: {appveyorRepoTag}");
+        }
     });
 
 Task(CleanSolutionTask)
@@ -176,6 +182,9 @@ Task(RestoreNugetTask)
             Verbosity = NuGetVerbosity.Quiet,
             NoCache = true,
         };
+
+        if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+            settings.NoCache = false;
 
         NuGetRestore(SolutionPath, settings);
     });

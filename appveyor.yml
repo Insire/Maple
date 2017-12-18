@@ -46,12 +46,12 @@ artifacts:
     name: 'Installer'
   - path: './Cake/Releases/Maple-$(appveyor_build_version)-full.nupkg'
     type: NuGetPackage
-    name: 'NuGetPackage'
+    #name: 'NuGetPackage'
   - path: './Cake/Releases/Setup.exe'
-    type: File
+    #type: File
     name: 'Installer'
   - path: './Cake/Releases/RELEASES'
-    type: File
+    #type: File
     name: 'Release'
 
 #---------------------------------#
@@ -63,11 +63,11 @@ test: off
 #  Deploy to GitHub Releases      #
 #---------------------------------#
 deploy:
-  description: 'Auto generated build' # is required to be set
+  description: 'Auto generated build' # required to be set
   provider: GitHub
   auth_token:
     secure: Yo5d5V9sj0vLGZl6XQ1N4aNajAja6FTmPkRyr1Ft3Vg5fhPTFCPuh4d0LqcQvNZy # your encrypted token from GitHub
-  artifact: Binaries,Installer,NuGetPackage,Installer,Release
+  artifact: Binaries,Installer,'./Cake/Releases/Maple-$(appveyor_build_version)-full.nupkg','./Cake/Releases/Setup.exe','./Cake/Releases/RELEASES'
   draft: true
   prerelease: true
   force_update: true
