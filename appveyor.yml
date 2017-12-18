@@ -43,7 +43,7 @@ artifacts:
   - path: './src/Maple/bin/$(configuration)'
     name: 'Binaries'
   - path: './Cake/Archive/'
-    name: 'Installer'
+    name: 'Archive'
   - path: './Cake/Releases/Maple-$(appveyor_build_version)-full.nupkg'
     type: NuGetPackage
     name: 'NuGetPackage'
@@ -67,7 +67,7 @@ deploy:
   provider: GitHub
   auth_token:
     secure: Yo5d5V9sj0vLGZl6XQ1N4aNajAja6FTmPkRyr1Ft3Vg5fhPTFCPuh4d0LqcQvNZy # your encrypted token from GitHub
-  artifact: Binaries,Installer,NuGetPackage,Installer,Release
+  artifact: Binaries,Archive,Installer,NuGetPackage,Release
   draft: true
   prerelease: true
   force_update: true
