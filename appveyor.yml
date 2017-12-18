@@ -63,10 +63,7 @@ test: off
 #  Deploy to GitHub Releases      #
 #---------------------------------#
 deploy:
-  #release: Maple-v$(appveyor_build_version)
   description: 'Auto generated build' # is required to be set
-  #tag: 'Test tag'
-  #realease: 'Test release name'
   provider: GitHub
   auth_token:
     secure: Yo5d5V9sj0vLGZl6XQ1N4aNajAja6FTmPkRyr1Ft3Vg5fhPTFCPuh4d0LqcQvNZy # your encrypted token from GitHub

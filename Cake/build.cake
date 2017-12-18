@@ -319,6 +319,10 @@ Task(PackTask)
         };
 
         NuGetPack(settings);
+
+        Information($"Files found in {PackagePath}:");
+        foreach(var file in GetFiles(PackagePath))
+            Information(file.FullPath);
     });
 
 Task(InstallerCreationTask)
