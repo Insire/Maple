@@ -248,6 +248,8 @@
         <Setter Property="Margin" Value="4" />
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsPlaying, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                <Setter Property="Command" Value="{Binding StopCommand}" />
+                <Setter Property="CommandParameter" Value="{x:Null}" />
                 <Setter Property="ContentTemplate">
                     <Setter.Value>
                         <DataTemplate>

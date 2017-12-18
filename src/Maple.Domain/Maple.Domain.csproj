@@ -46,6 +46,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Enums\AudioFormats.cs" />
+    <Compile Include="Enums\MediaItemType.cs" />
     <Compile Include="Enums\MediaPlayerType.cs" />
     <Compile Include="Enums\OptionType.cs" />
     <Compile Include="Enums\PackIconKind.cs" />

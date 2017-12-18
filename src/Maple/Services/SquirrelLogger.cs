@@ -1,61 +1,43 @@
 ﻿using System;
+using System.ComponentModel;
 using Maple.Domain;
 using Maple.Localization.Properties;
+using Splat;
 
-namespace Maple.Core
+namespace Maple
 {
     /// <summary>
-    /// Generates a Diagnostic report when exceptions are being thrown around
+    /// Decorator for logging messages from windows.squirrel
     /// </summary>
-    public class DetailLoggingService : ILoggingService
+    public class SquirrelLogger : Splat.ILogger, ILoggingService
     {
         private readonly ILoggingService _log;
 
-        private bool _hasLoggedException = false;
+        public LogLevel Level { get; set; }
 
-        public DetailLoggingService(ILoggingService log)
+        public SquirrelLogger(ILoggingService log)
         {
             _log = log ?? throw new ArgumentNullException(nameof(log), $"{nameof(log)} {Resources.IsRequired}");
         }
 
         public void Error(object message)
         {
-            if (!_hasLoggedException)
-                _log.Error(DiagnosticReport.Generate(DiagnosticReportType.Full));
-
             _log.Error(message);
-
-            _hasLoggedException = true;
         }
 
         public void Error(object message, Exception exception)
         {
-            if (!_hasLoggedException)
-                _log.Error(DiagnosticReport.Generate(DiagnosticReportType.Full));
-
             _log.Error(message, exception);
-
-            _hasLoggedException = true;
         }
 
         public void Fatal(object message)
         {
-            if (!_hasLoggedException)
-                _log.Fatal(DiagnosticReport.Generate(DiagnosticReportType.Full));
-
             _log.Fatal(message);
-
-            _hasLoggedException = true;
         }
 
         public void Fatal(object message, Exception exception)
         {
-            if (!_hasLoggedException)
-                _log.Fatal(DiagnosticReport.Generate(DiagnosticReportType.Full));
-
             _log.Fatal(message, exception);
-
-            _hasLoggedException = true;
         }
 
         public void Info(object message)
@@ -76,6 +58,26 @@ namespace Maple.Core
         public void Warn(object message, Exception exception)
         {
             _log.Warn(message, exception);
+        }
+
+        public void Write([Localizable(false)] string message, LogLevel logLevel)
+        {
+            switch (logLevel)
+            {
+                case LogLevel.Error:
+                    Error(message);
+                    break;
+                case LogLevel.Fatal:
+                    Fatal(message);
+                    break;
+                case LogLevel.Debug:
+                case LogLevel.Info:
+                    Info(message);
+                    break;
+                case LogLevel.Warn:
+                    Warn(message);
+                    break;
+            }
         }
     }
 }

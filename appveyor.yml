@@ -7,8 +7,12 @@ image:
 
 skip_commits:
   files:
-    - appveyor.yml
     - README.md
+    - license.md
+    - .XamlStyler
+    - .editorconfig
+    - header.png
+    - MainWindow.gif
 
 environment:
   APPVEYOR_REPO_TAG: true
@@ -40,8 +44,10 @@ artifacts:
     name: 'Binaries'
   - path: './Cake/Archive/'
     name: 'Installer'
-  - path: './Cake/Releases/'
-    name: 'AutoUpdates'
+
+  - path: './Cake/Releases/Maple-{build}-full.nupkg'
+  - path: './Cake/Releases/MapleSetup-v{build}.exe'
+  - path: './Cake/Releases/RELEASES'
 
 #---------------------------------#
 #  Unit Tests                     #
@@ -59,7 +65,7 @@ deploy:
   provider: GitHub
   auth_token:
     secure: Yo5d5V9sj0vLGZl6XQ1N4aNajAja6FTmPkRyr1Ft3Vg5fhPTFCPuh4d0LqcQvNZy # your encrypted token from GitHub
-  artifact: Binaries,Installer,AutoUpdates
+  artifact: Binaries,Installer,'./Cake/Releases/Maple-{build}-full.nupkg','./Cake/Releases/MapleSetup-v{build}.exe','./Cake/Releases/RELEASES'
   draft: true
   prerelease: true
   force_update: true

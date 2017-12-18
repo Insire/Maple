@@ -15,7 +15,7 @@ namespace Maple
         public string Get()
         {
             var version = _assemblyName.Version;
-            return $"v{version.Major}.{version.Minor}.{version.Revision}";
+            return $"v{version.Major}.{version.Minor}.{version.Build}";
         }
     }
 }

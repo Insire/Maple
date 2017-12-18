@@ -63,7 +63,7 @@ namespace Maple
 
         public override bool CanPlay(IMediaItem item)
         {
-            return item != null && _player?.PlaybackState != null && _player.PlaybackState != NAudio.Wave.PlaybackState.Playing;
+            return item != null && _player?.PlaybackState != null && _player.PlaybackState != NAudio.Wave.PlaybackState.Playing && item.MediaItemType.HasFlag(MediaItemType.LocalFile);
         }
 
         public override bool CanPause()

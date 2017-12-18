@@ -18,6 +18,7 @@ namespace Maple.Domain
         /// </summary>
         public long Duration { get; set; }
         public int PrivacyStatus { get; set; }
+        public int MediaItemType { get; set; }
         public string Description { get; set; }
 
         [Required]

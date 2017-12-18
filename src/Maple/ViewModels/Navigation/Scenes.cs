@@ -90,7 +90,7 @@ namespace Maple
                 {
                     Content = new MediaPlayerPage(_manager),
                     Key = nameof(Resources.Playback),
-                    IsSelected = false,
+                    IsSelected = true,
                     Sequence = 100,
                 },
 
@@ -126,21 +126,22 @@ namespace Maple
                     Sequence = 150,
                 },
 
-                new Scene(_manager)
-                {
-                    Content = new ContentPresenter()
-                    {
-                        Content = new FileBrowserContentDialogViewModel(fileSystemViewModel, new FileSystemBrowserOptions()
-                        {
-                            CanCancel=false,
-                            MultiSelection= true,
-                            Title="Test"
-                        })
-                    },
-                    Key = nameof(Resources.Director),
-                    IsSelected = true,
-                    Sequence = 700,
-                },
+                // keeping this for debugging the FileBrowser
+                //new Scene(_manager)
+                //{
+                //    Content = new ContentPresenter()
+                //    {
+                //        Content = new FileBrowserContentDialogViewModel(fileSystemViewModel, new FileSystemBrowserOptions()
+                //        {
+                //            CanCancel=false,
+                //            MultiSelection= true,
+                //            Title="Test"
+                //        })
+                //    },
+                //    Key = nameof(Resources.Director),
+                //    IsSelected = true,
+                //    Sequence = 700,
+                //},
             };
 
             using (BusyStack.GetToken())
