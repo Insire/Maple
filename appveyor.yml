@@ -47,7 +47,7 @@ artifacts:
   - path: './Cake/Releases/Maple-$(appveyor_build_version)-full.nupkg'
     type: NuGetPackage
     name: 'NuGetPackage'
-  - path: './Cake/Releases/MapleSetup-v$(appveyor_build_version).exe'
+  - path: './Cake/Releases/Setup.exe'
     type: File
     name: 'Installer'
   - path: './Cake/Releases/RELEASES'

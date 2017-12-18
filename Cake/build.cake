@@ -185,30 +185,30 @@ Task(AssemblyInfoTask)
     {
         assemblyInfoParseResult = ParseAssemblyInfo(AssemblyInfoPath);
 
-            var settings = new AssemblyInfoSettings()
-            {
-                Version                 = assemblyInfoParseResult.AssemblyVersion,
-                FileVersion             = assemblyInfoParseResult.AssemblyFileVersion,
-                InformationalVersion    = assemblyInfoParseResult.AssemblyInformationalVersion,
+        var settings = new AssemblyInfoSettings()
+        {
+            Version                 = assemblyInfoParseResult.AssemblyVersion,
+            FileVersion             = assemblyInfoParseResult.AssemblyFileVersion,
+            InformationalVersion    = assemblyInfoParseResult.AssemblyInformationalVersion,
 
-                Product                 = assemblyInfoParseResult.Product,
-                Company                 = assemblyInfoParseResult.Company,
-                Trademark               = assemblyInfoParseResult.Trademark,
-                Copyright               = string.Format("© {0} Insire", DateTime.Now.Year),
+            Product                 = assemblyInfoParseResult.Product,
+            Company                 = assemblyInfoParseResult.Company,
+            Trademark               = assemblyInfoParseResult.Trademark,
+            Copyright               = string.Format("© {0} Insire", DateTime.Now.Year),
 
-                ComVisible              = assemblyInfoParseResult.ComVisible,
-                InternalsVisibleTo      = assemblyInfoParseResult.InternalsVisibleTo,
+            ComVisible              = assemblyInfoParseResult.ComVisible,
+            InternalsVisibleTo      = assemblyInfoParseResult.InternalsVisibleTo,
 
-                // invalid entries:
-                // Configuration           = assemblyInfoParseResult.Configuration,
-                // Description             = assemblyInfoParseResult.Description,
-                // Guid                    = assemblyInfoParseResult.Guid,
-                // Title                   = assemblyInfoParseResult.Title,
+            // invalid entries:
+            // Configuration           = assemblyInfoParseResult.Configuration,
+            // Description             = assemblyInfoParseResult.Description,
+            // Guid                    = assemblyInfoParseResult.Guid,
+            // Title                   = assemblyInfoParseResult.Title,
 
-                // posssible missing entries
-                // CustomAttributes     = assemblyInfoParseResult.CustomAttributes,
-                // CLSCompliant         = assemblyInfoParseResult.CLSCompliant,
-            };
+            // posssible missing entries
+            // CustomAttributes     = assemblyInfoParseResult.CustomAttributes,
+            // CLSCompliant         = assemblyInfoParseResult.CLSCompliant,
+        };
 
         if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
         {
@@ -216,14 +216,16 @@ Task(AssemblyInfoTask)
 
             Information($"Version: {version}");
 
-            settings.Version                 = EnvironmentVariable(version) ?? assemblyInfoParseResult.AssemblyVersion;
-            settings.FileVersion             = EnvironmentVariable(version) ?? assemblyInfoParseResult.AssemblyFileVersion;
-            settings.InformationalVersion    = EnvironmentVariable(version) ?? assemblyInfoParseResult.AssemblyInformationalVersion;
+            settings.Version                 = version;
+            settings.FileVersion             = version;
+            settings.InformationalVersion    = version;
         }
 
         CreateAssemblyInfo(new FilePath(AssemblyInfoPath), settings);
 
         assemblyInfoParseResult = ParseAssemblyInfo(AssemblyInfoPath);
+
+        Information(assemblyInfoParseResult.Dump());
     });
 
 Task(BuildTask)
