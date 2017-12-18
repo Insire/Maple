@@ -8,5 +8,6 @@ namespace Maple.Domain
         string Location { get; }
         TimeSpan Duration { get; }
         PrivacyStatus PrivacyStatus { get; }
+        MediaItemType MediaItemType { get; }
     }
 }

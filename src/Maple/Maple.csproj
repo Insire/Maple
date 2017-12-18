@@ -125,6 +125,7 @@
     <Compile Include="Interfaces\IMediaPlayerMapper.cs" />
     <Compile Include="Interfaces\IMediaRepository.cs" />
     <Compile Include="Interfaces\IPlaylistMapper.cs" />
+    <Compile Include="Services\SquirrelLogger.cs" />
     <Compile Include="UI\FileSystemBrowserDetailTemplateSelector.cs" />
     <Compile Include="UI\ListBox.cs" />
     <Compile Include="UI\IoCResourceDictionary.cs" />
@@ -348,6 +349,12 @@
       <Project>{B5BE546F-8D9F-4FB9-B235-AF05FD553F9E}</Project>
       <Name>Maple.Youtube</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Resources\Art_Of_Escapism_-_Universe_Words.mp3">
+      <Link>Resources\Art_Of_Escapism_-_Universe_Words.mp3</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

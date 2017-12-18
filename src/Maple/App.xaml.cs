@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using DryIoc;
 using Maple.Core;
 using Maple.Domain;
@@ -13,6 +16,7 @@ namespace Maple
     public partial class App : Application
     {
         private IContainer _container;
+        private Task _backgroundUpdate;
 
         protected override async void OnStartup(StartupEventArgs e)
         {
@@ -23,6 +27,7 @@ namespace Maple
             var localizationService = _container.Resolve<ILocalizationService>();
             var log = _container.Resolve<ILoggingService>();
 
+            InitializeUpdater(log);
             InitializeResources(localizationService);
             InitializeLocalization();
 
@@ -32,7 +37,7 @@ namespace Maple
             base.OnStartup(e);
         }
 
-        private async void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private async void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             var log = _container?.Resolve<ILoggingService>();
             var dialog = _container?.Resolve<IDialogViewModel>();
@@ -51,6 +56,9 @@ namespace Maple
         {
             SaveState();
             DisposeResources();
+
+            _backgroundUpdate.Wait();
+
             ExitInternal(e);
         }
 
@@ -102,10 +110,50 @@ namespace Maple
             Thread.CurrentThread.CurrentCulture = Core.Properties.Settings.Default.StartUpCulture;
         }
 
-        private async Task LoadUpdates()
+        private void InitializeUpdater(ILoggingService log)
         {
-            using (var manager = new UpdateManager("https://github.com/Insire/Maple/releases/latest"))
-                await manager.UpdateApp().ConfigureAwait(true);
+            Splat.Locator.CurrentMutable.Register(() => log, typeof(Splat.ILogger));
+
+            _backgroundUpdate = LoadUpdates(log);
+        }
+
+        private async Task LoadUpdates(ILoggingService log)
+        {
+            var manager = default(UpdateManager);
+
+            try
+            {
+                using (manager = await UpdateManager.GitHubUpdateManager("https://www.github.com/Insire/Maple", prerelease: true).ConfigureAwait(true))
+                {
+                    await manager.UpdateApp().ConfigureAwait(true);
+
+                    //Debug.WriteLine("CheckForUpdate");
+                    //var updateInfo = await manager.CheckForUpdate(ignoreDeltaUpdates: true).ConfigureAwait(true);
+                    //Debug.WriteLine("CheckForUpdate completed");
+                    //if (updateInfo.ReleasesToApply.Any())
+                    //{
+                    //    Debug.WriteLine("Update found");
+                    //    var releaseEntry = await manager.UpdateApp().ConfigureAwait(true);
+                    //    Debug.WriteLine($"Update complete {releaseEntry.Version}");
+
+
+                    //}
+                }
+            }
+            catch (WebException ex)
+            {
+                Debug.WriteLine(ex.Status);
+                log.Error(ex);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                log.Error(ex);
+            }
+            finally
+            {
+                manager?.Dispose();
+            }
         }
 
         private IList<Task> LoadApplicationData()

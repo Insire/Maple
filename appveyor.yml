@@ -7,8 +7,12 @@ image:
 
 skip_commits:
   files:
-    - appveyor.yml
     - README.md
+    - license.md
+    - .XamlStyler
+    - .editorconfig
+    - header.png
+    - MainWindow.gif
 
 environment:
   APPVEYOR_REPO_TAG: true
@@ -40,8 +44,15 @@ artifacts:
     name: 'Binaries'
   - path: './Cake/Archive/'
     name: 'Installer'
-  - path: './Cake/Releases/'
-    name: 'AutoUpdates'
+  - path: './Cake/Releases/Maple-$(appveyor_build_version)-full.nupkg'
+    type: NuGetPackage
+    name: 'NuGetPackage'
+  - path: './Cake/Releases/Setup.exe'
+    type: File
+    name: 'Installer'
+  - path: './Cake/Releases/RELEASES'
+    type: File
+    name: 'Release'
 
 #---------------------------------#
 #  Unit Tests                     #
@@ -52,17 +63,14 @@ test: off
 #  Deploy to GitHub Releases      #
 #---------------------------------#
 deploy:
-  #release: Maple-v$(appveyor_build_version)
-  description: 'Auto generated build' # is required to be set
-  #tag: 'Test tag'
-  #realease: 'Test release name'
+  description: 'Auto generated build' # required to be set
   provider: GitHub
   auth_token:
     secure: Yo5d5V9sj0vLGZl6XQ1N4aNajAja6FTmPkRyr1Ft3Vg5fhPTFCPuh4d0LqcQvNZy # your encrypted token from GitHub
-  artifact: Binaries,Installer,AutoUpdates
+  artifact: Binaries,Installer,NuGetPackage,Installer,Release
   draft: true
   prerelease: true
   force_update: true
   on:
-    branch: master                # release from master branch only
+    branch: master                # release from these branches only
     APPVEYOR_REPO_TAG: true       # deploy on tag push only

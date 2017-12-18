@@ -8,16 +8,33 @@
 #addin "nuget:?package=SharpZipLib"
 #addin "nuget:?package=Cake.Compression"
 #addin "nuget:?package=Microsoft.Extensions.FileSystemGlobbing&version=1.1.1"
+
 //////////////////////////////////////////////////////////////////////
 // Constants
 //////////////////////////////////////////////////////////////////////
 
+const string VsWhereTask = "VSWhereAll";
+const string GatherBuildRequirementTask = "Gather-BuildRequirements";
+const string CleanSolutionTask = "Clean-Solution";
+const string CleanFoldersTask = "Clean-Folders";
+const string RestoreNugetTask = "Restore-NuGet-Packages";
+const string BuildTask = "Build";
+const string UnitTestTask = "Run-Unit-Tests";
+const string AssemblyInfoTask = "Parse-And-Update-AssemblyInfo";
+const string PackTask = "Pack-Application";
+const string InstallerCreationTask = "Create-Installer";
+const string InstallerRenameTask = "Rename-Installer";
+const string InstallerCompressionTask = "Compress-Installer";
+const string BuildServerTask  ="Update-BuildServerEnvironment";
+
 const string SolutionPath ="..\\Maple.sln";
+const string AssemblyInfoPath ="..\\src\\Resources\\SharedAssemblyInfo.cs";
 const string Platform = "anyCPU";
 const string Configuration = "Release";
 const string PackagePath = ".\\Package";
 const string InstallerPath = ".\\Releases";
 const string ArchivePath = ".\\Archive";
+const string TestResultsPath = ".\\TestResults";
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -36,15 +53,15 @@ var assemblyInfoParseResult = default(AssemblyInfoParseResult);
 // TASKS
 //////////////////////////////////////////////////////////////////////
 
-Task("VSWhereAll")
+Task(VsWhereTask)
     .Does(()=>
     {
         foreach(var item in VSWhereAll())
             Information(item.FullPath);
     });
 
-Task("Gather-BuildRequirements")
-    .IsDependentOn("VSWhereAll")
+Task(GatherBuildRequirementTask)
+    .IsDependentOn(VsWhereTask)
     .Does(() =>
     {
         var tools = new List<string>()
@@ -99,10 +116,16 @@ Task("Gather-BuildRequirements")
 
         if(foundMSBuild && foundVSTest)
             Information("Required tools have been found.");
+
+        if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        {
+            var appveyorRepoTag = EnvironmentVariable("APPVEYOR_REPO_TAG") ;
+            Information($"APPVEYOR_REPO_TAG: {appveyorRepoTag}");
+        }
     });
 
-Task("Clean-Solution")
-    .IsDependentOn("Gather-BuildRequirements")
+Task(CleanSolutionTask)
+    .IsDependentOn(GatherBuildRequirementTask)
     .Does(() =>
     {
         var solution = ParseSolution(SolutionPath);
@@ -130,7 +153,7 @@ Task("Clean-Solution")
         }
     });
 
-Task("Clean-Folders")
+Task(CleanFoldersTask)
     .Does(() =>
     {
         var folders = new[]
@@ -138,6 +161,7 @@ Task("Clean-Folders")
             new DirectoryPath(PackagePath),
             new DirectoryPath(InstallerPath),
             new DirectoryPath(ArchivePath),
+            new DirectoryPath(TestResultsPath),
         };
 
         foreach(var folder in folders)
@@ -147,9 +171,9 @@ Task("Clean-Folders")
         }
     });
 
-Task("Restore-NuGet-Packages")
-    .IsDependentOn("Clean-Solution")
-    .IsDependentOn("Clean-Folders")
+Task(RestoreNugetTask)
+    .IsDependentOn(CleanSolutionTask)
+    .IsDependentOn(CleanFoldersTask)
     .Does(() =>
     {
         var settings = new NuGetRestoreSettings()
@@ -159,11 +183,63 @@ Task("Restore-NuGet-Packages")
             NoCache = true,
         };
 
+        if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+            settings.NoCache = false;
+
         NuGetRestore(SolutionPath, settings);
     });
 
-Task("Build")
-    .IsDependentOn("Restore-NuGet-Packages")
+Task(AssemblyInfoTask)
+    .Does(() =>
+    {
+        assemblyInfoParseResult = ParseAssemblyInfo(AssemblyInfoPath);
+
+        var settings = new AssemblyInfoSettings()
+        {
+            Version                 = assemblyInfoParseResult.AssemblyVersion,
+            FileVersion             = assemblyInfoParseResult.AssemblyFileVersion,
+            InformationalVersion    = assemblyInfoParseResult.AssemblyInformationalVersion,
+
+            Product                 = assemblyInfoParseResult.Product,
+            Company                 = assemblyInfoParseResult.Company,
+            Trademark               = assemblyInfoParseResult.Trademark,
+            Copyright               = string.Format("© {0} Insire", DateTime.Now.Year),
+
+            ComVisible              = assemblyInfoParseResult.ComVisible,
+            InternalsVisibleTo      = assemblyInfoParseResult.InternalsVisibleTo,
+
+            // invalid entries:
+            // Configuration           = assemblyInfoParseResult.Configuration,
+            // Description             = assemblyInfoParseResult.Description,
+            // Guid                    = assemblyInfoParseResult.Guid,
+            // Title                   = assemblyInfoParseResult.Title,
+
+            // posssible missing entries
+            // CustomAttributes     = assemblyInfoParseResult.CustomAttributes,
+            // CLSCompliant         = assemblyInfoParseResult.CLSCompliant,
+        };
+
+        if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+        {
+            var version = EnvironmentVariable("APPVEYOR_BUILD_VERSION") ?? "no version found from AppVeyorEnvironment";
+
+            Information($"Version: {version}");
+
+            settings.Version                 = version;
+            settings.FileVersion             = version;
+            settings.InformationalVersion    = version;
+        }
+
+        CreateAssemblyInfo(new FilePath(AssemblyInfoPath), settings);
+
+        assemblyInfoParseResult = ParseAssemblyInfo(AssemblyInfoPath);
+
+        Information(assemblyInfoParseResult.Dump());
+    });
+
+Task(BuildTask)
+    .IsDependentOn(RestoreNugetTask)
+    .IsDependentOn(AssemblyInfoTask)
     .Does(() =>
     {
         var msBuildPath = Context.Tools.Resolve("msbuild.exe");
@@ -183,8 +259,8 @@ Task("Build")
         MSBuild(SolutionPath, settings);
     });
 
- Task("Run-Unit-Tests")
-    .IsDependentOn("Build")
+Task(UnitTestTask)
+    .IsDependentOn(BuildTask)
     .Does(() =>
     {
         // http://cakebuild.net/blog/2017/03/vswhere-and-visual-studio-2017-support
@@ -197,8 +273,7 @@ Task("Build")
             InIsolation = true,
         };
 
-        // if(BuildSystem.AppVeyor.IsRunningOnAppVeyor)
-            settings.Logger = "trx";
+        settings.Logger = "trx";
 
         if(vsTest != null)
             settings.ToolPath = Context.Tools.Resolve("vstest.console.exe");
@@ -218,19 +293,12 @@ Task("Build")
         VSTest(testAssemblies, settings);
     });
 
-Task("Parse-AssemblyInfo")
-    .Does(() =>
-    {
-        assemblyInfoParseResult = ParseAssemblyInfo("..\\src\\Resources\\SharedAssemblyInfo.cs");
-    });
-
-Task("Pack-Application")
+Task(PackTask)
     .WithCriteria(()=> assemblyInfoParseResult != null)
-    .IsDependentOn("Parse-AssemblyInfo")
-    .IsDependentOn("Run-Unit-Tests")
+    .IsDependentOn(AssemblyInfoTask)
+    .IsDependentOn(UnitTestTask)
     .Does(()=>
     {
-        Information(new FilePath("..\\src\\Resources\\Images\\logo.ico").MakeAbsolute(Context.Environment));
         var settings = new NuGetPackSettings()
         {
             Id                          = "Maple",
@@ -263,12 +331,12 @@ Task("Pack-Application")
         NuGetPack(settings);
     });
 
-Task("Create-Installer")
+Task(InstallerCreationTask)
     .WithCriteria(()=> assemblyInfoParseResult != null)
-    .IsDependentOn("Pack-Application")
-	.Does(() =>
+    .IsDependentOn(PackTask)
+    .Does(() =>
     {
-		var settings = new SquirrelSettings()
+        var settings = new SquirrelSettings()
         {
             NoMsi = true,
             Silent = true,
@@ -281,24 +349,28 @@ Task("Create-Installer")
         // nupkg file cant be in the Releases folder
         var nupkg = new DirectoryPath(PackagePath).CombineWithFilePath(new FilePath($".\\Maple.{assemblyInfoParseResult.AssemblyVersion}.nupkg"));
 
-		 Squirrel(nupkg, settings);
-	});
+         Squirrel(nupkg, settings);
 
-Task("Rename-Installer")
+        Information($"Files found in {InstallerPath}:");
+        foreach(var file in GetFiles("./**/"+InstallerPath+"/*"))
+            Information(file.FullPath);
+    });
+
+Task(InstallerRenameTask)
     .WithCriteria(()=> assemblyInfoParseResult != null)
-    .IsDependentOn("Create-Installer")
+    .IsDependentOn(InstallerCreationTask)
     .Does(()=>
     {
         var root = new DirectoryPath(InstallerPath);
         var source = root.CombineWithFilePath(new FilePath("Setup.exe"));
         var target = root.CombineWithFilePath(new FilePath($".\\MapleSetup-v{assemblyInfoParseResult.AssemblyVersion}.exe"));
 
-        MoveFile(source, target);
+        CopyFile(source, target);
     });
 
-Task("Compress-Installer") // this task might be obsolete for squirrel - might break the auto updater?
+Task(InstallerCompressionTask) // this task might be obsolete for squirrel - might break the auto updater?
     .WithCriteria(()=> assemblyInfoParseResult != null)
-    .IsDependentOn("Rename-Installer")
+    .IsDependentOn(InstallerRenameTask)
     .Does(()=>
     {
         var installer = new DirectoryPath(InstallerPath);
@@ -308,14 +380,11 @@ Task("Compress-Installer") // this task might be obsolete for squirrel - might b
         ZipCompress(installer, archive.CombineWithFilePath(new FilePath(".\\MapleSetup.zip")), new[]{source});
     });
 
-Task("Update-BuildServerEnvironment")
+Task(BuildServerTask)
     .WithCriteria(()=> BuildSystem.AppVeyor.IsRunningOnAppVeyor)
-    .IsDependentOn("Parse-AssemblyInfo")
+    .IsDependentOn(AssemblyInfoTask)
     .Does(()=>
     {
-        // TODO not really sure how to increment the build number
-        // BuildSystem.AppVeyor.UpdateBuildVersion(assemblyInfoParseResult.AssemblyVersion);
-
         var settings = new FileSetSettings()
         {
             BasePath=".\\TestResults",
@@ -327,7 +396,7 @@ Task("Update-BuildServerEnvironment")
 
         foreach(var file in files)
         {
-            Information($"Testffile {file.FullPath} found and uploading....");
+            Information($"Testfile {file.FullPath} found and uploading....");
             BuildSystem.AppVeyor.UploadTestResults(file, AppVeyorTestResultsType.MSTest);
         }
     });
@@ -337,8 +406,8 @@ Task("Update-BuildServerEnvironment")
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("Compress-Installer")
-    .IsDependentOn("Update-BuildServerEnvironment");
+    .IsDependentOn(InstallerCompressionTask)
+    .IsDependentOn(BuildServerTask);
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION

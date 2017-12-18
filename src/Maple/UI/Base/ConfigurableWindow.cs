@@ -102,15 +102,15 @@ namespace Maple
             SetCurrentValue(WidthProperty, size.Width);
             SetCurrentValue(HeightProperty, size.Height);
 
-            var loccation = _settings.WindowLocation;
+            var location = _settings.WindowLocation;
 
             // If the user's machine had two monitors but now only
             // has one, and the Window was previously on the other
             // monitor, we need to move the Window into view.
-            var outOfBounds = loccation.X <= -size.Width
-                            || loccation.Y <= -size.Height
-                            || SystemParameters.VirtualScreenWidth <= loccation.X
-                            || SystemParameters.VirtualScreenHeight <= loccation.Y;
+            var outOfBounds = location.X <= -size.Width
+                            || location.Y <= -size.Height
+                            || SystemParameters.VirtualScreenWidth <= location.X
+                            || SystemParameters.VirtualScreenHeight <= location.Y;
 
             if (_settings.IsFirstRun || outOfBounds)
                 WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -118,8 +118,8 @@ namespace Maple
             {
                 WindowStartupLocation = WindowStartupLocation.Manual;
 
-                SetCurrentValue(LeftProperty, loccation.X);
-                SetCurrentValue(TopProperty, loccation.Y);
+                SetCurrentValue(LeftProperty, location.X);
+                SetCurrentValue(TopProperty, location.Y);
 
                 // We need to wait until the HWND window is initialized before
                 // setting the state, to ensure that this works correctly on

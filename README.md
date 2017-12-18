@@ -13,7 +13,7 @@ After a long hiatus, I'm continuing my rewrite and try to improve on my previous
 
 ## Compile Requirements:
  - Visual Studio 2017 Community Edition or better
- - .NET Framework 4.7, C# 7
+ - .NET Framework 4.7.1, C# 7
  - Windows 10 (lower versions may run down till Windows 7)
 
 ## Features
@@ -37,6 +37,7 @@ After a long hiatus, I'm continuing my rewrite and try to improve on my previous
 - [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json) - JSON framework
 - [DryIoc](https://bitbucket.org/dadhi/dryioc) - IoC container
 - [Fluent Validation](https://github.com/JeremySkinner/FluentValidation) - Validation
+- [Squirrel](https://github.com/Squirrel/Squirrel.Windows) - Windows installer and updater
 
 ## Useful Patterns, Concepts you may find here aswell
 - Repository pattern
@@ -81,3 +82,4 @@ SOFTWARE.
 ## Credits
 - Application Icon - by vngnc aka [Keno Böhme](http://www.kenoboeh.me/)
 - General Feedback - [C# Discord Server](https://discord.gg/VCFhEDy)
+- Test MP3 files - [Art Of Escapsim](http://freemusicarchive.org/music/Artofescapism/)

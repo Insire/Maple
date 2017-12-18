@@ -43,6 +43,13 @@ namespace Maple
             private set { SetValue(ref _privacyStatus, value, OnChanged: () => Model.PrivacyStatus = (int)value); }
         }
 
+        private MediaItemType _mediaItemType;
+        public MediaItemType MediaItemType
+        {
+            get { return _mediaItemType; }
+            set { SetValue(ref _mediaItemType, value, OnChanged: () => Model.MediaItemType = (int)value); }
+        }
+
         private string _title;
         public string Title
         {
@@ -127,6 +134,7 @@ namespace Maple
             _sequence = model.Sequence;
             _duration = TimeSpan.FromTicks(model.Duration);
             _privacyStatus = (PrivacyStatus)model.PrivacyStatus;
+            _mediaItemType = (MediaItemType)model.MediaItemType;
             _createdBy = model.CreatedBy;
             _createdOn = model.CreatedOn;
             _updatedBy = model.UpdatedBy;

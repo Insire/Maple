@@ -223,10 +223,13 @@ namespace Maple
         private void Player_PlayingMediaItem(PlayingMediaItemMessage e)
         {
             // TODO: sync state to other viewmodels
+            OnPropertyChanged(nameof(IsPlaying));
         }
 
         private void MediaPlayer_CompletedMediaItem(CompletedMediaItemMessage e)
         {
+            OnPropertyChanged(nameof(IsPlaying));
+
             Next();
         }
 
@@ -328,7 +331,7 @@ namespace Maple
             using (BusyStack.GetToken())
             {
                 var item = Playlist.Previous();
-                Player.Play(item);
+                Play(item);
             }
         }
 
@@ -340,7 +343,7 @@ namespace Maple
             using (BusyStack.GetToken())
             {
                 var item = Playlist.Next();
-                Player.Play(item);
+                Play(item);
             }
         }
 
