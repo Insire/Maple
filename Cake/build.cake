@@ -212,7 +212,7 @@ Task(AssemblyInfoTask)
 
         if (BuildSystem.AppVeyor.IsRunningOnAppVeyor)
         {
-            var version = EnvironmentVariable("APPVEYOR_BUILD_VERSION ") ?? "no version found from AppVeyorEnvironment";
+            var version = EnvironmentVariable("APPVEYOR_BUILD_VERSION") ?? "no version found from AppVeyorEnvironment";
 
             Information($"Version: {version}");
 
