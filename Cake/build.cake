@@ -216,9 +216,9 @@ Task(AssemblyInfoTask)
 
             Information($"Version: {version}");
 
-            settings.Version                 = EnvironmentVariable("APPVEYOR_BUILD_VERSION ") ?? assemblyInfoParseResult.AssemblyVersion;
-            settings.FileVersion             = EnvironmentVariable("APPVEYOR_BUILD_VERSION ") ?? assemblyInfoParseResult.AssemblyFileVersion;
-            settings.InformationalVersion    = EnvironmentVariable("APPVEYOR_BUILD_VERSION ") ?? assemblyInfoParseResult.AssemblyInformationalVersion;
+            settings.Version                 = EnvironmentVariable(version) ?? assemblyInfoParseResult.AssemblyVersion;
+            settings.FileVersion             = EnvironmentVariable(version) ?? assemblyInfoParseResult.AssemblyFileVersion;
+            settings.InformationalVersion    = EnvironmentVariable(version) ?? assemblyInfoParseResult.AssemblyInformationalVersion;
         }
 
         CreateAssemblyInfo(new FilePath(AssemblyInfoPath), settings);
