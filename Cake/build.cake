@@ -288,7 +288,6 @@ Task(PackTask)
     .IsDependentOn(UnitTestTask)
     .Does(()=>
     {
-        Information(new FilePath("..\\src\\Resources\\Images\\logo.ico").MakeAbsolute(Context.Environment));
         var settings = new NuGetPackSettings()
         {
             Id                          = "Maple",
@@ -319,10 +318,6 @@ Task(PackTask)
         };
 
         NuGetPack(settings);
-
-        Information($"Files found in {PackagePath}:");
-        foreach(var file in GetFiles(PackagePath))
-            Information(file.FullPath);
     });
 
 Task(InstallerCreationTask)
@@ -344,6 +339,10 @@ Task(InstallerCreationTask)
         var nupkg = new DirectoryPath(PackagePath).CombineWithFilePath(new FilePath($".\\Maple.{assemblyInfoParseResult.AssemblyVersion}.nupkg"));
 
          Squirrel(nupkg, settings);
+
+        Information($"Files found in {InstallerPath}:");
+        foreach(var file in GetFiles("./**/"+InstallerPath+"/*"))
+            Information(file.FullPath);
     });
 
 Task(InstallerRenameTask)
