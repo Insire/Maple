@@ -50,6 +50,7 @@
     </Compile>
     <Compile Include="DiagnosticReportTests.cs" />
     <Compile Include="StringBuilderCacheTests.cs" />
+    <Compile Include="TestUtils\ContainerContextExtensions.cs" />
     <Compile Include="TypeExtension\CheckingATypeForDefaultConstructorTests.cs" />
     <Compile Include="TypeExtension\CheckingATypeImplementsTests.cs" />
     <Compile Include="TypeExtension\CheckingATypeIsSimpleTests.cs" />
@@ -73,6 +74,9 @@
     <Compile Include="TypeExtension\GettingPropertiesTests.cs" />
     <Compile Include="MapleMessengerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestUtils\MediaItemModelContextModelExtensions.cs" />
+    <Compile Include="TestUtils\PlaylistModelContextExtensions.cs" />
+    <Compile Include="ViewModels\Playlists\PlaylistsTests.cs" />
     <Compile Include="ViewModels\Playlists\PlaylistTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -332,12 +332,15 @@ namespace Maple
             using (BusyStack.GetToken())
             {
                 var added = false;
-                var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
+                var sequence = 0;
                 var collection = items.ToList();
                 var item = default(MediaItem);
 
                 for (var i = 0; i < collection.Count; i++)
                 {
+                    if (i == 0)
+                        sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
+
                     item = collection[i];
 
                     if (item == null)

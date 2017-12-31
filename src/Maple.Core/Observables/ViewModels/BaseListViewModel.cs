@@ -21,6 +21,9 @@ namespace Maple.Core
     {
         protected readonly object _itemsLock;
 
+        /// <summary>
+        /// Indicates whether the LoadCommand/ the Load Method has been executed yet
+        /// </summary>
         public bool IsLoaded { get; protected set; }
 
         private TViewModel _selectedItem;
