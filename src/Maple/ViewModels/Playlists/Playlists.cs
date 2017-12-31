@@ -32,8 +32,7 @@ namespace Maple
 
         public void Add()
         {
-            var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
-            Add(_playlistMapper.GetNewPlaylist(sequence));
+            Add(_playlistMapper.GetNewPlaylist());
         }
 
         public bool CanAdd()

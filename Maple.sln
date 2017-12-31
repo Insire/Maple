@@ -28,7 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cake", "Cake", "{E463B2A9-3
 	ProjectSection(SolutionItems) = preProject
 		Cake\build.cake = Cake\build.cake
 		Cake\build.ps1 = Cake\build.ps1
-		Cake\cake.config = Cake\cake.config
+		Cake\tools\packages.config = Cake\tools\packages.config
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Domain", "src\Maple.Domain\Maple.Domain.csproj", "{9D7D05A6-8271-4836-A7BB-5B2ABECCBD81}"

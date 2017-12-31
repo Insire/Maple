@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using DryIoc;
 using Maple.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
@@ -44,10 +47,11 @@ namespace Maple.Test.ViewModels
         public async Task Playlists_ShouldAdd()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
-            var sequenceProvider = ContainerContextExtensions.CreateISequenceService();
-
+            var sequenceProvider = ContainerContextExtensions.CreateSequenceService();
+            sequenceProvider.Get(default(List<ISequence>)).ReturnsForAnyArgs(5);
             container.UseInstance(sequenceProvider);
-            var playlists = container.CreatePlaylists();
+
+            var playlists = (Playlists)container.Resolve<IPlaylistsViewModel>();
 
             Assert.AreEqual(0, playlists.Count);
             sequenceProvider.ClearReceivedCalls();
@@ -55,35 +59,72 @@ namespace Maple.Test.ViewModels
             playlists.Add();
 
             sequenceProvider.Received(1).Get(NSubstitute.Arg.Any<IList<ISequence>>());
+
             Assert.AreEqual(1, playlists.Count);
+            Assert.AreEqual(5, playlists.Items.First().Sequence);
         }
 
         [TestMethod]
         public async Task Playlists_ShouldAddWithExplicitValue()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            var sequenceProvider = ContainerContextExtensions.CreateSequenceService();
+            sequenceProvider.Get(default(List<ISequence>)).ReturnsForAnyArgs(5);
+            container.UseInstance(sequenceProvider);
+
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
-            var playlists = container.CreatePlaylists();
+            var playlists = (Playlists)container.Resolve<IPlaylistsViewModel>();
+
+            Assert.AreEqual(0, playlists.Count);
+            sequenceProvider.ClearReceivedCalls();
 
             playlists.Add(playlist);
 
-            Assert.Fail();
+            sequenceProvider.Received(1).Get(NSubstitute.Arg.Any<IList<ISequence>>());
+
+            Assert.AreEqual(1, playlists.Count);
+            Assert.AreEqual(playlist, playlists.Items.First());
+            Assert.AreEqual(5, playlist.Sequence);
         }
 
         [TestMethod]
         public async Task Playlists_ShouldSave()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            var repository = ContainerContextExtensions.CreateRepository();
 
-            Assert.Fail();
+            container.UseInstance(repository);
+
+            var playlists = container.Resolve<IPlaylistsViewModel>();
+            repository.ClearReceivedCalls();
+
+            playlists.Save();
+
+            repository.Received(1).Save(NSubstitute.Arg.Any<Playlists>());
+            repository.Received(1).Dispose();
         }
 
         [TestMethod]
         public async Task Playlists_ShouldLoad()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            var dummyPlaylists = new List<Playlist>
+            {
+                container.CreatePlaylist(_context.CreateModelPlaylist()),
+            };
+            var repository = ContainerContextExtensions.CreateRepository();
+            repository.GetPlaylistsAsync().ReturnsForAnyArgs(dummyPlaylists);
+            container.UseInstance(repository);
 
-            Assert.Fail();
+            var playlists = (Playlists)container.Resolve<IPlaylistsViewModel>();
+            repository.ClearReceivedCalls();
+
+            await playlists.LoadAsync().ConfigureAwait(false);
+            await repository.Received(1).GetPlaylistsAsync().ConfigureAwait(false);
+            repository.Received(1).Dispose();
+
+            Assert.AreEqual(dummyPlaylists[0], playlists.SelectedItem);
+            Assert.AreEqual(1, playlists.Count);
         }
     }
 }

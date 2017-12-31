@@ -4,6 +4,6 @@ namespace Maple
 {
     public interface IPlaylistMapper : IBaseMapper<Playlist, PlaylistModel>
     {
-        Playlist GetNewPlaylist(int sequence);
+        Playlist GetNewPlaylist();
     }
 }

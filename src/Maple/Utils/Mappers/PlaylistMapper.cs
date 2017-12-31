@@ -39,7 +39,7 @@ namespace Maple
             Mapper = config.CreateMapper();
         }
 
-        public Playlist GetNewPlaylist(int sequence)
+        public Playlist GetNewPlaylist()
         {
             return new Playlist(_container, _validator, _dialogViewModel, _mediaItemMapper, new PlaylistModel
             {
@@ -48,7 +48,7 @@ namespace Maple
                 Location = string.Empty,
                 RepeatMode = 0,
                 IsShuffeling = false,
-                Sequence = sequence,
+                Sequence = 0,
             });
         }
 
