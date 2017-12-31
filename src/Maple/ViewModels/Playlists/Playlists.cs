@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
@@ -12,8 +11,6 @@ namespace Maple
     {
         private readonly Func<IMediaRepository> _repositoryFactory;
         private readonly IPlaylistMapper _playlistMapper;
-
-        public ICommand PlayCommand { get; private set; }
 
         public Playlists(ViewModelServiceContainer container, IPlaylistMapper playlistMapper, Func<IMediaRepository> repositoryFactory)
             : base(container)
