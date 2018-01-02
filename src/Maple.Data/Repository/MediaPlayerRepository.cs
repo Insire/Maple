@@ -1,53 +1,34 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
 using System.Threading.Tasks;
 using Maple.Domain;
 
 namespace Maple.Data
 {
-    public class MediaPlayerRepository : MaplePlaylistRepository<MediaPlayerModel>, IMediaPlayerRepository
+    public class MediaPlayerRepository : IMediaPlayerRepository
     {
-        public Task<MediaPlayerModel> GetMainMediaPlayerAsync()
+        public Task<IReadOnlyCollection<MediaPlayerModel>> GetAsync()
         {
-            return Task.Run(() =>
-             {
-                 using (var context = new PlaylistContext())
-                     return GetMainMediaPlayerInternal(context);
-             });
+            throw new System.NotImplementedException();
         }
 
-        private MediaPlayerModel GetMainMediaPlayerInternal(PlaylistContext context)
+        public Task<MediaPlayerModel> GetByIdAsync(int Id)
         {
-            return GetEntities(context).Include(p => p.Playlist)
-                                        .Include(p => p.Playlist.MediaItems)
-                                        .FirstOrDefault(p => p.IsPrimary);
+            throw new System.NotImplementedException();
+        }
+
+        public Task<MediaPlayerModel> GetMainMediaPlayerAsync()
+        {
+            throw new System.NotImplementedException();
         }
 
         public Task<IReadOnlyCollection<MediaPlayerModel>> GetOptionalMediaPlayersAsync()
         {
-            return Task.Run(() =>
-            {
-                using (var context = new PlaylistContext())
-                    return GetOptionalMediaPlayersInternal(context);
-            });
+            throw new System.NotImplementedException();
         }
 
-        private IReadOnlyCollection<MediaPlayerModel> GetOptionalMediaPlayersInternal(PlaylistContext context)
+        public void Save(MediaPlayerModel item)
         {
-            return GetEntities(context).Include(p => p.Playlist)
-                                            .Where(p => !p.IsPrimary)
-                                            .ToList();
-        }
-
-        protected override IReadOnlyCollection<MediaPlayerModel> GetInternalAsync(PlaylistContext context)
-        {
-            return GetEntities(context).Include(p => p.Playlist).ToList();
-        }
-
-        protected override DbSet<MediaPlayerModel> GetEntities(PlaylistContext context)
-        {
-            return context.Mediaplayers;
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -1,20 +1,24 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
+using System.Threading.Tasks;
 using Maple.Domain;
 
 namespace Maple.Data
 {
-    public class PlaylistRepository : MaplePlaylistRepository<PlaylistModel>, IPlaylistRepository
+    public class PlaylistRepository : IPlaylistRepository
     {
-        protected override DbSet<PlaylistModel> GetEntities(PlaylistContext context)
+        public Task<IReadOnlyCollection<PlaylistModel>> GetAsync()
         {
-            return context.Playlists;
+            throw new System.NotImplementedException();
         }
 
-        protected override IReadOnlyCollection<PlaylistModel> GetInternalAsync(PlaylistContext context)
+        public Task<PlaylistModel> GetByIdAsync(int Id)
         {
-            return GetEntities(context).Include(p => p.MediaItems).ToList();
+            throw new System.NotImplementedException();
+        }
+
+        public void Save(PlaylistModel item)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

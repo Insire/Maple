@@ -9,7 +9,7 @@ namespace Maple
     ///
     /// </summary>
     /// <seealso cref="MahApps.Metro.IconPacks.PackIcon{Maple.PackIconKind}" />
-    public class PackIcon : PackIcon<PackIconKind>
+    public class PackIcon : PackIconControl<PackIconKind>
     {
         private static IDictionary<PackIconKind, string> _cache;
         /// <summary>
