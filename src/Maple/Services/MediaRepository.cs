@@ -54,7 +54,7 @@ namespace Maple
         public void Save(MediaItem viewModel)
         {
             using (_busyStack.GetToken())
-                _mediaItemRepository.Save(viewModel.Model);
+                _mediaItemRepository.SaveAsync(viewModel.Model);
         }
 
         public void Save(MediaItems viewModel)
@@ -103,7 +103,7 @@ namespace Maple
                 return;
 
             using (_busyStack.GetToken())
-                _playlistRepository.Save(viewModel.Model);
+                _playlistRepository.SaveAsync(viewModel.Model);
         }
 
         public void Save(Playlists viewModel)
@@ -139,7 +139,7 @@ namespace Maple
         public void Save(MediaPlayer viewModel)
         {
             using (_busyStack.GetToken())
-                _mediaPlayerRepository.Save(viewModel.Model);
+                _mediaPlayerRepository.SaveAsync(viewModel.Model);
         }
 
         public void Save(MediaPlayers viewModel)

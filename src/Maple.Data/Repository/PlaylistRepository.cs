@@ -1,20 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using Maple.Domain;
+﻿using Maple.Domain;
 
 namespace Maple.Data
 {
-    public class PlaylistRepository : MaplePlaylistRepository<PlaylistModel>, IPlaylistRepository
+    public class PlaylistRepository : BaseRepository<PlaylistModel>, IPlaylistRepository
     {
-        protected override DbSet<PlaylistModel> GetEntities(PlaylistContext context)
+        public PlaylistRepository(IConnectionStringManager connectionStringManager)
+            : base(connectionStringManager)
         {
-            return context.Playlists;
-        }
-
-        protected override IReadOnlyCollection<PlaylistModel> GetInternalAsync(PlaylistContext context)
-        {
-            return GetEntities(context).Include(p => p.MediaItems).ToList();
         }
     }
 }

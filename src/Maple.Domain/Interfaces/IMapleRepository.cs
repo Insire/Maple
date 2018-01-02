@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 namespace Maple.Domain
 {
     public interface IMapleRepository<T>
-        where T : class, IBaseObject
+        where T : class
     {
         Task<IReadOnlyCollection<T>> GetAsync();
-        Task<T> GetByIdAsync(int Id);
-        void Save(T item);
+        Task<T> GetByIdAsync(int id);
+        Task SaveAsync(T item);
     }
 }

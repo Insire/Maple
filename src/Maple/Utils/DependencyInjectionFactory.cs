@@ -71,8 +71,8 @@ namespace Maple
                 c.Register<IMediaRepository, MediaRepository>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
 
                 c.Register<ViewModelServiceContainer>(Reuse.Singleton);
-                c.Register<PlaylistContext>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
 
+                c.Register<IConnectionStringManager, ConnectionStringManager>(Reuse.Singleton);
                 c.Register<IPlaylistRepository, PlaylistRepository>(Reuse.Singleton);
                 c.Register<IMediaItemRepository, MediaItemRepository>(Reuse.Singleton);
                 c.Register<IMediaPlayerRepository, MediaPlayerRepository>(Reuse.Singleton);
