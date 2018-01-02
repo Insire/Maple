@@ -9,38 +9,38 @@ namespace Maple.Data
 {
     internal static class DBGenericActions
     {
-        public static async Task UpdateEntity<T>(T entity)
+        public static async Task UpdateEntity<T>(string connectionString, T entity)
             where T : class
         {
-            using (var db = new DataContext(""))
+            using (var db = new DataContext(connectionString))
                 await db.UpdateAsync(entity).ConfigureAwait(false);
         }
 
-        public static async Task<object> InsertEntity<T>(T entity)
+        public static async Task<object> InsertEntity<T>(string connectionString, T entity)
             where T : class
         {
-            using (var db = new DataContext(""))
+            using (var db = new DataContext(connectionString))
                 return await db.InsertWithIdentityAsync(entity).ConfigureAwait(false);
         }
 
-        public static async Task<object> InsertOrUpdateEntity<T>(T entity)
+        public static async Task<object> InsertOrUpdateEntity<T>(string connectionString, T entity)
             where T : class
         {
-            using (var db = new DataContext(""))
+            using (var db = new DataContext(connectionString))
                 return await db.InsertOrReplaceAsync(entity).ConfigureAwait(false);
         }
 
-        public static async Task DeleteEntity<T>(T entity)
+        public static async Task DeleteEntity<T>(string connectionString, T entity)
             where T : class
         {
-            using (var db = new DataContext(""))
+            using (var db = new DataContext(connectionString))
                 await db.DeleteAsync(entity).ConfigureAwait(false);
         }
 
-        public static async Task<List<T>> GetAllFromEntity<T>()
+        public static async Task<List<T>> GetAllFromEntity<T>(string connectionString)
             where T : class
         {
-            using (var db = new DataContext(""))
+            using (var db = new DataContext(connectionString))
                 return await db.GetTable<T>().ToListAsync().ConfigureAwait(false);
         }
 
@@ -59,10 +59,10 @@ namespace Maple.Data
         /// <typeparam name="T">linqToDb Table mapped</typeparam>
         /// <param name="pk"> Have to be of the same type of primary key atribute of T table mapped</param>
         /// <returns>T linqToDb mapped class</returns>
-        public static async Task<T> GetEntityByPK<T>(object pk)
+        public static async Task<T> GetEntityByPK<T>(string connectionString, object pk)
             where T : class
         {
-            using (var db = new DataContext(""))
+            using (var db = new DataContext(connectionString))
             {
                 var pkName = typeof(T).GetProperties().Where(prop => prop.GetCustomAttributes(typeof(LinqToDB.Mapping.PrimaryKeyAttribute), false).Count() > 0).First();
                 var expression = SimpleComparison<T>(pkName.Name, pk);
@@ -79,15 +79,15 @@ namespace Maple.Data
         /// <param name="propertyName">Name of property</param>
         /// <param name="valueToFilter">Value to filter query</param>
         /// <returns>List of T</returns>
-        public static async Task<ICollection<T>> GetAllEntititiesByPropertyValue<T, D>(string propertyName, D valueToFilter)
+        public static async Task<ICollection<T>> GetAllEntititiesByPropertyValue<T, D>(string connectionString, string propertyName, D valueToFilter)
             where T : class
         {
             if (string.IsNullOrWhiteSpace(propertyName))
-                return await GetAllFromEntity<T>().ConfigureAwait(false);
+                return await GetAllFromEntity<T>(connectionString).ConfigureAwait(false);
 
             var expression = SimpleComparison<T, D>(propertyName, valueToFilter);
 
-            using (var db = new DataContext(""))
+            using (var db = new DataContext(connectionString))
             {
                 var data = await db.GetTable<T>().Where<T>(expression).ToListAsync().ConfigureAwait(false);
                 return data;

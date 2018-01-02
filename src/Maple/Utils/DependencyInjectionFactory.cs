@@ -72,6 +72,7 @@ namespace Maple
 
                 c.Register<ViewModelServiceContainer>(Reuse.Singleton);
 
+                c.Register<IConnectionStringManager, ConnectionStringManager>(Reuse.Singleton);
                 c.Register<IPlaylistRepository, PlaylistRepository>(Reuse.Singleton);
                 c.Register<IMediaItemRepository, MediaItemRepository>(Reuse.Singleton);
                 c.Register<IMediaPlayerRepository, MediaPlayerRepository>(Reuse.Singleton);
