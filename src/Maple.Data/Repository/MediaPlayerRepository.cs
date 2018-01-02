@@ -4,29 +4,14 @@ using Maple.Domain;
 
 namespace Maple.Data
 {
-    public class MediaPlayerRepository : IMediaPlayerRepository
+    public class MediaPlayerRepository : BaseRepository<MediaPlayerModel>, IMediaPlayerRepository
     {
-        public Task<IReadOnlyCollection<MediaPlayerModel>> GetAsync()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<MediaPlayerModel> GetByIdAsync(int Id)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public Task<MediaPlayerModel> GetMainMediaPlayerAsync()
         {
             throw new System.NotImplementedException();
         }
 
         public Task<IReadOnlyCollection<MediaPlayerModel>> GetOptionalMediaPlayersAsync()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Save(MediaPlayerModel item)
         {
             throw new System.NotImplementedException();
         }
