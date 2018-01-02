@@ -320,8 +320,8 @@ Task(PackTask)
             {
                 new NuSpecContent{ Source="*",Target="lib\\net471", Exclude="*.pdb"},
                 new NuSpecContent{ Source=".\\Resources\\",Target="lib\\net471\\Resources\\", Exclude="*.pdb"},
-                new NuSpecContent{ Source=".\\x64\\*",Target="lib\\net471\\x64\\", Exclude="*.pdb"},
-                new NuSpecContent{ Source=".\\x86\\*",Target="lib\\net471\\x86\\", Exclude="*.pdb"},
+                // new NuSpecContent{ Source=".\\x64\\*",Target="lib\\net471\\x64\\", Exclude="*.pdb"},
+                // new NuSpecContent{ Source=".\\x86\\*",Target="lib\\net471\\x86\\", Exclude="*.pdb"},
             },
             BasePath                    = new DirectoryPath("..\\src\\Maple\\bin\\Release\\"),
             OutputDirectory             = new DirectoryPath(PackagePath),
