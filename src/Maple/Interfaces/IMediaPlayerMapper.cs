@@ -2,7 +2,7 @@
 
 namespace Maple
 {
-    public interface IMediaPlayerMapper : IBaseMapper<MediaPlayer, MediaPlayerModel>
+    public interface IMediaPlayerMapper : IBaseMapper<MediaPlayer, MediaPlayerModel, int>
     {
         MainMediaPlayer GetMain(MediaPlayerModel player, Playlist playlist);
 

@@ -8,8 +8,6 @@ namespace Maple.Data
         public DbSet<PlaylistModel> Playlists { get; set; }
         public DbSet<MediaItemModel> MediaItems { get; set; }
         public DbSet<MediaPlayerModel> Mediaplayers { get; set; }
-        public DbSet<OptionModel> Options { get; set; }
-        public DbSet<RawModel> Data { get; set; }
 
         public PlaylistContext()
             : base("Main")

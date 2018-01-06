@@ -3,11 +3,15 @@ using System.Threading.Tasks;
 
 namespace Maple.Domain
 {
-    public interface IMapleRepository<T>
-        where T : class, IBaseObject
+    public interface IMapleRepository<TModel, TKeyDataType>
+        where TModel : class, IBaseObject<TKeyDataType>
     {
-        Task<IReadOnlyCollection<T>> GetAsync();
-        Task<T> GetByIdAsync(int Id);
-        void Save(T item);
+        Task<List<TModel>> GetAsync();
+        Task<TModel> GetByIdAsync(TKeyDataType Id);
+
+        Task<List<TKeyDataType>> GetKeysAsync();
+        Task<int> GetEntryCountAsync();
+
+        Task Save(TModel item);
     }
 }

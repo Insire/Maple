@@ -4,7 +4,7 @@ using Maple.Domain;
 
 namespace Maple.Data
 {
-    public interface IMediaPlayerRepository : IMapleRepository<MediaPlayerModel>
+    public interface IMediaPlayerRepository : IMapleRepository<MediaPlayerModel, int>
     {
         Task<MediaPlayerModel> GetMainMediaPlayerAsync();
         Task<IReadOnlyCollection<MediaPlayerModel>> GetOptionalMediaPlayersAsync();

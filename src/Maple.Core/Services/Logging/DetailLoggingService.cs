@@ -5,7 +5,7 @@ using Maple.Localization.Properties;
 namespace Maple.Core
 {
     /// <summary>
-    /// Generates a Diagnostic report when exceptions are being thrown around
+    /// Facade that generates a diagnostic report when exceptions are being thrown around and forwards report and exceptions to the log
     /// </summary>
     public class DetailLoggingService : ILoggingService
     {

@@ -2,7 +2,7 @@
 
 namespace Maple.Data
 {
-    public interface IPlaylistRepository : IMapleRepository<PlaylistModel>
+    public interface IPlaylistRepository : IMapleRepository<PlaylistModel, int>
     {
     }
 }

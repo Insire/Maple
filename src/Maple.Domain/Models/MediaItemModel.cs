@@ -5,13 +5,11 @@ using System.Diagnostics;
 namespace Maple.Domain
 {
     [DebuggerDisplay("{Title}, {Sequence}")]
-    public class MediaItemModel : BaseObject
+    public class MediaItemModel : BaseObject<int>
     {
         public int PlaylistId { get; set; }
         [ForeignKey(nameof(PlaylistId))]
         public PlaylistModel Playlist { get; set; }
-
-        public RawModel Raw { get; set; }
 
         /// <summary>
         /// Ticks

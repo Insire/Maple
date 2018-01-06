@@ -12,7 +12,7 @@ namespace Maple
     /// <seealso cref="Maple.Core.BaseViewModel{Maple.Data.MediaItem}" />
     /// <seealso cref="Maple.Core.IMediaItem" />
     [DebuggerDisplay("{Title}, {Sequence} {Location}")]
-    public class MediaItem : ValidableBaseDataViewModel<MediaItem, MediaItemModel>, IMediaItem
+    public class MediaItem : ValidableBaseDataViewModel<MediaItem, MediaItemModel, int>, IMediaItem
     {
         public bool IsNew => Model.IsNew;
         public bool IsDeleted => Model.IsDeleted;

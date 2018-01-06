@@ -7,7 +7,7 @@ using Maple.Localization.Properties;
 
 namespace Maple
 {
-    public class MediaPlayers : BaseDataListViewModel<MediaPlayer, MediaPlayerModel>, IMediaPlayersViewModel
+    public class MediaPlayers : BaseDataListViewModel<MediaPlayer, MediaPlayerModel, int>, IMediaPlayersViewModel
     {
         private readonly Func<IMediaPlayer> _playerFactory;
         private readonly AudioDevices _devices;

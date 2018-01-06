@@ -72,9 +72,7 @@
     <Compile Include="Models\Base\BaseObject.cs" />
     <Compile Include="Models\MediaItemModel.cs" />
     <Compile Include="Models\MediaPlayerModel.cs" />
-    <Compile Include="Models\OptionModel.cs" />
     <Compile Include="Models\PlaylistModel.cs" />
-    <Compile Include="Models\RawModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

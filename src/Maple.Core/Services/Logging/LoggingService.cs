@@ -5,7 +5,7 @@ using Maple.Domain;
 namespace Maple.Core
 {
     /// <summary>
-    ///
+    /// actual log
     /// </summary>
     /// <seealso cref="Maple.Core.ILoggingService" />
     public class LoggingService : ILoggingService

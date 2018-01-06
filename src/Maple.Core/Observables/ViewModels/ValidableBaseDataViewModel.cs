@@ -12,9 +12,9 @@ using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
-    public abstract class ValidableBaseDataViewModel<TViewModel, TModel> : BaseDataViewModel<TViewModel, TModel>, INotifyDataErrorInfo
-        where TViewModel : BaseDataViewModel<TViewModel, TModel>, ISequence
-        where TModel : class, IBaseObject
+    public abstract class ValidableBaseDataViewModel<TViewModel, TModel, TKeyDataType> : BaseDataViewModel<TViewModel, TModel, TKeyDataType>, INotifyDataErrorInfo
+        where TViewModel : BaseDataViewModel<TViewModel, TModel, TKeyDataType>, ISequence
+        where TModel : class, IBaseObject<TKeyDataType>
     {
         protected bool SkipValidation { get; set; }
 

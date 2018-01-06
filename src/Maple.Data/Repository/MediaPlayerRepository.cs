@@ -6,43 +6,39 @@ using Maple.Domain;
 
 namespace Maple.Data
 {
-    public class MediaPlayerRepository : MaplePlaylistRepository<MediaPlayerModel>, IMediaPlayerRepository
+    public class MediaPlayerRepository : MaplePlaylistRepository<MediaPlayerModel, int>, IMediaPlayerRepository
     {
-        public Task<MediaPlayerModel> GetMainMediaPlayerAsync()
+        public async Task<MediaPlayerModel> GetMainMediaPlayerAsync()
         {
-            return Task.Run(() =>
-             {
-                 using (var context = new PlaylistContext())
-                     return GetMainMediaPlayerInternal(context);
-             });
+            using (var context = new PlaylistContext())
+                return await GetMainMediaPlayerInternal(context).ConfigureAwait(false);
         }
 
-        private MediaPlayerModel GetMainMediaPlayerInternal(PlaylistContext context)
+        private async Task<MediaPlayerModel> GetMainMediaPlayerInternal(PlaylistContext context)
         {
-            return GetEntities(context).Include(p => p.Playlist)
+            return await GetEntities(context).Include(p => p.Playlist)
                                         .Include(p => p.Playlist.MediaItems)
-                                        .FirstOrDefault(p => p.IsPrimary);
+                                        .FirstOrDefaultAsync(p => p.IsPrimary)
+                                        .ConfigureAwait(false);
         }
 
-        public Task<IReadOnlyCollection<MediaPlayerModel>> GetOptionalMediaPlayersAsync()
+        public async Task<IReadOnlyCollection<MediaPlayerModel>> GetOptionalMediaPlayersAsync()
         {
-            return Task.Run(() =>
-            {
-                using (var context = new PlaylistContext())
-                    return GetOptionalMediaPlayersInternal(context);
-            });
+            using (var context = new PlaylistContext())
+                return await GetOptionalMediaPlayersInternal(context).ConfigureAwait(false);
         }
 
-        private IReadOnlyCollection<MediaPlayerModel> GetOptionalMediaPlayersInternal(PlaylistContext context)
+        private async Task<IReadOnlyCollection<MediaPlayerModel>> GetOptionalMediaPlayersInternal(PlaylistContext context)
         {
-            return GetEntities(context).Include(p => p.Playlist)
+            return await GetEntities(context).Include(p => p.Playlist)
                                             .Where(p => !p.IsPrimary)
-                                            .ToList();
+                                            .ToListAsync()
+                                            .ConfigureAwait(false);
         }
 
-        protected override IReadOnlyCollection<MediaPlayerModel> GetInternalAsync(PlaylistContext context)
+        protected override async Task<List<MediaPlayerModel>> GetInternalAsync(PlaylistContext context)
         {
-            return GetEntities(context).Include(p => p.Playlist).ToList();
+            return await GetEntities(context).Include(p => p.Playlist).ToListAsync().ConfigureAwait(false);
         }
 
         protected override DbSet<MediaPlayerModel> GetEntities(PlaylistContext context)

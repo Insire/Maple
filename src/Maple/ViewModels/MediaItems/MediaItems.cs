@@ -7,7 +7,7 @@ using Maple.Localization.Properties;
 
 namespace Maple
 {
-    public class MediaItems : BaseDataListViewModel<MediaItem, MediaItemModel>, IMediaItemsViewModel
+    public class MediaItems : BaseDataListViewModel<MediaItem, MediaItemModel, int>, IMediaItemsViewModel
     {
         private readonly Func<IMediaRepository> _repositoryFactory;
         private readonly IMediaItemMapper _mediaItemMapper;

@@ -16,7 +16,7 @@ using Maple.Localization.Properties;
 namespace Maple
 {
     [DebuggerDisplay("{Title}, {Sequence}")]
-    public class Playlist : ValidableBaseDataViewModel<Playlist, PlaylistModel>, IIsSelected, ISequence, IIdentifier, IChangeState
+    public class Playlist : ValidableBaseDataViewModel<Playlist, PlaylistModel, int>, IIsSelected, ISequence, IIdentifier, IChangeState
     {
         private readonly IMediaItemMapper _mediaItemMapper;
         private readonly ISequenceService _sequenceProvider;

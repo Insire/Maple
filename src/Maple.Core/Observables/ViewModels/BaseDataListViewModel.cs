@@ -15,9 +15,9 @@ namespace Maple.Core
     /// <typeparam name="TViewModel">a wrapper class implementing <see cref="BaseViewModel" /></typeparam>
     /// <typeparam name="TModel">a DTO implementing <see cref="BaseObject" /></typeparam>
     /// <seealso cref="Maple.Core.BaseListViewModel{T}" />
-    public abstract class BaseDataListViewModel<TViewModel, TModel> : BaseListViewModel<TViewModel>, ILoadableViewModel
-        where TViewModel : BaseDataViewModel<TViewModel, TModel>, ISequence
-        where TModel : class, IBaseObject
+    public abstract class BaseDataListViewModel<TViewModel, TModel, TKeyDataType> : BaseListViewModel<TViewModel>, ILoadableViewModel
+        where TViewModel : BaseDataViewModel<TViewModel, TModel, TKeyDataType>, ISequence
+        where TModel : class, IBaseObject<TKeyDataType>
     {
         protected readonly ISequenceService _sequenceProvider;
         protected readonly ILocalizationService _translationService;

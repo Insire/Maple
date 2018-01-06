@@ -2,11 +2,11 @@
 
 namespace Maple.Domain
 {
-    public interface IBaseObject
+    public interface IBaseObject<TKeyDataType>
     {
         string CreatedBy { get; set; }
         DateTime CreatedOn { get; set; }
-        int Id { get; set; }
+        TKeyDataType Id { get; set; }
         bool IsDeleted { get; set; }
         bool IsNew { get; }
         byte[] RowVersion { get; set; }

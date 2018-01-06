@@ -55,6 +55,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -129,6 +130,12 @@
     <Compile Include="Observables\ViewModels\ViewModel.cs" />
     <Compile Include="Observables\ChangeTracker.cs" />
     <Compile Include="Observables\NotifyTaskCompletion.cs" />
+    <Compile Include="Observables\Virtualization\Base\BaseDataProvider.cs" />
+    <Compile Include="Observables\Virtualization\DataVirtualizationCollectionView.cs" />
+    <Compile Include="Observables\Virtualization\Base\IDataProvider.cs" />
+    <Compile Include="Observables\Virtualization\Base\IDataVirtualizationItemProvider.cs" />
+    <Compile Include="Observables\Virtualization\VirtualizationViewModel.cs" />
+    <Compile Include="Observables\Virtualization\VirtualizationViewModelState.cs" />
     <Compile Include="ProcessExecutionResult.cs" />
     <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -147,11 +154,14 @@
     <Compile Include="IO\Base\MapleFileSystemContainerBase.cs" />
     <Compile Include="Observables\ViewModels\BaseDataListViewModel.cs" />
     <Compile Include="IO\Base\MapleFileSystemBase.cs" />
-    <Compile Include="Services\DetailLoggingService.cs" />
+    <Compile Include="Services\Caching\ICachingService.cs" />
+    <Compile Include="Services\Caching\MemoryCacheService.cs" />
+    <Compile Include="Services\Caching\WeakReferenceCache.cs" />
+    <Compile Include="Services\Logging\DetailLoggingService.cs" />
     <Compile Include="Services\Localization\LocalizationDTO.cs" />
     <Compile Include="Services\Localization\LocalizationService.cs" />
     <Compile Include="Services\Localization\Providers\ResxTranslationProvider.cs" />
-    <Compile Include="Services\LogNotifcationService.cs" />
+    <Compile Include="Services\Logging\LogNotifcationService.cs" />
     <Compile Include="Services\SequenceService.cs" />
     <Compile Include="Observables\BusyStack.cs" />
     <Compile Include="Observables\BusyToken.cs" />
@@ -159,10 +169,11 @@
     <Compile Include="Observables\RangeObservableCollection.cs" />
     <Compile Include="Observables\ViewModels\BaseViewModel.cs" />
     <Compile Include="Observables\ViewModels\BaseListViewModel.cs" />
-    <Compile Include="Services\LoggingService.cs" />
+    <Compile Include="Services\Logging\LoggingService.cs" />
     <Compile Include="Services\MrlExtractionService.cs" />
     <Compile Include="Observables\NotifyPropertyChangedExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Caching\SimpleInMemoryCacheService.cs" />
     <Compile Include="Services\ViewModelServiceContainer.cs" />
     <Compile Include="StringBuilderCache.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
@@ -190,5 +201,6 @@
       <Name>Maple.Localization</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

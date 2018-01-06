@@ -8,18 +8,42 @@ using Maple.Domain;
 
 namespace Maple.Data
 {
-    public abstract class MaplePlaylistRepository<T> : IMapleRepository<T>
-        where T : class, IBaseObject
+    public abstract class MaplePlaylistRepository<TModel, TKeyDataType> : IMapleRepository<TModel, TKeyDataType>
+        where TModel : class, IBaseObject<TKeyDataType>
     {
-        public void Save(T item)
+        public async Task Save(TModel item)
         {
             using (var context = new PlaylistContext())
-                SaveInternal(item, context);
+                await SaveInternal(item, context).ConfigureAwait(false);
         }
 
-        protected abstract DbSet<T> GetEntities(PlaylistContext context);
+        public async Task<TModel> GetByIdAsync(TKeyDataType Id)
+        {
+            using (var context = new PlaylistContext())
+                return await GetByIdInternalAsync(Id, context).ConfigureAwait(false);
+        }
 
-        protected virtual void SaveInternal(T item, PlaylistContext context)
+        public async Task<List<TModel>> GetAsync()
+        {
+            using (var context = new PlaylistContext())
+                return await GetInternalAsync(context).ConfigureAwait(false);
+        }
+
+        public async Task<List<TKeyDataType>> GetKeysAsync()
+        {
+            using (var context = new PlaylistContext())
+                return await GetEntities(context).Select(p => p.Id).ToListAsync().ConfigureAwait(false);
+        }
+
+        public async Task<int> GetEntryCountAsync()
+        {
+            using (var context = new PlaylistContext())
+                return await GetEntities(context).CountAsync().ConfigureAwait(false);
+        }
+
+        protected abstract DbSet<TModel> GetEntities(PlaylistContext context);
+
+        protected virtual async Task SaveInternal(TModel item, PlaylistContext context)
         {
             if (item.IsNew)
                 Create(item, context);
@@ -31,28 +55,28 @@ namespace Maple.Data
                     Delete(item, context);
                 }
                 else
-                    Update(item, context);
+                    await Update(item, context).ConfigureAwait(false);
             }
 
-            context.SaveChanges();
+            await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        protected virtual void Delete(T item, PlaylistContext context)
+        protected virtual void Delete(TModel item, PlaylistContext context)
         {
-            context.Set<T>().Remove(item);
+            context.Set<TModel>().Remove(item);
         }
 
-        protected virtual void Create(T item, PlaylistContext context)
+        protected virtual void Create(TModel item, PlaylistContext context)
         {
             item.CreatedBy = System.Security.Principal.WindowsIdentity.GetCurrent().User.Value;
             item.CreatedOn = DateTime.UtcNow;
 
-            context.Set<T>().Add(item);
+            context.Set<TModel>().Add(item);
         }
 
-        protected virtual void Update(T item, PlaylistContext context)
+        protected virtual async Task Update(TModel item, PlaylistContext context)
         {
-            var entity = GetEntities(context).Find(item.Id);
+            var entity = await GetEntities(context).FindAsync(item.Id).ConfigureAwait(false);
 
             if (entity == null)
                 return;
@@ -64,32 +88,15 @@ namespace Maple.Data
             context.Entry(entity).CurrentValues.SetValues(item);
         }
 
-        public Task<T> GetByIdAsync(int Id)
+        protected virtual Task<TModel> GetByIdInternalAsync(TKeyDataType id, PlaylistContext context)
         {
-            return Task.Run(() =>
-            {
-                using (var context = new PlaylistContext())
-                    return GetByIdInternalAsync(Id, context);
-            });
+            return GetEntities(context).FirstOrDefaultAsync(p => EqualityComparer<TKeyDataType>.Default.Equals(p.Id, id));
         }
 
-        protected virtual T GetByIdInternalAsync(int id, PlaylistContext context)
+        // override if you need to include foreignkeys
+        protected virtual Task<List<TModel>> GetInternalAsync(PlaylistContext context)
         {
-            return GetEntities(context).FirstOrDefault(p => p.Id == id);
-        }
-
-        public Task<IReadOnlyCollection<T>> GetAsync()
-        {
-            return Task.Run(() =>
-            {
-                using (var context = new PlaylistContext())
-                    return GetInternalAsync(context);
-            });
-        }
-
-        protected virtual IReadOnlyCollection<T> GetInternalAsync(PlaylistContext context)
-        {
-            return GetEntities(context).ToList();
+            return GetEntities(context).ToListAsync();
         }
     }
 }

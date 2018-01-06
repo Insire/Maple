@@ -4,6 +4,9 @@ using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
+    /// <summary>
+    /// Facade to forward log messages to the UI
+    /// </summary>
     public class LoggingNotifcationService : ILoggingNotifcationService
     {
         private readonly ILoggingService _log;

@@ -11,7 +11,7 @@ using Maple.Localization.Properties;
 namespace Maple
 {
     [DebuggerDisplay("{Name}, {Sequence}")]
-    public class MediaPlayer : ValidableBaseDataViewModel<MediaPlayer, MediaPlayerModel>, IDisposable, IChangeState, ISequence
+    public class MediaPlayer : ValidableBaseDataViewModel<MediaPlayer, MediaPlayerModel, int>, IDisposable, IChangeState, ISequence
     {
         protected readonly ILocalizationService _manager;
 

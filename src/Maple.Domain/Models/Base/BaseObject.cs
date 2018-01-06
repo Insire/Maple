@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Maple.Domain
 {
-    public abstract class BaseObject : IBaseObject
+    public abstract class BaseObject<TKeyDataType> : IBaseObject<TKeyDataType>
     {
         [Key]
         [Column(Order = 1)]
-        public int Id { get; set; }
+        public TKeyDataType Id { get; set; }
         [Column(Order = 2)]
         public int Sequence { get; set; }
 
@@ -25,6 +26,6 @@ namespace Maple.Domain
         public bool IsDeleted { get; set; }
 
         [NotMapped]
-        public bool IsNew => Id == 0;
+        public bool IsNew => EqualityComparer<TKeyDataType>.Default.Equals(Id, default(TKeyDataType));
     }
 }

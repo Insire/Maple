@@ -3,7 +3,7 @@ using Maple.Domain;
 
 namespace Maple.Data
 {
-    public interface IMediaItemRepository : IMapleRepository<MediaItemModel>
+    public interface IMediaItemRepository : IMapleRepository<MediaItemModel, int>
     {
         Task<MediaItemModel> GetMediaItemByPlaylistIdAsync(int id);
     }

@@ -1,19 +1,15 @@
 ﻿using System.Data.Entity;
-using System.Linq;
 using System.Threading.Tasks;
 using Maple.Domain;
 
 namespace Maple.Data
 {
-    public class MediaItemRepository : MaplePlaylistRepository<MediaItemModel>, IMediaItemRepository
+    public class MediaItemRepository : MaplePlaylistRepository<MediaItemModel, int>, IMediaItemRepository
     {
-        public Task<MediaItemModel> GetMediaItemByPlaylistIdAsync(int id)
+        public async Task<MediaItemModel> GetMediaItemByPlaylistIdAsync(int id)
         {
-            return Task.Run(() =>
-            {
-                using (var context = new PlaylistContext())
-                    return GetMediaItemByPlaylistIdInternalAsync(id, context);
-            });
+            using (var context = new PlaylistContext())
+                return await GetMediaItemByPlaylistIdInternalAsync(id, context).ConfigureAwait(false);
         }
 
         protected override DbSet<MediaItemModel> GetEntities(PlaylistContext context)
@@ -21,9 +17,9 @@ namespace Maple.Data
             return context.MediaItems;
         }
 
-        private MediaItemModel GetMediaItemByPlaylistIdInternalAsync(int id, PlaylistContext context)
+        private async Task<MediaItemModel> GetMediaItemByPlaylistIdInternalAsync(int id, PlaylistContext context)
         {
-            return context.MediaItems.FirstOrDefault(p => p.Playlist.Id == id);
+            return await GetEntities(context).FirstOrDefaultAsync(p => p.Playlist.Id == id).ConfigureAwait(false);
         }
     }
 }
