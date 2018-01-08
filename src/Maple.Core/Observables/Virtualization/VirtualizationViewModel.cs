@@ -25,7 +25,7 @@ namespace Maple.Core
         }
 
         private VirtualizationViewModelState _state;
-        public VirtualizationViewModelState State
+        public VirtualizationViewModelState State // TODO add implementation details
         {
             get { return _state; }
             private set { SetValue(ref _state, value); }
@@ -79,7 +79,7 @@ namespace Maple.Core
 
         public bool CanExpand()
         {
-            return false; // TODO add implementation
+            return ViewModel == null && !IsExtended;
         }
 
         public void Deflate()
@@ -90,7 +90,7 @@ namespace Maple.Core
 
         public bool CanDeflate()
         {
-            return false; // TODO add implementation
+            return ViewModel != null && IsExtended;
         }
     }
 }

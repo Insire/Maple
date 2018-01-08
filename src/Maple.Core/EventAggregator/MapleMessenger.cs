@@ -25,13 +25,13 @@ namespace Maple.Core
         public SubscriptionToken Subscribe<TMessage>(Action<TMessage> deliveryAction)
             where TMessage : class, IMapleMessage
         {
-            return AddSubscriptionInternal(deliveryAction, (m) => true, true, _mapleMessageProxy);
+            return AddSubscriptionInternal(deliveryAction, (m) => true, false, _mapleMessageProxy);
         }
 
         public SubscriptionToken Subscribe<TMessage>(Action<TMessage> deliveryAction, IMapleMessageProxy proxy)
             where TMessage : class, IMapleMessage
         {
-            return AddSubscriptionInternal(deliveryAction, (m) => true, true, proxy);
+            return AddSubscriptionInternal(deliveryAction, (m) => true, false, proxy);
         }
 
         public SubscriptionToken Subscribe<TMessage>(Action<TMessage> deliveryAction, bool useStrongReferences)

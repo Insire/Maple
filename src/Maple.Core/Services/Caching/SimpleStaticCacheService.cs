@@ -2,7 +2,7 @@
 
 namespace Maple.Core
 {
-    public class SimpleInMemoryCacheService<TPrimaryKeyType, TViewModel> : Dictionary<TPrimaryKeyType, TViewModel>, ICachingService<TPrimaryKeyType, TViewModel>
+    public sealed class SimpleStaticCacheService<TPrimaryKeyType, TViewModel> : Dictionary<TPrimaryKeyType, TViewModel>, ICachingService<TPrimaryKeyType, TViewModel>
     {
         public bool Contains(TPrimaryKeyType key)
         {

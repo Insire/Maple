@@ -35,7 +35,7 @@ namespace Maple.Core
                 // free managed resources
                 if (_hub.IsAlive && _hub.Target is IMessenger hub)
                 {
-                    var unsubscribeMethod = typeof(IMessenger).GetMethod("Unsubscribe", new Type[] { typeof(SubscriptionToken) });
+                    var unsubscribeMethod = typeof(IMessenger).GetMethod(nameof(IMessenger.Unsubscribe), new Type[] { typeof(SubscriptionToken) });
                     unsubscribeMethod = unsubscribeMethod.MakeGenericMethod(_messageType);
                     unsubscribeMethod.Invoke(hub, new object[] { this });
                 }
