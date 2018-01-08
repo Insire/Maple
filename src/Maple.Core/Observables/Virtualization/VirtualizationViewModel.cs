@@ -6,7 +6,7 @@ using Maple.Localization.Properties;
 namespace Maple.Core
 {
     public sealed class VirtualizationViewModel<TViewModel, TModel, TKeyDataType> : ObservableObject
-        where TModel : class, IBaseObject<TKeyDataType>
+        where TModel : class, IBaseModel<TKeyDataType>
     {
         private readonly IDataProvider<BaseDataViewModel<TViewModel, TModel, TKeyDataType>, TKeyDataType> _dataProvider;
 

@@ -54,7 +54,7 @@
     <Compile Include="Enums\PrivacyStatus.cs" />
     <Compile Include="Enums\RepeatMode.cs" />
     <Compile Include="Interfaces\IAudioDevice.cs" />
-    <Compile Include="Interfaces\IBaseObject.cs" />
+    <Compile Include="Interfaces\IBaseModel.cs" />
     <Compile Include="Interfaces\IChangeState.cs" />
     <Compile Include="Interfaces\IIdentifier.cs" />
     <Compile Include="Interfaces\IIsSelected.cs" />
@@ -68,7 +68,7 @@
     <Compile Include="Interfaces\ISequenceService.cs" />
     <Compile Include="Interfaces\ITranslationProvider.cs" />
     <Compile Include="Interfaces\IVersionService.cs" />
-    <Compile Include="Models\Base\BaseObject.cs" />
+    <Compile Include="Models\Base\BaseModel.cs" />
     <Compile Include="Models\MediaItemModel.cs" />
     <Compile Include="Models\MediaPlayerModel.cs" />
     <Compile Include="Models\PlaylistModel.cs" />

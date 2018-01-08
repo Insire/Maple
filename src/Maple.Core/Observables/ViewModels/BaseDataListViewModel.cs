@@ -16,7 +16,7 @@ namespace Maple.Core
     /// <seealso cref="Maple.Core.BaseListViewModel{T}" />
     public abstract class BaseDataListViewModel<TViewModel, TModel, TKeyDataType> : BaseListViewModel<TViewModel>, ILoadableViewModel, ISaveableViewModel
         where TViewModel : BaseDataViewModel<TViewModel, TModel, TKeyDataType>, ISequence
-        where TModel : class, IBaseObject<TKeyDataType>
+        where TModel : class, IBaseModel<TKeyDataType>
     {
         protected readonly ISequenceService _sequenceProvider;
         protected readonly ILocalizationService _translationService;

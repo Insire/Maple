@@ -9,7 +9,7 @@ using Maple.Domain;
 namespace Maple.Data
 {
     public abstract class MaplePlaylistRepository<TModel, TKeyDataType> : IMapleRepository<TModel, TKeyDataType>
-        where TModel : class, IBaseObject<TKeyDataType>
+        where TModel : class, IBaseModel<TKeyDataType>
     {
         public async Task SaveAsync(TModel item)
         {

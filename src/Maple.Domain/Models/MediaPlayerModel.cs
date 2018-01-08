@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace Maple.Domain
 {
     [DebuggerDisplay("{Name}, {DeviceName}, {Sequence}")]
-    public class MediaPlayerModel : BaseObject<int>
+    public class MediaPlayerModel : BaseModel<int>
     {
         public int PlaylistId { get; set; }
         [ForeignKey(nameof(PlaylistId))]

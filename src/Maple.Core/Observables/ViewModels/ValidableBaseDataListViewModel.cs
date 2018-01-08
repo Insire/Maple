@@ -4,7 +4,7 @@ namespace Maple.Core
 {
     public abstract class ValidableBaseDataListViewModel<TViewModel, TModel, TKeyDataType> : BaseDataListViewModel<TViewModel, TModel, TKeyDataType>
         where TViewModel : BaseDataViewModel<TViewModel, TModel, TKeyDataType>, ISequence
-        where TModel : class, IBaseObject<TKeyDataType>
+        where TModel : class, IBaseModel<TKeyDataType>
     {
         protected ValidableBaseDataListViewModel(ViewModelServiceContainer container)
             : base(container)

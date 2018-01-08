@@ -5,7 +5,7 @@ using Maple.Domain;
 namespace Maple.Core
 {
     public abstract class BaseDataViewModel<TViewModel, TModel, TKeyDataType> : BaseViewModel<TModel>
-        where TModel : class, IBaseObject<TKeyDataType>
+        where TModel : class, IBaseModel<TKeyDataType>
     {
         protected ChangeTracker ChangeTracker { get; }
         protected bool SkipChangeTracking { get; set; }

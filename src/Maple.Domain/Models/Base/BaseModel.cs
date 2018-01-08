@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Maple.Domain
 {
-    public abstract class BaseObject<TKeyDataType> : IBaseObject<TKeyDataType>
+    public abstract class BaseModel<TKeyDataType> : IBaseModel<TKeyDataType>
     {
         [Key]
         [Column(Order = 1)]

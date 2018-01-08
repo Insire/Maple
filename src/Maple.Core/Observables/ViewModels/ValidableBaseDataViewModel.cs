@@ -14,7 +14,7 @@ namespace Maple.Core
 {
     public abstract class ValidableBaseDataViewModel<TViewModel, TModel, TKeyDataType> : BaseDataViewModel<TViewModel, TModel, TKeyDataType>, INotifyDataErrorInfo
         where TViewModel : BaseDataViewModel<TViewModel, TModel, TKeyDataType>, ISequence
-        where TModel : class, IBaseObject<TKeyDataType>
+        where TModel : class, IBaseModel<TKeyDataType>
     {
         protected bool SkipValidation { get; set; }
 

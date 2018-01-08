@@ -2,7 +2,7 @@
 
 namespace Maple.Domain
 {
-    public interface IBaseObject<TKeyDataType>
+    public interface IBaseModel<TKeyDataType>
     {
         string CreatedBy { get; set; }
         DateTime CreatedOn { get; set; }

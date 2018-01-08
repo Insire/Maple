@@ -7,7 +7,7 @@ namespace Maple.Core
 {
     public abstract class VirtualizationListViewModel<TViewModel, TModel, TKeyDataType> : ValidableBaseDataListViewModel<TViewModel, TModel, TKeyDataType>, IVirtualizedViewModel, ILoadableViewModel, ISaveableViewModel
         where TViewModel : BaseDataViewModel<TViewModel, TModel, TKeyDataType>, ISequence
-        where TModel : class, IBaseObject<TKeyDataType>
+        where TModel : class, IBaseModel<TKeyDataType>
     {
         private bool _isLoaded;
         /// <summary>
