@@ -7,6 +7,14 @@ namespace Maple.Test
 {
     public static class ContainerContextExtensions
     {
+        public static IContainer ConfigureForTesting(this IContainer container)
+        {
+            container.UseInstance(CreatePlaybackDeviceFactory());
+            container.UseInstance(CreateWavePlayerFactory());
+
+            return container;
+        }
+
         public static Playlists CreatePlaylists(this IContainer container)
         {
             return new Playlists(container.CreateViewModelServiceContainer(), container.Resolve<IPlaylistMapper>(), () => container.Resolve<IMediaRepository>());
@@ -27,6 +35,36 @@ namespace Maple.Test
         {
             var mapper = container.Resolve<IMediaItemMapper>();
             return mapper.Get(model);
+        }
+
+        public static IPlaybackDeviceFactory CreatePlaybackDeviceFactory()
+        {
+            var factory = Substitute.For<IPlaybackDeviceFactory>();
+
+            factory.GetAudioDevices(default(ILoggingService)).ReturnsForAnyArgs(
+                new[]
+                {
+                    new AudioDevice()
+                    {
+                        Channels= 2,
+                        IsSelected = true,
+                        Name = "TestDevice",
+                        Sequence = 1,
+                    }
+                });
+
+            return factory;
+        }
+
+        // should not be used as default replacement in the container, since some tests rely on the messenger relaying message in the class to be tested
+        public static IMessenger CreateMessenger()
+        {
+            return Substitute.For<IMessenger>();
+        }
+
+        public static IWavePlayerFactory CreateWavePlayerFactory()
+        {
+            return Substitute.For<IWavePlayerFactory>();
         }
 
         public static ISequenceService CreateSequenceService()

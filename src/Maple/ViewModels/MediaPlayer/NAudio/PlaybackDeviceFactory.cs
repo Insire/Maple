@@ -5,9 +5,9 @@ using NAudio.Wave;
 
 namespace Maple
 {
-    public static class PlaybackDeviceFactory
+    public class PlaybackDeviceFactory : IPlaybackDeviceFactory
     {
-        public static IEnumerable<IAudioDevice> GetAudioDevices(ILoggingService log)
+        public IEnumerable<IAudioDevice> GetAudioDevices(ILoggingService log)
         {
             for (var i = 0; i < WaveOut.DeviceCount; i++)
             {
@@ -25,7 +25,7 @@ namespace Maple
 
         }
 
-        private static WaveOutCapabilities GetCapabilities(int index, ILoggingService log)
+        private WaveOutCapabilities GetCapabilities(int index, ILoggingService log)
         {
             try
             {

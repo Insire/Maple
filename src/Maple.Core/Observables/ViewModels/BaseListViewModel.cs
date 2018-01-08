@@ -79,6 +79,8 @@ namespace Maple.Core
         protected BaseListViewModel(IMessenger messenger)
             : base(messenger)
         {
+            _items = new RangeObservableCollection<TViewModel>();
+
             RemoveCommand = new RelayCommand<TViewModel>(Remove, CanRemove);
             RemoveRangeCommand = new RelayCommand<IList>(RemoveRange, CanRemoveRange);
             ClearCommand = new RelayCommand(() => Clear(), CanClear);

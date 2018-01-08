@@ -4,16 +4,12 @@ using Maple.Domain;
 
 namespace Maple
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <seealso cref="Maple.Core.BaseListViewModel{Maple.AudioDevice}" />
     public class AudioDevices : BaseListViewModel<IAudioDevice>
     {
-        public AudioDevices(ILoggingService log, IMessenger messenger)
+        public AudioDevices(ILoggingService log, IMessenger messenger, IPlaybackDeviceFactory factory)
             : base(messenger)
         {
-            AddRange(PlaybackDeviceFactory.GetAudioDevices(log).ToList());
+            AddRange(factory.GetAudioDevices(log).ToList());
         }
     }
 }

@@ -66,6 +66,7 @@ namespace Maple
                 c.Register<IMediaPlayer, NAudioMediaPlayer>(setup: Setup.With(allowDisposableTransient: true));
                 c.Register<IWavePlayerFactory, WavePlayerFactory>(Reuse.Singleton);
                 c.Register<IMediaRepository, MediaRepository>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
+                c.Register<IPlaybackDeviceFactory, PlaybackDeviceFactory>(Reuse.Singleton);
 
                 c.Register<ViewModelServiceContainer>(Reuse.Singleton);
                 c.Register<PlaylistContext>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));

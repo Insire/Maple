@@ -192,6 +192,7 @@
     <Compile Include="ViewModels\Interfaces\IMediaPlayersViewModel.cs" />
     <Compile Include="ViewModels\MediaPlayer\MainMediaPlayer.cs" />
     <Compile Include="ViewModels\MediaPlayer\MediaPlayers.cs" />
+    <Compile Include="ViewModels\MediaPlayer\NAudio\IPlaybackDeviceFactory.cs" />
     <Compile Include="ViewModels\MediaPlayer\NAudio\IWavePlayerFactory.cs" />
     <Compile Include="ViewModels\Navigation\Scene.cs" />
     <Compile Include="ViewModels\Interfaces\IPlaylistsViewModel.cs" />

@@ -23,6 +23,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlists_ShouldRunConstructorWithErrors()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
 
             var playlists = container.CreatePlaylists();
 
@@ -49,6 +50,7 @@ namespace Maple.Test.ViewModels
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
             var sequenceProvider = ContainerContextExtensions.CreateSequenceService();
             sequenceProvider.Get(default(List<ISequence>)).ReturnsForAnyArgs(5);
+            container = container.ConfigureForTesting();
             container.UseInstance(sequenceProvider);
 
             var playlists = (Playlists)container.Resolve<IPlaylistsViewModel>();
@@ -70,6 +72,7 @@ namespace Maple.Test.ViewModels
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
             var sequenceProvider = ContainerContextExtensions.CreateSequenceService();
             sequenceProvider.Get(default(List<ISequence>)).ReturnsForAnyArgs(5);
+            container = container.ConfigureForTesting();
             container.UseInstance(sequenceProvider);
 
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
@@ -93,6 +96,7 @@ namespace Maple.Test.ViewModels
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
             var repository = ContainerContextExtensions.CreateRepository();
 
+            container = container.ConfigureForTesting();
             container.UseInstance(repository);
 
             var playlists = container.Resolve<IPlaylistsViewModel>();
@@ -114,6 +118,7 @@ namespace Maple.Test.ViewModels
             };
             var repository = ContainerContextExtensions.CreateRepository();
             repository.GetPlaylistsAsync().ReturnsForAnyArgs(dummyPlaylists);
+            container = container.ConfigureForTesting();
             container.UseInstance(repository);
 
             var playlists = (Playlists)container.Resolve<IPlaylistsViewModel>();
