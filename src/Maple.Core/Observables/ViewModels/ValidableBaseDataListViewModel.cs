@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Maple.Domain;
+﻿using Maple.Domain;
 
 namespace Maple.Core
 {
@@ -12,5 +10,7 @@ namespace Maple.Core
             : base(container)
         {
         }
+
+        // TODO add logic for handling INotifyDataErrorInfo for children and on this
     }
 }

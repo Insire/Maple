@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using Maple.Domain;
+using System.Threading.Tasks;
 
-namespace Maple.Core
+namespace Maple
 {
     /// <summary>
     ///
     /// </summary>
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     /// <seealso cref="Maple.Core.IRefreshable" />
-    public interface ILocalizationService : INotifyPropertyChanged, ILoadAndSaveProvider
+    public interface ILocalizationService : INotifyPropertyChanged
     {
         /// <summary>
         /// Gets or sets the current language.
@@ -32,5 +32,8 @@ namespace Maple.Core
         /// <param name="key">The key.</param>
         /// <returns></returns>
         string Translate(string key);
+
+        Task Save();
+        Task LoadAsync();
     }
 }

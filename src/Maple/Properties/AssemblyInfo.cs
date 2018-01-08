@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Windows;
 
 [assembly: AssemblyTitle("Maple")]

@@ -121,6 +121,8 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Interfaces\IBaseMapper.cs" />
+    <Compile Include="Interfaces\IConfigurableWindowSettings.cs" />
+    <Compile Include="Interfaces\IIocFrameworkElement.cs" />
     <Compile Include="Interfaces\IMediaItemMapper.cs" />
     <Compile Include="Interfaces\IMediaPlayerMapper.cs" />
     <Compile Include="Interfaces\IMediaRepository.cs" />
@@ -157,7 +159,7 @@
     <Compile Include="UI\MarkupExtensions\CaseConverter.cs" />
     <Compile Include="UI\MarkupExtensions\MathMultipleConverter.cs" />
     <Compile Include="Utils\DependencyInjectionFactory.cs" />
-    <Compile Include="Utils\Mappers\MapperExtensions.cs" />
+    <Compile Include="Utils\Mappers\Base\MapperExtensions.cs" />
     <Compile Include="Utils\Mappers\Base\BaseMapper.cs" />
     <Compile Include="Utils\Mappers\MediaItemMapper.cs" />
     <Compile Include="Utils\Mappers\MediaPlayerMapper.cs" />

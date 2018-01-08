@@ -64,7 +64,6 @@
     <Compile Include="Interfaces\IMediaItem.cs" />
     <Compile Include="Interfaces\IMediaPlayer.cs" />
     <Compile Include="Interfaces\IRangeObservableCollection.cs" />
-    <Compile Include="Interfaces\IRefreshable.cs" />
     <Compile Include="Interfaces\ISequence.cs" />
     <Compile Include="Interfaces\ISequenceService.cs" />
     <Compile Include="Interfaces\ITranslationProvider.cs" />

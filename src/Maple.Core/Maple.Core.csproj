@@ -107,16 +107,14 @@
     <Compile Include="Messages\RepeatModeChangedMessage.cs" />
     <Compile Include="Extensions\EventExtension.cs" />
     <Compile Include="Messages\FileSystemInfoChangedMessage.cs" />
-    <Compile Include="Interfaces\ILocalizationService.cs" />
+    <Compile Include="Services\Localization\ILocalizationService.cs" />
     <Compile Include="IO\FileSystemBrowser.cs" />
     <Compile Include="IO\Interfaces\IDepth.cs" />
     <Compile Include="IO\Interfaces\IFileSystemDirectory.cs" />
     <Compile Include="IO\Interfaces\IFileSystemDrive.cs" />
     <Compile Include="IO\Interfaces\IFileSystemFile.cs" />
     <Compile Include="IO\Interfaces\IFileSystemInfo.cs" />
-    <Compile Include="Interfaces\IConfigurableWindowSettings.cs" />
-    <Compile Include="Interfaces\IIocFrameworkElement.cs" />
-    <Compile Include="Interfaces\ILoadableViewModel.cs" />
+    <Compile Include="Observables\Base\ILoadableViewModel.cs" />
     <Compile Include="IO\IOUtils.cs" />
     <Compile Include="IO\Util\SelectedTreeViewItemBehavior.cs" />
     <Compile Include="Messages\ShuffleModeChangedMessage.cs" />
@@ -146,7 +144,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Extensions\LinqExtensions.cs" />
-    <Compile Include="Interfaces\ISaveableViewModel.cs" />
+    <Compile Include="Observables\Base\ISaveableViewModel.cs" />
     <Compile Include="IO\Util\FileSystemDepth.cs" />
     <Compile Include="IO\Util\FileSystemExtensions.cs" />
     <Compile Include="IO\FileSystemViewModel.cs" />

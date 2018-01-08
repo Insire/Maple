@@ -25,26 +25,8 @@ namespace Maple.Core
 
         public int Count => Items?.Count ?? 0;
 
-        /// <summary>
-        /// Gets the load command.
-        /// </summary>
-        /// <value>
-        /// The load command.
-        /// </value>
         public override IAsyncCommand LoadCommand => AsyncCommand.Create(LoadAsync, () => !IsLoaded);
-        /// <summary>
-        /// Gets the refresh command.
-        /// </summary>
-        /// <value>
-        /// The refresh command.
-        /// </value>
-        public override IAsyncCommand RefreshCommand => AsyncCommand.Create(LoadAsync);
-        /// <summary>
-        /// Gets the save command.
-        /// </summary>
-        /// <value>
-        /// The save command.
-        /// </value>
+        public override IAsyncCommand RefreshCommand => AsyncCommand.Create(LoadAsync, () => IsLoaded);
         public override IAsyncCommand SaveCommand => AsyncCommand.Create(SaveAsync);
 
         protected VirtualizationListViewModel(ViewModelServiceContainer container)

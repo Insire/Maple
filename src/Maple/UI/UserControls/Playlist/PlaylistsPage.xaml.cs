@@ -1,6 +1,4 @@
-﻿using Maple.Core;
-
-namespace Maple
+﻿namespace Maple
 {
     public partial class PlaylistsPage
     {

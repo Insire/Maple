@@ -1,10 +1,7 @@
 ﻿using System.Windows;
 
-namespace Maple.Core
+namespace Maple
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public interface IConfigurableWindowSettings
     {
         /// <summary>
