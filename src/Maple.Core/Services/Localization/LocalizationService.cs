@@ -54,28 +54,30 @@ namespace Maple.Core
             return $"!{key}!";
         }
 
-        public void Save()
+        public Task Save()
         {
             Properties.Settings.Default.StartUpCulture = CurrentLanguage;
             Properties.Settings.Default.Save();
+
+            return Task.CompletedTask;
         }
 
-        public void Load()
+        public Task Load()
         {
             _log.Info($"{Resources.Loading} {GetType().Name}");
             Thread.CurrentThread.CurrentCulture = Properties.Settings.Default.StartUpCulture;
+
+            return Task.CompletedTask;
         }
 
         public Task SaveAsync()
         {
-            Save();
-            return Task.CompletedTask;
+            return Save();
         }
 
         public Task LoadAsync()
         {
-            Load();
-            return Task.CompletedTask;
+            return Load();
         }
     }
 }

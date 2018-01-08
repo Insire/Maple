@@ -1,13 +1,8 @@
-﻿using System.Windows.Input;
-using Maple.Domain;
+﻿using System.Threading.Tasks;
 
 namespace Maple.Core
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <seealso cref="Maple.Core.IRefreshable" />
-    public interface ILoadableViewModel : IRefreshable
+    public interface ILoadableViewModel
     {
         /// <summary>
         /// Gets a value indicating whether this instance is loaded.
@@ -17,7 +12,9 @@ namespace Maple.Core
         /// </value>
         bool IsLoaded { get; }
 
-        ICommand LoadCommand { get; }
-        ICommand RefreshCommand { get; }
+        IAsyncCommand LoadCommand { get; }
+        IAsyncCommand RefreshCommand { get; }
+
+        Task LoadAsync();
     }
 }

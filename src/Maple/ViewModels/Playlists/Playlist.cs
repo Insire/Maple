@@ -41,26 +41,6 @@ namespace Maple
             get { return Model.Id; }
         }
 
-        public string CreatedBy
-        {
-            get { return Model.CreatedBy; }
-        }
-
-        public string UpdatedBy
-        {
-            get { return Model.UpdatedBy; }
-        }
-
-        public DateTime UpdatedOn
-        {
-            get { return Model.UpdatedOn; }
-        }
-
-        public DateTime CreatedOn
-        {
-            get { return Model.CreatedOn; }
-        }
-
         public MediaItem this[int index]
         {
             get { return _items[index]; }

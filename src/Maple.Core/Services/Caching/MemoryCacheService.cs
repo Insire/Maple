@@ -11,7 +11,7 @@ namespace Maple.Core
         private readonly HashSet<TPrimaryKeyType> _trackedEntries;
         private readonly MemoryCache _cache;
         private readonly CacheItemPolicy _policy;
-        private readonly IDataVirtualizationItemProvider _virtualizationProvider;
+        private readonly IVirtualizedViewModel _virtualizationProvider;
         private readonly string _cacheKeyPart;
 
         private MemoryCacheService()
@@ -26,7 +26,7 @@ namespace Maple.Core
             };
         }
 
-        protected MemoryCacheService(MemoryCache cache, IDataVirtualizationItemProvider virtualizationProvider)
+        protected MemoryCacheService(MemoryCache cache, IVirtualizedViewModel virtualizationProvider)
             : this()
         {
             _virtualizationProvider = virtualizationProvider ?? throw new ArgumentNullException(nameof(virtualizationProvider), $"{nameof(virtualizationProvider)} {Resources.IsRequired}");

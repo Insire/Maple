@@ -1,9 +1,11 @@
-﻿using System.Windows.Input;
+﻿using System.Threading.Tasks;
 
 namespace Maple.Core
 {
     public interface ISaveableViewModel
     {
-        ICommand SaveCommand { get; }
+        IAsyncCommand SaveCommand { get; }
+
+        Task SaveAsync();
     }
 }

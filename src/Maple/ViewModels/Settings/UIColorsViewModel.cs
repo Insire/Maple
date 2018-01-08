@@ -85,21 +85,21 @@ namespace Maple
         /// <value>
         /// The refresh command.
         /// </value>
-        public ICommand RefreshCommand => new RelayCommand(Load);
+        public IAsyncCommand RefreshCommand => AsyncCommand.Create(Load);
         /// <summary>
         /// Gets the load command.
         /// </summary>
         /// <value>
         /// The load command.
         /// </value>
-        public ICommand LoadCommand => new RelayCommand(Load, () => !IsLoaded);
+        public IAsyncCommand LoadCommand => AsyncCommand.Create(Load, () => !IsLoaded);
         /// <summary>
         /// Gets the save command.
         /// </summary>
         /// <value>
         /// The save command.
         /// </value>
-        public ICommand SaveCommand => new RelayCommand(Save);
+        public IAsyncCommand SaveCommand => AsyncCommand.Create(Save);
 
         /// <summary>
         /// Gets the swatches.
@@ -166,7 +166,7 @@ namespace Maple
         /// <summary>
         /// Saves this instance.
         /// </summary>
-        public void Save()
+        public Task Save()
         {
             _log.Info($"{Resources.Saving} {Resources.Themes}");
 
@@ -175,12 +175,14 @@ namespace Maple
             Properties.Settings.Default.UseDarkTheme = _isDark;
 
             Properties.Settings.Default.Save();
+
+            return Task.CompletedTask;
         }
 
         /// <summary>
         /// Loads this instance.
         /// </summary>
-        public void Load()
+        public Task Load()
         {
             _log.Info($"{Resources.Loading} {Resources.Themes}");
 
@@ -195,11 +197,12 @@ namespace Maple
             ApplyBase(this, Properties.Settings.Default.UseDarkTheme);
 
             _messenger.Publish(new LoadedMessage(this, this));
+            return Task.CompletedTask;
         }
 
-        public Task SaveAsync()
+        public async Task SaveAsync()
         {
-            return Task.Run(() => Save());
+            await Save().ConfigureAwait(true);
         }
 
         public Task LoadAsync()

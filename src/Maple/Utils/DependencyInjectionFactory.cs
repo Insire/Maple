@@ -27,9 +27,6 @@ namespace Maple
 
                 c.Resolve<ILocalizationService>().LoadAsync();
 
-                //if (Debugger.IsAttached)
-                //    Debugging();
-
                 return c;
             }
 
@@ -44,10 +41,10 @@ namespace Maple
                 // TODO register disposeables
 
                 // save-/loadable ViewModels
-                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IPlaylistsViewModel) }, typeof(Playlists), Reuse.Singleton);
-                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IMediaPlayersViewModel) }, typeof(MediaPlayers), Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
-                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(ICultureViewModel) }, typeof(Cultures), Reuse.Singleton);
-                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IUIColorsViewModel) }, typeof(UIColorsViewModel), Reuse.Singleton);
+                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(ISaveableViewModel), typeof(IPlaylistsViewModel) }, typeof(Playlists), Reuse.Singleton);
+                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(ISaveableViewModel), typeof(IMediaPlayersViewModel) }, typeof(MediaPlayers), Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
+                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(ISaveableViewModel), typeof(ICultureViewModel) }, typeof(Cultures), Reuse.Singleton);
+                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(ISaveableViewModel), typeof(IUIColorsViewModel) }, typeof(UIColorsViewModel), Reuse.Singleton);
 
                 //generic ViewModels
                 c.Register<Scenes>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));

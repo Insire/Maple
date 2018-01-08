@@ -7,7 +7,7 @@ using Maple.Localization.Properties;
 
 namespace Maple
 {
-    public class Playlists : BaseDataListViewModel<Playlist, PlaylistModel, int>, ISaveableViewModel, IPlaylistsViewModel
+    public class Playlists : VirtualizationListViewModel<Playlist, PlaylistModel, int>, ISaveableViewModel, IPlaylistsViewModel
     {
         private readonly Func<IMediaRepository> _repositoryFactory;
         private readonly IPlaylistMapper _playlistMapper;
@@ -21,15 +21,6 @@ namespace Maple
             AddCommand = new RelayCommand(Add, CanAdd);
         }
 
-        private void SaveInternal()
-        {
-            _log.Info($"{_translationService.Translate(nameof(Resources.Saving))} {_translationService.Translate(nameof(Resources.Playlists))}");
-            using (var context = _repositoryFactory())
-            {
-                context.Save(this);
-            }
-        }
-
         public void Add()
         {
             Add(_playlistMapper.GetNewPlaylist());
@@ -40,9 +31,13 @@ namespace Maple
             return Items != null;
         }
 
-        public override void Save()
+        public override async Task SaveAsync()
         {
-            SaveInternal();
+            _log.Info($"{_translationService.Translate(nameof(Resources.Saving))} {_translationService.Translate(nameof(Resources.Playlists))}");
+            using (var context = _repositoryFactory())
+            {
+                await context.SaveAsync(this).ConfigureAwait(true);
+            }
         }
 
         public override async Task LoadAsync()
@@ -57,7 +52,7 @@ namespace Maple
             }
 
             SelectedItem = Items.FirstOrDefault();
-            OnLoaded();
+            IsLoaded = true;
         }
     }
 }

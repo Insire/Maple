@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Maple.Domain;
 using Maple.Localization.Properties;
 
@@ -15,7 +14,7 @@ namespace Maple.Core
     /// <typeparam name="TViewModel">a wrapper class implementing <see cref="BaseViewModel" /></typeparam>
     /// <typeparam name="TModel">a DTO implementing <see cref="BaseObject" /></typeparam>
     /// <seealso cref="Maple.Core.BaseListViewModel{T}" />
-    public abstract class BaseDataListViewModel<TViewModel, TModel, TKeyDataType> : BaseListViewModel<TViewModel>, ILoadableViewModel
+    public abstract class BaseDataListViewModel<TViewModel, TModel, TKeyDataType> : BaseListViewModel<TViewModel>, ILoadableViewModel, ISaveableViewModel
         where TViewModel : BaseDataViewModel<TViewModel, TModel, TKeyDataType>, ISequence
         where TModel : class, IBaseObject<TKeyDataType>
     {
@@ -23,27 +22,14 @@ namespace Maple.Core
         protected readonly ILocalizationService _translationService;
         protected readonly ILoggingService _log;
 
-        /// <summary>
-        /// Gets the load command.
-        /// </summary>
-        /// <value>
-        /// The load command.
-        /// </value>
-        public ICommand LoadCommand => AsyncCommand.Create(LoadAsync, () => !IsLoaded);
-        /// <summary>
-        /// Gets the refresh command.
-        /// </summary>
-        /// <value>
-        /// The refresh command.
-        /// </value>
-        public ICommand RefreshCommand => AsyncCommand.Create(LoadAsync);
-        /// <summary>
-        /// Gets the save command.
-        /// </summary>
-        /// <value>
-        /// The save command.
-        /// </value>
-        public ICommand SaveCommand => new RelayCommand(Save);
+        public abstract bool IsLoaded { get; protected set; }
+
+        public abstract IAsyncCommand SaveCommand { get; }
+        public abstract IAsyncCommand LoadCommand { get; }
+        public abstract IAsyncCommand RefreshCommand { get; }
+
+        public abstract Task LoadAsync();
+        public abstract Task SaveAsync();
 
         protected BaseDataListViewModel(ViewModelServiceContainer container)
             : base(container.Messenger)
@@ -52,9 +38,6 @@ namespace Maple.Core
             _translationService = container.LocalizationService;
             _sequenceProvider = container.SequenceService;
         }
-
-        public abstract Task LoadAsync();
-        public abstract void Save();
 
         /// <summary>
         /// Removes the specified item.
@@ -141,5 +124,7 @@ namespace Maple.Core
                     SelectedItem = Items.First();
             }
         }
+
+
     }
 }

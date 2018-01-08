@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
@@ -12,9 +11,23 @@ namespace Maple
         private readonly ILocalizationService _manager;
         private readonly ILoggingService _log;
 
-        public ICommand RefreshCommand => AsyncCommand.Create(LoadAsync);
-        public ICommand LoadCommand => AsyncCommand.Create(LoadAsync, () => !IsLoaded);
-        public ICommand SaveCommand => new RelayCommand(Save);
+        public IAsyncCommand RefreshCommand => AsyncCommand.Create(LoadAsync);
+        public IAsyncCommand LoadCommand => AsyncCommand.Create(LoadAsync, () => !IsLoaded);
+        public IAsyncCommand SaveCommand => AsyncCommand.Create(Save);
+
+        private bool _isLoaded;
+        /// <summary>
+        /// Indicates whether the LoadCommand/ the Load Method has been executed yet
+        /// </summary>
+        public bool IsLoaded
+        {
+            get { return _isLoaded; }
+            protected set
+            {
+                if (value)
+                    SetValue(ref _isLoaded, value, OnChanged: () => Messenger.Publish(new LoadedMessage(this, this)));
+            }
+        }
 
         public Cultures(ViewModelServiceContainer container)
             : base(container.Messenger)
@@ -30,10 +43,12 @@ namespace Maple
             _manager.CurrentLanguage = SelectedItem.Model;
         }
 
-        public void Save()
+        public Task Save()
         {
             _log.Info($"{Resources.Saving} {Resources.Options}");
             _manager.Save();
+
+            return Task.CompletedTask;
         }
 
         public Task SaveAsync()
@@ -42,7 +57,6 @@ namespace Maple
             {
                 _log.Info($"{Resources.Saving} {Resources.Options}");
                 _manager.Save();
-
             });
         }
 

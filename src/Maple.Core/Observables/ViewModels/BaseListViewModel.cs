@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows.Data;
 using System.Windows.Input;
 using Maple.Domain;
 
@@ -19,13 +17,6 @@ namespace Maple.Core
     public abstract class BaseListViewModel<TViewModel> : ViewModel
         where TViewModel : INotifyPropertyChanged
     {
-        protected readonly object _itemsLock;
-
-        /// <summary>
-        /// Indicates whether the LoadCommand/ the Load Method has been executed yet
-        /// </summary>
-        public bool IsLoaded { get; protected set; }
-
         private TViewModel _selectedItem;
         public virtual TViewModel SelectedItem
         {
@@ -51,7 +42,7 @@ namespace Maple.Core
         public IReadOnlyCollection<TViewModel> Items
         {
             get { return (IReadOnlyCollection<TViewModel>)_items; }
-            private set { SetValue(ref _items, (IRangeObservableCollection<TViewModel>)value); }
+            protected set { SetValue(ref _items, (IRangeObservableCollection<TViewModel>)value); }
         }
 
         private ICollectionView _view;
@@ -64,10 +55,9 @@ namespace Maple.Core
         public ICollectionView View
         {
             get { return _view; }
-            private set { SetValue(ref _view, value); }
+            protected set { SetValue(ref _view, value); }
         }
 
-        public int Count => Items?.Count ?? 0;
         /// <summary>
         /// Gets the <see cref="TViewModel"/> at the specified index.
         /// </summary>
@@ -89,50 +79,15 @@ namespace Maple.Core
         protected BaseListViewModel(IMessenger messenger)
             : base(messenger)
         {
-            _itemsLock = new object();
-
-
-            Items = new RangeObservableCollection<TViewModel>();
-            _items.CollectionChanged += ItemsCollectionChanged;
-
-            View = CollectionViewSource.GetDefaultView(Items);
-
-            // initial Notification, so that UI recognizes the value
-            OnPropertyChanged(nameof(Count));
-
-            InitializeCommands();
-
-            BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
-        }
-
-        protected BaseListViewModel(IList<TViewModel> items, IMessenger messenger)
-            : this(messenger)
-        {
-            AddRange(items);
+            RemoveCommand = new RelayCommand<TViewModel>(Remove, CanRemove);
+            RemoveRangeCommand = new RelayCommand<IList>(RemoveRange, CanRemoveRange);
+            ClearCommand = new RelayCommand(() => Clear(), CanClear);
         }
 
         protected BaseListViewModel(IEnumerable<TViewModel> items, IMessenger messenger)
             : this(messenger)
         {
             AddRange(items);
-        }
-
-        private void InitializeCommands()
-        {
-            RemoveCommand = new RelayCommand<TViewModel>(Remove, CanRemove);
-            RemoveRangeCommand = new RelayCommand<IList>(RemoveRange, CanRemoveRange);
-            ClearCommand = new RelayCommand(() => Clear(), CanClear);
-        }
-
-        private void ItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            OnPropertyChanged(nameof(Count));
-        }
-
-        protected virtual void OnLoaded()
-        {
-            IsLoaded = true;
-            Messenger.Publish(new LoadedMessage(this, this));
         }
 
         /// <summary>

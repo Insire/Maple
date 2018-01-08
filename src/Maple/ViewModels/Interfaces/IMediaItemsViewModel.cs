@@ -4,12 +4,10 @@ using Maple.Core;
 
 namespace Maple
 {
-    public interface IMediaItemsViewModel : ISaveableViewModel
+    public interface IMediaItemsViewModel : ILoadableViewModel, ISaveableViewModel
     {
         IReadOnlyCollection<MediaItem> Items { get; }
 
         void Add(Playlist playlist);
-        Task LoadAsync();
-        void Save();
     }
 }

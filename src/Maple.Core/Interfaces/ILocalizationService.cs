@@ -10,7 +10,7 @@ namespace Maple.Core
     /// </summary>
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     /// <seealso cref="Maple.Core.IRefreshable" />
-    public interface ILocalizationService : INotifyPropertyChanged, IRefreshable
+    public interface ILocalizationService : INotifyPropertyChanged, ILoadAndSaveProvider
     {
         /// <summary>
         /// Gets or sets the current language.

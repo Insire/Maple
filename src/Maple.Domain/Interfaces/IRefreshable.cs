@@ -2,9 +2,9 @@
 
 namespace Maple.Domain
 {
-    public interface IRefreshable
+    public interface ILoadAndSaveProvider
     {
-        void Save();
+        Task Save();
         Task LoadAsync();
     }
 }

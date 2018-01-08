@@ -51,18 +51,18 @@ namespace Maple
             _busyStack.OnChanged += (hasItems) => { IsBusy = hasItems; };
         }
 
-        public void Save(MediaItem viewModel)
+        public async Task SaveAsync(MediaItem viewModel)
         {
             using (_busyStack.GetToken())
-                _mediaItemRepository.Save(viewModel.Model);
+                await _mediaItemRepository.SaveAsync(viewModel.Model).ConfigureAwait(false);
         }
 
-        public void Save(MediaItems viewModel)
+        public async Task SaveAsync(MediaItems viewModel)
         {
             using (_busyStack.GetToken())
             {
-                foreach (var item in viewModel.Items)
-                    Save(item);
+                var tasks = new List<Task>(viewModel.Items.Select(p => SaveAsync(p)));
+                await Task.WhenAll(tasks).ConfigureAwait(true);
             }
         }
 
@@ -71,7 +71,7 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var item = await _mediaItemRepository.GetByIdAsync(id)
-                                                     .ConfigureAwait(true);
+                                                     .ConfigureAwait(false);
                 return _mediaItemMapper.Get(item);
             }
         }
@@ -81,7 +81,7 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var items = await _mediaItemRepository.GetAsync()
-                                                      .ConfigureAwait(true);
+                                                      .ConfigureAwait(false);
                 return items.Select(p => _mediaItemMapper.Get(p))
                             .ToList();
             }
@@ -92,26 +92,26 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var item = await _mediaItemRepository.GetMediaItemByPlaylistIdAsync(id)
-                                                     .ConfigureAwait(true);
+                                                     .ConfigureAwait(false);
                 return _mediaItemMapper.Get(item);
             }
         }
 
-        public void Save(Playlist viewModel)
+        public async Task SaveAsync(Playlist viewModel)
         {
             if (!viewModel.IsChanged)
                 return;
 
             using (_busyStack.GetToken())
-                _playlistRepository.Save(viewModel.Model);
+                await _playlistRepository.SaveAsync(viewModel.Model).ConfigureAwait(false);
         }
 
-        public void Save(Playlists viewModel)
+        public async Task SaveAsync(Playlists viewModel)
         {
             using (_busyStack.GetToken())
             {
-                foreach (var item in viewModel.Items)
-                    Save(item);
+                var tasks = new List<Task>(viewModel.Items.Select(p => SaveAsync(p)));
+                await Task.WhenAll(tasks).ConfigureAwait(false); ;
             }
         }
 
@@ -120,7 +120,7 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var item = await _playlistRepository.GetByIdAsync(id)
-                                                    .ConfigureAwait(true);
+                                                    .ConfigureAwait(false);
                 return _playlistMapper.Get(item);
             }
         }
@@ -130,24 +130,24 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var items = await _playlistRepository.GetAsync()
-                                                     .ConfigureAwait(true);
+                                                     .ConfigureAwait(false);
                 return items.Select(p => _playlistMapper.Get(p))
                             .ToList();
             }
         }
 
-        public void Save(MediaPlayer viewModel)
+        public async Task SaveAsync(MediaPlayer viewModel)
         {
             using (_busyStack.GetToken())
-                _mediaPlayerRepository.Save(viewModel.Model);
+                await _mediaPlayerRepository.SaveAsync(viewModel.Model).ConfigureAwait(false);
         }
 
-        public void Save(MediaPlayers viewModel)
+        public async Task SaveAsync(MediaPlayers viewModel)
         {
             using (_busyStack.GetToken())
             {
-                foreach (var item in viewModel.Items)
-                    Save(item);
+                var tasks = new List<Task>(viewModel.Items.Select(p => SaveAsync(p)));
+                await Task.WhenAll(tasks).ConfigureAwait(true);
             }
         }
 
@@ -156,7 +156,7 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var item = await _mediaPlayerRepository.GetMainMediaPlayerAsync()
-                                                       .ConfigureAwait(true);
+                                                       .ConfigureAwait(false);
                 return _mediaPlayerMapper.GetMain(item, _playlistMapper.Get(item.Playlist));
             }
         }
@@ -166,7 +166,7 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var item = await _mediaPlayerRepository.GetByIdAsync(id)
-                                                       .ConfigureAwait(true);
+                                                       .ConfigureAwait(false);
                 return _mediaPlayerMapper.Get(item);
             }
         }
@@ -176,7 +176,7 @@ namespace Maple
             using (_busyStack.GetToken())
             {
                 var items = await _mediaPlayerRepository.GetOptionalMediaPlayersAsync()
-                                                        .ConfigureAwait(true);
+                                                        .ConfigureAwait(false);
                 return items.Select(p => _mediaPlayerMapper.Get(p))
                             .ToList();
             }

@@ -98,9 +98,9 @@ namespace Maple.Test.ViewModels
             var playlists = container.Resolve<IPlaylistsViewModel>();
             repository.ClearReceivedCalls();
 
-            playlists.Save();
+            await playlists.SaveAsync().ConfigureAwait(false);
 
-            repository.Received(1).Save(NSubstitute.Arg.Any<Playlists>());
+            await repository.Received(1).SaveAsync(NSubstitute.Arg.Any<Playlists>()).ConfigureAwait(false);
             repository.Received(1).Dispose();
         }
 

@@ -12,6 +12,6 @@ namespace Maple.Domain
         Task<List<TKeyDataType>> GetKeysAsync();
         Task<int> GetEntryCountAsync();
 
-        Task Save(TModel item);
+        Task SaveAsync(TModel item);
     }
 }

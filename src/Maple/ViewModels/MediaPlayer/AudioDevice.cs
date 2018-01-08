@@ -6,8 +6,6 @@ namespace Maple
     public class AudioDevice : ObservableObject, IIsSelected, ISequence, IAudioDevice
     {
         private bool _isSelected;
-
-
         public bool IsSelected
         {
             get { return _isSelected; }

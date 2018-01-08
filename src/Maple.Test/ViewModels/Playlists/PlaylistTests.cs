@@ -34,8 +34,6 @@ namespace Maple.Test.ViewModels
             var model = _context.CreateModelPlaylist();
             var playlist = container.CreatePlaylist(model);
 
-            Assert.AreEqual(_context.FullyQualifiedTestClassName, playlist.CreatedBy);
-            Assert.AreEqual(_context.FullyQualifiedTestClassName, playlist.UpdatedBy);
             Assert.AreEqual(4, playlist.Count);
             Assert.AreEqual($"Description for {_context.FullyQualifiedTestClassName} Playlist", playlist.Description);
             Assert.AreEqual(false, playlist.HasErrors);

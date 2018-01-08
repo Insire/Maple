@@ -7,7 +7,7 @@ using Maple.Localization.Properties;
 
 namespace Maple
 {
-    public class MediaPlayers : BaseDataListViewModel<MediaPlayer, MediaPlayerModel, int>, IMediaPlayersViewModel
+    public class MediaPlayers : VirtualizationListViewModel<MediaPlayer, MediaPlayerModel, int>, IMediaPlayersViewModel
     {
         private readonly Func<IMediaPlayer> _playerFactory;
         private readonly AudioDevices _devices;
@@ -41,15 +41,6 @@ namespace Maple
             _notificationService = container.NotificationService;
         }
 
-        private void SaveInternal()
-        {
-            _log.Info($"{_translationService.Translate(nameof(Resources.Saving))} {_translationService.Translate(nameof(Resources.MediaPlayers))}");
-            using (var context = _repositoryFactory())
-            {
-                context.Save(this);
-            }
-        }
-
         public void Add()
         {
             var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
@@ -77,9 +68,13 @@ namespace Maple
             Disposed = true;
         }
 
-        public override void Save()
+        public override async Task SaveAsync()
         {
-            SaveInternal();
+            _log.Info($"{_translationService.Translate(nameof(Resources.Saving))} {_translationService.Translate(nameof(Resources.MediaPlayers))}");
+            using (var context = _repositoryFactory())
+            {
+                await context.SaveAsync(this).ConfigureAwait(true);
+            }
         }
 
         public override async Task LoadAsync()
@@ -98,7 +93,7 @@ namespace Maple
                 AddRange(others);
             }
 
-            OnLoaded();
+            IsLoaded = true;
         }
     }
 }

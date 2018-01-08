@@ -7,21 +7,21 @@ using System.Windows.Threading;
 
 namespace Maple.Core
 {
-    public class VirtualizationListViewModel : ListCollectionView
+    public class VirtualizingCollectionViewSource : ListCollectionView
     {
-        private readonly IDataVirtualizationItemProvider _sponsor;
+        private readonly IVirtualizedViewModel _sponsor;
         private readonly HashSet<object> _deferredItems;
         private readonly MemoryCache _cache;
         private readonly CacheItemPolicy _policy;
 
         private bool _isDeferred;
 
-        public VirtualizationListViewModel(IList list)
+        public VirtualizingCollectionViewSource(IList list)
             : base(list)
         {
             _deferredItems = new HashSet<object>();
-            _sponsor = list as IDataVirtualizationItemProvider;
-            _cache = new MemoryCache(nameof(VirtualizationListViewModel));
+            _sponsor = list as IVirtualizedViewModel;
+            _cache = new MemoryCache(nameof(VirtualizingCollectionViewSource));
             _policy = new CacheItemPolicy()
             {
                 SlidingExpiration = TimeSpan.FromSeconds(3),

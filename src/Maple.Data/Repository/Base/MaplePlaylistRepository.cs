@@ -11,7 +11,7 @@ namespace Maple.Data
     public abstract class MaplePlaylistRepository<TModel, TKeyDataType> : IMapleRepository<TModel, TKeyDataType>
         where TModel : class, IBaseObject<TKeyDataType>
     {
-        public async Task Save(TModel item)
+        public async Task SaveAsync(TModel item)
         {
             using (var context = new PlaylistContext())
                 await SaveInternal(item, context).ConfigureAwait(false);

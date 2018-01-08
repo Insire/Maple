@@ -2,7 +2,7 @@
 
 namespace Maple.Core
 {
-    public interface IDataVirtualizationItemProvider
+    public interface IVirtualizedViewModel
     {
         void ExtendItems(IEnumerable<object> items);
         void DeflateItem(object item);

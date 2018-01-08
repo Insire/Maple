@@ -7,7 +7,7 @@ using Maple.Localization.Properties;
 
 namespace Maple
 {
-    public class MediaItems : BaseDataListViewModel<MediaItem, MediaItemModel, int>, IMediaItemsViewModel
+    public class MediaItems : VirtualizationListViewModel<MediaItem, MediaItemModel, int>, IMediaItemsViewModel
     {
         private readonly Func<IMediaRepository> _repositoryFactory;
         private readonly IMediaItemMapper _mediaItemMapper;
@@ -25,15 +25,6 @@ namespace Maple
             Add(_mediaItemMapper.GetNewMediaItem(sequence, playlist));
         }
 
-        private void SaveInternal()
-        {
-            _log.Info($"{_translationService.Translate(nameof(Resources.Saving))} {_translationService.Translate(nameof(Resources.MediaItems))}");
-            using (var context = _repositoryFactory())
-            {
-                context.Save(this);
-            }
-        }
-
         public override async Task LoadAsync()
         {
             _log.Info($"{_translationService.Translate(nameof(Resources.Loading))} {_translationService.Translate(nameof(Resources.MediaItems))}");
@@ -46,12 +37,16 @@ namespace Maple
             }
 
             SelectedItem = Items.FirstOrDefault();
-            OnLoaded();
+            IsLoaded = true;
         }
 
-        public override void Save()
+        public override async Task SaveAsync()
         {
-            SaveInternal();
+            _log.Info($"{_translationService.Translate(nameof(Resources.Saving))} {_translationService.Translate(nameof(Resources.MediaItems))}");
+            using (var context = _repositoryFactory())
+            {
+                await context.SaveAsync(this).ConfigureAwait(true);
+            }
         }
     }
 }

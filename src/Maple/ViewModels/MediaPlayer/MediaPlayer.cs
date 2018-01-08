@@ -92,34 +92,6 @@ namespace Maple
             protected set { SetValue(ref _isPrimary, value, OnChanged: () => Model.IsPrimary = value); }
         }
 
-        private string _createdBy;
-        public string CreatedBy
-        {
-            get { return _createdBy; }
-            set { SetValue(ref _createdBy, value, OnChanged: () => Model.CreatedBy = value); }
-        }
-
-        private string _updatedBy;
-        public string UpdatedBy
-        {
-            get { return _updatedBy; }
-            set { SetValue(ref _updatedBy, value, OnChanged: () => Model.UpdatedBy = value); }
-        }
-
-        private DateTime _updatedOn;
-        public DateTime UpdatedOn
-        {
-            get { return _updatedOn; }
-            set { SetValue(ref _updatedOn, value, OnChanged: () => Model.UpdatedOn = value); }
-        }
-
-        private DateTime _createdOn;
-        public DateTime CreatedOn
-        {
-            get { return _updatedOn; }
-            set { SetValue(ref _updatedOn, value, OnChanged: () => Model.CreatedOn = value); }
-        }
-
         public MediaPlayer(ViewModelServiceContainer container, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, MediaPlayerModel model)
             : base(model, validator, container.Messenger)
         {
@@ -129,11 +101,6 @@ namespace Maple
             _name = model.Name;
             _audioDevices = devices;
             _sequence = model.Sequence;
-
-            _createdBy = model.CreatedBy;
-            _createdOn = model.CreatedOn;
-            _updatedBy = model.UpdatedBy;
-            _updatedOn = model.UpdatedOn;
 
             if (AudioDevices.Items.Count > 0)
                 Player.AudioDevice = AudioDevices.Items.FirstOrDefault(p => p.Name == Model.DeviceName) ?? AudioDevices[0];
