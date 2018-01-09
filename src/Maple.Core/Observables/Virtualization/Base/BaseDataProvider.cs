@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Maple.Localization.Properties;
 
 namespace Maple.Core
@@ -7,34 +8,37 @@ namespace Maple.Core
     public abstract class BaseDataProvider<TViewModel, TPrimaryKeyType> : IDataProvider<TViewModel, TPrimaryKeyType>
         where TViewModel : class
     {
-        private readonly IDictionary<TPrimaryKeyType, TViewModel> _cache;
-        private readonly Func<TPrimaryKeyType, TViewModel> _viewModelFactory;
+        private readonly ICachingService<TPrimaryKeyType, TViewModel> _cache;
+        private readonly Func<TPrimaryKeyType, Task<TViewModel>> _viewModelFactory;
 
-        protected BaseDataProvider(Func<TPrimaryKeyType, TViewModel> viewModelFactory, IDictionary<TPrimaryKeyType, TViewModel> cache)
+        protected BaseDataProvider(Func<TPrimaryKeyType, Task<TViewModel>> viewModelFactory, ICachingService<TPrimaryKeyType, TViewModel> cache)
         {
             _cache = cache ?? throw new ArgumentNullException(nameof(cache), $"{nameof(cache)} {Resources.IsRequired}");
             _viewModelFactory = viewModelFactory ?? throw new ArgumentNullException(nameof(viewModelFactory), $"{nameof(viewModelFactory)} {Resources.IsRequired}");
         }
 
-        public void Chunk(IEnumerable<TPrimaryKeyType> Ids)
+        public async Task Chunk(IEnumerable<TPrimaryKeyType> Ids)
         {
             foreach (var id in Ids)
             {
-                if (_cache.ContainsKey(id))
+                if (_cache.Contains(id))
                     continue;
 
-                _cache.Add(id, InternalGet(id));
+                _cache.Add(id, await InternalGet(id).ConfigureAwait(false));
             }
         }
 
-        public TViewModel Get(TPrimaryKeyType id)
+        public async Task<TViewModel> Get(TPrimaryKeyType key)
         {
-            return _cache[id];
+            if (_cache.TryGetValue(key, out var result))
+                return result;
+
+            return await InternalGet(key).ConfigureAwait(false);
         }
 
-        private TViewModel InternalGet(TPrimaryKeyType id)
+        private async Task<TViewModel> InternalGet(TPrimaryKeyType key)
         {
-            return _viewModelFactory(id);
+            return await _viewModelFactory(key).ConfigureAwait(false);
         }
 
         public void Clear()

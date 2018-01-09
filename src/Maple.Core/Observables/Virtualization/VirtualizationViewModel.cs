@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Maple.Domain;
 using Maple.Localization.Properties;
@@ -52,8 +53,8 @@ namespace Maple.Core
             private set { SetValue(ref _deflateCommand, value); }
         }
 
-        private ICommand _expandCommand;
-        public ICommand ExpandCommand
+        private IAsyncCommand _expandCommand;
+        public IAsyncCommand ExpandCommand
         {
             get { return _expandCommand; }
             private set { SetValue(ref _expandCommand, value); }
@@ -65,15 +66,15 @@ namespace Maple.Core
             _dataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider), $"{nameof(dataProvider)} {Resources.IsRequired}");
 
             DeflateCommand = new RelayCommand(Deflate, CanDeflate);
-            ExpandCommand = new RelayCommand(Expand, CanExpand);
+            ExpandCommand = AsyncCommand.Create(Expand, CanExpand);
         }
 
-        public void Expand()
+        public async Task Expand()
         {
             if (ViewModel != null)
                 return;
 
-            ViewModel = _dataProvider.Get(Id);
+            ViewModel = await _dataProvider.Get(Id).ConfigureAwait(true);
             IsExtended = true;
         }
 

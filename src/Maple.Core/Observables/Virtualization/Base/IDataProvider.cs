@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Maple.Core
 {
     public interface IDataProvider<T, TPrimaryKeyType>
     {
-        T Get(TPrimaryKeyType id);
+        Task<T> Get(TPrimaryKeyType id);
 
-        void Chunk(IEnumerable<TPrimaryKeyType> Ids);
+        Task Chunk(IEnumerable<TPrimaryKeyType> Ids);
 
         void Clear();
         void Remove(TPrimaryKeyType id);
