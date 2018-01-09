@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using DryIoc;
+using Maple.Core;
 using Maple.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;

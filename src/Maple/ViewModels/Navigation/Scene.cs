@@ -6,11 +6,6 @@ using Maple.Localization.Properties;
 
 namespace Maple
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <seealso cref="Maple.Core.ObservableObject" />
-    /// <seealso cref="Maple.Core.ISequence" />
     public class Scene : ObservableObject, ISequence
     {
         private readonly ILocalizationService _manager;

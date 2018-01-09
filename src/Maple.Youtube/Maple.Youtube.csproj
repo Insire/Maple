@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Google.Apis.YouTube.v3">
-      <Version>1.31.1.1063</Version>
+      <Version>1.32.0.1079</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Zlib.Portable.Signed" Version="1.11.0" />
@@ -68,10 +68,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Maple.Core\Maple.Core.csproj">
-      <Project>{21fa5854-0692-42e2-924e-a38cf3c7ff71}</Project>
-      <Name>Maple.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Maple.Domain\Maple.Domain.csproj">
       <Project>{9d7d05a6-8271-4836-a7bb-5b2abeccbd81}</Project>
       <Name>Maple.Domain</Name>
