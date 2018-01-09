@@ -1,11 +1,13 @@
 ﻿namespace Maple.Core
 {
-    public interface ICachingService<TPrimaryKeyType, TViewModel>
+    public interface ICachingService<TKey, TObject>
     {
-        bool Contains(TPrimaryKeyType key);
-        bool Add(TPrimaryKeyType key, TViewModel viewModel);
+        bool Contains(TKey key);
+        bool Add(TKey key, TObject item);
+
+        bool TryGetValue(TKey key, out TObject item);
 
         void Clear();
-        bool Remove(TPrimaryKeyType key);
+        bool Remove(TKey key);
     }
 }

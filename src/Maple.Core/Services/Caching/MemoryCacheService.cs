@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Caching;
 using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
-    public abstract class MemoryCacheService<TPrimaryKeyType, TViewModel> : ICachingService<TPrimaryKeyType, TViewModel>
-        where TViewModel : class
+    public abstract class MemoryCacheService<TKey, TObject> : ICachingService<TKey, TObject>
+        where TObject : class
     {
-        private readonly HashSet<TPrimaryKeyType> _trackedEntries;
+        private readonly HashSet<TKey> _trackedEntries;
         private readonly MemoryCache _cache;
         private readonly CacheItemPolicy _policy;
         private readonly IVirtualizedViewModel _virtualizationProvider;
@@ -16,8 +17,8 @@ namespace Maple.Core
 
         private MemoryCacheService()
         {
-            _cacheKeyPart = typeof(TViewModel).FullName;
-            _trackedEntries = new HashSet<TPrimaryKeyType>();
+            _cacheKeyPart = typeof(TObject).FullName;
+            _trackedEntries = new HashSet<TKey>();
             _policy = new CacheItemPolicy()
             {
                 SlidingExpiration = TimeSpan.FromSeconds(3),
@@ -33,12 +34,12 @@ namespace Maple.Core
             _cache = cache ?? throw new ArgumentNullException(nameof(cache), $"{nameof(cache)} {Resources.IsRequired}");
         }
 
-        public bool Add(TPrimaryKeyType key, TViewModel viewModel)
+        public bool Add(TKey key, TObject viewModel)
         {
             if (viewModel == null)
                 throw new ArgumentNullException(nameof(viewModel), $"{nameof(viewModel)} {Resources.IsRequired}");
 
-            var result = _cache.Add(new CacheItem(_cacheKeyPart + key, viewModel), _policy);
+            var result = _cache.Add(new CacheItem(GetInternalKey(key), viewModel), _policy);
 
             if (result)
                 _trackedEntries.Add(key);
@@ -46,7 +47,7 @@ namespace Maple.Core
             return result;
         }
 
-        public bool Contains(TPrimaryKeyType key)
+        public bool Contains(TKey key)
         {
             return _cache.Contains(GetInternalKey(key));
         }
@@ -59,9 +60,9 @@ namespace Maple.Core
             _trackedEntries.Clear();
         }
 
-        public bool Remove(TPrimaryKeyType key)
+        public bool Remove(TKey key)
         {
-            var result = _cache.Remove(GetInternalKey(key)) is TViewModel;
+            var result = _cache.Remove(GetInternalKey(key)) is TObject;
 
             if (result)
                 _trackedEntries.Remove(key);
@@ -75,9 +76,24 @@ namespace Maple.Core
         //}
 
 
-        private string GetInternalKey(TPrimaryKeyType key)
+        private string GetInternalKey(TKey key)
         {
             return _cacheKeyPart + key;
+        }
+
+        public bool TryGetValue(TKey key, out TObject item)
+        {
+            item = (TObject)_cache.Get(GetInternalKey(key));
+
+            return true;
+        }
+
+        // hm, speed?
+        public bool TryGetValues(out IEnumerable<TObject> items, params TKey[] keys)
+        {
+            items = _cache.GetValues(keys.Select(key => GetInternalKey(key))).Select(p => p.Value).Cast<TObject>();
+
+            return true;
         }
     }
 }

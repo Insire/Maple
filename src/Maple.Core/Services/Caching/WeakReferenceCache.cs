@@ -3,20 +3,31 @@ using System.Collections.Concurrent;
 
 namespace Maple.Core
 {
-    public sealed class WeakReferenceCache<TPrimaryKeyType, TViewModel> : ICachingService<TPrimaryKeyType, TViewModel>
-        where TViewModel : class
+    public sealed class WeakReferenceCache<TKey, TObject> : ICachingService<TKey, TObject>
+        where TObject : class
     {
-        private readonly ConcurrentDictionary<TPrimaryKeyType, WeakReference<TViewModel>> _references;
+        private readonly ConcurrentDictionary<TKey, WeakReference<TObject>> _references;
 
         public WeakReferenceCache()
         {
-            _references = new ConcurrentDictionary<TPrimaryKeyType, WeakReference<TViewModel>>();
+            _references = new ConcurrentDictionary<TKey, WeakReference<TObject>>();
         }
 
-        public bool Add(TPrimaryKeyType key, TViewModel viewModel)
+        public bool Add(TKey key, TObject item)
         {
-            throw new NotImplementedException(); // can't accept IDisposeable, since we dont know when the object will be disposed and we cant call Dispose on it
+            return Add(key, item, false);
+        }
 
+        public bool Add(TKey key, TObject item, bool isStrongReference)
+        {
+            // can't accept IDisposeable, since we dont know when the object will be disposed and we cant call Dispose on it
+            if (item is IDisposable)
+                throw new ArgumentException();
+
+            _references.AddOrUpdate(key, new WeakReference<TObject>(item), (existingKey, existingEntry) => existingEntry = new WeakReference<TObject>(item));
+
+
+            return true;
             // Consider
             // And finally a word of warning: weak references aren't a guaranteed profit for application performance.
             // In most cases, they will make an algorithm more performant than when using very large local variables.
@@ -26,19 +37,29 @@ namespace Maple.Core
             // So the best advice with weak references is: profile or benchmark it, to make sure that you choose the best solution for your specific situation.
         }
 
+        public bool TryGetValue(TKey key, out TObject item)
+        {
+            item = default(TObject);
+
+            if (_references.TryGetValue(key, out var reference))
+                return reference.TryGetTarget(out item);
+
+            return false;
+        }
+
         public void Clear()
         {
-            throw new NotImplementedException();
+            _references.Clear();
         }
 
-        public bool Contains(TPrimaryKeyType key)
+        public bool Contains(TKey key)
         {
-            throw new NotImplementedException();
+            return _references.ContainsKey(key);
         }
 
-        public bool Remove(TPrimaryKeyType key)
+        public bool Remove(TKey key)
         {
-            throw new NotImplementedException();
+            return _references.TryRemove(key, out _);
         }
     }
 }
