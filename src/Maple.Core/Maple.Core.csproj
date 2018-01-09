@@ -36,8 +36,6 @@
     <PackageReference Include="AutoMapper">
       <Version>6.2.2</Version>
     </PackageReference>
-    <PackageReference Include="EntityFramework" Version="6.2.0" />
-    <PackageReference Include="Expression.Blend.Sdk" Version="1.0.2" />
     <PackageReference Include="FluentValidation" Version="7.3.4" />
     <PackageReference Include="Humanizer.Core">
       <Version>2.2.0</Version>
@@ -46,12 +44,9 @@
       <Version>2.2.0</Version>
     </PackageReference>
     <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="SQLite.CodeFirst" Version="1.5.0.21" />
     <PackageReference Include="squirrel.windows">
       <Version>1.7.8</Version>
     </PackageReference>
-    <PackageReference Include="YoutubeExtractor" Version="0.10.11" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
@@ -123,7 +118,6 @@
     <Compile Include="IO\Interfaces\IFileSystemInfo.cs" />
     <Compile Include="Observables\Base\ILoadableViewModel.cs" />
     <Compile Include="IO\IOUtils.cs" />
-    <Compile Include="IO\Util\SelectedTreeViewItemBehavior.cs" />
     <Compile Include="EventAggregator\Messages\ShuffleModeChangedMessage.cs" />
     <Compile Include="EventAggregator\Messages\UiPrimaryColorChangedMessage.cs" />
     <Compile Include="EventAggregator\Messages\ViewModelSelectionChangedMessage.cs" />
@@ -186,7 +180,6 @@
     <Compile Include="Observables\ViewModels\BaseViewModel.cs" />
     <Compile Include="Observables\ViewModels\BaseListViewModel.cs" />
     <Compile Include="Services\Logging\LoggingService.cs" />
-    <Compile Include="Services\MrlExtractionService.cs" />
     <Compile Include="Observables\NotifyPropertyChangedExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Validation\Base\BaseValidator.cs" />
