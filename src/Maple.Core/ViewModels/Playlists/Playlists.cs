@@ -6,7 +6,7 @@ using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
-    public class Playlists : VirtualizationListViewModel<Playlist, PlaylistModel, int>, ISaveableViewModel, IPlaylistsViewModel
+    public class Playlists : ValidableBaseDataListViewModel<Playlist, PlaylistModel, int>, ISaveableViewModel, IPlaylistsViewModel
     {
         private readonly Func<IMediaRepository> _repositoryFactory;
         private readonly IPlaylistMapper _playlistMapper;
@@ -39,7 +39,7 @@ namespace Maple.Core
             }
         }
 
-        public override async Task LoadAsync()
+        public override async Task GetCountAsync()
         {
             _log.Info($"{_translationService.Translate(nameof(Resources.Loading))} {_translationService.Translate(nameof(Resources.Playlists))}");
             Clear();

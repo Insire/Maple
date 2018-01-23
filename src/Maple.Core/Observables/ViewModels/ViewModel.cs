@@ -6,6 +6,7 @@ namespace Maple.Core
 {
     public abstract class ViewModel : ObservableObject, IDisposable
     {
+        // TODO cache equality comparer
         protected IMessenger Messenger { get; }
         protected BusyStack BusyStack { get; }
 

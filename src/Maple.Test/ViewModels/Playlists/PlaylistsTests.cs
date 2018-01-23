@@ -125,7 +125,7 @@ namespace Maple.Test.ViewModels
             var playlists = (Playlists)container.Resolve<IPlaylistsViewModel>();
             repository.ClearReceivedCalls();
 
-            await playlists.LoadAsync().ConfigureAwait(false);
+            await playlists.GetCountAsync().ConfigureAwait(false);
             await repository.Received(1).GetPlaylistsAsync().ConfigureAwait(false);
             repository.Received(1).Dispose();
 

@@ -205,7 +205,7 @@ namespace Maple
             await Save().ConfigureAwait(true);
         }
 
-        public Task LoadAsync()
+        public Task GetCountAsync()
         {
             Load();
             return Task.CompletedTask;

@@ -6,7 +6,7 @@ using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
-    public class MediaItems : VirtualizationListViewModel<MediaItem, MediaItemModel, int>, IMediaItemsViewModel
+    public class MediaItems : ValidableBaseDataListViewModel<MediaItem, MediaItemModel, int>, IMediaItemsViewModel
     {
         private readonly Func<IMediaRepository> _repositoryFactory;
         private readonly IMediaItemMapper _mediaItemMapper;
@@ -24,7 +24,7 @@ namespace Maple.Core
             Add(_mediaItemMapper.GetNewMediaItem(sequence, playlist));
         }
 
-        public override async Task LoadAsync()
+        public override async Task GetCountAsync()
         {
             _log.Info($"{_translationService.Translate(nameof(Resources.Loading))} {_translationService.Translate(nameof(Resources.MediaItems))}");
             Clear();

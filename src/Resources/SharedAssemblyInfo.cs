@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("0.0.1")]
 [assembly: AssemblyFileVersion("0.0.1")]
 [assembly: AssemblyInformationalVersion("0.0.0.1")]
-[assembly: AssemblyCopyright("© 2017 Insire")]
+[assembly: AssemblyCopyright("© 2018 Insire")]
 [assembly: AssemblyTrademark("")]
 [assembly: ComVisible(false)]
 

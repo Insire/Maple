@@ -76,7 +76,7 @@ namespace Maple.Core
             }
         }
 
-        public override async Task LoadAsync()
+        public override async Task GetCountAsync()
         {
             _notificationService.Info($"{_translationService.Translate(nameof(Resources.Loading))} {_translationService.Translate(nameof(Resources.MediaPlayers))}");
             Clear();

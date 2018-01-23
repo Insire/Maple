@@ -108,6 +108,8 @@
     <Compile Include="EventAggregator\Messages\RepeatModeChangedMessage.cs" />
     <Compile Include="Extensions\EventExtension.cs" />
     <Compile Include="EventAggregator\Messages\FileSystemInfoChangedMessage.cs" />
+    <Compile Include="Observables\Virtualization\Base\IVirtualizedListViewModel.cs" />
+    <Compile Include="Observables\Virtualization\VirtualizingCollectionViewSource.cs" />
     <Compile Include="Services\Caching\SimpleStaticCacheService.cs" />
     <Compile Include="Services\DataAccess\MediaItemDataProvider.cs" />
     <Compile Include="Services\DataAccess\MediaPlayerDataProvider.cs" />
@@ -133,11 +135,8 @@
     <Compile Include="Observables\ViewModels\ViewModel.cs" />
     <Compile Include="Observables\ChangeTracker.cs" />
     <Compile Include="Observables\NotifyTaskCompletion.cs" />
-    <Compile Include="Observables\Virtualization\Base\BaseDataProvider.cs" />
-    <Compile Include="Observables\Virtualization\Base\IDataProvider.cs" />
-    <Compile Include="Observables\Virtualization\Base\IVirtualizedViewModel.cs" />
-    <Compile Include="Observables\Virtualization\DataVirtualizationCollectionView.cs" />
-    <Compile Include="Observables\Virtualization\VirtualizationListViewModel.cs" />
+    <Compile Include="Services\DataAccess\Base\BaseDataProvider.cs" />
+    <Compile Include="Services\DataAccess\Base\IDataProvider.cs" />
     <Compile Include="Observables\Virtualization\VirtualizationViewModel.cs" />
     <Compile Include="Observables\Virtualization\VirtualizationViewModelState.cs" />
     <Compile Include="ProcessExecutionResult.cs" />
@@ -186,7 +185,7 @@
     <Compile Include="Observables\NotifyPropertyChangedExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Validation\Base\BaseValidator.cs" />
-    <Compile Include="Services\DataAccess\IMediaRepository.cs" />
+    <Compile Include="Services\DataAccess\Base\IMediaRepository.cs" />
     <Compile Include="Services\DataAccess\MediaRepository.cs" />
     <Compile Include="Services\SquirrelLogger.cs" />
     <Compile Include="Services\VersionService.cs" />

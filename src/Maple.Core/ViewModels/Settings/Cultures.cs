@@ -10,8 +10,8 @@ namespace Maple.Core
         private readonly ILocalizationService _manager;
         private readonly ILoggingService _log;
 
-        public IAsyncCommand RefreshCommand => AsyncCommand.Create(LoadAsync);
-        public IAsyncCommand LoadCommand => AsyncCommand.Create(LoadAsync, () => !IsLoaded);
+        public IAsyncCommand RefreshCommand => AsyncCommand.Create(GetCountAsync);
+        public IAsyncCommand LoadCommand => AsyncCommand.Create(GetCountAsync, () => !IsLoaded);
         public IAsyncCommand SaveCommand => AsyncCommand.Create(Save);
 
         private bool _isLoaded;
@@ -59,7 +59,7 @@ namespace Maple.Core
             });
         }
 
-        public async Task LoadAsync()
+        public async Task GetCountAsync()
         {
             _log.Info($"{Resources.Loading} {Resources.Options}");
             await _manager.LoadAsync().ConfigureAwait(true);

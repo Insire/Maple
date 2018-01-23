@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Data;
 using System.Windows.Input;
 using FluentValidation;
 using Maple.Core;
@@ -175,14 +174,13 @@ namespace Maple.Core
                 _isShuffeling = model.IsShuffeling;
                 _sequence = model.Sequence;
 
-                RepeatModes = new RangeObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
                 _history = new Stack<int>();
 
+                RepeatModes = new RangeObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
                 Items = new RangeObservableCollection<MediaItem>();
                 _items.CollectionChanged += (o, e) => OnPropertyChanged(nameof(Count));
 
-                BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
-                View = CollectionViewSource.GetDefaultView(Items); // TODO add sorting by sequence
+                View = new VirtualizingCollectionViewSource(container, (IList)_items);
                 OnPropertyChanged(nameof(Count));
 
                 LoadFromFileCommand = AsyncCommand.Create(LoadFromFile, () => CanLoadFromFile());
@@ -199,6 +197,7 @@ namespace Maple.Core
 
                 Validate();
             }
+
             SkipChangeTracking = false;
         }
 

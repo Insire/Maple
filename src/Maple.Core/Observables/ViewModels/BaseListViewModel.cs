@@ -45,19 +45,6 @@ namespace Maple.Core
             protected set { SetValue(ref _items, (IRangeObservableCollection<TViewModel>)value); }
         }
 
-        private ICollectionView _view;
-        /// <summary>
-        /// For grouping, sorting and filtering
-        /// </summary>
-        /// <value>
-        /// The view.
-        /// </value>
-        public ICollectionView View
-        {
-            get { return _view; }
-            protected set { SetValue(ref _view, value); }
-        }
-
         /// <summary>
         /// Gets the <see cref="TViewModel"/> at the specified index.
         /// </summary>

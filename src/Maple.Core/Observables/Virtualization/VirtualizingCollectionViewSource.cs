@@ -4,30 +4,27 @@ using System.Collections.Generic;
 using System.Runtime.Caching;
 using System.Windows.Data;
 using System.Windows.Threading;
+using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
     public class VirtualizingCollectionViewSource : ListCollectionView
     {
-        private readonly IVirtualizedViewModel _sponsor;
+        private readonly IVirtualizedListViewModel _sponsor;
         private readonly HashSet<object> _deferredItems;
         private readonly MemoryCache _cache;
         private readonly CacheItemPolicy _policy;
 
         private bool _isDeferred;
 
-        public VirtualizingCollectionViewSource(IList list)
+        public VirtualizingCollectionViewSource(ViewModelServiceContainer container, IList list)
             : base(list)
         {
+            _cache = container.Cache ?? throw new ArgumentNullException(nameof(container.Cache), $"{nameof(container.Cache)} {Resources.IsRequired}");
+            _policy = container.CacheItemPolicy ?? throw new ArgumentNullException(nameof(container.CacheItemPolicy), $"{nameof(container.CacheItemPolicy)} {Resources.IsRequired}");
+
             _deferredItems = new HashSet<object>();
-            _sponsor = list as IVirtualizedViewModel;
-            _cache = new MemoryCache(nameof(VirtualizingCollectionViewSource));
-            _policy = new CacheItemPolicy()
-            {
-                SlidingExpiration = TimeSpan.FromSeconds(3),
-                Priority = CacheItemPriority.Default,
-                RemovedCallback = new CacheEntryRemovedCallback(CacheRemovedCallback)
-            };
+            _sponsor = list as IVirtualizedListViewModel;
         }
 
         public void CacheRemovedCallback(CacheEntryRemovedArguments arguments)

@@ -2,6 +2,12 @@
 
 namespace Maple.Core
 {
+    public interface ILoadableViewModel<TKey> : ILoadableViewModel
+    {
+        Task GetCountAsync();
+        Task GetItemsWithKey(TKey[] keys);
+    }
+
     public interface ILoadableViewModel
     {
         /// <summary>
@@ -14,7 +20,5 @@ namespace Maple.Core
 
         IAsyncCommand LoadCommand { get; }
         IAsyncCommand RefreshCommand { get; }
-
-        Task LoadAsync();
     }
 }

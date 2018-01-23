@@ -159,7 +159,7 @@ namespace Maple
 
         private IList<Task> LoadApplicationData()
         {
-            return new List<Task>((_container.Resolve<IEnumerable<ILoadableViewModel>>()).ToArray().Select(p => p.LoadAsync()));
+            return new List<Task>((_container.Resolve<IEnumerable<ILoadableViewModel>>()).ToArray().Select(p => p.GetCountAsync()));
         }
 
         private async Task SaveState()

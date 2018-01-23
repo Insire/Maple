@@ -4,19 +4,9 @@ using Maple.Localization.Properties;
 
 namespace Maple
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <seealso cref="Maple.Core.ObservableObject" />
     public class ShellViewModel : ObservableObject
     {
         private StatusbarViewModel _statusbarViewModel;
-        /// <summary>
-        /// Gets the statusbar view model.
-        /// </summary>
-        /// <value>
-        /// The statusbar view model.
-        /// </value>
         public StatusbarViewModel StatusbarViewModel
         {
             get { return _statusbarViewModel; }
@@ -24,12 +14,6 @@ namespace Maple
         }
 
         private Scenes _scenes;
-        /// <summary>
-        /// Gets the scenes.
-        /// </summary>
-        /// <value>
-        /// The scenes.
-        /// </value>
         public Scenes Scenes
         {
             get { return _scenes; }
@@ -37,12 +21,6 @@ namespace Maple
         }
 
         private ILocalizationService _translationManager;
-        /// <summary>
-        /// Gets the translation manager.
-        /// </summary>
-        /// <value>
-        /// The translation manager.
-        /// </value>
         public ILocalizationService TranslationManager
         {
             get { return _translationManager; }
@@ -50,12 +28,6 @@ namespace Maple
         }
 
         private IDialogViewModel _dialogViewModel;
-        /// <summary>
-        /// Gets the dialog view model.
-        /// </summary>
-        /// <value>
-        /// The dialog view model.
-        /// </value>
         public IDialogViewModel DialogViewModel
         {
             get { return _dialogViewModel; }
@@ -63,12 +35,6 @@ namespace Maple
         }
 
         private IPlaylistsViewModel _playlists;
-        /// <summary>
-        /// Gets the playlists.
-        /// </summary>
-        /// <value>
-        /// The playlists.
-        /// </value>
         public IPlaylistsViewModel Playlists
         {
             get { return _playlists; }
@@ -76,12 +42,6 @@ namespace Maple
         }
 
         private IMediaPlayersViewModel _mediaPlayers;
-        /// <summary>
-        /// Gets the media players.
-        /// </summary>
-        /// <value>
-        /// The media players.
-        /// </value>
         public IMediaPlayersViewModel MediaPlayers
         {
             get { return _mediaPlayers; }
@@ -89,29 +49,12 @@ namespace Maple
         }
 
         private OptionsViewModel _optionsViewModel;
-        /// <summary>
-        /// Gets the options view model.
-        /// </summary>
-        /// <value>
-        /// The options view model.
-        /// </value>
         public OptionsViewModel OptionsViewModel
         {
             get { return _optionsViewModel; }
             private set { SetValue(ref _optionsViewModel, value); }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ShellViewModel"/> class.
-        /// </summary>
-        /// <param name="translationManager">The translation manager.</param>
-        /// <param name="scenes">The scenes.</param>
-        /// <param name="statusBarViewModel">The status bar view model.</param>
-        /// <param name="dialogViewModel">The dialog view model.</param>
-        /// <param name="playlists">The playlists.</param>
-        /// <param name="mediaPlayers">The media players.</param>
-        /// <param name="uiColorsViewModel">The UI colors view model.</param>
-        /// <param name="optionsViewModel">The options view model.</param>
         public ShellViewModel(ILocalizationService translationManager,
                                 Scenes scenes,
                                 StatusbarViewModel statusBarViewModel,
