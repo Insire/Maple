@@ -141,7 +141,8 @@ Task(CleanSolutionTask)
 
             var customProject = ParseProject(project.Path, configuration: Configuration, platform: Platform);
 
-            CleanDirectory(customProject.OutputPath.FullPath);
+            foreach(var dir in customProject.OutputPaths)
+                CleanDirectory(dir);
 
             if(customProject.OutputType != "Library") // WinExe
                 continue;
@@ -149,7 +150,8 @@ Task(CleanSolutionTask)
             if(!project.Name.Contains("Test")) // we only care about test assemblies
                 continue;
 
-            testsDirectories.Add(customProject.OutputPath.FullPath);
+            foreach(var dir in customProject.OutputPaths)
+                testsDirectories.Add(dir.FullPath);
         }
     });
 

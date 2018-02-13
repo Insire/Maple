@@ -2,11 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Maple.Domain;
-using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
-    public class MediaPlayers : VirtualizationListViewModel<MediaPlayer, MediaPlayerModel, int>, IMediaPlayersViewModel
+    public class MediaPlayers : ValidableBaseDataListViewModel<MediaPlayer, MediaPlayerModel, int>, IMediaPlayersViewModel
     {
         private readonly Func<IMediaPlayer> _playerFactory;
         private readonly AudioDevices _devices;
@@ -15,35 +14,42 @@ namespace Maple.Core
         private readonly IMediaPlayerMapper _mediaPlayerMapper;
         private readonly ILoggingNotifcationService _notificationService;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MediaPlayers"/> class.
-        /// </summary>
-        /// <param name="manager">The manager.</param>
-        /// <param name="playerFactory">The player factory.</param>
-        /// <param name="repositoryFactory">The repo.</param>
-        /// <param name="devices">The devices.</param>
-        /// <param name="dialog">The dialog.</param>
-        public MediaPlayers(ViewModelServiceContainer container,
-                            IMediaPlayerMapper mediaPlayerMapper,
-                            Func<IMediaPlayer> playerFactory,
-                            Func<IMediaRepository> repositoryFactory,
-                            AudioDevices devices,
-                            IDialogViewModel dialog)
-            : base(container)
+        protected MediaPlayers(ViewModelServiceContainer container, IMapleRepository<MediaPlayerModel, int> repository)
+            : base(container, repository)
         {
-            _playerFactory = playerFactory ?? throw new ArgumentNullException(nameof(playerFactory), $"{nameof(playerFactory)} {Resources.IsRequired}");
-            _devices = devices ?? throw new ArgumentNullException(nameof(devices), $"{nameof(devices)} {Resources.IsRequired}");
-            _dialog = dialog ?? throw new ArgumentNullException(nameof(dialog), $"{nameof(dialog)} {Resources.IsRequired}");
-            _repositoryFactory = repositoryFactory ?? throw new ArgumentNullException(nameof(repositoryFactory), $"{nameof(repositoryFactory)} {Resources.IsRequired}");
-            _mediaPlayerMapper = mediaPlayerMapper ?? throw new ArgumentNullException(nameof(mediaPlayerMapper), $"{nameof(mediaPlayerMapper)} {Resources.IsRequired}");
-
-            _notificationService = container.NotificationService;
         }
+
+        public override bool IsLoaded
+        {
+            get { throw new NotImplementedException(); }
+            protected set => throw new NotImplementedException();
+        }
+
+        public override IAsyncCommand SaveCommand => throw new NotImplementedException();
+
+        public override IAsyncCommand LoadCommand => throw new NotImplementedException();
+
+        public override IAsyncCommand RefreshCommand => throw new NotImplementedException();
 
         public void Add()
         {
             var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
             Add(_mediaPlayerMapper.GetNewMediaPlayer(sequence));
+        }
+
+        public override Task GetCountAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task GetItemsWithKey(int[] keys)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task SaveAsync()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -67,32 +73,32 @@ namespace Maple.Core
             Disposed = true;
         }
 
-        public override async Task SaveAsync()
-        {
-            _log.Info($"{_translationService.Translate(nameof(Resources.Saving))} {_translationService.Translate(nameof(Resources.MediaPlayers))}");
-            using (var context = _repositoryFactory())
-            {
-                await context.SaveAsync(this).ConfigureAwait(true);
-            }
-        }
+        //public override async Task SaveAsync()
+        //{
+        //    _log.Info($"{_translationService.Translate(nameof(Resources.Saving))} {_translationService.Translate(nameof(Resources.MediaPlayers))}");
+        //    using (var context = _repositoryFactory())
+        //    {
+        //        await context.SaveAsync(this).ConfigureAwait(true);
+        //    }
+        //}
 
-        public override async Task GetCountAsync()
-        {
-            _notificationService.Info($"{_translationService.Translate(nameof(Resources.Loading))} {_translationService.Translate(nameof(Resources.MediaPlayers))}");
-            Clear();
+        //public override async Task GetCountAsync()
+        //{
+        //    _notificationService.Info($"{_translationService.Translate(nameof(Resources.Loading))} {_translationService.Translate(nameof(Resources.MediaPlayers))}");
+        //    Clear();
 
-            using (var context = _repositoryFactory())
-            {
-                var main = await context.GetMainMediaPlayerAsync().ConfigureAwait(true);
+        //    using (var context = _repositoryFactory())
+        //    {
+        //        var main = await context.GetMainMediaPlayerAsync().ConfigureAwait(true);
 
-                Add(main);
-                SelectedItem = main;
+        //        Add(main);
+        //        SelectedItem = main;
 
-                var others = await context.GetAllOptionalMediaPlayersAsync().ConfigureAwait(true);
-                AddRange(others);
-            }
+        //        var others = await context.GetAllOptionalMediaPlayersAsync().ConfigureAwait(true);
+        //        AddRange(others);
+        //    }
 
-            IsLoaded = true;
-        }
+        //    IsLoaded = true;
+        //}
     }
 }

@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
-using Maple.Domain;
 
 namespace Maple.Core
 {
@@ -18,31 +17,26 @@ namespace Maple.Core
         where TViewModel : INotifyPropertyChanged
     {
         private TViewModel _selectedItem;
-        public virtual TViewModel SelectedItem
+        public TViewModel SelectedItem
         {
             get { return _selectedItem; }
             set
             {
-                if (EqualityComparer<TViewModel>.Default.Equals(_selectedItem, value))
-                    return;
-
-                Messenger.Publish(new ViewModelSelectionChangingMessage<TViewModel>(Items, _selectedItem));
-                _selectedItem = value;
-                Messenger.Publish(new ViewModelSelectionChangedMessage<TViewModel>(Items, _selectedItem));
-
-                OnPropertyChanged();
+                SetValue(ref _selectedItem, value,
+                    () => Messenger.Publish(new ViewModelSelectionChangingMessage<TViewModel>(Items, _selectedItem)),
+                    () => Messenger.Publish(new ViewModelSelectionChangedMessage<TViewModel>(Items, _selectedItem)));
             }
         }
 
-        private IRangeObservableCollection<TViewModel> _items;
+        protected RangeObservableCollection<TViewModel> _items;
         /// <summary>
         /// Contains all the UI relevant Models and notifies about changes in the collection and inside the Models themself
         /// </summary>
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public IReadOnlyCollection<TViewModel> Items
+        public IReadOnlyList<TViewModel> Items
         {
-            get { return (IReadOnlyCollection<TViewModel>)_items; }
-            protected set { SetValue(ref _items, (IRangeObservableCollection<TViewModel>)value); }
+            get { return _items; }
+            protected set { SetValue(ref _items, (RangeObservableCollection<TViewModel>)value); }
         }
 
         /// <summary>

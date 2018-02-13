@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using Maple.Domain;
 using Maple.Localization.Properties;
-using Splat;
 
 namespace Maple
 {
@@ -12,8 +11,6 @@ namespace Maple
     public class SquirrelLogger : Splat.ILogger, ILoggingService
     {
         private readonly ILoggingService _log;
-
-        public LogLevel Level { get; set; }
 
         public SquirrelLogger(ILoggingService log)
         {

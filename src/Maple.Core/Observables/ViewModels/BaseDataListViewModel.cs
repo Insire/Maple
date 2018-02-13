@@ -53,7 +53,7 @@ namespace Maple.Core
             _translationService = container.LocalizationService;
             _sequenceProvider = container.SequenceService;
 
-            View = new VirtualizingCollectionViewSource(container, (IList)_items);
+            View = new VirtualizingCollectionViewSource(container, _items);
         }
 
         /// <summary>

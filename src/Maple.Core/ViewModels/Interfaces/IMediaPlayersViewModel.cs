@@ -5,6 +5,6 @@ namespace Maple.Core
 {
     public interface IMediaPlayersViewModel : ILoadableViewModel, ISaveableViewModel, IDisposable
     {
-        IReadOnlyCollection<MediaPlayer> Items { get; }
+        IReadOnlyList<MediaPlayer> Items { get; }
     }
 }

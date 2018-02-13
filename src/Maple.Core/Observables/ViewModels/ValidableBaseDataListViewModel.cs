@@ -6,8 +6,8 @@ namespace Maple.Core
         where TViewModel : VirtualizationViewModel<TViewModel, TModel, TKeyDataType>, ISequence
         where TModel : class, IBaseModel<TKeyDataType>
     {
-        protected ValidableBaseDataListViewModel(ViewModelServiceContainer container)
-            : base(container)
+        protected ValidableBaseDataListViewModel(ViewModelServiceContainer container, IMapleRepository<TModel, TKeyDataType> repository)
+            : base(container, repository)
         {
         }
 

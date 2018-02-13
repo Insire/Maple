@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Maple.Domain;
-using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
@@ -11,12 +10,22 @@ namespace Maple.Core
         private readonly Func<IMediaRepository> _repositoryFactory;
         private readonly IMediaItemMapper _mediaItemMapper;
 
-        public MediaItems(ViewModelServiceContainer container, IMediaItemMapper mediaItemMapper, Func<IMediaRepository> repositoryFactory)
-            : base(container)
+        protected MediaItems(ViewModelServiceContainer container, IMapleRepository<MediaItemModel, int> repository)
+            : base(container, repository)
         {
-            _repositoryFactory = repositoryFactory ?? throw new ArgumentNullException(nameof(repositoryFactory), $"{nameof(repositoryFactory)} {Resources.IsRequired}");
-            _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper), $"{nameof(mediaItemMapper)} {Resources.IsRequired}");
         }
+
+        public override bool IsLoaded
+        {
+            get { throw new NotImplementedException(); }
+            protected set => throw new NotImplementedException();
+        }
+
+        public override IAsyncCommand SaveCommand => throw new NotImplementedException();
+
+        public override IAsyncCommand LoadCommand => throw new NotImplementedException();
+
+        public override IAsyncCommand RefreshCommand => throw new NotImplementedException();
 
         public void Add(Playlist playlist)
         {
@@ -24,28 +33,43 @@ namespace Maple.Core
             Add(_mediaItemMapper.GetNewMediaItem(sequence, playlist));
         }
 
-        public override async Task GetCountAsync()
+        public override Task GetCountAsync()
         {
-            _log.Info($"{_translationService.Translate(nameof(Resources.Loading))} {_translationService.Translate(nameof(Resources.MediaItems))}");
-            Clear();
-
-            using (var context = _repositoryFactory())
-            {
-                var result = await context.GetMediaItemsAsync().ConfigureAwait(true);
-                AddRange(result);
-            }
-
-            SelectedItem = Items.FirstOrDefault();
-            IsLoaded = true;
+            throw new NotImplementedException();
         }
 
-        public override async Task SaveAsync()
+        public override Task GetItemsWithKey(int[] keys)
         {
-            _log.Info($"{_translationService.Translate(nameof(Resources.Saving))} {_translationService.Translate(nameof(Resources.MediaItems))}");
-            using (var context = _repositoryFactory())
-            {
-                await context.SaveAsync(this).ConfigureAwait(true);
-            }
+            throw new NotImplementedException();
         }
+
+        public override Task SaveAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        //public override async Task GetCountAsync()
+        //{
+        //    _log.Info($"{_translationService.Translate(nameof(Resources.Loading))} {_translationService.Translate(nameof(Resources.MediaItems))}");
+        //    Clear();
+
+        //    using (var context = _repositoryFactory())
+        //    {
+        //        var result = await context.GetMediaItemsAsync().ConfigureAwait(true);
+        //        AddRange(result);
+        //    }
+
+        //    SelectedItem = Items.FirstOrDefault();
+        //    IsLoaded = true;
+        //}
+
+        //public override async Task SaveAsync()
+        //{
+        //    _log.Info($"{_translationService.Translate(nameof(Resources.Saving))} {_translationService.Translate(nameof(Resources.MediaItems))}");
+        //    using (var context = _repositoryFactory())
+        //    {
+        //        await context.SaveAsync(this).ConfigureAwait(true);
+        //    }
+        //}
     }
 }
