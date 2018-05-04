@@ -1,16 +1,9 @@
-﻿namespace Maple.Core
+﻿using Maple.Domain;
+
+namespace Maple.Core
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public interface IIocFrameworkElement
     {
-        /// <summary>
-        /// Gets the translation manager.
-        /// </summary>
-        /// <value>
-        /// The translation manager.
-        /// </value>
         ILocalizationService TranslationManager { get; }
     }
 }

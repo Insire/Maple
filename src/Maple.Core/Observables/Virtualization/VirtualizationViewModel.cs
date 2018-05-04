@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Maple.Domain;
+
 using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
+    // container for one viewmodel
     public class VirtualizationViewModel<TViewModel, TModel, TKeyDataType> : ObservableObject
-        where TModel : class, IBaseModel<TKeyDataType>
+        where TModel : class
     {
         private readonly IDataProvider<BaseDataViewModel<TViewModel, TModel, TKeyDataType>, TKeyDataType> _dataProvider;
 
-        private TKeyDataType _id;
-        public TKeyDataType Id
-        {
-            get { return _id; }
-            private set { SetValue(ref _id, value); }
-        }
+        private readonly TKeyDataType _id;
 
         private bool _isExtended;
         public bool IsExtended
@@ -74,7 +70,7 @@ namespace Maple.Core
             if (ViewModel != null)
                 return;
 
-            ViewModel = await _dataProvider.Get(Id).ConfigureAwait(true);
+            ViewModel = await _dataProvider.Get(_id).ConfigureAwait(true);
             IsExtended = true;
         }
 

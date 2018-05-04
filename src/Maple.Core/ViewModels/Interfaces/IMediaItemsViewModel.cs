@@ -1,11 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace Maple.Core
+﻿namespace Maple.Core
 {
-    public interface IMediaItemsViewModel : ILoadableViewModel, ISaveableViewModel
+    public interface IMediaItemsViewModel : ILoadableViewModel
     {
-        IReadOnlyList<MediaItem> Items { get; }
-
-        void Add(Playlist playlist);
     }
 }

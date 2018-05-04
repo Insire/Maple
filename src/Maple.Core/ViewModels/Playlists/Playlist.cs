@@ -7,7 +7,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+
 using FluentValidation;
+
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
@@ -15,7 +17,7 @@ using Maple.Localization.Properties;
 namespace Maple.Core
 {
     [DebuggerDisplay("{Title}, {Sequence}")]
-    public class Playlist : ValidableBaseDataViewModel<Playlist, PlaylistModel, int>, IIsSelected, ISequence, IIdentifier, IChangeState
+    public class Playlist : ValidableBaseDataViewModel<Playlist, PlaylistModel, int>, IIsSelected, ISequence
     {
         private readonly IMediaItemMapper _mediaItemMapper;
         private readonly ISequenceService _sequenceProvider;
@@ -392,8 +394,7 @@ namespace Maple.Core
             if (Items == null || Items.Count == 0)
                 return false;
 
-            var mediaItem = item as MediaItem;
-            if (mediaItem == null)
+            if (!(item is MediaItem mediaItem))
                 return false;
 
             return Items.Contains(mediaItem) && !IsBusy;

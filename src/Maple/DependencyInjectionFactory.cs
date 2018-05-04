@@ -1,6 +1,9 @@
 ﻿using System.Threading.Tasks;
+
 using DryIoc;
+
 using FluentValidation;
+
 using Maple.Core;
 using Maple.Data;
 using Maple.Domain;
@@ -41,10 +44,10 @@ namespace Maple
                 // TODO register disposeables
 
                 // save-/loadable ViewModels
-                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(ISaveableViewModel), typeof(IPlaylistsViewModel) }, typeof(Playlists), Reuse.Singleton);
-                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(ISaveableViewModel), typeof(IMediaPlayersViewModel) }, typeof(MediaPlayers), Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
-                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(ISaveableViewModel), typeof(ICultureViewModel) }, typeof(Cultures), Reuse.Singleton);
-                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(ISaveableViewModel), typeof(IUIColorsViewModel) }, typeof(UIColorsViewModel), Reuse.Singleton);
+                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IPlaylistsViewModel) }, typeof(Playlists), Reuse.Singleton);
+                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IMediaPlayersViewModel) }, typeof(MediaPlayers), Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
+                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(ICultureViewModel) }, typeof(Cultures), Reuse.Singleton);
+                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IUIColorsViewModel) }, typeof(UIColorsViewModel), Reuse.Singleton);
 
                 //generic ViewModels
                 c.Register<Scenes>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
@@ -65,15 +68,11 @@ namespace Maple
             {
                 c.Register<IMediaPlayer, NAudioMediaPlayer>(setup: Setup.With(allowDisposableTransient: true));
                 c.Register<IWavePlayerFactory, WavePlayerFactory>(Reuse.Singleton);
-                c.Register<IMediaRepository, MediaRepository>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
+                c.Register<IRepository, MapleRepository>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
                 c.Register<IPlaybackDeviceFactory, PlaybackDeviceFactory>(Reuse.Singleton);
 
                 c.Register<ViewModelServiceContainer>(Reuse.Singleton);
-                c.Register<PlaylistContext>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
-
-                c.Register<IPlaylistRepository, PlaylistRepository>(Reuse.Singleton);
-                c.Register<IMediaItemRepository, MediaItemRepository>(Reuse.Singleton);
-                c.Register<IMediaPlayerRepository, MediaPlayerRepository>(Reuse.Singleton);
+                c.Register<IUnitOfWork, UnitOfWork>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
 
                 c.Register<IPlaylistMapper, PlaylistMapper>();
                 c.Register<IMediaPlayerMapper, MediaPlayerMapper>();

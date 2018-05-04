@@ -73,17 +73,14 @@
     <Compile Include="..\Resources\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="DB\MapleContext.cs" />
     <Compile Include="DB\ModelConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DB\CreateSeedDatabaseIfNotExists.cs" />
-    <Compile Include="Repository\Base\IMediaItemRepository.cs" />
-    <Compile Include="Repository\Base\IMediaPlayerRepository.cs" />
-    <Compile Include="Repository\Base\IPlaylistRepository.cs" />
-    <Compile Include="Repository\Base\MaplePlaylistRepository.cs" />
-    <Compile Include="Repository\MediaItemRepository.cs" />
-    <Compile Include="DB\PlaylistContext.cs" />
-    <Compile Include="Repository\MediaPlayerRepository.cs" />
-    <Compile Include="Repository\PlaylistRepository.cs" />
+    <Compile Include="Repository\Base\EntityFrameworkReadOnlyRepository.cs" />
+    <Compile Include="Repository\Base\EntityFrameworkRepository.cs" />
+    <Compile Include="Repository\Base\UnitOfWork.cs" />
+    <Compile Include="Repository\MapleRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">

@@ -5,8 +5,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+
 using FluentValidation;
 using FluentValidation.Results;
+
 using Maple.Domain;
 using Maple.Localization.Properties;
 
@@ -14,7 +16,7 @@ namespace Maple.Core
 {
     public abstract class ValidableBaseDataViewModel<TViewModel, TModel, TKeyDataType> : BaseDataViewModel<TViewModel, TModel, TKeyDataType>, INotifyDataErrorInfo
         where TViewModel : BaseDataViewModel<TViewModel, TModel, TKeyDataType>, ISequence
-        where TModel : class, IBaseModel<TKeyDataType>
+        where TModel : class, IEntity<TKeyDataType>
     {
         protected bool SkipValidation { get; set; }
 

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using Maple.Domain;
 
 namespace Maple.Core
 {
     public abstract class BaseDataViewModel<TViewModel, TModel, TKeyDataType> : BaseViewModel<TModel>
-        where TModel : class, IBaseModel<TKeyDataType>
+        where TModel : class
     {
         protected ChangeTracker ChangeTracker { get; }
         protected bool SkipChangeTracking { get; set; }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
+
 using Maple.Domain;
 using Maple.Localization.Properties;
 
@@ -11,25 +11,15 @@ namespace Maple.Core
 {
     // TODO add virtualization here
     //
-    public abstract class BaseDataListViewModel<TViewModel, TModel, TKeyDataType> : BaseListViewModel<TViewModel>, ILoadableViewModel<TKeyDataType>, ISaveableViewModel
+    public abstract class BaseDataListViewModel<TViewModel, TModel, TKeyDataType> : BaseListViewModel<TViewModel>
         where TViewModel : VirtualizationViewModel<TViewModel, TModel, TKeyDataType>, ISequence
-        where TModel : class, IBaseModel<TKeyDataType>
+        where TModel : class, IEntity
     {
-        private readonly IMapleRepository<TModel, TKeyDataType> _repository;
-
         protected readonly ISequenceService _sequenceProvider;
         protected readonly ILocalizationService _translationService;
         protected readonly ILoggingService _log;
 
-        public abstract bool IsLoaded { get; protected set; }
-
-        public abstract IAsyncCommand SaveCommand { get; }
-        public abstract IAsyncCommand LoadCommand { get; }
-        public abstract IAsyncCommand RefreshCommand { get; }
-
-        public abstract Task GetCountAsync();
-        public abstract Task SaveAsync();
-        public abstract Task GetItemsWithKey(TKeyDataType[] keys);
+        protected IRepository Repository { get; }
 
         private ICollectionView _view;
         /// <summary>
@@ -44,16 +34,16 @@ namespace Maple.Core
             protected set { SetValue(ref _view, value); }
         }
 
-        protected BaseDataListViewModel(ViewModelServiceContainer container, IMapleRepository<TModel, TKeyDataType> repository)
+        protected BaseDataListViewModel(ViewModelServiceContainer container)
             : base(container.Messenger)
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository), $"{nameof(repository)} {Resources.IsRequired}");
+            Repository = container.Repository;
 
             _log = container.Log;
             _translationService = container.LocalizationService;
             _sequenceProvider = container.SequenceService;
 
-            View = new VirtualizingCollectionViewSource(container, _items);
+            View = new VirtualizingCollectionViewSource(container, Items);
         }
 
         /// <summary>
@@ -69,7 +59,7 @@ namespace Maple.Core
             {
                 while (Items.Contains(container))
                 {
-                    container.ViewModel.Model.IsDeleted = true;
+                    Repository.Delete(container.ViewModel.Model);
                     base.Remove(container);
                 }
             }
@@ -86,7 +76,7 @@ namespace Maple.Core
 
             using (BusyStack.GetToken())
             {
-                items.ForEach(p => p.ViewModel.Model.IsDeleted = true);
+                items.ForEach(p => Remove(p));
                 base.RemoveRange(items);
             }
         }

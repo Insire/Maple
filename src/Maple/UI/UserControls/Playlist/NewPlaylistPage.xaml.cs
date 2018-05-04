@@ -1,4 +1,6 @@
-﻿namespace Maple
+﻿using Maple.Domain;
+
+namespace Maple
 {
     public partial class NewPlaylistPage
     {

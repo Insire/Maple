@@ -2,7 +2,7 @@
 
 namespace Maple.Domain
 {
-    public interface IMediaItem : IIsSelected, ISequence, IIdentifier, IChangeState
+    public interface IMediaItem : IIsSelected, ISequence
     {
         string Title { get; }
         string Location { get; }

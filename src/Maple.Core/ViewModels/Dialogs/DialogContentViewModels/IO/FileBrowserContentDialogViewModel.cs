@@ -1,11 +1,12 @@
 ﻿using System;
+
 using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
     public class FileBrowserContentDialogViewModel : ObservableObject
     {
-        private FileSystemBrowserOptions _options;
+        private readonly FileSystemBrowserOptions _options;
 
         private FileSystemViewModel _fileSystemViewModel;
         public FileSystemViewModel FileSystemViewModel

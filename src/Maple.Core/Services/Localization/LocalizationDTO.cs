@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
+
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple.Core

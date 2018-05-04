@@ -1,7 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
+
 using Maple.Domain;
 using Maple.Localization.Properties;
+
+using Splat;
 
 namespace Maple
 {
@@ -16,6 +19,8 @@ namespace Maple
         {
             _log = log ?? throw new ArgumentNullException(nameof(log), $"{nameof(log)} {Resources.IsRequired}");
         }
+
+        public LogLevel Level { get; set; }
 
         public void Error(object message)
         {

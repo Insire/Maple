@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Runtime.Caching;
 using System.Windows.Data;
 using System.Windows.Threading;
+
 using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
-    public class VirtualizingCollectionViewSource : ListCollectionView
+    public sealed class VirtualizingCollectionViewSource : ListCollectionView
     {
         private readonly IVirtualizedListViewModel _sponsor;
         private readonly HashSet<object> _deferredItems;

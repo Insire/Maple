@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 
+using Maple.Domain;
+
 namespace Maple.Core
 {
     public class MediaPlayerValidator : BaseValidator<MediaPlayer>, IValidator<MediaPlayer>

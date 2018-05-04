@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Maple.Core
+﻿namespace Maple.Core
 {
-    public interface IMediaPlayersViewModel : ILoadableViewModel, ISaveableViewModel, IDisposable
+    public interface IMediaPlayersViewModel
     {
-        IReadOnlyList<MediaPlayer> Items { get; }
     }
 }

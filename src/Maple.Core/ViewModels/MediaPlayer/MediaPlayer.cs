@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
+
 using FluentValidation;
+
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
@@ -18,7 +20,6 @@ namespace Maple.Core
         public bool IsPlaying { get { return Player.IsPlaying; } }
 
         public bool IsNew => Model.IsNew;
-        public bool IsDeleted => Model.IsDeleted;
 
         private IMediaPlayer _player;
         public IMediaPlayer Player
@@ -102,8 +103,8 @@ namespace Maple.Core
             _audioDevices = devices;
             _sequence = model.Sequence;
 
-            if (AudioDevices.Items.Count > 0)
-                Player.AudioDevice = AudioDevices.Items.FirstOrDefault(p => p.Name == Model.DeviceName) ?? AudioDevices[0];
+            if (AudioDevices.ReadOnlyItems.Count > 0)
+                Player.AudioDevice = AudioDevices.ReadOnlyItems.FirstOrDefault(p => p.Name == Model.DeviceName) ?? AudioDevices[0];
 
             Playlist = playlist;
 

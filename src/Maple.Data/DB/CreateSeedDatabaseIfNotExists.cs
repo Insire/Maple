@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Diagnostics;
+
 using Maple.Domain;
+
 using SQLite.CodeFirst;
 
 namespace Maple.Data
 {
-    public class CreateSeedDatabaseIfNotExists<TContext> : SqliteDropCreateDatabaseWhenModelChanges<TContext>
-        where TContext : PlaylistContext
+    public class CreateSeedDatabaseIfNotExists : SqliteDropCreateDatabaseWhenModelChanges<MapleContext>
     {
-        private const int saveThresHold = 100;
-
         private readonly List<string> _playlistTitles = new List<string>()
         {
             "Memories Of A Time To Come",
@@ -69,7 +68,7 @@ namespace Maple.Data
         {
         }
 
-        protected override void Seed(TContext context)
+        protected override void Seed(MapleContext context)
         {
             if (!Debugger.IsAttached)
             {
@@ -85,7 +84,7 @@ namespace Maple.Data
             context.SaveChanges();
         }
 
-        private void SeedTestData(TContext context)
+        private void SeedTestData(MapleContext context)
         {
             context.Playlists
                        .Add(new PlaylistModel
@@ -161,15 +160,12 @@ namespace Maple.Data
                                 UpdatedOn = DateTime.UtcNow,
                             });
                     index++;
-
-                    if (index % saveThresHold == 0)
-                        context.SaveChanges();
                 }
             }
 
         }
 
-        private void SeedMediaPlayers(TContext context)
+        private void SeedMediaPlayers(MapleContext context)
         {
             if (context.Mediaplayers.Find(1) == null)
                 context.Mediaplayers

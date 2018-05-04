@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple.Core
@@ -9,12 +11,10 @@ namespace Maple.Core
         where TViewModel : class
     {
         private readonly ICachingService<TPrimaryKeyType, TViewModel> _cache;
-        private readonly Func<TPrimaryKeyType, Task<TViewModel>> _viewModelFactory;
 
-        protected BaseDataProvider(Func<TPrimaryKeyType, Task<TViewModel>> viewModelFactory, ICachingService<TPrimaryKeyType, TViewModel> cache)
+        protected BaseDataProvider(IRepository mapleRepository, ICachingService<TPrimaryKeyType, TViewModel> cache)
         {
             _cache = cache ?? throw new ArgumentNullException(nameof(cache), $"{nameof(cache)} {Resources.IsRequired}");
-            _viewModelFactory = viewModelFactory ?? throw new ArgumentNullException(nameof(viewModelFactory), $"{nameof(viewModelFactory)} {Resources.IsRequired}");
         }
 
         public async Task Chunk(IEnumerable<TPrimaryKeyType> Ids)
@@ -36,9 +36,15 @@ namespace Maple.Core
             return await InternalGet(key).ConfigureAwait(false);
         }
 
+
         private async Task<TViewModel> InternalGet(TPrimaryKeyType key)
         {
-            return await _viewModelFactory(key).ConfigureAwait(false);
+            throw new NotImplementedException();
+
+            // check cache for entry
+            // ask repository for entry
+            // wrap result with mapper
+            // return result
         }
 
         public void Clear()

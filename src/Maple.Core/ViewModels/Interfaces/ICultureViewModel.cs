@@ -1,6 +1,6 @@
 ﻿namespace Maple.Core
 {
-    public interface ICultureViewModel : ILoadableViewModel, ISaveableViewModel
+    public interface ICultureViewModel : ILoadableViewModel
     {
     }
 }

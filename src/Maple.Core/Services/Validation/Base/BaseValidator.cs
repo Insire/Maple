@@ -1,5 +1,8 @@
 ﻿using System;
+
 using FluentValidation;
+
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple.Core

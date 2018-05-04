@@ -1,8 +1,8 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
+
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
@@ -148,11 +148,6 @@ namespace Maple
                 AddRange(content);
 
                 SelectedItem = this[0];
-
-                using (View.DeferRefresh())
-                {
-                    View.SortDescriptions.Add(new SortDescription(nameof(Scene.Sequence), ListSortDirection.Ascending));
-                }
             }
 
             InitializeCommands();

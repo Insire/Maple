@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 
+using Maple.Domain;
+
 namespace Maple.Core
 {
     public class PlaylistsValidator : BaseValidator<Playlists>, IValidator<Playlists>
@@ -7,8 +9,9 @@ namespace Maple.Core
         public PlaylistsValidator(ILocalizationService translationService, IValidator<Playlist> playlistValidator)
             : base(translationService)
         {
-            RuleFor(playlists => playlists.Items).NotEmpty()
-                                                 .SetCollectionValidator(playlistValidator);
+            RuleFor(playlists => playlists.ReadOnlyItems)
+                .NotEmpty()
+                .SetCollectionValidator(playlistValidator);
         }
     }
 }

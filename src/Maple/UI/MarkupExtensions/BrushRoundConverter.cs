@@ -13,8 +13,7 @@ namespace Maple
 
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var solidColorBrush = value as SolidColorBrush;
-            if (solidColorBrush == null)
+            if (!(value is SolidColorBrush solidColorBrush))
                 return null;
 
             var color = solidColorBrush.Color;

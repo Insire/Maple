@@ -159,16 +159,13 @@ namespace Maple
 
         private IList<Task> LoadApplicationData()
         {
-            return new List<Task>((_container.Resolve<IEnumerable<ILoadableViewModel>>()).ToArray().Select(p => p.GetCountAsync()));
+            //return new List<Task>((_container.Resolve<IEnumerable<ILoadableViewModel>>()).ToArray().Select(p => p.GetCountAsync()));
         }
 
         private async Task SaveState()
         {
             var log = _container.Resolve<ILoggingService>();
             log.Info(Localization.Properties.Resources.SavingState);
-            var tasks = new List<Task>(_container.Resolve<IEnumerable<ISaveableViewModel>>().ToArray().Select(p => p.SaveAsync()));
-
-            await Task.WhenAll(tasks).ConfigureAwait(true);
 
             log.Info(Localization.Properties.Resources.SavedState);
         }

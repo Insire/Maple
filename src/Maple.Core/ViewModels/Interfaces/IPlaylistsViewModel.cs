@@ -1,7 +1,6 @@
 ﻿namespace Maple.Core
 {
-    public interface IPlaylistsViewModel : ILoadableViewModel, ISaveableViewModel
+    public interface IPlaylistsViewModel
     {
-        void Add();
     }
 }
