@@ -34,9 +34,9 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Google.Apis.YouTube.v3">
-      <Version>1.32.0.1079</Version>
+      <Version>1.33.0.1215</Version>
     </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="SonarAnalyzer.CSharp">
       <Version>7.1.0.5212</Version>
     </PackageReference>
