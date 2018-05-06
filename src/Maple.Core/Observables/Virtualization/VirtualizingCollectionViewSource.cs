@@ -5,8 +5,6 @@ using System.Runtime.Caching;
 using System.Windows.Data;
 using System.Windows.Threading;
 
-using Maple.Localization.Properties;
-
 namespace Maple.Core
 {
     public sealed class VirtualizingCollectionViewSource : ListCollectionView
@@ -21,8 +19,11 @@ namespace Maple.Core
         public VirtualizingCollectionViewSource(ViewModelServiceContainer container, IList list)
             : base(list)
         {
-            _cache = container.Cache ?? throw new ArgumentNullException(nameof(container.Cache), $"{nameof(container.Cache)} {Resources.IsRequired}");
-            _policy = container.CacheItemPolicy ?? throw new ArgumentNullException(nameof(container.CacheItemPolicy), $"{nameof(container.CacheItemPolicy)} {Resources.IsRequired}");
+            if (container == null)
+                throw new ArgumentNullException(nameof(container));
+
+            _cache = container.Cache;
+            _policy = container.CacheItemPolicy;
 
             _deferredItems = new HashSet<object>();
             _sponsor = list as IVirtualizedListViewModel;

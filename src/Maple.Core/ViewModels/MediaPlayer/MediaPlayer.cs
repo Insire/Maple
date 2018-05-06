@@ -6,14 +6,13 @@ using System.Windows.Input;
 
 using FluentValidation;
 
-using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
     [DebuggerDisplay("{Name}, {Sequence}")]
-    public class MediaPlayer : ValidableBaseDataViewModel<MediaPlayer, MediaPlayerModel, int>, IDisposable, IChangeState, ISequence
+    public class MediaPlayer : ValidableBaseDataViewModel<MediaPlayer, MediaPlayerModel, int>, IChangeState, ISequence
     {
         protected readonly ILocalizationService _manager;
 

@@ -1,5 +1,7 @@
 ﻿using System;
+
 using log4net;
+
 using Maple.Domain;
 
 namespace Maple.Core
@@ -85,8 +87,6 @@ namespace Maple.Core
         /// <param name="exception">The exception.</param>
         public void Info(object message, Exception exception)
         {
-            var text = (string)message;
-
             _log.Info(message, exception);
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
+
 using Maple.Localization.Properties;
 using Maple.Youtube;
 
@@ -11,8 +12,8 @@ namespace Maple.Core
     /// </summary>
     public class CreateMediaItem : BaseListViewModel<MediaItem>
     {
-        private IYoutubeUrlParser _dataParsingService;
-        private IMediaItemMapper _mapper;
+        private readonly IYoutubeUrlParser _dataParsingService;
+        private readonly IMediaItemMapper _mapper;
 
         public ICommand ParseCommand { get; private set; }
 

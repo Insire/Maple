@@ -20,11 +20,10 @@ namespace Maple.Core
 
         public bool Add(TKey key, TObject item, bool isStrongReference)
         {
-            // can't accept IDisposeable, since we dont know when the object will be disposed and we cant call Dispose on it
             if (item is IDisposable)
-                throw new ArgumentException();
+                throw new ArgumentException("can't accept IDisposeable, since we dont know when the object will be disposed and we cant call Dispose on it");
 
-            _references.AddOrUpdate(key, new WeakReference<TObject>(item), (existingKey, existingEntry) => existingEntry = new WeakReference<TObject>(item));
+            _references.AddOrUpdate(key, new WeakReference<TObject>(item), (existingKey, existingEntry) => new WeakReference<TObject>(item));
 
 
             return true;
@@ -39,7 +38,7 @@ namespace Maple.Core
 
         public bool TryGetValue(TKey key, out TObject item)
         {
-            item = default(TObject);
+            item = default;
 
             if (_references.TryGetValue(key, out var reference))
                 return reference.TryGetTarget(out item);

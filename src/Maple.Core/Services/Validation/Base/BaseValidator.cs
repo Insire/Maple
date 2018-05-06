@@ -7,7 +7,7 @@ using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
-    public abstract class BaseValidator<T> : AbstractValidator<T>, IValidator<T>
+    public abstract class BaseValidator<T> : AbstractValidator<T>
     {
         protected readonly ILocalizationService _translationService;
 

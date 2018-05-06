@@ -22,10 +22,5 @@ namespace Maple.Data
             ModelConfiguration.Configure(modelBuilder);
             Database.SetInitializer(new CreateSeedDatabaseIfNotExists(modelBuilder));
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-        }
     }
 }

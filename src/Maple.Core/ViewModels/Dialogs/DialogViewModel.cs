@@ -17,8 +17,6 @@ namespace Maple.Core
         private readonly IMediaItemMapper _mediaItemMapper;
         private readonly FileSystemViewModel _fileSystemViewModel;
 
-        private readonly Func<CreateMediaItem> _createMediaItemFactory;
-
         public DialogViewModel(ILocalizationService translator, IYoutubeUrlParser service, IMediaItemMapper mediaItemMapper, IMessenger messenger, FileSystemViewModel fileSystemViewModel, Func<CreateMediaItem> createMediaItemFactory)
             : base(messenger)
         {
@@ -26,7 +24,6 @@ namespace Maple.Core
             _service = service ?? throw new ArgumentNullException(nameof(service), $"{nameof(service)} {Resources.IsRequired}");
             _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper), $"{nameof(mediaItemMapper)} {Resources.IsRequired}");
             _fileSystemViewModel = fileSystemViewModel ?? throw new ArgumentNullException(nameof(fileSystemViewModel), $"{nameof(fileSystemViewModel)} {Resources.IsRequired}");
-            _createMediaItemFactory = createMediaItemFactory ?? throw new ArgumentNullException(nameof(createMediaItemFactory), $"{nameof(createMediaItemFactory)} {Resources.IsRequired}");
 
 
             CloseDialogCommand = new RelayCommand(Close, () => CanClose());
@@ -89,7 +86,7 @@ namespace Maple.Core
                 throw new InvalidOperationException(Resources.DialogOpenAlready);
 
             var tuple = default((bool Result, IList<IFileSystemFile> Files));
-            var viewModel = new FileBrowserContentDialogViewModel(_fileSystemViewModel, options);
+            var viewModel = new FileBrowserContentDialogViewModel(_fileSystemViewModel);
 
             TitleDetail = string.Empty;
             Context = viewModel;
@@ -162,7 +159,7 @@ namespace Maple.Core
                 throw new InvalidOperationException(Resources.DialogOpenAlready);
 
             var tuple = default((bool Result, IFileSystemDirectory Directory));
-            var viewModel = new FileBrowserContentDialogViewModel(_fileSystemViewModel, options);
+            var viewModel = new FileBrowserContentDialogViewModel(_fileSystemViewModel);
 
             TitleDetail = string.Empty;
             Context = viewModel;

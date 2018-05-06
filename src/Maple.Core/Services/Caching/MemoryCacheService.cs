@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
+
 using Maple.Localization.Properties;
 
 namespace Maple.Core
@@ -34,12 +35,12 @@ namespace Maple.Core
             _cache = cache ?? throw new ArgumentNullException(nameof(cache), $"{nameof(cache)} {Resources.IsRequired}");
         }
 
-        public bool Add(TKey key, TObject viewModel)
+        public bool Add(TKey key, TObject item)
         {
-            if (viewModel == null)
-                throw new ArgumentNullException(nameof(viewModel), $"{nameof(viewModel)} {Resources.IsRequired}");
+            if (item == null)
+                throw new ArgumentNullException(nameof(item), $"{nameof(item)} {Resources.IsRequired}");
 
-            var result = _cache.Add(new CacheItem(GetInternalKey(key), viewModel), _policy);
+            var result = _cache.Add(new CacheItem(GetInternalKey(key), item), _policy);
 
             if (result)
                 _trackedEntries.Add(key);
@@ -71,10 +72,6 @@ namespace Maple.Core
         }
 
         public abstract void CacheRemovedCallback(CacheEntryRemovedArguments arguments);
-        //{
-        //    _virtualizationProvider.DeflateItem(arguments.CacheItem.Value);
-        //}
-
 
         private string GetInternalKey(TKey key)
         {

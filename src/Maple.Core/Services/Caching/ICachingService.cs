@@ -1,6 +1,6 @@
 ﻿namespace Maple.Core
 {
-    public interface ICachingService<TKey, TObject>
+    public interface ICachingService<in TKey, TObject>
     {
         bool Contains(TKey key);
         bool Add(TKey key, TObject item);

@@ -26,7 +26,7 @@ namespace Maple.Core
             // consider a thread-safe static instance
             var r = new Random();
             var list = baseCollection as IList<T> ?? baseCollection.ToList();
-            return list.Count == 0 ? default(T) : list[r.Next(0, list.Count)];
+            return list.Count == 0 ? default : list[r.Next(0, list.Count)];
         }
 
         public static IEnumerable<TResult> ForEach<TSource, TResult>(this IEnumerable<TSource> baseCollection, Func<TSource, TResult> action)

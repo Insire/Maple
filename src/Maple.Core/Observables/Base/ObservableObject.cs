@@ -27,7 +27,7 @@ namespace Maple.Core
 
         protected virtual bool SetValue<T>(ref T field, T value, Action OnChanging = null, Action OnChanged = null, [CallerMemberName]string propertyName = null)
         {
-            if (EqualityComparer<T>.Default.Equals(field, value))
+            if (EqualityComparer<T>.Default.Equals(field, value)) // TODO add cache for equality comparer as readonly field
                 return false;
 
             OnChanging?.Invoke();

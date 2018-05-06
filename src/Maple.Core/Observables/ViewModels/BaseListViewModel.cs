@@ -105,12 +105,12 @@ namespace Maple.Core
 
         public virtual bool CanRemoveRange(IList items)
         {
-            return items == null ? false : CanRemoveRange(items.Cast<TViewModel>());
+            return !(items == null) && CanRemoveRange(items.Cast<TViewModel>());
         }
 
         public virtual void Clear()
         {
-            SelectedItem = default(TViewModel);
+            SelectedItem = default;
 
             using (BusyStack.GetToken())
                 Items.Clear();

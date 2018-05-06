@@ -10,7 +10,6 @@ using System.Windows.Input;
 
 using FluentValidation;
 
-using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
 
@@ -19,11 +18,9 @@ namespace Maple.Core
     [DebuggerDisplay("{Title}, {Sequence}")]
     public class Playlist : ValidableBaseDataViewModel<Playlist, PlaylistModel, int>, IIsSelected, ISequence
     {
-        private readonly IMediaItemMapper _mediaItemMapper;
         private readonly ISequenceService _sequenceProvider;
         private readonly ILocalizationService _translator;
         private readonly IDialogViewModel _dialogViewModel;
-        private readonly object _itemsLock;
         private readonly Stack<int> _history;
 
         public bool IsNew => Model.IsNew;
@@ -163,9 +160,6 @@ namespace Maple.Core
             SkipChangeTracking = true;
             using (BusyStack.GetToken())
             {
-                _itemsLock = new object();
-
-                _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper), $"{nameof(mediaItemMapper)} {Resources.IsRequired}");
                 _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel), $"{nameof(dialogViewModel)} {Resources.IsRequired}");
                 _sequenceProvider = container.SequenceService;
 
@@ -192,8 +186,6 @@ namespace Maple.Core
                 RemoveCommand = new RelayCommand<object>(Remove, CanRemove);
                 RemoveRangeCommand = new RelayCommand<IList>(RemoveRange, CanRemoveRange);
                 ClearCommand = new RelayCommand(() => Clear(), CanClear);
-
-                AddRange(_mediaItemMapper.GetMany(model.MediaItems));
 
                 MessageTokens.Add(Messenger.Subscribe<PlayingMediaItemMessage>(OnPlaybackItemChanged, m => m.PlaylistId == Id && _items.Contains(m.Content)));
 
@@ -315,18 +307,13 @@ namespace Maple.Core
                 var added = false;
                 var sequence = 0;
                 var collection = items.ToList();
-                var item = default(MediaItem);
 
                 for (var i = 0; i < collection.Count; i++)
                 {
                     if (i == 0)
                         sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
 
-                    item = collection[i];
-
-                    if (item == null)
-                        throw new ArgumentNullException(nameof(item), $"{nameof(item)} {Resources.IsRequired}");
-
+                    var item = collection[i];
                     item.Sequence = sequence;
                     AddInternal(item);
                     sequence++;
@@ -407,7 +394,7 @@ namespace Maple.Core
 
         protected virtual bool CanRemoveRange(IList items)
         {
-            return items == null ? false : CanRemoveRange(items.Cast<MediaItem>());
+            return (items != null) && CanRemoveRange(items.Cast<MediaItem>());
         }
 
         /// <summary>
@@ -452,7 +439,7 @@ namespace Maple.Core
                 if (nextPossibleItems?.Any() == true) // try to find items after the current one
                 {
                     Items.ToList().ForEach(p => p.IsSelected = false);
-                    var foundItem = nextPossibleItems.Where(q => q.Sequence == nextPossibleItems.Select(p => p.Sequence).Min()).First();
+                    var foundItem = nextPossibleItems.First(q => q.Sequence == nextPossibleItems.Select(p => p.Sequence).Min());
                     foundItem.IsSelected = true;
                     return foundItem;
                 }
@@ -485,7 +472,7 @@ namespace Maple.Core
                 if (nextPossibleItems.Any()) // try to find items after the current one
                 {
                     Items.ToList().ForEach(p => p.IsSelected = false);
-                    var foundItem = nextPossibleItems.Where(q => q.Sequence == nextPossibleItems.Select(p => p.Sequence).Min()).First();
+                    var foundItem = nextPossibleItems.First(q => q.Sequence == nextPossibleItems.Select(p => p.Sequence).Min());
                     foundItem.IsSelected = true;
                     return foundItem;
                 }
@@ -526,9 +513,6 @@ namespace Maple.Core
                     while (_history.Any())
                     {
                         var previous = _history.Pop();
-
-                        //if (previous == SelectedItem?.Sequence) // the most recent item in the history, is the just played item, so we wanna skip that
-                        //    continue;
 
                         if (previous > -1)
                         {

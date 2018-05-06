@@ -1,6 +1,9 @@
 ﻿using System;
+
 using AutoMapper;
+
 using FluentValidation;
+
 using Maple.Domain;
 using Maple.Localization.Properties;
 
@@ -56,9 +59,14 @@ namespace Maple.Core
             return new Playlist(_container, _validator, _dialogViewModel, _mediaItemMapper, model);
         }
 
-        public PlaylistModel GetData(Playlist mediaitem)
+        public PlaylistModel GetData(Playlist viewModel)
         {
-            return mediaitem.Model;
+            if (viewModel == null)
+            {
+                throw new ArgumentNullException(nameof(viewModel));
+            }
+
+            return viewModel.Model;
         }
     }
 }

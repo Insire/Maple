@@ -74,7 +74,7 @@ namespace Maple
         {
             var binding = new Binding("Value")
             {
-                Source = new LocalizationDTO(manager, Key, ToUpper)
+                Source = new LocalizationDto(manager, Key, ToUpper)
             };
 
             return binding.ProvideValue(serviceProvider);

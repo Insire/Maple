@@ -1,6 +1,9 @@
 ﻿using System;
+
 using AutoMapper;
+
 using FluentValidation;
+
 using Maple.Domain;
 using Maple.Localization.Properties;
 
@@ -22,7 +25,7 @@ namespace Maple.Core
 
         protected override void InitializeMapper()
         {
-            var config = new MapperConfiguration(cfg => // TODO mapper configuration
+            var config = new MapperConfiguration(cfg =>
             {
             });
 

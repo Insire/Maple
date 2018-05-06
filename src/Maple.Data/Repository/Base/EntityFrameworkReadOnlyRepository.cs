@@ -14,7 +14,7 @@ namespace Maple.Data
     {
         protected readonly TContext context;
 
-        public EntityFrameworkReadOnlyRepository(TContext context)
+        protected EntityFrameworkReadOnlyRepository(TContext context)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -53,7 +53,7 @@ namespace Maple.Data
             int? take = null)
             where TEntity : class, IEntity
         {
-            return GetQueryable<TEntity>(null, orderBy, includeProperties, skip, take).ToList();
+            return GetQueryable(null, orderBy, includeProperties, skip, take).ToList();
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync<TEntity>(
@@ -63,7 +63,7 @@ namespace Maple.Data
             int? take = null)
             where TEntity : class, IEntity
         {
-            return await GetQueryable<TEntity>(null, orderBy, includeProperties, skip, take).ToListAsync();
+            return await GetQueryable(null, orderBy, includeProperties, skip, take).ToListAsync();
         }
 
         public virtual IEnumerable<TEntity> Get<TEntity>(
@@ -74,7 +74,7 @@ namespace Maple.Data
             int? take = null)
             where TEntity : class, IEntity
         {
-            return GetQueryable<TEntity>(filter, orderBy, includeProperties, skip, take).ToList();
+            return GetQueryable(filter, orderBy, includeProperties, skip, take).ToList();
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAsync<TEntity>(
@@ -85,15 +85,15 @@ namespace Maple.Data
             int? take = null)
             where TEntity : class, IEntity
         {
-            return await GetQueryable<TEntity>(filter, orderBy, includeProperties, skip, take).ToListAsync();
+            return await GetQueryable(filter, orderBy, includeProperties, skip, take).ToListAsync();
         }
 
         public virtual TEntity GetOne<TEntity>(
             Expression<Func<TEntity, bool>> filter = null,
-            string includeProperties = "")
+            string includeProperties = default)
             where TEntity : class, IEntity
         {
-            return GetQueryable<TEntity>(filter, null, includeProperties).SingleOrDefault();
+            return GetQueryable(filter, null, includeProperties).SingleOrDefault();
         }
 
         public virtual async Task<TEntity> GetOneAsync<TEntity>(
@@ -101,16 +101,16 @@ namespace Maple.Data
             string includeProperties = null)
             where TEntity : class, IEntity
         {
-            return await GetQueryable<TEntity>(filter, null, includeProperties).SingleOrDefaultAsync();
+            return await GetQueryable(filter, null, includeProperties).SingleOrDefaultAsync();
         }
 
         public virtual TEntity GetFirst<TEntity>(
            Expression<Func<TEntity, bool>> filter = null,
            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-           string includeProperties = "")
+           string includeProperties = default)
            where TEntity : class, IEntity
         {
-            return GetQueryable<TEntity>(filter, orderBy, includeProperties).FirstOrDefault();
+            return GetQueryable(filter, orderBy, includeProperties).FirstOrDefault();
         }
 
         public virtual async Task<TEntity> GetFirstAsync<TEntity>(
@@ -119,7 +119,7 @@ namespace Maple.Data
             string includeProperties = null)
             where TEntity : class, IEntity
         {
-            return await GetQueryable<TEntity>(filter, orderBy, includeProperties).FirstOrDefaultAsync();
+            return await GetQueryable(filter, orderBy, includeProperties).FirstOrDefaultAsync();
         }
 
         public virtual TEntity GetById<TEntity>(object id)
@@ -143,25 +143,25 @@ namespace Maple.Data
         public virtual int GetCount<TEntity>(Expression<Func<TEntity, bool>> filter = null)
             where TEntity : class, IEntity
         {
-            return GetQueryable<TEntity>(filter).Count();
+            return GetQueryable(filter).Count();
         }
 
         public virtual Task<int> GetCountAsync<TEntity>(Expression<Func<TEntity, bool>> filter = null)
             where TEntity : class, IEntity
         {
-            return GetQueryable<TEntity>(filter).CountAsync();
+            return GetQueryable(filter).CountAsync();
         }
 
         public virtual bool GetExists<TEntity>(Expression<Func<TEntity, bool>> filter = null)
             where TEntity : class, IEntity
         {
-            return GetQueryable<TEntity>(filter).Any();
+            return GetQueryable(filter).Any();
         }
 
         public virtual Task<bool> GetExistsAsync<TEntity>(Expression<Func<TEntity, bool>> filter = null)
             where TEntity : class, IEntity
         {
-            return GetQueryable<TEntity>(filter).AnyAsync();
+            return GetQueryable(filter).AnyAsync();
         }
     }
 }

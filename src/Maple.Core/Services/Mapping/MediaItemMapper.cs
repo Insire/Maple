@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+
 using FluentValidation;
+
 using Maple.Domain;
 using Maple.Localization.Properties;
 
@@ -50,19 +52,24 @@ namespace Maple.Core
             };
         }
 
-        public MediaItem Get(MediaItemModel mediaitem)
+        public MediaItem Get(MediaItemModel model)
         {
-            return new MediaItem(mediaitem, _validator, _messenger);
+            if (model == null)
+            {
+                throw new System.ArgumentNullException(nameof(model));
+            }
+
+            return new MediaItem(model, _validator, _messenger);
         }
 
         /// <summary>
         /// Gets the data.
         /// </summary>
-        /// <param name="mediaitem">The mediaitem.</param>
+        /// <param name="viewModel">The mediaitem.</param>
         /// <returns></returns>
-        public MediaItemModel GetData(MediaItem mediaitem)
+        public MediaItemModel GetData(MediaItem viewModel)
         {
-            return mediaitem.Model;
+            return viewModel.Model;
         }
     }
 }

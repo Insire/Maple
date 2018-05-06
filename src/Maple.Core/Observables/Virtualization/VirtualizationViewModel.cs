@@ -7,10 +7,10 @@ using Maple.Localization.Properties;
 namespace Maple.Core
 {
     // container for one viewmodel
-    public class VirtualizationViewModel<TViewModel, TModel, TKeyDataType> : ObservableObject
+    public class VirtualizationViewModel<TModel, TKeyDataType> : ObservableObject
         where TModel : class
     {
-        private readonly IDataProvider<BaseDataViewModel<TViewModel, TModel, TKeyDataType>, TKeyDataType> _dataProvider;
+        private readonly IDataProvider<BaseDataViewModel<TModel>, TKeyDataType> _dataProvider;
 
         private readonly TKeyDataType _id;
 
@@ -35,8 +35,8 @@ namespace Maple.Core
             private set { SetValue(ref _isBusy, value); }
         }
 
-        private BaseDataViewModel<TViewModel, TModel, TKeyDataType> _viewModel;
-        public BaseDataViewModel<TViewModel, TModel, TKeyDataType> ViewModel
+        private BaseDataViewModel<TModel> _viewModel;
+        public BaseDataViewModel<TModel> ViewModel
         {
             get { return _viewModel; }
             set { SetValue(ref _viewModel, value); }
@@ -56,7 +56,7 @@ namespace Maple.Core
             private set { SetValue(ref _expandCommand, value); }
         }
 
-        public VirtualizationViewModel(TKeyDataType id, IDataProvider<BaseDataViewModel<TViewModel, TModel, TKeyDataType>, TKeyDataType> dataProvider)
+        public VirtualizationViewModel(TKeyDataType id, IDataProvider<BaseDataViewModel<TModel>, TKeyDataType> dataProvider)
         {
             _id = id;
             _dataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider), $"{nameof(dataProvider)} {Resources.IsRequired}");

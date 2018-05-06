@@ -10,7 +10,7 @@ namespace Maple.Data
     public abstract class EntityFrameworkRepository<TContext> : EntityFrameworkReadOnlyRepository<TContext>, IRepository
         where TContext : DbContext
     {
-        public EntityFrameworkRepository(TContext context)
+        protected EntityFrameworkRepository(TContext context)
             : base(context)
         {
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Input;
+
 using Maple.Domain;
 using Maple.Localization.Properties;
 
@@ -8,6 +9,7 @@ namespace Maple.Core
 {
     public class SplashScreenViewModel : ObservableObject, ISplashScreenViewModel
     {
+        private readonly SubscriptionToken _subscriptionToken;
         private readonly IMessenger _messenger;
         private readonly Queue<string> _queue;
         private System.Timers.Timer _timer;
@@ -52,7 +54,7 @@ namespace Maple.Core
         private SplashScreenViewModel(IMessenger messenger) : this()
         {
             _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");
-            _messenger.Subscribe<LogMessageReceivedMessage>(LogMessageReceived);
+            _subscriptionToken = messenger.Subscribe<LogMessageReceivedMessage>(e => _queue.Enqueue(e.Content));
         }
 
         public SplashScreenViewModel(IMessenger messenger, IVersionService version) : this(messenger)
@@ -86,11 +88,6 @@ namespace Maple.Core
             return !IsDisposed;
         }
 
-        private void LogMessageReceived(LogMessageReceivedMessage e)
-        {
-            _queue.Enqueue(e.Content);
-        }
-
         public void Dispose()
         {
             Dispose(true);
@@ -111,6 +108,8 @@ namespace Maple.Core
                     _timer.Dispose();
                     _timer = null;
                 }
+
+                _messenger.Unsubscribe<LogMessageReceivedMessage>(_subscriptionToken);
                 // Free any other managed objects here.
             }
 

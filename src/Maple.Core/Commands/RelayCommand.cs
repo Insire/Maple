@@ -103,7 +103,7 @@ namespace Maple.Core
                 return true;
 
             if (parameter == null && typeof(T).IsValueType)
-                return _canExecute.Invoke(default(T));
+                return _canExecute.Invoke(default);
 
             if (parameter == null || parameter is T)
                 return (_canExecute.Invoke((T)parameter));

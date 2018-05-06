@@ -14,7 +14,7 @@ namespace Maple.Domain
         /// Plays the specified item.
         /// </summary>
         /// <param name="item">The item.</param>
-        bool Play(IMediaItem item);
+        bool Play(IMediaItem mediaItem);
 
         /// <summary>
         /// Pauses this instance.
@@ -43,7 +43,7 @@ namespace Maple.Domain
         /// </summary>
         /// <param name="item">The item.</param>
         /// <returns><c>true</c> if this instance can play the specified item; otherwise, <c>false</c>.</returns>
-        bool CanPlay(IMediaItem item);
+        bool CanPlay(IMediaItem mediaItem);
 
         /// <summary>
         /// Gets or sets the volume.

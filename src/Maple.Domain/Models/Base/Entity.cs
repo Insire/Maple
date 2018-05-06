@@ -36,7 +36,7 @@ namespace Maple.Domain
         public byte[] Version { get; set; }
 
         [NotMapped]
-        public bool IsNew => EqualityComparer<T>.Default.Equals(Id, default(T));
+        public bool IsNew => EqualityComparer<T>.Default.Equals(Id, default);
 
         [NotMapped]
         public bool IsDeleted { get; set; }

@@ -4,7 +4,7 @@ using Maple.Domain;
 
 namespace Maple.Core
 {
-    public class MediaItemValidator : BaseValidator<MediaItem>, IValidator<MediaItem>
+    public class MediaItemValidator : BaseValidator<MediaItem>
     {
         public MediaItemValidator(ILocalizationService translationService)
             : base(translationService)

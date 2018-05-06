@@ -7,7 +7,7 @@ namespace Maple.Core
 {
     public abstract class DialogBaseViewModel : ViewModel
     {
-        public EventHandler DialogClosed;
+        private EventHandler _dialogClosed;
 
         public ExceptionContentDialogViewModel ExceptionDialogViewModel { get; protected set; }
         public MessageContentDialogViewModel MessageDialogViewModel { get; protected set; }
@@ -66,7 +66,7 @@ namespace Maple.Core
         private void OnOpenChanged()
         {
             if (!IsOpen)
-                DialogClosed?.Invoke(this, EventArgs.Empty);
+                _dialogClosed?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Maple.Core
         /// </returns>
         public bool CanAccept()
         {
-            return CanClose() && (CanAcceptFunc?.Invoke() ?? true) == true;
+            return CanClose() && (CanAcceptFunc?.Invoke() ?? true);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Maple.Core
         /// </returns>
         public bool CanCancel()
         {
-            return CanClose() && (CanCancelFunc?.Invoke() ?? true) == true;
+            return CanClose() && (CanCancelFunc?.Invoke() ?? true);
         }
 
         public Task Open()
@@ -125,13 +125,13 @@ namespace Maple.Core
             void lambda(object s, EventArgs e) => tcs.TrySetResult(null);
             try
             {
-                DialogClosed += lambda;
+                _dialogClosed += lambda;
                 IsOpen = true; // open dialog
                 await tcs.Task.ConfigureAwait(false); // wait for dialog to close
             }
             finally
             {
-                DialogClosed -= lambda;
+                _dialogClosed -= lambda;
                 registration.Dispose();
             }
         }

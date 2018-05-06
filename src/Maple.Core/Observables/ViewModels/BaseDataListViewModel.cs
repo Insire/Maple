@@ -10,9 +10,8 @@ using Maple.Localization.Properties;
 namespace Maple.Core
 {
     // TODO add virtualization here
-    //
     public abstract class BaseDataListViewModel<TViewModel, TModel, TKeyDataType> : BaseListViewModel<TViewModel>
-        where TViewModel : VirtualizationViewModel<TViewModel, TModel, TKeyDataType>, ISequence
+        where TViewModel : VirtualizationViewModel<TModel, TKeyDataType>, ISequence
         where TModel : class, IEntity
     {
         protected readonly ISequenceService _sequenceProvider;
@@ -22,12 +21,6 @@ namespace Maple.Core
         protected IRepository Repository { get; }
 
         private ICollectionView _view;
-        /// <summary>
-        /// For grouping, sorting and filtering
-        /// </summary>
-        /// <value>
-        /// The view.
-        /// </value>
         public ICollectionView View
         {
             get { return _view; }
@@ -46,29 +39,21 @@ namespace Maple.Core
             View = new VirtualizingCollectionViewSource(container, Items);
         }
 
-        /// <summary>
-        /// Removes the specified item.
-        /// </summary>
-        /// <param name="item">The item.</param>
-        public override void Remove(TViewModel container)
+        public override void Remove(TViewModel item)
         {
-            if (container == null)
-                throw new ArgumentNullException(nameof(container), $"{nameof(container)} {Resources.IsRequired}");
+            if (item == null)
+                throw new ArgumentNullException(nameof(item), $"{nameof(item)} {Resources.IsRequired}");
 
             using (BusyStack.GetToken())
             {
-                while (Items.Contains(container))
+                while (Items.Contains(item))
                 {
-                    Repository.Delete(container.ViewModel.Model);
-                    base.Remove(container);
+                    Repository.Delete(item.ViewModel.Model);
+                    base.Remove(item);
                 }
             }
         }
 
-        /// <summary>
-        /// Removes the range.
-        /// </summary>
-        /// <param name="items">The items.</param>
         public override void RemoveRange(IEnumerable<TViewModel> items)
         {
             if (items == null)
@@ -81,11 +66,6 @@ namespace Maple.Core
             }
         }
 
-        /// <summary>
-        /// Removes the range.
-        /// </summary>
-        /// <param name="items">The items.</param>
-        /// <exception cref="System.ArgumentNullException">items</exception>
         public override void RemoveRange(IList items)
         {
             if (items == null)
@@ -98,14 +78,14 @@ namespace Maple.Core
             }
         }
 
-        public override void Add(TViewModel viewModel)
+        public override void Add(TViewModel item)
         {
-            if (viewModel == null)
-                throw new ArgumentNullException(nameof(viewModel), $"{nameof(viewModel)} {Resources.IsRequired}");
+            if (item == null)
+                throw new ArgumentNullException(nameof(item), $"{nameof(item)} {Resources.IsRequired}");
 
             var sequence = _sequenceProvider.Get(Items.Cast<ISequence>().ToList());
-            viewModel.Sequence = sequence;
-            base.Add(viewModel);
+            item.Sequence = sequence;
+            base.Add(item);
         }
 
         public override void AddRange(IEnumerable<TViewModel> items)

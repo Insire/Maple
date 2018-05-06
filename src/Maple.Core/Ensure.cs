@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+
 using Maple.Localization.Properties;
 
 namespace Maple.Core
@@ -22,7 +23,7 @@ namespace Maple.Core
         ///     Thrown when <cref>TException</cref> <paramref name="condition"/> is <see langword="false"/>.
         /// </exception>
         [DebuggerStepThrough]
-        public static void That<TException>(bool condition, string message = default(string))
+        public static void That<TException>(bool condition, string message = default)
             where TException : Exception
         {
             if (!condition)
@@ -43,7 +44,7 @@ namespace Maple.Core
         ///     Thrown when <paramref name="condition"/> is <see langword="false"/>.
         /// </exception>
         [DebuggerStepThrough]
-        public static void That(bool condition, string message = default(string))
+        public static void That(bool condition, string message = default)
         {
             if (string.IsNullOrEmpty(message))
                 message = Resources.ExceptionMessageFalseCondition;
@@ -61,7 +62,7 @@ namespace Maple.Core
         ///     Thrown when <paramref name="condition"/> is <see langword="false"/>.
         /// </exception>
         [DebuggerStepThrough]
-        public static void Not<TException>(bool condition, string message = default(string))
+        public static void Not<TException>(bool condition, string message = default)
             where TException : Exception
         {
             if (string.IsNullOrEmpty(message))
@@ -79,7 +80,7 @@ namespace Maple.Core
         ///     Thrown when <paramref name="condition"/> is <see langword="false"/>.
         /// </exception>
         [DebuggerStepThrough]
-        public static void Not(bool condition, string message = default(string))
+        public static void Not(bool condition, string message = default)
         {
             if (string.IsNullOrEmpty(message))
                 message = Resources.ExceptionMessageFalseCondition;
@@ -122,7 +123,7 @@ namespace Maple.Core
         /// </exception>
         /// <remarks>Null values will cause an exception to be thrown</remarks>
         [DebuggerStepThrough]
-        public static void Equal<T>(T left, T right, string message = default(string))
+        public static void Equal<T>(T left, T right, string message = default)
         {
             if (string.IsNullOrEmpty(message))
                 message = Resources.ExceptionMessageEqualValues;
@@ -142,7 +143,7 @@ namespace Maple.Core
         /// </exception>
         /// <remarks>Null values will cause an exception to be thrown</remarks>
         [DebuggerStepThrough]
-        public static void NotEqual<T>(T left, T right, string message = default(string))
+        public static void NotEqual<T>(T left, T right, string message = default)
         {
             if (string.IsNullOrEmpty(message))
                 message = Resources.ExceptionMessageNotEqualValues;
@@ -164,7 +165,7 @@ namespace Maple.Core
         ///     Thrown when <paramref name="collection"/> is empty.
         /// </exception>
         [DebuggerStepThrough]
-        public static ICollection<T> NotNullOrEmpty<T>(ICollection<T> collection, string message = default(string))
+        public static ICollection<T> NotNullOrEmpty<T>(ICollection<T> collection, string message = default)
         {
             if (string.IsNullOrEmpty(message))
                 message = Resources.ExceptionMessageCollectionNullOrEmpty;
@@ -184,7 +185,7 @@ namespace Maple.Core
         ///     Thrown when <paramref name="value"/> is null or empty or whitespace.
         /// </exception>
         [DebuggerStepThrough]
-        public static string NotNullOrEmptyOrWhiteSpace(string value, string message = default(string))
+        public static string NotNullOrEmptyOrWhiteSpace(string value, string message = default)
         {
             if (string.IsNullOrEmpty(message))
                 message = Resources.ExceptionMessageStringNullEmpyOrWhiteSpace;

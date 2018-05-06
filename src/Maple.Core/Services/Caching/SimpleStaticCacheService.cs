@@ -9,9 +9,9 @@ namespace Maple.Core
             return ContainsKey(key);
         }
 
-        bool ICachingService<TPrimaryKeyType, TViewModel>.Add(TPrimaryKeyType key, TViewModel viewModel)
+        bool ICachingService<TPrimaryKeyType, TViewModel>.Add(TPrimaryKeyType key, TViewModel item)
         {
-            Add(key, viewModel);
+            Add(key, item);
 
             return true;
         }

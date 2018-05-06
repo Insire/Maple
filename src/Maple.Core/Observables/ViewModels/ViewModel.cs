@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
     public abstract class ViewModel : ObservableObject, IDisposable
     {
-        // TODO cache equality comparer
         protected IMessenger Messenger { get; }
         protected BusyStack BusyStack { get; }
 
@@ -42,7 +42,9 @@ namespace Maple.Core
 
             if (disposing)
             {
+#pragma warning disable S1066 // Collapsible "if" statements should be merged
                 if (MessageTokens != null)
+#pragma warning restore S1066 // Collapsible "if" statements should be merged
                 {
                     foreach (var token in MessageTokens)
                         Messenger.Unsubscribe<IMapleMessage>(token);

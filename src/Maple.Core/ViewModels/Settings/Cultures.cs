@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+
 using Maple.Domain;
 using Maple.Localization.Properties;
 
@@ -35,11 +36,6 @@ namespace Maple.Core
             _manager = container.LocalizationService;
 
             MessageTokens.Add(Messenger.Subscribe<ViewModelSelectionChangedMessage<Culture>>(UpdateCulture));
-        }
-
-        private void SyncCulture()
-        {
-            _manager.CurrentLanguage = SelectedItem.Model;
         }
 
         public Task Save()

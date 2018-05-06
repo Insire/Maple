@@ -58,7 +58,9 @@ namespace Maple.Data
                 if (disposing)
                 {
                     // Dispose managed resources.
+#pragma warning disable S1066 // Collapsible "if" statements should be merged
                     if (_context != null)
+#pragma warning restore S1066 // Collapsible "if" statements should be merged
                     {
                         _context.Dispose();
                         _context = null;

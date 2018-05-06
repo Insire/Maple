@@ -37,7 +37,7 @@ namespace Maple.Core
         {
         }
 
-        public abstract bool CanPlay(IMediaItem item);
+        public abstract bool CanPlay(IMediaItem mediaItem);
 
         public abstract bool IsPlaying { get; }
 

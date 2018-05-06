@@ -39,6 +39,7 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -50,11 +51,14 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.2.0" />
-    <PackageReference Include="SQLite.CodeFirst" Version="1.5.0.21" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.106" />
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.106" />
-    <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.106" />
-    <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.106" />
+    <PackageReference Include="SonarAnalyzer.CSharp">
+      <Version>7.1.0.5212</Version>
+    </PackageReference>
+    <PackageReference Include="SQLite.CodeFirst" Version="1.5.1.25" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.108" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.108" />
+    <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.108" />
+    <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.108" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

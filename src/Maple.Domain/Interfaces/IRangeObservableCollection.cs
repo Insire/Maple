@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace Maple.Domain
 {
-    public interface IRangeObservableCollection<T> : IEnumerable<T>, ICollection<T>, INotifyPropertyChanged, IList<T>, INotifyCollectionChanged
+    public interface IRangeObservableCollection<T> : INotifyPropertyChanged, IList<T>, INotifyCollectionChanged
     {
         void AddRange(IEnumerable<T> items);
 

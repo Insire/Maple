@@ -89,8 +89,7 @@ namespace Maple
 
                 c.Register<ILoggingNotifcationService, LoggingNotifcationService>(Reuse.Singleton);
                 c.Register<ILoggingService, LoggingService>(Reuse.Singleton);
-                c.Register<ILoggingService, DetailLoggingService>(setup: Setup.DecoratorWith(order: 1));
-                c.Register<ILoggingService, SquirrelLogger>(setup: Setup.DecoratorWith(order: 2));
+                c.Register<ILoggingService, SquirrelLogger>(setup: Setup.DecoratorWith(order: 1));
             }
 
             void RegisterValidation()

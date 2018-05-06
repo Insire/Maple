@@ -1,6 +1,9 @@
 ﻿using DryIoc;
+
 using Maple.Core;
+using Maple.Data;
 using Maple.Domain;
+
 using NSubstitute;
 
 namespace Maple.Test
@@ -92,7 +95,7 @@ namespace Maple.Test
             return Substitute.For<IDialogViewModel>();
         }
 
-        public static IMediaRepository CreateRepository()
+        public static MapleRepository CreateRepository()
         {
             return Substitute.For<IMediaRepository>();
         }

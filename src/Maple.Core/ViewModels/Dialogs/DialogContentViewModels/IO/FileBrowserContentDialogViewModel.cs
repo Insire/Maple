@@ -6,8 +6,6 @@ namespace Maple.Core
 {
     public class FileBrowserContentDialogViewModel : ObservableObject
     {
-        private readonly FileSystemBrowserOptions _options;
-
         private FileSystemViewModel _fileSystemViewModel;
         public FileSystemViewModel FileSystemViewModel
         {
@@ -15,9 +13,8 @@ namespace Maple.Core
             private set { SetValue(ref _fileSystemViewModel, value); }
         }
 
-        public FileBrowserContentDialogViewModel(FileSystemViewModel fileSystemViewModel, FileSystemBrowserOptions options)
+        public FileBrowserContentDialogViewModel(FileSystemViewModel fileSystemViewModel)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options), $"{nameof(options)} {Resources.IsRequired}");
             FileSystemViewModel = fileSystemViewModel ?? throw new ArgumentNullException(nameof(fileSystemViewModel), $"{nameof(fileSystemViewModel)} {Resources.IsRequired}");
         }
     }

@@ -10,7 +10,7 @@ namespace Maple.Core
 {
     // TODO add logic for handling INotifyDataErrorInfo for children and on this
     public abstract class ValidableBaseDataListViewModel<TViewModel, TModel, TKeyDataType> : BaseDataListViewModel<TViewModel, TModel, TKeyDataType>, ILoadableViewModel, IVirtualizedListViewModel
-        where TViewModel : VirtualizationViewModel<TViewModel, TModel, TKeyDataType>, ISequence
+        where TViewModel : VirtualizationViewModel<TModel, TKeyDataType>, ISequence
         where TModel : class, IEntity, new()
     {
         public bool IsLoaded { get; protected set; }

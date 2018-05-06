@@ -4,7 +4,7 @@ using Maple.Domain;
 
 namespace Maple.Core
 {
-    public class MediaPlayerValidator : BaseValidator<MediaPlayer>, IValidator<MediaPlayer>
+    public class MediaPlayerValidator : BaseValidator<MediaPlayer>
     {
         public MediaPlayerValidator(ILocalizationService translationService)
             : base(translationService)
