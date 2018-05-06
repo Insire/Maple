@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
+
 using Maple.Domain;
 
 namespace Maple.Core
@@ -117,9 +118,7 @@ namespace Maple.Core
 
         public void SetSelectedItem(object item)
         {
-            var value = item as MapleFileSystemContainerBase;
-
-            if (value == null)
+            if (!(item is MapleFileSystemContainerBase value))
                 return;
 
             SelectedItem = value;
@@ -132,9 +131,7 @@ namespace Maple.Core
             if (item == null)
                 return false;
 
-            var value = item as MapleFileSystemContainerBase;
-
-            return value != null && value != SelectedItem;
+            return item is MapleFileSystemContainerBase value && value != SelectedItem;
         }
     }
 }

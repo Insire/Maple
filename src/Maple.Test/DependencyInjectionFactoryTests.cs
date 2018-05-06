@@ -16,6 +16,8 @@ namespace Maple.Test
         public async Task SanityMapleGetContainerTest()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
+
             container.VerifyResolutions();
         }
 
@@ -23,6 +25,7 @@ namespace Maple.Test
         public async Task ResolveMessengerTest()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
 
             var messenger = Substitute.For<IMessenger>();
             container.UseInstance(typeof(IMessenger), messenger, IfAlreadyRegistered: IfAlreadyRegistered.Replace);
@@ -34,9 +37,7 @@ namespace Maple.Test
         public async Task ResolveLoadablesAsList()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
-
-            var factory = Substitute.For<IWavePlayerFactory>();
-            container.UseInstance(factory);
+            container = container.ConfigureForTesting();
 
             var loadables = container.Resolve<IList<ILoadableViewModel>>();
 
@@ -48,9 +49,7 @@ namespace Maple.Test
         public async Task ResolveManyLoadablesAsList()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
-
-            var factory = Substitute.For<IWavePlayerFactory>();
-            container.UseInstance(factory);
+            container = container.ConfigureForTesting();
 
             var loadables = container.ResolveMany<ILoadableViewModel>().ToList();
 

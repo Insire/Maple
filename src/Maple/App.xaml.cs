@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -54,7 +55,7 @@ namespace Maple
 
         protected override void OnExit(ExitEventArgs e)
         {
-            SaveState();
+            SaveState().Wait();
             DisposeResources();
 
             _backgroundUpdate.Wait();
@@ -158,21 +159,13 @@ namespace Maple
 
         private IList<Task> LoadApplicationData()
         {
-            var tasks = new List<Task>();
-
-            foreach (var item in _container.Resolve<IEnumerable<ILoadableViewModel>>())
-                tasks.Add(item.LoadAsync());
-
-            return tasks;
+            //return new List<Task>((_container.Resolve<IEnumerable<ILoadableViewModel>>()).ToArray().Select(p => p.GetCountAsync()));
         }
 
-        private void SaveState()
+        private async Task SaveState()
         {
             var log = _container.Resolve<ILoggingService>();
             log.Info(Localization.Properties.Resources.SavingState);
-
-            foreach (var item in _container.Resolve<IEnumerable<ILoadableViewModel>>())
-                item.Save();
 
             log.Info(Localization.Properties.Resources.SavedState);
         }

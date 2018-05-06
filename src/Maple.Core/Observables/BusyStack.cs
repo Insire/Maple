@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Threading.Tasks;
+using System.Windows;
+
 using Maple.Localization.Properties;
 
 namespace Maple.Core
@@ -20,7 +23,7 @@ namespace Maple.Core
         protected ConcurrentBag<BusyToken> Items
         {
             get { return _items; }
-            set { SetValue(ref _items, value, InvokeOnChanged); }
+            set { SetValue(ref _items, value, async () => await InvokeOnChanged()); }
         }
 
         private Action<bool> _onChanged;
@@ -60,12 +63,12 @@ namespace Maple.Core
         /// Tries to take an item from the stack and returns true if that action was successful
         /// </summary>
         /// <returns></returns>
-        public bool Pull()
+        public async Task<bool> Pull()
         {
-            var result = Items.TryTake(out BusyToken token);
+            var result = Items.TryTake(out var token);
 
             if (result)
-                InvokeOnChanged();
+                await InvokeOnChanged();
 
             return result;
         }
@@ -74,11 +77,11 @@ namespace Maple.Core
         /// Adds a new <see cref="BusyToken" /> to the Stack
         /// </summary>
         /// <param name="token">The token.</param>
-        public void Push(BusyToken token)
+        public async Task Push(BusyToken token)
         {
             Items.Add(token);
 
-            InvokeOnChanged();
+            await InvokeOnChanged();
         }
 
         /// <summary>
@@ -89,7 +92,7 @@ namespace Maple.Core
         /// </returns>
         public bool HasItems()
         {
-            return Items?.TryPeek(out BusyToken token) ?? false;
+            return Items?.TryPeek(out var token) ?? false;
         }
 
         /// <summary>
@@ -103,9 +106,9 @@ namespace Maple.Core
             return new BusyToken(this);
         }
 
-        private void InvokeOnChanged()
+        private async Task InvokeOnChanged()
         {
-            DispatcherFactory.Invoke(OnChanged, HasItems());
+            await Application.Current.Dispatcher.InvokeAsync(() => OnChanged(HasItems()));
         }
     }
 }

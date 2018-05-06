@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
+
+using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple.Core
@@ -12,13 +14,13 @@ namespace Maple.Core
     /// <seealso cref="System.Windows.IWeakEventListener" />
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     /// <seealso cref="System.IDisposable" />
-    public class LocalizationDTO : ObservableObject, INotifyPropertyChanged, IDisposable
+    public class LocalizationDto : ObservableObject, IDisposable
     {
         private readonly string _key;
         private readonly ILocalizationService _service;
         private readonly bool _toUpper;
 
-        public LocalizationDTO(ILocalizationService service, string key, bool toUpper)
+        public LocalizationDto(ILocalizationService service, string key, bool toUpper)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service), $"{nameof(service)} {Resources.IsRequired}");
             _key = key ?? throw new ArgumentNullException(nameof(key), $"{nameof(key)} {Resources.IsRequired}");

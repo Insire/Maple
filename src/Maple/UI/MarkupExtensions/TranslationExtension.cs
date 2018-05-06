@@ -4,7 +4,9 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
 using System.Xaml;
+
 using Maple.Core;
+using Maple.Domain;
 
 namespace Maple
 {
@@ -72,7 +74,7 @@ namespace Maple
         {
             var binding = new Binding("Value")
             {
-                Source = new LocalizationDTO(manager, Key, ToUpper)
+                Source = new LocalizationDto(manager, Key, ToUpper)
             };
 
             return binding.ProvideValue(serviceProvider);

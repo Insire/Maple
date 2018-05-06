@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using DryIoc;
+using Maple.Core;
 using Maple.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
@@ -23,6 +24,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlists_ShouldRunConstructorWithErrors()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
 
             var playlists = container.CreatePlaylists();
 
@@ -49,6 +51,7 @@ namespace Maple.Test.ViewModels
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
             var sequenceProvider = ContainerContextExtensions.CreateSequenceService();
             sequenceProvider.Get(default(List<ISequence>)).ReturnsForAnyArgs(5);
+            container = container.ConfigureForTesting();
             container.UseInstance(sequenceProvider);
 
             var playlists = (Playlists)container.Resolve<IPlaylistsViewModel>();
@@ -70,6 +73,7 @@ namespace Maple.Test.ViewModels
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
             var sequenceProvider = ContainerContextExtensions.CreateSequenceService();
             sequenceProvider.Get(default(List<ISequence>)).ReturnsForAnyArgs(5);
+            container = container.ConfigureForTesting();
             container.UseInstance(sequenceProvider);
 
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
@@ -93,14 +97,15 @@ namespace Maple.Test.ViewModels
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
             var repository = ContainerContextExtensions.CreateRepository();
 
+            container = container.ConfigureForTesting();
             container.UseInstance(repository);
 
             var playlists = container.Resolve<IPlaylistsViewModel>();
             repository.ClearReceivedCalls();
 
-            playlists.Save();
+            await playlists.SaveAsync().ConfigureAwait(false);
 
-            repository.Received(1).Save(NSubstitute.Arg.Any<Playlists>());
+            await repository.Received(1).SaveAsync(NSubstitute.Arg.Any<Playlists>()).ConfigureAwait(false);
             repository.Received(1).Dispose();
         }
 
@@ -114,12 +119,13 @@ namespace Maple.Test.ViewModels
             };
             var repository = ContainerContextExtensions.CreateRepository();
             repository.GetPlaylistsAsync().ReturnsForAnyArgs(dummyPlaylists);
+            container = container.ConfigureForTesting();
             container.UseInstance(repository);
 
             var playlists = (Playlists)container.Resolve<IPlaylistsViewModel>();
             repository.ClearReceivedCalls();
 
-            await playlists.LoadAsync().ConfigureAwait(false);
+            await playlists.GetCountAsync().ConfigureAwait(false);
             await repository.Received(1).GetPlaylistsAsync().ConfigureAwait(false);
             repository.Received(1).Dispose();
 

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 
 namespace Maple
@@ -11,7 +13,7 @@ namespace Maple
     /// is created, it only merges the resources from the cache.
     /// </summary>
     /// <seealso cref="System.Windows.ResourceDictionary" />
-    public class SharedResourceDictionary : ResourceDictionary
+    public class SharedResourceDictionary : ResourceDictionary, INotifyPropertyChanged
     {
         /// <summary>
         /// Internal cache of loaded dictionaries
@@ -23,6 +25,8 @@ namespace Maple
         /// </summary>
         private Uri _sourceUri;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         /// <summary>
         /// Gets or sets the uniform resource identifier (URI) to load resources from.
         /// </summary>
@@ -32,6 +36,7 @@ namespace Maple
             set
             {
                 _sourceUri = value;
+                OnPropertyChanged(nameof(Source));
 
                 if (!_sharedDictionaries.ContainsKey(value))
                 {
@@ -43,11 +48,15 @@ namespace Maple
                     _sharedDictionaries.Add(value, this);
                 }
                 else
-                {
+
                     // If the dictionary is already loaded, get it from the cache
                     MergedDictionaries.Add(_sharedDictionaries[value]);
-                }
             }
+        }
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

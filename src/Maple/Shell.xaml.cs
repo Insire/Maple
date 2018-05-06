@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows.Input;
+
 using Maple.Core;
+using Maple.Domain;
 
 namespace Maple
 {

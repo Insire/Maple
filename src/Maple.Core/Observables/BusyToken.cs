@@ -23,9 +23,10 @@ namespace Maple.Core
         /// Initializes a new instance of the <see cref="BusyToken"/> class.
         /// </summary>
         /// <param name="stack">The stack.</param>
-        public BusyToken(BusyStack stack) : base(stack)
+        public BusyToken(BusyStack stack)
+            : base(stack)
         {
-            stack.Push(this);
+            stack.Push(this).GetAwaiter().GetResult();
         }
 
         /// <summary>

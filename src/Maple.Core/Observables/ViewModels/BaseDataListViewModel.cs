@@ -1,84 +1,59 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
+
 using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
-    /// <summary>
-    /// ListViewModel implementation for ObservableObjects related to the DataAccessLayer (DB)
-    /// </summary>
-    /// <typeparam name="TViewModel">a wrapper class implementing <see cref="BaseViewModel" /></typeparam>
-    /// <typeparam name="TModel">a DTO implementing <see cref="BaseObject" /></typeparam>
-    /// <seealso cref="Maple.Core.BaseListViewModel{T}" />
-    public abstract class BaseDataListViewModel<TViewModel, TModel> : BaseListViewModel<TViewModel>, ILoadableViewModel
-        where TViewModel : BaseDataViewModel<TViewModel, TModel>, ISequence
-        where TModel : class, IBaseObject
+    // TODO add virtualization here
+    public abstract class BaseDataListViewModel<TViewModel, TModel, TKeyDataType> : BaseListViewModel<TViewModel>
+        where TViewModel : VirtualizationViewModel<TModel, TKeyDataType>, ISequence
+        where TModel : class, IEntity
     {
         protected readonly ISequenceService _sequenceProvider;
         protected readonly ILocalizationService _translationService;
         protected readonly ILoggingService _log;
 
-        /// <summary>
-        /// Gets the load command.
-        /// </summary>
-        /// <value>
-        /// The load command.
-        /// </value>
-        public ICommand LoadCommand => AsyncCommand.Create(LoadAsync, () => !IsLoaded);
-        /// <summary>
-        /// Gets the refresh command.
-        /// </summary>
-        /// <value>
-        /// The refresh command.
-        /// </value>
-        public ICommand RefreshCommand => AsyncCommand.Create(LoadAsync);
-        /// <summary>
-        /// Gets the save command.
-        /// </summary>
-        /// <value>
-        /// The save command.
-        /// </value>
-        public ICommand SaveCommand => new RelayCommand(Save);
+        protected IRepository Repository { get; }
+
+        private ICollectionView _view;
+        public ICollectionView View
+        {
+            get { return _view; }
+            protected set { SetValue(ref _view, value); }
+        }
 
         protected BaseDataListViewModel(ViewModelServiceContainer container)
             : base(container.Messenger)
         {
+            Repository = container.Repository;
+
             _log = container.Log;
             _translationService = container.LocalizationService;
             _sequenceProvider = container.SequenceService;
+
+            View = new VirtualizingCollectionViewSource(container, Items);
         }
 
-        public abstract Task LoadAsync();
-        public abstract void Save();
-
-        /// <summary>
-        /// Removes the specified item.
-        /// </summary>
-        /// <param name="item">The item.</param>
-        public override void Remove(TViewModel viewModel)
+        public override void Remove(TViewModel item)
         {
-            if (viewModel == null)
-                throw new ArgumentNullException(nameof(viewModel), $"{nameof(viewModel)} {Resources.IsRequired}");
+            if (item == null)
+                throw new ArgumentNullException(nameof(item), $"{nameof(item)} {Resources.IsRequired}");
 
             using (BusyStack.GetToken())
             {
-                while (Items.Contains(viewModel))
+                while (Items.Contains(item))
                 {
-                    viewModel.Model.IsDeleted = true;
-                    base.Remove(viewModel);
+                    Repository.Delete(item.ViewModel.Model);
+                    base.Remove(item);
                 }
             }
         }
 
-        /// <summary>
-        /// Removes the range.
-        /// </summary>
-        /// <param name="items">The items.</param>
         public override void RemoveRange(IEnumerable<TViewModel> items)
         {
             if (items == null)
@@ -86,16 +61,11 @@ namespace Maple.Core
 
             using (BusyStack.GetToken())
             {
-                items.ForEach(p => p.Model.IsDeleted = true);
+                items.ForEach(p => Remove(p));
                 base.RemoveRange(items);
             }
         }
 
-        /// <summary>
-        /// Removes the range.
-        /// </summary>
-        /// <param name="items">The items.</param>
-        /// <exception cref="System.ArgumentNullException">items</exception>
         public override void RemoveRange(IList items)
         {
             if (items == null)
@@ -108,14 +78,14 @@ namespace Maple.Core
             }
         }
 
-        public override void Add(TViewModel viewModel)
+        public override void Add(TViewModel item)
         {
-            if (viewModel == null)
-                throw new ArgumentNullException(nameof(viewModel), $"{nameof(viewModel)} {Resources.IsRequired}");
+            if (item == null)
+                throw new ArgumentNullException(nameof(item), $"{nameof(item)} {Resources.IsRequired}");
 
             var sequence = _sequenceProvider.Get(Items.Cast<ISequence>().ToList());
-            viewModel.Sequence = sequence;
-            base.Add(viewModel);
+            item.Sequence = sequence;
+            base.Add(item);
         }
 
         public override void AddRange(IEnumerable<TViewModel> items)

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using Maple.Domain;
 
 namespace Maple.Core
 {
-    public abstract class BaseDataViewModel<TViewModel, TModel> : BaseViewModel<TModel>
-        where TModel : class, IBaseObject
+    public abstract class BaseDataViewModel<TModel> : BaseViewModel<TModel>
+        where TModel : class
     {
         protected ChangeTracker ChangeTracker { get; }
         protected bool SkipChangeTracking { get; set; }
@@ -13,19 +12,6 @@ namespace Maple.Core
         public bool IsChanged
         {
             get { return ChangeTracker.HasChanged; }
-        }
-
-        protected override bool SetValue<T>(ref T field, T value, Action OnChanging = null, Action OnChanged = null, [CallerMemberName] string propertyName = null)
-        {
-            var result = base.SetValue(ref field, value, OnChanging, OnChanged, propertyName);
-
-            if (result)
-            {
-                if (!SkipChangeTracking && ChangeTracker.Update(value, propertyName))
-                    OnPropertyChanged(nameof(IsChanged));
-            }
-
-            return result;
         }
 
         protected BaseDataViewModel(TModel model, IMessenger messenger)
@@ -37,6 +23,18 @@ namespace Maple.Core
             Model = model ?? throw new ArgumentNullException(nameof(model));
 
             SkipChangeTracking = false;
+        }
+
+        protected override bool SetValue<T>(ref T field, T value, Action OnChanging = null, Action OnChanged = null, [CallerMemberName] string propertyName = null)
+        {
+            var result = base.SetValue(ref field, value, OnChanging, OnChanged, propertyName);
+
+            if (result && !SkipChangeTracking && ChangeTracker.Update(value, propertyName))
+            {
+                OnPropertyChanged(nameof(IsChanged));
+            }
+
+            return result;
         }
     }
 }

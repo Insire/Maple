@@ -5,11 +5,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
+
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
+
 using Maple.Domain;
 using Maple.Localization.Properties;
 
@@ -17,17 +19,17 @@ namespace Maple.Youtube
 {
     public class YoutubeApi : IYoutubeApi
     {
+#pragma warning disable S1075 // URIs should not be hardcoded
         private const string _videoBaseUrl = @"https://www.youtube.com/watch?v=";
         private const string _playListBaseUrl = @"https://www.youtube.com/playlist?list=";
+#pragma warning restore S1075 // URIs should not be hardcoded
 
         private volatile YouTubeService _service;
         private readonly ILoggingService _log;
-        private readonly object _syncRoot;
 
         public YoutubeApi(ILoggingService log)
         {
             _log = log ?? throw new ArgumentNullException(nameof(log), $"{nameof(log)} {Resources.IsRequired}");
-            _syncRoot = new object();
         }
 
         private async Task<YouTubeService> GetService()
@@ -109,7 +111,7 @@ namespace Maple.Youtube
                 },
                 Status = new PlaylistStatus
                 {
-                    PrivacyStatus = publicPlaylist == true ? "public" : "private"
+                    PrivacyStatus = publicPlaylist ? "public" : "private"
                 }
             };
             newPlaylist = await youtubeService.Playlists.Insert(newPlaylist, "snippet,status")
@@ -129,7 +131,7 @@ namespace Maple.Youtube
                 };
                 newVideo.Snippet.ResourceId.Kind = "youtube#video";
                 newVideo.Snippet.ResourceId.VideoId = GetVideoId(item);
-                newVideo = await youtubeService.PlaylistItems.Insert(newVideo, "snippet")
+                await youtubeService.PlaylistItems.Insert(newVideo, "snippet")
                                                              .ExecuteAsync()
                                                              .ConfigureAwait(false);
             }

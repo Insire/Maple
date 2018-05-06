@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace Maple.Domain
 {
     [DebuggerDisplay("{Name}, {DeviceName}, {Sequence}")]
-    public class MediaPlayerModel : BaseObject
+    public class MediaPlayerModel : Entity<int>
     {
         public int PlaylistId { get; set; }
         [ForeignKey(nameof(PlaylistId))]
@@ -13,6 +13,7 @@ namespace Maple.Domain
 
         [MaxLength(100)]
         public string DeviceName { get; set; }
+
         public bool IsPrimary { get; set; }
 
         [Required]

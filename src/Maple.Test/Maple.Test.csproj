@@ -48,7 +48,6 @@
     <Compile Include="..\Resources\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="DiagnosticReportTests.cs" />
     <Compile Include="StringBuilderCacheTests.cs" />
     <Compile Include="TestUtils\ContainerContextExtensions.cs" />
     <Compile Include="TypeExtension\CheckingATypeForDefaultConstructorTests.cs" />
@@ -59,7 +58,6 @@
     <Compile Include="TypeExtension\CheckingTypeIsNumeric.cs" />
     <Compile Include="TypeExtension\Context.cs" />
     <Compile Include="DependencyInjectionFactoryTests.cs" />
-    <Compile Include="DynamicDictionaryTests.cs" />
     <Compile Include="Ensure\EnsuringCollectionNotNullOrEmptyTest.cs" />
     <Compile Include="Ensure\EnsuringEqualTests.cs" />
     <Compile Include="Ensure\EnsuringExistsTests.cs" />
@@ -112,7 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DryIoc.dll">
-      <Version>2.12.5</Version>
+      <Version>2.12.6</Version>
     </PackageReference>
     <PackageReference Include="MSTest.TestAdapter">
       <Version>1.2.0</Version>
@@ -125,6 +123,9 @@
     </PackageReference>
     <PackageReference Include="Shouldly">
       <Version>2.8.3</Version>
+    </PackageReference>
+    <PackageReference Include="SonarAnalyzer.CSharp">
+      <Version>7.1.0.5212</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

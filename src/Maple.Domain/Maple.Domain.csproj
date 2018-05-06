@@ -21,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -53,29 +54,33 @@
     <Compile Include="Enums\PlaybackState.cs" />
     <Compile Include="Enums\PrivacyStatus.cs" />
     <Compile Include="Enums\RepeatMode.cs" />
+    <Compile Include="Interfaces\Services\ILocalizationService.cs" />
+    <Compile Include="Models\Base\Entity.cs" />
+    <Compile Include="Interfaces\DataAccessLayer\IReadOnlyRepository.cs" />
+    <Compile Include="Interfaces\DataAccessLayer\IRepository.cs" />
+    <Compile Include="Interfaces\DataAccessLayer\IUnitOfWork.cs" />
     <Compile Include="Interfaces\IAudioDevice.cs" />
-    <Compile Include="Interfaces\IBaseObject.cs" />
-    <Compile Include="Interfaces\IChangeState.cs" />
-    <Compile Include="Interfaces\IIdentifier.cs" />
+    <Compile Include="Interfaces\DataAccessLayer\IChangeState.cs" />
+    <Compile Include="Interfaces\DataAccessLayer\IEntity.cs" />
     <Compile Include="Interfaces\IIsSelected.cs" />
-    <Compile Include="Interfaces\ILoggingNotifcationService.cs" />
-    <Compile Include="Interfaces\ILoggingService.cs" />
-    <Compile Include="Interfaces\IMapleRepository.cs" />
+    <Compile Include="Interfaces\Services\ILoggingNotifcationService.cs" />
+    <Compile Include="Interfaces\Services\ILoggingService.cs" />
     <Compile Include="Interfaces\IMediaItem.cs" />
     <Compile Include="Interfaces\IMediaPlayer.cs" />
     <Compile Include="Interfaces\IRangeObservableCollection.cs" />
-    <Compile Include="Interfaces\IRefreshable.cs" />
-    <Compile Include="Interfaces\ISequence.cs" />
-    <Compile Include="Interfaces\ISequenceService.cs" />
-    <Compile Include="Interfaces\ITranslationProvider.cs" />
-    <Compile Include="Interfaces\IVersionService.cs" />
-    <Compile Include="Models\Base\BaseObject.cs" />
+    <Compile Include="Interfaces\DataAccessLayer\ISequence.cs" />
+    <Compile Include="Interfaces\Services\ISequenceService.cs" />
+    <Compile Include="Interfaces\Providers\ITranslationProvider.cs" />
+    <Compile Include="Interfaces\Services\IVersionService.cs" />
     <Compile Include="Models\MediaItemModel.cs" />
     <Compile Include="Models\MediaPlayerModel.cs" />
-    <Compile Include="Models\OptionModel.cs" />
     <Compile Include="Models\PlaylistModel.cs" />
-    <Compile Include="Models\RawModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SonarAnalyzer.CSharp">
+      <Version>7.1.0.5212</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

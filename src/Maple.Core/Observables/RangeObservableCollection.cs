@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
+
 using Maple.Domain;
 using Maple.Localization.Properties;
 
@@ -47,11 +46,6 @@ namespace Maple.Core
             base.OnCollectionChanged(param);
         }
 
-        public virtual void AddRange(IList items)
-        {
-            AddRange(items.Cast<T>());
-        }
-
         public virtual void AddRange(IEnumerable<T> items)
         {
             if (items == null)
@@ -80,34 +74,6 @@ namespace Maple.Core
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
-        public virtual void RemoveRange(IList items)
-        {
-            if (items == null)
-                throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
-
-            using (_busyStack.GetToken())
-            {
-                foreach (var item in items.Cast<T>())
-                    Remove(item);
-            }
-
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
-
-        public virtual void RemoveRange(IList<T> items)
-        {
-            if (items == null)
-                throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
-
-            using (_busyStack.GetToken())
-            {
-                foreach (var item in items)
-                    Remove(item);
-            }
-
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
-
         public void OnPropertyChanged([CallerMemberName]string propertyName = null)
         {
             OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
@@ -121,11 +87,6 @@ namespace Maple.Core
         private void RaisePropertyChanged(PropertyChangedEventArgs param)
         {
             base.OnPropertyChanged(param);
-        }
-
-        public void AddRange(IList<T> items)
-        {
-            AddRange((IEnumerable<T>)items);
         }
     }
 }

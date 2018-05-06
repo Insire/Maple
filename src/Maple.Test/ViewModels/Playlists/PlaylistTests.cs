@@ -31,11 +31,10 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldRunConstructorWithoutErrors()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var model = _context.CreateModelPlaylist();
             var playlist = container.CreatePlaylist(model);
 
-            Assert.AreEqual(_context.FullyQualifiedTestClassName, playlist.CreatedBy);
-            Assert.AreEqual(_context.FullyQualifiedTestClassName, playlist.UpdatedBy);
             Assert.AreEqual(4, playlist.Count);
             Assert.AreEqual($"Description for {_context.FullyQualifiedTestClassName} Playlist", playlist.Description);
             Assert.AreEqual(false, playlist.HasErrors);
@@ -67,6 +66,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldThrowForEmptyModel()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             Assert.ThrowsException<ArgumentNullException>(() => container.CreatePlaylist(default(PlaylistModel)));
         }
 
@@ -74,6 +74,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldThrowForEmptyContainer()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             Assert.ThrowsException<ArgumentNullException>(() => new Playlist(null, container.Resolve<IValidator<Playlist>>(), container.Resolve<IDialogViewModel>(), container.Resolve<IMediaItemMapper>(), _context.CreateModelPlaylist()));
         }
 
@@ -81,6 +82,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldThrowForEmptyValidator()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             Assert.ThrowsException<ArgumentNullException>(() => new Playlist(container.Resolve<ViewModelServiceContainer>(), null, container.Resolve<IDialogViewModel>(), container.Resolve<IMediaItemMapper>(), _context.CreateModelPlaylist()));
         }
 
@@ -88,6 +90,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldThrowForEmptyViewModel()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             Assert.ThrowsException<ArgumentNullException>(() => new Playlist(container.Resolve<ViewModelServiceContainer>(), container.Resolve<IValidator<Playlist>>(), null, container.Resolve<IMediaItemMapper>(), _context.CreateModelPlaylist()));
         }
 
@@ -95,6 +98,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldThrowForEmptyMediaItemMapper()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             Assert.ThrowsException<ArgumentNullException>(() => new Playlist(container.Resolve<ViewModelServiceContainer>(), container.Resolve<IValidator<Playlist>>(), container.Resolve<IDialogViewModel>(), null, _context.CreateModelPlaylist()));
         }
 
@@ -102,6 +106,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldRunClear()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
 
             Assert.AreEqual(4, playlist.Count);
@@ -115,6 +120,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldAdd()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var mediaItem = container.CreateMediaItem(_context.CreateModelMediaItem());
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
 
@@ -129,6 +135,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldThrowAddForNull()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
 
             Assert.ThrowsException<ArgumentNullException>(() => playlist.Add(null));
@@ -138,6 +145,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldAddRange()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var mediaItems = new[]
             {
                 container.CreateMediaItem(_context.CreateModelMediaItem()),
@@ -157,6 +165,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldHandleAddRangeForEmptyCollection()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var mediaItems = new List<MediaItem>();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
 
@@ -171,6 +180,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldThrowAddRangeForNull()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
 
             Assert.AreEqual(4, playlist.Count);
@@ -182,6 +192,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldHandleAddRangeForDuplicateEntries()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var mediaItem = container.CreateMediaItem(_context.CreateModelMediaItem());
             var mediaItems = new[]
             {
@@ -202,6 +213,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldRemove()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
 
             Assert.AreEqual(4, playlist.Count);
@@ -215,6 +227,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldThrowRemoveForNull()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
 
             Assert.ThrowsException<ArgumentNullException>(() => playlist.Remove(null));
@@ -224,6 +237,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldRemoveRange()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
             var mediaItems = new[]
             {
@@ -243,6 +257,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldThrowRemoveRangeForNull()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
 
             Assert.ThrowsException<ArgumentNullException>(() => playlist.RemoveRange(null));
@@ -252,6 +267,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldHandleRemoveRangeForSameItem()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
             var mediaItems = new[]
             {
@@ -271,6 +287,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldHandleRemoveRangeForUnknownItem()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
             var mediaItems = new List<MediaItem>()
             {
@@ -288,6 +305,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldHandleRemoveRangeForUnknownItems()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
             var mediaItems = new[]
             {
@@ -307,6 +325,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldHandleRemoveRangeForEmptyCollection()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
             var mediaItems = new List<MediaItem>();
 
@@ -321,6 +340,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldRunNext()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
             playlist.RepeatMode = RepeatMode.None;
             var mediaItem = playlist.Next();
@@ -334,6 +354,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldRunNextWithRepeatModeNone()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
             playlist.RepeatMode = RepeatMode.None;
             playlist.SelectedItem = playlist[3];
@@ -347,6 +368,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldRunNextWithRepeatModeAll()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
             playlist.RepeatMode = RepeatMode.All;
             playlist.SelectedItem = playlist[3];
@@ -361,6 +383,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldRunNextWithRepeatModeAllWhileShuffeling()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
             playlist.RepeatMode = RepeatMode.All;
             playlist.IsShuffeling = true;
@@ -376,6 +399,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldRunNextWithRepeatModeNoneWhileShuffeling()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
             playlist.RepeatMode = RepeatMode.None;
             playlist.IsShuffeling = true;
@@ -391,6 +415,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldRunNextWithRepeatModeSingleWhileShuffeling()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
             playlist.RepeatMode = RepeatMode.Single;
             playlist.IsShuffeling = true;
@@ -406,6 +431,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldRunNextWithRepeatModeSingle()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
             playlist.RepeatMode = RepeatMode.Single;
 
@@ -420,6 +446,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldRunPrevious()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var playlist = container.CreatePlaylist(_context.CreateModelPlaylist());
             var messenger = container.Resolve<IMessenger>();
 
@@ -455,6 +482,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldRaiseSelectionChanging()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var messenger = Substitute.For<IMessenger>();
             container.UseInstance(typeof(IMessenger), messenger, IfAlreadyRegistered: IfAlreadyRegistered.Replace);
 
@@ -472,6 +500,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldRaiseSelectionChanged()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var messenger = Substitute.For<IMessenger>();
             container.UseInstance(typeof(IMessenger), messenger, IfAlreadyRegistered: IfAlreadyRegistered.Replace);
 
@@ -489,6 +518,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldSynchronizeItemsWithModelWhenRemovingSelectedItem()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var model = _context.CreateModelPlaylist();
             var playlist = container.CreatePlaylist(model);
             var selectedModel = playlist.SelectedItem.Model;
@@ -507,6 +537,7 @@ namespace Maple.Test.ViewModels
         public async Task Playlist_ShouldSynchronizeItemsWithModelWhenRemoving()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var model = _context.CreateModelPlaylist();
             var playlist = container.CreatePlaylist(model);
             var mediaItem1 = playlist[1];
@@ -532,6 +563,7 @@ namespace Maple.Test.ViewModels
         {
             var tokenSource = new CancellationTokenSource(1000);
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var mediaItems = new[]
 {
                 container.CreateMediaItem(new MediaItemModel()),
@@ -558,6 +590,7 @@ namespace Maple.Test.ViewModels
         {
             var tokenSource = new CancellationTokenSource(1000);
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var mediaItems = new[]
 {
                 container.CreateMediaItem(new MediaItemModel()),
@@ -584,6 +617,7 @@ namespace Maple.Test.ViewModels
         {
             var tokenSource = new CancellationTokenSource(1000);
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
+            container = container.ConfigureForTesting();
             var mediaItems = new[]
 {
                 container.CreateMediaItem(new MediaItemModel()),

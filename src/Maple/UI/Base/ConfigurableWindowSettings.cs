@@ -1,6 +1,5 @@
 ﻿using System.Configuration;
 using System.Windows;
-using Maple.Core;
 
 namespace Maple
 {
