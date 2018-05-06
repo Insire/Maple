@@ -37,6 +37,9 @@
       <Version>1.32.0.1079</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="SonarAnalyzer.CSharp">
+      <Version>7.1.0.5212</Version>
+    </PackageReference>
     <PackageReference Include="YoutubeExtractor">
       <Version>0.10.11</Version>
     </PackageReference>
