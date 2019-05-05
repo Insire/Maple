@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -62,10 +59,8 @@ namespace Maple
             await dialog.ShowExceptionDialog(e.Exception).ConfigureAwait(true);
         }
 
-        protected override async void OnExit(ExitEventArgs e)
+        protected override void OnExit(ExitEventArgs e)
         {
-            DisposeResources();
-
             _backgroundUpdate.Wait();
 
             ExitInternal(e);
@@ -161,11 +156,6 @@ namespace Maple
                 manager?.Dispose();
             }
 #endif
-        }
-
-        private void DisposeResources()
-        {
-            // TODO get and dispose claimed resources
         }
 
         private void ExitInternal(ExitEventArgs e)

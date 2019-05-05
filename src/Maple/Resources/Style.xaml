@@ -143,7 +143,7 @@
     <Style x:Key="BaseDataGridButtonStyle"
            BasedOn="{StaticResource MaterialDesignMultiFloatingActionAccentPopupBox}"
            TargetType="{x:Type materialDesign:PopupBox}">
-        <Setter Property="Margin" Value="0 -30 10 0" />
+        <Setter Property="Margin" Value="0,-30,10,0" />
         <Setter Property="Panel.ZIndex" Value="2" />
         <Setter Property="PlacementMode" Value="LeftAndAlignMiddles" />
         <Setter Property="ToolTipService.Placement" Value="Mouse" />
@@ -356,7 +356,7 @@
 
                                 <!--  Toggle  -->
                                 <ToggleButton x:Name="PART_Expander"
-                                              Margin="8 0 8 0"
+                                              Margin="8,0,8,0"
                                               VerticalAlignment="Center"
                                               ClickMode="Press"
                                               Foreground="{TemplateBinding Foreground}"
@@ -400,7 +400,7 @@
                                             Grid.Row="1"
                                             Grid.Column="1"
                                             Grid.ColumnSpan="2"
-                                            Margin="-16 0 0 0">
+                                            Margin="-16,0,0,0">
                                     <StackPanel.Height>
                                         <MultiBinding Converter="{local:MathMultipleConverter Operation=Multiply}">
                                             <Binding ElementName="ItemsHost" Path="ActualHeight" />
@@ -638,7 +638,7 @@
                                             <icons:PackIconMaterial DockPanel.Dock="Left"
                                                                     Foreground="{DynamicResource SecondaryAccentBrush}"
                                                                     Kind="Folder" />
-                                            <TextBlock Margin="8 0 0 0"
+                                            <TextBlock Margin="8,0,0,0"
                                                        Text="{Binding Name}"
                                                        TextTrimming="CharacterEllipsis" />
                                         </DockPanel>
@@ -649,7 +649,7 @@
                                     <Border Background="Transparent" ContextMenu="{StaticResource FileContextMenu}">
                                         <DockPanel>
                                             <icons:PackIconEntypo Foreground="{DynamicResource SecondaryAccentBrush}" Kind="Drive" />
-                                            <TextBlock Margin="8 0 0 0"
+                                            <TextBlock Margin="8,0,0,0"
                                                        Text="{Binding Name}"
                                                        TextTrimming="CharacterEllipsis" />
                                         </DockPanel>
@@ -674,7 +674,7 @@
                         <DockPanel Grid.Row="0"
                                    Grid.Column="2"
                                    LastChildFill="True">
-                            <Grid Margin="0 0 0 8" DockPanel.Dock="Top">
+                            <Grid Margin="0,0,0,8" DockPanel.Dock="Top">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="5" />
                                     <ColumnDefinition Width="*" />
@@ -716,7 +716,7 @@
                                                                                 <icons:PackIconMaterial DockPanel.Dock="Left"
                                                                                                         Foreground="{DynamicResource SecondaryAccentBrush}"
                                                                                                         Kind="File" />
-                                                                                <TextBlock Margin="8 0 0 0" Text="{Binding Name}" />
+                                                                                <TextBlock Margin="8,0,0,0" Text="{Binding Name}" />
 
                                                                                 <DockPanel.Resources>
                                                                                     <local:BindingProxy x:Key="MapleFileProxy" Data="{Binding}" />
@@ -738,7 +738,7 @@
                                                                                             <icons:PackIconMaterial DockPanel.Dock="Left"
                                                                                                                     Foreground="{DynamicResource SecondaryAccentBrush}"
                                                                                                                     Kind="Folder" />
-                                                                                            <TextBlock Margin="8 0 0 0" Text="{Binding Name}" />
+                                                                                            <TextBlock Margin="8,0,0,0" Text="{Binding Name}" />
 
                                                                                             <DockPanel.InputBindings>
                                                                                                 <MouseBinding Command="{Binding Data.SelectCommand, Source={StaticResource ViewModelProxy}}"
@@ -767,7 +767,7 @@
                                                                                                                     Focusable="False"
                                                                                                                     Foreground="{DynamicResource SecondaryAccentBrush}"
                                                                                                                     Kind="Folder" />
-                                                                                            <TextBlock Margin="8 0 0 0"
+                                                                                            <TextBlock Margin="8,0,0,0"
                                                                                                        Focusable="False"
                                                                                                        Text="{Binding Name}" />
 
@@ -1013,6 +1013,122 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:ProgressContentDialogViewModel}" />
+
+    <DataTemplate DataType="{x:Type local:MediaPlayers}">
+        <materialDesign:TransitioningContent>
+            <materialDesign:TransitioningContent.OpeningEffects>
+                <materialDesign:TransitionEffect Kind="FadeIn" />
+            </materialDesign:TransitioningContent.OpeningEffects>
+
+            <materialDesign:Card VerticalAlignment="Stretch">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="{StaticResource DefaultGridLength}" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="{StaticResource DefaultGridLength}" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
+                            <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
+                        </Grid.ColumnDefinitions>
+
+                        <ListBox Grid.Row="1"
+                                 Grid.Column="1"
+                                 AlternationCount="2"
+                                 ItemsSource="{Binding View, ValidatesOnNotifyDataErrors=True}"
+                                 SelectedItem="{Binding SelectedItem, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Loaded">
+                                    <i:InvokeCommandAction Command="{Binding LoadCommand}" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="UnLoaded">
+                                    <i:InvokeCommandAction Command="{Binding SaveCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+
+                            <ListBox.ItemContainerStyle>
+                                <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+
+                        <GridSplitter Grid.Row="1"
+                                      Grid.Column="2"
+                                      Width="5"
+                                      Margin="{StaticResource LeftRightThickness}"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Stretch" />
+
+                        <Grid Grid.Row="1" Grid.Column="3">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="{StaticResource DefaultGridLength}" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="{StaticResource DefaultGridLength}" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="0"
+                                       Text="{local:Translation AudioDevice}" />
+
+                            <ComboBox Grid.Row="0"
+                                      Grid.Column="2"
+                                      DisplayMemberPath="Name"
+                                      ItemsSource="{Binding SelectedItem.AudioDevices.Items, ValidatesOnNotifyDataErrors=True}"
+                                      SelectedItem="{Binding SelectedItem.Player.AudioDevice, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}" />
+                            <TextBlock Grid.Row="2"
+                                       Grid.Column="0"
+                                       Text="{local:Translation PlaybackMode}" />
+
+                            <ComboBox Grid.Row="2"
+                                      Grid.Column="2"
+                                      ItemsSource="{Binding SelectedItem.Playlist.RepeatModes}"
+                                      SelectedItem="{Binding SelectedItem.Playlist.RepeatMode, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                            <TextBlock Grid.Row="4"
+                                       Grid.Column="0"
+                                       Text="{local:Translation Playlist}" />
+                            <ComboBox Grid.Row="4"
+                                      Grid.Column="2"
+                                      ItemsSource="{Binding Playlists.View, ValidatesOnNotifyDataErrors=True}"
+                                      SelectedItem="{Binding SelectedItem.Playlist, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Loaded">
+                                        <i:InvokeCommandAction Command="{Binding Playlists.LoadCommand}" />
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="UnLoaded">
+                                        <i:InvokeCommandAction Command="{Binding Playlists.SaveCommand}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Title}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Grid>
+                    </Grid>
+                </ScrollViewer>
+            </materialDesign:Card>
+        </materialDesign:TransitioningContent>
+    </DataTemplate>
     <!--#endregion-->
 
     <DataTemplate DataType="{x:Type local:CreateMediaItem}">
@@ -1123,7 +1239,7 @@
                                     Kind="ViewHeadline" />
 
             <StackPanel Grid.Column="1"
-                        Margin="10 0"
+                        Margin="10,0"
                         VerticalAlignment="Center"
                         Orientation="Vertical">
                 <TextBlock FontSize="22"
@@ -1166,7 +1282,7 @@
                                     Kind="File" />
 
             <StackPanel Grid.Column="1"
-                        Margin="10 0"
+                        Margin="10,0"
                         VerticalAlignment="Center"
                         Orientation="Vertical">
                 <TextBlock FontSize="22"
@@ -1193,14 +1309,14 @@
 
     <DataTemplate DataType="{x:Type local:MainMediaPlayer}">
         <StackPanel Orientation="Horizontal">
-            <icons:PackIconModern Margin="0 0 5 0" Kind="MonitorPlay" />
+            <icons:PackIconModern Margin="0,0,5,0" Kind="MonitorPlay" />
             <TextBlock Text="{Binding Name}" />
         </StackPanel>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:MediaPlayer}">
         <StackPanel Orientation="Horizontal">
-            <icons:PackIconOcticons Margin="0 0 5 0" Kind="DeviceDesktop" />
+            <icons:PackIconOcticons Margin="0,0,5,0" Kind="DeviceDesktop" />
             <TextBlock Text="{Binding Name}" />
         </StackPanel>
     </DataTemplate>

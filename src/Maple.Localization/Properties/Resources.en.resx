@@ -354,4 +354,7 @@
   <data name="Refresh" xml:space="preserve">
     <value>Refresh</value>
   </data>
+  <data name="OpenMediaPlayerConfigurationCommand" xml:space="preserve">
+    <value>Open Mediaplayer settings</value>
+  </data>
 </root>

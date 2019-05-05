@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +18,8 @@ namespace Maple
         Task<(bool Result, ICollection<MediaItem> MediaItems)> ShowMediaItemFolderSelectionDialog(FileSystemFolderBrowserOptions options, CancellationToken token);
 
         Task<(bool Result, ICollection<MediaItem> MediaItems)> ShowMediaItemSelectionDialog(FileSystemBrowserOptions options, CancellationToken token);
+
+        Task ShowMediaPlayerConfiguration(IMediaPlayersViewModel mediaPlayersViewModel);
 
         Task ShowMessageDialog(string message, string title);
 

@@ -10,10 +10,11 @@ namespace Maple
 {
     public sealed class MediaPlayers : BaseDataListViewModel<MediaPlayer, MediaPlayerModel>, IMediaPlayersViewModel
     {
-        private readonly IPlaylistsViewModel _playlists;
         private readonly Func<IUnitOfWork> _repositoryFactory;
         private readonly IMediaPlayerMapper _mediaPlayerMapper;
         private readonly ILoggingNotifcationService _notificationService;
+
+        public IPlaylistsViewModel Playlists { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaPlayers"/> class.
@@ -31,9 +32,10 @@ namespace Maple
         {
             _repositoryFactory = repositoryFactory ?? throw new ArgumentNullException(nameof(repositoryFactory), $"{nameof(repositoryFactory)} {Resources.IsRequired}");
             _mediaPlayerMapper = mediaPlayerMapper ?? throw new ArgumentNullException(nameof(mediaPlayerMapper), $"{nameof(mediaPlayerMapper)} {Resources.IsRequired}");
-            _playlists = playlists ?? throw new ArgumentNullException(nameof(playlists), $"{nameof(playlists)} {Resources.IsRequired}");
 
             _notificationService = container.NotificationService;
+
+            Playlists = playlists ?? throw new ArgumentNullException(nameof(playlists), $"{nameof(playlists)} {Resources.IsRequired}");
         }
 
         public Task Add()
@@ -88,21 +90,21 @@ namespace Maple
                         Sequence = _sequenceProvider.Get(Items.Cast<ISequence>().ToList()),
                     };
 
-                    if (!_playlists.IsLoaded)
+                    if (!Playlists.IsLoaded)
                     {
-                        await _playlists.Load();
+                        await Playlists.Load();
                     }
 
-                    if (_playlists.Count > 0)
+                    if (Playlists.Count > 0)
                     {
-                        var viewModel = _mediaPlayerMapper.GetMain(main, _playlists[0]);
+                        var viewModel = _mediaPlayerMapper.GetMain(main, Playlists[0]);
                         Add(viewModel);
                         SelectedItem = viewModel;
                     }
                     else
                     {
-                        await _playlists.Add();
-                        var viewModel = _mediaPlayerMapper.GetMain(main, _playlists[0]);
+                        await Playlists.Add();
+                        var viewModel = _mediaPlayerMapper.GetMain(main, Playlists[0]);
                         Add(viewModel);
                         SelectedItem = viewModel;
                     }

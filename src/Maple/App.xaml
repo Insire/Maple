@@ -32,6 +32,7 @@
                 <local:SharedResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Fonts.xaml" />
                 <local:SharedResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Flyout.xaml" />
 
+                <ResourceDictionary Source="Resources/Style.xaml" />
                 <!--  more injections OnStartup, those are not all resources used  -->
             </ResourceDictionary.MergedDictionaries>
 

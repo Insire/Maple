@@ -358,4 +358,7 @@
   <data name="Refresh" xml:space="preserve">
     <value>Aktualisieren</value>
   </data>
+  <data name="OpenMediaPlayerConfigurationCommand" xml:space="preserve">
+    <value>Mediaplayereinstellungen öffnen</value>
+  </data>
 </root>

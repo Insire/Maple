@@ -8,6 +8,7 @@
                  xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
                  Title="{local:Translation ShellTitle}"
                  Style="{StaticResource BaseWindowStyle}">
+
     <local:IoCWindow.Resources>
         <local:BindingProxy x:Key="ScenesProxy" Data="{Binding Scenes}" />
         <local:BindingProxy x:Key="DialogProxy" Data="{Binding DialogViewModel}" />
@@ -16,6 +17,9 @@
     <!--  DataContext ShellViewModel  -->
     <metro:MetroWindow.RightWindowCommands>
         <metro:WindowCommands ShowSeparators="False">
+            <Button Command="{Binding Scenes.OpenMediaPlayerConfigurationCommand}" ToolTip="{local:Translation OpenMediaPlayerConfigurationCommand}">
+                <icons:PackIconMaterial Kind="Cogs" />
+            </Button>
             <Button Command="{Binding Scenes.OpenOptionsCommand}" ToolTip="{local:Translation OptionsCommand}">
                 <icons:PackIconMaterial Kind="Earth" />
             </Button>
@@ -73,16 +77,17 @@
                                    Identifier="RootDialog"
                                    IsOpen="{Binding Data.IsOpen, Source={StaticResource DialogProxy}}">
             <materialDesign:DialogHost.DialogContent>
-                <DockPanel DataContext="{Binding Data, Source={StaticResource DialogProxy}}"
+                <DockPanel Width="900"
                            Height="506"
-                           Width="900"
+                           MaxWidth="900"
                            MaxHeight="506"
-                           MaxWidth="900">
+                           DataContext="{Binding Data, Source={StaticResource DialogProxy}}">
                     <materialDesign:ColorZone Padding="4"
                                               DockPanel.Dock="Top"
                                               Mode="PrimaryMid">
                         <DockPanel LastChildFill="False">
-                            <TextBlock DockPanel.Dock="Left" Margin="8,0,0,0"
+                            <TextBlock Margin="8,0,0,0"
+                                       DockPanel.Dock="Left"
                                        FontWeight="Medium"
                                        TextTrimming="CharacterEllipsis"
                                        TextWrapping="NoWrap">
@@ -99,13 +104,14 @@
                     </materialDesign:ColorZone>
 
                     <DockPanel Margin="5">
-                        <StackPanel Margin="0 5 0 0"
+                        <StackPanel Margin="0,5,0,0"
                                     HorizontalAlignment="Right"
                                     DockPanel.Dock="Bottom"
                                     Orientation="Horizontal">
-                            <Button Command="{Binding AcceptDialogCommand}"
+                            <Button Margin="0,0,8,0"
+                                    Command="{Binding AcceptDialogCommand}"
                                     Content="{local:Translation Accept}"
-                                    ToolTip="{local:Translation Accept}" Margin="0,0,8,0" />
+                                    ToolTip="{local:Translation Accept}" />
                             <Button Command="{Binding CancelDialogCommand}"
                                     Content="{local:Translation Cancel}"
                                     ToolTip="{local:Translation Cancel}"

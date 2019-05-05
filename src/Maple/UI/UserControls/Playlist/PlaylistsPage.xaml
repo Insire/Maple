@@ -7,10 +7,6 @@
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <local:IoCUserControl.Resources>
         <local:SharedResourceDictionary>
-            <local:SharedResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../../../Resources/Style.xaml" />
-            </local:SharedResourceDictionary.MergedDictionaries>
-
             <local:BindingProxy x:Key="DetailViewToggleButtonProxy" Data="False" />
 
             <ControlTemplate x:Key="ListView">

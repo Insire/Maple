@@ -128,9 +128,6 @@
     <Compile Include="UI\MarkupExtensions\BreakingDebugConverter.cs" />
     <Compile Include="UI\MarkupExtensions\PrintingDebugConverter.cs" />
     <Compile Include="UI\Base\SharedResourceDictionary.cs" />
-    <Compile Include="UI\UserControls\MediaPlayersPage.xaml.cs">
-      <DependentUpon>MediaPlayersPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\UserControls\Options\OptionsPage.xaml.cs">
       <DependentUpon>OptionsPage.xaml</DependentUpon>
     </Compile>
@@ -200,9 +197,6 @@
     <Compile Include="UI\UserControls\MediaPlayerPage.xaml.cs">
       <DependentUpon>MediaPlayerPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls\Playlist\NewPlaylistOptionsPage.xaml.cs">
-      <DependentUpon>NewPlaylistOptionsPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\UserControls\Playlist\NewPlaylistPage.xaml.cs">
       <DependentUpon>NewPlaylistPage.xaml</DependentUpon>
     </Compile>
@@ -224,15 +218,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UserControls\MediaPlayersPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UI\UserControls\Options\OptionsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\UserControls\Playlist\NewPlaylistOptionsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

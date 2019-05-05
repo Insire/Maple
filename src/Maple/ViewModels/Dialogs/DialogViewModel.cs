@@ -249,6 +249,19 @@ namespace Maple
             return result;
         }
 
+        public Task ShowMediaPlayerConfiguration(IMediaPlayersViewModel mediaPlayersViewModel)
+        {
+            if (IsOpen) // no exception spam, could probably be improved TODO ?
+                return Task.CompletedTask;
+
+            TitleDetail = string.Empty;
+            Context = mediaPlayersViewModel;
+            Title = _translator.Translate(nameof(Resources.Director));
+            IsCancelVisible = false;
+
+            return Open();
+        }
+
         private void FileSystemInfoChanged(FileSystemInfoChangedMessage e)
         {
             TitleDetail = e.Content.FullName;

@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -53,8 +54,8 @@ namespace Maple
             protected set { SetValue(ref _titleDetail, value); }
         }
 
-        private ObservableObject _context;
-        public ObservableObject Context
+        private INotifyPropertyChanged _context;
+        public INotifyPropertyChanged Context
         {
             get { return _context; }
             set { SetValue(ref _context, value); }
