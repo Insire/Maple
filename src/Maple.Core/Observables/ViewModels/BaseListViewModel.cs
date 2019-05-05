@@ -183,7 +183,7 @@ namespace Maple.Core
 
         public virtual void Clear()
         {
-            SelectedItem = default(TViewModel);
+            SelectedItem = default;
 
             using (BusyStack.GetToken())
                 _items.Clear();
