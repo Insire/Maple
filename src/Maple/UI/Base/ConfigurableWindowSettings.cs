@@ -1,13 +1,10 @@
 ﻿using System.Configuration;
 using System.Windows;
+
 using Maple.Core;
 
 namespace Maple
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <seealso cref="Maple.Core.IConfigurableWindowSettings" />
     public abstract class ConfigurableWindowSettings : IConfigurableWindowSettings
     {
         private readonly ApplicationSettingsBase _settings;

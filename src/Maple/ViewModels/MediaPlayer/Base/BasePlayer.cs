@@ -33,7 +33,7 @@ namespace Maple
             set { SetValue(ref _current, value); }
         }
 
-        protected BasePlayer(IMessenger messenger, AudioDevices audioDevices)
+        protected BasePlayer(IMessenger messenger)
             : base(messenger)
         {
         }
@@ -48,7 +48,7 @@ namespace Maple
 
         public abstract int VolumeMin { get; }
 
-        public abstract bool Play(IMediaItem mediaItem);
+        public abstract bool Play(IMediaItem item);
 
         public abstract void Pause();
 

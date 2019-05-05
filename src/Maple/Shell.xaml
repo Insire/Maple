@@ -46,13 +46,13 @@
                                   Mode="PrimaryMid">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="5" />
                     <ColumnDefinition />
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
                     <ColumnDefinition />
-                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="5" />
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="1">
@@ -62,7 +62,7 @@
 
                 <TextBlock Grid.Column="3">
                     <Run Text="{Binding MainMediaPlayer.Playlist.Title, Mode=OneWay}" />
-                    <Run Text="-"/>
+                    <Run Text="-" />
                     <Run Text="{Binding MainMediaPlayer.Playlist.SelectedItem.Title, Mode=OneWay}" />
                 </TextBlock>
             </Grid>
@@ -85,9 +85,9 @@
                             <TextBlock DockPanel.Dock="Left" Margin="8,0,0,0"
                                        FontWeight="Medium"
                                        TextTrimming="CharacterEllipsis"
-                                       TextWrapping="NoWrap" >
-                                <Run Text="{Binding Title, Mode=OneWay}"/>
-                                <Run Text="{Binding TitleDetail, Mode=OneWay}"/>
+                                       TextWrapping="NoWrap">
+                                <Run Text="{Binding Title, Mode=OneWay}" />
+                                <Run Text="{Binding TitleDetail, Mode=OneWay}" />
                             </TextBlock>
                             <Button Command="{Binding CloseDialogCommand}"
                                     DockPanel.Dock="Right"
@@ -96,7 +96,6 @@
                                 <icons:PackIconMaterial Kind="WindowClose" Style="{StaticResource MiniIconStyle}" />
                             </Button>
                         </DockPanel>
-
                     </materialDesign:ColorZone>
 
                     <DockPanel Margin="5">
@@ -106,7 +105,7 @@
                                     Orientation="Horizontal">
                             <Button Command="{Binding AcceptDialogCommand}"
                                     Content="{local:Translation Accept}"
-                                    ToolTip="{local:Translation Accept}" Margin="0,0,8,0"/>
+                                    ToolTip="{local:Translation Accept}" Margin="0,0,8,0" />
                             <Button Command="{Binding CancelDialogCommand}"
                                     Content="{local:Translation Cancel}"
                                     ToolTip="{local:Translation Cancel}"
@@ -176,9 +175,7 @@
                     </materialDesign:ColorZone>
                     <ContentControl Content="{Binding Scenes.SelectedItem.Content, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseLayoutStyle}" />
                 </DockPanel>
-
             </materialDesign:DrawerHost>
         </materialDesign:DialogHost>
     </DockPanel>
-
 </local:IoCWindow>

@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+
 using Maple.Domain;
 using Maple.Localization.Properties;
 
@@ -17,10 +18,8 @@ namespace Maple.Core
         private readonly BusyStack _busyStack;
 
         public RangeObservableCollection()
-            : base()
         {
-            _busyStack = new BusyStack();
-            _busyStack.OnChanged += (updatePending) => _suppressNotification = updatePending;
+            _busyStack = new BusyStack(updatePending => _suppressNotification = updatePending);
         }
 
         public RangeObservableCollection(IEnumerable<T> items) : this()

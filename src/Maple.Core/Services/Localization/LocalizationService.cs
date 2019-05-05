@@ -4,15 +4,16 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple.Core
 {
-    public class LocalizationService : ObservableObject, ILocalizationService
+    public sealed class LocalizationService : ObservableObject, ILocalizationService
     {
-        public ITranslationProvider TranslationProvider { get; private set; }
         public readonly ILoggingService _log;
+        public ITranslationProvider TranslationProvider { get; }
 
         private CultureInfo _currentLanguage;
         public CultureInfo CurrentLanguage
@@ -54,27 +55,19 @@ namespace Maple.Core
             return $"!{key}!";
         }
 
-        public void Save()
+        public Task Save()
         {
             Properties.Settings.Default.StartUpCulture = CurrentLanguage;
             Properties.Settings.Default.Save();
-        }
 
-        public void Load()
-        {
-            _log.Info($"{Resources.Loading} {GetType().Name}");
-            Thread.CurrentThread.CurrentCulture = Properties.Settings.Default.StartUpCulture;
-        }
-
-        public Task SaveAsync()
-        {
-            Save();
             return Task.CompletedTask;
         }
 
-        public Task LoadAsync()
+        public Task Load()
         {
-            Load();
+            _log.Info($"{Resources.Loading} {GetType().Name}");
+            Thread.CurrentThread.CurrentCulture = Properties.Settings.Default.StartUpCulture;
+
             return Task.CompletedTask;
         }
     }

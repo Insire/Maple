@@ -1,5 +1,7 @@
 ﻿using System;
+
 using FluentValidation;
+
 using Maple.Core;
 using Maple.Localization.Properties;
 

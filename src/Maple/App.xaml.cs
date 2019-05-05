@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
@@ -6,9 +6,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+
 using DryIoc;
+
 using Maple.Core;
+using Maple.Data;
 using Maple.Domain;
+using Microsoft.Extensions.Logging;
 using Squirrel;
 
 namespace Maple
@@ -25,13 +29,19 @@ namespace Maple
             _container = await DependencyInjectionFactory.Get().ConfigureAwait(true);
 
             var localizationService = _container.Resolve<ILocalizationService>();
+            var loggerFactory = _container.Resolve<ILoggerFactory>();
             var log = _container.Resolve<ILoggingService>();
 
             InitializeUpdater(log);
             InitializeResources(localizationService);
             InitializeLocalization();
 
-            var shell = await GetShell(localizationService, log).ConfigureAwait(true);
+            using (var context = _container.Resolve<PlaylistContext>())
+            {
+                await context.Migrate().ConfigureAwait(false);
+            }
+
+            var shell = await GetShell(log).ConfigureAwait(true);
             shell.Show();
 
             base.OnStartup(e);
@@ -52,9 +62,8 @@ namespace Maple
             await dialog.ShowExceptionDialog(e.Exception).ConfigureAwait(true);
         }
 
-        protected override void OnExit(ExitEventArgs e)
+        protected override async void OnExit(ExitEventArgs e)
         {
-            SaveState();
             DisposeResources();
 
             _backgroundUpdate.Wait();
@@ -70,7 +79,7 @@ namespace Maple
         /// <remarks>
         /// order matters alot here, so be careful when modifying this
         /// </remarks>
-        private async Task<Shell> GetShell(ILocalizationService service, ILoggingService log)
+        private async Task<Shell> GetShell(ILoggingService log)
         {
             using (var vm = _container.Resolve<ISplashScreenViewModel>())
             {
@@ -79,8 +88,6 @@ namespace Maple
 
                 shell.Loaded += (o, args) => screen.Close();
                 screen.Show();
-
-                await Task.WhenAll(LoadApplicationData()).ConfigureAwait(true);
 
                 log.Info(Localization.Properties.Resources.AppStart);
                 await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(true);
@@ -119,8 +126,8 @@ namespace Maple
 
         private async Task LoadUpdates(ILoggingService log)
         {
+#if Release
             var manager = default(UpdateManager);
-
             try
             {
                 using (manager = await UpdateManager.GitHubUpdateManager("https://www.github.com/Insire/Maple", prerelease: true).ConfigureAwait(true))
@@ -135,7 +142,6 @@ namespace Maple
                     //    Debug.WriteLine("Update found");
                     //    var releaseEntry = await manager.UpdateApp().ConfigureAwait(true);
                     //    Debug.WriteLine($"Update complete {releaseEntry.Version}");
-
 
                     //}
                 }
@@ -154,27 +160,7 @@ namespace Maple
             {
                 manager?.Dispose();
             }
-        }
-
-        private IList<Task> LoadApplicationData()
-        {
-            var tasks = new List<Task>();
-
-            foreach (var item in _container.Resolve<IEnumerable<ILoadableViewModel>>())
-                tasks.Add(item.LoadAsync());
-
-            return tasks;
-        }
-
-        private void SaveState()
-        {
-            var log = _container.Resolve<ILoggingService>();
-            log.Info(Localization.Properties.Resources.SavingState);
-
-            foreach (var item in _container.Resolve<IEnumerable<ILoadableViewModel>>())
-                item.Save();
-
-            log.Info(Localization.Properties.Resources.SavedState);
+#endif
         }
 
         private void DisposeResources()

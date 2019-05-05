@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
+
 using Maple.Localization.Properties;
 
 namespace Maple.Core

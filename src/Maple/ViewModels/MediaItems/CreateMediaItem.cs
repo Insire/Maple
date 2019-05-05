@@ -1,7 +1,10 @@
-﻿using System;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
+
 using Maple.Core;
+using Maple.Domain;
 using Maple.Localization.Properties;
 using Maple.Youtube;
 
@@ -57,6 +60,19 @@ namespace Maple
         private bool CanParse()
         {
             return !string.IsNullOrWhiteSpace(Source);
+        }
+
+        public MediaItem Create(string absolutePath)
+        {
+            var model = new MediaItemModel()
+            {
+                Location = absolutePath,
+                MediaItemType = (int)MediaItemType.LocalFile,
+                PrivacyStatus = (int)PrivacyStatus.None,
+                Title = Path.GetFileName(absolutePath),
+            };
+
+            return _mapper.Get(model);
         }
     }
 }

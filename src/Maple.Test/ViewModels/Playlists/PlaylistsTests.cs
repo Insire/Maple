@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using DryIoc;
+
 using Maple.Domain;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using NSubstitute;
 
 namespace Maple.Test.ViewModels
@@ -98,9 +102,9 @@ namespace Maple.Test.ViewModels
             var playlists = container.Resolve<IPlaylistsViewModel>();
             repository.ClearReceivedCalls();
 
-            playlists.Save();
+            await playlists.Save().ConfigureAwait(false);
 
-            repository.Received(1).Save(NSubstitute.Arg.Any<Playlists>());
+            await repository.Received(1).SaveChanges().ConfigureAwait(false);
             repository.Received(1).Dispose();
         }
 
@@ -108,19 +112,19 @@ namespace Maple.Test.ViewModels
         public async Task Playlists_ShouldLoad()
         {
             var container = await DependencyInjectionFactory.Get().ConfigureAwait(false);
-            var dummyPlaylists = new List<Playlist>
+            var dummyPlaylists = new List<PlaylistModel>
             {
-                container.CreatePlaylist(_context.CreateModelPlaylist()),
+                _context.CreateModelPlaylist(),
             };
             var repository = ContainerContextExtensions.CreateRepository();
-            repository.GetPlaylistsAsync().ReturnsForAnyArgs(dummyPlaylists);
+            repository.PlaylistRepository.ReadAsync().ReturnsForAnyArgs(dummyPlaylists);
             container.UseInstance(repository);
 
             var playlists = (Playlists)container.Resolve<IPlaylistsViewModel>();
             repository.ClearReceivedCalls();
 
-            await playlists.LoadAsync().ConfigureAwait(false);
-            await repository.Received(1).GetPlaylistsAsync().ConfigureAwait(false);
+            await playlists.Load().ConfigureAwait(false);
+            await repository.PlaylistRepository.Received(1).ReadAsync().ConfigureAwait(false);
             repository.Received(1).Dispose();
 
             Assert.AreEqual(dummyPlaylists[0], playlists.SelectedItem);

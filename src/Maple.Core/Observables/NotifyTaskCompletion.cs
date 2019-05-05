@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
+
 using Maple.Localization.Properties;
 
 namespace Maple.Core

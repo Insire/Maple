@@ -22,10 +22,13 @@ namespace Maple
                 {
                     case CharacterCasing.Lower:
                         return str.ToLower();
+
                     case CharacterCasing.Normal:
                         return str;
+
                     case CharacterCasing.Upper:
                         return str.ToUpper();
+
                     default:
                         return str;
                 }

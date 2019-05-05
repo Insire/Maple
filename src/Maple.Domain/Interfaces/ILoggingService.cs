@@ -27,6 +27,7 @@ namespace Maple.Domain
         /// </summary>
         /// <param name="message">The message.</param>
         void Error(object message);
+
         //
         // Summary:
         //     Log a message object with the log4net.Core.Level.Error level including the stack
@@ -71,6 +72,7 @@ namespace Maple.Domain
         /// </summary>
         /// <param name="message">The message.</param>
         void Fatal(object message);
+
         //
         // Summary:
         //     Log a message object with the log4net.Core.Level.Fatal level including the stack
@@ -115,6 +117,7 @@ namespace Maple.Domain
         /// </summary>
         /// <param name="message">The message.</param>
         void Info(object message);
+
         //
         // Summary:
         //     Logs a message object with the INFO level including the stack trace of the System.Exception
@@ -159,6 +162,7 @@ namespace Maple.Domain
         /// </summary>
         /// <param name="message">The message.</param>
         void Warn(object message);
+
         //
         // Summary:
         //     Log a message object with the log4net.Core.Level.Warn level including the stack

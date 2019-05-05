@@ -2,7 +2,9 @@
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
+
 using MahApps.Metro.Controls;
+
 using Maple.Core;
 
 namespace Maple
@@ -63,10 +65,10 @@ namespace Maple
         /// <summary>
         /// When overridden in a derived class, participates in rendering operations that are directed by the layout system. This method is invoked after layout update, and before rendering, if the element's <see cref="P:System.Windows.UIElement.RenderSize" /> has changed as a result of layout update.
         /// </summary>
-        /// <param name="info">The packaged parameters (<see cref="T:System.Windows.SizeChangedInfo" />), which includes old and new sizes, and which dimension actually changes.</param>
-        protected override void OnRenderSizeChanged(SizeChangedInfo info)
+        /// <param name="sizeInfo">The packaged parameters (<see cref="T:System.Windows.SizeChangedInfo" />), which includes old and new sizes, and which dimension actually changes.</param>
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
-            base.OnRenderSizeChanged(info);
+            base.OnRenderSizeChanged(sizeInfo);
 
             if (_isLoaded && WindowState == WindowState.Normal)
             {
@@ -96,7 +98,7 @@ namespace Maple
         /// <summary>
         /// Applies the settings.
         /// </summary>
-        void ApplySettings()
+        private void ApplySettings()
         {
             var size = _settings.WindowSize;
             SetCurrentValue(WidthProperty, size.Width);

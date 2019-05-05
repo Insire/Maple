@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Maple.Domain;
+
 using NAudio.Wave;
 
 namespace Maple
@@ -22,7 +24,6 @@ namespace Maple
                     Sequence = i,
                 };
             }
-
         }
 
         private static WaveOutCapabilities GetCapabilities(int index, ILoggingService log)

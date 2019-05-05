@@ -238,22 +238,27 @@
     <Style x:Key="PlayButtonStyle"
            BasedOn="{StaticResource MaterialDesignFloatingActionButton}"
            TargetType="{x:Type Button}">
-        <Setter Property="ContentTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <icons:PackIconMaterial Kind="Play" Style="{Binding IconStyle}" />
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
         <Setter Property="Margin" Value="4" />
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsPlaying, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                <Setter Property="Command" Value="{Binding StopCommand}" />
+            <DataTrigger Binding="{Binding IsPlaying}" Value="True">
+                <Setter Property="Command" Value="{Binding PauseCommand}" />
                 <Setter Property="CommandParameter" Value="{x:Null}" />
                 <Setter Property="ContentTemplate">
                     <Setter.Value>
                         <DataTemplate>
-                            <icons:PackIconMaterial Kind="Stop" Style="{Binding IconStyle}" />
+                            <icons:PackIconMaterial Kind="Pause" Style="{Binding IconStyle}" />
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+
+            <DataTrigger Binding="{Binding IsPlaying}" Value="False">
+                <Setter Property="Command" Value="{Binding PlayCommand}" />
+                <Setter Property="CommandParameter" Value="{Binding Playlist.SelectedItem}" />
+                <Setter Property="ContentTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <icons:PackIconMaterial Kind="Play" Style="{Binding IconStyle}" />
                         </DataTemplate>
                     </Setter.Value>
                 </Setter>
@@ -608,7 +613,6 @@
                                     </MenuItem.Icon>
                                 </MenuItem>
                             </ContextMenu>
-
                         </Grid.Resources>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.4*" MinWidth="100" />
@@ -744,7 +748,6 @@
                                                                                         </DockPanel>
                                                                                     </Border>
                                                                                 </DataTemplate>
-
                                                                             </local:ListBox.Resources>
                                                                         </local:ListBox>
                                                                     </DataTemplate>
@@ -780,11 +783,9 @@
                                                                                         </DockPanel>
                                                                                     </Border>
                                                                                 </DataTemplate>
-
                                                                             </local:ListBox.Resources>
                                                                         </local:ListBox>
                                                                     </DataTemplate>
-
                                                                 </ContentPresenter.Resources>
                                                             </ContentPresenter>
                                                         </ControlTemplate>
@@ -899,14 +900,12 @@
                                                                                                               CommandParameter="{Binding Data, Source={StaticResource MapleDirectoryProxy}}"
                                                                                                               Gesture="LeftDoubleClick" />
                                                                                             </DockPanel.InputBindings>
-
                                                                                         </DockPanel>
                                                                                     </Border>
                                                                                 </DataTemplate>
                                                                             </local:ListBox.Resources>
                                                                         </local:ListBox>
                                                                     </DataTemplate>
-
                                                                 </ContentPresenter.Resources>
                                                             </ContentPresenter>
                                                         </ControlTemplate>
@@ -917,7 +916,6 @@
                                     </Style>
                                 </ContentControl.Style>
                             </ContentControl>
-
                         </DockPanel>
 
                         <!--  StatusBar  -->
@@ -1207,5 +1205,4 @@
         </StackPanel>
     </DataTemplate>
     <!--#endregion-->
-
 </local:SharedResourceDictionary>

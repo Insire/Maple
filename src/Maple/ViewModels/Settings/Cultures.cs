@@ -1,20 +1,21 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple
 {
-    public class Cultures : BaseListViewModel<Culture>, ICultureViewModel
+    public sealed class Cultures : BaseListViewModel<Culture>, ICultureViewModel
     {
         private readonly ILocalizationService _manager;
         private readonly ILoggingService _log;
 
-        public ICommand RefreshCommand => AsyncCommand.Create(LoadAsync);
-        public ICommand LoadCommand => AsyncCommand.Create(LoadAsync, () => !IsLoaded);
-        public ICommand SaveCommand => new RelayCommand(Save);
+        public ICommand RefreshCommand => AsyncCommand.Create(Load);
+        public ICommand LoadCommand => AsyncCommand.Create(Load, () => !IsLoaded);
+        public ICommand SaveCommand => AsyncCommand.Create(Save);
 
         public Cultures(ViewModelServiceContainer container)
             : base(container.Messenger)
@@ -30,26 +31,20 @@ namespace Maple
             _manager.CurrentLanguage = SelectedItem.Model;
         }
 
-        public void Save()
+        public Task Save()
         {
             _log.Info($"{Resources.Saving} {Resources.Options}");
             _manager.Save();
+
+            _log.Info($"{Resources.Saving} {Resources.Options}");
+
+            return Task.CompletedTask;
         }
 
-        public Task SaveAsync()
-        {
-            return Task.Run(() =>
-            {
-                _log.Info($"{Resources.Saving} {Resources.Options}");
-                _manager.Save();
-
-            });
-        }
-
-        public async Task LoadAsync()
+        public async Task Load()
         {
             _log.Info($"{Resources.Loading} {Resources.Options}");
-            await _manager.LoadAsync().ConfigureAwait(true);
+            await _manager.Load().ConfigureAwait(true);
 
             Initialise();
 

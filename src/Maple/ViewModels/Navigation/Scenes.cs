@@ -2,8 +2,8 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows.Controls;
 using System.Windows.Input;
+
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
@@ -49,6 +49,7 @@ namespace Maple
         /// The open color options command.
         /// </value>
         public ICommand OpenColorOptionsCommand { get; private set; }
+
         /// <summary>
         /// Gets the open media player command.
         /// </summary>
@@ -56,6 +57,7 @@ namespace Maple
         /// The open media player command.
         /// </value>
         public ICommand OpenMediaPlayerCommand { get; private set; }
+
         /// <summary>
         /// Gets the open github page command.
         /// </summary>

@@ -1,11 +1,13 @@
 ﻿using System;
+
 using Maple.Core;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Maple.Test
 {
     [TestClass, Ignore]
-    public class MapleMessengerTests
+    public static class MapleMessengerTests
     {
         //[TestMethod]
         //public void Dispose_WithValidHubReference_UnregistersWithHub()
@@ -59,7 +61,6 @@ namespace Maple.Test
         {
             public TestMessage(object sender) : base(sender)
             {
-
             }
         }
 
@@ -75,7 +76,6 @@ namespace Maple.Test
 
         public interface ITestMessageInterface : IMapleMessage
         {
-
         }
 
         public class InterfaceDerivedMessage<TThings> : ITestMessageInterface
@@ -109,7 +109,7 @@ namespace Maple.Test
             }
         }
 
-        public class UtilityMethods
+        public static class UtilityMethods
         {
             //public static IMapleMessengerHub GetMessenger()
             //{

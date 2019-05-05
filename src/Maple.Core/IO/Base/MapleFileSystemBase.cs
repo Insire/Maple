@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
+
 using Maple.Localization.Properties;
 
 namespace Maple.Core
@@ -27,7 +28,7 @@ namespace Maple.Core
             if (string.IsNullOrWhiteSpace(info.Filter))
                 return true;
 
-            return info.Name.ToLowerInvariant().Contains(info.Filter.ToLowerInvariant());
+            return info.Name.IndexOf(info.Filter, StringComparison.InvariantCultureIgnoreCase) >= 0;
         }
 
         public ICommand LoadCommand { get; protected set; }
@@ -166,9 +167,13 @@ namespace Maple.Core
         }
 
         public abstract void Refresh();
+
         public abstract void LoadMetaData();
+
         public abstract void OnFilterChanged(string filter);
+
         public abstract void Delete();
+
         public abstract bool CanDelete();
 
         protected bool CanLoad()

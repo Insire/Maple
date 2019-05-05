@@ -4,7 +4,8 @@ namespace Maple.Domain
 {
     public interface IRefreshable
     {
-        void Save();
-        Task LoadAsync();
+        Task Save();
+
+        Task Load();
     }
 }

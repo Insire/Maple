@@ -3,10 +3,6 @@ using System.Windows.Data;
 
 namespace Maple
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <seealso cref="System.Windows.Data.IValueConverter" />
     [ValueConversion(typeof(object), typeof(bool))]
     public class RadioButtonCheckedConverter : ConverterMarkupExtension<RadioButtonCheckedConverter>, IValueConverter
     {

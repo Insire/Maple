@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
+
 using FluentValidation;
+
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
@@ -116,8 +118,8 @@ namespace Maple
         private DateTime _createdOn;
         public DateTime CreatedOn
         {
-            get { return _updatedOn; }
-            set { SetValue(ref _updatedOn, value, OnChanged: () => Model.CreatedOn = value); }
+            get { return _createdOn; }
+            set { SetValue(ref _createdOn, value, OnChanged: () => Model.CreatedOn = value); }
         }
 
         public MediaPlayer(ViewModelServiceContainer container, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, MediaPlayerModel model)
@@ -177,11 +179,18 @@ namespace Maple
 
             if (Player.Play(mediaItem))
                 Messenger.Publish(new PlayingMediaItemMessage(this, mediaItem, Playlist.Id));
+
+            OnPropertyChanged(nameof(IsPlaying));
         }
 
         private bool IsSenderEqualsPlayer(object sender)
         {
-            return ReferenceEquals(sender, Player);
+            if (sender is MapleMessageBase message)
+            {
+                return ReferenceEquals(message.Sender, this);
+            }
+
+            return false;
         }
 
         private void Player_AudioDeviceChanging(ViewModelSelectionChangingMessage<AudioDevice> e)
@@ -312,6 +321,8 @@ namespace Maple
         {
             using (BusyStack.GetToken())
                 Player.Pause();
+
+            OnPropertyChanged(nameof(IsPlaying));
         }
 
         /// <summary>
@@ -321,6 +332,8 @@ namespace Maple
         {
             using (BusyStack.GetToken())
                 Player.Stop();
+
+            OnPropertyChanged(nameof(IsPlaying));
         }
 
         /// <summary>

@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Maple.Core;
 using Maple.Localization.Properties;
 using Maple.Youtube;
@@ -26,7 +28,6 @@ namespace Maple
             _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper), $"{nameof(mediaItemMapper)} {Resources.IsRequired}");
             _fileSystemViewModel = fileSystemViewModel ?? throw new ArgumentNullException(nameof(fileSystemViewModel), $"{nameof(fileSystemViewModel)} {Resources.IsRequired}");
             _createMediaItemFactory = createMediaItemFactory ?? throw new ArgumentNullException(nameof(createMediaItemFactory), $"{nameof(createMediaItemFactory)} {Resources.IsRequired}");
-
 
             CloseDialogCommand = new RelayCommand(Close, () => CanClose());
             CancelDialogCommand = new RelayCommand(Cancel, () => CanCancel());
@@ -141,10 +142,24 @@ namespace Maple
 
             // should handle items depending on options
 
-            foreach (var file in Folder.Children)
+            IEnumerable<IFileSystemInfo> query = Folder.Children;
+
+            if (options.IncludeSubFolders)
             {
-                // TODO get the files from the folder
-                // TODO parse the files from the folder and generate mediaitems from them
+                // TODO
+            }
+
+            var supportedFileExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                ".flac",
+                ".mp3"
+            };
+
+            foreach (var file in query.Where(p => !p.IsContainer && supportedFileExtensions.Contains(Path.GetExtension(p.Name))))
+            {
+                var factory = _createMediaItemFactory();
+
+                mediaItems.Add(factory.Create(file.FullName));
             }
 
             return (Result, mediaItems);
@@ -172,9 +187,14 @@ namespace Maple
             {
                 AcceptAction = () =>
                 {
-                    var items = viewModel.FileSystemViewModel.SelectedItems;
-                    items.Add(viewModel.FileSystemViewModel.SelectedItem);
-                    tuple = (true, items.Distinct().FirstOrDefault() as IFileSystemDirectory); // TODO handle multi select option
+                    if (viewModel.FileSystemViewModel.SelectedItem is IFileSystemDirectory directory)
+                    {
+                        tuple = (true, directory);
+                    }
+                    else
+                    {
+                        tuple = (false, default(IFileSystemDirectory));
+                    }
                 };
 
                 CancelAction = () =>
@@ -228,7 +248,6 @@ namespace Maple
 
             return result;
         }
-
 
         private void FileSystemInfoChanged(FileSystemInfoChangedMessage e)
         {

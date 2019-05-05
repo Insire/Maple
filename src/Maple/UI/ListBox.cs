@@ -23,7 +23,7 @@ namespace Maple
             SelectionChanged += ListBoxCustom_SelectionChanged;
         }
 
-        void ListBoxCustom_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ListBoxCustom_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SelectedEntriesList = SelectedItems;
         }

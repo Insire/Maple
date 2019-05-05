@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
+
 using Maple.Domain;
 
 namespace Maple.Core
@@ -16,7 +17,7 @@ namespace Maple.Core
     /// </summary>
     /// <typeparam name="TViewModel">a class implementing <see cref="ObservableObject" /></typeparam>
     /// <seealso cref="Maple.Core.ObservableObject" />
-    public abstract class BaseListViewModel<TViewModel> : ViewModel
+    public abstract class BaseListViewModel<TViewModel> : ViewModel, IBaseListViewModel<TViewModel>
         where TViewModel : INotifyPropertyChanged
     {
         protected readonly object _itemsLock;
@@ -44,9 +45,6 @@ namespace Maple.Core
         }
 
         private IRangeObservableCollection<TViewModel> _items;
-        /// <summary>
-        /// Contains all the UI relevant Models and notifies about changes in the collection and inside the Models themself
-        /// </summary>
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public IReadOnlyCollection<TViewModel> Items
         {
@@ -55,12 +53,6 @@ namespace Maple.Core
         }
 
         private ICollectionView _view;
-        /// <summary>
-        /// For grouping, sorting and filtering
-        /// </summary>
-        /// <value>
-        /// The view.
-        /// </value>
         public ICollectionView View
         {
             get { return _view; }
@@ -68,14 +60,7 @@ namespace Maple.Core
         }
 
         public int Count => Items?.Count ?? 0;
-        /// <summary>
-        /// Gets the <see cref="TViewModel"/> at the specified index.
-        /// </summary>
-        /// <value>
-        /// The <see cref="TViewModel"/>.
-        /// </value>
-        /// <param name="index">The index.</param>
-        /// <returns></returns>
+
         public TViewModel this[int index]
         {
             get { return _items[index]; }
@@ -90,7 +75,6 @@ namespace Maple.Core
             : base(messenger)
         {
             _itemsLock = new object();
-
 
             Items = new RangeObservableCollection<TViewModel>();
             _items.CollectionChanged += ItemsCollectionChanged;
@@ -135,11 +119,6 @@ namespace Maple.Core
             Messenger.Publish(new LoadedMessage(this, this));
         }
 
-        /// <summary>
-        /// Adds the specified item.
-        /// </summary>
-        /// <param name="item">The item.</param>
-        /// <exception cref="System.ArgumentNullException">item</exception>
         public virtual void Add(TViewModel item)
         {
             if (item == null)
@@ -149,8 +128,6 @@ namespace Maple.Core
                 _items.Add(item);
         }
 
-        /// <param name="items">The items.</param>
-        /// <exception cref="System.ArgumentNullException">items</exception>
         public virtual void AddRange(IEnumerable<TViewModel> items)
         {
             if (items == null)
@@ -165,18 +142,12 @@ namespace Maple.Core
             return Items != null && item != null;
         }
 
-        /// <summary>
-        /// Removes the specified item.
-        /// </summary>
-        /// <param name="item">The item.</param>
         public virtual void Remove(TViewModel item)
         {
             using (BusyStack.GetToken())
                 _items.Remove(item);
         }
 
-        /// <param name="items">The items.</param>
-        /// <exception cref="System.ArgumentNullException">items</exception>
         public virtual void RemoveRange(IEnumerable<TViewModel> items)
         {
             if (items == null)
@@ -186,8 +157,6 @@ namespace Maple.Core
                 _items.RemoveRange(items);
         }
 
-        /// <param name="items">The items.</param>
-        /// <exception cref="System.ArgumentNullException">items</exception>
         public virtual void RemoveRange(IList items)
         {
             if (items == null)
@@ -197,37 +166,16 @@ namespace Maple.Core
                 _items.RemoveRange(items.Cast<TViewModel>());
         }
 
-        /// <summary>
-        /// Determines whether this instance can remove the specified item.
-        /// </summary>
-        /// <param name="item">The item.</param>
-        /// <returns>
-        ///   <c>true</c> if this instance can remove the specified item; otherwise, <c>false</c>.
-        /// </returns>
         public virtual bool CanRemove(TViewModel item)
         {
             return CanClear() && item != null && Items.Contains(item);
         }
 
-        /// <summary>
-        /// Checks if any of the submitted items can be removed
-        /// </summary>
-        /// <param name="items">The items.</param>
-        /// <returns>
-        ///   <c>true</c> if this instance [can remove range] the specified items; otherwise, <c>false</c>.
-        /// </returns>
         public virtual bool CanRemoveRange(IEnumerable<TViewModel> items)
         {
-            return CanClear() && items != null && items.Any(p => Items.Contains(p));
+            return CanClear() && items?.Any(p => Items.Contains(p)) == true;
         }
 
-        /// <summary>
-        /// Determines whether this instance [can remove range] the specified items.
-        /// </summary>
-        /// <param name="items">The items.</param>
-        /// <returns>
-        ///   <c>true</c> if this instance [can remove range] the specified items; otherwise, <c>false</c>.
-        /// </returns>
         public virtual bool CanRemoveRange(IList items)
         {
             return items == null ? false : CanRemoveRange(items.Cast<TViewModel>());

@@ -92,7 +92,6 @@
                             </Grid>
                         </materialDesign:Flipper.BackContent>
                     </materialDesign:Flipper>
-
                 </WrapPanel>
             </ScrollViewer>
         </materialDesign:Card>

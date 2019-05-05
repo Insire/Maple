@@ -7,10 +7,10 @@ namespace Maple
         // the values of these consts have to be added in the project settings with their according type set
         // so, IsFirstRun has to be added and be set as a bool for instance
 
-        const string IS_FIRST_RUN = "IsFirstRun";
-        const string WINDOW_LOCATION = "ShellWindowLocation";
-        const string WINDOW_SIZE = "ShellWindowSize";
-        const string WINDOW_STATE = "ShellWindowState";
+        private const string IS_FIRST_RUN = "IsFirstRun";
+        private const string WINDOW_LOCATION = "ShellWindowLocation";
+        private const string WINDOW_SIZE = "ShellWindowSize";
+        private const string WINDOW_STATE = "ShellWindowState";
 
         public ShellSettings(IoCWindow window)
                 : base(

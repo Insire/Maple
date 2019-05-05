@@ -1,15 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
+
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
+
 using Maple.Domain;
 using Maple.Localization.Properties;
 
@@ -22,12 +25,10 @@ namespace Maple.Youtube
 
         private volatile YouTubeService _service;
         private readonly ILoggingService _log;
-        private readonly object _syncRoot;
 
         public YoutubeApi(ILoggingService log)
         {
             _log = log ?? throw new ArgumentNullException(nameof(log), $"{nameof(log)} {Resources.IsRequired}");
-            _syncRoot = new object();
         }
 
         private async Task<YouTubeService> GetService()
@@ -37,9 +38,15 @@ namespace Maple.Youtube
 
             _log.Info(Resources.YoutubeLoad);
 
+            var credentials = await GetCredential().ConfigureAwait(false);
+            if (credentials is null)
+            {
+                return null;
+            }
+
             _service = new YouTubeService(new BaseClientService.Initializer()
             {
-                HttpClientInitializer = await GetCredential().ConfigureAwait(false),
+                HttpClientInitializer = credentials,
                 ApplicationName = GetType().ToString()
             });
 
@@ -52,7 +59,15 @@ namespace Maple.Youtube
         {
             using (var stream = new FileStream(@"Resources\client_secret.json", FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                var secretes = GoogleClientSecrets.Load(stream).Secrets;
+                var secretCollection = GoogleClientSecrets.Load(stream);
+
+                if (secretCollection is null || secretCollection.Secrets is null)
+                {
+                    _log.Error("Youtube credentials not found!.");
+                    return null;
+                }
+
+                var clientSecrets = secretCollection.Secrets;
                 var store = new FileDataStore(GetType().ToString());
                 var scopes = new[]
 {
@@ -60,7 +75,7 @@ namespace Maple.Youtube
                     YouTubeService.Scope.Youtube
                 };
 
-                return await GoogleWebAuthorizationBroker.AuthorizeAsync(secretes, scopes, "user", CancellationToken.None, store)
+                return await GoogleWebAuthorizationBroker.AuthorizeAsync(clientSecrets, scopes, "user", CancellationToken.None, store)
                                                          .ConfigureAwait(false);
             }
         }
@@ -69,6 +84,11 @@ namespace Maple.Youtube
         {
             var result = new List<PlaylistModel>();
             var youtubeService = await GetService().ConfigureAwait(false);
+
+            if (youtubeService is null)
+            {
+                return Enumerable.Empty<PlaylistModel>().ToList();
+            }
 
             var request = youtubeService.Playlists.List("snippet,contentDetails");
             request.Id = playlistId;
@@ -99,6 +119,11 @@ namespace Maple.Youtube
         public async Task CreatePlaylist(PlaylistModel playlist, bool publicPlaylist = true)
         {
             var youtubeService = await GetService().ConfigureAwait(false);
+
+            if (youtubeService is null)
+            {
+                return;
+            }
 
             var newPlaylist = new Playlist()
             {
@@ -138,6 +163,11 @@ namespace Maple.Youtube
         public async Task DeletePlaylist(PlaylistModel playlist)
         {
             var youtubeService = await GetService().ConfigureAwait(false);
+            if (youtubeService is null)
+            {
+                return;
+            }
+
             var id = GetPlaylistId(playlist);
 
             await youtubeService.Playlists.Delete(id)
@@ -165,8 +195,13 @@ namespace Maple.Youtube
 
         public async Task<ICollection<PlaylistItem>> GetPlaylistItems(string playlistId)
         {
-            var result = new List<PlaylistItem>();
             var youtubeService = await GetService().ConfigureAwait(false);
+            if (youtubeService is null)
+            {
+                return Enumerable.Empty<PlaylistItem>().ToList();
+            }
+
+            var result = new List<PlaylistItem>();
 
             var request = youtubeService.PlaylistItems.List("snippet,contentDetails");
             request.PlaylistId = playlistId;
@@ -174,13 +209,11 @@ namespace Maple.Youtube
             var response = await request.ExecuteAsync()
                                         .ConfigureAwait(false);
 
-
             foreach (var item in response.Items)
             {
                 var nextPageToken = "";
                 while (nextPageToken != null)
                 {
-
                     result.Add(item);
 
                     nextPageToken = response.NextPageToken;
@@ -192,6 +225,10 @@ namespace Maple.Youtube
         public async Task DeletePlaylistItems(ICollection<PlaylistItem> playlistItems)
         {
             var youtubeService = await GetService().ConfigureAwait(false);
+            if (youtubeService is null)
+            {
+                return;
+            }
 
             foreach (var item in playlistItems)
                 await youtubeService.PlaylistItems.Delete(item.Id)

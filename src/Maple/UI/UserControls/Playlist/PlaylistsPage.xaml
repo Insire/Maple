@@ -7,10 +7,9 @@
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <local:IoCUserControl.Resources>
         <local:SharedResourceDictionary>
-                <local:SharedResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="../../../Resources/Style.xaml" />
-                </local:SharedResourceDictionary.MergedDictionaries>
-
+            <local:SharedResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../../Resources/Style.xaml" />
+            </local:SharedResourceDictionary.MergedDictionaries>
 
             <local:BindingProxy x:Key="DetailViewToggleButtonProxy" Data="False" />
 
@@ -90,13 +89,12 @@
                                 Margin="2.5,0"
                                 Command="{Binding LoadFromUrlCommand}"
                                 ToolTip="{local:Translation YoutubePlaylistImport}">
-                            <icons:PackIconMaterial Kind="YoutubePlay" />
+                            <icons:PackIconMaterial Kind="Youtube" />
                         </Button>
                     </UniformGrid>
                 </Grid>
             </ControlTemplate>
         </local:SharedResourceDictionary>
-
     </local:IoCUserControl.Resources>
     <materialDesign:TransitioningContent DataContext="{Binding Playlists}">
         <materialDesign:TransitioningContent.OpeningEffects>
@@ -128,7 +126,7 @@
                          SelectedItem="{Binding SelectedItem, IsAsync=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Loaded">
-                            <i:InvokeCommandAction Command="{Binding LoadCommand}" CommandParameter="{Binding}"/>
+                            <i:InvokeCommandAction Command="{Binding LoadCommand}" CommandParameter="{Binding}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                     <ListBox.ItemContainerStyle>

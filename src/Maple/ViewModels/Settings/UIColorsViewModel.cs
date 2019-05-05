@@ -2,21 +2,18 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
+
 using MaterialDesignColors;
+
 using MaterialDesignThemes.Wpf;
 
 namespace Maple
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <seealso cref="Maple.Core.ObservableObject" />
-    /// <seealso cref="Maple.Core.ILoadableViewModel" />
-    /// <seealso cref="Maple.Core.ISaveableViewModel" />
-    public class UIColorsViewModel : ObservableObject, IUIColorsViewModel
+    public sealed class UIColorsViewModel : ObservableObject, IUIColorsViewModel
     {
         private readonly ILoggingService _log;
         private readonly IMessenger _messenger;
@@ -28,12 +25,6 @@ namespace Maple
         private static PaletteHelper _paletteHelper = new PaletteHelper();
 
         private bool _isLoaded;
-        /// <summary>
-        /// Gets a value indicating whether this instance is loaded.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is loaded; otherwise, <c>false</c>.
-        /// </value>
         public bool IsLoaded
         {
             get { return _isLoaded; }
@@ -41,12 +32,6 @@ namespace Maple
         }
 
         private ICommand _toggleBaseCommand;
-        /// <summary>
-        /// Gets the toggle base command.
-        /// </summary>
-        /// <value>
-        /// The toggle base command.
-        /// </value>
         public ICommand ToggleBaseCommand
         {
             get { return _toggleBaseCommand; }
@@ -54,12 +39,6 @@ namespace Maple
         }
 
         private ICommand _applyPrimaryCommand;
-        /// <summary>
-        /// Gets the apply primary command.
-        /// </summary>
-        /// <value>
-        /// The apply primary command.
-        /// </value>
         public ICommand ApplyPrimaryCommand
         {
             get { return _applyPrimaryCommand; }
@@ -67,51 +46,18 @@ namespace Maple
         }
 
         private ICommand _applyAccentCommand;
-        /// <summary>
-        /// Gets the apply accent command.
-        /// </summary>
-        /// <value>
-        /// The apply accent command.
-        /// </value>
         public ICommand ApplyAccentCommand
         {
             get { return _applyAccentCommand; }
             private set { SetValue(ref _applyAccentCommand, value); }
         }
 
-        /// <summary>
-        /// Gets the refresh command.
-        /// </summary>
-        /// <value>
-        /// The refresh command.
-        /// </value>
-        public ICommand RefreshCommand => new RelayCommand(Load);
-        /// <summary>
-        /// Gets the load command.
-        /// </summary>
-        /// <value>
-        /// The load command.
-        /// </value>
-        public ICommand LoadCommand => new RelayCommand(Load, () => !IsLoaded);
-        /// <summary>
-        /// Gets the save command.
-        /// </summary>
-        /// <value>
-        /// The save command.
-        /// </value>
-        public ICommand SaveCommand => new RelayCommand(Save);
+        public ICommand RefreshCommand => AsyncCommand.Create(Load);
+        public ICommand LoadCommand => AsyncCommand.Create(Load, () => !IsLoaded);
+        public ICommand SaveCommand => AsyncCommand.Create(Save);
 
-        /// <summary>
-        /// Gets the swatches.
-        /// </summary>
-        /// <value>
-        /// The swatches.
-        /// </value>
         public static IEnumerable<Swatch> Swatches => new SwatchesProvider().Swatches;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UIColorsViewModel"/> class.
-        /// </summary>
         public UIColorsViewModel(ViewModelServiceContainer container)
         {
             _log = container.Log;
@@ -123,12 +69,12 @@ namespace Maple
 
         private void InitializeCommands()
         {
-            ToggleBaseCommand = new RelayCommand(() => ApplyBase(this, !_isDark));
+            ToggleBaseCommand = new RelayCommand(() => ApplyBase(!_isDark));
             ApplyPrimaryCommand = new RelayCommand<Swatch>(o => ApplyPrimary(this, o));
-            ApplyAccentCommand = new RelayCommand<Swatch>(o => ApplyAccent(this, o));
+            ApplyAccentCommand = new RelayCommand<Swatch>(o => ApplyAccent(o));
         }
 
-        private static void ApplyBase(IUIColorsViewModel vm, bool isDark = false)
+        private static void ApplyBase(bool isDark = false)
         {
             _paletteHelper.SetLightDark(isDark);
             _isDark = isDark;
@@ -149,7 +95,7 @@ namespace Maple
             _swatch = swatch.Name;
         }
 
-        private static void ApplyAccent(IUIColorsViewModel vm, Swatch swatch)
+        private static void ApplyAccent(Swatch swatch)
         {
             if (swatch == null)
                 return;
@@ -166,7 +112,7 @@ namespace Maple
         /// <summary>
         /// Saves this instance.
         /// </summary>
-        public void Save()
+        public Task Save()
         {
             _log.Info($"{Resources.Saving} {Resources.Themes}");
 
@@ -175,12 +121,14 @@ namespace Maple
             Properties.Settings.Default.UseDarkTheme = _isDark;
 
             Properties.Settings.Default.Save();
+
+            return Task.CompletedTask;
         }
 
         /// <summary>
         /// Loads this instance.
         /// </summary>
-        public void Load()
+        public Task Load()
         {
             _log.Info($"{Resources.Loading} {Resources.Themes}");
 
@@ -191,20 +139,11 @@ namespace Maple
             var accent = Swatches.FirstOrDefault(p => p.Name == accentName);
 
             ApplyPrimary(this, swatch);
-            ApplyAccent(this, accent);
-            ApplyBase(this, Properties.Settings.Default.UseDarkTheme);
+            ApplyAccent(accent);
+            ApplyBase(Properties.Settings.Default.UseDarkTheme);
 
             _messenger.Publish(new LoadedMessage(this, this));
-        }
 
-        public Task SaveAsync()
-        {
-            return Task.Run(() => Save());
-        }
-
-        public Task LoadAsync()
-        {
-            Load();
             return Task.CompletedTask;
         }
     }

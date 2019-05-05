@@ -5,8 +5,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+
 using Maple.Core;
 using Maple.Domain;
+using Maple.Icons;
 
 namespace Maple
 {
@@ -46,7 +48,7 @@ namespace Maple
         private void PrimaryColorChanged(UiPrimaryColorChangedMessage e)
         {
             var data = string.Empty;
-            if (PackIcon.TryGet(PackIconKind.ApplicationIcon, out data))
+            if (MaplePackIcon.TryGet(PackIconKind.ApplicationIcon, out data))
             {
                 var geo = Geometry.Parse(data);
                 SetCurrentValue(IconProperty, SetImage(geo, e.Content));

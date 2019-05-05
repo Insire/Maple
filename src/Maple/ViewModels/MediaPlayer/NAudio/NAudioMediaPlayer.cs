@@ -1,7 +1,9 @@
-﻿using System;
+using System;
+
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
+
 using NAudio.Wave;
 
 namespace Maple
@@ -24,8 +26,8 @@ namespace Maple
             set { SetValue(ref _volume, value, OnChanged: () => SyncVolumeToVolumeProvider(value)); }
         }
 
-        public NAudioMediaPlayer(ILoggingService log, IMessenger messenger, AudioDevices audioDevices, IWavePlayerFactory factory)
-            : base(messenger, audioDevices)
+        public NAudioMediaPlayer(ILoggingService log, IMessenger messenger, IWavePlayerFactory factory)
+            : base(messenger)
         {
             _settings = new MediaFoundationReader.MediaFoundationReaderSettings
             {
@@ -39,8 +41,11 @@ namespace Maple
 
             Messenger.Subscribe<PlayingMediaItemMessage>(OnPlaybackStarted);
 
+            Volume = 50;
+
             OnPropertyChanged(nameof(VolumeMin));
             OnPropertyChanged(nameof(VolumeMax));
+            OnPropertyChanged(nameof(Volume));
         }
 
         private void OnPlaybackStarted(PlayingMediaItemMessage e)
@@ -58,22 +63,22 @@ namespace Maple
 
         public override bool IsPlaying
         {
-            get { return _player?.PlaybackState != null && _player.PlaybackState != NAudio.Wave.PlaybackState.Playing; }
+            get { return _player?.PlaybackState != null && _player.PlaybackState == NAudio.Wave.PlaybackState.Playing; }
         }
 
         public override bool CanPlay(IMediaItem item)
         {
-            return item != null && _player?.PlaybackState != null && _player.PlaybackState != NAudio.Wave.PlaybackState.Playing && item.MediaItemType.HasFlag(MediaItemType.LocalFile);
+            return item != null && _player?.PlaybackState != null && _player.PlaybackState != NAudio.Wave.PlaybackState.Playing && (item.MediaItemType & MediaItemType.LocalFile) != 0;
         }
 
         public override bool CanPause()
         {
-            return _player?.PlaybackState != null && _player.PlaybackState != NAudio.Wave.PlaybackState.Playing;
+            return _player?.PlaybackState != null && _player.PlaybackState == NAudio.Wave.PlaybackState.Playing && _player.PlaybackState != NAudio.Wave.PlaybackState.Stopped && _player.PlaybackState != NAudio.Wave.PlaybackState.Paused;
         }
 
         public override bool CanStop()
         {
-            return _player?.PlaybackState != null && _player.PlaybackState != NAudio.Wave.PlaybackState.Playing;
+            return _player?.PlaybackState != null && _player.PlaybackState != NAudio.Wave.PlaybackState.Playing && _player.PlaybackState != NAudio.Wave.PlaybackState.Stopped;
         }
 
         public override void Pause()
@@ -87,19 +92,26 @@ namespace Maple
             _player.Pause();
         }
 
-        public override bool Play(IMediaItem mediaItem)
+        public override bool Play(IMediaItem item)
         {
             if (_player?.PlaybackState == NAudio.Wave.PlaybackState.Playing)
                 throw new InvalidOperationException("Can't play a file, when already playing"); // TODO localize
 
-            _reader = new MediaFoundationReader(mediaItem.Location, _settings);
-
-            _volumeProvider = new VolumeWaveProvider16(_reader)
+            if (_player?.PlaybackState == NAudio.Wave.PlaybackState.Paused)
             {
-                Volume = 0.5f
-            };
-            _player.Init(_volumeProvider);
-            _player.Play();
+                _player.Play();
+            }
+            else
+            {
+                _reader = new MediaFoundationReader(item.Location, _settings);
+
+                _volumeProvider = new VolumeWaveProvider16(_reader)
+                {
+                    Volume = 0.5f
+                };
+                _player.Init(_volumeProvider);
+                _player.Play();
+            }
 
             return true;
         }
@@ -117,10 +129,10 @@ namespace Maple
 
         private void SyncVolumeToVolumeProvider(int value)
         {
-            if (_volumeProvider == null || value > 100 && value < 0)
+            if (_volumeProvider == null || (value > 100 && value < 0))
                 return;
 
-            _volumeProvider.Volume = value / 100;
+            _volumeProvider.Volume = value / 100f;
         }
 
         protected override void Dispose(bool disposing)

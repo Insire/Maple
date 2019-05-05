@@ -5,8 +5,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+
 using FluentValidation;
 using FluentValidation.Results;
+
 using Maple.Domain;
 using Maple.Localization.Properties;
 

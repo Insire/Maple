@@ -1,15 +1,22 @@
 ﻿using DryIoc;
+
 using Maple.Core;
 using Maple.Domain;
+
 using NSubstitute;
 
 namespace Maple.Test
 {
     public static class ContainerContextExtensions
     {
+        public static IUnitOfWork CreateRepository()
+        {
+            return Substitute.For<IUnitOfWork>();
+        }
+
         public static Playlists CreatePlaylists(this IContainer container)
         {
-            return new Playlists(container.CreateViewModelServiceContainer(), container.Resolve<IPlaylistMapper>(), () => container.Resolve<IMediaRepository>());
+            return new Playlists(container.CreateViewModelServiceContainer(), container.Resolve<IPlaylistMapper>(), () => container.Resolve<IUnitOfWork>());
         }
 
         public static ViewModelServiceContainer CreateViewModelServiceContainer(this IContainer container)
@@ -52,11 +59,6 @@ namespace Maple.Test
         public static IDialogViewModel CreateDialogViewModel()
         {
             return Substitute.For<IDialogViewModel>();
-        }
-
-        public static IMediaRepository CreateRepository()
-        {
-            return Substitute.For<IMediaRepository>();
         }
     }
 }

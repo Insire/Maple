@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+
 using Maple.Domain;
 using Maple.Localization.Properties;
+
 using Splat;
 
 namespace Maple
@@ -67,13 +69,16 @@ namespace Maple
                 case LogLevel.Error:
                     Error(message);
                     break;
+
                 case LogLevel.Fatal:
                     Fatal(message);
                     break;
+
                 case LogLevel.Debug:
                 case LogLevel.Info:
                     Info(message);
                     break;
+
                 case LogLevel.Warn:
                     Warn(message);
                     break;

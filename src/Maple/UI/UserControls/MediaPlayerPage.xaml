@@ -153,7 +153,7 @@
                                     </MenuItem>
                                     <MenuItem Command="{Binding LoadFromUrlCommand}" Header="{local:Translation YoutubePlaylistImport}">
                                         <MenuItem.Icon>
-                                            <icons:PackIconMaterial Kind="YoutubePlay" />
+                                            <icons:PackIconMaterial Kind="Youtube" />
                                         </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Command="{Binding ClearCommand}" Header="{local:Translation Clear}">
@@ -176,7 +176,7 @@
                                                             <Setter Property="Kind" Value="File" />
                                                         </DataTrigger>
                                                         <DataTrigger Binding="{Binding IsFile}" Value="False">
-                                                            <Setter Property="Kind" Value="YoutubePlay" />
+                                                            <Setter Property="Kind" Value="Youtube" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -194,7 +194,6 @@
                                                 Binding="{Binding Duration, StringFormat={}{0:c}}"
                                                 Header="{local:Translation Duration}"
                                                 IsReadOnly="True" />
-
                         </DataGrid.Columns>
                     </DataGrid>
 
@@ -242,8 +241,6 @@
                                 ToolTip="{local:Translation Next}" />
                         <Button Grid.Row="0"
                                 Grid.Column="1"
-                                Command="{Binding PlayCommand}"
-                                CommandParameter="{Binding Playlist.SelectedItem}"
                                 Style="{StaticResource PlayButtonStyle}"
                                 ToolTip="{local:Translation Playback}" />
                     </DockPanel>
@@ -274,7 +271,6 @@
                                 <RadioButton IsChecked="{Binding RepeatMode, Converter={local:RadioButtonCheckedConverter}, ConverterParameter={x:Static domain:RepeatMode.All}, UpdateSourceTrigger=PropertyChanged}"
                                              Style="{StaticResource AllRepeatModeStyle}"
                                              ToolTip="{local:Translation PlaybackModeAll}" />
-
                             </StackPanel>
                         </DockPanel>
                     </DockPanel>

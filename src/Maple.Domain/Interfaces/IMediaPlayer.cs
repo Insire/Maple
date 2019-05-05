@@ -17,10 +17,12 @@ namespace Maple.Domain
         /// </summary>
         /// <param name="item">The item.</param>
         bool Play(IMediaItem item);
+
         /// <summary>
         /// Pauses this instance.
         /// </summary>
         void Pause();
+
         /// <summary>
         /// Stops this instance.
         /// </summary>
@@ -33,6 +35,7 @@ namespace Maple.Domain
         ///   <c>true</c> if this instance can stop; otherwise, <c>false</c>.
         /// </returns>
         bool CanStop();
+
         /// <summary>
         /// Determines whether this instance can pause.
         /// </summary>
@@ -40,6 +43,7 @@ namespace Maple.Domain
         ///   <c>true</c> if this instance can pause; otherwise, <c>false</c>.
         /// </returns>
         bool CanPause();
+
         /// <summary>
         /// Determines whether this instance can play the specified item.
         /// </summary>
@@ -56,6 +60,7 @@ namespace Maple.Domain
         /// The volume.
         /// </value>
         int Volume { get; set; }
+
         /// <summary>
         /// Gets the volume maximum.
         /// </summary>
@@ -63,6 +68,7 @@ namespace Maple.Domain
         /// The volume maximum.
         /// </value>
         int VolumeMax { get; }
+
         /// <summary>
         /// Gets the volume minimum.
         /// </summary>
@@ -70,6 +76,7 @@ namespace Maple.Domain
         /// The volume minimum.
         /// </value>
         int VolumeMin { get; }
+
         /// <summary>
         /// Gets or sets the audio device.
         /// </summary>

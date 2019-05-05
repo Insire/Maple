@@ -7,7 +7,6 @@ namespace Maple
     {
         private bool _isSelected;
 
-
         public bool IsSelected
         {
             get { return _isSelected; }
@@ -53,7 +52,7 @@ namespace Maple
             Channels = 0;
         }
 
-        override public string ToString()
+        public override string ToString()
         {
             return Name;
         }

@@ -140,7 +140,8 @@
   </data>
   <data name="GithubProjectLink" xml:space="preserve">
     <value>https://github.com/Insire/InsireBot-V2</value>
-  <comment>@Invariant</comment></data>
+    <comment>@Invariant</comment>
+  </data>
   <data name="Options" xml:space="preserve">
     <value>Einstellungen</value>
   </data>
@@ -217,7 +218,7 @@
     <value>Eine Wiedergabeliste aus einer Datei importieren</value>
   </data>
   <data name="Accept" xml:space="preserve">
-    <value>Ok</value>
+    <value>OK</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Schließen</value>

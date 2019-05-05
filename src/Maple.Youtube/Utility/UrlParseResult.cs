@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Maple.Domain;
 using Maple.Localization.Properties;
 
@@ -128,6 +129,7 @@ namespace Maple.Youtube
                     if (Playlists.Count > 0)
                         return Playlists.Count;
                     return 0;
+
                 default:
                     _log.Warn("DataParsingServiceResult misses an Implementation of DataParsingServiceResultType"); // TODO localization
                     return 0;

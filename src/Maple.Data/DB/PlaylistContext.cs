@@ -1,32 +1,58 @@
-﻿using System.Data.Entity;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Maple.Domain;
+using Maple.Log;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Maple.Data
 {
-    public class PlaylistContext : DbContext
+    public sealed class PlaylistContext : DbContext
     {
+        private readonly ILoggerFactory _loggerFactory;
+
         public DbSet<PlaylistModel> Playlists { get; set; }
         public DbSet<MediaItemModel> MediaItems { get; set; }
         public DbSet<MediaPlayerModel> Mediaplayers { get; set; }
         public DbSet<OptionModel> Options { get; set; }
-        public DbSet<RawModel> Data { get; set; }
 
-        public PlaylistContext()
-            : base("Main")
+        public PlaylistContext(ILoggerFactory loggerFactory)
         {
-            Configuration.ProxyCreationEnabled = false;
-            Configuration.LazyLoadingEnabled = false;
+            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
         }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        internal PlaylistContext(DbContextOptions<PlaylistContext> options, ILoggerFactory loggerFactory)
+            : base(options)
         {
-            ModelConfiguration.Configure(modelBuilder);
-            Database.SetInitializer(new CreateSeedDatabaseIfNotExists<PlaylistContext>(modelBuilder));
+            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
         }
 
-        protected override void Dispose(bool disposing)
+        public Task Migrate()
         {
-            base.Dispose(disposing);
+            return Database.MigrateAsync();
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (optionsBuilder.IsConfigured)
+                return;
+
+            _loggerFactory.AddLog4Net();
+
+            optionsBuilder
+                .EnableSensitiveDataLogging(true)
+                .UseLoggerFactory(_loggerFactory)
+                .UseSqlite(Constants.ConnectionString)
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new MediaPlayerConfiguration());
+            modelBuilder.ApplyConfiguration(new MediaItemConfiguration());
+            modelBuilder.ApplyConfiguration(new PlaylistConfiguration());
+            modelBuilder.ApplyConfiguration(new OptionConfiguration());
         }
     }
 }

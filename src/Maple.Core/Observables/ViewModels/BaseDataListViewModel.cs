@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+
 using Maple.Domain;
 using Maple.Localization.Properties;
 
@@ -16,7 +17,7 @@ namespace Maple.Core
     /// <typeparam name="TModel">a DTO implementing <see cref="BaseObject" /></typeparam>
     /// <seealso cref="Maple.Core.BaseListViewModel{T}" />
     public abstract class BaseDataListViewModel<TViewModel, TModel> : BaseListViewModel<TViewModel>, ILoadableViewModel
-        where TViewModel : BaseDataViewModel<TViewModel, TModel>, ISequence
+        where TViewModel : ValidableBaseDataViewModel<TViewModel, TModel>, ISequence
         where TModel : class, IBaseObject
     {
         protected readonly ISequenceService _sequenceProvider;
@@ -29,21 +30,23 @@ namespace Maple.Core
         /// <value>
         /// The load command.
         /// </value>
-        public ICommand LoadCommand => AsyncCommand.Create(LoadAsync, () => !IsLoaded);
+        public ICommand LoadCommand => AsyncCommand.Create(Load, () => !IsLoaded);
+
         /// <summary>
         /// Gets the refresh command.
         /// </summary>
         /// <value>
         /// The refresh command.
         /// </value>
-        public ICommand RefreshCommand => AsyncCommand.Create(LoadAsync);
+        public ICommand RefreshCommand => AsyncCommand.Create(Load);
+
         /// <summary>
         /// Gets the save command.
         /// </summary>
         /// <value>
         /// The save command.
         /// </value>
-        public ICommand SaveCommand => new RelayCommand(Save);
+        public ICommand SaveCommand => AsyncCommand.Create(Save, CanSave);
 
         protected BaseDataListViewModel(ViewModelServiceContainer container)
             : base(container.Messenger)
@@ -53,24 +56,30 @@ namespace Maple.Core
             _sequenceProvider = container.SequenceService;
         }
 
-        public abstract Task LoadAsync();
-        public abstract void Save();
+        public abstract Task Load();
+
+        public abstract Task Save();
+
+        protected virtual bool CanSave()
+        {
+            return !Items.Any(p => p.HasErrors);
+        }
 
         /// <summary>
         /// Removes the specified item.
         /// </summary>
         /// <param name="item">The item.</param>
-        public override void Remove(TViewModel viewModel)
+        public override void Remove(TViewModel item)
         {
-            if (viewModel == null)
-                throw new ArgumentNullException(nameof(viewModel), $"{nameof(viewModel)} {Resources.IsRequired}");
+            if (item == null)
+                throw new ArgumentNullException(nameof(item), $"{nameof(item)} {Resources.IsRequired}");
 
             using (BusyStack.GetToken())
             {
-                while (Items.Contains(viewModel))
+                while (Items.Contains(item))
                 {
-                    viewModel.Model.IsDeleted = true;
-                    base.Remove(viewModel);
+                    item.Model.IsDeleted = true;
+                    base.Remove(item);
                 }
             }
         }
@@ -108,14 +117,13 @@ namespace Maple.Core
             }
         }
 
-        public override void Add(TViewModel viewModel)
+        public override void Add(TViewModel item)
         {
-            if (viewModel == null)
-                throw new ArgumentNullException(nameof(viewModel), $"{nameof(viewModel)} {Resources.IsRequired}");
+            if (item == null)
+                throw new ArgumentNullException(nameof(item), $"{nameof(item)} {Resources.IsRequired}");
 
-            var sequence = _sequenceProvider.Get(Items.Cast<ISequence>().ToList());
-            viewModel.Sequence = sequence;
-            base.Add(viewModel);
+            item.Sequence = _sequenceProvider.Get(Items.Cast<ISequence>().ToList());
+            base.Add(item);
         }
 
         public override void AddRange(IEnumerable<TViewModel> items)

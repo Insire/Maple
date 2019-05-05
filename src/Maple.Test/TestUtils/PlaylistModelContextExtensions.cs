@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Maple.Domain;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Maple.Test

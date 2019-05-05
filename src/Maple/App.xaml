@@ -55,7 +55,6 @@
                              Color="{DynamicResource Primary500}" />
 
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-
         </local:SharedResourceDictionary>
     </Application.Resources>
 </Application>

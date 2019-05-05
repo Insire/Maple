@@ -1,5 +1,7 @@
 ﻿using System;
+
 using Maple.Domain;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Maple.Test

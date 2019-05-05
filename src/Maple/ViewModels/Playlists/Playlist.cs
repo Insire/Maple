@@ -8,7 +8,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
+
 using FluentValidation;
+
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;

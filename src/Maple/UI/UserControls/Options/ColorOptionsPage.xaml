@@ -68,7 +68,6 @@
                                 CommandParameter="{Binding}"
                                 Content="Accent" />
                     </Border>
-
                 </Grid>
             </materialDesign:Card>
         </DataTemplate>
@@ -118,7 +117,6 @@
                     </materialDesign:ToggleButtonAssist.OnContent>
                 </ToggleButton>
             </Grid>
-
         </materialDesign:Card>
     </materialDesign:TransitioningContent>
 </local:IoCUserControl>

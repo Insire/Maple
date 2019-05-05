@@ -226,3 +226,5 @@ ModelManifest.xml
 
 # Merge
 *.orig
+
+!Maple.Log

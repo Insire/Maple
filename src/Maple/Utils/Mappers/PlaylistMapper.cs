@@ -1,6 +1,9 @@
 ﻿using System;
+
 using AutoMapper;
+
 using FluentValidation;
+
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;

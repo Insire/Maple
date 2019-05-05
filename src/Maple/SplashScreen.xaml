@@ -48,7 +48,6 @@
         <Image RenderOptions.BitmapScalingMode="HighQuality"
                SnapsToDevicePixels="True"
                Source="Resources/logo_withoutbackground.png">
-
         </Image>
     </DockPanel>
 </local:IoCWindow>

@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+using FluentValidation;
+
 using Maple.Core;
 
 namespace Maple
@@ -12,9 +13,6 @@ namespace Maple
 
             RuleFor(mediaPlayer => mediaPlayer.AudioDevices).NotEmpty();
             RuleFor(mediaPlayer => mediaPlayer.Model).NotEmpty();
-
-            RuleFor(mediaPlayer => mediaPlayer.Player).NotEmpty();
-            RuleFor(mediaPlayer => mediaPlayer.Playlist).NotEmpty();
         }
     }
 }

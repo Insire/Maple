@@ -9,14 +9,17 @@ namespace Maple.Core
         /// conditional refresh
         /// </summary>
         ICommand LoadCommand { get; }
+
         /// <summary>
         /// explicit refresh
         /// </summary>
         ICommand RefreshCommand { get; }
+
         /// <summary>
         /// delete an object from the filesystem
         /// </summary>
         ICommand DeleteCommand { get; }
+
         /// <summary>
         /// the logical parent
         /// </summary>
@@ -41,10 +44,12 @@ namespace Maple.Core
         /// updates filtering and the current children
         /// </summary>
         void Refresh();
+
         /// <summary>
         /// Loads attributes and checks if the object still exists on file system
         /// </summary>
         void LoadMetaData();
+
         /// <summary>
         /// updates the filtering
         /// </summary>
@@ -52,6 +57,7 @@ namespace Maple.Core
         void OnFilterChanged(string filter);
 
         void Delete();
+
         bool CanDelete();
     }
 }

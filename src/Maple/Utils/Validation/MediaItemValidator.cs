@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+
 using Maple.Core;
 
 namespace Maple

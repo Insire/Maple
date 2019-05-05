@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Maple.Localization.Properties;
 
 namespace Maple.Core
@@ -8,7 +9,6 @@ namespace Maple.Core
     {
         protected IMessenger Messenger { get; }
         protected BusyStack BusyStack { get; }
-
         protected bool Disposed { get; set; }
         protected ICollection<SubscriptionToken> MessageTokens { get; private set; }
 
@@ -21,8 +21,7 @@ namespace Maple.Core
 
         protected ViewModel(IMessenger messenger)
         {
-            BusyStack = new BusyStack();
-            BusyStack.OnChanged += (isBusy) => IsBusy = isBusy;
+            BusyStack = new BusyStack(isBusy => IsBusy = isBusy);
             MessageTokens = new List<SubscriptionToken>();
 
             Messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");

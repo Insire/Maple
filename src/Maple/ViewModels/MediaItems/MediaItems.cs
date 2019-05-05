@@ -1,18 +1,19 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
 
 namespace Maple
 {
-    public class MediaItems : BaseDataListViewModel<MediaItem, MediaItemModel>, IMediaItemsViewModel
+    public sealed class MediaItems : BaseDataListViewModel<MediaItem, MediaItemModel>, IMediaItemsViewModel
     {
-        private readonly Func<IMediaRepository> _repositoryFactory;
+        private readonly Func<IUnitOfWork> _repositoryFactory;
         private readonly IMediaItemMapper _mediaItemMapper;
 
-        public MediaItems(ViewModelServiceContainer container, IMediaItemMapper mediaItemMapper, Func<IMediaRepository> repositoryFactory)
+        public MediaItems(ViewModelServiceContainer container, IMediaItemMapper mediaItemMapper, Func<IUnitOfWork> repositoryFactory)
             : base(container)
         {
             _repositoryFactory = repositoryFactory ?? throw new ArgumentNullException(nameof(repositoryFactory), $"{nameof(repositoryFactory)} {Resources.IsRequired}");
@@ -21,37 +22,43 @@ namespace Maple
 
         public void Add(Playlist playlist)
         {
-            var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
+            var sequence = _sequenceProvider.Get(Items.Cast<ISequence>().ToList());
             Add(_mediaItemMapper.GetNewMediaItem(sequence, playlist));
         }
 
-        private void SaveInternal()
+        private async Task SaveInternal()
         {
             _log.Info($"{_translationService.Translate(nameof(Resources.Saving))} {_translationService.Translate(nameof(Resources.MediaItems))}");
             using (var context = _repositoryFactory())
             {
-                context.Save(this);
+                foreach (var item in Items)
+                    context.MediaItemRepository.Update(item.Model);
+
+                await context.SaveChanges().ConfigureAwait(false);
             }
         }
 
-        public override async Task LoadAsync()
+        public override async Task Load()
         {
             _log.Info($"{_translationService.Translate(nameof(Resources.Loading))} {_translationService.Translate(nameof(Resources.MediaItems))}");
             Clear();
 
             using (var context = _repositoryFactory())
             {
-                var result = await context.GetMediaItemsAsync().ConfigureAwait(true);
-                AddRange(result);
+                var result = await context.MediaItemRepository.ReadAsync().ConfigureAwait(true);
+                if (result.Count > 0)
+                {
+                    AddRange(_mediaItemMapper.GetMany(result));
+                }
             }
 
             SelectedItem = Items.FirstOrDefault();
             OnLoaded();
         }
 
-        public override void Save()
+        public override Task Save()
         {
-            SaveInternal();
+            return SaveInternal();
         }
     }
 }

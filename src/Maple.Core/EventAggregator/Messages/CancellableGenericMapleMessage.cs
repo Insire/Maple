@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Maple.Localization.Properties;
 
 namespace Maple.Core
