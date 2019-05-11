@@ -10,6 +10,10 @@ using Maple.Domain;
 using Maple.Log;
 using Maple.Youtube;
 using Microsoft.Extensions.Logging;
+using MvvmScarletToolkit;
+using MvvmScarletToolkit.Abstractions;
+using MvvmScarletToolkit.FileSystemBrowser;
+using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
@@ -46,10 +50,10 @@ namespace Maple
                 // TODO register disposeables
 
                 // save-/loadable ViewModels
-                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IPlaylistsViewModel) }, typeof(Playlists), Reuse.Singleton);
-                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IMediaPlayersViewModel) }, typeof(MediaPlayers), Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
-                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(ICultureViewModel) }, typeof(Cultures), Reuse.Singleton);
-                c.RegisterMany(new[] { typeof(ILoadableViewModel), typeof(IUIColorsViewModel) }, typeof(UIColorsViewModel), Reuse.Singleton);
+                c.RegisterMany(new[] { typeof(IPlaylistsViewModel) }, typeof(Playlists), Reuse.Singleton);
+                c.RegisterMany(new[] { typeof(IMediaPlayersViewModel) }, typeof(MediaPlayers), Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
+                c.RegisterMany(new[] { typeof(ICultureViewModel) }, typeof(Cultures), Reuse.Singleton);
+                c.RegisterMany(new[] { typeof(IUIColorsViewModel) }, typeof(UIColorsViewModel), Reuse.Singleton);
 
                 //generic ViewModels
                 c.Register<Scenes>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
@@ -71,7 +75,6 @@ namespace Maple
                 c.Register<IMediaPlayer, NAudioMediaPlayer>(setup: Setup.With(allowDisposableTransient: true));
                 c.Register<IWavePlayerFactory, WavePlayerFactory>(Reuse.Singleton);
 
-                c.Register<ViewModelServiceContainer>(Reuse.Singleton);
                 c.Register<PlaylistContext>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
 
                 c.Register<IPlaylistRepository, PlaylistRepository>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
@@ -90,8 +93,8 @@ namespace Maple
                 c.Register<ILocalizationService, LocalizationServiceBase>(Reuse.Singleton);
                 c.Register<ITranslationProvider, ResxTranslationProvider>(Reuse.Singleton);
 
-                c.Register<IMessenger, MapleMessenger>(Reuse.Singleton);
-                c.Register<IMapleMessageProxy, DefaultMessageProxy>(Reuse.Singleton);
+                c.Register<IMessenger, ScarletMessenger>(Reuse.Singleton);
+                c.Register<IScarletMessageProxy, DefaultMessageProxy>(Reuse.Singleton);
 
                 c.Register<ILoggingNotifcationService, LoggingNotifcationService>(Reuse.Singleton);
                 c.Register<ILoggingService, LoggingService>(Reuse.Singleton);

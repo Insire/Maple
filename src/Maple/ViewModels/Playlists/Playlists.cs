@@ -8,7 +8,7 @@ using Maple.Localization.Properties;
 
 namespace Maple
 {
-    public sealed class Playlists : BusinessListViewModel<Playlist, PlaylistModel>, ISaveableViewModel, IPlaylistsViewModel
+    public sealed class Playlists : BusinessListViewModel<Playlist, PlaylistModel>, IPlaylistsViewModel
     {
         private readonly Func<IUnitOfWork> _repositoryFactory;
         private readonly IPlaylistMapper _playlistMapper;

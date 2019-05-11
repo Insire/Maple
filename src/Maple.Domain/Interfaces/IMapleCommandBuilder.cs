@@ -6,5 +6,8 @@ namespace Maple.Domain
     {
         IMessenger Messenger { get; }
         ILoggingService Log { get; }
+        ILoggingNotifcationService NotificationService { get; }
+        ILocalizationService LocalizationService { get; }
+        ISequenceService SequenceService { get; }
     }
 }

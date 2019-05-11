@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using Maple.Core;
 using Maple.Domain;
 using Maple.Icons;
+using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.ConfigurableWindow;
 
 namespace Maple

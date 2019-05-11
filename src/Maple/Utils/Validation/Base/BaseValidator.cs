@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 
 using FluentValidation;
-
-using Maple.Core;
 using Maple.Localization.Properties;
+using MvvmScarletToolkit.Abstractions;
 
 namespace Maple
 {

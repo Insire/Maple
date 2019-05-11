@@ -1,10 +1,10 @@
-﻿using System.Windows.Input;
+using System.Windows.Input;
 
 using Maple.Core;
 
 namespace Maple
 {
-    public interface IUIColorsViewModel : ILoadableViewModel, ISaveableViewModel
+    public interface IUIColorsViewModel
     {
         ICommand ApplyAccentCommand { get; }
         ICommand ApplyPrimaryCommand { get; }

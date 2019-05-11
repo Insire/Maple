@@ -7,6 +7,8 @@
                       xmlns:local="clr-namespace:Maple"
                       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
+    <!--  DataContext ShellViewModel  -->
+
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding MediaPlayers.LoadCommand}" />
@@ -99,7 +101,6 @@
         </Style>
     </local:IoCUserControl.Resources>
 
-    <!--  DataContext ShellViewModel  -->
     <Grid DataContext="{Binding MediaPlayers.SelectedItem}">
         <materialDesign:TransitioningContent>
             <materialDesign:TransitioningContent.OpeningEffects>
@@ -124,7 +125,6 @@
                         <ColumnDefinition Width="{StaticResource DefaultGridLength}" />
                     </Grid.ColumnDefinitions>
 
-                    <!--  Playlist  -->
                     <DataGrid Grid.Row="1"
                               Grid.Column="1"
                               Grid.ColumnSpan="5"
@@ -197,7 +197,6 @@
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <!--  Volume Slider  -->
                     <Grid Grid.Row="3" Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -223,7 +222,6 @@
                                                 Style="{StaticResource IconStyle}" />
                     </Grid>
 
-                    <!--  Previous, Play, Next  -->
                     <DockPanel Grid.Row="3"
                                Grid.Column="3"
                                LastChildFill="True">
@@ -245,7 +243,6 @@
                                 ToolTip="{local:Translation Playback}" />
                     </DockPanel>
 
-                    <!--  PlayMode  -->
                     <DockPanel Grid.Row="3"
                                Grid.Column="5"
                                LastChildFill="True">

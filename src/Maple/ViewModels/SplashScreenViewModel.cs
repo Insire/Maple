@@ -1,10 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
+using MvvmScarletToolkit.Abstractions;
+using MvvmScarletToolkit.Commands;
+using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {

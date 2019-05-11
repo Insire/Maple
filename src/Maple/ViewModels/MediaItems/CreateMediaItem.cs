@@ -3,19 +3,19 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-
-using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
 using Maple.Youtube;
+using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Commands;
+using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
     /// <summary>
     /// viewmodel for creating mediaitem from a string (path/url)
     /// </summary>
-    public class CreateMediaItem : BaseListViewModel<MediaItem>
+    public class CreateMediaItem : ViewModelListBase<MediaItem>
     {
         private IYoutubeUrlParser _dataParsingService;
         private IMediaItemMapper _mapper;
@@ -36,8 +36,8 @@ namespace Maple
             private set { SetValue(ref _result, value); }
         }
 
-        public CreateMediaItem(IYoutubeUrlParser dataParsingService, IMediaItemMapper mapper, IMessenger messenger, CommandBuilder builder)
-            : base(messenger, builder)
+        public CreateMediaItem(IYoutubeUrlParser dataParsingService, IMediaItemMapper mapper, ICommandBuilder builder)
+            : base(builder)
         {
             _dataParsingService = dataParsingService ?? throw new ArgumentNullException(nameof(dataParsingService), $"{nameof(mapper)} {Resources.IsRequired}");
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), $"{nameof(mapper)} {Resources.IsRequired}");
@@ -56,7 +56,7 @@ namespace Maple
                                               .ConfigureAwait(true);
 
             if (Result.Count > 0 && Result.MediaItems?.Count > 0)
-                AddRange(_mapper.GetMany(Result.MediaItems));
+                await AddRange(_mapper.GetMany(Result.MediaItems)).ConfigureAwait(false);
         }
 
         private bool CanParse()

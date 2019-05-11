@@ -15,6 +15,7 @@ using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
 using MvvmScarletToolkit;
+using MvvmScarletToolkit.Abstractions;
 
 namespace Maple
 {
@@ -32,9 +33,9 @@ namespace Maple
         public bool IsDeleted => Model.IsDeleted;
         public int Count => Items?.Count ?? 0;
 
-        public IAsyncCommand LoadFromFileCommand { get; private set; }
-        public IAsyncCommand LoadFromFolderCommand { get; private set; }
-        public IAsyncCommand LoadFromUrlCommand { get; private set; }
+        public ICommand LoadFromFileCommand { get; private set; }
+        public ICommand LoadFromFolderCommand { get; private set; }
+        public ICommand LoadFromUrlCommand { get; private set; }
         public ICommand RemoveRangeCommand { get; protected set; }
         public ICommand RemoveCommand { get; protected set; }
         public ICommand ClearCommand { get; protected set; }
@@ -76,12 +77,12 @@ namespace Maple
             protected set { SetValue(ref _view, value); }
         }
 
-        private IRangeObservableCollection<MediaItem> _items;
+        private RangeObservableCollection<MediaItem> _items;
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public IReadOnlyCollection<MediaItem> Items
         {
             get { return (IReadOnlyCollection<MediaItem>)_items; }
-            private set { SetValue(ref _items, (IRangeObservableCollection<MediaItem>)value); }
+            private set { SetValue(ref _items, (RangeObservableCollection<MediaItem>)value); }
         }
 
         private MediaItem _selectedItem;
@@ -169,11 +170,11 @@ namespace Maple
             set { SetValue(ref _repeatMode, value, OnChanged: () => Model.RepeatMode = (int)value); }
         }
 
-        private IRangeObservableCollection<RepeatMode> _repeatModes;
+        private RangeObservableCollection<RepeatMode> _repeatModes;
         public IReadOnlyCollection<RepeatMode> RepeatModes
         {
             get { return (IReadOnlyCollection<RepeatMode>)_repeatModes; }
-            private set { SetValue(ref _repeatModes, (IRangeObservableCollection<RepeatMode>)value); }
+            private set { SetValue(ref _repeatModes, (RangeObservableCollection<RepeatMode>)value); }
         }
 
         public Playlist(ViewModelServiceContainer container, IValidator<Playlist> validator, IDialogViewModel dialogViewModel, IMediaItemMapper mediaItemMapper, PlaylistModel model)

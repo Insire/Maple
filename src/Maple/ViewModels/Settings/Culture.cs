@@ -1,15 +1,15 @@
-﻿using System.Globalization;
-
-using Maple.Core;
+using System.Globalization;
+using MvvmScarletToolkit.Abstractions;
+using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    public class Culture : BaseViewModel<CultureInfo>
+    public class Culture : ViewModelBase<CultureInfo>
     {
         public string DisplayName => Model.DisplayName;
 
-        public Culture(CultureInfo info, IMessenger messenger)
-            : base(info, messenger)
+        public Culture(CultureInfo info, ICommandBuilder commandBuilder)
+            : base(commandBuilder, info)
         {
         }
     }

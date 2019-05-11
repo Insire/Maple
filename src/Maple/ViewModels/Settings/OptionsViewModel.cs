@@ -1,7 +1,6 @@
-﻿using System;
-
-using Maple.Core;
+using System;
 using Maple.Localization.Properties;
+using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {

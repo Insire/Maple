@@ -55,6 +55,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvvmScarletToolkit.Incubato
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvvmScarletToolkit", "MvvmScarletToolkit\MvvmScarletToolkit\MvvmScarletToolkit.csproj", "{868E8C0A-0D84-4ACF-B870-0AC980A3139C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoApp", "MvvmScarletToolkit\DemoApp\DemoApp.csproj", "{F02FBD6B-471E-4291-860D-1A363D5ED075}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +131,10 @@ Global
 		{868E8C0A-0D84-4ACF-B870-0AC980A3139C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{868E8C0A-0D84-4ACF-B870-0AC980A3139C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{868E8C0A-0D84-4ACF-B870-0AC980A3139C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F02FBD6B-471E-4291-860D-1A363D5ED075}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F02FBD6B-471E-4291-860D-1A363D5ED075}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F02FBD6B-471E-4291-860D-1A363D5ED075}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F02FBD6B-471E-4291-860D-1A363D5ED075}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -143,6 +149,7 @@ Global
 		{CFFA08D8-4913-45A3-B54A-CC4042331724} = {B265CA65-B1C2-4FCA-92C0-E6BE51466509}
 		{4FFC7188-6BB3-48EA-B297-B289D84D9AFC} = {B265CA65-B1C2-4FCA-92C0-E6BE51466509}
 		{868E8C0A-0D84-4ACF-B870-0AC980A3139C} = {B265CA65-B1C2-4FCA-92C0-E6BE51466509}
+		{F02FBD6B-471E-4291-860D-1A363D5ED075} = {B265CA65-B1C2-4FCA-92C0-E6BE51466509}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FB7AD8CC-4699-4B9E-B17E-DF2F7CF26C7A}

@@ -6,13 +6,18 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Maple.Core;
+using Maple.Domain;
 using Maple.Localization.Properties;
 using Maple.Youtube;
+using MvvmScarletToolkit.Abstractions;
+using MvvmScarletToolkit.Commands;
+using MvvmScarletToolkit.FileSystemBrowser;
 
 namespace Maple
 {
     public class DialogViewModel : DialogBaseViewModel, IDialogViewModel
     {
+        private readonly IMessenger _messenger;
         private readonly ILocalizationService _translator;
         private readonly IYoutubeUrlParser _service;
         private readonly IMediaItemMapper _mediaItemMapper;
@@ -20,10 +25,12 @@ namespace Maple
 
         private readonly Func<CreateMediaItem> _createMediaItemFactory;
 
-        public DialogViewModel(ILocalizationService translator, IYoutubeUrlParser service, IMediaItemMapper mediaItemMapper, IMessenger messenger, FileSystemViewModel fileSystemViewModel, Func<CreateMediaItem> createMediaItemFactory)
-            : base(messenger)
+        public DialogViewModel(IMapleCommandBuilder commandBuilder, IYoutubeUrlParser service, IMediaItemMapper mediaItemMapper, FileSystemViewModel fileSystemViewModel, Func<CreateMediaItem> createMediaItemFactory)
+            : base(commandBuilder)
         {
-            _translator = translator ?? throw new ArgumentNullException(nameof(translator), $"{nameof(translator)} {Resources.IsRequired}");
+            _translator = commandBuilder.LocalizationService;
+            _messenger = commandBuilder.Messenger;
+
             _service = service ?? throw new ArgumentNullException(nameof(service), $"{nameof(service)} {Resources.IsRequired}");
             _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper), $"{nameof(mediaItemMapper)} {Resources.IsRequired}");
             _fileSystemViewModel = fileSystemViewModel ?? throw new ArgumentNullException(nameof(fileSystemViewModel), $"{nameof(fileSystemViewModel)} {Resources.IsRequired}");
@@ -96,7 +103,7 @@ namespace Maple
             Title = options.Title;
             IsCancelVisible = options.CanCancel;
 
-            using (Messenger.Subscribe<FileSystemInfoChangedMessage>(FileSystemInfoChanged))
+            using (_messenger.Subscribe<FileSystemInfoChangedMessage>(FileSystemInfoChanged))
             {
                 AcceptAction = () =>
                 {
@@ -183,7 +190,7 @@ namespace Maple
             Title = options.Title;
             IsCancelVisible = options.CanCancel;
 
-            using (Messenger.Subscribe<FileSystemInfoChangedMessage>(FileSystemInfoChanged))
+            using (_messenger.Subscribe<FileSystemInfoChangedMessage>(FileSystemInfoChanged))
             {
                 AcceptAction = () =>
                 {
@@ -229,7 +236,7 @@ namespace Maple
         public async Task<ICollection<MediaItem>> ShowUrlParseDialog(CancellationToken token)
         {
             var result = new List<MediaItem>();
-            var viewmodel = new CreateMediaItem(_service, _mediaItemMapper, Messenger);
+            var viewmodel = new CreateMediaItem(_service, _mediaItemMapper, CommandBuilder);
 
             TitleDetail = string.Empty;
             Context = viewmodel;

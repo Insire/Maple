@@ -1,7 +1,7 @@
-﻿using System;
-
-using Maple.Core;
+using System;
 using Maple.Localization.Properties;
+using MvvmScarletToolkit.FileSystemBrowser;
+using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {

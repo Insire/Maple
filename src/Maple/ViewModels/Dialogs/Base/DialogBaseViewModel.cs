@@ -3,12 +3,12 @@ using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-
-using Maple.Core;
+using MvvmScarletToolkit.Abstractions;
+using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    public abstract class DialogBaseViewModel : ViewModel
+    public abstract class DialogBaseViewModel : ViewModelBase
     {
         public EventHandler DialogClosed;
 
@@ -61,8 +61,8 @@ namespace Maple
             set { SetValue(ref _context, value); }
         }
 
-        protected DialogBaseViewModel(IMessenger messenger)
-            : base(messenger)
+        protected DialogBaseViewModel(ICommandBuilder commandBuilder)
+            : base(commandBuilder)
         {
         }
 

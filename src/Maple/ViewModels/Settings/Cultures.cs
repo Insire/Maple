@@ -1,14 +1,16 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
+using MvvmScarletToolkit.Abstractions;
+using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    public sealed class Cultures : BaseListViewModel<Culture>, ICultureViewModel
+    public sealed class Cultures : ViewModelListBase<Culture>, ICultureViewModel
     {
         private readonly ILocalizationService _manager;
         private readonly ILoggingService _log;

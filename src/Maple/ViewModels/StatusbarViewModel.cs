@@ -1,12 +1,14 @@
-﻿using System;
+using System;
 
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
+using MvvmScarletToolkit.Abstractions;
+using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    public class StatusbarViewModel : ViewModel
+    public class StatusbarViewModel : ViewModelBase
     {
         private string _version;
         /// <summary>

@@ -1,6 +1,5 @@
-﻿using FluentValidation;
-
-using Maple.Core;
+using FluentValidation;
+using MvvmScarletToolkit.Abstractions;
 
 namespace Maple
 {

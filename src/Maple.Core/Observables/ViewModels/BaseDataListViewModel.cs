@@ -1,8 +1,7 @@
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
-
 using Maple.Domain;
 using MvvmScarletToolkit.Observables;
 
@@ -14,29 +13,17 @@ namespace Maple.Core
     /// <typeparam name="TViewModel">a wrapper class implementing <see cref="BaseViewModel" /></typeparam>
     /// <typeparam name="TModel">a DTO implementing <see cref="BaseObject" /></typeparam>
     /// <seealso cref="Maple.Core.BaseListViewModel{T}" />
-    public abstract class BaseDataListViewModel<TViewModel, TModel> : ViewModelListBase<TViewModel>, ILoadableViewModel
-        where TViewModel : ValidableBaseDataViewModel<TViewModel, TModel>, ISequence
+    public abstract class BusinessListViewModel<TViewModel, TModel> : ViewModelListBase<TViewModel>
+        where TViewModel : ValidableBaseDataViewModel<TViewModel, TModel>, ISequence, INotifyPropertyChanged
         where TModel : class, IBaseObject
     {
         protected readonly ISequenceService _sequenceProvider;
 
-        /// <summary>
-        /// Gets the save command.
-        /// </summary>
-        /// <value>
-        /// The save command.
-        /// </value>
-        public ICommand SaveCommand => AsyncCommand.Create(Save, CanSave);
-
-        protected BaseDataListViewModel(ViewModelServiceContainer container)
-            : base(container.Messenger)
+        protected BusinessListViewModel(IMapleCommandBuilder commandBuilder)
+            : base(commandBuilder)
         {
-            _sequenceProvider = container.SequenceService;
+            _sequenceProvider = commandBuilder.SequenceService;
         }
-
-        public abstract Task Load();
-
-        public abstract Task Save();
 
         protected virtual bool CanSave()
         {

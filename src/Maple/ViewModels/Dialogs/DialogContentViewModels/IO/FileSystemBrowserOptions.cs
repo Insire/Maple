@@ -1,4 +1,5 @@
-﻿using Maple.Core;
+using Maple.Core;
+using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
