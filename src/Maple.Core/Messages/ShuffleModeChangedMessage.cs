@@ -1,8 +1,11 @@
-﻿namespace Maple.Core
+using MvvmScarletToolkit;
+
+namespace Maple.Core
 {
-    public class ShuffleModeChangedMessage : GenericMapleMessage<bool>
+    public class ShuffleModeChangedMessage : GenericScarletMessage<bool>
     {
-        public ShuffleModeChangedMessage(object sender, bool content) : base(sender, content)
+        public ShuffleModeChangedMessage(object sender, bool content)
+            : base(sender, content)
         {
         }
     }

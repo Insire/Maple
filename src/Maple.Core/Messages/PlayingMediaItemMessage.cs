@@ -1,8 +1,9 @@
-﻿using Maple.Domain;
+using Maple.Domain;
+using MvvmScarletToolkit;
 
 namespace Maple.Core
 {
-    public class PlayingMediaItemMessage : GenericMapleMessage<IMediaItem>
+    public class PlayingMediaItemMessage : GenericScarletMessage<IMediaItem>
     {
         public int PlaylistId { get; }
 

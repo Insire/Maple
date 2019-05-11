@@ -87,7 +87,7 @@ namespace Maple
                 c.Register<IYoutubeUrlParser, YoutubeUrlParser>();
 
                 c.Register<IVersionService, VersionService>(Reuse.Singleton);
-                c.Register<ILocalizationService, LocalizationService>(Reuse.Singleton);
+                c.Register<ILocalizationService, LocalizationServiceBase>(Reuse.Singleton);
                 c.Register<ITranslationProvider, ResxTranslationProvider>(Reuse.Singleton);
 
                 c.Register<IMessenger, MapleMessenger>(Reuse.Singleton);

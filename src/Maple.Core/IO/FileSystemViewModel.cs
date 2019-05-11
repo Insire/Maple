@@ -1,9 +1,11 @@
-﻿using System.Collections;
+using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
 
 using Maple.Domain;
+using MvvmScarletToolkit;
+using MvvmScarletToolkit.Commands;
 
 namespace Maple.Core
 {

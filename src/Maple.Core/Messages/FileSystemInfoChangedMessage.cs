@@ -1,8 +1,11 @@
-﻿namespace Maple.Core
+using MvvmScarletToolkit;
+
+namespace Maple.Core
 {
-    public class FileSystemInfoChangedMessage : GenericMapleMessage<IFileSystemInfo>
+    public class FileSystemInfoChangedMessage : GenericScarletMessage<IFileSystemInfo>
     {
-        public FileSystemInfoChangedMessage(object sender, IFileSystemInfo info) : base(sender, info)
+        public FileSystemInfoChangedMessage(object sender, IFileSystemInfo info)
+            : base(sender, info)
         {
         }
     }

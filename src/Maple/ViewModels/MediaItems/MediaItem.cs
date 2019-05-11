@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
-
+using System.Threading;
+using System.Threading.Tasks;
 using FluentValidation;
 
 using Maple.Core;
@@ -133,6 +134,21 @@ namespace Maple
         public override string ToString()
         {
             return Title?.Length == 0 ? Location : Title;
+        }
+
+        protected override Task Load(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task Unload(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task Refresh(CancellationToken token)
+        {
+            throw new NotImplementedException();
         }
     }
 }

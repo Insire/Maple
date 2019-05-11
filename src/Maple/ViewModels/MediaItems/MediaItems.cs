@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Maple.Core;
@@ -59,6 +60,21 @@ namespace Maple
         public override Task Save()
         {
             return SaveInternal();
+        }
+
+        protected override Task Load(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task Unload(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task Refresh(CancellationToken token)
+        {
+            throw new NotImplementedException();
         }
     }
 }

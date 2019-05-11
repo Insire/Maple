@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +14,7 @@ using FluentValidation;
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
+using MvvmScarletToolkit;
 
 namespace Maple
 {

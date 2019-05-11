@@ -1,10 +1,12 @@
-﻿using System.Windows.Media;
+using System.Windows.Media;
+using MvvmScarletToolkit;
 
 namespace Maple.Core
 {
-    public class UiPrimaryColorChangedMessage : GenericMapleMessage<Color>
+    public class UiPrimaryColorChangedMessage : GenericScarletMessage<Color>
     {
-        public UiPrimaryColorChangedMessage(object sender, Color color) : base(sender, color)
+        public UiPrimaryColorChangedMessage(object sender, Color color)
+            : base(sender, color)
         {
         }
     }

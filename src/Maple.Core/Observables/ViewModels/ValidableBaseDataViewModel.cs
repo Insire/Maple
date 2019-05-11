@@ -1,21 +1,21 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-
+using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
-
 using Maple.Domain;
 using Maple.Localization.Properties;
+using MvvmScarletToolkit.Commands;
+using MvvmScarletToolkit.Observables;
 
 namespace Maple.Core
 {
-    public abstract class ValidableBaseDataViewModel<TViewModel, TModel> : BaseDataViewModel<TViewModel, TModel>, INotifyDataErrorInfo
-        where TViewModel : BaseDataViewModel<TViewModel, TModel>, ISequence
+    public abstract class ValidableBaseDataViewModel<TViewModel, TModel> : ViewModelBase<TModel>, INotifyDataErrorInfo
         where TModel : class, IBaseObject
     {
         protected bool SkipValidation { get; set; }
@@ -27,16 +27,16 @@ namespace Maple.Core
 
         public bool HasErrors => Messages.Any(p => !p.Value.IsValid);
 
-        protected ValidableBaseDataViewModel(TModel model, IValidator<TViewModel> validator, IMessenger messenger)
-            : base(model, messenger)
+        protected ValidableBaseDataViewModel(TModel model, CommandBuilder commandBuilder, IValidator<TViewModel> validator)
+            : base(commandBuilder, model)
         {
             SkipChangeTracking = true;
             SkipValidation = true;
 
             Messages = new Dictionary<string, ValidationResult>();
 
-            Validator = validator ?? throw new ArgumentNullException(nameof(validator), $"{nameof(validator)} {Resources.IsRequired}"); //order is important in this case
-            Model = model ?? throw new ArgumentNullException(nameof(model), $"{nameof(model)} {Resources.IsRequired}");
+            Validator = validator ?? throw new ArgumentNullException(nameof(validator)); //order is important in this case
+            Model = model ?? throw new ArgumentNullException(nameof(model));
 
             SkipChangeTracking = false;
         }
@@ -79,9 +79,9 @@ namespace Maple.Core
             AddOrUpdateValidationResults(Validator.Validate(this, propertyName), propertyName);
         }
 
-        protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected override async Task OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            base.OnPropertyChanged(propertyName);
+            await base.OnPropertyChanged(propertyName).ConfigureAwait(false);
 
             if (this == null || SkipValidation)
                 return;

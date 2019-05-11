@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Resources;
-
-using Maple.Domain;
+using MvvmScarletToolkit.Abstractions;
 
 namespace Maple.Core
 {

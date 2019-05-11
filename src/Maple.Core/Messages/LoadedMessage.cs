@@ -1,8 +1,12 @@
-﻿namespace Maple.Core
+using System.ComponentModel;
+using MvvmScarletToolkit;
+
+namespace Maple.Core
 {
-    public class LoadedMessage : GenericMapleMessage<ObservableObject>
+    public class LoadedMessage : GenericScarletMessage<INotifyPropertyChanged>
     {
-        public LoadedMessage(object sender, ObservableObject viewModel) : base(sender, viewModel)
+        public LoadedMessage(object sender, INotifyPropertyChanged viewModel)
+            : base(sender, viewModel)
         {
         }
     }

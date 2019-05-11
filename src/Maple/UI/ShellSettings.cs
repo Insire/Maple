@@ -1,4 +1,5 @@
-﻿using Maple.Properties;
+using Maple.Properties;
+using MvvmScarletToolkit.ConfigurableWindow;
 
 namespace Maple
 {

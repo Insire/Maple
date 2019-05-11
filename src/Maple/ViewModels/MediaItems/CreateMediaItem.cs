@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -7,6 +8,7 @@ using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
 using Maple.Youtube;
+using MvvmScarletToolkit.Commands;
 
 namespace Maple
 {
@@ -34,8 +36,8 @@ namespace Maple
             private set { SetValue(ref _result, value); }
         }
 
-        public CreateMediaItem(IYoutubeUrlParser dataParsingService, IMediaItemMapper mapper, IMessenger messenger)
-            : base(messenger)
+        public CreateMediaItem(IYoutubeUrlParser dataParsingService, IMediaItemMapper mapper, IMessenger messenger, CommandBuilder builder)
+            : base(messenger, builder)
         {
             _dataParsingService = dataParsingService ?? throw new ArgumentNullException(nameof(dataParsingService), $"{nameof(mapper)} {Resources.IsRequired}");
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), $"{nameof(mapper)} {Resources.IsRequired}");
@@ -45,7 +47,7 @@ namespace Maple
 
         private void InitializeCommands()
         {
-            ParseCommand = AsyncCommand.Create(Parse, CanParse);
+            ParseCommand = CommandBuilder.Create(Parse, CanParse).Build();
         }
 
         private async Task Parse()
@@ -73,6 +75,21 @@ namespace Maple
             };
 
             return _mapper.Get(model);
+        }
+
+        protected override Task Load(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task Unload(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task Refresh(CancellationToken token)
+        {
+            throw new NotImplementedException();
         }
     }
 }

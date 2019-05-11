@@ -1,4 +1,6 @@
-﻿namespace Maple.Core
+using MvvmScarletToolkit.Abstractions;
+
+namespace Maple.Core
 {
     public interface IIocFrameworkElement
     {

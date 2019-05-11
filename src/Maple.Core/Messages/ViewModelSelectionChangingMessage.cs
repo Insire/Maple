@@ -1,8 +1,11 @@
-﻿namespace Maple.Core
+using MvvmScarletToolkit;
+
+namespace Maple.Core
 {
-    public class ViewModelSelectionChangingMessage<TViewModel> : GenericMapleMessage<TViewModel>
+    public class ViewModelSelectionChangingMessage<TViewModel> : GenericScarletMessage<TViewModel>
     {
-        public ViewModelSelectionChangingMessage(object sender, TViewModel viewModel) : base(sender, viewModel)
+        public ViewModelSelectionChangingMessage(object sender, TViewModel viewModel)
+            : base(sender, viewModel)
         {
         }
     }
