@@ -15,6 +15,7 @@
     <PackageReference Include="YoutubeExtractor" Version="0.10.11" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.FileSystemBrowser\MvvmScarletToolkit.FileSystemBrowser.csproj" />
     <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.Incubator\MvvmScarletToolkit.Incubator.csproj" />
     <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.Observables\MvvmScarletToolkit.Observables.csproj" />
     <ProjectReference Include="..\Maple.Data\Maple.Data.csproj" />

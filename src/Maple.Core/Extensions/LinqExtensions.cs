@@ -1,10 +1,9 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Maple.Domain;
 using Maple.Localization.Properties;
+using MvvmScarletToolkit;
 
 namespace Maple.Core
 {
@@ -26,7 +25,7 @@ namespace Maple.Core
             // consider a thread-safe static instance
             var r = new Random();
             var list = baseCollection as IList<T> ?? baseCollection.ToList();
-            return list.Count == 0 ? default(T) : list[r.Next(0, list.Count)];
+            return list.Count == 0 ? default : list[r.Next(0, list.Count)];
         }
 
         /// <summary>
@@ -99,7 +98,7 @@ namespace Maple.Core
                 action(item);
         }
 
-        public static IEnumerable<TResult> ForEach<TSource, TResult>(this IRangeObservableCollection<TSource> baseCollection, Func<TSource, TResult> action)
+        public static IEnumerable<TResult> ForEach<TSource, TResult>(this RangeObservableCollection<TSource> baseCollection, Func<TSource, TResult> action)
         {
             if (baseCollection == null)
                 throw new ArgumentNullException(nameof(baseCollection), $"{nameof(baseCollection)} {Resources.IsRequired}");
@@ -111,7 +110,7 @@ namespace Maple.Core
                 yield return action(item);
         }
 
-        public static void ForEach<TSource>(this IRangeObservableCollection<TSource> baseCollection, Action<TSource> action)
+        public static void ForEach<TSource>(this RangeObservableCollection<TSource> baseCollection, Action<TSource> action)
         {
             if (baseCollection == null)
                 throw new ArgumentNullException(nameof(baseCollection), $"{nameof(baseCollection)} {Resources.IsRequired}");

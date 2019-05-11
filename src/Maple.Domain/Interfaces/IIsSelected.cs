@@ -1,4 +1,4 @@
-﻿namespace Maple.Domain
+namespace Maple.Domain
 {
     public interface IIsSelected
     {

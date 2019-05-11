@@ -7,4 +7,8 @@
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.Abstractions\MvvmScarletToolkit.Abstractions.csproj" />
+    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.Commands\MvvmScarletToolkit.Commands.csproj" />
+  </ItemGroup>
 </Project>

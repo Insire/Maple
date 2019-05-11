@@ -9,7 +9,7 @@ using Maple.Localization.Properties;
 
 namespace Maple
 {
-    public sealed class MediaItems : BaseDataListViewModel<MediaItem, MediaItemModel>, IMediaItemsViewModel
+    public sealed class MediaItems : BusinessListViewModel<MediaItem, MediaItemModel>, IMediaItemsViewModel
     {
         private readonly Func<IUnitOfWork> _repositoryFactory;
         private readonly IMediaItemMapper _mediaItemMapper;

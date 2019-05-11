@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
 using Maple.Domain;
@@ -79,9 +78,9 @@ namespace Maple.Core
             AddOrUpdateValidationResults(Validator.Validate(this, propertyName), propertyName);
         }
 
-        protected override async Task OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            await base.OnPropertyChanged(propertyName).ConfigureAwait(false);
+            base.OnPropertyChanged(propertyName);
 
             if (this == null || SkipValidation)
                 return;

@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 using Maple.Domain;
 using Maple.Localization.Properties;
+using MvvmScarletToolkit.Abstractions;
 
 namespace Maple.Core
 {
@@ -13,7 +14,7 @@ namespace Maple.Core
 
         public SequenceService(ILoggingService log)
         {
-            _log = log ?? throw new ArgumentNullException(nameof(log), $"{nameof(log)} {Resources.IsRequired}");
+            _log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
         public int Get(IList<ISequence> items)
