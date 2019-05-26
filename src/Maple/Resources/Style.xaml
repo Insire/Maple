@@ -4,6 +4,7 @@
                                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                                 xmlns:icons="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks"
                                 xmlns:local="clr-namespace:Maple"
+                                xmlns:browser="clr-namespace:MvvmScarletToolkit.FileSystemBrowser;assembly=MvvmScarletToolkit.FileSystemBrowser"
                                 xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                                 xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
                                 xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -326,7 +327,7 @@
     <!--#endregion  ToggleButton Styles-->
 
     <!--#region FileSystemBrowser-->
-    <Style x:Key="BaseFileSystemBrowserStyle" TargetType="{x:Type core:FileSystemBrowser}">
+    <Style x:Key="BaseFileSystemBrowserStyle" TargetType="{x:Type browser:FileSystemBrowser}">
 
         <Style.Resources>
             <Style x:Key="{x:Type TreeViewItem}" TargetType="{x:Type TreeViewItem}">
@@ -589,7 +590,7 @@
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type core:FileSystemBrowser}">
+                <ControlTemplate TargetType="{x:Type browser:FileSystemBrowser}">
                     <Grid>
                         <Grid.Resources>
                             <local:BindingProxy x:Key="ViewModelProxy" Data="{Binding}" />
@@ -632,7 +633,7 @@
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   ScrollViewer.VerticalScrollBarVisibility="Auto">
                             <TreeView.Resources>
-                                <HierarchicalDataTemplate DataType="{x:Type core:MapleDirectory}" ItemsSource="{Binding Children}">
+                                <HierarchicalDataTemplate DataType="{x:Type browser:ScarletDirectory}" ItemsSource="{Binding Children}">
                                     <Border Background="Transparent" ContextMenu="{StaticResource FileContextMenu}">
                                         <DockPanel>
                                             <icons:PackIconMaterial DockPanel.Dock="Left"
@@ -645,7 +646,7 @@
                                     </Border>
                                 </HierarchicalDataTemplate>
 
-                                <HierarchicalDataTemplate DataType="{x:Type core:MapleDrive}" ItemsSource="{Binding Children}">
+                                <HierarchicalDataTemplate DataType="{x:Type browser:ScarletDrive}" ItemsSource="{Binding Children}">
                                     <Border Background="Transparent" ContextMenu="{StaticResource FileContextMenu}">
                                         <DockPanel>
                                             <icons:PackIconEntypo Foreground="{DynamicResource SecondaryAccentBrush}" Kind="Drive" />
@@ -710,7 +711,7 @@
                                                         <ControlTemplate TargetType="{x:Type ContentControl}">
                                                             <ContentPresenter Content="{Binding SelectedItem, Mode=TwoWay}">
                                                                 <ContentPresenter.Resources>
-                                                                    <DataTemplate DataType="{x:Type core:MapleFile}">
+                                                                    <DataTemplate DataType="{x:Type browser:ScarletFile}">
                                                                         <Border Background="Transparent" ContextMenu="{StaticResource FileContextMenu}">
                                                                             <DockPanel>
                                                                                 <icons:PackIconMaterial DockPanel.Dock="Left"
@@ -725,14 +726,14 @@
                                                                         </Border>
                                                                     </DataTemplate>
 
-                                                                    <DataTemplate DataType="{x:Type core:MapleDirectory}">
+                                                                    <DataTemplate DataType="{x:Type browser:ScarletDirectory}">
                                                                         <local:ListBox ContextMenu="{StaticResource FileContextMenu}"
                                                                                        ItemsSource="{Binding DefaultCollectionView}"
                                                                                        SelectedEntriesList="{Binding Data.SelectedItemsList, Source={StaticResource ViewModelProxy}}"
                                                                                        SelectionMode="Extended">
 
                                                                             <local:ListBox.Resources>
-                                                                                <DataTemplate DataType="{x:Type core:MapleDirectory}">
+                                                                                <DataTemplate DataType="{x:Type browser:ScarletDirectory}">
                                                                                     <Border Background="Transparent" ContextMenu="{StaticResource FileContextMenu}">
                                                                                         <DockPanel>
                                                                                             <icons:PackIconMaterial DockPanel.Dock="Left"
@@ -752,7 +753,7 @@
                                                                         </local:ListBox>
                                                                     </DataTemplate>
 
-                                                                    <DataTemplate DataType="{x:Type core:MapleDrive}">
+                                                                    <DataTemplate DataType="{x:Type browser:ScarletDrive}">
                                                                         <local:ListBox ContextMenu="{StaticResource FileContextMenu}"
                                                                                        ItemsSource="{Binding DefaultCollectionView}"
                                                                                        SelectedEntriesList="{Binding Data.SelectedItemsList, Source={StaticResource ViewModelProxy}}"
@@ -760,7 +761,7 @@
 
                                                                             <local:ListBox.Resources>
 
-                                                                                <DataTemplate DataType="{x:Type core:MapleDirectory}">
+                                                                                <DataTemplate DataType="{x:Type browser:ScarletDirectory}">
                                                                                     <Border Background="Transparent" ContextMenu="{StaticResource FileContextMenu}">
                                                                                         <DockPanel>
                                                                                             <icons:PackIconMaterial DockPanel.Dock="Left"
@@ -800,7 +801,7 @@
                                                             <ContentPresenter Content="{Binding SelectedItem, Mode=TwoWay}">
                                                                 <ContentPresenter.Resources>
 
-                                                                    <DataTemplate DataType="{x:Type core:MapleFile}">
+                                                                    <DataTemplate DataType="{x:Type browser:ScarletFile}">
                                                                         <Border Background="Transparent" ContextMenu="{StaticResource FileContextMenu}">
                                                                             <DockPanel Width="100">
 
@@ -819,7 +820,7 @@
                                                                         </Border>
                                                                     </DataTemplate>
 
-                                                                    <DataTemplate DataType="{x:Type core:MapleDirectory}">
+                                                                    <DataTemplate DataType="{x:Type browser:ScarletDirectory}">
                                                                         <local:ListBox ContextMenu="{StaticResource FileContextMenu}"
                                                                                        ItemsSource="{Binding DefaultCollectionView}"
                                                                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -832,7 +833,7 @@
                                                                                 </ItemsPanelTemplate>
                                                                             </local:ListBox.ItemsPanel>
                                                                             <local:ListBox.Resources>
-                                                                                <DataTemplate DataType="{x:Type core:MapleDirectory}">
+                                                                                <DataTemplate DataType="{x:Type browser:ScarletDirectory}">
                                                                                     <Border Background="Transparent" ContextMenu="{StaticResource FileContextMenu}">
                                                                                         <DockPanel Width="100">
                                                                                             <TextBlock HorizontalAlignment="Center"
@@ -863,7 +864,7 @@
                                                                         </local:ListBox>
                                                                     </DataTemplate>
 
-                                                                    <DataTemplate DataType="{x:Type core:MapleDrive}">
+                                                                    <DataTemplate DataType="{x:Type browser:ScarletDrive}">
                                                                         <local:ListBox ContextMenu="{StaticResource FileContextMenu}"
                                                                                        ItemsSource="{Binding DefaultCollectionView}"
                                                                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -875,7 +876,7 @@
                                                                                 </ItemsPanelTemplate>
                                                                             </local:ListBox.ItemsPanel>
                                                                             <local:ListBox.Resources>
-                                                                                <DataTemplate DataType="{x:Type core:MapleDirectory}">
+                                                                                <DataTemplate DataType="{x:Type browser:ScarletDirectory}">
                                                                                     <Border Background="Transparent" ContextMenu="{StaticResource FileContextMenu}">
                                                                                         <DockPanel Width="100">
 
@@ -1005,11 +1006,11 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:FileBrowserContentDialogViewModel}">
-        <core:FileSystemBrowser Style="{StaticResource BaseFileSystemBrowserStyle}" />
+        <browser:FileSystemBrowser Style="{StaticResource BaseFileSystemBrowserStyle}" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:FolderBrowserContentDialogViewModel}">
-        <core:FileSystemBrowser Style="{StaticResource BaseFileSystemBrowserStyle}" />
+        <browser:FileSystemBrowser Style="{StaticResource BaseFileSystemBrowserStyle}" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:ProgressContentDialogViewModel}" />

@@ -7,7 +7,6 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Expression.Blend.Sdk" Version="1.0.2" />
     <PackageReference Include="FluentValidation" Version="8.3.0" />
     <PackageReference Include="Humanizer.Core" Version="2.6.2" />
     <PackageReference Include="YoutubeExtractor" Version="0.10.11" />
