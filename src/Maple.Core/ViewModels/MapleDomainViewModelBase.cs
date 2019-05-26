@@ -157,11 +157,17 @@ namespace Maple.Core
             return new DisposalToken<MapleDomainViewModelBase<TModel>>(observer, _observers);
         }
 
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            base.Dispose();
+            if (IsDisposed)
+                return;
 
-            _observers.Clear();
+            if (disposing)
+            {
+                _observers.Clear();
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

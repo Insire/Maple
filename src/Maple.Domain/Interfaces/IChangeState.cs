@@ -1,4 +1,4 @@
-﻿namespace Maple.Domain
+namespace Maple.Domain
 {
     public interface IChangeState
     {
@@ -16,6 +16,6 @@
         /// <value>
         ///   <c>true</c> if this instance is deleted; otherwise, <c>false</c>.
         /// </value>
-        bool IsDeleted { get; }
+        bool IsDeleted { get; set; }
     }
 }

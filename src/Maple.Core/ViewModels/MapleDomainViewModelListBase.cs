@@ -19,8 +19,8 @@ namespace Maple.Core
     /// <typeparam name="TViewModel"></typeparam>
     /// <typeparam name="TModel"></typeparam>
     public abstract class MapleDomainViewModelListBase<TViewModel, TModel> : MapleBusinessViewModelListBase<TViewModel, TModel>, INotifyDataErrorInfo, IObserver<TViewModel>
-        where TViewModel : MapleDomainViewModelBase<TModel>, ISequence, IObservable<TViewModel>
-        where TModel : class, IBaseObject
+        where TViewModel : MapleDomainViewModelBase<TModel>, ISequence
+        where TModel : class, IChangeState
     {
         protected readonly bool SkipChangeTracking;
         protected readonly bool SkipValidation;

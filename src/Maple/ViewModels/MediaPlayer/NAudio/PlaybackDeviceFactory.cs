@@ -1,8 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-
 using Maple.Domain;
-
 using NAudio.Wave;
 
 namespace Maple
@@ -35,7 +33,7 @@ namespace Maple
             catch (Exception ex)
             {
                 log.Error(ex);
-                return default(WaveOutCapabilities);
+                return default;
             }
         }
     }

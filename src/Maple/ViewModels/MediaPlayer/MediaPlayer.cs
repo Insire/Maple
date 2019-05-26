@@ -2,21 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
-
 using FluentValidation;
-
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
+using MvvmScarletToolkit;
+using MvvmScarletToolkit.Commands;
 
 namespace Maple
 {
     [DebuggerDisplay("{Name}, {Sequence}")]
-    public class MediaPlayer : ValidableBaseDataViewModel<MediaPlayer, MediaPlayerModel>, IDisposable, IChangeState, ISequence
+    public class MediaPlayer : MapleDomainViewModelBase<MediaPlayerModel>, ISequence
     {
-        protected readonly ILocalizationService _manager;
-
         public bool IsPlaying { get { return Player.IsPlaying; } }
 
         public bool IsNew => Model.IsNew;
@@ -34,9 +34,6 @@ namespace Maple
         public ICommand NextCommand { get; private set; }
         public ICommand PreviousCommand { get; private set; }
         public ICommand StopCommand { get; private set; }
-        public ICommand RemoveRangeCommand { get; protected set; }
-        public ICommand RemoveCommand { get; protected set; }
-        public ICommand ClearCommand { get; protected set; }
 
         private ICommand _loadFromFileCommand;
         public ICommand LoadFromFileCommand
@@ -122,11 +119,10 @@ namespace Maple
             set { SetValue(ref _createdOn, value, OnChanged: () => Model.CreatedOn = value); }
         }
 
-        public MediaPlayer(ViewModelServiceContainer container, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, MediaPlayerModel model)
-            : base(model, validator, container.Messenger)
+        public MediaPlayer(IMapleCommandBuilder commandBuilder, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, MediaPlayerModel model)
+            : base(commandBuilder)
         {
-            _manager = container.LocalizationService;
-            Player = player ?? throw new ArgumentNullException(nameof(player), $"{nameof(player)} {Resources.IsRequired}");
+            Player = player ?? throw new ArgumentNullException(nameof(player));
 
             _name = model.Name;
             _audioDevices = devices;
@@ -142,29 +138,11 @@ namespace Maple
 
             Playlist = playlist;
 
-            InitializeSubscriptions();
-            InitiliazeCommands();
-
-            Validate();
-        }
-
-        private void InitializeSubscriptions()
-        {
-            MessageTokens.Add(Messenger.Subscribe<PlayingMediaItemMessage>(Player_PlayingMediaItem, IsSenderEqualsPlayer));
-            MessageTokens.Add(Messenger.Subscribe<CompletedMediaItemMessage>(MediaPlayer_CompletedMediaItem, IsSenderEqualsPlayer));
-            MessageTokens.Add(Messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanging, IsSenderEqualsPlayer));
-            MessageTokens.Add(Messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanged, IsSenderEqualsPlayer));
-        }
-
-        private void InitiliazeCommands()
-        {
             PlayCommand = new RelayCommand<MediaItem>(Play, CanPlay);
             PreviousCommand = new RelayCommand(Previous, () => Playlist?.CanPrevious() == true && CanPrevious());
             NextCommand = new RelayCommand(Next, () => Playlist?.CanNext() == true && CanNext());
             PauseCommand = new RelayCommand(Pause, () => CanPause());
             StopCommand = new RelayCommand(Stop, () => CanStop());
-            RemoveCommand = new RelayCommand<MediaItem>(Remove, CanRemove);
-            ClearCommand = new RelayCommand(Clear, CanClear);
 
             UpdatePlaylistCommands();
         }
@@ -174,7 +152,7 @@ namespace Maple
             if (mediaItem == null)
                 throw new ArgumentNullException(nameof(mediaItem), $"{nameof(mediaItem)} {Resources.IsRequired}");
 
-            if (!Playlist.MediaItems.Contains(mediaItem))
+            if (!Playlist.MediaItems.Items.Contains(mediaItem))
                 throw new ArgumentException("Cant play an item thats not part of the playlist"); // TODO localize
 
             if (Player.Play(mediaItem))
@@ -185,7 +163,7 @@ namespace Maple
 
         private bool IsSenderEqualsPlayer(object sender)
         {
-            if (sender is MapleMessageBase message)
+            if (sender is ScarletMessageBase message)
             {
                 return ReferenceEquals(message.Sender, this);
             }
@@ -243,26 +221,6 @@ namespace Maple
         }
 
         /// <summary>
-        /// Clears this instance.
-        /// </summary>
-        public void Clear()
-        {
-            using (BusyStack.GetToken())
-                Playlist.Clear();
-        }
-
-        /// <summary>
-        /// Determines whether this instance can clear.
-        /// </summary>
-        /// <returns>
-        ///   <c>true</c> if this instance can clear; otherwise, <c>false</c>.
-        /// </returns>
-        public bool CanClear()
-        {
-            return !IsBusy && Playlist.Count > 0;
-        }
-
-        /// <summary>
         /// Adds the range.
         /// </summary>
         /// <param name="mediaItems">The media items.</param>
@@ -283,9 +241,9 @@ namespace Maple
         {
             using (BusyStack.GetToken())
             {
-                if (Playlist.MediaItems.Any())
+                if (Playlist.MediaItems.Items.Any())
                 {
-                    var maxIndex = Playlist.MediaItems.Max(p => p.Sequence) + 1;
+                    var maxIndex = Playlist.MediaItems.Items.Max(p => p.Sequence) + 1;
                     if (maxIndex < 0)
                         maxIndex = 0;
 
@@ -418,13 +376,9 @@ namespace Maple
             return Player.CanPlay(item);
         }
 
-        /// <summary>
-        /// Releases unmanaged and - optionally - managed resources.
-        /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
         {
-            if (Disposed)
+            if (IsDisposed)
                 return;
 
             if (IsPlaying)
@@ -437,13 +391,28 @@ namespace Maple
                     Player?.Dispose();
                     Player = null;
                 }
-
-                base.Dispose(disposing);
-                // Free any other managed objects here.
             }
 
-            // Free any unmanaged objects here.
-            Disposed = true;
+            base.Dispose(disposing);
+        }
+
+        protected override Task RefreshInternal(CancellationToken token)
+        {
+            ClearSubscriptions();
+
+            Add(Messenger.Subscribe<PlayingMediaItemMessage>(Player_PlayingMediaItem, IsSenderEqualsPlayer));
+            Add(Messenger.Subscribe<CompletedMediaItemMessage>(MediaPlayer_CompletedMediaItem, IsSenderEqualsPlayer));
+            Add(Messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanging, IsSenderEqualsPlayer));
+            Add(Messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanged, IsSenderEqualsPlayer));
+
+            return Task.CompletedTask;
+        }
+
+        protected override Task UnloadInternal(CancellationToken token)
+        {
+            ClearSubscriptions();
+
+            return Task.CompletedTask;
         }
     }
 }

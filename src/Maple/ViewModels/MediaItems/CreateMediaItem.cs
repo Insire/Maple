@@ -1,10 +1,8 @@
 using System;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Maple.Domain;
-using Maple.Localization.Properties;
 using Maple.Youtube;
 using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Commands;
@@ -73,21 +71,6 @@ namespace Maple
             };
 
             return _mapper.Get(model);
-        }
-
-        protected override Task Load(CancellationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override Task Unload(CancellationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override Task Refresh(CancellationToken token)
-        {
-            throw new NotImplementedException();
         }
     }
 }

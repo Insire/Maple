@@ -1,15 +1,20 @@
-using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Maple.Core;
 using Maple.Domain;
-using MvvmScarletToolkit.Abstractions;
 
 namespace Maple
 {
-    public class AudioDevices : BaseListViewModel<IAudioDevice>
+    public class AudioDevices : MapleBusinessViewModelListBase<IAudioDevice>
     {
-        public AudioDevices(ILoggingService log, IMessenger messenger)
-            : base(messenger)
+        public AudioDevices(IMapleCommandBuilder commandBuilder)
+            : base(commandBuilder)
         {
-            AddRange(PlaybackDeviceFactory.GetAudioDevices(log).ToList());
+        }
+
+        protected override Task RefreshInternal(CancellationToken token)
+        {
+            return AddRange(PlaybackDeviceFactory.GetAudioDevices(Log));
         }
     }
 }

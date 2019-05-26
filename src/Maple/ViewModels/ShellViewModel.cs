@@ -35,15 +35,15 @@ namespace Maple
             private set { SetValue(ref _dialogViewModel, value); }
         }
 
-        private IPlaylistsViewModel _playlists;
-        public IPlaylistsViewModel Playlists
+        private Playlists _playlists;
+        public Playlists Playlists
         {
             get { return _playlists; }
             private set { SetValue(ref _playlists, value); }
         }
 
-        private IMediaPlayersViewModel _mediaPlayers;
-        public IMediaPlayersViewModel MediaPlayers
+        private MediaPlayers _mediaPlayers;
+        public MediaPlayers MediaPlayers
         {
             get { return _mediaPlayers; }
             private set { SetValue(ref _mediaPlayers, value); }
@@ -60,8 +60,8 @@ namespace Maple
                                 Scenes scenes,
                                 StatusbarViewModel statusBarViewModel,
                                 IDialogViewModel dialogViewModel,
-                                IPlaylistsViewModel playlists,
-                                IMediaPlayersViewModel mediaPlayers,
+                                Playlists playlists,
+                                MediaPlayers mediaPlayers,
                                 OptionsViewModel optionsViewModel)
         {
             TranslationManager = translationManager ?? throw new ArgumentNullException(nameof(translationManager), $"{nameof(translationManager)} {Resources.IsRequired}");

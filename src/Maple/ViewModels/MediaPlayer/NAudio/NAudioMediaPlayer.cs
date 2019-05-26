@@ -1,9 +1,9 @@
 using System;
-
+using System.Threading;
+using System.Threading.Tasks;
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
-
 using NAudio.Wave;
 
 namespace Maple
@@ -11,7 +11,7 @@ namespace Maple
     public sealed class NAudioMediaPlayer : BasePlayer
     {
         private readonly MediaFoundationReader.MediaFoundationReaderSettings _settings;
-
+        private readonly IWavePlayerFactory _factory;
         private IWavePlayer _player;
         private WaveStream _reader;
         private VolumeWaveProvider16 _volumeProvider;
@@ -26,20 +26,17 @@ namespace Maple
             set { SetValue(ref _volume, value, OnChanged: () => SyncVolumeToVolumeProvider(value)); }
         }
 
-        public NAudioMediaPlayer(ILoggingService log, IMessenger messenger, IWavePlayerFactory factory)
-            : base(messenger)
+        public NAudioMediaPlayer(IMapleCommandBuilder commandBuilder, IWavePlayerFactory factory)
+            : base(commandBuilder)
         {
+            _factory = factory ?? throw new ArgumentNullException(nameof(factory));
+
             _settings = new MediaFoundationReader.MediaFoundationReaderSettings
             {
                 RepositionInRead = true,
                 SingleReaderObject = false,
                 RequestFloatOutput = false,
             };
-
-            _player = factory.GetPlayer(log);
-            _player.PlaybackStopped += PlaybackStopped;
-
-            Messenger.Subscribe<PlayingMediaItemMessage>(OnPlaybackStarted);
 
             Volume = 50;
 
@@ -137,16 +134,17 @@ namespace Maple
 
         protected override void Dispose(bool disposing)
         {
-            if (Disposed)
+            // Check to see if Dispose has already been called.
+            if (IsDisposed)
                 return;
 
             if (IsPlaying)
                 Stop();
 
+            // If disposing equals true, dispose all managed
+            // and unmanaged resources.
             if (disposing)
             {
-                base.Dispose(disposing);
-
                 if (_player != null)
                 {
                     _player.PlaybackStopped -= PlaybackStopped;
@@ -164,8 +162,26 @@ namespace Maple
                 // Free any other managed objects here.
             }
 
-            // Free any unmanaged objects here.
-            Disposed = true;
+            base.Dispose(disposing);
+        }
+
+        protected override Task UnloadInternal(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task RefreshInternal(CancellationToken token)
+        {
+            _player.PlaybackStopped -= PlaybackStopped;
+
+            _player = _factory.GetPlayer(Log);
+            _player.PlaybackStopped += PlaybackStopped;
+
+            ClearSubscriptions();
+
+            Messenger.Subscribe<PlayingMediaItemMessage>(OnPlaybackStarted);
+
+            return Task.CompletedTask;
         }
     }
 }

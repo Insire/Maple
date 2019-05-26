@@ -1,19 +1,10 @@
-﻿using Maple.Core;
+using Maple.Core;
 using Maple.Domain;
 
 namespace Maple
 {
-    public abstract class BasePlayer : ViewModel, IMediaPlayer
+    public abstract class BasePlayer : MapleBusinessViewModelBase, IMediaPlayer
     {
-        protected readonly ILoggingService _log;
-
-        private IRangeObservableCollection<AudioDevice> _items;
-        public IRangeObservableCollection<AudioDevice> Items
-        {
-            get { return _items; }
-            private set { SetValue(ref _items, value); }
-        }
-
         private IAudioDevice _audioDevice;
         public IAudioDevice AudioDevice
         {
@@ -26,16 +17,16 @@ namespace Maple
             }
         }
 
+        protected BasePlayer(IMapleCommandBuilder commandBuilder)
+            : base(commandBuilder)
+        {
+        }
+
         private IMediaItem _current;
         public IMediaItem Current
         {
             get { return _current; }
             set { SetValue(ref _current, value); }
-        }
-
-        protected BasePlayer(IMessenger messenger)
-            : base(messenger)
-        {
         }
 
         public abstract bool CanPlay(IMediaItem item);
