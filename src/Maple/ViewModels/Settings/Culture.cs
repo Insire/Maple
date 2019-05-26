@@ -8,8 +8,8 @@ namespace Maple
     {
         public string DisplayName => Model.DisplayName;
 
-        public Culture(CultureInfo info, ICommandBuilder commandBuilder)
-            : base(commandBuilder, info)
+        public Culture(ICommandBuilder commandBuilder)
+            : base(commandBuilder)
         {
         }
     }

@@ -11,7 +11,6 @@ namespace Maple
             RuleFor(mediaPlayer => mediaPlayer.Name).NotEmpty(); // TODO finalize Validator configuration
 
             RuleFor(mediaPlayer => mediaPlayer.AudioDevices).NotEmpty();
-            RuleFor(mediaPlayer => mediaPlayer.Model).NotEmpty();
         }
     }
 }

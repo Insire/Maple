@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -8,37 +9,25 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
-
 using FluentValidation;
-
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
-using MvvmScarletToolkit;
-using MvvmScarletToolkit.Abstractions;
 
 namespace Maple
 {
     [DebuggerDisplay("{Title}, {Sequence}")]
-    public class Playlist : ValidableBaseDataViewModel<Playlist, PlaylistModel>, IIsSelected, ISequence, IIdentifier, IChangeState
+    public class Playlist : MapleDomainViewModelBase<Playlist, PlaylistModel>, IIsSelected, ISequence, IIdentifier, IChangeState
     {
-        private readonly IMediaItemMapper _mediaItemMapper;
-        private readonly ISequenceService _sequenceProvider;
-        private readonly ILocalizationService _translator;
         private readonly IDialogViewModel _dialogViewModel;
-        private readonly object _itemsLock;
         private readonly Stack<int> _history;
 
         public bool IsNew => Model.IsNew;
         public bool IsDeleted => Model.IsDeleted;
-        public int Count => Items?.Count ?? 0;
 
-        public ICommand LoadFromFileCommand { get; private set; }
-        public ICommand LoadFromFolderCommand { get; private set; }
-        public ICommand LoadFromUrlCommand { get; private set; }
-        public ICommand RemoveRangeCommand { get; protected set; }
-        public ICommand RemoveCommand { get; protected set; }
-        public ICommand ClearCommand { get; protected set; }
+        public ICommand LoadFromFileCommand { get; }
+        public ICommand LoadFromFolderCommand { get; }
+        public ICommand LoadFromUrlCommand { get; }
 
         public int Id
         {
@@ -65,42 +54,11 @@ namespace Maple
             get { return Model.CreatedOn; }
         }
 
-        public MediaItem this[int index]
-        {
-            get { return _items[index]; }
-        }
-
         private ICollectionView _view;
         public ICollectionView View
         {
             get { return _view; }
             protected set { SetValue(ref _view, value); }
-        }
-
-        private RangeObservableCollection<MediaItem> _items;
-        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public IReadOnlyCollection<MediaItem> Items
-        {
-            get { return (IReadOnlyCollection<MediaItem>)_items; }
-            private set { SetValue(ref _items, (RangeObservableCollection<MediaItem>)value); }
-        }
-
-        private MediaItem _selectedItem;
-        /// <summary>
-        /// is <see cref="SetActive" /> when a IMediaPlayer picks a <see cref="IMediaItem" /> from this
-        /// </summary>
-        /// <value>
-        /// The current item.
-        /// </value>
-        public MediaItem SelectedItem
-        {
-            get { return _selectedItem; }
-            set
-            {
-                SetValue(ref _selectedItem, value,
-                    OnChanging: () => Messenger.Publish(new ViewModelSelectionChangingMessage<MediaItem>(Items, _selectedItem)),
-                    OnChanged: () => Messenger.Publish(new ViewModelSelectionChangedMessage<MediaItem>(Items, value)));
-            }
         }
 
         private int _sequence;
@@ -170,60 +128,38 @@ namespace Maple
             set { SetValue(ref _repeatMode, value, OnChanged: () => Model.RepeatMode = (int)value); }
         }
 
-        private RangeObservableCollection<RepeatMode> _repeatModes;
-        public IReadOnlyCollection<RepeatMode> RepeatModes
-        {
-            get { return (IReadOnlyCollection<RepeatMode>)_repeatModes; }
-            private set { SetValue(ref _repeatModes, (RangeObservableCollection<RepeatMode>)value); }
-        }
+        [Bindable(true, BindingDirection.OneWay)]
+        public MediaItems MediaItems { get; }
 
-        public Playlist(ViewModelServiceContainer container, IValidator<Playlist> validator, IDialogViewModel dialogViewModel, IMediaItemMapper mediaItemMapper, PlaylistModel model)
-            : base(model, validator, container?.Messenger)
-        {
-            if (container == null)
-                throw new ArgumentNullException(nameof(container), $"{nameof(container)} {Resources.IsRequired}");
+        [Bindable(true, BindingDirection.OneWay)]
+        public ReadOnlyObservableCollection<RepeatMode> RepeatModes { get; }
 
-            SkipChangeTracking = true;
+        public Playlist(IMapleCommandBuilder commandBuilder, IValidator<Playlist> validator, IDialogViewModel dialogViewModel, PlaylistModel model)
+            : base(commandBuilder, validator)
+        {
+            MediaItems = new MediaItems(commandBuilder);
+
             using (BusyStack.GetToken())
             {
-                _itemsLock = new object();
+                _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
 
-                _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper), $"{nameof(mediaItemMapper)} {Resources.IsRequired}");
-                _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel), $"{nameof(dialogViewModel)} {Resources.IsRequired}");
-                _sequenceProvider = container.SequenceService;
-
-                _translator = container.LocalizationService;
                 _title = model.Title;
                 _description = model.Description;
                 _repeatMode = (RepeatMode)model.RepeatMode;
                 _isShuffeling = model.IsShuffeling;
                 _sequence = model.Sequence;
 
-                RepeatModes = new RangeObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>().ToList());
+                RepeatModes = new ReadOnlyObservableCollection<RepeatMode>(new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>()));
                 _history = new Stack<int>();
 
-                Items = new RangeObservableCollection<MediaItem>();
-                _items.CollectionChanged += (o, e) => OnPropertyChanged(nameof(Count));
-
-                BindingOperations.EnableCollectionSynchronization(Items, _itemsLock);
-                View = CollectionViewSource.GetDefaultView(Items); // TODO add sorting by sequence
-                OnPropertyChanged(nameof(Count));
+                View = CollectionViewSource.GetDefaultView(MediaItems); // TODO add sorting by sequence
 
                 LoadFromFileCommand = AsyncCommand.Create(LoadFromFile, () => CanLoadFromFile());
                 LoadFromFolderCommand = AsyncCommand.Create(LoadFromFolder, () => CanLoadFromFolder());
                 LoadFromUrlCommand = AsyncCommand.Create(LoadFromUrl, () => CanLoadFromUrl());
 
-                RemoveCommand = new RelayCommand<object>(Remove, CanRemove);
-                RemoveRangeCommand = new RelayCommand<IList>(RemoveRange, CanRemoveRange);
-                ClearCommand = new RelayCommand(() => Clear(), CanClear);
-
-                AddRange(_mediaItemMapper.GetMany(model.MediaItems));
-
-                MessageTokens.Add(Messenger.Subscribe<PlayingMediaItemMessage>(OnPlaybackItemChanged, m => m.PlaylistId == Id && _items.Contains(m.Content)));
-
-                Validate();
+                Add(Messenger.Subscribe<PlayingMediaItemMessage>(OnPlaybackItemChanged, m => m.PlaylistId == Id && MediaItems.Items.Contains(m.Content)));
             }
-            SkipChangeTracking = false;
         }
 
         private void OnPlaybackItemChanged(PlayingMediaItemMessage message)
@@ -254,7 +190,7 @@ namespace Maple
                     IncludeSubFolders = false,
                     CanCancel = true,
                     MultiSelection = false,
-                    Title = _translator.Translate(nameof(Resources.SelectFolder)),
+                    Title = LocalizationService.Translate(nameof(Resources.SelectFolder)),
                 };
 
                 (var Result, var MediaItems) = await _dialogViewModel.ShowMediaItemFolderSelectionDialog(options, token).ConfigureAwait(true);
@@ -276,7 +212,7 @@ namespace Maple
                 {
                     CanCancel = true,
                     MultiSelection = false,
-                    Title = _translator.Translate(nameof(Resources.SelectFiles)),
+                    Title = LocalizationService.Translate(nameof(Resources.SelectFiles)),
                 };
 
                 (var Result, var MediaItems) = await _dialogViewModel.ShowMediaItemSelectionDialog(options, token).ConfigureAwait(true);
@@ -290,16 +226,11 @@ namespace Maple
             return !IsBusy;
         }
 
-        public virtual void Clear()
+        public virtual Task Clear(CancellationToken token)
         {
             _history.Clear();
-            SelectedItem = null;
-            RemoveRange(Items.AsEnumerable());
-        }
-
-        private bool CanClear()
-        {
-            return Items?.Any() == true;
+            MediaItems.SelectedItem = null;
+            return MediaItems.Clear(token);
         }
 
         public virtual void Add(MediaItem item)
@@ -309,20 +240,20 @@ namespace Maple
 
             using (BusyStack.GetToken())
             {
-                var sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
+                var sequence = SequenceService.Get(MediaItems.Items.Select(p => (ISequence)p).ToList());
                 item.Sequence = sequence;
 
                 AddInternal(item);
 
-                if (SelectedItem == null)
-                    SelectedItem = Items.First();
+                if (MediaItems.SelectedItem == null)
+                    MediaItems.SelectedItem = MediaItems.Items.First();
             }
         }
 
-        private void AddInternal(MediaItem item)
+        private async Task AddInternal(MediaItem item)
         {
             item.Playlist = this;
-            _items.Add(item);
+            await MediaItems.Add(item);
 
             if (!Model.MediaItems.Contains(item.Model))
                 Model.MediaItems.Add(item.Model);
@@ -343,7 +274,7 @@ namespace Maple
                 for (var i = 0; i < collection.Count; i++)
                 {
                     if (i == 0)
-                        sequence = _sequenceProvider.Get(Items.Select(p => (ISequence)p).ToList());
+                        sequence = SequenceService.Get(MediaItems.Items.Select(p => (ISequence)p).ToList());
 
                     item = collection[i];
 
@@ -357,8 +288,8 @@ namespace Maple
                     added = true;
                 }
 
-                if (SelectedItem == null && (added || Items.Count > 0))
-                    SelectedItem = Items.First();
+                if (MediaItems.SelectedItem == null && (added || MediaItems.Count > 0))
+                    MediaItems.SelectedItem = MediaItems.Items.First();
             }
         }
 
@@ -374,17 +305,17 @@ namespace Maple
 
             using (BusyStack.GetToken())
             {
-                while (Items.Contains(item))
+                while (MediaItems.Items.Contains(item))
                     RemoveInternal(item);
             }
         }
 
         private void RemoveInternal(MediaItem item)
         {
-            if (SelectedItem == item)
-                SelectedItem = Next();
+            if (MediaItems.SelectedItem == item)
+                MediaItems.SelectedItem = Next();
 
-            _items.Remove(item);
+            MediaItems.Remove(item);
             item.Model.IsDeleted = true;
         }
 
@@ -414,24 +345,19 @@ namespace Maple
 
         public virtual bool CanRemove(object item)
         {
-            if (Items == null || Items.Count == 0)
+            if (MediaItems == null || MediaItems.Count == 0)
                 return false;
 
             var mediaItem = item as MediaItem;
             if (mediaItem == null)
                 return false;
 
-            return Items.Contains(mediaItem) && !IsBusy;
+            return MediaItems.Items.Contains(mediaItem) && !IsBusy;
         }
 
         protected virtual bool CanRemoveRange(IEnumerable<MediaItem> items)
         {
-            return CanClear() && items != null && items.Any(p => Items.Contains(p));
-        }
-
-        protected virtual bool CanRemoveRange(IList items)
-        {
-            return items == null ? false : CanRemoveRange(items.Cast<MediaItem>());
+            return CanClear() && items != null && items.Any(p => MediaItems.Items.Contains(p));
         }
 
         /// <summary>
@@ -442,7 +368,7 @@ namespace Maple
         {
             using (BusyStack.GetToken())
             {
-                if (Items != null && Items.Any())
+                if (MediaItems != null && MediaItems.Items.Any())
                 {
                     switch (RepeatMode)
                     {
@@ -466,16 +392,16 @@ namespace Maple
         private MediaItem NextRepeatNone()
         {
             var currentIndex = 0;
-            if (SelectedItem?.Sequence != null)
-                currentIndex = SelectedItem?.Sequence ?? 0;
+            if (MediaItems.SelectedItem?.Sequence != null)
+                currentIndex = MediaItems.SelectedItem?.Sequence ?? 0;
 
-            if (Items.Count > 1)
+            if (MediaItems.Count > 1)
             {
-                var nextPossibleItems = Items.Where(p => p.Sequence > currentIndex);
+                var nextPossibleItems = MediaItems.Items.Where(p => p.Sequence > currentIndex);
 
                 if (nextPossibleItems?.Any() == true) // try to find items after the current one
                 {
-                    Items.ToList().ForEach(p => p.IsSelected = false);
+                    MediaItems.Items.ToList().ForEach(p => p.IsSelected = false);
                     var foundItem = nextPossibleItems.Where(q => q.Sequence == nextPossibleItems.Select(p => p.Sequence).Min()).First();
                     foundItem.IsSelected = true;
                     return foundItem;
@@ -491,7 +417,7 @@ namespace Maple
         private MediaItem NextRepeatSingle()
         {
             if (RepeatMode != RepeatMode.None)
-                return SelectedItem;
+                return MediaItems.SelectedItem;
             else
                 return null;
         }
@@ -499,24 +425,24 @@ namespace Maple
         private MediaItem NextRepeatAll()
         {
             var currentIndex = 0;
-            if (SelectedItem?.Sequence != null)
-                currentIndex = SelectedItem?.Sequence ?? 0;
+            if (MediaItems.SelectedItem?.Sequence != null)
+                currentIndex = MediaItems.SelectedItem?.Sequence ?? 0;
 
-            if (Items.Count > 1)
+            if (MediaItems.Count > 1)
             {
-                var nextPossibleItems = Items.Where(p => p.Sequence > currentIndex);
+                var nextPossibleItems = MediaItems.Items.Where(p => p.Sequence > currentIndex);
 
                 if (nextPossibleItems.Any()) // try to find items after the current one
                 {
-                    Items.ToList().ForEach(p => p.IsSelected = false);
+                    MediaItems.Items.ToList().ForEach(p => p.IsSelected = false);
                     var foundItem = nextPossibleItems.Where(q => q.Sequence == nextPossibleItems.Select(p => p.Sequence).Min()).First();
                     foundItem.IsSelected = true;
                     return foundItem;
                 }
                 else // if there are none, use the first item in the list
                 {
-                    Items.ToList().ForEach(p => p.IsSelected = false);
-                    var foundItem = Items.First();
+                    MediaItems.Items.ToList().ForEach(p => p.IsSelected = false);
+                    var foundItem = MediaItems.Items.First();
                     foundItem.IsSelected = true;
                     return foundItem;
                 }
@@ -527,10 +453,10 @@ namespace Maple
 
         private MediaItem NextShuffle()
         {
-            if (Items.Count > 1)
+            if (MediaItems.Count > 1)
             {
-                var nextItems = Items.Where(p => p.Sequence != SelectedItem?.Sequence); // get all items besides the current one
-                Items.ToList().ForEach(p => p.IsSelected = false);
+                var nextItems = MediaItems.Items.Where(p => p.Sequence != MediaItems.SelectedItem?.Sequence); // get all items besides the current one
+                MediaItems.Items.ToList().ForEach(p => p.IsSelected = false);
                 var foundItem = nextItems.Random();
                 foundItem.IsSelected = true;
                 return foundItem;
@@ -543,7 +469,7 @@ namespace Maple
         {
             using (BusyStack.GetToken())
             {
-                Items.ToList().ForEach(p => p.IsSelected = false);      // deselect all items in the list
+                MediaItems.Items.ToList().ForEach(p => p.IsSelected = false);      // deselect all items in the list
 
                 if (_history?.Any() == true)
                 {
@@ -556,7 +482,7 @@ namespace Maple
 
                         if (previous > -1)
                         {
-                            var previousItems = Items.Where(p => p.Sequence == previous); // try to get the last played item
+                            var previousItems = MediaItems.Items.Where(p => p.Sequence == previous); // try to get the last played item
                             if (previousItems.Any())
                             {
                                 var foundItem = previousItems.First();
@@ -573,12 +499,22 @@ namespace Maple
 
         public bool CanNext()
         {
-            return Items != null && Items.Any();
+            return MediaItems != null && MediaItems.Items.Any();
         }
 
         public bool CanPrevious()
         {
             return _history != null && _history.Any();
+        }
+
+        protected override Task UnloadInternal(CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task RefreshInternal(CancellationToken token)
+        {
+            throw new NotImplementedException();
         }
     }
 }

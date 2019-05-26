@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 
 namespace Maple.Domain
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork
     {
         IMediaItemRepository MediaItemRepository { get; }
         IMediaPlayerRepository MediaPlayerRepository { get; }

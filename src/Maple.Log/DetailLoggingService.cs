@@ -1,7 +1,5 @@
-﻿using System;
-
+using System;
 using Maple.Domain;
-using Maple.Localization.Properties;
 
 namespace Maple.Log
 {
@@ -14,7 +12,7 @@ namespace Maple.Log
 
         public DetailLoggingService(ILoggingService log)
         {
-            _log = log ?? throw new ArgumentNullException(nameof(log), $"{nameof(log)} {Resources.IsRequired}");
+            _log = log ?? throw new ArgumentNullException(nameof(log));
         }
 
         public void Error(object message)

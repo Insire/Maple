@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
+using MvvmScarletToolkit.Abstractions;
 
 namespace Maple
 {

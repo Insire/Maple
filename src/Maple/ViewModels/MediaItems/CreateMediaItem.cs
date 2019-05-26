@@ -18,7 +18,6 @@ namespace Maple
     public class CreateMediaItem : ViewModelListBase<MediaItem>
     {
         private IYoutubeUrlParser _dataParsingService;
-        private IMediaItemMapper _mapper;
 
         public ICommand ParseCommand { get; private set; }
 
@@ -36,11 +35,10 @@ namespace Maple
             private set { SetValue(ref _result, value); }
         }
 
-        public CreateMediaItem(IYoutubeUrlParser dataParsingService, IMediaItemMapper mapper, ICommandBuilder builder)
+        public CreateMediaItem(IYoutubeUrlParser dataParsingService, ICommandBuilder builder)
             : base(builder)
         {
-            _dataParsingService = dataParsingService ?? throw new ArgumentNullException(nameof(dataParsingService), $"{nameof(mapper)} {Resources.IsRequired}");
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), $"{nameof(mapper)} {Resources.IsRequired}");
+            _dataParsingService = dataParsingService ?? throw new ArgumentNullException(nameof(dataParsingService));
 
             InitializeCommands();
         }

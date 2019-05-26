@@ -8,23 +8,21 @@ using Maple.Localization.Properties;
 
 namespace Maple
 {
-    public sealed class Playlists : BusinessListViewModel<Playlist, PlaylistModel>, IPlaylistsViewModel
+    public sealed class Playlists : MapleBusinessViewModelListBase<Playlist, PlaylistModel>, IPlaylistsViewModel
     {
         private readonly Func<IUnitOfWork> _repositoryFactory;
-        private readonly IPlaylistMapper _playlistMapper;
 
-        public Playlists(ViewModelServiceContainer container, IPlaylistMapper playlistMapper, Func<IUnitOfWork> repositoryFactory)
+        public Playlists(Func<IUnitOfWork> repositoryFactory)
             : base(container)
         {
-            _repositoryFactory = repositoryFactory ?? throw new ArgumentNullException(nameof(repositoryFactory), $"{nameof(repositoryFactory)} {Resources.IsRequired}");
-            _playlistMapper = playlistMapper ?? throw new ArgumentNullException(nameof(playlistMapper), $"{nameof(playlistMapper)} {Resources.IsRequired}");
+            _repositoryFactory = repositoryFactory ?? throw new ArgumentNullException(nameof(repositoryFactory));
 
             AddCommand = AsyncCommand.Create(Add, CanAdd);
         }
 
         private async Task SaveInternal()
         {
-            _log.Info($"{_translationService.Translate(nameof(Resources.Saving))} {_translationService.Translate(nameof(Resources.Playlists))}");
+            _log.Info($"{LocalizationService.Translate(nameof(Resources.Saving))} {LocalizationService.Translate(nameof(Resources.Playlists))}");
             using (var context = _repositoryFactory())
             {
                 foreach (var item in Items)
@@ -52,7 +50,7 @@ namespace Maple
 
         public override async Task Load()
         {
-            _log.Info($"{_translationService.Translate(nameof(Resources.Loading))} {_translationService.Translate(nameof(Resources.Playlists))}");
+            Log.Info($"{LocalizationService.Translate(nameof(Resources.Loading))} {LocalizationService.Translate(nameof(Resources.Playlists))}");
             Clear();
 
             using (var context = _repositoryFactory())

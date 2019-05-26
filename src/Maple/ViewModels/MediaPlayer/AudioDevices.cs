@@ -1,7 +1,6 @@
-﻿using System.Linq;
-
-using Maple.Core;
+using System.Linq;
 using Maple.Domain;
+using MvvmScarletToolkit.Abstractions;
 
 namespace Maple
 {

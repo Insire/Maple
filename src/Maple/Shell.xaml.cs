@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Windows.Input;
-
-using Maple.Core;
+using MvvmScarletToolkit.Abstractions;
 
 namespace Maple
 {

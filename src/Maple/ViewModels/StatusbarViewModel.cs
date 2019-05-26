@@ -1,15 +1,15 @@
 using System;
-
+using System.Threading;
+using System.Threading.Tasks;
 using Maple.Core;
 using Maple.Domain;
-using Maple.Localization.Properties;
-using MvvmScarletToolkit.Abstractions;
-using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    public class StatusbarViewModel : ViewModelBase
+    public class StatusbarViewModel : MapleBusinessViewModelBase
     {
+        private readonly IVersionService _versionService;
+
         private string _version;
         /// <summary>
         /// Gets the version.
@@ -54,16 +54,10 @@ namespace Maple
         /// </summary>
         /// <param name="manager">The manager.</param>
         /// <param name="mediaPlayers">The media players.</param>
-        public StatusbarViewModel(IVersionService version, IMessenger messenger)
-            : base(messenger)
+        public StatusbarViewModel(IMapleCommandBuilder commandBuilder, IVersionService versionService)
+            : base(commandBuilder)
         {
-            if (version == null)
-                throw new ArgumentNullException(nameof(version), $"{nameof(version)} {Resources.IsRequired}");
-
-            Version = version.Get();
-
-            MessageTokens.Add(Messenger.Subscribe<ViewModelSelectionChangedMessage<Culture>>(UpdateLanguage));
-            MessageTokens.Add(Messenger.Subscribe<ViewModelSelectionChangedMessage<MediaPlayer>>(UpdateMediaPlayer));
+            _versionService = versionService ?? throw new ArgumentNullException(nameof(versionService));
         }
 
         private void UpdateLanguage(ViewModelSelectionChangedMessage<Culture> message)
@@ -74,6 +68,24 @@ namespace Maple
         private void UpdateMediaPlayer(ViewModelSelectionChangedMessage<MediaPlayer> message)
         {
             MainMediaPlayer = message.Content as MainMediaPlayer;
+        }
+
+        protected override Task UnloadInternal(CancellationToken token)
+        {
+            ClearSubscriptions();
+            Version = string.Empty;
+
+            return Task.CompletedTask;
+        }
+
+        protected override Task RefreshInternal(CancellationToken token)
+        {
+            Version = _versionService.Get();
+
+            Add(Messenger.Subscribe<ViewModelSelectionChangedMessage<Culture>>(UpdateLanguage));
+            Add(Messenger.Subscribe<ViewModelSelectionChangedMessage<MediaPlayer>>(UpdateMediaPlayer));
+
+            return Task.CompletedTask;
         }
 
         // TODO add message queue and notify user about important notifications

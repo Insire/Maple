@@ -1,13 +1,10 @@
 using System.Collections.Generic;
-
-using Maple.Core;
+using System.Collections.ObjectModel;
 
 namespace Maple
 {
     public interface IMediaItemsViewModel
     {
-        IReadOnlyCollection<MediaItem> Items { get; }
-
-        void Add(Playlist playlist);
+        ReadOnlyObservableCollection<MediaItem> Items { get; }
     }
 }

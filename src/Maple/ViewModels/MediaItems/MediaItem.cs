@@ -3,14 +3,13 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
-
 using Maple.Core;
 using Maple.Domain;
 
 namespace Maple
 {
     [DebuggerDisplay("{Title}, {Sequence} {Location}")]
-    public class MediaItem : ValidableBaseDataViewModel<MediaItem, MediaItemModel>, IMediaItem
+    public class MediaItem : MapleDomainViewModelBase<MediaItem, MediaItemModel>, IMediaItem
     {
         public bool IsNew => Model.IsNew;
         public bool IsDeleted => Model.IsDeleted;
@@ -111,24 +110,9 @@ namespace Maple
             set { SetValue(ref _playlist, value, OnChanged: () => Model.Playlist = value.Model); }
         }
 
-        public bool IsFile => IOUtils.IsLocalFile(Location);
-
-        public MediaItem(MediaItemModel model, IValidator<MediaItem> validator, IMessenger messenger)
-            : base(model, validator, messenger)
+        public MediaItem(IMapleCommandBuilder commandBuilder, MediaItemModel model, IValidator<MediaItem> validator)
+            : base(commandBuilder, validator)
         {
-            _location = model.Location;
-            _description = model.Description;
-            _title = model.Title;
-            _sequence = model.Sequence;
-            _duration = TimeSpan.FromTicks(model.Duration);
-            _privacyStatus = (PrivacyStatus)model.PrivacyStatus;
-            _mediaItemType = (MediaItemType)model.MediaItemType;
-            _createdBy = model.CreatedBy;
-            _createdOn = model.CreatedOn;
-            _updatedBy = model.UpdatedBy;
-            _updatedOn = model.UpdatedOn;
-
-            Validate();
         }
 
         public override string ToString()
@@ -136,19 +120,42 @@ namespace Maple
             return Title?.Length == 0 ? Location : Title;
         }
 
-        protected override Task Load(CancellationToken token)
+        protected override Task UnloadInternal(CancellationToken token)
         {
-            throw new NotImplementedException();
+            _location = string.Empty;
+            _description = string.Empty;
+            _title = string.Empty;
+            _sequence = -1;
+            _duration = TimeSpan.FromTicks(0);
+            _privacyStatus = PrivacyStatus.None;
+            _mediaItemType = MediaItemType.None;
+            _createdBy = string.Empty;
+            _createdOn = DateTime.MinValue;
+            _updatedBy = string.Empty;
+            _updatedOn = DateTime.MinValue;
+
+            OnPropertyChanged(string.Empty);
+
+            return Task.CompletedTask;
         }
 
-        protected override Task Unload(CancellationToken token)
+        protected override Task RefreshInternal(CancellationToken token)
         {
-            throw new NotImplementedException();
-        }
+            _location = Model.Location;
+            _description = Model.Description;
+            _title = Model.Title;
+            _sequence = Model.Sequence;
+            _duration = TimeSpan.FromTicks(Model.Duration);
+            _privacyStatus = (PrivacyStatus)Model.PrivacyStatus;
+            _mediaItemType = (MediaItemType)Model.MediaItemType;
+            _createdBy = Model.CreatedBy;
+            _createdOn = Model.CreatedOn;
+            _updatedBy = Model.UpdatedBy;
+            _updatedOn = Model.UpdatedOn;
 
-        protected override Task Refresh(CancellationToken token)
-        {
-            throw new NotImplementedException();
+            OnPropertyChanged(string.Empty);
+
+            return Task.CompletedTask;
         }
     }
 }

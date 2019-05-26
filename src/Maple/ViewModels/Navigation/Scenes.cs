@@ -4,10 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-
-using Maple.Core;
-using Maple.Domain;
 using Maple.Localization.Properties;
+using MvvmScarletToolkit.Abstractions;
+using MvvmScarletToolkit.Commands;
 
 namespace Maple
 {

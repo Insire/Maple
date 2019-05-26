@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace Maple.Data
 {
@@ -15,7 +14,7 @@ namespace Maple.Data
             var builder = new DbContextOptionsBuilder<PlaylistContext>()
                 .UseSqlite(Constants.ConnectionString);
 
-            return new PlaylistContext(builder.Options, new LoggerFactory());
+            return new PlaylistContext(builder.Options);
         }
     }
 }

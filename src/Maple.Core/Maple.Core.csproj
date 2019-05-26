@@ -1,17 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFrameworks>net471</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <LangVersion>7.1</LangVersion>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="..\Resources\SharedAssemblyInfo.cs" Link="SharedAssemblyInfo.cs" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Expression.Blend.Sdk" Version="1.0.2" />
     <PackageReference Include="FluentValidation" Version="8.3.0" />
     <PackageReference Include="Humanizer.Core" Version="2.6.2" />
-    <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="YoutubeExtractor" Version="0.10.11" />
   </ItemGroup>
   <ItemGroup>
@@ -21,12 +19,5 @@
     <ProjectReference Include="..\Maple.Data\Maple.Data.csproj" />
     <ProjectReference Include="..\Maple.Domain\Maple.Domain.csproj" />
     <ProjectReference Include="..\Maple.Localization\Maple.Localization.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.1\PresentationFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="WindowsBase" />
   </ItemGroup>
 </Project>

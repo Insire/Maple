@@ -1,66 +1,11 @@
-﻿<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FBD5595B-6859-4E8E-BDFA-C3169EF34985}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Maple</RootNamespace>
-    <AssemblyName>Maple</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>Maple.App</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>..\Resources\Images\logo.ico</ApplicationIcon>
+    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="8.1.0" />
     <PackageReference Include="DryIoc.dll">
       <Version>4.0.4</Version>
     </PackageReference>
@@ -78,303 +23,27 @@
     <PackageReference Include="MaterialDesignThemes" Version="2.5.1" />
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.0.12" />
     <PackageReference Include="NAudio" Version="1.9.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="SQLitePCLRaw.bundle_green">
       <Version>1.1.13</Version>
     </PackageReference>
     <PackageReference Include="squirrel.windows">
       <Version>1.9.1</Version>
     </PackageReference>
-    <PackageReference Include="Zlib.Portable.Signed" Version="1.11.0" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
+    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.Abstractions\MvvmScarletToolkit.Abstractions.csproj" />
+    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.Commands\MvvmScarletToolkit.Commands.csproj" />
+    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.ConfigurableWindow\MvvmScarletToolkit.ConfigurableWindow.csproj" />
+    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.FileSystemBrowser\MvvmScarletToolkit.FileSystemBrowser.csproj" />
+    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.Implementations\MvvmScarletToolkit.Implementations.csproj" />
+    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.Observables\MvvmScarletToolkit.Observables.csproj" />
+    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit\MvvmScarletToolkit.csproj" />
+    <ProjectReference Include="..\Maple.Core\Maple.Core.csproj" />
+    <ProjectReference Include="..\Maple.Data\Maple.Data.csproj" />
+    <ProjectReference Include="..\Maple.Domain\Maple.Domain.csproj" />
+    <ProjectReference Include="..\Maple.Icons\Maple.Icons.csproj" />
+    <ProjectReference Include="..\Maple.Localization\Maple.Localization.csproj" />
+    <ProjectReference Include="..\Maple.Log\Maple.Log.csproj" />
+    <ProjectReference Include="..\Maple.Youtube\Maple.Youtube.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="..\Resources\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Interfaces\IBaseMapper.cs" />
-    <Compile Include="Interfaces\IMediaItemMapper.cs" />
-    <Compile Include="Interfaces\IMediaPlayerMapper.cs" />
-    <Compile Include="Interfaces\IPlaylistMapper.cs" />
-    <Compile Include="Services\LogNotifcationService.cs" />
-    <Compile Include="Services\SquirrelLogger.cs" />
-    <Compile Include="UI\FileSystemBrowserDetailTemplateSelector.cs" />
-    <Compile Include="UI\ListBox.cs" />
-    <Compile Include="UI\IoCResourceDictionary.cs" />
-    <Compile Include="UI\MarkupExtensions\BreakingDebugConverter.cs" />
-    <Compile Include="UI\MarkupExtensions\PrintingDebugConverter.cs" />
-    <Compile Include="UI\Base\SharedResourceDictionary.cs" />
-    <Compile Include="UI\UserControls\Options\OptionsPage.xaml.cs">
-      <DependentUpon>OptionsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\UserControls\Playlist\PlaylistsPage.xaml.cs">
-      <DependentUpon>PlaylistsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Base\IocUserControl.cs" />
-    <Compile Include="UI\Base\IoCWindow.cs" />
-    <Compile Include="Services\VersionService.cs" />
-    <Compile Include="SplashScreen.xaml.cs">
-      <DependentUpon>SplashScreen.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\BindingProxy.cs" />
-    <Compile Include="UI\MarkupExtensions\Base\ConverterMarkupExtension.cs" />
-    <Compile Include="UI\MarkupExtensions\BrushRoundConverter.cs" />
-    <Compile Include="UI\MarkupExtensions\CaseConverter.cs" />
-    <Compile Include="UI\MarkupExtensions\MathMultipleConverter.cs" />
-    <Compile Include="Utils\DependencyInjectionFactory.cs" />
-    <Compile Include="Utils\Mappers\MapperExtensions.cs" />
-    <Compile Include="Utils\Mappers\Base\BaseMapper.cs" />
-    <Compile Include="Utils\Mappers\MediaItemMapper.cs" />
-    <Compile Include="Utils\Mappers\MediaPlayerMapper.cs" />
-    <Compile Include="Utils\Mappers\PlaylistMapper.cs" />
-    <Compile Include="UI\ShellSettings.cs" />
-    <Compile Include="UI\MarkupExtensions\RadioButtonCheckedConverter.cs" />
-    <Compile Include="UI\MarkupExtensions\Base\MultiConverterMarkupExtension.cs" />
-    <Compile Include="UI\MarkupExtensions\TranslationExtension.cs" />
-    <Compile Include="Utils\Validation\Base\BaseValidator.cs" />
-    <Compile Include="Utils\Validation\MediaItemValidator.cs" />
-    <Compile Include="Utils\Validation\MediaPlayerValidator.cs" />
-    <Compile Include="Utils\Validation\PlaylistsValidator.cs" />
-    <Compile Include="Utils\Validation\PlaylistValidator.cs" />
-    <Compile Include="ViewModels\Dialogs\Base\DialogBaseViewModel.cs" />
-    <Compile Include="ViewModels\Dialogs\DialogViewModel.cs" />
-    <Compile Include="ViewModels\Dialogs\Base\IDialogViewModel.cs" />
-    <Compile Include="ViewModels\Dialogs\DialogContentViewModels\ExceptionContentDialogViewModel.cs" />
-    <Compile Include="ViewModels\Dialogs\DialogContentViewModels\IO\FileBrowserContentDialogViewModel.cs" />
-    <Compile Include="ViewModels\Dialogs\DialogContentViewModels\IO\FileSystemBrowserOptions.cs" />
-    <Compile Include="ViewModels\Dialogs\DialogContentViewModels\IO\FileSystemFolderBrowserOptions.cs" />
-    <Compile Include="ViewModels\Dialogs\DialogContentViewModels\IO\FolderBrowserContentDialogViewModel.cs" />
-    <Compile Include="ViewModels\Dialogs\DialogContentViewModels\MessageContentDialogViewModel.cs" />
-    <Compile Include="ViewModels\Dialogs\DialogContentViewModels\ProgressContentDialogViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\ICultureViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\ISplashScreenViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IMediaItemsViewModel.cs" />
-    <Compile Include="ViewModels\MediaItems\MediaItems.cs" />
-    <Compile Include="ViewModels\MediaPlayer\AudioDevices.cs" />
-    <Compile Include="ViewModels\Interfaces\IMediaPlayersViewModel.cs" />
-    <Compile Include="ViewModels\MediaPlayer\MainMediaPlayer.cs" />
-    <Compile Include="ViewModels\MediaPlayer\MediaPlayers.cs" />
-    <Compile Include="ViewModels\MediaPlayer\NAudio\IWavePlayerFactory.cs" />
-    <Compile Include="ViewModels\Navigation\Scene.cs" />
-    <Compile Include="ViewModels\Interfaces\IPlaylistsViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IUIColorsViewModel.cs" />
-    <Compile Include="ViewModels\MediaPlayer\AudioDevice.cs" />
-    <Compile Include="ViewModels\MediaItems\MediaItem.cs" />
-    <Compile Include="ViewModels\MediaPlayer\Base\BasePlayer.cs" />
-    <Compile Include="ViewModels\MediaPlayer\NAudio\WaveFormatFactory.cs" />
-    <Compile Include="ViewModels\MediaPlayer\NAudio\NAudioMediaPlayer.cs" />
-    <Compile Include="ViewModels\MediaPlayer\NAudio\PlaybackDeviceFactory.cs" />
-    <Compile Include="ViewModels\MediaPlayer\NAudio\WavePlayerFactory.cs" />
-    <Compile Include="ViewModels\Playlists\Playlists.cs" />
-    <Compile Include="ViewModels\Playlists\Playlist.cs" />
-    <Compile Include="UI\UserControls\MediaPlayerPage.xaml.cs">
-      <DependentUpon>MediaPlayerPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\UserControls\Playlist\NewPlaylistPage.xaml.cs">
-      <DependentUpon>NewPlaylistPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\UserControls\Options\ColorOptionsPage.xaml.cs">
-      <DependentUpon>ColorOptionsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\MediaItems\CreateMediaItem.cs" />
-    <Compile Include="ViewModels\Playlists\CreatePlaylist.cs" />
-    <Compile Include="ViewModels\Settings\Culture.cs" />
-    <Compile Include="ViewModels\Settings\Cultures.cs" />
-    <Compile Include="ViewModels\Settings\OptionsViewModel.cs" />
-    <Compile Include="ViewModels\ShellViewModel.cs" />
-    <Compile Include="ViewModels\SplashScreenViewModel.cs" />
-    <Compile Include="ViewModels\StatusbarViewModel.cs" />
-    <Compile Include="ViewModels\Settings\UIColorsViewModel.cs" />
-    <Compile Include="ViewModels\Navigation\Scenes.cs" />
-    <Compile Include="ViewModels\MediaPlayer\MediaPlayer.cs" />
-    <Page Include="UI\UserControls\MediaPlayerPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\UserControls\Options\OptionsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\UserControls\Playlist\NewPlaylistPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\UserControls\Options\ColorOptionsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\UserControls\Playlist\PlaylistsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Style.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Shell.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Shell.xaml.cs">
-      <DependentUpon>Shell.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="SplashScreen.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="..\Resources\client_secret.json">
-      <Link>Resources\client_secret.json</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <AppDesigner Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="..\Resources\Images\logo.ico">
-      <Link>Resources\logo.ico</Link>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="..\Resources\Images\logo_withoutbackground.png">
-      <Link>Resources\logo_withoutbackground.png</Link>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="FodyWeavers.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.Abstractions\MvvmScarletToolkit.Abstractions.csproj">
-      <Project>{4a57caaa-1ca7-4efc-a4d3-0beaf97571a4}</Project>
-      <Name>MvvmScarletToolkit.Abstractions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.Commands\MvvmScarletToolkit.Commands.csproj">
-      <Project>{4c302ce6-cf90-4551-9ba0-8a96ebaff99a}</Project>
-      <Name>MvvmScarletToolkit.Commands</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.ConfigurableWindow\MvvmScarletToolkit.ConfigurableWindow.csproj">
-      <Project>{3e938558-7f5d-48a5-b022-c15ee0a9bdaa}</Project>
-      <Name>MvvmScarletToolkit.ConfigurableWindow</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.FileSystemBrowser\MvvmScarletToolkit.FileSystemBrowser.csproj">
-      <Project>{35395464-babc-458f-b682-e4134e70a118}</Project>
-      <Name>MvvmScarletToolkit.FileSystemBrowser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.Implementations\MvvmScarletToolkit.Implementations.csproj">
-      <Project>{2f40ea93-6ec3-41c9-bc19-170933a002c0}</Project>
-      <Name>MvvmScarletToolkit.Implementations</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.Incubator\MvvmScarletToolkit.Incubator.csproj">
-      <Project>{4ffc7188-6bb3-48ea-b297-b289d84d9afc}</Project>
-      <Name>MvvmScarletToolkit.Incubator</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.Observables\MvvmScarletToolkit.Observables.csproj">
-      <Project>{cffa08d8-4913-45a3-b54a-cc4042331724}</Project>
-      <Name>MvvmScarletToolkit.Observables</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Maple.Core\Maple.Core.csproj">
-      <Project>{21FA5854-0692-42E2-924E-A38CF3C7FF71}</Project>
-      <Name>Maple.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Maple.Data\Maple.Data.csproj">
-      <Project>{b3cd46be-3c08-4bae-ae60-a6d84a62400c}</Project>
-      <Name>Maple.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Maple.Domain\Maple.Domain.csproj">
-      <Project>{9d7d05a6-8271-4836-a7bb-5b2abeccbd81}</Project>
-      <Name>Maple.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Maple.Icons\Maple.Icons.csproj">
-      <Project>{1570d024-dde5-4bba-bc01-f47d47535b53}</Project>
-      <Name>Maple.Icons</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Maple.Localization\Maple.Localization.csproj">
-      <Project>{a073fc92-90e3-4541-8b52-6f7293187871}</Project>
-      <Name>Maple.Localization</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Maple.Log\Maple.Log.csproj">
-      <Project>{8c3e9110-ffb8-4656-9a19-b763c0868278}</Project>
-      <Name>Maple.Log</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Maple.Youtube\Maple.Youtube.csproj">
-      <Project>{B5BE546F-8D9F-4FB9-B235-AF05FD553F9E}</Project>
-      <Name>Maple.Youtube</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\Resources\Art_Of_Escapism_-_Universe_Words.mp3">
-      <Link>Resources\Art_Of_Escapism_-_Universe_Words.mp3</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UI\Interactivity\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
 </Project>

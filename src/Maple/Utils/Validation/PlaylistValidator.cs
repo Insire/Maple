@@ -20,8 +20,8 @@ namespace Maple
             RuleFor(playlist => playlist.RepeatMode).NotNull();
 
             RuleFor(playlist => playlist.SelectedItem).NotNull();
-            RuleFor(playlist => playlist.Items).NotNull();
-            RuleForEach(playlist => playlist.Items).SetValidator(mediaItemValidator);
+            RuleFor(playlist => playlist.MediaItems).NotNull();
+            RuleForEach(playlist => playlist.MediaItems).SetValidator(mediaItemValidator);
         }
     }
 }

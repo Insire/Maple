@@ -1,19 +1,16 @@
-﻿using System;
-
-using log4net;
-
+using System;
 using Maple.Domain;
+using NLog;
 
 namespace Maple.Log
 {
     public sealed class LoggingService : ILoggingService
     {
-        private readonly ILog _log;
+        private readonly ILogger _log;
 
         public LoggingService()
         {
-            log4net.Config.XmlConfigurator.Configure();
-            _log = LogManager.GetLogger(typeof(LoggingService));
+            _log = LogManager.GetCurrentClassLogger();
         }
 
         public void Debug(object message)
@@ -29,7 +26,7 @@ namespace Maple.Log
             var text = (string)message;
 
             System.Diagnostics.Debug.WriteLine(text);
-            _log.Debug(message, exception);
+            _log.Debug(exception, text);
         }
 
         public void Error(object message)
@@ -39,7 +36,7 @@ namespace Maple.Log
 
         public void Error(object message, Exception exception)
         {
-            _log.Error(message, exception);
+            _log.Error(exception, (string)message);
         }
 
         public void Fatal(object message)
@@ -49,7 +46,7 @@ namespace Maple.Log
 
         public void Fatal(object message, Exception exception)
         {
-            _log.Fatal(message, exception);
+            _log.Fatal(exception, (string)message);
         }
 
         public void Info(object message)
@@ -61,9 +58,7 @@ namespace Maple.Log
 
         public void Info(object message, Exception exception)
         {
-            var text = (string)message;
-
-            _log.Info(message, exception);
+            _log.Info(exception, (string)message);
         }
 
         public void Warn(object message)
@@ -73,7 +68,7 @@ namespace Maple.Log
 
         public void Warn(object message, Exception exception)
         {
-            _log.Warn(message, exception);
+            _log.Warn(exception, (string)message);
         }
     }
 }

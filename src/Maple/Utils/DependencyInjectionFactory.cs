@@ -1,9 +1,6 @@
 using System.Threading.Tasks;
-
 using DryIoc;
-
 using FluentValidation;
-
 using Maple.Core;
 using Maple.Data;
 using Maple.Domain;
@@ -83,9 +80,6 @@ namespace Maple
 
                 c.Register<IUnitOfWork, MapleUnitOfWork>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
 
-                c.Register<IPlaylistMapper, PlaylistMapper>();
-                c.Register<IMediaPlayerMapper, MediaPlayerMapper>();
-                c.Register<IMediaItemMapper, MediaItemMapper>();
                 c.Register<ISequenceService, SequenceService>();
                 c.Register<IYoutubeUrlParser, YoutubeUrlParser>();
 

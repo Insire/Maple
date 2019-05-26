@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
@@ -20,21 +19,18 @@ namespace Maple
         private readonly IMessenger _messenger;
         private readonly ILocalizationService _translator;
         private readonly IYoutubeUrlParser _service;
-        private readonly IMediaItemMapper _mediaItemMapper;
         private readonly FileSystemViewModel _fileSystemViewModel;
-
         private readonly Func<CreateMediaItem> _createMediaItemFactory;
 
-        public DialogViewModel(IMapleCommandBuilder commandBuilder, IYoutubeUrlParser service, IMediaItemMapper mediaItemMapper, FileSystemViewModel fileSystemViewModel, Func<CreateMediaItem> createMediaItemFactory)
+        public DialogViewModel(IMapleCommandBuilder commandBuilder, IYoutubeUrlParser service, FileSystemViewModel fileSystemViewModel, Func<CreateMediaItem> createMediaItemFactory)
             : base(commandBuilder)
         {
             _translator = commandBuilder.LocalizationService;
             _messenger = commandBuilder.Messenger;
 
-            _service = service ?? throw new ArgumentNullException(nameof(service), $"{nameof(service)} {Resources.IsRequired}");
-            _mediaItemMapper = mediaItemMapper ?? throw new ArgumentNullException(nameof(mediaItemMapper), $"{nameof(mediaItemMapper)} {Resources.IsRequired}");
-            _fileSystemViewModel = fileSystemViewModel ?? throw new ArgumentNullException(nameof(fileSystemViewModel), $"{nameof(fileSystemViewModel)} {Resources.IsRequired}");
-            _createMediaItemFactory = createMediaItemFactory ?? throw new ArgumentNullException(nameof(createMediaItemFactory), $"{nameof(createMediaItemFactory)} {Resources.IsRequired}");
+            _service = service ?? throw new ArgumentNullException(nameof(service));
+            _fileSystemViewModel = fileSystemViewModel ?? throw new ArgumentNullException(nameof(fileSystemViewModel));
+            _createMediaItemFactory = createMediaItemFactory ?? throw new ArgumentNullException(nameof(createMediaItemFactory));
 
             CloseDialogCommand = new RelayCommand(Close, () => CanClose());
             CancelDialogCommand = new RelayCommand(Cancel, () => CanCancel());

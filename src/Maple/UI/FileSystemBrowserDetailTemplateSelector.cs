@@ -1,7 +1,6 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Controls;
-
-using Maple.Core;
+using MvvmScarletToolkit.FileSystemBrowser;
 
 namespace Maple
 {
@@ -15,13 +14,13 @@ namespace Maple
         {
             switch (item)
             {
-                case MapleFile _:
+                case ScarletFile _:
                     return FileTemplate;
 
-                case MapleDirectory _:
+                case ScarletDirectory _:
                     return FolderTemplate;
 
-                case MapleDrive _:
+                case ScarletDrive _:
                     return DriveTemplate;
             }
 

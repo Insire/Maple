@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Data;
 
 namespace Maple
@@ -18,7 +18,7 @@ namespace Maple
         /// </returns>
         public override object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return value.Equals(parameter);
+            return value?.Equals(parameter);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Maple
         /// </returns>
         public override object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return value.Equals(true) ? parameter : Binding.DoNothing;
+            return value?.Equals(true) == true ? parameter : Binding.DoNothing;
         }
     }
 }

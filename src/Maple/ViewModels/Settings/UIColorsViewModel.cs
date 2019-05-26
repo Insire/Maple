@@ -1,91 +1,57 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
-
 using MaterialDesignColors;
-
 using MaterialDesignThemes.Wpf;
-using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Commands;
-using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    public sealed class UIColorsViewModel : ObservableObject, IUIColorsViewModel
+    public sealed class UIColorsViewModel : MapleBusinessViewModelBase, IUIColorsViewModel
     {
-        private readonly ILoggingService _log;
-        private readonly IMessenger _messenger;
-
         private static bool _isDark;
         private static string _accent;
         private static string _swatch;
 
-        private static PaletteHelper _paletteHelper = new PaletteHelper();
+        private readonly PaletteHelper _paletteHelper;
+        private readonly SwatchesProvider _swatchesProvider;
 
-        private bool _isLoaded;
-        public bool IsLoaded
+        public ICommand ToggleBaseCommand { get; }
+
+        public ICommand ApplyPrimaryCommand { get; }
+        public ICommand ApplyAccentCommand { get; }
+
+        public ICommand SaveCommand { get; }
+
+        public IEnumerable<Swatch> Swatches => new SwatchesProvider().Swatches;
+
+        public UIColorsViewModel(IMapleCommandBuilder commandBuilder, SwatchesProvider swatchesProvider, PaletteHelper paletteHelper)
+            : base(commandBuilder)
         {
-            get { return _isLoaded; }
-            private set { SetValue(ref _isLoaded, value); }
-        }
-
-        private ICommand _toggleBaseCommand;
-        public ICommand ToggleBaseCommand
-        {
-            get { return _toggleBaseCommand; }
-            private set { SetValue(ref _toggleBaseCommand, value); }
-        }
-
-        private ICommand _applyPrimaryCommand;
-        public ICommand ApplyPrimaryCommand
-        {
-            get { return _applyPrimaryCommand; }
-            private set { SetValue(ref _applyPrimaryCommand, value); }
-        }
-
-        private ICommand _applyAccentCommand;
-        public ICommand ApplyAccentCommand
-        {
-            get { return _applyAccentCommand; }
-            private set { SetValue(ref _applyAccentCommand, value); }
-        }
-
-        public ICommand RefreshCommand => AsyncCommand.Create(Load);
-        public ICommand LoadCommand => AsyncCommand.Create(Load, () => !IsLoaded);
-        public ICommand SaveCommand => AsyncCommand.Create(Save);
-
-        public static IEnumerable<Swatch> Swatches => new SwatchesProvider().Swatches;
-
-        public UIColorsViewModel(ViewModelServiceContainer container)
-        {
-            _log = container.Log;
-            _messenger = container.Messenger;
+            _swatchesProvider = swatchesProvider ?? throw new ArgumentNullException(nameof(swatchesProvider));
+            _paletteHelper = paletteHelper ?? throw new ArgumentNullException(nameof(paletteHelper));
 
             OnPropertyChanged(nameof(Swatches));
-            InitializeCommands();
-        }
-
-        private void InitializeCommands()
-        {
             ToggleBaseCommand = new RelayCommand(() => ApplyBase(!_isDark));
             ApplyPrimaryCommand = new RelayCommand<Swatch>(o => ApplyPrimary(this, o));
             ApplyAccentCommand = new RelayCommand<Swatch>(o => ApplyAccent(o));
         }
 
-        private static void ApplyBase(bool isDark = false)
+        private void ApplyBase(bool isDark = false)
         {
             _paletteHelper.SetLightDark(isDark);
             _isDark = isDark;
         }
 
-        private static void ApplyPrimary(IUIColorsViewModel vm, Swatch swatch)
+        private void ApplyPrimary(IUIColorsViewModel vm, Swatch swatch)
         {
-            if (swatch == null)
+            if (swatch is null)
                 return;
 
             var oldPalette = _paletteHelper.QueryPalette();
@@ -98,7 +64,7 @@ namespace Maple
             _swatch = swatch.Name;
         }
 
-        private static void ApplyAccent(Swatch swatch)
+        private void ApplyAccent(Swatch swatch)
         {
             if (swatch == null)
                 return;
@@ -109,7 +75,7 @@ namespace Maple
 
         public void OnPrimaryColorChanged(UiPrimaryColorChangedMessage args)
         {
-            _messenger.Publish(args);
+            Messenger.Publish(args);
         }
 
         /// <summary>
@@ -117,7 +83,7 @@ namespace Maple
         /// </summary>
         public Task Save()
         {
-            _log.Info($"{Resources.Saving} {Resources.Themes}");
+            Log.Info($"{Resources.Saving} {Resources.Themes}");
 
             Properties.Settings.Default.AccentName = _accent;
             Properties.Settings.Default.SwatchName = _swatch;
@@ -128,12 +94,14 @@ namespace Maple
             return Task.CompletedTask;
         }
 
-        /// <summary>
-        /// Loads this instance.
-        /// </summary>
-        public Task Load()
+        protected override Task UnloadInternal(CancellationToken token)
         {
-            _log.Info($"{Resources.Loading} {Resources.Themes}");
+            throw new System.NotImplementedException();
+        }
+
+        protected override Task RefreshInternal(CancellationToken token)
+        {
+            Log.Info($"{Resources.Loading} {Resources.Themes}");
 
             var swatchName = Properties.Settings.Default.SwatchName;
             var swatch = Swatches.FirstOrDefault(p => p.Name == swatchName);
@@ -145,7 +113,7 @@ namespace Maple
             ApplyAccent(accent);
             ApplyBase(Properties.Settings.Default.UseDarkTheme);
 
-            _messenger.Publish(new LoadedMessage(this, this));
+            Messenger.Publish(new LoadedMessage(this, this));
 
             return Task.CompletedTask;
         }

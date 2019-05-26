@@ -1,7 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFramework>net471</TargetFramework>
+    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,13 +13,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Maple.Domain\Maple.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.1\PresentationFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="WindowsBase" />
   </ItemGroup>
 </Project>

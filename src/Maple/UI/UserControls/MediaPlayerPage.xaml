@@ -257,15 +257,15 @@
                                         Orientation="Horizontal"
                                         ToolTip="{local:Translation PlaybackMode}">
 
-                                <RadioButton IsChecked="{Binding RepeatMode, Converter={local:RadioButtonCheckedConverter}, ConverterParameter={x:Static domain:RepeatMode.None}, UpdateSourceTrigger=PropertyChanged}"
+                                <RadioButton IsChecked="{Binding RepeatMode, Converter={local:RadioButtonCheckedConverter}, ConverterParameter={x:Static domain:RepeatMode.None}}"
                                              Style="{StaticResource NoneRepeatModeStyle}"
                                              ToolTip="{local:Translation PlaybackModeNone}" />
 
-                                <RadioButton IsChecked="{Binding RepeatMode, Converter={local:RadioButtonCheckedConverter}, ConverterParameter={x:Static domain:RepeatMode.Single}, UpdateSourceTrigger=PropertyChanged}"
+                                <RadioButton IsChecked="{Binding RepeatMode, Converter={local:RadioButtonCheckedConverter}, ConverterParameter={x:Static domain:RepeatMode.Single}}"
                                              Style="{StaticResource OneRepeatModeStyle}"
                                              ToolTip="{local:Translation PlaybackModeOne}" />
 
-                                <RadioButton IsChecked="{Binding RepeatMode, Converter={local:RadioButtonCheckedConverter}, ConverterParameter={x:Static domain:RepeatMode.All}, UpdateSourceTrigger=PropertyChanged}"
+                                <RadioButton IsChecked="{Binding RepeatMode, Converter={local:RadioButtonCheckedConverter}, ConverterParameter={x:Static domain:RepeatMode.All}}"
                                              Style="{StaticResource AllRepeatModeStyle}"
                                              ToolTip="{local:Translation PlaybackModeAll}" />
                             </StackPanel>

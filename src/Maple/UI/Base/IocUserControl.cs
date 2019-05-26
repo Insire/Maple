@@ -1,7 +1,8 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Windows.Controls;
 
 using Maple.Core;
+using MvvmScarletToolkit.Abstractions;
 
 namespace Maple
 {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,8 +12,6 @@ namespace Maple.Data
         {
             Context = context ?? throw new ArgumentNullException(nameof(context));
         }
-
-        public abstract void Dispose();
 
         public Task SaveChanges()
         {

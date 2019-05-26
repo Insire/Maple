@@ -5,12 +5,10 @@ using System.Windows;
 using System.Windows.Threading;
 
 using DryIoc;
-
-using Maple.Core;
 using Maple.Data;
 using Maple.Domain;
 using Microsoft.Extensions.Logging;
-using Squirrel;
+using MvvmScarletToolkit.Abstractions;
 
 namespace Maple
 {

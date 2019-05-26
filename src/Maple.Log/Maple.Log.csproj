@@ -1,14 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFrameworks>net471</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <LangVersion>7.1</LangVersion>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
+    <PackageReference Include="NLog" Version="4.6.3" />
   </ItemGroup>
 
   <ItemGroup>

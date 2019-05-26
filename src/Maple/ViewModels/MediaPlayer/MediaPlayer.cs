@@ -174,7 +174,7 @@ namespace Maple
             if (mediaItem == null)
                 throw new ArgumentNullException(nameof(mediaItem), $"{nameof(mediaItem)} {Resources.IsRequired}");
 
-            if (!Playlist.Items.Contains(mediaItem))
+            if (!Playlist.MediaItems.Contains(mediaItem))
                 throw new ArgumentException("Cant play an item thats not part of the playlist"); // TODO localize
 
             if (Player.Play(mediaItem))
@@ -283,9 +283,9 @@ namespace Maple
         {
             using (BusyStack.GetToken())
             {
-                if (Playlist.Items.Any())
+                if (Playlist.MediaItems.Any())
                 {
-                    var maxIndex = Playlist.Items.Max(p => p.Sequence) + 1;
+                    var maxIndex = Playlist.MediaItems.Max(p => p.Sequence) + 1;
                     if (maxIndex < 0)
                         maxIndex = 0;
 
