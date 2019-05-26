@@ -17,7 +17,7 @@ using Maple.Localization.Properties;
 namespace Maple
 {
     [DebuggerDisplay("{Title}, {Sequence}")]
-    public class Playlist : MapleDomainViewModelBase<Playlist, PlaylistModel>, IIsSelected, ISequence, IIdentifier, IChangeState
+    public class Playlist : MapleDomainViewModelBase<PlaylistModel>, IIsSelected, ISequence, IIdentifier
     {
         private readonly IDialogViewModel _dialogViewModel;
         private readonly Stack<int> _history;
@@ -233,7 +233,7 @@ namespace Maple
             return MediaItems.Clear(token);
         }
 
-        public virtual void Add(MediaItem item)
+        public virtual async Task Add(MediaItem item)
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item), $"{nameof(item)} {Resources.IsRequired}");
@@ -243,7 +243,7 @@ namespace Maple
                 var sequence = SequenceService.Get(MediaItems.Items.Select(p => (ISequence)p).ToList());
                 item.Sequence = sequence;
 
-                AddInternal(item);
+                await AddInternal(item).ConfigureAwait(false);
 
                 if (MediaItems.SelectedItem == null)
                     MediaItems.SelectedItem = MediaItems.Items.First();
@@ -259,7 +259,7 @@ namespace Maple
                 Model.MediaItems.Add(item.Model);
         }
 
-        public virtual void AddRange(IEnumerable<MediaItem> items)
+        public virtual async Task AddRange(IEnumerable<MediaItem> items)
         {
             if (items == null)
                 throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
@@ -282,7 +282,7 @@ namespace Maple
                         throw new ArgumentNullException(nameof(item), $"{nameof(item)} {Resources.IsRequired}");
 
                     item.Sequence = sequence;
-                    AddInternal(item);
+                    await AddInternal(item).ConfigureAwait(false);
                     sequence++;
 
                     added = true;
@@ -310,13 +310,13 @@ namespace Maple
             }
         }
 
-        private void RemoveInternal(MediaItem item)
+        private async Task RemoveInternal(MediaItem item)
         {
             if (MediaItems.SelectedItem == item)
                 MediaItems.SelectedItem = Next();
 
-            MediaItems.Remove(item);
-            item.Model.IsDeleted = true;
+            await MediaItems.Remove(item).ConfigureAwait(false);
+            item.IsDeleted = true;
         }
 
         public virtual void RemoveRange(IEnumerable<MediaItem> items)

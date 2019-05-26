@@ -9,7 +9,7 @@ using Maple.Domain;
 namespace Maple
 {
     [DebuggerDisplay("{Title}, {Sequence} {Location}")]
-    public class MediaItem : MapleDomainViewModelBase<MediaItem, MediaItemModel>, IMediaItem
+    public class MediaItem : MapleDomainViewModelBase<MediaItemModel>, IMediaItem
     {
         public bool IsNew => Model.IsNew;
         public bool IsDeleted => Model.IsDeleted;

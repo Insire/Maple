@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Maple.Core;
@@ -8,16 +9,13 @@ using Maple.Localization.Properties;
 
 namespace Maple
 {
-    public sealed class Playlists : MapleBusinessViewModelListBase<Playlist, PlaylistModel>, IPlaylistsViewModel
+    public sealed class Playlists : MapleBusinessViewModelListBase<Playlist, PlaylistModel>
     {
         private readonly Func<IUnitOfWork> _repositoryFactory;
 
-        public Playlists(Func<IUnitOfWork> repositoryFactory)
-            : base(container)
+        public Playlists(IMapleCommandBuilder commandBuilder)
+            : base(commandBuilder)
         {
-            _repositoryFactory = repositoryFactory ?? throw new ArgumentNullException(nameof(repositoryFactory));
-
-            AddCommand = AsyncCommand.Create(Add, CanAdd);
         }
 
         private async Task SaveInternal()
@@ -32,26 +30,9 @@ namespace Maple
             }
         }
 
-        public Task Add()
-        {
-            Add(_playlistMapper.GetNewPlaylist());
-            return Save();
-        }
-
-        public bool CanAdd()
-        {
-            return Items != null;
-        }
-
-        public override Task Save()
-        {
-            return SaveInternal();
-        }
-
-        public override async Task Load()
+        protected override Task RefreshInternal(CancellationToken token)
         {
             Log.Info($"{LocalizationService.Translate(nameof(Resources.Loading))} {LocalizationService.Translate(nameof(Resources.Playlists))}");
-            Clear();
 
             using (var context = _repositoryFactory())
             {
@@ -68,8 +49,6 @@ namespace Maple
             }
 
             SelectedItem = Items.FirstOrDefault();
-
-            OnLoaded();
         }
     }
 }

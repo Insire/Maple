@@ -1,9 +1,7 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-
 using DryIoc;
 using Maple.Data;
 using Maple.Domain;
@@ -29,7 +27,7 @@ namespace Maple
 
             InitializeUpdater(log);
             InitializeResources(localizationService);
-            InitializeLocalization();
+            // TODO InitializeLocalization();
 
             using (var context = _container.Resolve<PlaylistContext>())
             {
@@ -103,11 +101,6 @@ namespace Maple
             var styles = new IoCResourceDictionary(service, url);
 
             Resources.MergedDictionaries.Add(styles);
-        }
-
-        private void InitializeLocalization()
-        {
-            Thread.CurrentThread.CurrentCulture = Core.Properties.Settings.Default.StartUpCulture;
         }
 
         private void InitializeUpdater(ILoggingService log)
