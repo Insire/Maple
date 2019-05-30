@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -13,14 +12,16 @@ using FluentValidation;
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
+using MvvmScarletToolkit.Commands;
 
 namespace Maple
 {
     [DebuggerDisplay("{Title}, {Sequence}")]
-    public class Playlist : MapleDomainViewModelBase<PlaylistModel>, IIsSelected, ISequence, IIdentifier
+    public class Playlist : MapleDomainViewModelBase<Playlist, PlaylistModel>, IIsSelected, ISequence, IIdentifier
     {
-        private readonly IDialogViewModel _dialogViewModel;
+        private readonly DialogViewModel _dialogViewModel;
         private readonly Stack<int> _history;
+        private readonly IValidator<MediaItem> _mediaItemValidator;
 
         public bool IsNew => Model.IsNew;
         public bool IsDeleted => Model.IsDeleted;
@@ -134,13 +135,14 @@ namespace Maple
         [Bindable(true, BindingDirection.OneWay)]
         public ReadOnlyObservableCollection<RepeatMode> RepeatModes { get; }
 
-        public Playlist(IMapleCommandBuilder commandBuilder, IValidator<Playlist> validator, IDialogViewModel dialogViewModel, PlaylistModel model)
-            : base(commandBuilder, validator)
+        public Playlist(IMapleCommandBuilder commandBuilder, IValidator<Playlist> playlistValidator, IValidator<MediaItem> mediaItemValidator, DialogViewModel dialogViewModel, PlaylistModel model)
+            : base(commandBuilder, playlistValidator)
         {
             MediaItems = new MediaItems(commandBuilder);
 
             using (BusyStack.GetToken())
             {
+                _mediaItemValidator = mediaItemValidator ?? throw new ArgumentNullException(nameof(mediaItemValidator));
                 _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
 
                 _title = model.Title;
@@ -154,9 +156,18 @@ namespace Maple
 
                 View = CollectionViewSource.GetDefaultView(MediaItems); // TODO add sorting by sequence
 
-                LoadFromFileCommand = AsyncCommand.Create(LoadFromFile, () => CanLoadFromFile());
-                LoadFromFolderCommand = AsyncCommand.Create(LoadFromFolder, () => CanLoadFromFolder());
-                LoadFromUrlCommand = AsyncCommand.Create(LoadFromUrl, () => CanLoadFromUrl());
+                LoadFromFileCommand = commandBuilder
+                    .Create(LoadFromFile, CanLoadFromFile)
+                    .WithSingleExecution(CommandManager)
+                    .Build();
+                LoadFromFolderCommand = commandBuilder
+                    .Create(LoadFromFolder, CanLoadFromFolder)
+                    .WithSingleExecution(CommandManager)
+                    .Build();
+                LoadFromUrlCommand = commandBuilder
+                    .Create(LoadFromUrl, CanLoadFromUrl)
+                    .WithSingleExecution(CommandManager)
+                    .Build();
 
                 Add(Messenger.Subscribe<PlayingMediaItemMessage>(OnPlaybackItemChanged, m => m.PlaylistId == Id && MediaItems.Items.Contains(m.Content)));
             }
@@ -171,8 +182,9 @@ namespace Maple
         {
             using (BusyStack.GetToken())
             {
-                var items = await _dialogViewModel.ShowUrlParseDialog(token).ConfigureAwait(true);
-                AddRange(items);
+                var items = await _dialogViewModel.ShowYoutubeVideoImport(token).ConfigureAwait(true);
+
+                await Task.WhenAll(items.ForEach(Add)).ConfigureAwait(false);
             }
         }
 
@@ -195,7 +207,7 @@ namespace Maple
 
                 (var Result, var MediaItems) = await _dialogViewModel.ShowMediaItemFolderSelectionDialog(options, token).ConfigureAwait(true);
                 if (Result)
-                    AddRange(MediaItems);
+                    await AddRange(MediaItems).ConfigureAwait(false);
             }
         }
 
@@ -217,7 +229,7 @@ namespace Maple
 
                 (var Result, var MediaItems) = await _dialogViewModel.ShowMediaItemSelectionDialog(options, token).ConfigureAwait(true);
                 if (Result)
-                    AddRange(MediaItems);
+                    await AddRange(MediaItems).ConfigureAwait(false);
             }
         }
 
@@ -226,16 +238,28 @@ namespace Maple
             return !IsBusy;
         }
 
-        public virtual Task Clear(CancellationToken token)
+        public Task Clear(CancellationToken token)
         {
             _history.Clear();
             MediaItems.SelectedItem = null;
             return MediaItems.Clear(token);
         }
 
-        public virtual async Task Add(MediaItem item)
+        public Task Add(YoutubeVideoViewModel model)
         {
-            if (item == null)
+            return Add(new MediaItem((IMapleCommandBuilder)CommandBuilder, _mediaItemValidator, new MediaItemModel()
+            {
+                Duration = model.Duration,
+                Description = model.Description,
+                Location = model.Location,
+                PrivacyStatus = (int)model.PrivacyStatus,
+                Title = model.Title,
+            }));
+        }
+
+        public async Task Add(MediaItem item)
+        {
+            if (item is null)
                 throw new ArgumentNullException(nameof(item), $"{nameof(item)} {Resources.IsRequired}");
 
             using (BusyStack.GetToken())
@@ -245,7 +269,7 @@ namespace Maple
 
                 await AddInternal(item).ConfigureAwait(false);
 
-                if (MediaItems.SelectedItem == null)
+                if (MediaItems.SelectedItem is null)
                     MediaItems.SelectedItem = MediaItems.Items.First();
             }
         }
@@ -259,7 +283,12 @@ namespace Maple
                 Model.MediaItems.Add(item.Model);
         }
 
-        public virtual async Task AddRange(IEnumerable<MediaItem> items)
+        public Task AddRange(ICollection<MediaItem> items)
+        {
+            return AddRange((IEnumerable<MediaItem>)items);
+        }
+
+        public async Task AddRange(IEnumerable<MediaItem> items)
         {
             if (items == null)
                 throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
@@ -288,17 +317,12 @@ namespace Maple
                     added = true;
                 }
 
-                if (MediaItems.SelectedItem == null && (added || MediaItems.Count > 0))
+                if (MediaItems.SelectedItem is null && (added || MediaItems.Count > 0))
                     MediaItems.SelectedItem = MediaItems.Items.First();
             }
         }
 
-        private void Remove(object item)
-        {
-            Remove(item as MediaItem);
-        }
-
-        public virtual void Remove(MediaItem item)
+        public async Task Remove(MediaItem item)
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item), $"{nameof(item)} {Resources.IsRequired}");
@@ -306,50 +330,34 @@ namespace Maple
             using (BusyStack.GetToken())
             {
                 while (MediaItems.Items.Contains(item))
-                    RemoveInternal(item);
+                {
+                    await MediaItems.Remove(item).ConfigureAwait(false);
+                    item.Model.IsDeleted = true;
+                }
+
+                if (MediaItems.SelectedItem == item)
+                    MediaItems.SelectedItem = Next();
             }
         }
 
-        private async Task RemoveInternal(MediaItem item)
-        {
-            if (MediaItems.SelectedItem == item)
-                MediaItems.SelectedItem = Next();
-
-            await MediaItems.Remove(item).ConfigureAwait(false);
-            item.IsDeleted = true;
-        }
-
-        public virtual void RemoveRange(IEnumerable<MediaItem> items)
+        public async Task RemoveRange(IEnumerable<MediaItem> items)
         {
             if (items == null)
                 throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
 
             using (BusyStack.GetToken())
-                RemoveRangeInternal(items.ToList());
+            {
+                foreach (var item in items)
+                    await Remove(item).ConfigureAwait(false);
+            }
         }
 
-        private void RemoveRange(IList items)
-        {
-            if (items == null)
-                throw new ArgumentNullException(nameof(items), $"{nameof(items)} {Resources.IsRequired}");
-
-            using (BusyStack.GetToken())
-                RemoveRangeInternal(items.Cast<MediaItem>().ToList());
-        }
-
-        private void RemoveRangeInternal(IEnumerable<MediaItem> items)
-        {
-            foreach (var item in items)
-                Remove(item);
-        }
-
-        public virtual bool CanRemove(object item)
+        public bool CanRemove(object item)
         {
             if (MediaItems == null || MediaItems.Count == 0)
                 return false;
 
-            var mediaItem = item as MediaItem;
-            if (mediaItem == null)
+            if (!(item is MediaItem mediaItem))
                 return false;
 
             return MediaItems.Items.Contains(mediaItem) && !IsBusy;
@@ -357,14 +365,14 @@ namespace Maple
 
         protected virtual bool CanRemoveRange(IEnumerable<MediaItem> items)
         {
-            return CanClear() && items != null && items.Any(p => MediaItems.Items.Contains(p));
+            return MediaItems.CanClear() && items != null && items.Any(p => MediaItems.Items.Contains(p));
         }
 
         /// <summary>
         /// Returns the next MediaItem from the Items collection according to their respective sequence and the current RepeatMode
         /// </summary>
         /// <returns></returns>
-        public virtual MediaItem Next()
+        public MediaItem Next()
         {
             using (BusyStack.GetToken())
             {
@@ -465,7 +473,7 @@ namespace Maple
                 return NextRepeatSingle();
         }
 
-        public virtual MediaItem Previous()
+        public MediaItem Previous()
         {
             using (BusyStack.GetToken())
             {

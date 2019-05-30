@@ -25,6 +25,12 @@ namespace Maple.Core
             : base(commandBuilder)
         {
         }
+
+        protected MapleBusinessViewModelBase(IMapleCommandBuilder commandBuilder, TModel model)
+            : base(commandBuilder)
+        {
+            Model = model ?? throw new ArgumentNullException(nameof(model));
+        }
     }
 
     /// <summary>

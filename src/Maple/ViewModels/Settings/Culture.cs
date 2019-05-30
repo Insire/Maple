@@ -4,12 +4,12 @@ using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    public class Culture : ViewModelBase<CultureInfo>
+    public sealed class Culture : ViewModelBase<CultureInfo>
     {
         public string DisplayName => Model.DisplayName;
 
-        public Culture(ICommandBuilder commandBuilder)
-            : base(commandBuilder)
+        public Culture(ICommandBuilder commandBuilder, CultureInfo culture)
+            : base(commandBuilder, culture)
         {
         }
     }

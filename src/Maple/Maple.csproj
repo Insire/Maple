@@ -46,4 +46,7 @@
     <ProjectReference Include="..\Maple.Log\Maple.Log.csproj" />
     <ProjectReference Include="..\Maple.Youtube\Maple.Youtube.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModels\Import\FileSystem\" />
+  </ItemGroup>
 </Project>

@@ -9,7 +9,7 @@ using Maple.Domain;
 namespace Maple
 {
     [DebuggerDisplay("{Title}, {Sequence} {Location}")]
-    public class MediaItem : MapleDomainViewModelBase<MediaItemModel>, IMediaItem
+    public class MediaItem : MapleDomainViewModelBase<MediaItem, MediaItemModel>, IMediaItem
     {
         public bool IsNew => Model.IsNew;
         public bool IsDeleted => Model.IsDeleted;
@@ -110,8 +110,8 @@ namespace Maple
             set { SetValue(ref _playlist, value, OnChanged: () => Model.Playlist = value.Model); }
         }
 
-        public MediaItem(IMapleCommandBuilder commandBuilder, MediaItemModel model, IValidator<MediaItem> validator)
-            : base(commandBuilder, validator)
+        public MediaItem(IMapleCommandBuilder commandBuilder, IValidator<MediaItem> validator, MediaItemModel model)
+            : base(commandBuilder, validator, model)
         {
         }
 

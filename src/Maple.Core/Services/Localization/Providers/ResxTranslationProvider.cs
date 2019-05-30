@@ -5,7 +5,7 @@ using MvvmScarletToolkit.Abstractions;
 
 namespace Maple.Core
 {
-    public class ResxTranslationProvider : ITranslationProvider
+    public class ResxTranslationProvider : ILocalizationProvider
     {
         private readonly ResourceManager _resourceManager;
 
@@ -20,7 +20,7 @@ namespace Maple.Core
         }
 
         /// <summary>
-        /// See <see cref="ITranslationProvider.Translate" />
+        /// See <see cref="ILocalizationProvider.Translate" />
         /// </summary>
         public string Translate(string key)
         {
@@ -28,7 +28,7 @@ namespace Maple.Core
         }
 
         /// <summary>
-        /// See <see cref="ITranslationProvider.AvailableLanguages" />
+        /// See <see cref="ILocalizationProvider.AvailableLanguages" />
         /// </summary>
         /// <value>
         /// The available languages.

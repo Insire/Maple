@@ -7,30 +7,29 @@ using System.Threading.Tasks;
 using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
-using Maple.Youtube;
 using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Commands;
 using MvvmScarletToolkit.FileSystemBrowser;
 
 namespace Maple
 {
-    public class DialogViewModel : DialogBaseViewModel, IDialogViewModel
+    public sealed class DialogViewModel : DialogBaseViewModel
     {
         private readonly IMessenger _messenger;
         private readonly ILocalizationService _translator;
-        private readonly IYoutubeUrlParser _service;
         private readonly FileSystemViewModel _fileSystemViewModel;
-        private readonly Func<CreateMediaItem> _createMediaItemFactory;
+        private readonly YoutubeImportViewModel _youtubeImport;
+        private readonly MediaPlayers _mediaPlayers;
 
-        public DialogViewModel(IMapleCommandBuilder commandBuilder, IYoutubeUrlParser service, FileSystemViewModel fileSystemViewModel, Func<CreateMediaItem> createMediaItemFactory)
+        public DialogViewModel(IMapleCommandBuilder commandBuilder, FileSystemViewModel fileSystemViewModel, YoutubeImportViewModel youtubeImport, MediaPlayers mediaPlayers)
             : base(commandBuilder)
         {
             _translator = commandBuilder.LocalizationService;
             _messenger = commandBuilder.Messenger;
 
-            _service = service ?? throw new ArgumentNullException(nameof(service));
+            _mediaPlayers = mediaPlayers ?? throw new ArgumentNullException(nameof(mediaPlayers));
+            _youtubeImport = youtubeImport ?? throw new ArgumentNullException(nameof(youtubeImport));
             _fileSystemViewModel = fileSystemViewModel ?? throw new ArgumentNullException(nameof(fileSystemViewModel));
-            _createMediaItemFactory = createMediaItemFactory ?? throw new ArgumentNullException(nameof(createMediaItemFactory));
 
             CloseDialogCommand = new RelayCommand(Close, () => CanClose());
             CancelDialogCommand = new RelayCommand(Cancel, () => CanCancel());
@@ -74,7 +73,7 @@ namespace Maple
 
             TitleDetail = string.Empty;
             Context = ExceptionDialogViewModel;
-            Title = exception.GetType().Name;
+            Title = exception.Message;
             ExceptionDialogViewModel.Exception = exception;
             IsCancelVisible = false;
 
@@ -119,9 +118,9 @@ namespace Maple
             return tuple;
         }
 
-        public async Task<(bool Result, ICollection<MediaItem> MediaItems)> ShowMediaItemSelectionDialog(FileSystemBrowserOptions options, CancellationToken token)
+        public async Task<(bool Result, ICollection<MediaItemModel> MediaItems)> ShowMediaItemSelectionDialog(FileSystemBrowserOptions options, CancellationToken token)
         {
-            var mediaItems = new List<MediaItem>();
+            var mediaItems = new List<MediaItemModel>();
             (var Result, var Files) = await ShowFileBrowserDialog(options, token).ConfigureAwait(true);
 
             if (!Result)
@@ -135,9 +134,9 @@ namespace Maple
             return (Result, mediaItems);
         }
 
-        public async Task<(bool Result, ICollection<MediaItem> MediaItems)> ShowMediaItemFolderSelectionDialog(FileSystemFolderBrowserOptions options, CancellationToken token)
+        public async Task<(bool Result, ICollection<MediaItemModel> MediaItems)> ShowMediaItemFolderSelectionDialog(FileSystemFolderBrowserOptions options, CancellationToken token)
         {
-            var mediaItems = new List<MediaItem>();
+            var mediaItems = default(ICollection<MediaItemModel>);
             (var Result, var Folder) = await ShowFolderBrowserDialog(options, token).ConfigureAwait(true);
 
             if (!Result)
@@ -158,12 +157,10 @@ namespace Maple
                 ".mp3"
             };
 
-            foreach (var file in query.Where(p => !p.IsContainer && supportedFileExtensions.Contains(Path.GetExtension(p.Name))))
-            {
-                var factory = _createMediaItemFactory();
-
-                mediaItems.Add(factory.Create(file.FullName));
-            }
+            mediaItems = query
+                .Where(p => !p.IsContainer && supportedFileExtensions.Contains(Path.GetExtension(p.Name)))
+                .Select(p => new MediaItemModel())
+                .ToList();
 
             return (Result, mediaItems);
         }
@@ -225,26 +222,17 @@ namespace Maple
             return ShowExceptionDialog(new NotImplementedException());
         }
 
-        /// <summary>
-        /// Shows the URL parse dialog.
-        /// </summary>
-        /// <returns></returns>
-        public async Task<ICollection<MediaItem>> ShowUrlParseDialog(CancellationToken token)
+        public async Task<ICollection<YoutubeVideoViewModel>> ShowYoutubeVideoImport(CancellationToken token)
         {
-            var result = new List<MediaItem>();
-            var viewmodel = new CreateMediaItem(_service, _mediaItemMapper, CommandBuilder);
+            var result = default(ICollection<YoutubeVideoViewModel>);
 
             TitleDetail = string.Empty;
-            Context = viewmodel;
+            Context = _youtubeImport;
             Title = _translator.Translate(nameof(Resources.VideoAdd));
 
             AcceptAction = () =>
             {
-                if (viewmodel.Result?.MediaItems?.Any() == true)
-                {
-                    var items = _mediaItemMapper.GetMany(viewmodel.Result.MediaItems);
-                    result.AddRange(items);
-                }
+                result = _youtubeImport.Items.Where(p => p is YoutubeVideoViewModel).Cast<YoutubeVideoViewModel>().ToList();
             };
 
             await Open(token).ConfigureAwait(false);
@@ -252,13 +240,31 @@ namespace Maple
             return result;
         }
 
-        public Task ShowMediaPlayerConfiguration(IMediaPlayersViewModel mediaPlayersViewModel)
+        public async Task<ICollection<YoutubePlaylistViewModel>> ShowYoutubePlaylistImport(CancellationToken token)
+        {
+            var result = default(ICollection<YoutubePlaylistViewModel>);
+
+            TitleDetail = string.Empty;
+            Context = _youtubeImport;
+            Title = _translator.Translate(nameof(Resources.PlaylistAdd));
+
+            AcceptAction = () =>
+            {
+                result = _youtubeImport.Items.Where(p => p is YoutubePlaylistViewModel).Cast<YoutubePlaylistViewModel>().ToList();
+            };
+
+            await Open(token).ConfigureAwait(false);
+
+            return result;
+        }
+
+        public Task ShowMediaPlayerConfiguration()
         {
             if (IsOpen) // no exception spam, could probably be improved TODO ?
                 return Task.CompletedTask;
 
             TitleDetail = string.Empty;
-            Context = mediaPlayersViewModel;
+            Context = _mediaPlayers;
             Title = _translator.Translate(nameof(Resources.Director));
             IsCancelVisible = false;
 

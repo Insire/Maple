@@ -10,6 +10,7 @@ using FluentValidation.Results;
 using System.Linq;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using MvvmScarletToolkit.Abstractions;
 
 namespace Maple.Core
 {
@@ -18,14 +19,12 @@ namespace Maple.Core
     /// </summary>
     /// <typeparam name="TViewModel"></typeparam>
     /// <typeparam name="TModel"></typeparam>
-    public abstract class MapleDomainViewModelListBase<TViewModel, TModel> : MapleBusinessViewModelListBase<TViewModel, TModel>, INotifyDataErrorInfo, IObserver<TViewModel>
-        where TViewModel : MapleDomainViewModelBase<TModel>, ISequence
-        where TModel : class, IChangeState
+    public abstract class MapleDomainViewModelListBase<TViewModel> : MapleBusinessViewModelListBase<TViewModel>, INotifyDataErrorInfo
+        where TViewModel : class, INotifyPropertyChanged, IChangeState, IChangeTrackable, INotifyDataErrorInfo
     {
         protected readonly bool SkipChangeTracking;
         protected readonly bool SkipValidation;
         protected readonly ChangeTracker ChangeTracker;
-        protected readonly IDictionary<TViewModel, IDisposable> ChangeTrackingLookup;
         protected readonly IDictionary<string, ValidationResult> ValidationLookup;
         protected readonly IValidator<TViewModel> Validator;
 
@@ -65,7 +64,6 @@ namespace Maple.Core
         {
             Validator = validator ?? throw new ArgumentNullException(nameof(validator));
             ValidationLookup = new Dictionary<string, ValidationResult>();
-            ChangeTrackingLookup = new Dictionary<TViewModel, IDisposable>();
 
             SkipValidation = true;
             SkipChangeTracking = true;
@@ -151,20 +149,31 @@ namespace Maple.Core
 
         public sealed override async Task Add(TViewModel item)
         {
-            if (ChangeTrackingLookup.ContainsKey(item))
+            if (Items.Contains(item))
             {
                 return;
             }
 
             await base.Add(item);
-            var token = item.Subscribe(this);
+            item.Changed += Item_Changed;
+            item.ErrorsChanged += Item_ErrorsChanged;
+        }
 
-            ChangeTrackingLookup.Add(item, token);
+        private void Item_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(HaveChildrenErrors));
+            OnPropertyChanged(nameof(HasErrors));
+        }
+
+        private void Item_Changed(object sender, EventArgs e)
+        {
+            OnPropertyChanged(nameof(HaveChildrenChanged));
+            OnPropertyChanged(nameof(HasChanged));
         }
 
         public sealed override async Task Remove(TViewModel item)
         {
-            if (!ChangeTrackingLookup.ContainsKey(item))
+            if (!Items.Contains(item))
             {
                 Debug.WriteLine("Trying to remove an untracked entity!");
                 return;
@@ -172,40 +181,10 @@ namespace Maple.Core
 
             await base.Remove(item);
 
-            var token = ChangeTrackingLookup[item];
-            token.Dispose();
-
-            ChangeTrackingLookup.Remove(item);
+            item.Changed -= Item_Changed;
+            item.ErrorsChanged -= Item_ErrorsChanged;
         }
 
-        /// <summary>
-        /// Unused
-        /// </summary>
-        public void OnCompleted()
-        {
-        }
-
-        /// <summary>
-        /// Unused
-        /// </summary>
-        public void OnError(Exception error)
-        {
-        }
-
-        /// <summary>
-        /// When a ChildViewModel changed
-        /// </summary>
-        /// <param name="value"></param>
-        public void OnNext(TViewModel value)
-        {
-            OnPropertyChanged(nameof(HaveChildrenErrors));
-            OnPropertyChanged(nameof(HasErrors));
-
-            OnPropertyChanged(nameof(HaveChildrenChanged));
-            OnPropertyChanged(nameof(HasChanged));
-        }
-
-        // TODO add validation via IObserver and self validation
         // TODO add event aggregator
     }
 }

@@ -12,9 +12,9 @@ namespace Maple.Core
     /// <summary>
     /// Generic CollectionViewModelBase that provides common services required in Maple
     /// </summary>
-    public abstract class MapleBusinessViewModelListBase<TViewModel, TModel> : MapleBusinessViewModelListBase<TViewModel>
-        where TViewModel : MapleDomainViewModelBase<TModel>, ISequence
-        where TModel : class, IChangeState
+    public abstract class MapleBusinessViewModelListBase<TModel, TViewModel> : MapleBusinessViewModelListBase<TViewModel>
+        where TModel : class, IBaseObject
+        where TViewModel : MapleBusinessViewModelBase<TModel>, ISequence
     {
         private TModel _model;
         [Bindable(true, BindingDirection.OneWay)]

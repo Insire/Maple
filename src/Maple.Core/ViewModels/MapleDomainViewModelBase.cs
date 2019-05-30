@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -9,22 +8,24 @@ using System.Runtime.CompilerServices;
 using FluentValidation;
 using FluentValidation.Results;
 using Maple.Domain;
+using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Observables;
 
 namespace Maple.Core
 {
-    public abstract class MapleDomainViewModelBase<TModel> : MapleBusinessViewModelBase<TModel>, INotifyDataErrorInfo, IObservable<MapleDomainViewModelBase<TModel>>
+    public abstract class MapleDomainViewModelBase<TViewModel, TModel> : MapleBusinessViewModelBase<TModel>, INotifyDataErrorInfo, IChangeTrackable
         where TModel : class
+        where TViewModel : class, IChangeTrackable
     {
-        private readonly ConcurrentDictionary<IObserver<MapleDomainViewModelBase<TModel>>, IObserver<MapleDomainViewModelBase<TModel>>> _observers;
-
         protected readonly bool SkipChangeTracking;
         protected readonly bool SkipValidation;
-        protected readonly IValidator<MapleDomainViewModelBase<TModel>> Validator;
+        protected readonly IValidator<TViewModel> Validator;
         protected readonly IDictionary<string, ValidationResult> ValidationLookup;
         protected readonly ChangeTracker ChangeTracker;
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public event EventHandler Changed;
 
         [Bindable(true, BindingDirection.OneWay)]
         public bool HasChanged => ChangeTracker.HasChanged;
@@ -37,13 +38,11 @@ namespace Maple.Core
             private set { SetValue(ref _hasErrors, value); }
         }
 
-        protected MapleDomainViewModelBase(IMapleCommandBuilder commandBuilder, IValidator<MapleDomainViewModelBase<TModel>> validator)
+        protected MapleDomainViewModelBase(IMapleCommandBuilder commandBuilder, IValidator<TViewModel> validator)
             : base(commandBuilder)
         {
             Validator = validator ?? throw new ArgumentNullException(nameof(validator));
             ValidationLookup = new Dictionary<string, ValidationResult>();
-
-            _observers = new ConcurrentDictionary<IObserver<MapleDomainViewModelBase<TModel>>, IObserver<MapleDomainViewModelBase<TModel>>>();
 
             SkipValidation = true;
             SkipChangeTracking = true;
@@ -52,6 +51,12 @@ namespace Maple.Core
 
             SkipChangeTracking = false;
             SkipValidation = false;
+        }
+
+        protected MapleDomainViewModelBase(IMapleCommandBuilder commandBuilder, IValidator<TViewModel> validator, TModel model)
+            : this(commandBuilder, validator)
+        {
+            Model = model ?? throw new ArgumentNullException(nameof(model));
         }
 
         protected override bool SetValue<T>(ref T field, T value, Action OnChanging, Action OnChanged, [CallerMemberName] string propertyName = null)
@@ -72,7 +77,7 @@ namespace Maple.Core
 
                 if (shouldNotifySubscribers)
                 {
-                    NotifySubscribers();
+                    this.OnChanged();
                 }
 
                 return true;
@@ -139,35 +144,14 @@ namespace Maple.Core
             }
         }
 
-        private void NotifySubscribers()
+        protected virtual void OnChanged()
         {
-            foreach (var observer in _observers.Keys.ToArray())
-            {
-                observer.OnNext(this);
-            }
+            Changed?.Invoke(this, EventArgs.Empty);
         }
 
-        protected void OnErrorsChanged(string propertyName)
+        protected virtual void OnErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-        }
-
-        public IDisposable Subscribe(IObserver<MapleDomainViewModelBase<TModel>> observer)
-        {
-            return new DisposalToken<MapleDomainViewModelBase<TModel>>(observer, _observers);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (IsDisposed)
-                return;
-
-            if (disposing)
-            {
-                _observers.Clear();
-            }
-
-            base.Dispose(disposing);
         }
     }
 }

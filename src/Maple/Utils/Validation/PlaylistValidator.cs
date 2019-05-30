@@ -19,9 +19,8 @@ namespace Maple
             RuleFor(playlist => playlist.RepeatModes).NotEmpty();
             RuleFor(playlist => playlist.RepeatMode).NotNull();
 
-            RuleFor(playlist => playlist.SelectedItem).NotNull();
             RuleFor(playlist => playlist.MediaItems).NotNull();
-            RuleForEach(playlist => playlist.MediaItems).SetValidator(mediaItemValidator);
+            RuleForEach(playlist => playlist.MediaItems.Items).SetValidator(mediaItemValidator);
         }
     }
 }

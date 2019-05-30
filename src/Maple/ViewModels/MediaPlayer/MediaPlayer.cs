@@ -15,7 +15,7 @@ using MvvmScarletToolkit.Commands;
 namespace Maple
 {
     [DebuggerDisplay("{Name}, {Sequence}")]
-    public class MediaPlayer : MapleDomainViewModelBase<MediaPlayerModel>, ISequence
+    public class MediaPlayer : MapleDomainViewModelBase<MediaPlayer, MediaPlayerModel>, ISequence, IChangeState
     {
         public bool IsPlaying { get { return Player.IsPlaying; } }
 
@@ -120,7 +120,7 @@ namespace Maple
         }
 
         public MediaPlayer(IMapleCommandBuilder commandBuilder, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, MediaPlayerModel model)
-            : base(commandBuilder)
+            : base(commandBuilder, validator)
         {
             Player = player ?? throw new ArgumentNullException(nameof(player));
 

@@ -16,16 +16,17 @@ namespace Maple
 
         protected override async Task RefreshInternal(CancellationToken token)
         {
-            Add(Messenger.Subscribe<ViewModelSelectionChangedMessage<Culture>>(UpdateCulture));
+            // TODO
+            //Add(Messenger.Subscribe<ViewModelSelectionChangedMessage<Culture>>(UpdateCulture));
 
-            Log.Info($"{Resources.Loading} {Resources.Options}");
-            await _manager.Load().ConfigureAwait(true);
+            //Log.Info($"{Resources.Loading} {Resources.Options}");
+            //await _manager.Load().ConfigureAwait(true);
 
-            await AddRange(LocalizationService.Languages.Select(p => new Culture(p, Messenger)).ToList());
-            SelectedItem = Items.FirstOrDefault(p => p.Model.LCID == Core.Properties.Settings.Default.StartUpCulture.LCID) ?? Items.First(p => p.Model.TwoLetterISOLanguageName == "en");
+            //await AddRange(LocalizationService.Languages.Select(p => new Culture(CommandBuilder, p)).ToList());
+            //SelectedItem = Items.FirstOrDefault(p => p.Model.LCID == Core.Properties.Settings.Default.StartUpCulture.LCID) ?? Items.First(p => p.Model.TwoLetterISOLanguageName == "en");
 
-            IsLoaded = true;
-            Messenger.Publish(new LoadedMessage(this, this));
+            //IsLoaded = true;
+            //Messenger.Publish(new LoadedMessage(this, this));
         }
 
         private void UpdateCulture(ViewModelSelectionChangedMessage<Culture> obj)
