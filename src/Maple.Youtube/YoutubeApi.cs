@@ -6,37 +6,25 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
-
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
 
-using Maple.Domain;
-using Maple.Localization.Properties;
-
 namespace Maple.Youtube
 {
-    public class YoutubeApi : IYoutubeApi
+    internal sealed class YoutubeApi
     {
         private const string _videoBaseUrl = @"https://www.youtube.com/watch?v=";
         private const string _playListBaseUrl = @"https://www.youtube.com/playlist?list=";
 
         private volatile YouTubeService _service;
-        private readonly ILoggingService _log;
-
-        public YoutubeApi(ILoggingService log)
-        {
-            _log = log ?? throw new ArgumentNullException(nameof(log), $"{nameof(log)} {Resources.IsRequired}");
-        }
 
         private async Task<YouTubeService> GetService()
         {
             if (_service != null)
                 return _service;
-
-            _log.Info(Resources.YoutubeLoad);
 
             var credentials = await GetCredential().ConfigureAwait(false);
             if (credentials is null)
@@ -50,8 +38,6 @@ namespace Maple.Youtube
                 ApplicationName = GetType().ToString()
             });
 
-            _log.Info(Resources.YoutubeLoaded);
-
             return _service;
         }
 
@@ -63,7 +49,6 @@ namespace Maple.Youtube
 
                 if (secretCollection is null || secretCollection.Secrets is null)
                 {
-                    _log.Error("Youtube credentials not found!.");
                     return null;
                 }
 
@@ -80,14 +65,14 @@ namespace Maple.Youtube
             }
         }
 
-        public async Task<ICollection<PlaylistModel>> GetPlaylists(string playlistId)
+        public async Task<ICollection<YoutubePlaylist>> GetPlaylists(string playlistId)
         {
-            var result = new List<PlaylistModel>();
+            var result = new List<YoutubePlaylist>();
             var youtubeService = await GetService().ConfigureAwait(false);
 
             if (youtubeService is null)
             {
-                return Enumerable.Empty<PlaylistModel>().ToList();
+                return Enumerable.Empty<YoutubePlaylist>().ToList();
             }
 
             var request = youtubeService.Playlists.List("snippet,contentDetails");
@@ -100,11 +85,11 @@ namespace Maple.Youtube
                 var nextPageToken = "";
                 while (nextPageToken != null)
                 {
-                    var playlist = new Domain.PlaylistModel
+                    var playlist = new YoutubePlaylist
                     {
                         Title = item.Snippet.Title,
                         Location = $"{_playListBaseUrl}{item.Id}",
-                        PrivacyStatus = string.IsNullOrEmpty(item.Status?.PrivacyStatus) ? (int)PrivacyStatus.None : (int)PrivacyStatus.Restricted,
+                        PrivacyStatus = string.IsNullOrEmpty(item.Status?.PrivacyStatus) ? 0 : 1,
                     };
 
                     result.Add(playlist);
@@ -116,7 +101,7 @@ namespace Maple.Youtube
             return result;
         }
 
-        public async Task CreatePlaylist(PlaylistModel playlist, bool publicPlaylist = true)
+        public async Task CreatePlaylist(YoutubePlaylist playlist, bool publicPlaylist = true)
         {
             var youtubeService = await GetService().ConfigureAwait(false);
 
@@ -141,7 +126,7 @@ namespace Maple.Youtube
                                                         .ExecuteAsync()
                                                         .ConfigureAwait(false);
 
-            foreach (var item in playlist.MediaItems)
+            foreach (var item in playlist.Items)
             {
                 // Add a video to the newly created playlist.
                 var newVideo = new PlaylistItem()
@@ -160,7 +145,7 @@ namespace Maple.Youtube
             }
         }
 
-        public async Task DeletePlaylist(PlaylistModel playlist)
+        public async Task DeletePlaylist(YoutubePlaylist playlist)
         {
             var youtubeService = await GetService().ConfigureAwait(false);
             if (youtubeService is null)
@@ -175,7 +160,7 @@ namespace Maple.Youtube
                                           .ConfigureAwait(false);
         }
 
-        public static string GetVideoId(MediaItemModel item)
+        private static string GetVideoId(YoutubeVideo item)
         {
             var url = new Uri(item.Location);
             var result = HttpUtility.ParseQueryString(url.Query)
@@ -184,7 +169,7 @@ namespace Maple.Youtube
             return result;
         }
 
-        public static string GetPlaylistId(PlaylistModel list)
+        private static string GetPlaylistId(YoutubePlaylist list)
         {
             var url = new Uri(list.Location);
             var result = HttpUtility.ParseQueryString(url.Query)
@@ -236,11 +221,9 @@ namespace Maple.Youtube
                                                   .ConfigureAwait(false);
         }
 
-        //TODO writing a async sync method for what i get from youtube vs that i generate myself as playlist
-
-        public async Task<ICollection<MediaItemModel>> GetVideo(string videoId)
+        public async Task<ICollection<YoutubeVideo>> GetVideo(string videoId)
         {
-            var result = new List<MediaItemModel>();
+            var result = new List<YoutubeVideo>();
             var youtubeService = await GetService().ConfigureAwait(false);
 
             var request = youtubeService.Videos.List("snippet,contentDetails");
@@ -254,12 +237,12 @@ namespace Maple.Youtube
                 var nextPageToken = "";
                 while (nextPageToken != null)
                 {
-                    var video = new Domain.MediaItemModel
+                    var video = new YoutubeVideo
                     {
                         Title = item.Snippet.Title,
                         Location = $"{_videoBaseUrl}{videoId}",
                         Duration = XmlConvert.ToTimeSpan(item.ContentDetails.Duration).Ticks,
-                        PrivacyStatus = (item.ContentDetails.CountryRestriction?.Allowed ?? true) ? (int)PrivacyStatus.None : (int)PrivacyStatus.Restricted,
+                        PrivacyStatus = (item.ContentDetails.CountryRestriction?.Allowed ?? true) ? 0 : 1,
                     };
 
                     result.Add(video);

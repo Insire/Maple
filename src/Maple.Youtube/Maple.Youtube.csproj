@@ -11,8 +11,4 @@
       <Version>1.40.0.1593</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Maple.Domain\Maple.Domain.csproj" />
-    <ProjectReference Include="..\Maple.Localization\Maple.Localization.csproj" />
-  </ItemGroup>
 </Project>
