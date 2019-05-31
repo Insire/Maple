@@ -14,11 +14,11 @@ namespace Maple
             private set { SetValue(ref _statusbarViewModel, value); }
         }
 
-        private Scenes _scenes;
-        public Scenes Scenes
+        private NavigationViewModel _navigationViewModel;
+        public NavigationViewModel NavigationViewModel
         {
-            get { return _scenes; }
-            private set { SetValue(ref _scenes, value); }
+            get { return _navigationViewModel; }
+            private set { SetValue(ref _navigationViewModel, value); }
         }
 
         private ILocalizationService _translationManager;
@@ -57,20 +57,20 @@ namespace Maple
         }
 
         public ShellViewModel(ILocalizationService translationManager,
-                                Scenes scenes,
+                                NavigationViewModel navigationViewModel,
                                 StatusbarViewModel statusBarViewModel,
                                 DialogViewModel dialogViewModel,
                                 Playlists playlists,
                                 MediaPlayers mediaPlayers,
                                 OptionsViewModel optionsViewModel)
         {
-            TranslationManager = translationManager ?? throw new ArgumentNullException(nameof(translationManager), $"{nameof(translationManager)} {Resources.IsRequired}");
-            Scenes = scenes ?? throw new ArgumentNullException(nameof(scenes), $"{nameof(scenes)} {Resources.IsRequired}");
-            StatusbarViewModel = statusBarViewModel ?? throw new ArgumentNullException(nameof(statusBarViewModel), $"{nameof(statusBarViewModel)} {Resources.IsRequired}");
-            DialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel), $"{nameof(dialogViewModel)} {Resources.IsRequired}");
-            Playlists = playlists ?? throw new ArgumentNullException(nameof(playlists), $"{nameof(playlists)} {Resources.IsRequired}");
-            MediaPlayers = mediaPlayers ?? throw new ArgumentNullException(nameof(mediaPlayers), $"{nameof(mediaPlayers)} {Resources.IsRequired}");
-            OptionsViewModel = optionsViewModel ?? throw new ArgumentNullException(nameof(optionsViewModel), $"{nameof(optionsViewModel)} {Resources.IsRequired}");
+            TranslationManager = translationManager ?? throw new ArgumentNullException(nameof(translationManager));
+            NavigationViewModel = navigationViewModel ?? throw new ArgumentNullException(nameof(navigationViewModel));
+            StatusbarViewModel = statusBarViewModel ?? throw new ArgumentNullException(nameof(statusBarViewModel));
+            DialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
+            Playlists = playlists ?? throw new ArgumentNullException(nameof(playlists));
+            MediaPlayers = mediaPlayers ?? throw new ArgumentNullException(nameof(mediaPlayers));
+            OptionsViewModel = optionsViewModel ?? throw new ArgumentNullException(nameof(optionsViewModel));
         }
     }
 }

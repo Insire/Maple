@@ -18,7 +18,7 @@ namespace Maple
 
         private void UIElement_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            _datacontext.Scenes.IsExpanded = false;
+            _datacontext.NavigationViewModel.IsExpanded = false;
         }
     }
 }

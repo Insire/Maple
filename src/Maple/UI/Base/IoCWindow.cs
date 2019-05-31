@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-
+using MahApps.Metro.Controls;
 using Maple.Core;
 using Maple.Domain;
 using Maple.Icons;
@@ -14,10 +14,11 @@ using MvvmScarletToolkit.ConfigurableWindow;
 
 namespace Maple
 {
-    public abstract class IoCWindow : ConfigurableWindow, IIocFrameworkElement
+    public abstract class IoCWindow : MetroWindow, IIocFrameworkElement
     {
+        private readonly IMessenger _messenger;
         private IConfigurableWindowSettings _settings;
-        private IMessenger _messenger;
+
         public ILocalizationService TranslationManager { get; private set; }
 
         protected IoCWindow()
@@ -36,21 +37,9 @@ namespace Maple
             _messenger.Subscribe<UiPrimaryColorChangedMessage>(PrimaryColorChanged);
         }
 
-        /// <summary>
-        /// Derived classes must return the object which exposes
-        /// persisted window settings. This method is only invoked
-        /// once per Window, during construction.
-        /// </summary>
-        /// <returns></returns>
-        protected override IConfigurableWindowSettings CreateSettings()
-        {
-            return _settings = _settings ?? new ShellSettings(this);
-        }
-
         private void PrimaryColorChanged(UiPrimaryColorChangedMessage e)
         {
-            var data = string.Empty;
-            if (MaplePackIcon.TryGet(PackIconKind.ApplicationIcon, out data))
+            if (MaplePackIcon.TryGet(PackIconKind.ApplicationIcon, out var data))
             {
                 var geo = Geometry.Parse(data);
                 SetCurrentValue(IconProperty, SetImage(geo, e.Content));

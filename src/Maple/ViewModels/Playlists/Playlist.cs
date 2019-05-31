@@ -207,7 +207,7 @@ namespace Maple
 
                 (var Result, var MediaItems) = await _dialogViewModel.ShowMediaItemFolderSelectionDialog(options, token).ConfigureAwait(true);
                 if (Result)
-                    await AddRange(MediaItems).ConfigureAwait(false);
+                    await Task.WhenAll(MediaItems.ForEach(Add)).ConfigureAwait(false);
             }
         }
 
@@ -229,7 +229,7 @@ namespace Maple
 
                 (var Result, var MediaItems) = await _dialogViewModel.ShowMediaItemSelectionDialog(options, token).ConfigureAwait(true);
                 if (Result)
-                    await AddRange(MediaItems).ConfigureAwait(false);
+                    await Task.WhenAll(MediaItems.ForEach(Add)).ConfigureAwait(false);
             }
         }
 
@@ -245,7 +245,19 @@ namespace Maple
             return MediaItems.Clear(token);
         }
 
-        public Task Add(YoutubeVideoViewModel model)
+        private Task Add(MediaItemModel model)
+        {
+            return Add(new MediaItem((IMapleCommandBuilder)CommandBuilder, _mediaItemValidator, new MediaItemModel()
+            {
+                Duration = model.Duration,
+                Description = model.Description,
+                Location = model.Location,
+                PrivacyStatus = model.PrivacyStatus,
+                Title = model.Title,
+            }));
+        }
+
+        private Task Add(YoutubeVideoViewModel model)
         {
             return Add(new MediaItem((IMapleCommandBuilder)CommandBuilder, _mediaItemValidator, new MediaItemModel()
             {

@@ -659,7 +659,7 @@
                             </TreeView.Resources>
 
                             <i:Interaction.Behaviors>
-                                <local:SelectedTreeViewItemBehavior SelectedItem="{Binding SelectedItem, Mode=TwoWay}" />
+                                <browser:SelectedTreeViewItemBehavior SelectedItem="{Binding SelectedItem, Mode=TwoWay}" />
                             </i:Interaction.Behaviors>
                         </TreeView>
 
@@ -1132,7 +1132,7 @@
     </DataTemplate>
     <!--#endregion-->
 
-    <DataTemplate DataType="{x:Type local:CreateMediaItem}">
+    <DataTemplate DataType="{x:Type local:YoutubeImportViewModel}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
