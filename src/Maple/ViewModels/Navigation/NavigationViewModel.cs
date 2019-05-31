@@ -46,21 +46,21 @@ namespace Maple
             _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationService, nameof(Resources.Playlists)))
             {
                 Content = new PlaylistsPage(_localizationService),
-                IsSelected = true,
+                IsSelected = false,
                 Sequence = 200,
             });
 
             _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationService, nameof(Resources.Themes)))
             {
                 Content = new ColorOptionsPage(_localizationService),
-                IsSelected = true,
+                IsSelected = false,
                 Sequence = 300,
             });
 
             _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationService, nameof(Resources.Options)))
             {
                 Content = new OptionsPage(_localizationService),
-                IsSelected = true,
+                IsSelected = false,
                 Sequence = 400,
             });
 

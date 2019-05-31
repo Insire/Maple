@@ -151,10 +151,7 @@
                             </ListBox.ItemContainerStyle>
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="Scene">
-                                    <TextBlock Grid.Column="1"
-                                               HorizontalAlignment="Stretch"
-                                               VerticalAlignment="Center"
-                                               Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" />
+                                    <ContentPresenter Content="{Binding DisplayName}" />
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
