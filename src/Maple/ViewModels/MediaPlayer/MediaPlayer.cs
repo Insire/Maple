@@ -17,7 +17,7 @@ namespace Maple
     [DebuggerDisplay("{Name}, {Sequence}")]
     public class MediaPlayer : MapleDomainViewModelBase<MediaPlayer, MediaPlayerModel>, ISequence, IChangeState
     {
-        public bool IsPlaying { get { return Player.IsPlaying; } }
+        public bool IsPlaying => Player.IsPlaying;
 
         public bool IsNew => Model.IsNew;
         public bool IsDeleted => Model.IsDeleted;
@@ -224,12 +224,12 @@ namespace Maple
         /// Adds the range.
         /// </summary>
         /// <param name="mediaItems">The media items.</param>
-        public void AddRange(IEnumerable<MediaItem> mediaItems)
+        public async Task AddRange(IEnumerable<MediaItem> mediaItems)
         {
             using (BusyStack.GetToken())
             {
                 foreach (var item in mediaItems)
-                    Playlist.Add(item);
+                    await Playlist.Add(item).ConfigureAwait(false);
             }
         }
 
@@ -237,7 +237,7 @@ namespace Maple
         /// Adds the specified media item.
         /// </summary>
         /// <param name="mediaItem">The media item.</param>
-        public void Add(MediaItem mediaItem)
+        public async Task Add(MediaItem mediaItem)
         {
             using (BusyStack.GetToken())
             {
@@ -252,7 +252,7 @@ namespace Maple
                 else
                     mediaItem.Sequence = 0;
 
-                Playlist.Add(mediaItem);
+                await Playlist.Add(mediaItem).ConfigureAwait(false);
             }
         }
 
@@ -260,16 +260,10 @@ namespace Maple
         /// Removes the specified item.
         /// </summary>
         /// <param name="item">The item.</param>
-        public void Remove(MediaItem item)
+        public async Task Remove(MediaItem item)
         {
             using (BusyStack.GetToken())
-                Playlist.Remove(item);
-        }
-
-        private bool CanRemove(MediaItem item)
-        {
-            using (BusyStack.GetToken())
-                return Playlist.CanRemove(item);
+                await Playlist.Remove(item).ConfigureAwait(false);
         }
 
         /// <summary>

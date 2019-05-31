@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Maple.Core;
@@ -14,7 +15,7 @@ namespace Maple
 
         protected override Task RefreshInternal(CancellationToken token)
         {
-            return AddRange(PlaybackDeviceFactory.GetAudioDevices(Log));
+            throw new NotImplementedException();
         }
     }
 }

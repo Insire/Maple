@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		src\Resources\SharedAssemblyInfo.cs = src\Resources\SharedAssemblyInfo.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple", "src\Maple\Maple.csproj", "{FBD5595B-6859-4E8E-BDFA-C3169EF34985}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple", "src\Maple\Maple.csproj", "{FBD5595B-6859-4E8E-BDFA-C3169EF34985}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple.Core", "src\Maple.Core\Maple.Core.csproj", "{21FA5854-0692-42E2-924E-A38CF3C7FF71}"
 EndProject
@@ -20,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple.Data", "src\Maple.Dat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple.Localization", "src\Maple.Localization\Maple.Localization.csproj", "{A073FC92-90E3-4541-8B52-6F7293187871}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Youtube", "src\Maple.Youtube\Maple.Youtube.csproj", "{B5BE546F-8D9F-4FB9-B235-AF05FD553F9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple.Youtube", "src\Maple.Youtube\Maple.Youtube.csproj", "{B5BE546F-8D9F-4FB9-B235-AF05FD553F9E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Test", "src\Maple.Test\Maple.Test.csproj", "{60F95B05-E714-4E0F-BA97-44711EC74210}"
 EndProject

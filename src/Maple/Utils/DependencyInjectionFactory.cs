@@ -31,8 +31,6 @@ namespace Maple
                 RegisterValidation();
                 RegisterControls();
 
-                c.Resolve<ILocalizationService>().Load();
-
                 return c;
             }
 
@@ -69,9 +67,6 @@ namespace Maple
 
             void RegisterServices()
             {
-                c.Register<IMediaPlayer, NAudioMediaPlayer>(setup: Setup.With(allowDisposableTransient: true));
-                c.Register<IWavePlayerFactory, WavePlayerFactory>(Reuse.Singleton);
-
                 c.Register<PlaylistContext>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
 
                 c.Register<IPlaylistRepository, PlaylistRepository>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));

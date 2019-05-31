@@ -154,7 +154,7 @@ namespace Maple
                 RepeatModes = new ReadOnlyObservableCollection<RepeatMode>(new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>()));
                 _history = new Stack<int>();
 
-                View = CollectionViewSource.GetDefaultView(MediaItems); // TODO add sorting by sequence
+                View = CollectionViewSource.GetDefaultView(MediaItems.Items); // TODO add sorting by sequence
 
                 LoadFromFileCommand = commandBuilder
                     .Create(LoadFromFile, CanLoadFromFile)

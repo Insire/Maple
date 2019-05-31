@@ -43,7 +43,7 @@ namespace Maple
         private async void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             var log = _container?.Resolve<ILoggingService>();
-            var dialog = _container?.Resolve<IDialogViewModel>();
+            var dialog = _container?.Resolve<DialogViewModel>();
 
             log.Info(Localization.Properties.Resources.ExceptionMessageUnhandled);
 
