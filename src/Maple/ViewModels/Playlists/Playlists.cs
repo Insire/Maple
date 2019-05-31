@@ -15,7 +15,7 @@ namespace Maple
 
         protected override Task RefreshInternal(CancellationToken token)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
     }
 }

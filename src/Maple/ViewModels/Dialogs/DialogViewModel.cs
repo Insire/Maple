@@ -15,7 +15,7 @@ namespace Maple
 {
     public sealed class DialogViewModel : DialogBaseViewModel
     {
-        private readonly IMessenger _messenger;
+        private readonly IScarletMessenger _messenger;
         private readonly ILocalizationService _translator;
         private readonly FileSystemViewModel _fileSystemViewModel;
         private readonly YoutubeImportViewModel _youtubeImport;

@@ -5,9 +5,8 @@ namespace Maple.Domain
 {
     public interface IMapleCommandBuilder : ICommandBuilder
     {
-        IMessenger Messenger { get; }
+        IScarletMessenger Messenger { get; }
         ILoggerFactory Log { get; }
-        ILoggingNotifcationService NotificationService { get; }
         ILocalizationService LocalizationService { get; }
         ISequenceService SequenceService { get; }
     }

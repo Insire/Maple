@@ -10,23 +10,23 @@
                  Style="{StaticResource BaseWindowStyle}">
 
     <local:IoCWindow.Resources>
-        <local:BindingProxy x:Key="ScenesProxy" Data="{Binding Scenes}" />
+        <local:BindingProxy x:Key="ScenesProxy" Data="{Binding NavigationViewModel}" />
         <local:BindingProxy x:Key="DialogProxy" Data="{Binding DialogViewModel}" />
     </local:IoCWindow.Resources>
 
     <!--  DataContext ShellViewModel  -->
     <metro:MetroWindow.RightWindowCommands>
         <metro:WindowCommands ShowSeparators="False">
-            <Button Command="{Binding Scenes.OpenMediaPlayerConfigurationCommand}" ToolTip="{local:Translation OpenMediaPlayerConfigurationCommand}">
+            <Button Command="{Binding NavigationViewModel.OpenMediaPlayerConfigurationCommand}" ToolTip="{local:Translation OpenMediaPlayerConfigurationCommand}">
                 <icons:PackIconMaterial Kind="Cogs" />
             </Button>
-            <Button Command="{Binding Scenes.OpenOptionsCommand}" ToolTip="{local:Translation OptionsCommand}">
+            <Button Command="{Binding NavigationViewModel.OpenOptionsCommand}" ToolTip="{local:Translation OptionsCommand}">
                 <icons:PackIconMaterial Kind="Earth" />
             </Button>
-            <Button Command="{Binding Scenes.OpenColorOptionsCommand}" ToolTip="{local:Translation ColorOptionsCommand}">
+            <Button Command="{Binding NavigationViewModel.OpenColorOptionsCommand}" ToolTip="{local:Translation ColorOptionsCommand}">
                 <icons:PackIconMaterial Kind="Brush" />
             </Button>
-            <Button Command="{Binding Scenes.OpenMediaPlayerCommand}" ToolTip="{local:Translation MediaPlayerCommand}">
+            <Button Command="{Binding NavigationViewModel.OpenMediaPlayerCommand}" ToolTip="{local:Translation MediaPlayerCommand}">
                 <icons:PackIconMaterial Kind="Play" />
             </Button>
         </metro:WindowCommands>
@@ -34,7 +34,7 @@
 
     <metro:MetroWindow.LeftWindowCommands>
         <metro:WindowCommands>
-            <Button Command="{Binding Scenes.OpenGithubPageCommand}" ToolTip="{local:Translation GithubPageCommand}">
+            <Button Command="{Binding NavigationViewModel.OpenGithubPageCommand}" ToolTip="{local:Translation GithubPageCommand}">
                 <icons:PackIconMaterial Kind="GithubCircle" />
             </Button>
         </metro:WindowCommands>
@@ -176,10 +176,10 @@
                                        VerticalAlignment="Center"
                                        FontSize="22"
                                        FontWeight="Medium"
-                                       Text="{Binding Scenes.SelectedItem.DisplayName, UpdateSourceTrigger=PropertyChanged}" />
+                                       Text="{Binding NavigationViewModel.SelectedItem.DisplayName, UpdateSourceTrigger=PropertyChanged}" />
                         </DockPanel>
                     </materialDesign:ColorZone>
-                    <ContentControl Content="{Binding Scenes.SelectedItem.Content, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseLayoutStyle}" />
+                    <ContentControl Content="{Binding NavigationViewModel.SelectedItem.Content, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseLayoutStyle}" />
                 </DockPanel>
             </materialDesign:DrawerHost>
         </materialDesign:DialogHost>

@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Maple.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +18,7 @@ namespace Maple.Data
 
         public Task Migrate()
         {
-            return Database.EnsureCreatedAsync();
+            return Database.MigrateAsync();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

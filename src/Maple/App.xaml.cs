@@ -29,11 +29,6 @@ namespace Maple
             InitializeResources(localizationService);
             // TODO InitializeLocalization();
 
-            using (var context = _container.Resolve<PlaylistContext>())
-            {
-                await context.Migrate().ConfigureAwait(false);
-            }
-
             var shell = await GetShell(_log).ConfigureAwait(true);
             shell.Show();
 

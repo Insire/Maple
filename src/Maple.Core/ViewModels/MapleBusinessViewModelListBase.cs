@@ -56,9 +56,8 @@ namespace Maple.Core
     public abstract class MapleBusinessViewModelListBase<TViewModel> : BusinessViewModelListBase<TViewModel>, IDisposable
         where TViewModel : class, INotifyPropertyChanged
     {
-        protected readonly IMessenger Messenger;
+        protected readonly IScarletMessenger Messenger;
         protected readonly ILoggerFactory Log;
-        protected readonly ILoggingNotifcationService NotificationService;
         protected readonly ILocalizationService LocalizationService;
         protected readonly ISequenceService SequenceService;
 
@@ -71,7 +70,6 @@ namespace Maple.Core
         {
             Messenger = commandBuilder.Messenger ?? throw new ArgumentNullException(nameof(Messenger));
             Log = commandBuilder.Log ?? throw new ArgumentNullException(nameof(Log));
-            NotificationService = commandBuilder.NotificationService ?? throw new ArgumentNullException(nameof(NotificationService));
             LocalizationService = commandBuilder.LocalizationService ?? throw new ArgumentNullException(nameof(LocalizationService));
             SequenceService = commandBuilder.SequenceService ?? throw new ArgumentNullException(nameof(SequenceService));
 

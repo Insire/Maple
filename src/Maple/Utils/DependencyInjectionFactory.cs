@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using DryIoc;
 using FluentValidation;
@@ -7,6 +6,8 @@ using Maple.Core;
 using Maple.Data;
 using Maple.Domain;
 using Maple.Youtube;
+using MaterialDesignColors;
+using MaterialDesignThemes.Wpf;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MvvmScarletToolkit;
@@ -71,7 +72,8 @@ namespace Maple
                 c.UseInstance(new DbContextOptionsBuilder<PlaylistContext>()
                     .UseSqlite("Data Source=../maple.db;")
                     .UseLoggerFactory(loggerFactory)
-                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).Options);
+                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                    .Options);
             }
 
             static Logger CreateLogger(LoggingFileConfiguration config)
@@ -105,7 +107,6 @@ namespace Maple
             {
                 // TODO register disposeables
 
-                // save-/loadable ViewModels
                 c.RegisterMany(new[] { typeof(Playlists) }, typeof(Playlists), Reuse.Singleton);
                 c.RegisterMany(new[] { typeof(MediaPlayers) }, typeof(MediaPlayers), Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
                 c.RegisterMany(new[] { typeof(ICultureViewModel) }, typeof(Cultures), Reuse.Singleton);
@@ -117,10 +118,10 @@ namespace Maple
                 c.Register<ShellViewModel>(Reuse.Singleton);
                 c.Register<DialogViewModel>(Reuse.Singleton);
                 c.Register<StatusbarViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
+                c.Register<FileSystemOptionsViewModel>();
                 c.Register<FileSystemViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
                 c.Register<OptionsViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
 
-                c.Register<YoutubeImportViewModel>(setup: Setup.With(allowDisposableTransient: true));
                 c.Register<YoutubeImportViewModel>(setup: Setup.With(allowDisposableTransient: true));
 
                 c.Register<ISplashScreenViewModel, SplashScreenViewModel>(Reuse.Singleton);
@@ -143,7 +144,14 @@ namespace Maple
                 c.Register<ILocalizationService, LocalizationsViewModel>(Reuse.Singleton);
                 c.Register<ILocalizationProvider, ResxTranslationProvider>(Reuse.Singleton);
 
-                c.Register<IMessenger, ScarletMessenger>(Reuse.Singleton);
+                c.UseInstance(new SwatchesProvider());
+                c.UseInstance(new PaletteHelper());
+
+                c.UseInstance(ScarletDispatcher.Default);
+                c.RegisterMany(new[] { typeof(ICommandBuilder), typeof(IMapleCommandBuilder) }, typeof(MapleCommandBuilder), Reuse.Singleton);
+                c.Register<IBusyStack, BusyStack>();
+                c.Register<IScarletMessenger, ScarletMessenger>(Reuse.Singleton);
+                c.Register<IScarletCommandManager, ScarletCommandManager>(Reuse.Singleton);
                 c.Register<IScarletMessageProxy, DefaultMessageProxy>(Reuse.Singleton);
             }
 

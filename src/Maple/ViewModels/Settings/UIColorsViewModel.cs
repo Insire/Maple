@@ -31,7 +31,7 @@ namespace Maple
 
         public ICommand SaveCommand { get; }
 
-        public IEnumerable<Swatch> Swatches => new SwatchesProvider().Swatches;
+        public IEnumerable<Swatch> Swatches => _swatchesProvider.Swatches;
 
         public UIColorsViewModel(IMapleCommandBuilder commandBuilder, SwatchesProvider swatchesProvider, PaletteHelper paletteHelper)
             : base(commandBuilder)

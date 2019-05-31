@@ -41,6 +41,7 @@
     <PackageReference Include="squirrel.windows">
       <Version>1.9.1</Version>
     </PackageReference>
+    <PackageReference Include="System.Management" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.Abstractions\MvvmScarletToolkit.Abstractions.csproj" />

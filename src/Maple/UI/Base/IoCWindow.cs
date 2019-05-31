@@ -15,7 +15,7 @@ namespace Maple
 {
     public abstract class IoCWindow : MetroWindow, IIocFrameworkElement
     {
-        private readonly IMessenger _messenger;
+        private readonly IScarletMessenger _messenger;
 
         public ILocalizationService LocalizationService { get; }
 
@@ -26,7 +26,7 @@ namespace Maple
                 Debug.Fail($"The constructor without parameters of {nameof(IoCWindow)} exists only for compatibility reasons.");
         }
 
-        protected IoCWindow(ILocalizationService localizationService, IMessenger messenger)
+        protected IoCWindow(ILocalizationService localizationService, IScarletMessenger messenger)
             : base()
         {
             LocalizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));

@@ -13,7 +13,7 @@ namespace Maple
 {
     public class SplashScreenViewModel : ObservableObject, ISplashScreenViewModel
     {
-        private readonly IMessenger _messenger;
+        private readonly IScarletMessenger _messenger;
         private readonly Queue<string> _queue;
         private System.Timers.Timer _timer;
 
@@ -54,13 +54,13 @@ namespace Maple
             _timer.Elapsed += _timer_Elapsed;
         }
 
-        private SplashScreenViewModel(IMessenger messenger) : this()
+        private SplashScreenViewModel(IScarletMessenger messenger) : this()
         {
             _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");
             _messenger.Subscribe<LogMessageReceivedMessage>(LogMessageReceived);
         }
 
-        public SplashScreenViewModel(IMessenger messenger, IVersionService version) : this(messenger)
+        public SplashScreenViewModel(IScarletMessenger messenger, IVersionService version) : this(messenger)
         {
             Version = version.Get();
             InitializeCommands();
