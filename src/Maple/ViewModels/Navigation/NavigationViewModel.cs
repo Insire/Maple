@@ -12,7 +12,7 @@ namespace Maple
 {
     public sealed class NavigationViewModel : Scenes
     {
-        private readonly ILocalizationService _manager;
+        private readonly ILocalizationService _localizationService;
         private readonly DialogViewModel _dialogViewModel;
 
         private bool _isExpanded;
@@ -33,33 +33,33 @@ namespace Maple
         public NavigationViewModel(ICommandBuilder commandBuilder, ILocalizationService localizationService, DialogViewModel dialogViewModel)
             : base(commandBuilder)
         {
-            _manager = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
+            _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
             _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
 
             _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationService, nameof(Resources.Playback)))
             {
-                Content = new MediaPlayerPage(_manager),
+                Content = new MediaPlayerPage(_localizationService),
                 IsSelected = true,
                 Sequence = 100,
             });
 
             _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationService, nameof(Resources.Playlists)))
             {
-                Content = new PlaylistsPage(_manager),
+                Content = new PlaylistsPage(_localizationService),
                 IsSelected = true,
                 Sequence = 200,
             });
 
             _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationService, nameof(Resources.Themes)))
             {
-                Content = new ColorOptionsPage(_manager),
+                Content = new ColorOptionsPage(_localizationService),
                 IsSelected = true,
                 Sequence = 300,
             });
 
             _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationService, nameof(Resources.Options)))
             {
-                Content = new OptionsPage(_manager),
+                Content = new OptionsPage(_localizationService),
                 IsSelected = true,
                 Sequence = 400,
             });
@@ -114,7 +114,7 @@ namespace Maple
 
         private void OpenGithubPage()
         {
-            using (Process.Start(_manager.Translate(nameof(Resources.GithubProjectLink))))
+            using (Process.Start(_localizationService.Translate(nameof(Resources.GithubProjectLink))))
             {
             }
         }

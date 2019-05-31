@@ -1,5 +1,6 @@
 using System;
 using Maple.Domain;
+using Microsoft.Extensions.Logging;
 using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Commands;
 
@@ -11,9 +12,9 @@ namespace Maple.Core
         public ILocalizationService LocalizationService { get; }
         public ISequenceService SequenceService { get; }
         public IMessenger Messenger { get; }
-        public ILoggingService Log { get; }
+        public ILoggerFactory Log { get; }
 
-        public MapleCommandBuilder(ILoggingService log, ILoggingNotifcationService notificationService, ILocalizationService localizationService, IMessenger messenger, ISequenceService sequenceService, IScarletDispatcher dispatcher, IScarletCommandManager commandManager, Func<Action<bool>, IBusyStack> busyStackFactory)
+        public MapleCommandBuilder(ILoggerFactory log, ILoggingNotifcationService notificationService, ILocalizationService localizationService, IMessenger messenger, ISequenceService sequenceService, IScarletDispatcher dispatcher, IScarletCommandManager commandManager, Func<Action<bool>, IBusyStack> busyStackFactory)
             : base(dispatcher, commandManager, busyStackFactory)
         {
             Log = log ?? throw new ArgumentNullException(nameof(log));

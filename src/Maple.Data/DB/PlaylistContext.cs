@@ -12,22 +12,14 @@ namespace Maple.Data
         public DbSet<MediaPlayerModel> Mediaplayers { get; set; }
         public DbSet<OptionModel> Options { get; set; }
 
-        internal PlaylistContext(DbContextOptions<PlaylistContext> options)
+        public PlaylistContext(DbContextOptions<PlaylistContext> options)
             : base(options)
         {
         }
 
         public Task Migrate()
         {
-            return Database.MigrateAsync();
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (optionsBuilder.IsConfigured)
-                return;
-
-            throw new NotImplementedException();
+            return Database.EnsureCreatedAsync();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

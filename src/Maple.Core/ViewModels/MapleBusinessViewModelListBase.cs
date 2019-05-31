@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Maple.Domain;
+using Microsoft.Extensions.Logging;
 using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Observables;
 
@@ -56,7 +57,7 @@ namespace Maple.Core
         where TViewModel : class, INotifyPropertyChanged
     {
         protected readonly IMessenger Messenger;
-        protected readonly ILoggingService Log;
+        protected readonly ILoggerFactory Log;
         protected readonly ILoggingNotifcationService NotificationService;
         protected readonly ILocalizationService LocalizationService;
         protected readonly ISequenceService SequenceService;

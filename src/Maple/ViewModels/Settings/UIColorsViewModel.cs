@@ -9,6 +9,7 @@ using Maple.Domain;
 using Maple.Localization.Properties;
 using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
+using Microsoft.Extensions.Logging;
 using MvvmScarletToolkit.Commands;
 
 namespace Maple
@@ -21,6 +22,7 @@ namespace Maple
 
         private readonly PaletteHelper _paletteHelper;
         private readonly SwatchesProvider _swatchesProvider;
+        private readonly ILogger _log;
 
         public ICommand ToggleBaseCommand { get; }
 
@@ -36,6 +38,7 @@ namespace Maple
         {
             _swatchesProvider = swatchesProvider ?? throw new ArgumentNullException(nameof(swatchesProvider));
             _paletteHelper = paletteHelper ?? throw new ArgumentNullException(nameof(paletteHelper));
+            _log = LogFactory.CreateLogger<UIColorsViewModel>();
 
             OnPropertyChanged(nameof(Swatches));
             ToggleBaseCommand = new RelayCommand(() => ApplyBase(!_isDark));
@@ -83,7 +86,7 @@ namespace Maple
         /// </summary>
         public Task Save()
         {
-            Log.Info($"{Resources.Saving} {Resources.Themes}");
+            _log.LogInformation($"{Resources.Saving} {Resources.Themes}");
 
             Properties.Settings.Default.AccentName = _accent;
             Properties.Settings.Default.SwatchName = _swatch;
@@ -101,7 +104,7 @@ namespace Maple
 
         protected override Task RefreshInternal(CancellationToken token)
         {
-            Log.Info($"{Resources.Loading} {Resources.Themes}");
+            _log.LogInformation($"{Resources.Loading} {Resources.Themes}");
 
             var swatchName = Properties.Settings.Default.SwatchName;
             var swatch = Swatches.FirstOrDefault(p => p.Name == swatchName);

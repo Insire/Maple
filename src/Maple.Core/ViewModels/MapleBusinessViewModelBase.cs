@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;
 using Maple.Domain;
+using Microsoft.Extensions.Logging;
 using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Observables;
 
@@ -39,7 +40,7 @@ namespace Maple.Core
     public abstract class MapleBusinessViewModelBase : BusinessViewModelBase, IDisposable
     {
         protected readonly IMessenger Messenger;
-        protected readonly ILoggingService Log;
+        protected readonly ILoggerFactory LogFactory;
         protected readonly ILoggingNotifcationService NotificationService;
         protected readonly ILocalizationService LocalizationService;
         protected readonly ISequenceService SequenceService;
@@ -52,7 +53,7 @@ namespace Maple.Core
             : base(commandBuilder)
         {
             Messenger = commandBuilder.Messenger ?? throw new ArgumentNullException(nameof(Messenger));
-            Log = commandBuilder.Log ?? throw new ArgumentNullException(nameof(Log));
+            LogFactory = commandBuilder.Log ?? throw new ArgumentNullException(nameof(LogFactory));
             NotificationService = commandBuilder.NotificationService ?? throw new ArgumentNullException(nameof(NotificationService));
             LocalizationService = commandBuilder.LocalizationService ?? throw new ArgumentNullException(nameof(LocalizationService));
             SequenceService = commandBuilder.SequenceService ?? throw new ArgumentNullException(nameof(SequenceService));

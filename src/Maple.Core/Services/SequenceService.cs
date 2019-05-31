@@ -1,20 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Maple.Domain;
 using Maple.Localization.Properties;
-using MvvmScarletToolkit.Abstractions;
+using Microsoft.Extensions.Logging;
 
 namespace Maple.Core
 {
     public sealed class SequenceService : ISequenceService
     {
-        private readonly ILoggingService _log;
+        private readonly ILogger _log;
 
-        public SequenceService(ILoggingService log)
+        public SequenceService(ILoggerFactory factory)
         {
-            _log = log ?? throw new ArgumentNullException(nameof(log));
+            _log = factory.CreateLogger<SequenceService>() ?? throw new ArgumentNullException(nameof(factory));
         }
 
         public int Get(IList<ISequence> items)
@@ -27,7 +26,7 @@ namespace Maple.Core
                 {
                     if (result == int.MaxValue)
                     {
-                        _log.Error(Resources.MaxPlaylistCountReachedException);
+                        _log.LogError(Resources.MaxPlaylistCountReachedException);
                         break;
                     }
 

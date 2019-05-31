@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Threading;
 using DryIoc;
 using Maple.Data;
-using Maple.Domain;
 using Microsoft.Extensions.Logging;
 using MvvmScarletToolkit.Abstractions;
 
@@ -14,6 +13,7 @@ namespace Maple
     {
         private IContainer _container;
         private Task _backgroundUpdate;
+        private ILogger _log;
 
         protected override async void OnStartup(StartupEventArgs e)
         {
@@ -23,9 +23,9 @@ namespace Maple
 
             var localizationService = _container.Resolve<ILocalizationService>();
             var loggerFactory = _container.Resolve<ILoggerFactory>();
-            var log = _container.Resolve<ILoggingService>();
+            _log = loggerFactory.CreateLogger<App>();
 
-            InitializeUpdater(log);
+            InitializeUpdater(_log);
             InitializeResources(localizationService);
             // TODO InitializeLocalization();
 
@@ -34,7 +34,7 @@ namespace Maple
                 await context.Migrate().ConfigureAwait(false);
             }
 
-            var shell = await GetShell(log).ConfigureAwait(true);
+            var shell = await GetShell(_log).ConfigureAwait(true);
             shell.Show();
 
             base.OnStartup(e);
@@ -42,15 +42,10 @@ namespace Maple
 
         private async void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            var log = _container?.Resolve<ILoggingService>();
-            var dialog = _container?.Resolve<DialogViewModel>();
+            var dialog = _container.Resolve<DialogViewModel>();
 
-            log.Info(Localization.Properties.Resources.ExceptionMessageUnhandled);
-
-            if (e.Exception.InnerException != null)
-                log.Error(e.Exception.InnerException);
-
-            log.Error(e.Exception);
+            _log.LogInformation(Localization.Properties.Resources.ExceptionMessageUnhandled);
+            _log.LogError(e.Exception, e.Exception.Message);
 
             await dialog.ShowExceptionDialog(e.Exception).ConfigureAwait(true);
         }
@@ -70,7 +65,7 @@ namespace Maple
         /// <remarks>
         /// order matters alot here, so be careful when modifying this
         /// </remarks>
-        private async Task<Shell> GetShell(ILoggingService log)
+        private async Task<Shell> GetShell(ILogger log)
         {
             using (var vm = _container.Resolve<ISplashScreenViewModel>())
             {
@@ -80,7 +75,7 @@ namespace Maple
                 shell.Loaded += (o, args) => screen.Close();
                 screen.Show();
 
-                log.Info(Localization.Properties.Resources.AppStart);
+                log.LogInformation(Localization.Properties.Resources.AppStart);
                 await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(true);
 
                 return shell;
@@ -103,14 +98,14 @@ namespace Maple
             Resources.MergedDictionaries.Add(styles);
         }
 
-        private void InitializeUpdater(ILoggingService log)
+        private void InitializeUpdater(ILogger log)
         {
             Splat.Locator.CurrentMutable.Register(() => log, typeof(Splat.ILogger));
 
             _backgroundUpdate = LoadUpdates(log);
         }
 
-        private async Task LoadUpdates(ILoggingService log)
+        private async Task LoadUpdates(ILogger log)
         {
 #if Release
             var manager = default(UpdateManager);

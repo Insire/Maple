@@ -12,7 +12,7 @@ namespace Maple.Data
                  .Build();
 
             var builder = new DbContextOptionsBuilder<PlaylistContext>()
-                .UseSqlite(Constants.ConnectionString);
+                .UseSqlite("Data Source=../maple.db;");
 
             return new PlaylistContext(builder.Options);
         }

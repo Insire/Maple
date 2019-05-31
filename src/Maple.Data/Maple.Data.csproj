@@ -19,6 +19,5 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Maple.Domain\Maple.Domain.csproj" />
-    <ProjectReference Include="..\Maple.Log\Maple.Log.csproj" />
   </ItemGroup>
 </Project>
