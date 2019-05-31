@@ -35,7 +35,7 @@ namespace Maple
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
             if (TryGetIoCFrameWorkElement(serviceProvider, out var element))
-                return ProvideValue(serviceProvider, element.TranslationManager);
+                return ProvideValue(serviceProvider, element.LocalizationService);
 
             if (TryGetTranslationManagerFromResources(serviceProvider, out var manager))
                 return ProvideValue(serviceProvider, manager);

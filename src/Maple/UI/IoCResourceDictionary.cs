@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-
 using Maple.Core;
 using MvvmScarletToolkit.Abstractions;
 
@@ -19,25 +18,29 @@ namespace Maple
         /// <value>
         /// The translation manager.
         /// </value>
-        public ILocalizationService TranslationManager { get; private set; }
+        public ILocalizationService LocalizationService { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IoCResourceDictionary"/> class.
         /// </summary>
-        public IoCResourceDictionary() : base()
+        public IoCResourceDictionary()
+            : base()
         {
-            Debug.Fail($"The constructor without parameters of {nameof(IoCResourceDictionary)} exists only for compatibility reasons.");
+            if (Debugger.IsAttached)
+                Debug.Fail($"The constructor without parameters of {nameof(IoCResourceDictionary)} exists only for compatibility reasons.");
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IoCResourceDictionary"/> class.
         /// </summary>
         /// <param name="translationManager">The translation manager.</param>
-        public IoCResourceDictionary(ILocalizationService service, Uri url) : base()
+        public IoCResourceDictionary(ILocalizationService localizationService, Uri source)
+            : base()
         {
-            TranslationManager = service;
-            Source = url;
-            Add(typeof(ILocalizationService).Name, service);
+            LocalizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
+            Source = source ?? throw new ArgumentNullException(nameof(source));
+
+            Add(typeof(ILocalizationService).Name, localizationService);
         }
     }
 }

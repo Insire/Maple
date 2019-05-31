@@ -10,16 +10,14 @@ using Maple.Core;
 using Maple.Domain;
 using Maple.Icons;
 using MvvmScarletToolkit.Abstractions;
-using MvvmScarletToolkit.ConfigurableWindow;
 
 namespace Maple
 {
     public abstract class IoCWindow : MetroWindow, IIocFrameworkElement
     {
         private readonly IMessenger _messenger;
-        private IConfigurableWindowSettings _settings;
 
-        public ILocalizationService TranslationManager { get; private set; }
+        public ILocalizationService LocalizationService { get; }
 
         protected IoCWindow()
             : base()
@@ -28,11 +26,11 @@ namespace Maple
                 Debug.Fail($"The constructor without parameters of {nameof(IoCWindow)} exists only for compatibility reasons.");
         }
 
-        protected IoCWindow(ILocalizationService container, IMessenger messenger)
+        protected IoCWindow(ILocalizationService localizationService, IMessenger messenger)
             : base()
         {
-            TranslationManager = container ?? throw new ArgumentNullException(nameof(container), $"{nameof(container)} {Localization.Properties.Resources.IsRequired}");
-            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Localization.Properties.Resources.IsRequired}");
+            LocalizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
+            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
             _messenger.Subscribe<UiPrimaryColorChangedMessage>(PrimaryColorChanged);
         }
