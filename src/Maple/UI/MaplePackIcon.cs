@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Windows;
 using ControlzEx;
 using Maple.Domain;
 
-namespace Maple.Icons
+namespace Maple
 {
     public sealed class MaplePackIcon : PackIconBase<PackIconKind>
     {

@@ -8,7 +8,6 @@ using System.Windows.Media.Imaging;
 using MahApps.Metro.Controls;
 using Maple.Core;
 using Maple.Domain;
-using Maple.Icons;
 using MvvmScarletToolkit.Abstractions;
 
 namespace Maple

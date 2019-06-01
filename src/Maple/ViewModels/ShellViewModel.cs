@@ -1,17 +1,16 @@
 using System;
-using Maple.Localization.Properties;
 using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    public class ShellViewModel : ObservableObject
+    public sealed class ShellViewModel : ObservableObject
     {
-        private StatusbarViewModel _statusbarViewModel;
-        public StatusbarViewModel StatusbarViewModel
+        private MetaDataViewModel _metaDataViewModel;
+        public MetaDataViewModel MetaDataViewModel
         {
-            get { return _statusbarViewModel; }
-            private set { SetValue(ref _statusbarViewModel, value); }
+            get { return _metaDataViewModel; }
+            private set { SetValue(ref _metaDataViewModel, value); }
         }
 
         private NavigationViewModel _navigationViewModel;
@@ -58,7 +57,7 @@ namespace Maple
 
         public ShellViewModel(ILocalizationService translationManager,
                                 NavigationViewModel navigationViewModel,
-                                StatusbarViewModel statusBarViewModel,
+                                MetaDataViewModel metaDataViewModel,
                                 DialogViewModel dialogViewModel,
                                 Playlists playlists,
                                 MediaPlayers mediaPlayers,
@@ -66,7 +65,7 @@ namespace Maple
         {
             TranslationManager = translationManager ?? throw new ArgumentNullException(nameof(translationManager));
             NavigationViewModel = navigationViewModel ?? throw new ArgumentNullException(nameof(navigationViewModel));
-            StatusbarViewModel = statusBarViewModel ?? throw new ArgumentNullException(nameof(statusBarViewModel));
+            MetaDataViewModel = metaDataViewModel ?? throw new ArgumentNullException(nameof(metaDataViewModel));
             DialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
             Playlists = playlists ?? throw new ArgumentNullException(nameof(playlists));
             MediaPlayers = mediaPlayers ?? throw new ArgumentNullException(nameof(mediaPlayers));

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using DryIoc;
-using Maple.Data;
 using Microsoft.Extensions.Logging;
 using MvvmScarletToolkit.Abstractions;
 
@@ -30,6 +29,7 @@ namespace Maple
             // TODO InitializeLocalization();
 
             var shell = await GetShell(_log).ConfigureAwait(true);
+            shell.DataContext = _container.Resolve<ShellViewModel>();
             shell.Show();
 
             base.OnStartup(e);
@@ -80,15 +80,15 @@ namespace Maple
         /// <summary>
         /// Initializes the resources.
         /// </summary>
-        /// <param name="service">The service.</param>
+        /// <param name="localizationService">The service.</param>
         /// <remarks>
         /// injecting the translation manager into a SharedResourcedictionary,
         /// so that hopefully all usages of the translation extension can be resolved inside of ResourceDictionaries
         /// </remarks>
-        private void InitializeResources(ILocalizationService service)
+        private void InitializeResources(ILocalizationService localizationService)
         {
             var url = new Uri("/Maple;component/Resources/Style.xaml", UriKind.RelativeOrAbsolute);
-            var styles = new IoCResourceDictionary(service, url);
+            var styles = new IoCResourceDictionary(localizationService, url);
 
             Resources.MergedDictionaries.Add(styles);
         }

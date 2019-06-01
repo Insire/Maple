@@ -7,7 +7,7 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="8.3.0" />
+    <PackageReference Include="FluentValidation" Version="8.4.0" />
     <PackageReference Include="Humanizer.Core" Version="2.6.2" />
     <PackageReference Include="YoutubeExtractor" Version="0.10.11" />
   </ItemGroup>

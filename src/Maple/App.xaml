@@ -8,54 +8,11 @@
 
                 <!--  MahApps.Metro  -->
                 <local:SharedResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-                <local:SharedResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-                <local:SharedResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-                <local:SharedResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
-
-                <!--  MaterialDesignColors  -->
-                <local:SharedResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Orange.xaml" />
-                <local:SharedResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Orange.xaml" />
-
-                <!--  MaterialDesignThemes  -->
-                <local:SharedResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                <local:SharedResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                <local:SharedResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
-                <local:SharedResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.CheckBox.xaml" />
-                <local:SharedResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ListBox.xaml" />
-                <local:SharedResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.PopupBox.xaml" />
-                <local:SharedResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ProgressBar.xaml" />
-                <local:SharedResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.RadioButton.xaml" />
-                <local:SharedResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ToggleButton.xaml" />
-                <local:SharedResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
-
-                <!--  MaterialDesignThemes Compatibility  -->
-                <local:SharedResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Fonts.xaml" />
-                <local:SharedResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.MahApps;component/Themes/MaterialDesignTheme.MahApps.Flyout.xaml" />
-
+                <local:SharedResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Themes/generic.xaml" />
+                <local:SharedResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/dark.orange.xaml" />
                 <ResourceDictionary Source="Resources/Style.xaml" />
                 <!--  more injections OnStartup, those are not all resources used  -->
             </ResourceDictionary.MergedDictionaries>
-
-            <!--  MahApps.Metro Brushes  -->
-            <SolidColorBrush x:Key="HighlightBrush" Color="{DynamicResource Primary700}" />
-            <SolidColorBrush x:Key="AccentColorBrush" Color="{DynamicResource Primary500}" />
-            <SolidColorBrush x:Key="AccentColorBrush2" Color="{DynamicResource Primary400}" />
-            <SolidColorBrush x:Key="AccentColorBrush3" Color="{DynamicResource Primary300}" />
-            <SolidColorBrush x:Key="AccentColorBrush4" Color="{DynamicResource Primary200}" />
-            <SolidColorBrush x:Key="WindowTitleColorBrush" Color="{DynamicResource Primary700}" />
-            <SolidColorBrush x:Key="AccentSelectedColorBrush" Color="{DynamicResource Primary500Foreground}" />
-            <LinearGradientBrush x:Key="ProgressBrush" StartPoint="1.002,0.5" EndPoint="0.001,0.5">
-                <GradientStop Offset="0" Color="{DynamicResource Primary700}" />
-                <GradientStop Offset="1" Color="{DynamicResource Primary300}" />
-            </LinearGradientBrush>
-            <SolidColorBrush x:Key="CheckmarkFill" Color="{DynamicResource Primary500}" />
-            <SolidColorBrush x:Key="RightArrowFill" Color="{DynamicResource Primary500}" />
-            <SolidColorBrush x:Key="IdealForegroundColorBrush" Color="{DynamicResource Primary500Foreground}" />
-            <SolidColorBrush x:Key="IdealForegroundDisabledBrush"
-                             Opacity="0.4"
-                             Color="{DynamicResource Primary500}" />
-
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         </local:SharedResourceDictionary>
     </Application.Resources>
 </Application>

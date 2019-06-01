@@ -23,14 +23,13 @@ namespace Maple
         }
 
         public ICommand CloseExpanderCommand { get; }
-        public ICommand OpenColorOptionsCommand { get; }
         public ICommand OpenMediaPlayerCommand { get; }
         public ICommand OpenGithubPageCommand { get; }
         public ICommand OpenOptionsCommand { get; }
 
         public ICommand OpenMediaPlayerConfigurationCommand { get; }
 
-        public NavigationViewModel(ICommandBuilder commandBuilder, ILocalizationService localizationService, DialogViewModel dialogViewModel)
+        public NavigationViewModel(ICommandBuilder commandBuilder, ILocalizationService localizationService, DialogViewModel dialogViewModel, MediaPlayers mediaPlayers, Playlists playlists, OptionsViewModel options)
             : base(commandBuilder)
         {
             _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
@@ -38,35 +37,27 @@ namespace Maple
 
             _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationService, nameof(Resources.Playback)))
             {
-                Content = new MediaPlayerPage(_localizationService),
-                IsSelected = true,
+                Content = mediaPlayers,
+                IsSelected = false,
                 Sequence = 100,
             });
 
             _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationService, nameof(Resources.Playlists)))
             {
-                Content = new PlaylistsPage(_localizationService),
+                Content = playlists,
                 IsSelected = false,
                 Sequence = 200,
             });
 
-            _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationService, nameof(Resources.Themes)))
-            {
-                Content = new ColorOptionsPage(_localizationService),
-                IsSelected = false,
-                Sequence = 300,
-            });
-
             _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationService, nameof(Resources.Options)))
             {
-                Content = new OptionsPage(_localizationService),
+                Content = options,
                 IsSelected = false,
                 Sequence = 400,
             });
 
             SelectedItem = this[0];
 
-            OpenColorOptionsCommand = new RelayCommand(OpenColorOptionsView, CanOpenColorOptionsView);
             OpenMediaPlayerCommand = new RelayCommand(OpenMediaPlayerView, CanOpenMediaPlayerView);
             OpenOptionsCommand = new RelayCommand(OpenOptionsView, CanOpenOptionsView);
             OpenGithubPageCommand = new RelayCommand(OpenGithubPage);
@@ -79,32 +70,22 @@ namespace Maple
 
         private void OpenOptionsView()
         {
-            SelectedItem = Items.First(p => p.Content is OptionsPage);
+            SelectedItem = Items.First(p => p.Content is OptionsViewModel);
         }
 
         private bool CanOpenOptionsView()
         {
-            return Items?.Any(p => p.Content is OptionsPage) == true;
-        }
-
-        private void OpenColorOptionsView()
-        {
-            SelectedItem = Items.First(p => p.Content is ColorOptionsPage);
-        }
-
-        private bool CanOpenColorOptionsView()
-        {
-            return Items?.Any(p => p.Content is ColorOptionsPage) == true;
+            return Items?.Any(p => p.Content is OptionsViewModel) == true;
         }
 
         private void OpenMediaPlayerView()
         {
-            SelectedItem = Items.First(p => p.Content is MediaPlayerPage);
+            SelectedItem = Items.First(p => p.Content is MediaPlayers);
         }
 
         private bool CanOpenMediaPlayerView()
         {
-            return Items?.Any(p => p.Content is MediaPlayerPage) == true;
+            return Items?.Any(p => p.Content is MediaPlayers) == true;
         }
 
         private Task OpenMediaPlayerConfiguration()

@@ -6,7 +6,7 @@ using Maple.Domain;
 
 namespace Maple
 {
-    public class StatusbarViewModel : MapleBusinessViewModelBase
+    public class MetaDataViewModel : MapleBusinessViewModelBase
     {
         private readonly IVersionService _versionService;
 
@@ -50,11 +50,11 @@ namespace Maple
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StatusbarViewModel"/> class.
+        /// Initializes a new instance of the <see cref="MetaDataViewModel"/> class.
         /// </summary>
         /// <param name="manager">The manager.</param>
         /// <param name="mediaPlayers">The media players.</param>
-        public StatusbarViewModel(IMapleCommandBuilder commandBuilder, IVersionService versionService)
+        public MetaDataViewModel(IMapleCommandBuilder commandBuilder, IVersionService versionService)
             : base(commandBuilder)
         {
             _versionService = versionService ?? throw new ArgumentNullException(nameof(versionService));
