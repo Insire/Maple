@@ -23,10 +23,7 @@ using Serilog.Formatting.Display;
 
 namespace Maple
 {
-    /// <summary>
-    /// Factory class that provides an Instance of <see cref="IContainer"/>
-    /// </summary>
-    public static class DependencyInjectionFactory
+    public static class CompositionRoot
     {
         public static Task<IContainer> Get()
         {
@@ -76,7 +73,7 @@ namespace Maple
                     .Options);
             }
 
-            static Logger CreateLogger(LoggingFileConfiguration config)
+            Logger CreateLogger(LoggingFileConfiguration config)
             {
                 var formatter = new MessageTemplateTextFormatter("{Timestamp:o} {RequestId,13} [{Level:u3}] ({ThreadId}) ({SourceContext}) {Message} ({EventId:x8}){NewLine}{Exception}", null);
                 var logConfiguration = new LoggerConfiguration()
@@ -160,6 +157,7 @@ namespace Maple
                 c.Register<IValidator<Playlist>, PlaylistValidator>(Reuse.Singleton);
                 c.Register<IValidator<Playlists>, PlaylistsValidator>(Reuse.Singleton);
                 c.Register<IValidator<MediaPlayer>, MediaPlayerValidator>(Reuse.Singleton);
+                c.Register<IValidator<MediaPlayers>, MediaPlayersValidator>(Reuse.Singleton);
                 c.Register<IValidator<MediaItem>, MediaItemValidator>(Reuse.Singleton);
             }
         }

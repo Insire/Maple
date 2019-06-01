@@ -19,7 +19,7 @@ namespace Maple
         {
             DispatcherUnhandledException += App_DispatcherUnhandledException;
 
-            _container = await DependencyInjectionFactory.Get().ConfigureAwait(true);
+            _container = await CompositionRoot.Get().ConfigureAwait(true);
 
             var localizationService = _container.Resolve<ILocalizationService>();
             var loggerFactory = _container.Resolve<ILoggerFactory>();

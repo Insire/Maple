@@ -7,11 +7,11 @@ using Maple.Domain;
 
 namespace Maple
 {
-    public sealed class MediaPlayers : MapleDomainViewModelListBase<MediaPlayer>
+    public sealed class MediaPlayers : MapleDomainViewModelListBase<MediaPlayers, MediaPlayer>
     {
         public Playlists Playlists { get; }
 
-        public MediaPlayers(IMapleCommandBuilder commandBuilder, IValidator<MediaPlayer> validator, Playlists playlists)
+        public MediaPlayers(IMapleCommandBuilder commandBuilder, IValidator<MediaPlayers> validator, Playlists playlists)
             : base(commandBuilder, validator)
         {
             Playlists = playlists ?? throw new ArgumentNullException(nameof(playlists));

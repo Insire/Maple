@@ -19,14 +19,16 @@ namespace Maple.Core
     /// </summary>
     /// <typeparam name="TViewModel"></typeparam>
     /// <typeparam name="TModel"></typeparam>
-    public abstract class MapleDomainViewModelListBase<TViewModel> : MapleBusinessViewModelListBase<TViewModel>, INotifyDataErrorInfo
+    public abstract class MapleDomainViewModelListBase<TListViewModel, TViewModel> : MapleBusinessViewModelListBase<TViewModel>, INotifyDataErrorInfo
+        where TListViewModel : MapleDomainViewModelListBase<TListViewModel, TViewModel>
         where TViewModel : class, INotifyPropertyChanged, IChangeState, IChangeTrackable, INotifyDataErrorInfo
+
     {
         protected readonly bool SkipChangeTracking;
         protected readonly bool SkipValidation;
         protected readonly ChangeTracker ChangeTracker;
         protected readonly IDictionary<string, ValidationResult> ValidationLookup;
-        protected readonly IValidator<TViewModel> Validator;
+        protected readonly IValidator<TListViewModel> Validator;
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
@@ -59,7 +61,7 @@ namespace Maple.Core
         [Bindable(true, BindingDirection.OneWay)]
         public bool HaveChildrenErrors => Items.Any(p => p.HasErrors);
 
-        protected MapleDomainViewModelListBase(IMapleCommandBuilder commandBuilder, IValidator<TViewModel> validator)
+        protected MapleDomainViewModelListBase(IMapleCommandBuilder commandBuilder, IValidator<TListViewModel> validator)
             : base(commandBuilder)
         {
             Validator = validator ?? throw new ArgumentNullException(nameof(validator));
