@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Bogus;
 using DryIoc;
 using FluentValidation;
 using Maple.Core;
@@ -23,10 +26,68 @@ namespace Maple
 {
     public static class CompositionRoot
     {
-        public static Task<IContainer> Get()
+        public static async Task<IContainer> Get(string[] args)
         {
             var c = new Container();
-            return Task.Run(() => InitializeContainer());
+
+            await Task.Run(() => InitializeContainer());
+
+            if (args.Contains("inmemory"))
+            {
+                await Task.Run(async () => await SeedDatabase());
+            }
+
+            return c;
+
+            async Task SeedDatabase()
+            {
+                Randomizer.Seed = new Random(8757858);
+                const string localization = "de";
+                var context = c.Resolve<IUnitOfWork>();
+
+                var mediaItemGenerator = new Faker<MediaItemModel>(localization)
+                    .RuleFor(o => o.Id, f => f.IndexFaker + 1)
+                    .RuleFor(o => o.Duration, f => f.Random.Long())
+                    .RuleFor(o => o.Sequence, f => f.IndexFaker)
+                    .RuleFor(o => o.Title, f => f.Lorem.Random.Word())
+                    .RuleFor(o => o.Location, f => f.Lorem.Random.Word());
+
+                var mediaPlayerGenerator = new Faker<MediaPlayerModel>(localization)
+                    .RuleFor(o => o.Id, f => f.IndexFaker + 1)
+                    .RuleFor(o => o.DeviceName, f => f.Lorem.Random.Words())
+                    .RuleFor(o => o.Sequence, f => f.IndexFaker)
+                    .RuleFor(o => o.Name, f => f.Lorem.Random.Word());
+
+                var playlistGenerator = new Faker<PlaylistModel>(localization)
+                    .RuleFor(o => o.Id, f => f.IndexFaker + 1)
+                    .RuleFor(o => o.Sequence, f => f.IndexFaker)
+                    .RuleFor(o => o.Title, f => f.Lorem.Random.Word())
+                    .RuleFor(o => o.MediaItems, f =>
+                      {
+                          var mediaItems = new List<MediaItemModel>();
+                          for (var i = 0; i < f.Random.Int(max: 20); i++)
+                          {
+                              var mediaItem = mediaItemGenerator.Generate();
+                              mediaItems.Add(mediaItem);
+                          }
+
+                          return mediaItems;
+                      })
+                    .RuleFor(o => o.MediaPlayer, f =>
+                      {
+                          return mediaPlayerGenerator.Generate();
+                      });
+
+                var count = Randomizer.Seed.Next(20, 100);
+
+                for (var i = 0; i < count; i++)
+                {
+                    var playlist = playlistGenerator.Generate();
+                    context.PlaylistRepository.Create(playlist);
+                }
+
+                await context.SaveChanges();
+            }
 
             IContainer InitializeContainer()
             {
@@ -53,9 +114,7 @@ namespace Maple
                 var loggerFactory = new LoggerFactory();
 
                 loggerFactory
-                    .AddSerilog()
-                    .AddDebug()
-                    .AddConsole();
+                    .AddSerilog();
 
                 c.Register<Splat.ILogger, SquirrelLogger>(setup: Setup.DecoratorWith(order: 2));
                 c.Register(serviceType: typeof(ILoggerProvider), implementationType: typeof(SerilogLoggerProvider), reuse: Reuse.Singleton);
@@ -64,11 +123,22 @@ namespace Maple
                 c.UseInstance<ILoggerFactory>(loggerFactory);
                 c.UseInstance(Log.Logger);
 
-                c.UseInstance(new DbContextOptionsBuilder<PlaylistContext>()
-                    .UseSqlite("Data Source=../maple.db;")
-                    .UseLoggerFactory(loggerFactory)
-                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-                    .Options);
+                if (args.Contains("inmemory"))
+                {
+                    c.UseInstance(new DbContextOptionsBuilder<PlaylistContext>()
+                        .UseInMemoryDatabase("Maple")
+                        .UseLoggerFactory(loggerFactory)
+                        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                        .Options);
+                }
+                else
+                {
+                    //c.UseInstance(new DbContextOptionsBuilder<PlaylistContext>()
+                    //    .UseSqlite("Data Source=../maple.db;")
+                    //    .UseLoggerFactory(loggerFactory)
+                    //    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                    //    .Options);
+                }
             }
 
             Logger CreateLogger(LoggingFileConfiguration config)
@@ -124,10 +194,6 @@ namespace Maple
             void RegisterServices()
             {
                 c.Register<PlaylistContext>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
-
-                c.Register<IPlaylistRepository, PlaylistRepository>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
-                c.Register<IMediaItemRepository, MediaItemRepository>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
-                c.Register<IMediaPlayerRepository, MediaPlayerRepository>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
 
                 c.Register<IUnitOfWork, MapleUnitOfWork>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
 

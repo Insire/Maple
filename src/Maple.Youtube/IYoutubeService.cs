@@ -5,6 +5,7 @@ namespace Maple.Youtube
 {
     public interface IYoutubeService
     {
+        IEnumerable<string> GetMrls(string url);
         Task<IEnumerable<YoutubeRessource>> Parse(string data);
     }
 }

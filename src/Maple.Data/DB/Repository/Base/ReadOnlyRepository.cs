@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-
 using Maple.Domain;
-
 using Microsoft.EntityFrameworkCore;
 
 namespace Maple.Data
@@ -24,7 +22,9 @@ namespace Maple.Data
                 uow.Context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             }
             else
+            {
                 throw new ArgumentException(nameof(unitOfWork) + " is not derived from " + typeof(UnitOfWork).FullName);
+            }
 
             Name = GetType().Name;
         }

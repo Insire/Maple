@@ -27,6 +27,7 @@
     <Resource Include="..\Resources\Images\logo_withoutbackground.png" Link="Resources\logo_withoutbackground.png" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Bogus" Version="27.0.1" />
     <PackageReference Include="DryIoc.dll">
       <Version>4.0.4</Version>
     </PackageReference>

@@ -14,7 +14,7 @@ namespace Maple.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024");
+                .HasAnnotation("ProductVersion", "3.0.0-preview5.19227.1");
 
             modelBuilder.Entity("Maple.Domain.MediaItemModel", b =>
                 {
@@ -191,7 +191,8 @@ namespace Maple.Data.Migrations
                     b.HasOne("Maple.Domain.PlaylistModel", "Playlist")
                         .WithMany("MediaItems")
                         .HasForeignKey("PlaylistId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Maple.Domain.PlaylistModel", b =>
