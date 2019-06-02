@@ -25,9 +25,6 @@
 
     <metro:MetroWindow.RightWindowCommands>
         <metro:WindowCommands ShowSeparators="False">
-            <Button Command="{Binding NavigationViewModel.OpenMediaPlayerConfigurationCommand}" ToolTip="{local:Translation OpenMediaPlayerConfigurationCommand}">
-                <icons:PackIconMaterial Kind="Cogs" />
-            </Button>
             <Button Command="{Binding NavigationViewModel.OpenOptionsCommand}" ToolTip="{local:Translation OptionsCommand}">
                 <icons:PackIconMaterial Kind="Earth" />
             </Button>

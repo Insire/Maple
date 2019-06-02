@@ -5,7 +5,7 @@ using Maple.Domain;
 
 namespace Maple
 {
-    public class MetaDataViewModel : MapleBusinessViewModelBase
+    public sealed class MetaDataViewModel : MapleBusinessViewModelBase
     {
         private readonly IVersionService _versionService;
 
@@ -35,19 +35,6 @@ namespace Maple
             private set { SetValue(ref _language, value); }
         }
 
-        private MainMediaPlayer _mainMediaPlayer;
-        /// <summary>
-        /// Gets the main media player.
-        /// </summary>
-        /// <value>
-        /// The main media player.
-        /// </value>
-        public MainMediaPlayer MainMediaPlayer
-        {
-            get { return _mainMediaPlayer; }
-            private set { SetValue(ref _mainMediaPlayer, value); }
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MetaDataViewModel"/> class.
         /// </summary>
@@ -64,11 +51,6 @@ namespace Maple
             Language = $"({message.Content.Model.TwoLetterISOLanguageName})";
         }
 
-        private void UpdateMediaPlayer(ViewModelSelectionChangedMessage<MediaPlayer> message)
-        {
-            MainMediaPlayer = message.Content as MainMediaPlayer;
-        }
-
         protected override Task UnloadInternal(CancellationToken token)
         {
             ClearSubscriptions();
@@ -82,7 +64,6 @@ namespace Maple
             Version = _versionService.Get();
 
             Add(Messenger.Subscribe<ViewModelSelectionChangedMessage<Culture>>(UpdateLanguage));
-            Add(Messenger.Subscribe<ViewModelSelectionChangedMessage<MediaPlayer>>(UpdateMediaPlayer));
 
             return Task.CompletedTask;
         }

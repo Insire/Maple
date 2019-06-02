@@ -40,10 +40,7 @@ namespace Maple
 
             Debug.WriteLine($"{nameof(TranslationExtension)} ProvideValue {Key} failed");
 
-            if (Debugger.IsAttached)
-                Debug.Fail($"{nameof(TranslationExtension)} ProvideValue {Key} failed");
-
-            return null;
+            return Binding.DoNothing;
         }
 
         private bool TryGetIoCFrameWorkElement(IServiceProvider serviceProvider, out IIocFrameworkElement element)

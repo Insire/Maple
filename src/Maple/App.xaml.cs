@@ -37,11 +37,10 @@ namespace Maple
 
         private async void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            var dialog = _container.Resolve<DialogViewModel>();
-
             _log.LogInformation(Maple.Properties.Resources.ExceptionMessageUnhandled);
             _log.LogError(e.Exception, e.Exception.Message);
 
+            var dialog = _container.Resolve<DialogViewModel>();
             await dialog.ShowExceptionDialog(e.Exception).ConfigureAwait(true);
         }
 

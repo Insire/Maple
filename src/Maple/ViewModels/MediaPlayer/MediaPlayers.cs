@@ -35,7 +35,7 @@ namespace Maple
 
         private Task Add(MediaPlayerModel model)
         {
-            return Add(new MediaPlayer((IMapleCommandBuilder)CommandBuilder, new MaplePlayer((IMapleCommandBuilder)CommandBuilder), _mediaPlayerValidator, _audioDevices, null, model));
+            return Add(new MediaPlayer((IMapleCommandBuilder)CommandBuilder, new MaplePlayer((IMapleCommandBuilder)CommandBuilder), _mediaPlayerValidator, _audioDevices, Playlists, null, model));
         }
     }
 }

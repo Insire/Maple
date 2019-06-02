@@ -13,7 +13,7 @@ using MvvmScarletToolkit.Commands;
 namespace Maple
 {
     [DebuggerDisplay("{Name}, {Sequence}")]
-    public class MediaPlayer : MapleDomainViewModelBase<MediaPlayer, MediaPlayerModel>, ISequence, IChangeState
+    public sealed class MediaPlayer : MapleDomainViewModelBase<MediaPlayer, MediaPlayerModel>, ISequence, IChangeState
     {
         public bool IsPlaying => Player.IsPlaying;
 
@@ -47,6 +47,13 @@ namespace Maple
             set { SetValue(ref _playlist, value, OnChanging: OnPlaylistChanging, OnChanged: OnPlaylistChanged); }
         }
 
+        private Playlists _playlists;
+        public Playlists Playlists
+        {
+            get { return _playlists; }
+            private set { SetValue(ref _playlists, value); }
+        }
+
         private int _sequence;
         public int Sequence
         {
@@ -65,7 +72,7 @@ namespace Maple
         public bool IsPrimary
         {
             get { return _isPrimary; }
-            protected set { SetValue(ref _isPrimary, value, OnChanged: () => Model.IsPrimary = value); }
+            set { SetValue(ref _isPrimary, value, OnChanged: () => Model.IsPrimary = value); }
         }
 
         private string _createdBy;
@@ -96,11 +103,11 @@ namespace Maple
             set { SetValue(ref _createdOn, value, OnChanged: () => Model.CreatedOn = value); }
         }
 
-        public MediaPlayer(IMapleCommandBuilder commandBuilder, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlist playlist, MediaPlayerModel model)
+        public MediaPlayer(IMapleCommandBuilder commandBuilder, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlists playlists, Playlist playlist, MediaPlayerModel model)
             : base(commandBuilder, validator)
         {
             Player = player ?? throw new ArgumentNullException(nameof(player));
-
+            Playlists = playlists ?? throw new ArgumentNullException(nameof(playlists));
             Model = model ?? throw new ArgumentNullException(nameof(model));
 
             _name = model.Name;
@@ -168,8 +175,6 @@ namespace Maple
         {
             Model.Playlist = Playlist.Model;
             // TODO: maybe add optional endless playback
-
-            OnPropertyChanged(nameof(Playlist.View));
         }
 
         private void Player_PlayingMediaItem(PlayingMediaItemMessage e)

@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Data;
 using System.Windows.Input;
 using FluentValidation;
 using Maple.Domain;
@@ -52,13 +51,6 @@ namespace Maple
         public DateTime CreatedOn
         {
             get { return Model.CreatedOn; }
-        }
-
-        private ICollectionView _view;
-        public ICollectionView View
-        {
-            get { return _view; }
-            protected set { SetValue(ref _view, value); }
         }
 
         private int _sequence;
@@ -154,8 +146,6 @@ namespace Maple
                 RepeatModes = new ReadOnlyObservableCollection<RepeatMode>(new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>()));
                 _history = new Stack<int>();
 
-                View = CollectionViewSource.GetDefaultView(MediaItems.Items); // TODO add sorting by sequence
-
                 LoadFromFileCommand = commandBuilder
                     .Create(LoadFromFile, CanLoadFromFile)
                     .WithSingleExecution(CommandManager)
@@ -171,6 +161,16 @@ namespace Maple
 
                 Add(Messenger.Subscribe<PlayingMediaItemMessage>(OnPlaybackItemChanged, m => m.PlaylistId == Id && MediaItems.Items.Contains(m.Content)));
             }
+        }
+
+        protected override Task RefreshInternal(CancellationToken token)
+        {
+            return Task.WhenAll(Model.MediaItems.ForEach(Add));
+        }
+
+        protected override Task UnloadInternal(CancellationToken token)
+        {
+            return MediaItems.Clear(token);
         }
 
         private void OnPlaybackItemChanged(PlayingMediaItemMessage message)
@@ -525,16 +525,6 @@ namespace Maple
         public bool CanPrevious()
         {
             return _history != null && _history.Any();
-        }
-
-        protected override Task UnloadInternal(CancellationToken token)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override Task RefreshInternal(CancellationToken token)
-        {
-            throw new NotImplementedException();
         }
     }
 }
