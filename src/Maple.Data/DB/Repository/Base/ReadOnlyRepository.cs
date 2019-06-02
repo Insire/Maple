@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Maple.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -29,27 +30,39 @@ namespace Maple.Data
             Name = GetType().Name;
         }
 
-        public TEntity Read(TKey key)
-        {
-            return Set.Find(key);
-        }
-
         public Task<TEntity> ReadAsync(TKey key)
         {
-            return Set.FindAsync(key);
+            return Set.FindAsync(key, CancellationToken.None);
         }
 
-        public ICollection<TEntity> Read(Expression<Func<TEntity, bool>> filter, string[] propertyNames, int index, int count)
+        public Task<TEntity> ReadAsync(TKey key, CancellationToken token)
         {
-            return ReadInternal(Set, filter, propertyNames, index, count)
-                .ToList()
-                .AsReadOnly();
+            return Set.FindAsync(key, token);
         }
 
-        public async Task<ICollection<TEntity>> ReadAsync(Expression<Func<TEntity, bool>> filter, string[] propertyNames, int index, int count)
+        public virtual Task<ICollection<TEntity>> ReadAsync()
+        {
+            return ReadAsync(CancellationToken.None);
+        }
+
+        public virtual async Task<ICollection<TEntity>> ReadAsync(CancellationToken token)
+        {
+            var result = await ReadInternal(Set, null, null, 0, 0)
+                                .ToListAsync(token)
+                                .ConfigureAwait(false);
+
+            return result.AsReadOnly();
+        }
+
+        public virtual Task<ICollection<TEntity>> ReadAsync(Expression<Func<TEntity, bool>> filter, string[] propertyNames, int index, int count)
+        {
+            return ReadAsync(filter, propertyNames, index, count, CancellationToken.None);
+        }
+
+        public virtual async Task<ICollection<TEntity>> ReadAsync(Expression<Func<TEntity, bool>> filter, string[] propertyNames, int index, int count, CancellationToken token)
         {
             var result = await ReadInternal(Set, filter, propertyNames, index, count)
-                                .ToListAsync()
+                                .ToListAsync(token)
                                 .ConfigureAwait(false);
 
             return result.AsReadOnly();

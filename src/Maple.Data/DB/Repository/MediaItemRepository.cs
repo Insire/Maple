@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Maple.Domain;
@@ -13,16 +14,16 @@ namespace Maple.Data
         {
         }
 
-        public async Task<MediaItemModel> GetMediaItemByPlaylistIdAsync(int id)
+        public async Task<MediaItemModel> GetMediaItemByPlaylistIdAsync(int id, CancellationToken token)
         {
-            var result = await ReadAsync(p => p.PlaylistId.Equals(id), new[] { nameof(MediaItemModel.Playlist) }, -1, 1).ConfigureAwait(false);
+            var result = await ReadAsync(p => p.PlaylistId.Equals(id), new[] { nameof(MediaItemModel.Playlist) }, -1, 1, token).ConfigureAwait(false);
 
             return result.First();
         }
 
-        public Task<ICollection<MediaItemModel>> ReadAsync()
+        public override Task<ICollection<MediaItemModel>> ReadAsync(CancellationToken token)
         {
-            return ReadAsync(null, new[] { nameof(MediaItemModel.Playlist) }, -1, -1);
+            return ReadAsync(null, new[] { nameof(MediaItemModel.Playlist) }, -1, -1, token);
         }
     }
 }
