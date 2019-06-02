@@ -85,11 +85,11 @@ namespace Maple
                 }
                 else
                 {
-                    //c.UseInstance(new DbContextOptionsBuilder<PlaylistContext>()
-                    //    .UseSqlite("Data Source=../maple.db;")
-                    //    .UseLoggerFactory(loggerFactory)
-                    //    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-                    //    .Options);
+                    c.UseInstance(new DbContextOptionsBuilder<PlaylistContext>()
+                        .UseSqlite("Data Source=../maple.db;")
+                        .UseLoggerFactory(loggerFactory)
+                        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                        .Options);
                 }
             }
 

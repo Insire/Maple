@@ -60,6 +60,7 @@ namespace Maple
         protected readonly ILoggerFactory Log;
         protected readonly ILocalizationService LocalizationService;
         protected readonly ISequenceService SequenceService;
+        protected readonly Func<IUnitOfWork> ContextFactory;
 
         private readonly ConcurrentStack<SubscriptionToken> _messageTokens;
 
@@ -72,6 +73,7 @@ namespace Maple
             Log = commandBuilder.Log ?? throw new ArgumentNullException(nameof(Log));
             LocalizationService = commandBuilder.LocalizationService ?? throw new ArgumentNullException(nameof(LocalizationService));
             SequenceService = commandBuilder.SequenceService ?? throw new ArgumentNullException(nameof(SequenceService));
+            ContextFactory = commandBuilder.ContextFactory ?? throw new ArgumentNullException(nameof(ContextFactory));
 
             _messageTokens = new ConcurrentStack<SubscriptionToken>();
         }
