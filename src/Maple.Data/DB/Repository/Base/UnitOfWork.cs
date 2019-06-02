@@ -5,13 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Maple.Data
 {
-    public abstract class UnitOfWork : IDisposable
+    public abstract class UnitOfWork<TDbContext> : IDisposable
+        where TDbContext : DbContext
     {
-        internal DbContext Context { get; }
+        internal TDbContext Context { get; }
 
         protected bool IsDiposed { get; private set; }
 
-        protected UnitOfWork(DbContext context)
+        protected UnitOfWork(TDbContext context)
         {
             Context = context ?? throw new ArgumentNullException(nameof(context));
         }

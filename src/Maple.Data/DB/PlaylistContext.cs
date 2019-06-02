@@ -1,5 +1,8 @@
+using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using Maple.Domain;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace Maple.Data
@@ -16,9 +19,19 @@ namespace Maple.Data
         {
         }
 
-        public Task Migrate()
+        public async Task Migrate(CancellationToken token)
         {
-            return Database.MigrateAsync();
+            try
+            {
+                await Database
+                    .MigrateAsync(token)
+                    .ConfigureAwait(false);
+            }
+            catch (SqliteException ex)
+            {
+                Debug.WriteLine(ex);
+                throw;
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -37,12 +37,13 @@ namespace Maple.Data
                 .RuleFor(o => o.Id, f => f.IndexFaker + 1)
                 .RuleFor(o => o.Sequence, f => f.IndexFaker)
                 .RuleFor(o => o.Title, f => f.Lorem.Random.Word())
-                .RuleFor(o => o.MediaItems, f =>
+                .RuleFor(o => o.MediaItems, (f, o) =>
                 {
                     var mediaItems = new List<MediaItemModel>();
                     for (var i = 0; i < f.Random.Int(max: 20); i++)
                     {
                         var mediaItem = mediaItemGenerator.Generate();
+                        mediaItem.Playlist = o;
                         mediaItems.Add(mediaItem);
                     }
 

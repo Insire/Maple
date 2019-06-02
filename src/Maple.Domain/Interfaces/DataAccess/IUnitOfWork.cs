@@ -10,6 +10,10 @@ namespace Maple.Domain
         IMediaPlayerRepository MediaPlayers { get; }
         IPlaylistRepository Playlists { get; }
 
+        Task Migrate(CancellationToken token);
+
+        Task Migrate();
+
         Task SaveChanges();
 
         Task SaveChanges(CancellationToken token);

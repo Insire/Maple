@@ -1,14 +1,15 @@
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Bogus;
 using DryIoc;
 using FluentValidation;
 using Maple.Data;
 using Maple.Domain;
 using Maple.Youtube;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MvvmScarletToolkit;
@@ -26,30 +27,85 @@ namespace Maple
 {
     public static class CompositionRoot
     {
+        private const string DatabasePath = "Data Source=maple.db;";
+        private const string ProductionDatabasePath = "Data Source=..\\maple.db;";
+
+        private static (bool MigrationRequired, bool SeedRequired, bool CreationRequired, bool DevEnvironment, bool InMemory) HandleStart(string[] args)
+        {
+            var seedRequired = false;
+            var migrationRequired = false;
+            var creationRequired = false;
+            var dev = false;
+            var inMemory = false;
+
+            if (args.Any(p => p.IndexOf("debug", StringComparison.InvariantCultureIgnoreCase) >= 0))
+            {
+                seedRequired = true;
+                dev = true;
+
+                if (args.Any(p => p.IndexOf("inmemory", StringComparison.InvariantCultureIgnoreCase) >= 0))
+                {
+                    inMemory = true;
+                    if (args.Any(p => p.IndexOf("sqlite", StringComparison.InvariantCultureIgnoreCase) >= 0))
+                    {
+                        migrationRequired = true;
+                    }
+                }
+                else
+                {
+                    if (!File.Exists(DatabasePath))
+                    {
+                        migrationRequired = true;
+                    }
+                }
+            }
+            else
+            {
+                migrationRequired = true;
+                if (!File.Exists(DatabasePath))
+                {
+                    creationRequired = true;
+                }
+            }
+
+            return (migrationRequired, seedRequired, creationRequired, dev, inMemory);
+        }
+
         public static async Task<IContainer> Get(string[] args)
+        {
+            var (MigrationRequired, SeedRequired, CreationRequired, Dev, InMemory) = HandleStart(args);
+
+            var builder = new SqliteConnectionStringBuilder(Dev ? ProductionDatabasePath : DatabasePath)
+            {
+                Mode = InMemory ? SqliteOpenMode.Memory : CreationRequired ? SqliteOpenMode.ReadWriteCreate : SqliteOpenMode.ReadWrite,
+            };
+
+            var container = CreateContainer(builder.ToString());
+
+            var context = container.Resolve<IUnitOfWork>();
+            if (MigrationRequired)
+            {
+                context.Migrate().Wait();
+            }
+
+            if (SeedRequired)
+            {
+                var factory = new DesignTimeDataFactory(context);
+                factory.SeedDatabase().Wait();
+            }
+
+            return container;
+        }
+
+        private static IContainer CreateContainer(string connectionString)
         {
             var c = new Container();
 
-            await Task.Run(() => InitializeContainer());
-
-            if (args.Contains("inmemory"))
-            {
-                var factory = new DesignTimeDataFactory(c.Resolve<IUnitOfWork>());
-                await Task.Run(async () => await factory.SeedDatabase());
-            }
-
-            return c;
-
-            IContainer InitializeContainer()
-            {
-                RegisterLogging();
-                RegisterViewModels();
-                RegisterServices();
-                RegisterValidation();
-                RegisterControls();
-
-                return c;
-            }
+            RegisterLogging();
+            RegisterViewModels();
+            RegisterServices();
+            RegisterValidation();
+            RegisterControls();
 
             void RegisterLogging()
             {
@@ -75,22 +131,11 @@ namespace Maple
                 c.UseInstance<ILoggerFactory>(loggerFactory);
                 c.UseInstance(Log.Logger);
 
-                if (args.Contains("inmemory"))
-                {
-                    c.UseInstance(new DbContextOptionsBuilder<PlaylistContext>()
-                        .UseInMemoryDatabase("Maple")
-                        .UseLoggerFactory(loggerFactory)
-                        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-                        .Options);
-                }
-                else
-                {
-                    c.UseInstance(new DbContextOptionsBuilder<PlaylistContext>()
-                        .UseSqlite("Data Source=../maple.db;")
-                        .UseLoggerFactory(loggerFactory)
-                        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-                        .Options);
-                }
+                c.UseInstance(new DbContextOptionsBuilder<PlaylistContext>()
+                    .UseSqlite(connectionString) // TODO switch for inmemory
+                    .UseLoggerFactory(loggerFactory)
+                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                    .Options);
             }
 
             Logger CreateLogger(LoggingFileConfiguration config)
@@ -170,6 +215,8 @@ namespace Maple
                 c.Register<IValidator<MediaPlayers>, MediaPlayersValidator>(Reuse.Singleton);
                 c.Register<IValidator<MediaItem>, MediaItemValidator>(Reuse.Singleton);
             }
+
+            return c;
         }
     }
 }
