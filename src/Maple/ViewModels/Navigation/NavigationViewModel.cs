@@ -1,12 +1,11 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using Maple.Properties;
 using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Commands;
 using MvvmScarletToolkit.Observables;
-using Maple.Properties;
 
 namespace Maple
 {
@@ -26,8 +25,6 @@ namespace Maple
         public ICommand OpenMediaPlayerCommand { get; }
         public ICommand OpenGithubPageCommand { get; }
         public ICommand OpenOptionsCommand { get; }
-
-        public ICommand OpenMediaPlayerConfigurationCommand { get; }
 
         public NavigationViewModel(ICommandBuilder commandBuilder, ILocalizationService localizationService, DialogViewModel dialogViewModel, MediaPlayers mediaPlayers, Playlists playlists, OptionsViewModel options)
             : base(commandBuilder)
@@ -62,10 +59,6 @@ namespace Maple
             OpenOptionsCommand = new RelayCommand(OpenOptionsView, CanOpenOptionsView);
             OpenGithubPageCommand = new RelayCommand(OpenGithubPage);
             CloseExpanderCommand = new RelayCommand(() => IsExpanded = false, () => IsExpanded != false);
-            OpenMediaPlayerConfigurationCommand = CommandBuilder
-                .Create(OpenMediaPlayerConfiguration)
-                .WithSingleExecution(CommandManager)
-                .Build();
         }
 
         private void OpenOptionsView()
@@ -86,11 +79,6 @@ namespace Maple
         private bool CanOpenMediaPlayerView()
         {
             return Items?.Any(p => p.Content is MediaPlayers) == true;
-        }
-
-        private Task OpenMediaPlayerConfiguration()
-        {
-            return _dialogViewModel.ShowMediaPlayerConfiguration();
         }
 
         private void OpenGithubPage()

@@ -5,10 +5,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Maple.Domain;
+using Maple.Properties;
 using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Commands;
 using MvvmScarletToolkit.FileSystemBrowser;
-using Maple.Properties;
 
 namespace Maple
 {
@@ -18,15 +18,13 @@ namespace Maple
         private readonly ILocalizationService _translator;
         private readonly FileSystemViewModel _fileSystemViewModel;
         private readonly YoutubeImportViewModel _youtubeImport;
-        private readonly MediaPlayers _mediaPlayers;
 
-        public DialogViewModel(IMapleCommandBuilder commandBuilder, FileSystemViewModel fileSystemViewModel, YoutubeImportViewModel youtubeImport, MediaPlayers mediaPlayers)
+        public DialogViewModel(IMapleCommandBuilder commandBuilder, FileSystemViewModel fileSystemViewModel, YoutubeImportViewModel youtubeImport)
             : base(commandBuilder)
         {
             _translator = commandBuilder.LocalizationService;
             _messenger = commandBuilder.Messenger;
 
-            _mediaPlayers = mediaPlayers ?? throw new ArgumentNullException(nameof(mediaPlayers));
             _youtubeImport = youtubeImport ?? throw new ArgumentNullException(nameof(youtubeImport));
             _fileSystemViewModel = fileSystemViewModel ?? throw new ArgumentNullException(nameof(fileSystemViewModel));
 
@@ -255,19 +253,6 @@ namespace Maple
             await Open(token).ConfigureAwait(false);
 
             return result;
-        }
-
-        public Task ShowMediaPlayerConfiguration()
-        {
-            if (IsOpen) // no exception spam, could probably be improved TODO ?
-                return Task.CompletedTask;
-
-            TitleDetail = string.Empty;
-            Context = _mediaPlayers;
-            Title = _translator.Translate(nameof(Resources.Director));
-            IsCancelVisible = false;
-
-            return Open();
         }
 
         private void FileSystemInfoChanged(FileSystemInfoChangedMessage e)

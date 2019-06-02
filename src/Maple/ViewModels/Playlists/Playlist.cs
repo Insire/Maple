@@ -137,13 +137,14 @@ namespace Maple
         public Playlist(IMapleCommandBuilder commandBuilder, IValidator<Playlist> playlistValidator, IValidator<MediaItem> mediaItemValidator, DialogViewModel dialogViewModel, PlaylistModel model)
             : base(commandBuilder, playlistValidator)
         {
-            MediaItems = new MediaItems(commandBuilder);
+            _mediaItemValidator = mediaItemValidator ?? throw new ArgumentNullException(nameof(mediaItemValidator));
+            _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
 
+            Model = model ?? throw new ArgumentNullException(nameof(model));
+
+            MediaItems = new MediaItems(commandBuilder);
             using (BusyStack.GetToken())
             {
-                _mediaItemValidator = mediaItemValidator ?? throw new ArgumentNullException(nameof(mediaItemValidator));
-                _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
-
                 _title = model.Title;
                 _description = model.Description;
                 _repeatMode = (RepeatMode)model.RepeatMode;

@@ -33,27 +33,6 @@ namespace Maple
         public ICommand PreviousCommand { get; private set; }
         public ICommand StopCommand { get; private set; }
 
-        private ICommand _loadFromFileCommand;
-        public ICommand LoadFromFileCommand
-        {
-            get { return _loadFromFileCommand; }
-            private set { SetValue(ref _loadFromFileCommand, value); }
-        }
-
-        private ICommand _loadFromFolderCommand;
-        public ICommand LoadFromFolderCommand
-        {
-            get { return _loadFromFolderCommand; }
-            private set { SetValue(ref _loadFromFolderCommand, value); }
-        }
-
-        private ICommand _loadFromUrlCommand;
-        public ICommand LoadFromUrlCommand
-        {
-            get { return _loadFromUrlCommand; }
-            private set { SetValue(ref _loadFromUrlCommand, value); }
-        }
-
         private AudioDevices _audioDevices;
         public AudioDevices AudioDevices
         {
@@ -122,6 +101,8 @@ namespace Maple
         {
             Player = player ?? throw new ArgumentNullException(nameof(player));
 
+            Model = model ?? throw new ArgumentNullException(nameof(model));
+
             _name = model.Name;
             _audioDevices = devices;
             _sequence = model.Sequence;
@@ -141,8 +122,6 @@ namespace Maple
             NextCommand = new RelayCommand(Next, () => Playlist?.CanNext() == true && CanNext());
             PauseCommand = new RelayCommand(Pause, () => CanPause());
             StopCommand = new RelayCommand(Stop, () => CanStop());
-
-            UpdatePlaylistCommands();
         }
 
         public void Play(MediaItem mediaItem)
@@ -191,18 +170,6 @@ namespace Maple
             // TODO: maybe add optional endless playback
 
             OnPropertyChanged(nameof(Playlist.View));
-
-            UpdatePlaylistCommands();
-        }
-
-        private void UpdatePlaylistCommands()
-        {
-            if (Playlist != null)
-            {
-                LoadFromFileCommand = Playlist.LoadFromFileCommand;
-                LoadFromFolderCommand = Playlist.LoadFromFolderCommand;
-                LoadFromUrlCommand = Playlist.LoadFromUrlCommand;
-            }
         }
 
         private void Player_PlayingMediaItem(PlayingMediaItemMessage e)
