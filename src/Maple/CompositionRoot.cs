@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Bogus;
 using DryIoc;
 using FluentValidation;
-using Maple.Core;
 using Maple.Data;
 using Maple.Domain;
 using Maple.Youtube;
@@ -83,7 +83,7 @@ namespace Maple
                 for (var i = 0; i < count; i++)
                 {
                     var playlist = playlistGenerator.Generate();
-                    context.PlaylistRepository.Create(playlist);
+                    context.Playlists.Create(playlist);
                 }
 
                 await context.SaveChanges();
@@ -102,9 +102,10 @@ namespace Maple
 
             void RegisterLogging()
             {
+                Directory.CreateDirectory("logs");
                 var fileConfiguration = new LoggingFileConfiguration()
                 {
-                    PathFormat = "Logs\\{Date}.log",
+                    PathFormat = "logs\\{Date}.log",
                     FileSizeLimitBytes = 1073741824,
                     RetainedFileCountLimit = 1,
                 };
@@ -174,7 +175,7 @@ namespace Maple
 
                 c.RegisterMany(new[] { typeof(Playlists) }, typeof(Playlists), Reuse.Singleton);
                 c.RegisterMany(new[] { typeof(MediaPlayers) }, typeof(MediaPlayers), Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
-                c.RegisterMany(new[] { typeof(ICultureViewModel) }, typeof(Cultures), Reuse.Singleton);
+                c.RegisterMany(new[] { typeof(Cultures) }, typeof(Cultures), Reuse.Singleton);
 
                 //generic ViewModels
                 c.Register<NavigationViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
@@ -188,7 +189,7 @@ namespace Maple
 
                 c.Register<YoutubeImportViewModel>(setup: Setup.With(allowDisposableTransient: true));
 
-                c.Register<ISplashScreenViewModel, SplashScreenViewModel>(Reuse.Singleton);
+                c.Register<SplashScreenViewModel>(Reuse.Singleton);
             };
 
             void RegisterServices()

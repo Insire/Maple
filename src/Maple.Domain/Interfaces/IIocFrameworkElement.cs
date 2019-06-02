@@ -1,6 +1,6 @@
 using MvvmScarletToolkit.Abstractions;
 
-namespace Maple.Core
+namespace Maple
 {
     public interface IIocFrameworkElement
     {

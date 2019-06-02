@@ -6,16 +6,16 @@ namespace Maple
 {
     public class OptionsViewModel : ObservableObject
     {
-        private ICultureViewModel _cultureViewModel;
-        public ICultureViewModel CultureViewModel
+        private Cultures _cultureViewModel;
+        public Cultures CultureViewModel
         {
             get { return _cultureViewModel; }
-            set { SetValue(ref _cultureViewModel, value); }
+            private set { SetValue(ref _cultureViewModel, value); }
         }
 
-        public OptionsViewModel(ICultureViewModel culture)
+        public OptionsViewModel(Cultures cultures)
         {
-            CultureViewModel = culture ?? throw new ArgumentNullException(nameof(culture), $"{nameof(culture)} {Resources.IsRequired}");
+            CultureViewModel = cultures ?? throw new ArgumentNullException(nameof(cultures));
         }
     }
 }

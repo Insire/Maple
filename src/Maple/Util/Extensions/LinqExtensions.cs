@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Maple.Core
+namespace Maple
 {
     public static class LinqExtensions
     {

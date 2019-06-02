@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
-using Maple.Core;
 using Maple.Domain;
 
 namespace Maple

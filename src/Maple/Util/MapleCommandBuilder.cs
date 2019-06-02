@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Commands;
 
-namespace Maple.Core
+namespace Maple
 {
     public class MapleCommandBuilder : CommandBuilder, IMapleCommandBuilder
     {

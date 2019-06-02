@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Resources;
 using MvvmScarletToolkit.Abstractions;
 
-namespace Maple.Core
+namespace Maple
 {
     public class ResxTranslationProvider : ILocalizationProvider
     {

@@ -14,8 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple", "src\Maple\Maple.csproj", "{FBD5595B-6859-4E8E-BDFA-C3169EF34985}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple.Core", "src\Maple.Core\Maple.Core.csproj", "{21FA5854-0692-42E2-924E-A38CF3C7FF71}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple.Data", "src\Maple.Data\Maple.Data.csproj", "{B3CD46BE-3C08-4BAE-AE60-A6D84A62400C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple.Localization", "src\Maple.Localization\Maple.Localization.csproj", "{A073FC92-90E3-4541-8B52-6F7293187871}"
@@ -61,10 +59,6 @@ Global
 		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBD5595B-6859-4E8E-BDFA-C3169EF34985}.Release|Any CPU.Build.0 = Release|Any CPU
-		{21FA5854-0692-42E2-924E-A38CF3C7FF71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{21FA5854-0692-42E2-924E-A38CF3C7FF71}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{21FA5854-0692-42E2-924E-A38CF3C7FF71}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{21FA5854-0692-42E2-924E-A38CF3C7FF71}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B3CD46BE-3C08-4BAE-AE60-A6D84A62400C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B3CD46BE-3C08-4BAE-AE60-A6D84A62400C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3CD46BE-3C08-4BAE-AE60-A6D84A62400C}.Release|Any CPU.ActiveCfg = Release|Any CPU

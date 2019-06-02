@@ -5,7 +5,7 @@ using Maple.Domain;
 using Maple.Localization.Properties;
 using Microsoft.Extensions.Logging;
 
-namespace Maple.Core
+namespace Maple
 {
     public sealed class SequenceService : ISequenceService
     {

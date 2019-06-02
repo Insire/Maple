@@ -11,7 +11,7 @@ using Maple.Domain;
 using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Observables;
 
-namespace Maple.Core
+namespace Maple
 {
     public abstract class MapleDomainViewModelBase<TViewModel, TModel> : MapleBusinessViewModelBase<TModel>, INotifyDataErrorInfo, IChangeTrackable
         where TModel : class

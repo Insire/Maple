@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net471;netstandard2.0</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
@@ -13,5 +13,8 @@
       <Version>1.40.0.1593</Version>
     </PackageReference>
     <PackageReference Include="YoutubeExtractor" Version="0.10.11" />
+  </ItemGroup>
+  <ItemGroup  Condition="'$(TargetFramework)' != 'netstandard2.0'">
+    <Reference Include="System.Web" />
   </ItemGroup>
 </Project>

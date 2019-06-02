@@ -55,7 +55,7 @@ namespace Maple.Youtube
                 var clientSecrets = secretCollection.Secrets;
                 var store = new FileDataStore(GetType().ToString());
                 var scopes = new[]
-{
+                {
                     YouTubeService.Scope.YoutubeReadonly,
                     YouTubeService.Scope.Youtube
                 };

@@ -4,16 +4,16 @@ namespace Maple.Data
 {
     public sealed class MapleUnitOfWork : UnitOfWork, IUnitOfWork
     {
-        public IMediaItemRepository MediaItemRepository { get; }
-        public IMediaPlayerRepository MediaPlayerRepository { get; }
-        public IPlaylistRepository PlaylistRepository { get; }
+        public IMediaItemRepository MediaItems { get; }
+        public IMediaPlayerRepository MediaPlayers { get; }
+        public IPlaylistRepository Playlists { get; }
 
         public MapleUnitOfWork(PlaylistContext context)
             : base(context)
         {
-            MediaItemRepository = new MediaItemRepository(this);
-            MediaPlayerRepository = new MediaPlayerRepository(this);
-            PlaylistRepository = new PlaylistRepository(this);
+            MediaItems = new MediaItemRepository(this);
+            MediaPlayers = new MediaPlayerRepository(this);
+            Playlists = new PlaylistRepository(this);
         }
     }
 }

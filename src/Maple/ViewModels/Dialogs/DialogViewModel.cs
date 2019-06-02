@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
 using MvvmScarletToolkit.Abstractions;

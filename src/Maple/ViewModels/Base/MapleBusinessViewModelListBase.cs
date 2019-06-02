@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Observables;
 
-namespace Maple.Core
+namespace Maple
 {
     /// <summary>
     /// Generic CollectionViewModelBase that provides common services required in Maple

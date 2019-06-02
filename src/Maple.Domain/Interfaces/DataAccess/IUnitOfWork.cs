@@ -5,9 +5,9 @@ namespace Maple.Domain
 {
     public interface IUnitOfWork
     {
-        IMediaItemRepository MediaItemRepository { get; }
-        IMediaPlayerRepository MediaPlayerRepository { get; }
-        IPlaylistRepository PlaylistRepository { get; }
+        IMediaItemRepository MediaItems { get; }
+        IMediaPlayerRepository MediaPlayers { get; }
+        IPlaylistRepository Playlists { get; }
 
         Task SaveChanges();
     }

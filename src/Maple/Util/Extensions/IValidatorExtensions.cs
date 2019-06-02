@@ -1,8 +1,8 @@
-﻿using FluentValidation;
+using FluentValidation;
 using FluentValidation.Internal;
 using FluentValidation.Results;
 
-namespace Maple.Core
+namespace Maple
 {
     public static class IValidatorExtensions
     {

@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using Maple.Core;
 using MvvmScarletToolkit.Abstractions;
 
 namespace Maple

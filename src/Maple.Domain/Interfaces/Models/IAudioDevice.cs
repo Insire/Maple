@@ -6,7 +6,5 @@ namespace Maple.Domain
     {
         int Channels { get; set; }
         string Name { get; set; }
-
-        string ToString();
     }
 }

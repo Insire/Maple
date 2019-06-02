@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
-
-using Maple.Core;
 using Maple.Domain;
 using Maple.Localization.Properties;
 using MvvmScarletToolkit.Abstractions;
@@ -11,7 +9,7 @@ using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    public class SplashScreenViewModel : ObservableObject, ISplashScreenViewModel
+    public class SplashScreenViewModel : ObservableObject
     {
         private readonly IScarletMessenger _messenger;
         private readonly Queue<string> _queue;

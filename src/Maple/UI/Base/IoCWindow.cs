@@ -6,7 +6,6 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MahApps.Metro.Controls;
-using Maple.Core;
 using Maple.Domain;
 using MvvmScarletToolkit.Abstractions;
 

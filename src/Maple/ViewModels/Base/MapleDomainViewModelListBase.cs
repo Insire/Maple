@@ -12,7 +12,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using MvvmScarletToolkit.Abstractions;
 
-namespace Maple.Core
+namespace Maple
 {
     /// <summary>
     /// Collection ViewModelBase that provides Validation and ChangeTracking for itself and all its children
