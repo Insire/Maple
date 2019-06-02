@@ -1,7 +1,5 @@
 using System;
-
 using FluentValidation;
-using Maple.Localization.Properties;
 using MvvmScarletToolkit.Abstractions;
 
 namespace Maple
@@ -12,7 +10,7 @@ namespace Maple
 
         protected BaseValidator(ILocalizationService translationService)
         {
-            _translationService = translationService ?? throw new ArgumentNullException(nameof(translationService), $"{nameof(translationService)} {Resources.IsRequired}");
+            _translationService = translationService ?? throw new ArgumentNullException(nameof(translationService));
         }
     }
 }

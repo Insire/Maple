@@ -39,7 +39,7 @@ namespace Maple
         {
             var dialog = _container.Resolve<DialogViewModel>();
 
-            _log.LogInformation(Localization.Properties.Resources.ExceptionMessageUnhandled);
+            _log.LogInformation(Maple.Properties.Resources.ExceptionMessageUnhandled);
             _log.LogError(e.Exception, e.Exception.Message);
 
             await dialog.ShowExceptionDialog(e.Exception).ConfigureAwait(true);
@@ -62,7 +62,7 @@ namespace Maple
         /// </remarks>
         private async Task<Shell> GetShell(ILogger log)
         {
-            using (var vm = _container.Resolve<ISplashScreenViewModel>())
+            using (var vm = _container.Resolve<SplashScreenViewModel>())
             {
                 var shell = _container.Resolve<Shell>();
                 var screen = _container.Resolve<SplashScreen>();
@@ -70,7 +70,7 @@ namespace Maple
                 shell.Loaded += (o, args) => screen.Close();
                 screen.Show();
 
-                log.LogInformation(Localization.Properties.Resources.AppStart);
+                log.LogInformation(Maple.Properties.Resources.AppStart);
                 await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(true);
 
                 return shell;

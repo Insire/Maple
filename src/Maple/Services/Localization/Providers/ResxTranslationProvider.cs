@@ -16,7 +16,7 @@ namespace Maple
         /// <param name="assembly">The assembly.</param>
         public ResxTranslationProvider()
         {
-            _resourceManager = new ResourceManager(typeof(Localization.Properties.Resources));
+            _resourceManager = new ResourceManager(typeof(Properties.Resources));
         }
 
         /// <summary>

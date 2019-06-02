@@ -10,7 +10,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using FluentValidation;
 using Maple.Domain;
-using Maple.Localization.Properties;
+using Maple.Properties;
 using MvvmScarletToolkit.Commands;
 
 namespace Maple

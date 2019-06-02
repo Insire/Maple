@@ -5,10 +5,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Maple.Domain;
-using Maple.Localization.Properties;
 using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Commands;
 using MvvmScarletToolkit.FileSystemBrowser;
+using Maple.Properties;
 
 namespace Maple
 {

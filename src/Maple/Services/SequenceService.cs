@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Maple.Domain;
-using Maple.Localization.Properties;
+using Maple.Properties;
 using Microsoft.Extensions.Logging;
 
 namespace Maple

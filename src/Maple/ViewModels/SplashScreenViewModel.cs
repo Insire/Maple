@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 using Maple.Domain;
-using Maple.Localization.Properties;
 using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Commands;
 using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    public class SplashScreenViewModel : ObservableObject
+    public class SplashScreenViewModel : ObservableObject, IDisposable
     {
         private readonly IScarletMessenger _messenger;
         private readonly Queue<string> _queue;
@@ -54,7 +53,7 @@ namespace Maple
 
         private SplashScreenViewModel(IScarletMessenger messenger) : this()
         {
-            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger), $"{nameof(messenger)} {Resources.IsRequired}");
+            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
             _messenger.Subscribe<LogMessageReceivedMessage>(LogMessageReceived);
         }
 

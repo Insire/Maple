@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using FluentValidation;
 using Maple.Domain;
-using Maple.Localization.Properties;
 using MvvmScarletToolkit;
 using MvvmScarletToolkit.Commands;
 
@@ -149,7 +148,7 @@ namespace Maple
         public void Play(MediaItem mediaItem)
         {
             if (mediaItem == null)
-                throw new ArgumentNullException(nameof(mediaItem), $"{nameof(mediaItem)} {Resources.IsRequired}");
+                throw new ArgumentNullException(nameof(mediaItem));
 
             if (!Playlist.MediaItems.Items.Contains(mediaItem))
                 throw new ArgumentException("Cant play an item thats not part of the playlist"); // TODO localize
