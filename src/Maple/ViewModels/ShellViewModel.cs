@@ -1,5 +1,4 @@
 using System;
-using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Observables;
 
 namespace Maple
@@ -20,11 +19,11 @@ namespace Maple
             private set { SetValue(ref _navigationViewModel, value); }
         }
 
-        private ILocalizationService _translationManager;
-        public ILocalizationService TranslationManager
+        private LocalizationsViewModel _localizations;
+        public LocalizationsViewModel Localizations
         {
-            get { return _translationManager; }
-            private set { SetValue(ref _translationManager, value); }
+            get { return _localizations; }
+            private set { SetValue(ref _localizations, value); }
         }
 
         private DialogViewModel _dialogViewModel;
@@ -55,7 +54,7 @@ namespace Maple
             private set { SetValue(ref _optionsViewModel, value); }
         }
 
-        public ShellViewModel(ILocalizationService translationManager,
+        public ShellViewModel(LocalizationsViewModel localizationsViewModel,
                                 NavigationViewModel navigationViewModel,
                                 MetaDataViewModel metaDataViewModel,
                                 DialogViewModel dialogViewModel,
@@ -63,7 +62,7 @@ namespace Maple
                                 MediaPlayers mediaPlayers,
                                 OptionsViewModel optionsViewModel)
         {
-            TranslationManager = translationManager ?? throw new ArgumentNullException(nameof(translationManager));
+            Localizations = localizationsViewModel ?? throw new ArgumentNullException(nameof(localizationsViewModel));
             NavigationViewModel = navigationViewModel ?? throw new ArgumentNullException(nameof(navigationViewModel));
             MetaDataViewModel = metaDataViewModel ?? throw new ArgumentNullException(nameof(metaDataViewModel));
             DialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));

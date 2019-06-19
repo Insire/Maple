@@ -88,7 +88,7 @@
             </Grid.RowDefinitions>
             <ContentControl Grid.Row="0"
                             HorizontalAlignment="Center"
-                            Content="{Binding DisplayName}"
+                            Content="{Binding Localization.Value}"
                             FontFamily="pack://application:,,,/Maple;component/Resources/Roboto/#Roboto"
                             FontSize="{DynamicResource HeaderFontSize}" />
 
@@ -112,6 +112,19 @@
 
     <DataTemplate DataType="{x:Type local:Playlist}">
         <TextBlock Text="{Binding Title}" />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type local:MediaItem}">
+        <TextBlock Text="{Binding Title}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Loaded">
+                    <i:InvokeCommandAction Command="{Binding LoadCommand}" />
+                </i:EventTrigger>
+                <i:EventTrigger EventName="UnLoaded">
+                    <i:InvokeCommandAction Command="{Binding UnloadCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </TextBlock>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:Playlists}">

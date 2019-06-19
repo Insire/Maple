@@ -32,26 +32,9 @@ namespace Maple
             _localizationsViewModel = localizationsViewModel ?? throw new ArgumentNullException(nameof(localizationsViewModel));
             _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
 
-            _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationsViewModel, nameof(Resources.Playback)))
-            {
-                Content = mediaPlayers,
-                IsSelected = false,
-                Sequence = 100,
-            });
-
-            _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationsViewModel, nameof(Resources.Playlists)))
-            {
-                Content = playlists,
-                IsSelected = false,
-                Sequence = 200,
-            });
-
-            _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationsViewModel, nameof(Resources.Options)))
-            {
-                Content = options,
-                IsSelected = false,
-                Sequence = 400,
-            });
+            Add(nameof(Resources.Playback), mediaPlayers);
+            Add(nameof(Resources.Playlists), playlists);
+            Add(nameof(Resources.Options), options);
 
             SelectedItem = this[0];
 

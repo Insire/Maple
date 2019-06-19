@@ -2,8 +2,7 @@
   "profiles": {
     "Maple": {
       "commandName": "Project",
-      "commandLineArgs": "debug inmemory sqlite",
-      "workingDirectory": "E:\\Code\\Maple\\src\\Maple\\bin\\Debug\\"
+      "commandLineArgs": "Debug"
     }
   }
 }

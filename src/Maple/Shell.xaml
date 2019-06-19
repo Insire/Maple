@@ -56,8 +56,6 @@
                              ItemsSource="{Binding NavigationViewModel.Items}"
                              OptionsVisibility="Visible"
                              SelectedItem="{Binding NavigationViewModel.SelectedItem}">
-            <metro:HamburgerMenu.Resources>
-            </metro:HamburgerMenu.Resources>
             <metro:HamburgerMenu.ItemTemplate>
                 <DataTemplate DataType="{x:Type metro:HamburgerMenuIconItem}">
                     <Grid Height="48">
@@ -87,7 +85,7 @@
 
                         <ContentControl Grid.Column="1"
                                         VerticalAlignment="Center"
-                                        Content="{Binding DisplayName}"
+                                        Content="{Binding Localization.Value}"
                                         FontSize="16" />
                     </Grid>
                 </DataTemplate>

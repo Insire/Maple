@@ -17,7 +17,7 @@ namespace Maple.Data
 
         public async Task SeedDatabase()
         {
-            Randomizer.Seed = new Random(8757858);
+            Randomizer.Seed = new Random(8757857);
             const string localization = "de";
 
             var mediaItemGenerator = new Faker<MediaItemModel>(localization)
@@ -40,7 +40,7 @@ namespace Maple.Data
                 .RuleFor(o => o.MediaItems, (f, o) =>
                 {
                     var mediaItems = new List<MediaItemModel>();
-                    for (var i = 0; i < f.Random.Int(max: 20); i++)
+                    for (var i = 0; i < Randomizer.Seed.Next(5, 20); i++)
                     {
                         var mediaItem = mediaItemGenerator.Generate();
                         mediaItem.Playlist = o;

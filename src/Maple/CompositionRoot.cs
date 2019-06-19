@@ -1,8 +1,6 @@
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using DryIoc;
 using FluentValidation;
@@ -27,55 +25,67 @@ namespace Maple
 {
     public static class CompositionRoot
     {
-        private const string DatabasePath = "Data Source=maple.db;";
-        private const string ProductionDatabasePath = "Data Source=..\\maple.db;";
+        private const string DatabasePath = "..\\maple.db";
 
-        private static (bool MigrationRequired, bool SeedRequired, bool CreationRequired, bool DevEnvironment, bool InMemory) HandleStart(string[] args)
+        private const string InMemorySqlite = "InMemorySqlite";
+        private const string DebugFileSqlite = "DebugFileSqlite";
+        private const string Debug = "Debug";
+
+        private static (bool MigrationRequired, bool SeedRequired, bool CreationRequired, bool InMemory) HandleStart(string[] args)
         {
             var seedRequired = false;
             var migrationRequired = false;
             var creationRequired = false;
-            var dev = false;
             var inMemory = false;
 
-            if (args.Any(p => p.IndexOf("debug", StringComparison.InvariantCultureIgnoreCase) >= 0))
+            if (args.Any(p => p.IndexOf(InMemorySqlite, StringComparison.InvariantCultureIgnoreCase) >= 0))
             {
+                // not working
                 seedRequired = true;
-                dev = true;
-
-                if (args.Any(p => p.IndexOf("inmemory", StringComparison.InvariantCultureIgnoreCase) >= 0))
-                {
-                    inMemory = true;
-                    if (args.Any(p => p.IndexOf("sqlite", StringComparison.InvariantCultureIgnoreCase) >= 0))
-                    {
-                        migrationRequired = true;
-                    }
-                }
-                else
-                {
-                    if (!File.Exists(DatabasePath))
-                    {
-                        migrationRequired = true;
-                    }
-                }
-            }
-            else
-            {
                 migrationRequired = true;
+                inMemory = true;
+
+                return (migrationRequired, seedRequired, creationRequired, inMemory);
+            }
+
+            if (args.Any(p => p.IndexOf(DebugFileSqlite, StringComparison.InvariantCultureIgnoreCase) >= 0))
+            {
+                // not working
+                seedRequired = true;
+                migrationRequired = true;
+
+                return (migrationRequired, seedRequired, creationRequired, inMemory);
+            }
+
+            if (args.Any(p => p.IndexOf(Debug, StringComparison.InvariantCultureIgnoreCase) >= 0))
+            {
                 if (!File.Exists(DatabasePath))
                 {
                     creationRequired = true;
+                    seedRequired = true;
                 }
+
+                migrationRequired = true;
+
+                return (migrationRequired, seedRequired, creationRequired, inMemory);
             }
 
-            return (migrationRequired, seedRequired, creationRequired, dev, inMemory);
+            if (!File.Exists(DatabasePath))
+            {
+                // working?
+                creationRequired = true;
+            }
+
+            migrationRequired = true;
+
+            return (migrationRequired, seedRequired, creationRequired, inMemory);
         }
 
         public static async Task<IContainer> Get(string[] args)
         {
-            var (MigrationRequired, SeedRequired, CreationRequired, Dev, InMemory) = HandleStart(args);
+            var (MigrationRequired, SeedRequired, CreationRequired, InMemory) = HandleStart(args);
 
-            var builder = new SqliteConnectionStringBuilder(Dev ? ProductionDatabasePath : DatabasePath)
+            var builder = new SqliteConnectionStringBuilder($"Data Source={DatabasePath};")
             {
                 Mode = InMemory ? SqliteOpenMode.Memory : CreationRequired ? SqliteOpenMode.ReadWriteCreate : SqliteOpenMode.ReadWrite,
             };
@@ -112,7 +122,7 @@ namespace Maple
                 Directory.CreateDirectory("logs");
                 var fileConfiguration = new LoggingFileConfiguration()
                 {
-                    PathFormat = "logs\\{Date}.log",
+                    PathFormat = "..\\logs\\{Date}.log",
                     FileSizeLimitBytes = 1073741824,
                     RetainedFileCountLimit = 1,
                 };
@@ -170,6 +180,7 @@ namespace Maple
                 c.RegisterMany(new[] { typeof(Playlists) }, typeof(Playlists), Reuse.Singleton);
                 c.RegisterMany(new[] { typeof(MediaPlayers) }, typeof(MediaPlayers), Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
                 c.RegisterMany(new[] { typeof(Cultures) }, typeof(Cultures), Reuse.Singleton);
+                c.RegisterMany(new[] { typeof(ILocalizationService), typeof(LocalizationsViewModel) }, typeof(LocalizationsViewModel), Reuse.Singleton);
 
                 c.Register<AudioDevices>(setup: Setup.With(allowDisposableTransient: true));
                 c.Register<FileSystemOptionsViewModel>();
@@ -196,7 +207,6 @@ namespace Maple
                 c.Register<IYoutubeService, YoutubeService>();
 
                 c.Register<IVersionService, VersionService>(Reuse.Singleton);
-                c.Register<ILocalizationService, LocalizationsViewModel>(Reuse.Singleton);
                 c.Register<ILocalizationProvider, ResxTranslationProvider>(Reuse.Singleton);
 
                 c.UseInstance(ScarletDispatcher.Default);
