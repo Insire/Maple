@@ -11,7 +11,7 @@ namespace Maple
 {
     public sealed class NavigationViewModel : Scenes
     {
-        private readonly ILocalizationService _localizationService;
+        private readonly LocalizationsViewModel _localizationsViewModel;
         private readonly DialogViewModel _dialogViewModel;
 
         private bool _isExpanded;
@@ -26,27 +26,27 @@ namespace Maple
         public ICommand OpenGithubPageCommand { get; }
         public ICommand OpenOptionsCommand { get; }
 
-        public NavigationViewModel(ICommandBuilder commandBuilder, ILocalizationService localizationService, DialogViewModel dialogViewModel, MediaPlayers mediaPlayers, Playlists playlists, OptionsViewModel options)
-            : base(commandBuilder)
+        public NavigationViewModel(ICommandBuilder commandBuilder, LocalizationsViewModel localizationsViewModel, DialogViewModel dialogViewModel, MediaPlayers mediaPlayers, Playlists playlists, OptionsViewModel options)
+            : base(commandBuilder, localizationsViewModel)
         {
-            _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
+            _localizationsViewModel = localizationsViewModel ?? throw new ArgumentNullException(nameof(localizationsViewModel));
             _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
 
-            _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationService, nameof(Resources.Playback)))
+            _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationsViewModel, nameof(Resources.Playback)))
             {
                 Content = mediaPlayers,
                 IsSelected = false,
                 Sequence = 100,
             });
 
-            _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationService, nameof(Resources.Playlists)))
+            _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationsViewModel, nameof(Resources.Playlists)))
             {
                 Content = playlists,
                 IsSelected = false,
                 Sequence = 200,
             });
 
-            _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationService, nameof(Resources.Options)))
+            _items.Add(new Scene(commandBuilder, new LocalizationViewModel(localizationsViewModel, nameof(Resources.Options)))
             {
                 Content = options,
                 IsSelected = false,
@@ -83,7 +83,7 @@ namespace Maple
 
         private void OpenGithubPage()
         {
-            using (Process.Start(_localizationService.Translate(nameof(Resources.GithubProjectLink))))
+            using (Process.Start(_localizationsViewModel.Translate(nameof(Resources.GithubProjectLink))))
             {
             }
         }

@@ -22,9 +22,9 @@ namespace Maple
         /// <summary>
         /// See <see cref="ILocalizationProvider.Translate" />
         /// </summary>
-        public string Translate(string key)
+        public string Translate(string key, CultureInfo culture)
         {
-            return _resourceManager.GetString(key);
+            return _resourceManager.GetString(key, culture);
         }
 
         /// <summary>
