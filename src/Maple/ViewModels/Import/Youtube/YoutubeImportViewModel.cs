@@ -3,8 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Maple.Youtube;
-using MvvmScarletToolkit.Abstractions;
-using MvvmScarletToolkit.Commands;
+using MvvmScarletToolkit;
 using MvvmScarletToolkit.Observables;
 
 namespace Maple

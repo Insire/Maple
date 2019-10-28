@@ -28,9 +28,9 @@ namespace Maple
             _youtubeImport = youtubeImport ?? throw new ArgumentNullException(nameof(youtubeImport));
             _fileSystemViewModel = fileSystemViewModel ?? throw new ArgumentNullException(nameof(fileSystemViewModel));
 
-            CloseDialogCommand = new RelayCommand(Close, () => CanClose());
-            CancelDialogCommand = new RelayCommand(Cancel, () => CanCancel());
-            AcceptDialogCommand = new RelayCommand(Accept, () => CanAccept());
+            CloseDialogCommand = new RelayCommand(CommandManager, Close, () => CanClose());
+            CancelDialogCommand = new RelayCommand(CommandManager, Cancel, () => CanCancel());
+            AcceptDialogCommand = new RelayCommand(CommandManager, Accept, () => CanAccept());
 
             ExceptionDialogViewModel = new ExceptionContentDialogViewModel();
             MessageDialogViewModel = new MessageContentDialogViewModel();
@@ -100,7 +100,7 @@ namespace Maple
                 AcceptAction = () =>
                 {
                     var items = viewModel.FileSystemViewModel.SelectedItems;
-                    tuple = (true, items.Select(p => p as IFileSystemFile).Where(p => p != null).ToList());
+                    tuple = (true, items.Cast<IFileSystemFile>().Where(p => !(p is null)).ToList());
                 };
 
                 CancelAction = () =>

@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using Maple.Properties;
-using MvvmScarletToolkit.Abstractions;
+using MvvmScarletToolkit;
 using MvvmScarletToolkit.Commands;
 using MvvmScarletToolkit.Observables;
 
@@ -38,10 +38,10 @@ namespace Maple
 
             SelectedItem = this[0];
 
-            OpenMediaPlayerCommand = new RelayCommand(OpenMediaPlayerView, CanOpenMediaPlayerView);
-            OpenOptionsCommand = new RelayCommand(OpenOptionsView, CanOpenOptionsView);
-            OpenGithubPageCommand = new RelayCommand(OpenGithubPage);
-            CloseExpanderCommand = new RelayCommand(() => IsExpanded = false, () => IsExpanded != false);
+            OpenMediaPlayerCommand = new RelayCommand(CommandManager, OpenMediaPlayerView, CanOpenMediaPlayerView);
+            OpenOptionsCommand = new RelayCommand(CommandManager, OpenOptionsView, CanOpenOptionsView);
+            OpenGithubPageCommand = new RelayCommand(CommandManager, OpenGithubPage);
+            CloseExpanderCommand = new RelayCommand(CommandManager, () => IsExpanded = false, () => IsExpanded != false);
         }
 
         private void OpenOptionsView()

@@ -2,14 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using Maple.Domain;
-using MvvmScarletToolkit.Observables;
 using FluentValidation;
 using FluentValidation.Results;
-using System.Linq;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
+using Maple.Domain;
 using MvvmScarletToolkit.Abstractions;
 
 namespace Maple

@@ -2,16 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 using Maple.Domain;
+using MvvmScarletToolkit;
 using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Commands;
 using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    public class SplashScreenViewModel : ObservableObject, IDisposable
+    public class SplashScreenViewModel : ViewModelBase, IDisposable
     {
         private readonly IScarletMessenger _messenger;
         private readonly Queue<string> _queue;
+
+        private bool _disposed;
         private System.Timers.Timer _timer;
 
         protected bool IsDisposed { get; private set; }
@@ -44,26 +47,29 @@ namespace Maple
             private set { SetValue(ref _disposeCommand, value); }
         }
 
-        private SplashScreenViewModel()
+        private SplashScreenViewModel(ICommandBuilder commandBuilder)
+            : base(commandBuilder)
         {
             _queue = new Queue<string>();
             _timer = new System.Timers.Timer(150);
-            _timer.Elapsed += _timer_Elapsed;
+            _timer.Elapsed += Timer_Elapsed;
         }
 
-        private SplashScreenViewModel(IScarletMessenger messenger) : this()
+        private SplashScreenViewModel(IScarletMessenger messenger, ICommandBuilder commandBuilder)
+            : this(commandBuilder)
         {
             _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
             _messenger.Subscribe<LogMessageReceivedMessage>(LogMessageReceived);
         }
 
-        public SplashScreenViewModel(IScarletMessenger messenger, IVersionService version) : this(messenger)
+        public SplashScreenViewModel(IScarletMessenger messenger, IVersionService version, ICommandBuilder commandBuilder)
+            : this(messenger, commandBuilder)
         {
             Version = version.Get();
             InitializeCommands();
         }
 
-        private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             if (_queue.Count == 0)
                 return;
@@ -74,8 +80,8 @@ namespace Maple
 
         private void InitializeCommands()
         {
-            LoadCommand = new RelayCommand(Load, CanLoad);
-            DisposeCommand = new RelayCommand(Dispose, CanDispose);
+            LoadCommand = new RelayCommand(CommandManager, Load, CanLoad);
+            DisposeCommand = new RelayCommand(CommandManager, Dispose, CanDispose);
         }
 
         public void Load()
@@ -93,31 +99,26 @@ namespace Maple
             _queue.Enqueue(e.Content);
         }
 
-        public void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (IsDisposed)
+            if (_disposed)
+            {
                 return;
+            }
+            _disposed = true;
 
             if (disposing)
             {
                 if (_timer != null)
                 {
                     _timer.Stop();
-                    _timer.Elapsed -= _timer_Elapsed;
+                    _timer.Elapsed -= Timer_Elapsed;
                     _timer.Dispose();
                     _timer = null;
                 }
-                // Free any other managed objects here.
             }
 
-            // Free any unmanaged objects here.
-            IsDisposed = true;
+            base.Dispose(disposing);
         }
 
         public bool CanDispose()

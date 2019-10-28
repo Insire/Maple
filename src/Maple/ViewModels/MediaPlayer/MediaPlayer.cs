@@ -15,6 +15,8 @@ namespace Maple
     [DebuggerDisplay("{Name}, {Sequence}")]
     public sealed class MediaPlayer : MapleDomainViewModelBase<MediaPlayer, MediaPlayerModel>, ISequence, IChangeState
     {
+        private bool _disposed;
+
         public bool IsPlaying => Player.IsPlaying;
 
         public bool IsNew => Model.IsNew;
@@ -124,11 +126,11 @@ namespace Maple
 
             Playlist = playlist;
 
-            PlayCommand = new RelayCommand<MediaItem>(Play, CanPlay);
-            PreviousCommand = new RelayCommand(Previous, () => Playlist?.CanPrevious() == true && CanPrevious());
-            NextCommand = new RelayCommand(Next, () => Playlist?.CanNext() == true && CanNext());
-            PauseCommand = new RelayCommand(Pause, () => CanPause());
-            StopCommand = new RelayCommand(Stop, () => CanStop());
+            PlayCommand = new RelayCommand<MediaItem>(CommandManager, Play, CanPlay);
+            PreviousCommand = new RelayCommand(CommandManager, Previous, () => Playlist?.CanPrevious() == true && CanPrevious());
+            NextCommand = new RelayCommand(CommandManager, Next, () => Playlist?.CanNext() == true && CanNext());
+            PauseCommand = new RelayCommand(CommandManager, Pause, () => CanPause());
+            StopCommand = new RelayCommand(CommandManager, Stop, () => CanStop());
         }
 
         public void Play(MediaItem mediaItem)
@@ -342,8 +344,11 @@ namespace Maple
 
         protected override void Dispose(bool disposing)
         {
-            if (IsDisposed)
+            if (_disposed)
+            {
                 return;
+            }
+            _disposed = true;
 
             if (IsPlaying)
                 Stop();

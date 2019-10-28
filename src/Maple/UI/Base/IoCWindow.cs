@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -16,6 +17,7 @@ namespace Maple
         private readonly IScarletMessenger _messenger;
 
         public ILocalizationService LocalizationService { get; }
+        public IWeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> WeakEventManager { get; }
 
         protected IoCWindow()
             : base()
@@ -24,11 +26,12 @@ namespace Maple
                 Debug.Fail($"The constructor without parameters of {nameof(IoCWindow)} exists only for compatibility reasons.");
         }
 
-        protected IoCWindow(ILocalizationService localizationService, IScarletMessenger messenger)
+        protected IoCWindow(ILocalizationService localizationService, IScarletMessenger messenger, IWeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> weakEventManager)
             : base()
         {
             LocalizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
             _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+            WeakEventManager = weakEventManager ?? throw new ArgumentNullException(nameof(weakEventManager));
 
             _messenger.Subscribe<UiPrimaryColorChangedMessage>(PrimaryColorChanged);
         }

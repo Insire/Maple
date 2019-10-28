@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using MvvmScarletToolkit.Abstractions;
 
@@ -11,17 +12,10 @@ namespace Maple
     /// <seealso cref="Maple.Core.IIocFrameworkElement" />
     public class IoCResourceDictionary : SharedResourceDictionary, IIocFrameworkElement
     {
-        /// <summary>
-        /// Gets the translation manager.
-        /// </summary>
-        /// <value>
-        /// The translation manager.
-        /// </value>
         public ILocalizationService LocalizationService { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IoCResourceDictionary"/> class.
-        /// </summary>
+        public IWeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> WeakEventManager { get; }
+
         public IoCResourceDictionary()
             : base()
         {
@@ -29,14 +23,11 @@ namespace Maple
                 Debug.Fail($"The constructor without parameters of {nameof(IoCResourceDictionary)} exists only for compatibility reasons.");
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IoCResourceDictionary"/> class.
-        /// </summary>
-        /// <param name="translationManager">The translation manager.</param>
-        public IoCResourceDictionary(ILocalizationService localizationService, Uri source)
+        public IoCResourceDictionary(ILocalizationService localizationService, IWeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> weakEventManager, Uri source)
             : base()
         {
             LocalizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
+            WeakEventManager = weakEventManager ?? throw new ArgumentNullException(nameof(weakEventManager));
             Source = source ?? throw new ArgumentNullException(nameof(source));
 
             Add(typeof(ILocalizationService).Name, localizationService);

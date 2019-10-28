@@ -9,7 +9,6 @@ using FluentValidation;
 using FluentValidation.Results;
 using Maple.Domain;
 using MvvmScarletToolkit.Abstractions;
-using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {

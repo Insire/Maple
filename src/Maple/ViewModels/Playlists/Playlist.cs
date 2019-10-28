@@ -10,7 +10,7 @@ using System.Windows.Input;
 using FluentValidation;
 using Maple.Domain;
 using Maple.Properties;
-using MvvmScarletToolkit.Commands;
+using MvvmScarletToolkit;
 
 namespace Maple
 {
@@ -146,15 +146,15 @@ namespace Maple
                 RepeatModes = new ReadOnlyObservableCollection<RepeatMode>(new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>()));
                 _history = new Stack<int>();
 
-                LoadFromFileCommand = commandBuilder
+                LoadFromFileCommand = CommandBuilder
                     .Create(LoadFromFile, CanLoadFromFile)
                     .WithSingleExecution(CommandManager)
                     .Build();
-                LoadFromFolderCommand = commandBuilder
+                LoadFromFolderCommand = CommandBuilder
                     .Create(LoadFromFolder, CanLoadFromFolder)
                     .WithSingleExecution(CommandManager)
                     .Build();
-                LoadFromUrlCommand = commandBuilder
+                LoadFromUrlCommand = CommandBuilder
                     .Create(LoadFromUrl, CanLoadFromUrl)
                     .WithSingleExecution(CommandManager)
                     .Build();

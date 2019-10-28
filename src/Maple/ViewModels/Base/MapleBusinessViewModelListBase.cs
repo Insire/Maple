@@ -56,7 +56,6 @@ namespace Maple
     public abstract class MapleBusinessViewModelListBase<TViewModel> : BusinessViewModelListBase<TViewModel>, IDisposable
         where TViewModel : class, INotifyPropertyChanged
     {
-        protected readonly IScarletMessenger Messenger;
         protected readonly ILoggerFactory Log;
         protected readonly ILocalizationService LocalizationService;
         protected readonly ISequenceService SequenceService;
@@ -64,12 +63,11 @@ namespace Maple
 
         private readonly ConcurrentStack<SubscriptionToken> _messageTokens;
 
-        public bool IsDisposed { get; private set; }
+        private bool _disposed;
 
         protected MapleBusinessViewModelListBase(IMapleCommandBuilder commandBuilder)
             : base(commandBuilder)
         {
-            Messenger = commandBuilder.Messenger ?? throw new ArgumentNullException(nameof(Messenger));
             Log = commandBuilder.Log ?? throw new ArgumentNullException(nameof(Log));
             LocalizationService = commandBuilder.LocalizationService ?? throw new ArgumentNullException(nameof(LocalizationService));
             SequenceService = commandBuilder.SequenceService ?? throw new ArgumentNullException(nameof(SequenceService));
@@ -83,50 +81,6 @@ namespace Maple
             _messageTokens.Push(token);
         }
 
-        // Implement IDisposable.
-        // Do not make this method virtual.
-        // A derived class should not be able to override this method.
-        public void Dispose()
-        {
-            Dispose(true);
-            // This object will be cleaned up by the Dispose method.
-            // Therefore, you should call GC.SupressFinalize to
-            // take this object off the finalization queue
-            // and prevent finalization code for this object
-            // from executing a second time.
-            GC.SuppressFinalize(this);
-        }
-
-        // Dispose(bool disposing) executes in two distinct scenarios.
-        // If disposing equals true, the method has been called directly
-        // or indirectly by a user's code. Managed and unmanaged resources
-        // can be disposed.
-        // If disposing equals false, the method has been called by the
-        // runtime from inside the finalizer and you should not reference
-        // other objects. Only unmanaged resources can be disposed.
-        protected virtual void Dispose(bool disposing)
-        {
-            // Check to see if Dispose has already been called.
-            if (IsDisposed)
-                return;
-
-            // If disposing equals true, dispose all managed
-            // and unmanaged resources.
-            if (disposing)
-            {
-                // Dispose managed resources.
-                ClearSubscriptions();
-            }
-
-            // Call the appropriate methods to clean up
-            // unmanaged resources here.
-            // If disposing is false,
-            // only the following code is executed.
-
-            // Note disposing has been done.
-            IsDisposed = true;
-        }
-
         protected void ClearSubscriptions()
         {
             using (BusyStack.GetToken())
@@ -136,6 +90,23 @@ namespace Maple
                     subscription.Dispose();
                 }
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+            _disposed = true;
+
+            if (disposing)
+            {
+                // Dispose managed resources.
+                ClearSubscriptions();
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

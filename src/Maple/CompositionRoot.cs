@@ -212,9 +212,9 @@ namespace Maple
                 c.UseInstance(ScarletDispatcher.Default);
                 c.RegisterMany(new[] { typeof(ICommandBuilder), typeof(IMapleCommandBuilder) }, typeof(MapleCommandBuilder), Reuse.Singleton);
                 c.Register<IBusyStack, BusyStack>();
-                c.Register<IScarletMessenger, ScarletMessenger>(Reuse.Singleton);
-                c.Register<IScarletCommandManager, ScarletCommandManager>(Reuse.Singleton);
-                c.Register<IScarletMessageProxy, DefaultMessageProxy>(Reuse.Singleton);
+                c.UseInstance(ScarletMessenger.Default);
+                c.UseInstance(ScarletCommandManager.Default);
+                c.UseInstance(ScarletMessageProxy.Default);
             }
 
             void RegisterValidation()

@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Data;
@@ -33,44 +34,45 @@ namespace Maple
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
             if (TryGetIoCFrameWorkElement(serviceProvider, out var element))
-                return ProvideValue(serviceProvider, element.LocalizationService);
+                return ProvideValue(serviceProvider, element.WeakEventManager, element.LocalizationService);
 
-            if (TryGetTranslationManagerFromResources(serviceProvider, out var manager))
-                return ProvideValue(serviceProvider, manager);
+            if (TryGetServiceFromResources<IWeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>>(serviceProvider, out var manager) && TryGetServiceFromResources<ILocalizationService>(serviceProvider, out var service))
+                return ProvideValue(serviceProvider, manager, service);
 
             Debug.WriteLine($"{nameof(TranslationExtension)} ProvideValue {Key} failed");
 
             return Binding.DoNothing;
         }
 
-        private bool TryGetIoCFrameWorkElement(IServiceProvider serviceProvider, out IIocFrameworkElement element)
+        private static bool TryGetIoCFrameWorkElement(IServiceProvider serviceProvider, out IIocFrameworkElement element)
         {
             var provider = serviceProvider.GetService(typeof(IRootObjectProvider)) as IRootObjectProvider;
             element = provider?.RootObject as IIocFrameworkElement;
             return element != null;
         }
 
-        private bool TryGetTranslationManagerFromResources(IServiceProvider serviceProvider, out ILocalizationService manager)
+        private static bool TryGetServiceFromResources<T>(IServiceProvider serviceProvider, out T service)
+            where T : class
         {
             var provider = serviceProvider.GetService(typeof(IRootObjectProvider)) as IRootObjectProvider;
             var dictionary = provider?.RootObject as ResourceDictionary;
-            var key = typeof(ILocalizationService).Name;
+            var key = typeof(T).Name;
 
             if (dictionary?.Contains(key) == true)
             {
-                manager = dictionary[key] as ILocalizationService;
+                service = dictionary[key] as T;
                 return true;
             }
 
-            manager = null;
+            service = null;
             return false;
         }
 
-        private object ProvideValue(IServiceProvider serviceProvider, ILocalizationService manager)
+        private object ProvideValue(IServiceProvider serviceProvider, IWeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> weakEventManager, ILocalizationService service)
         {
             var binding = new Binding("Value")
             {
-                Source = new LocalizationViewModel(manager, Key, ToUpper)
+                Source = new LocalizationViewModel(weakEventManager, service, Key, ToUpper)
             };
 
             return binding.ProvideValue(serviceProvider);
