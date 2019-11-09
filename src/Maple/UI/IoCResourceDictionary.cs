@@ -14,7 +14,7 @@ namespace Maple
     {
         public ILocalizationService LocalizationService { get; }
 
-        public IWeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> WeakEventManager { get; }
+        public IScarletEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> WeakEventManager { get; }
 
         public IoCResourceDictionary()
             : base()
@@ -23,7 +23,7 @@ namespace Maple
                 Debug.Fail($"The constructor without parameters of {nameof(IoCResourceDictionary)} exists only for compatibility reasons.");
         }
 
-        public IoCResourceDictionary(ILocalizationService localizationService, IWeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> weakEventManager, Uri source)
+        public IoCResourceDictionary(ILocalizationService localizationService, IScarletEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> weakEventManager, Uri source)
             : base()
         {
             LocalizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));

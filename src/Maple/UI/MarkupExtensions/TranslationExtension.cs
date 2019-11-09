@@ -36,7 +36,7 @@ namespace Maple
             if (TryGetIoCFrameWorkElement(serviceProvider, out var element))
                 return ProvideValue(serviceProvider, element.WeakEventManager, element.LocalizationService);
 
-            if (TryGetServiceFromResources<IWeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>>(serviceProvider, out var manager) && TryGetServiceFromResources<ILocalizationService>(serviceProvider, out var service))
+            if (TryGetServiceFromResources<IScarletEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>>(serviceProvider, out var manager) && TryGetServiceFromResources<ILocalizationService>(serviceProvider, out var service))
                 return ProvideValue(serviceProvider, manager, service);
 
             Debug.WriteLine($"{nameof(TranslationExtension)} ProvideValue {Key} failed");
@@ -68,7 +68,7 @@ namespace Maple
             return false;
         }
 
-        private object ProvideValue(IServiceProvider serviceProvider, IWeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> weakEventManager, ILocalizationService service)
+        private object ProvideValue(IServiceProvider serviceProvider, IScarletEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> weakEventManager, ILocalizationService service)
         {
             var binding = new Binding("Value")
             {

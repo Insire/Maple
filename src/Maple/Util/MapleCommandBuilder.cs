@@ -19,7 +19,7 @@ namespace Maple
             , IScarletCommandManager commandManager
             , IScarletMessenger messenger
             , IExitService exitService
-            , IWeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> weakEventManager
+            , IScarletEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> weakEventManager
             , Func<Action<bool>, IBusyStack> busyStackFactory
             , ILoggerFactory log
             , ILocalizationService localizationService

@@ -17,7 +17,7 @@ namespace Maple
         private readonly IScarletMessenger _messenger;
 
         public ILocalizationService LocalizationService { get; }
-        public IWeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> WeakEventManager { get; }
+        public IScarletEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> WeakEventManager { get; }
 
         protected IoCWindow()
             : base()
@@ -26,7 +26,7 @@ namespace Maple
                 Debug.Fail($"The constructor without parameters of {nameof(IoCWindow)} exists only for compatibility reasons.");
         }
 
-        protected IoCWindow(ILocalizationService localizationService, IScarletMessenger messenger, IWeakEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> weakEventManager)
+        protected IoCWindow(ILocalizationService localizationService, IScarletMessenger messenger, IScarletEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> weakEventManager)
             : base()
         {
             LocalizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
