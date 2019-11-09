@@ -175,7 +175,7 @@ namespace Maple
 
         private void OnPlaylistChanged()
         {
-            Model.Playlist = Playlist.Model;
+            Model.Playlist = Playlist?.Model;
             // TODO: maybe add optional endless playback
         }
 
