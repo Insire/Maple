@@ -1,18 +1,17 @@
 <Application x:Class="Maple.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Maple">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Resources>
-        <local:SharedResourceDictionary>
+        <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
 
                 <!--  MahApps.Metro  -->
-                <local:SharedResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-                <local:SharedResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Themes/generic.xaml" />
-                <local:SharedResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/dark.orange.xaml" />
-                <ResourceDictionary Source="Resources/Style.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Themes/generic.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/dark.orange.xaml" />
+
                 <!--  more injections OnStartup, those are not all resources used  -->
             </ResourceDictionary.MergedDictionaries>
-        </local:SharedResourceDictionary>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

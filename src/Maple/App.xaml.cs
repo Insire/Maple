@@ -29,10 +29,7 @@ namespace Maple
 
             InitializeUpdater(_log);
 
-            var url = new Uri("/Maple;component/Resources/Style.xaml", UriKind.RelativeOrAbsolute);
-            var styles = new IoCResourceDictionary(localizationService, weakEventManager, url);
-
-            Resources.MergedDictionaries.Add(styles);
+            Resources.MergedDictionaries.Add(new IoCResourceDictionary(localizationService, weakEventManager, new Uri("/Maple;component/Resources/Style.xaml", UriKind.RelativeOrAbsolute)));
 
             var shell = await GetShell(_log).ConfigureAwait(true);
             shell.DataContext = _container.Resolve<ShellViewModel>();
