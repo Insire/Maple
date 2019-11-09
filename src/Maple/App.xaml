@@ -10,7 +10,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Themes/generic.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/dark.orange.xaml" />
 
-                <!--  more injections OnStartup, those are not all resources used  -->
+                <!--  more injections OnStartup, these are not all resources used  -->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

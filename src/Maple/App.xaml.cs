@@ -54,11 +54,6 @@ namespace Maple
             ExitInternal(e);
         }
 
-        /// <summary>
-        /// Gets the shell control.
-        /// </summary>
-        /// <param name="service">The service.</param>
-        /// <returns></returns>
         /// <remarks>
         /// order matters alot here, so be careful when modifying this
         /// </remarks>
