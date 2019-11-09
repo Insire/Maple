@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -10,7 +11,7 @@ namespace Maple
 {
     public partial class App : Application
     {
-        private IContainer _container;
+        private DryIoc.IContainer _container;
         private Task _backgroundUpdate;
         private ILogger _log;
 
@@ -22,11 +23,16 @@ namespace Maple
 
             var localizationService = _container.Resolve<ILocalizationService>();
             var loggerFactory = _container.Resolve<ILoggerFactory>();
+            var weakEventManager = _container.Resolve<IScarletEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>>();
+
             _log = loggerFactory.CreateLogger<App>();
 
             InitializeUpdater(_log);
-            InitializeResources(localizationService);
-            // TODO InitializeLocalization();
+
+            var url = new Uri("/Maple;component/Resources/Style.xaml", UriKind.RelativeOrAbsolute);
+            var styles = new IoCResourceDictionary(localizationService, weakEventManager, url);
+
+            Resources.MergedDictionaries.Add(styles);
 
             var shell = await GetShell(_log).ConfigureAwait(true);
             shell.DataContext = _container.Resolve<ShellViewModel>();
@@ -74,22 +80,6 @@ namespace Maple
 
                 return shell;
             }
-        }
-
-        /// <summary>
-        /// Initializes the resources.
-        /// </summary>
-        /// <param name="localizationService">The service.</param>
-        /// <remarks>
-        /// injecting the translation manager into a SharedResourcedictionary,
-        /// so that hopefully all usages of the translation extension can be resolved inside of ResourceDictionaries
-        /// </remarks>
-        private void InitializeResources(ILocalizationService localizationService)
-        {
-            var url = new Uri("/Maple;component/Resources/Style.xaml", UriKind.RelativeOrAbsolute);
-            var styles = new IoCResourceDictionary(localizationService, url);
-
-            Resources.MergedDictionaries.Add(styles);
         }
 
         private void InitializeUpdater(ILogger log)

@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
 using Maple.Domain;
-using MvvmScarletToolkit.Abstractions;
 
 namespace Maple
 {
@@ -20,28 +19,13 @@ namespace Maple
     /// <typeparam name="TModel"></typeparam>
     public abstract class MapleDomainViewModelListBase<TListViewModel, TViewModel> : MapleBusinessViewModelListBase<TViewModel>, INotifyDataErrorInfo
         where TListViewModel : MapleDomainViewModelListBase<TListViewModel, TViewModel>
-        where TViewModel : class, INotifyPropertyChanged, IChangeState, IChangeTrackable, INotifyDataErrorInfo
+        where TViewModel : class, INotifyPropertyChanged, IChangeState, INotifyDataErrorInfo
 
     {
-        protected readonly bool SkipChangeTracking;
-        protected readonly bool SkipValidation;
-        protected readonly ChangeTracker ChangeTracker;
         protected readonly IDictionary<string, ValidationResult> ValidationLookup;
         protected readonly IValidator<TListViewModel> Validator;
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
-        // ChangeTracking
-        [Bindable(true, BindingDirection.OneWay)]
-        public bool HasChanged => HasSelfChanged || HaveChildrenChanged;
-
-        // ChangeTracking
-        [Bindable(true, BindingDirection.OneWay)]
-        public bool HasSelfChanged => ChangeTracker.HasChanged;
-
-        // ChangeTracking
-        [Bindable(true, BindingDirection.OneWay)]
-        public bool HaveChildrenChanged => Items.Any(p => p.HasChanged);
 
         private bool _hasErrors;
         /// <summary>
@@ -65,28 +49,13 @@ namespace Maple
         {
             Validator = validator ?? throw new ArgumentNullException(nameof(validator));
             ValidationLookup = new Dictionary<string, ValidationResult>();
-
-            SkipValidation = true;
-            SkipChangeTracking = true;
-
-            ChangeTracker = new ChangeTracker();
-
-            SkipChangeTracking = false;
-            SkipValidation = false;
         }
 
         protected override bool SetValue<T>(ref T field, T value, Action OnChanging, Action OnChanged, [CallerMemberName] string propertyName = null)
         {
             if (base.SetValue(ref field, value, OnChanging, OnChanged, propertyName))
             {
-                if (!SkipChangeTracking && ChangeTracker.Update(value, propertyName))
-                {
-                    OnPropertyChanged(nameof(HasChanged));
-                    OnPropertyChanged(nameof(HasSelfChanged));
-                }
-
-                if (!SkipValidation)
-                    AddOrUpdateValidationResults(Validator.Validate(this, propertyName), propertyName);
+                AddOrUpdateValidationResults(Validator?.Validate(this, propertyName), propertyName);
 
                 return true;
             }
@@ -108,9 +77,6 @@ namespace Maple
         private void AddOrUpdateValidationResults(ValidationResult result, string propertyName)
         {
             if (result is null)
-                throw new ArgumentNullException(nameof(result));
-
-            if (SkipValidation)
                 return;
 
             var hadErrors = false;
@@ -156,7 +122,6 @@ namespace Maple
             }
 
             await base.Add(item);
-            item.Changed += Item_Changed;
             item.ErrorsChanged += Item_ErrorsChanged;
         }
 
@@ -164,12 +129,6 @@ namespace Maple
         {
             OnPropertyChanged(nameof(HaveChildrenErrors));
             OnPropertyChanged(nameof(HasErrors));
-        }
-
-        private void Item_Changed(object sender, EventArgs e)
-        {
-            OnPropertyChanged(nameof(HaveChildrenChanged));
-            OnPropertyChanged(nameof(HasChanged));
         }
 
         public sealed override async Task Remove(TViewModel item)
@@ -182,7 +141,6 @@ namespace Maple
 
             await base.Remove(item);
 
-            item.Changed -= Item_Changed;
             item.ErrorsChanged -= Item_ErrorsChanged;
         }
 

@@ -8,26 +8,20 @@ using System.Runtime.CompilerServices;
 using FluentValidation;
 using FluentValidation.Results;
 using Maple.Domain;
-using MvvmScarletToolkit.Abstractions;
 
 namespace Maple
 {
-    public abstract class MapleDomainViewModelBase<TViewModel, TModel> : MapleBusinessViewModelBase<TModel>, INotifyDataErrorInfo, IChangeTrackable
+    public abstract class MapleDomainViewModelBase<TViewModel, TModel> : MapleBusinessViewModelBase<TModel>, INotifyDataErrorInfo
         where TModel : class
-        where TViewModel : class, IChangeTrackable
+        where TViewModel : class
     {
-        protected readonly bool SkipChangeTracking;
         protected readonly bool SkipValidation;
         protected readonly IValidator<TViewModel> Validator;
         protected readonly IDictionary<string, ValidationResult> ValidationLookup;
-        protected readonly ChangeTracker ChangeTracker;
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
         public event EventHandler Changed;
-
-        [Bindable(true, BindingDirection.OneWay)]
-        public bool HasChanged => ChangeTracker.HasChanged;
 
         private bool _hasErrors;
         [Bindable(true, BindingDirection.OneWay)]
@@ -42,14 +36,6 @@ namespace Maple
         {
             Validator = validator ?? throw new ArgumentNullException(nameof(validator));
             ValidationLookup = new Dictionary<string, ValidationResult>();
-
-            SkipValidation = true;
-            SkipChangeTracking = true;
-
-            ChangeTracker = new ChangeTracker();
-
-            SkipChangeTracking = false;
-            SkipValidation = false;
         }
 
         protected MapleDomainViewModelBase(IMapleCommandBuilder commandBuilder, IValidator<TViewModel> validator, TModel model)
@@ -62,19 +48,7 @@ namespace Maple
         {
             if (base.SetValue(ref field, value, OnChanging, OnChanged, propertyName))
             {
-                var shouldNotifySubscribers = false;
-                if (!SkipChangeTracking && ChangeTracker.Update(value, propertyName))
-                {
-                    shouldNotifySubscribers = true;
-                    OnPropertyChanged(nameof(HasChanged));
-                }
-
-                if (!SkipValidation)
-                {
-                    AddOrUpdateValidationResults(ref shouldNotifySubscribers, Validator.Validate(this, propertyName), propertyName);
-                }
-
-                if (shouldNotifySubscribers)
+                if (AddOrUpdateValidationResults(Validator.Validate(this, propertyName), propertyName))
                 {
                     this.OnChanged();
                 }
@@ -96,7 +70,7 @@ namespace Maple
             return ValidationLookup[propertyName].Errors.Select(p => p.ErrorMessage);
         }
 
-        private void AddOrUpdateValidationResults(ref bool shouldNotifySubscribers, ValidationResult result, string propertyName)
+        private bool AddOrUpdateValidationResults(ValidationResult result, string propertyName)
         {
             if (result is null)
             {
@@ -105,7 +79,7 @@ namespace Maple
 
             if (SkipValidation)
             {
-                return;
+                return false;
             }
 
             var wasValid = false;
@@ -129,10 +103,8 @@ namespace Maple
             var didIsValidStayTheSame = wasValid == (result?.IsValid ?? true);
             if (didIsValidStayTheSame)
             {
-                return;
+                return false;
             }
-
-            shouldNotifySubscribers = true;
 
             OnErrorsChanged(propertyName);
 
@@ -141,6 +113,8 @@ namespace Maple
                 foreach (var item in ValidationLookup[propertyName].Errors)
                     Debug.WriteLine(item);
             }
+
+            return true;
         }
 
         protected virtual void OnChanged()

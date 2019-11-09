@@ -183,7 +183,7 @@ namespace Maple
                 c.RegisterMany(new[] { typeof(ILocalizationService), typeof(LocalizationsViewModel) }, typeof(LocalizationsViewModel), Reuse.Singleton);
 
                 c.Register<AudioDevices>(setup: Setup.With(allowDisposableTransient: true));
-                c.Register<FileSystemOptionsViewModel>();
+                c.Register<FileSystemOptionsViewModel>(Reuse.Singleton);
 
                 c.Register<NavigationViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
                 c.Register<ShellViewModel>(Reuse.Singleton);
@@ -215,6 +215,8 @@ namespace Maple
                 c.UseInstance(ScarletMessenger.Default);
                 c.UseInstance(ScarletCommandManager.Default);
                 c.UseInstance(ScarletMessageProxy.Default);
+                c.UseInstance(ScarletWeakEventManager.Default);
+                c.UseInstance(ScarletExitService.Default);
             }
 
             void RegisterValidation()
