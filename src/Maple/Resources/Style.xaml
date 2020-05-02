@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:domain="clr-namespace:Maple.Domain;assembly=Maple.Domain"
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-                    xmlns:icons="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks"
+                    xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
                     xmlns:local="clr-namespace:Maple"
                     xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
                     xmlns:mvvm="clr-namespace:MvvmScarletToolkit.Observables;assembly=MvvmScarletToolkit.Observables">

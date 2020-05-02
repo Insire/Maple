@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Maple.Domain;
 using Maple.Properties;
+using MvvmScarletToolkit;
 using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Commands;
 using MvvmScarletToolkit.FileSystemBrowser;
