@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
@@ -114,14 +115,14 @@ namespace Maple
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
 
-        public sealed override async Task Add(TViewModel item)
+        public sealed override async Task Add(TViewModel item, CancellationToken token)
         {
             if (Items.Contains(item))
             {
                 return;
             }
 
-            await base.Add(item);
+            await base.Add(item, token);
             item.ErrorsChanged += Item_ErrorsChanged;
         }
 
@@ -131,7 +132,7 @@ namespace Maple
             OnPropertyChanged(nameof(HasErrors));
         }
 
-        public sealed override async Task Remove(TViewModel item)
+        public sealed override async Task Remove(TViewModel item, CancellationToken token)
         {
             if (!Items.Contains(item))
             {

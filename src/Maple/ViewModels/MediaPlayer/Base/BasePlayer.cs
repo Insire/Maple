@@ -1,4 +1,5 @@
 using Maple.Domain;
+using MvvmScarletToolkit;
 
 namespace Maple
 {
@@ -11,8 +12,8 @@ namespace Maple
             set
             {
                 SetValue(ref _audioDevice, value,
-                                OnChanging: () => Messenger.Publish(new ViewModelSelectionChangingMessage<IAudioDevice>(this, _audioDevice)),
-                                OnChanged: () => Messenger.Publish(new ViewModelSelectionChangingMessage<IAudioDevice>(this, value)));
+                                onChanging: () => Messenger.Publish(new ViewModelListBaseSelectionChanging<IAudioDevice>(this, _audioDevice)),
+                                onChanged: () => Messenger.Publish(new ViewModelListBaseSelectionChanged<IAudioDevice>(this, value)));
             }
         }
 

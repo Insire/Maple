@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Maple.Domain;
 using Microsoft.Extensions.Logging;
@@ -30,21 +31,21 @@ namespace Maple
         {
         }
 
-        public override async Task Remove(TViewModel item)
+        public override async Task Remove(TViewModel item, CancellationToken token)
         {
             using (BusyStack.GetToken())
             {
                 while (Items.Contains(item))
                 {
-                    await base.Remove(item);
+                    await base.Remove(item, token);
                     item.Model.IsDeleted = true;
                 }
             }
         }
 
-        public override async Task Add(TViewModel item)
+        public override async Task Add(TViewModel item, CancellationToken token)
         {
-            await base.Add(item);
+            await base.Add(item, token);
 
             item.Sequence = SequenceService.Get(Items.Cast<ISequence>().ToList());
         }

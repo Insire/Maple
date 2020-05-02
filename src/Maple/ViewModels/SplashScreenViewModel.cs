@@ -17,8 +17,6 @@ namespace Maple
         private bool _disposed;
         private System.Timers.Timer _timer;
 
-        protected bool IsDisposed { get; private set; }
-
         private string _version;
         public string Version
         {
@@ -47,7 +45,7 @@ namespace Maple
             private set { SetValue(ref _disposeCommand, value); }
         }
 
-        private SplashScreenViewModel(ICommandBuilder commandBuilder)
+        private SplashScreenViewModel(IScarletCommandBuilder commandBuilder)
             : base(commandBuilder)
         {
             _queue = new Queue<string>();
@@ -55,14 +53,14 @@ namespace Maple
             _timer.Elapsed += Timer_Elapsed;
         }
 
-        private SplashScreenViewModel(IScarletMessenger messenger, ICommandBuilder commandBuilder)
+        private SplashScreenViewModel(IScarletMessenger messenger, IScarletCommandBuilder commandBuilder)
             : this(commandBuilder)
         {
             _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
             _messenger.Subscribe<LogMessageReceivedMessage>(LogMessageReceived);
         }
 
-        public SplashScreenViewModel(IScarletMessenger messenger, IVersionService version, ICommandBuilder commandBuilder)
+        public SplashScreenViewModel(IScarletMessenger messenger, IVersionService version, IScarletCommandBuilder commandBuilder)
             : this(messenger, commandBuilder)
         {
             Version = version.Get();

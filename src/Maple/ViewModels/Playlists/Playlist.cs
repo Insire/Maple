@@ -57,7 +57,7 @@ namespace Maple
         public int Sequence
         {
             get { return _sequence; }
-            set { SetValue(ref _sequence, value, OnChanged: () => Model.Sequence = value); }
+            set { SetValue(ref _sequence, value, onChanged: () => Model.Sequence = value); }
         }
 
         private PrivacyStatus _privacyStatus;
@@ -70,7 +70,7 @@ namespace Maple
         public PrivacyStatus PrivacyStatus
         {
             get { return _privacyStatus; }
-            private set { SetValue(ref _privacyStatus, value, OnChanged: () => Model.PrivacyStatus = (int)value); }
+            private set { SetValue(ref _privacyStatus, value, onChanged: () => Model.PrivacyStatus = (int)value); }
         }
 
         private bool _isSelected;
@@ -96,28 +96,28 @@ namespace Maple
         public bool IsShuffeling
         {
             get { return _isShuffeling; }
-            set { SetValue(ref _isShuffeling, value, OnChanged: () => Model.IsShuffeling = value); }
+            set { SetValue(ref _isShuffeling, value, onChanged: () => Model.IsShuffeling = value); }
         }
 
         private string _title;
         public string Title
         {
             get { return _title; }
-            set { SetValue(ref _title, value, OnChanged: () => Model.Title = value); }
+            set { SetValue(ref _title, value, onChanged: () => Model.Title = value); }
         }
 
         private string _description;
         public string Description
         {
             get { return _description; }
-            set { SetValue(ref _description, value, OnChanged: () => Model.Description = value); }
+            set { SetValue(ref _description, value, onChanged: () => Model.Description = value); }
         }
 
         private RepeatMode _repeatMode;
         public RepeatMode RepeatMode
         {
             get { return _repeatMode; }
-            set { SetValue(ref _repeatMode, value, OnChanged: () => Model.RepeatMode = (int)value); }
+            set { SetValue(ref _repeatMode, value, onChanged: () => Model.RepeatMode = (int)value); }
         }
 
         [Bindable(true, BindingDirection.OneWay)]
@@ -148,15 +148,15 @@ namespace Maple
 
                 LoadFromFileCommand = CommandBuilder
                     .Create(LoadFromFile, CanLoadFromFile)
-                    .WithSingleExecution(CommandManager)
+                    .WithSingleExecution()
                     .Build();
                 LoadFromFolderCommand = CommandBuilder
                     .Create(LoadFromFolder, CanLoadFromFolder)
-                    .WithSingleExecution(CommandManager)
+                    .WithSingleExecution()
                     .Build();
                 LoadFromUrlCommand = CommandBuilder
                     .Create(LoadFromUrl, CanLoadFromUrl)
-                    .WithSingleExecution(CommandManager)
+                    .WithSingleExecution()
                     .Build();
 
                 Add(Messenger.Subscribe<PlayingMediaItemMessage>(OnPlaybackItemChanged, m => m.PlaylistId == Id && MediaItems.Items.Contains(m.Content)));
@@ -390,19 +390,16 @@ namespace Maple
             {
                 if (MediaItems != null && MediaItems.Items.Any())
                 {
-                    switch (RepeatMode)
+                    return RepeatMode switch
                     {
-                        case RepeatMode.All:
-                            return IsShuffeling ? NextShuffle() : NextRepeatAll();
+                        RepeatMode.All => IsShuffeling ? NextShuffle() : NextRepeatAll(),
 
-                        case RepeatMode.None:
-                            return IsShuffeling ? NextShuffle() : NextRepeatNone();
+                        RepeatMode.None => IsShuffeling ? NextShuffle() : NextRepeatNone(),
 
-                        case RepeatMode.Single: return NextRepeatSingle();
+                        RepeatMode.Single => NextRepeatSingle(),
 
-                        default:
-                            throw new NotImplementedException(nameof(RepeatMode));
-                    }
+                        _ => throw new NotImplementedException(nameof(RepeatMode)),
+                    };
                 }
 
                 return null;

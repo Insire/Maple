@@ -5,7 +5,7 @@ namespace Maple
 {
     public sealed class MediaItems : ViewModelListBase<MediaItem>
     {
-        public MediaItems(ICommandBuilder commandBuilder)
+        public MediaItems(IScarletCommandBuilder commandBuilder)
             : base(commandBuilder)
         {
         }

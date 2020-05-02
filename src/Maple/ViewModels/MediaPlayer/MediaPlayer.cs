@@ -46,7 +46,7 @@ namespace Maple
         public Playlist Playlist
         {
             get { return _playlist; }
-            set { SetValue(ref _playlist, value, OnChanging: OnPlaylistChanging, OnChanged: OnPlaylistChanged); }
+            set { SetValue(ref _playlist, value, onChanging: OnPlaylistChanging, onChanged: OnPlaylistChanged); }
         }
 
         private Playlists _playlists;
@@ -60,49 +60,49 @@ namespace Maple
         public int Sequence
         {
             get { return _sequence; }
-            set { SetValue(ref _sequence, value, OnChanged: () => Model.Sequence = value); }
+            set { SetValue(ref _sequence, value, onChanged: () => Model.Sequence = value); }
         }
 
         private string _name;
         public string Name
         {
             get { return _name; }
-            set { SetValue(ref _name, value, OnChanged: () => Model.Name = value); }
+            set { SetValue(ref _name, value, onChanged: () => Model.Name = value); }
         }
 
         private bool _isPrimary;
         public bool IsPrimary
         {
             get { return _isPrimary; }
-            set { SetValue(ref _isPrimary, value, OnChanged: () => Model.IsPrimary = value); }
+            set { SetValue(ref _isPrimary, value, onChanged: () => Model.IsPrimary = value); }
         }
 
         private string _createdBy;
         public string CreatedBy
         {
             get { return _createdBy; }
-            set { SetValue(ref _createdBy, value, OnChanged: () => Model.CreatedBy = value); }
+            set { SetValue(ref _createdBy, value, onChanged: () => Model.CreatedBy = value); }
         }
 
         private string _updatedBy;
         public string UpdatedBy
         {
             get { return _updatedBy; }
-            set { SetValue(ref _updatedBy, value, OnChanged: () => Model.UpdatedBy = value); }
+            set { SetValue(ref _updatedBy, value, onChanged: () => Model.UpdatedBy = value); }
         }
 
         private DateTime _updatedOn;
         public DateTime UpdatedOn
         {
             get { return _updatedOn; }
-            set { SetValue(ref _updatedOn, value, OnChanged: () => Model.UpdatedOn = value); }
+            set { SetValue(ref _updatedOn, value, onChanged: () => Model.UpdatedOn = value); }
         }
 
         private DateTime _createdOn;
         public DateTime CreatedOn
         {
             get { return _createdOn; }
-            set { SetValue(ref _createdOn, value, OnChanged: () => Model.CreatedOn = value); }
+            set { SetValue(ref _createdOn, value, onChanged: () => Model.CreatedOn = value); }
         }
 
         public MediaPlayer(IMapleCommandBuilder commandBuilder, IMediaPlayer player, IValidator<MediaPlayer> validator, AudioDevices devices, Playlists playlists, Playlist playlist, MediaPlayerModel model)
@@ -157,12 +157,12 @@ namespace Maple
             return false;
         }
 
-        private void Player_AudioDeviceChanging(ViewModelSelectionChangingMessage<AudioDevice> e)
+        private void Player_AudioDeviceChanging(ViewModelListBaseSelectionChanging<AudioDevice> e)
         {
             // TODO handle Player_AudioDeviceChanging
         }
 
-        private void Player_AudioDeviceChanged(ViewModelSelectionChangingMessage<AudioDevice> e)
+        private void Player_AudioDeviceChanged(ViewModelListBaseSelectionChanged<AudioDevice> e)
         {
             if (!string.IsNullOrEmpty(e?.Content?.Name))
                 Model.DeviceName = e.Content.Name;
@@ -371,8 +371,8 @@ namespace Maple
 
             Add(Messenger.Subscribe<PlayingMediaItemMessage>(Player_PlayingMediaItem, IsSenderEqualsPlayer));
             Add(Messenger.Subscribe<CompletedMediaItemMessage>(MediaPlayer_CompletedMediaItem, IsSenderEqualsPlayer));
-            Add(Messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanging, IsSenderEqualsPlayer));
-            Add(Messenger.Subscribe<ViewModelSelectionChangingMessage<AudioDevice>>(Player_AudioDeviceChanged, IsSenderEqualsPlayer));
+            Add(Messenger.Subscribe<ViewModelListBaseSelectionChanging<AudioDevice>>(Player_AudioDeviceChanging, IsSenderEqualsPlayer));
+            Add(Messenger.Subscribe<ViewModelListBaseSelectionChanged<AudioDevice>>(Player_AudioDeviceChanged, IsSenderEqualsPlayer));
 
             return Task.CompletedTask;
         }

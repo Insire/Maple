@@ -5,7 +5,7 @@ using MvvmScarletToolkit.Abstractions;
 
 namespace Maple.Domain
 {
-    public interface IMapleCommandBuilder : ICommandBuilder
+    public interface IMapleCommandBuilder : IScarletCommandBuilder
     {
         ILoggerFactory Log { get; }
         ILocalizationService LocalizationService { get; }

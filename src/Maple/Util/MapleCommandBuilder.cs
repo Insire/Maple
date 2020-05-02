@@ -4,11 +4,10 @@ using Maple.Domain;
 using Microsoft.Extensions.Logging;
 using MvvmScarletToolkit;
 using MvvmScarletToolkit.Abstractions;
-using MvvmScarletToolkit.Commands;
 
 namespace Maple
 {
-    public class MapleCommandBuilder : CommandBuilder, IMapleCommandBuilder
+    public sealed class MapleCommandBuilder : ScarletCommandBuilder, IMapleCommandBuilder
     {
         public ILocalizationService LocalizationService { get; }
         public ISequenceService SequenceService { get; }

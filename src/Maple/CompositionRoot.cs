@@ -210,7 +210,7 @@ namespace Maple
                 c.Register<ILocalizationProvider, ResxTranslationProvider>(Reuse.Singleton);
 
                 c.UseInstance(ScarletDispatcher.Default);
-                c.RegisterMany(new[] { typeof(ICommandBuilder), typeof(IMapleCommandBuilder) }, typeof(MapleCommandBuilder), Reuse.Singleton);
+                c.RegisterMany(new[] { typeof(IScarletCommandBuilder), typeof(IMapleCommandBuilder) }, typeof(MapleCommandBuilder), Reuse.Singleton);
                 c.Register<IBusyStack, BusyStack>();
                 c.UseInstance(ScarletMessenger.Default);
                 c.UseInstance(ScarletCommandManager.Default);

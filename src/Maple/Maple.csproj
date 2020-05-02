@@ -47,6 +47,9 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.2.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.3" />
+    <PackageReference Include="MvvmScarletToolkit.Messenger" Version="2.0.197" />
+    <PackageReference Include="MvvmScarletToolkit.Observables" Version="2.0.197" />
+    <PackageReference Include="MvvmScarletToolkit.Wpf" Version="2.0.197" />
     <PackageReference Include="Serilog.Exceptions" Version="5.3.1" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.4" />
     <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
@@ -59,8 +62,6 @@
     <PackageReference Include="System.Management" Version="4.6.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit.Implementations\MvvmScarletToolkit.Implementations.csproj" />
-    <ProjectReference Include="..\..\MvvmScarletToolkit\MvvmScarletToolkit\MvvmScarletToolkit.csproj" />
     <ProjectReference Include="..\Maple.Data\Maple.Data.csproj" />
     <ProjectReference Include="..\Maple.Domain\Maple.Domain.csproj" />
     <ProjectReference Include="..\Maple.Youtube\Maple.Youtube.csproj" />
@@ -75,22 +76,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
 </Project>

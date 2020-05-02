@@ -12,7 +12,6 @@ namespace Maple
     public sealed class NavigationViewModel : Scenes
     {
         private readonly LocalizationsViewModel _localizationsViewModel;
-        private readonly DialogViewModel _dialogViewModel;
 
         private bool _isExpanded;
         public bool IsExpanded
@@ -26,11 +25,10 @@ namespace Maple
         public ICommand OpenGithubPageCommand { get; }
         public ICommand OpenOptionsCommand { get; }
 
-        public NavigationViewModel(ICommandBuilder commandBuilder, LocalizationsViewModel localizationsViewModel, DialogViewModel dialogViewModel, MediaPlayers mediaPlayers, Playlists playlists, OptionsViewModel options)
+        public NavigationViewModel(IScarletCommandBuilder commandBuilder, LocalizationsViewModel localizationsViewModel, MediaPlayers mediaPlayers, Playlists playlists, OptionsViewModel options)
             : base(commandBuilder, localizationsViewModel)
         {
             _localizationsViewModel = localizationsViewModel ?? throw new ArgumentNullException(nameof(localizationsViewModel));
-            _dialogViewModel = dialogViewModel ?? throw new ArgumentNullException(nameof(dialogViewModel));
 
             Add(nameof(Resources.Playback), mediaPlayers);
             Add(nameof(Resources.Playlists), playlists);

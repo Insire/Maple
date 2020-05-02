@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MvvmScarletToolkit;
-using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Observables;
 
 namespace Maple
@@ -31,7 +30,7 @@ namespace Maple
         public bool IsOpen
         {
             get { return _isOpen; }
-            set { SetValue(ref _isOpen, value, OnChanged: OnOpenChanged); }
+            set { SetValue(ref _isOpen, value, onChanged: OnOpenChanged); }
         }
 
         private bool _isCancelVisible;
@@ -62,7 +61,7 @@ namespace Maple
             set { SetValue(ref _context, value); }
         }
 
-        protected DialogBaseViewModel(ICommandBuilder commandBuilder)
+        protected DialogBaseViewModel(IScarletCommandBuilder commandBuilder)
             : base(commandBuilder)
         {
         }

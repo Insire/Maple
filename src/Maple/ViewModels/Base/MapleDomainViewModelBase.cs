@@ -44,13 +44,13 @@ namespace Maple
             Model = model ?? throw new ArgumentNullException(nameof(model));
         }
 
-        protected override bool SetValue<T>(ref T field, T value, Action OnChanging, Action OnChanged, [CallerMemberName] string propertyName = null)
+        protected override bool SetValue<T>(ref T field, T value, Action onChanging, Action onChanged, [CallerMemberName] string propertyName = null)
         {
-            if (base.SetValue(ref field, value, OnChanging, OnChanged, propertyName))
+            if (base.SetValue(ref field, value, onChanging, onChanged, propertyName))
             {
                 if (AddOrUpdateValidationResults(Validator.Validate(this, propertyName), propertyName))
                 {
-                    this.OnChanged();
+                    OnChanged();
                 }
 
                 return true;

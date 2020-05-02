@@ -21,14 +21,14 @@ namespace Maple
 
         public ICommand ParseCommand { get; }
 
-        public YoutubeImportViewModel(ICommandBuilder commandBuilder, IYoutubeService youtubeService)
+        public YoutubeImportViewModel(IScarletCommandBuilder commandBuilder, IYoutubeService youtubeService)
             : base(commandBuilder)
         {
             _youtubeService = youtubeService ?? throw new ArgumentNullException(nameof(youtubeService));
 
             ParseCommand = commandBuilder
                 .Create(Parse, CanParse)
-                .WithSingleExecution(CommandManager)
+                .WithSingleExecution()
                 .Build();
         }
 
