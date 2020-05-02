@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
-using YoutubeExtractor;
 
 namespace Maple.Youtube
 {
@@ -25,13 +24,7 @@ namespace Maple.Youtube
 
         public IEnumerable<string> GetMrls(string url)
         {
-            if (DownloadUrlResolver.TryNormalizeYoutubeUrl(url, out var normalizedUrl))
-            {
-                var videoInfos = DownloadUrlResolver.GetDownloadUrls(normalizedUrl);
-
-                foreach (var item in videoInfos)
-                    yield return item.DownloadUrl;
-            }
+            return Enumerable.Empty<string>();
         }
 
         public async Task<IEnumerable<YoutubeRessource>> Parse(string data)
