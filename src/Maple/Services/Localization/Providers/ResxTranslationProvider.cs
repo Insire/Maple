@@ -13,33 +13,22 @@ namespace Maple
         /// Initializes a new instance of the <see cref="ResxTranslationProvider"/> class.
         /// </summary>
         /// <param name="baseName">Name of the base.</param>
-        /// <param name="assembly">The assembly.</param>
+        /// <param name="assembly">The assembly that provides localized strings</param>
         public ResxTranslationProvider()
         {
             _resourceManager = new ResourceManager(typeof(Properties.Resources));
+            Languages = new CultureInfo[]
+            {
+                new CultureInfo("de"),
+                new CultureInfo("en")
+            };
         }
 
-        /// <summary>
-        /// See <see cref="ILocalizationProvider.Translate" />
-        /// </summary>
         public string Translate(string key, CultureInfo culture)
         {
             return _resourceManager.GetString(key, culture);
         }
 
-        /// <summary>
-        /// See <see cref="ILocalizationProvider.AvailableLanguages" />
-        /// </summary>
-        /// <value>
-        /// The available languages.
-        /// </value>
-        public IEnumerable<CultureInfo> Languages
-        {
-            get
-            {
-                yield return new CultureInfo("de");
-                yield return new CultureInfo("en");
-            }
-        }
+        public IEnumerable<CultureInfo> Languages { get; }
     }
 }

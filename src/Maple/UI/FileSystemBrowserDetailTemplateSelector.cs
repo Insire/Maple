@@ -4,7 +4,7 @@ using MvvmScarletToolkit.FileSystemBrowser;
 
 namespace Maple
 {
-    public class FileSystemBrowserDetailTemplateSelector : DataTemplateSelector
+    public sealed class FileSystemBrowserDetailTemplateSelector : DataTemplateSelector
     {
         public DataTemplate DriveTemplate { get; set; }
         public DataTemplate FolderTemplate { get; set; }
@@ -12,19 +12,14 @@ namespace Maple
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            switch (item)
+            return item switch
             {
-                case ScarletFile _:
-                    return FileTemplate;
+                ScarletFile _ => FileTemplate,
+                ScarletDirectory _ => FolderTemplate,
+                ScarletDrive _ => DriveTemplate,
 
-                case ScarletDirectory _:
-                    return FolderTemplate;
-
-                case ScarletDrive _:
-                    return DriveTemplate;
-            }
-
-            return base.SelectTemplate(item, container);
+                _ => base.SelectTemplate(item, container),
+            };
         }
     }
 }

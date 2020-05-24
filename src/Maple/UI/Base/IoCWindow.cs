@@ -54,16 +54,14 @@ namespace Maple
                 Background = new SolidColorBrush(Colors.Transparent)
             };
 
-            var path = new System.Windows.Shapes.Path()
+            canvas.Children.Add(new System.Windows.Shapes.Path()
             {
                 Data = geo,
                 Stretch = Stretch.Fill,
                 Fill = new SolidColorBrush(color),
                 Width = 36,
                 Height = 36,
-            };
-
-            canvas.Children.Add(path);
+            });
 
             var size = new Size(36, 36);
             canvas.Measure(size);

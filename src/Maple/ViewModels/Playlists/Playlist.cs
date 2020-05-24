@@ -165,7 +165,7 @@ namespace Maple
 
         protected override Task RefreshInternal(CancellationToken token)
         {
-            return Task.WhenAll(Model.MediaItems.ForEach(Add));
+            return Task.WhenAll(Model.MediaItems.ForEachAsync(Add));
         }
 
         protected override Task UnloadInternal(CancellationToken token)
@@ -184,7 +184,7 @@ namespace Maple
             {
                 var items = await _dialogViewModel.ShowYoutubeVideoImport(token).ConfigureAwait(true);
 
-                await Task.WhenAll(items.ForEach(Add)).ConfigureAwait(false);
+                await Task.WhenAll(items.ForEachAsync(Add)).ConfigureAwait(false);
             }
         }
 
@@ -207,7 +207,7 @@ namespace Maple
 
                 (var Result, var MediaItems) = await _dialogViewModel.ShowMediaItemFolderSelectionDialog(options, token).ConfigureAwait(true);
                 if (Result)
-                    await Task.WhenAll(MediaItems.ForEach(Add)).ConfigureAwait(false);
+                    await Task.WhenAll(MediaItems.ForEachAsync(Add)).ConfigureAwait(false);
             }
         }
 
@@ -229,7 +229,7 @@ namespace Maple
 
                 (var Result, var MediaItems) = await _dialogViewModel.ShowMediaItemSelectionDialog(options, token).ConfigureAwait(true);
                 if (Result)
-                    await Task.WhenAll(MediaItems.ForEach(Add)).ConfigureAwait(false);
+                    await Task.WhenAll(MediaItems.ForEachAsync(Add)).ConfigureAwait(false);
             }
         }
 

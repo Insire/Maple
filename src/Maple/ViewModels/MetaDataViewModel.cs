@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Maple.Domain;
+using MvvmScarletToolkit;
 
 namespace Maple
 {
@@ -46,7 +47,7 @@ namespace Maple
             _versionService = versionService ?? throw new ArgumentNullException(nameof(versionService));
         }
 
-        private void UpdateLanguage(ViewModelSelectionChangedMessage<Culture> message)
+        private void UpdateLanguage(ViewModelListBaseSelectionChanged<Culture> message)
         {
             Language = $"({message.Content.Model.TwoLetterISOLanguageName})";
         }
@@ -63,7 +64,7 @@ namespace Maple
         {
             Version = _versionService.Get();
 
-            Add(Messenger.Subscribe<ViewModelSelectionChangedMessage<Culture>>(UpdateLanguage));
+            Add(Messenger.Subscribe<ViewModelListBaseSelectionChanged<Culture>>(UpdateLanguage));
 
             return Task.CompletedTask;
         }

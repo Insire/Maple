@@ -5,7 +5,8 @@
                     xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
                     xmlns:local="clr-namespace:Maple"
                     xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
-                    xmlns:mvvm="clr-namespace:MvvmScarletToolkit.Observables;assembly=MvvmScarletToolkit.Observables">
+                    xmlns:mvvm="clr-namespace:MvvmScarletToolkit.Observables;assembly=MvvmScarletToolkit.Observables"
+                    xmlns:mvvmscarlettoolkit="clr-namespace:MvvmScarletToolkit;assembly=MvvmScarletToolkit.Wpf">
 
     <!--  Remember: the order of these styles matters, since they depend on each other. If one references for a style not yet declared, you get random RuntimeErrors  -->
 
@@ -13,7 +14,7 @@
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
-    <Style BasedOn="{StaticResource MahApps.Metro.Styles.MetroCircleButtonStyle}" TargetType="{x:Type RadioButton}">
+    <Style BasedOn="{StaticResource MahApps.Styles.ToggleButton.Circle}" TargetType="{x:Type RadioButton}">
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}" />
@@ -24,7 +25,7 @@
         </Style.Triggers>
     </Style>
 
-    <Style BasedOn="{StaticResource MahApps.Metro.Styles.MetroCircleButtonStyle}" TargetType="{x:Type ToggleButton}">
+    <Style BasedOn="{StaticResource MahApps.Styles.ToggleButton.Circle}" TargetType="{x:Type ToggleButton}">
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}" />
@@ -37,28 +38,6 @@
 
     <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="{x:Type TextBox}">
         <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
-
-    <Style BasedOn="{StaticResource {x:Type ListBox}}" TargetType="{x:Type local:ListBox}" />
-
-    <Style x:Key="HugeIconStyle" TargetType="icons:PackIconMaterial">
-        <Setter Property="Height" Value="48" />
-        <Setter Property="Width" Value="48" />
-    </Style>
-
-    <Style x:Key="BigIconStyle" TargetType="icons:PackIconMaterial">
-        <Setter Property="Height" Value="24" />
-        <Setter Property="Width" Value="24" />
-    </Style>
-
-    <Style x:Key="IconStyle" TargetType="icons:PackIconMaterial">
-        <Setter Property="Height" Value="20" />
-        <Setter Property="Width" Value="20" />
-    </Style>
-
-    <Style x:Key="MiniIconStyle" TargetType="icons:PackIconMaterial">
-        <Setter Property="Height" Value="16" />
-        <Setter Property="Width" Value="16" />
     </Style>
 
     <Style x:Key="BaseWindowStyle"
@@ -106,8 +85,55 @@
         <TextBlock Text="{Binding Value}" />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type local:Culture}">
+        <TextBlock Text="{Binding DisplayName}" />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type local:Cultures}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="4" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="{local:Translation EditLanguage}" />
+
+            <ComboBox Grid.Column="2"
+                      ItemsSource="{Binding Items}"
+                      SelectedItem="{Binding SelectedItem}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Loaded">
+                        <i:InvokeCommandAction Command="{Binding LoadCommand}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="UnLoaded">
+                        <i:InvokeCommandAction Command="{Binding UnloadCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+        </Grid>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type local:OptionsViewModel}">
-        <TextBlock>Options</TextBlock>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="4" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TreeView Name="OptionsTree">
+                <TreeViewItem DataContext="{Binding CultureViewModel}" Header="{local:Translation Languages}" />
+            </TreeView>
+
+            <ContentControl Grid.Column="2" Content="{Binding SelectedItem.DataContext, ElementName=OptionsTree}" />
+        </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:Playlist}">
@@ -128,7 +154,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:Playlists}">
-        <local:ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
+        <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Loaded">
                     <i:InvokeCommandAction Command="{Binding LoadCommand}" />
@@ -137,7 +163,7 @@
                     <i:InvokeCommandAction Command="{Binding UnloadCommand}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-        </local:ListBox>
+        </ListBox>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:AudioDevices}">
@@ -186,8 +212,8 @@
             </Grid.ColumnDefinitions>
 
             <ScrollViewer Grid.Row="0" Grid.Column="0">
-                <local:ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
-                    <local:ListBox.ContextMenu>
+                <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
+                    <ListBox.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Add">
                                 <MenuItem.Icon>
@@ -225,7 +251,7 @@
                                 </MenuItem.Icon>
                             </MenuItem>
                         </ContextMenu>
-                    </local:ListBox.ContextMenu>
+                    </ListBox.ContextMenu>
 
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Loaded">
@@ -235,7 +261,7 @@
                             <i:InvokeCommandAction Command="{Binding UnloadCommand}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
-                </local:ListBox>
+                </ListBox>
             </ScrollViewer>
 
             <TextBlock Grid.Row="2"
@@ -324,7 +350,7 @@
                                             Height="50"
                                             Command="{Binding PreviousCommand}"
                                             DockPanel.Dock="Left"
-                                            Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
+                                            Style="{DynamicResource MahApps.Styles.Button.Circle}"
                                             ToolTip="{local:Translation Previous}">
                                         <icons:PackIconMaterial Kind="SkipPrevious" />
                                     </Button>
@@ -334,7 +360,7 @@
                                             Height="50"
                                             Command="{Binding NextCommand}"
                                             DockPanel.Dock="Right"
-                                            Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
+                                            Style="{DynamicResource MahApps.Styles.Button.Circle}"
                                             ToolTip="{local:Translation Next}">
                                         <icons:PackIconMaterial Kind="SkipNext" />
                                     </Button>
@@ -342,7 +368,7 @@
                                                   Grid.Column="1"
                                                   Width="50"
                                                   Height="50"
-                                                  Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
+                                                  Style="{DynamicResource MahApps.Styles.ToggleButton.Circle}"
                                                   ToolTip="{local:Translation Playback}">
                                         <icons:PackIconMaterial Kind="Play" />
                                     </ToggleButton>
@@ -354,7 +380,7 @@
                                                       Height="50"
                                                       DockPanel.Dock="Left"
                                                       IsChecked="{Binding Playlist.IsShuffeling}"
-                                                      Style="{DynamicResource MahApps.Metro.Styles.MetroCircleToggleButtonStyle}"
+                                                      Style="{DynamicResource MahApps.Metro.Styles.ToggleButton.Circle}"
                                                       ToolTip="{local:Translation PlaybackShuffle}">
                                             <icons:PackIconMaterial Kind="Shuffle" />
                                         </ToggleButton>
@@ -366,19 +392,19 @@
 
                                             <RadioButton Width="40"
                                                          Height="40"
-                                                         IsChecked="{Binding RepeatMode, Converter={local:RadioButtonCheckedConverter}, ConverterParameter={x:Static domain:RepeatMode.None}}"
+                                                         IsChecked="{Binding RepeatMode, Converter={mvvmscarlettoolkit:RadioButtonCheckedConverter}, ConverterParameter={x:Static domain:RepeatMode.None}}"
                                                          ToolTip="{local:Translation PlaybackModeNone}">
                                                 <icons:PackIconMaterial Kind="RepeatOff" />
                                             </RadioButton>
                                             <RadioButton Width="40"
                                                          Height="40"
-                                                         IsChecked="{Binding RepeatMode, Converter={local:RadioButtonCheckedConverter}, ConverterParameter={x:Static domain:RepeatMode.Single}}"
+                                                         IsChecked="{Binding RepeatMode, Converter={mvvmscarlettoolkit:RadioButtonCheckedConverter}, ConverterParameter={x:Static domain:RepeatMode.Single}}"
                                                          ToolTip="{local:Translation PlaybackModeOne}">
                                                 <icons:PackIconMaterial Kind="RepeatOnce" />
                                             </RadioButton>
                                             <RadioButton Width="40"
                                                          Height="40"
-                                                         IsChecked="{Binding RepeatMode, Converter={local:RadioButtonCheckedConverter}, ConverterParameter={x:Static domain:RepeatMode.All}}"
+                                                         IsChecked="{Binding RepeatMode, Converter={mvvmscarlettoolkit:RadioButtonCheckedConverter}, ConverterParameter={x:Static domain:RepeatMode.All}}"
                                                          ToolTip="{local:Translation PlaybackModeAll}">
                                                 <icons:PackIconMaterial Kind="Repeat" />
                                             </RadioButton>
@@ -396,7 +422,7 @@
                                                        DockPanel.Dock="Bottom"
                                                        Text="{Binding MediaItems.Count, StringFormat={}{0} Songs}" />
 
-                                            <local:ListBox ItemsSource="{Binding MediaItems.Items}" SelectedItem="{Binding MediaItems.SelectedItem}">
+                                            <ListBox ItemsSource="{Binding MediaItems.Items}" SelectedItem="{Binding MediaItems.SelectedItem}">
                                                 <i:Interaction.Triggers>
                                                     <i:EventTrigger EventName="Loaded">
                                                         <i:InvokeCommandAction Command="{Binding LoadCommand}" />
@@ -405,7 +431,7 @@
                                                         <i:InvokeCommandAction Command="{Binding UnloadCommand}" />
                                                     </i:EventTrigger>
                                                 </i:Interaction.Triggers>
-                                                <local:ListBox.ContextMenu>
+                                                <ListBox.ContextMenu>
                                                     <ContextMenu>
                                                         <MenuItem Header="Add">
                                                             <MenuItem.Icon>
@@ -443,8 +469,8 @@
                                                             </MenuItem.Icon>
                                                         </MenuItem>
                                                     </ContextMenu>
-                                                </local:ListBox.ContextMenu>
-                                            </local:ListBox>
+                                                </ListBox.ContextMenu>
+                                            </ListBox>
                                         </DockPanel>
                                     </DataTemplate>
                                 </ContentControl.Resources>

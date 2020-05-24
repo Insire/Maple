@@ -134,7 +134,6 @@ namespace Maple
                 loggerFactory
                     .AddSerilog();
 
-                c.Register<Splat.ILogger, SquirrelLogger>(setup: Setup.DecoratorWith(order: 2));
                 c.Register(serviceType: typeof(ILoggerProvider), implementationType: typeof(SerilogLoggerProvider), reuse: Reuse.Singleton);
                 c.Register(serviceType: typeof(ILogger<>), implementationType: typeof(Logger<>));
 

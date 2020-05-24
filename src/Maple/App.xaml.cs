@@ -12,7 +12,6 @@ namespace Maple
     public partial class App : Application
     {
         private DryIoc.IContainer _container;
-        private Task _backgroundUpdate;
         private ILogger _log;
 
         protected override async void OnStartup(StartupEventArgs e)
@@ -26,8 +25,6 @@ namespace Maple
             var weakEventManager = _container.Resolve<IScarletEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>>();
 
             _log = loggerFactory.CreateLogger<App>();
-
-            InitializeUpdater(_log);
 
             Resources.MergedDictionaries.Add(new IoCResourceDictionary(localizationService, weakEventManager, new Uri("/Maple;component/Resources/Style.xaml", UriKind.RelativeOrAbsolute)));
 
@@ -49,8 +46,6 @@ namespace Maple
 
         protected override void OnExit(ExitEventArgs e)
         {
-            _backgroundUpdate.Wait();
-
             ExitInternal(e);
         }
 
@@ -72,52 +67,6 @@ namespace Maple
 
                 return shell;
             }
-        }
-
-        private void InitializeUpdater(ILogger log)
-        {
-            Splat.Locator.CurrentMutable.Register(() => log, typeof(Splat.ILogger));
-
-            _backgroundUpdate = LoadUpdates(log);
-        }
-
-        private async Task LoadUpdates(ILogger log)
-        {
-#if Release
-            var manager = default(UpdateManager);
-            try
-            {
-                using (manager = await UpdateManager.GitHubUpdateManager("https://www.github.com/Insire/Maple", prerelease: true).ConfigureAwait(true))
-                {
-                    await manager.UpdateApp().ConfigureAwait(true);
-
-                    //Debug.WriteLine("CheckForUpdate");
-                    //var updateInfo = await manager.CheckForUpdate(ignoreDeltaUpdates: true).ConfigureAwait(true);
-                    //Debug.WriteLine("CheckForUpdate completed");
-                    //if (updateInfo.ReleasesToApply.Any())
-                    //{
-                    //    Debug.WriteLine("Update found");
-                    //    var releaseEntry = await manager.UpdateApp().ConfigureAwait(true);
-                    //    Debug.WriteLine($"Update complete {releaseEntry.Version}");
-
-                    //}
-                }
-            }
-            catch (WebException ex)
-            {
-                Debug.WriteLine(ex.Status);
-                log.Error(ex);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                log.Error(ex);
-            }
-            finally
-            {
-                manager?.Dispose();
-            }
-#endif
         }
 
         private void ExitInternal(ExitEventArgs e)

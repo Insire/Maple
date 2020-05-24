@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 using MahApps.Metro.Converters;
+using MvvmScarletToolkit;
 
 namespace Maple
 {
@@ -18,21 +19,13 @@ namespace Maple
             if (!double.TryParse(values[0].ToString(), out var value1) || !double.TryParse(values[1].ToString(), out var value2))
                 return 0;
 
-            switch (Operation)
+            return Operation switch
             {
-                default:
-                    // (case MathOperation.Add:)
-                    return value1 + value2;
-
-                case MathOperation.Divide:
-                    return value1 / value2;
-
-                case MathOperation.Multiply:
-                    return value1 * value2;
-
-                case MathOperation.Subtract:
-                    return value1 - value2;
-            }
+                MathOperation.Divide => value1 / value2,
+                MathOperation.Multiply => value1 * value2,
+                MathOperation.Subtract => value1 - value2,
+                _ => value1 + value2,
+            };
         }
 
         public override object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

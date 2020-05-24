@@ -1,6 +1,8 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Maple.Domain;
+using MvvmScarletToolkit;
 
 namespace Maple
 {
@@ -9,11 +11,13 @@ namespace Maple
         public Cultures(IMapleCommandBuilder commandBuilder)
                 : base(commandBuilder)
         {
+            Messenger.Subscribe<ViewModelListBaseSelectionChanged<Culture>>((p) => LocalizationService.CurrentLanguage = p.Content.Model);
         }
 
-        protected override Task RefreshInternal(CancellationToken token)
+        protected override async Task RefreshInternal(CancellationToken token)
         {
-            return Task.CompletedTask;
+            await Task.WhenAll(LocalizationService.Languages.ForEachAsync(p => Add(new Culture(CommandBuilder, p))));
+            await Dispatcher.Invoke(() => SelectedItem = Items.FirstOrDefault(p => p.Model == LocalizationService.CurrentLanguage));
         }
     }
 }

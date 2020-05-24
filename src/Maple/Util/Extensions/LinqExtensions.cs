@@ -24,17 +24,5 @@ namespace Maple
             var list = baseCollection as IList<T> ?? baseCollection.ToList();
             return list.Count == 0 ? default : list[r.Next(0, list.Count)];
         }
-
-        public static IEnumerable<TResult> ForEach<TSource, TResult>(this IEnumerable<TSource> baseCollection, Func<TSource, TResult> action)
-        {
-            if (baseCollection == null)
-                throw new ArgumentNullException(nameof(baseCollection));
-
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
-
-            foreach (var item in baseCollection)
-                yield return action(item);
-        }
     }
 }

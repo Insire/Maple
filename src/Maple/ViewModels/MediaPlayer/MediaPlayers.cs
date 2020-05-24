@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using Maple.Domain;
+using MvvmScarletToolkit;
 
 namespace Maple
 {
@@ -29,7 +30,7 @@ namespace Maple
                      .ReadAsync(token)
                      .ConfigureAwait(false);
 
-                await Task.WhenAll(players.ForEach(Add)).ConfigureAwait(false);
+                await Task.WhenAll(players.ForEachAsync(Add)).ConfigureAwait(false);
             }
         }
 

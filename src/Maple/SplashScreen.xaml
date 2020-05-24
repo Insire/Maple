@@ -13,6 +13,7 @@
                  Style="{StaticResource BaseWindowStyle}"
                  WindowStartupLocation="CenterScreen"
                  WindowTransitionsEnabled="True">
+
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadCommand}" />
@@ -33,7 +34,7 @@
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        FontWeight="Medium"
-                       Text="Copyright © 2017 by Insire" />
+                       Text="Copyright © 2020 by Insire" />
             <TextBlock Grid.Column="1"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
