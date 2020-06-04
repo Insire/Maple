@@ -1,19 +1,16 @@
 using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using DryIoc;
 using FluentValidation;
-using Maple.Data;
 using Maple.Domain;
 using Maple.Youtube;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MvvmScarletToolkit;
 using MvvmScarletToolkit.Abstractions;
-using MvvmScarletToolkit.FileSystemBrowser;
 using MvvmScarletToolkit.Observables;
+using MvvmScarletToolkit.Wpf.FileSystemBrowser;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
@@ -25,89 +22,7 @@ namespace Maple
 {
     public static class CompositionRoot
     {
-        private const string DatabasePath = "..\\maple.db";
-
-        private const string InMemorySqlite = "InMemorySqlite";
-        private const string DebugFileSqlite = "DebugFileSqlite";
-        private const string Debug = "Debug";
-
-        private static (bool MigrationRequired, bool SeedRequired, bool CreationRequired, bool InMemory) HandleStart(string[] args)
-        {
-            var seedRequired = false;
-            var migrationRequired = false;
-            var creationRequired = false;
-            var inMemory = false;
-
-            if (args.Any(p => p.IndexOf(InMemorySqlite, StringComparison.InvariantCultureIgnoreCase) >= 0))
-            {
-                // not working
-                seedRequired = true;
-                migrationRequired = true;
-                inMemory = true;
-
-                return (migrationRequired, seedRequired, creationRequired, inMemory);
-            }
-
-            if (args.Any(p => p.IndexOf(DebugFileSqlite, StringComparison.InvariantCultureIgnoreCase) >= 0))
-            {
-                // not working
-                seedRequired = true;
-                migrationRequired = true;
-
-                return (migrationRequired, seedRequired, creationRequired, inMemory);
-            }
-
-            if (args.Any(p => p.IndexOf(Debug, StringComparison.InvariantCultureIgnoreCase) >= 0))
-            {
-                if (!File.Exists(DatabasePath))
-                {
-                    creationRequired = true;
-                    seedRequired = true;
-                }
-
-                migrationRequired = true;
-
-                return (migrationRequired, seedRequired, creationRequired, inMemory);
-            }
-
-            if (!File.Exists(DatabasePath))
-            {
-                // working?
-                creationRequired = true;
-            }
-
-            migrationRequired = true;
-
-            return (migrationRequired, seedRequired, creationRequired, inMemory);
-        }
-
-        public static async Task<IContainer> Get(string[] args)
-        {
-            var (MigrationRequired, SeedRequired, CreationRequired, InMemory) = HandleStart(args);
-
-            var builder = new SqliteConnectionStringBuilder($"Data Source={DatabasePath};")
-            {
-                Mode = InMemory ? SqliteOpenMode.Memory : CreationRequired ? SqliteOpenMode.ReadWriteCreate : SqliteOpenMode.ReadWrite,
-            };
-
-            var container = CreateContainer(builder.ToString());
-
-            var context = container.Resolve<IUnitOfWork>();
-            if (MigrationRequired)
-            {
-                context.Migrate().Wait();
-            }
-
-            if (SeedRequired)
-            {
-                var factory = new DesignTimeDataFactory(context);
-                factory.SeedDatabase().Wait();
-            }
-
-            return container;
-        }
-
-        private static IContainer CreateContainer(string connectionString)
+        public static IContainer Get()
         {
             var c = new Container();
 
@@ -139,12 +54,6 @@ namespace Maple
 
                 c.UseInstance<ILoggerFactory>(loggerFactory);
                 c.UseInstance(Log.Logger);
-
-                c.UseInstance(new DbContextOptionsBuilder<PlaylistContext>()
-                    .UseSqlite(connectionString) // TODO switch for inmemory
-                    .UseLoggerFactory(loggerFactory)
-                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-                    .Options);
             }
 
             Logger CreateLogger(LoggingFileConfiguration config)
@@ -186,6 +95,7 @@ namespace Maple
 
                 c.Register<NavigationViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
                 c.Register<ShellViewModel>(Reuse.Singleton);
+                c.Register<PlaybackViewModel>(Reuse.Singleton);
                 c.Register<DialogViewModel>(Reuse.Singleton);
                 c.Register<MetaDataViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
                 c.Register<FileSystemViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
@@ -194,23 +104,24 @@ namespace Maple
                 c.Register<YoutubeImportViewModel>(setup: Setup.With(allowDisposableTransient: true));
 
                 c.Register<SplashScreenViewModel>(Reuse.Singleton);
+
+                c.UseInstance(new ReadOnlyObservableCollection<RepeatMode>(new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>())));
             };
 
             void RegisterServices()
             {
-                c.Register<PlaylistContext>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
-
-                c.Register<IUnitOfWork, MapleUnitOfWork>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
-
+                c.Register<MediaPlayerFactory, MediaPlayerFactory>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
                 c.Register<ISequenceService, SequenceService>();
-                c.Register<IYoutubeService, YoutubeService>();
+                c.Register<IYoutubeService, YoutubeService>(Reuse.Singleton);
+                c.Register<IAudioDeviceProvider, AudioDeviceProvider>(Reuse.Singleton);
 
                 c.Register<IVersionService, VersionService>(Reuse.Singleton);
                 c.Register<ILocalizationProvider, ResxTranslationProvider>(Reuse.Singleton);
 
-                c.UseInstance(ScarletDispatcher.Default);
                 c.RegisterMany(new[] { typeof(IScarletCommandBuilder), typeof(IMapleCommandBuilder) }, typeof(MapleCommandBuilder), Reuse.Singleton);
                 c.Register<IBusyStack, BusyStack>();
+
+                c.UseInstance(ScarletDispatcher.Default);
                 c.UseInstance(ScarletMessenger.Default);
                 c.UseInstance(ScarletCommandManager.Default);
                 c.UseInstance(ScarletMessageProxy.Default);

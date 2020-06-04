@@ -10,6 +10,5 @@ namespace Maple.Domain
         ILoggerFactory Log { get; }
         ILocalizationService LocalizationService { get; }
         ISequenceService SequenceService { get; }
-        Func<IUnitOfWork> ContextFactory { get; }
     }
 }

@@ -3,104 +3,70 @@
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  xmlns:local="clr-namespace:Maple"
-                 xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
-                 xmlns:mvvmscarlettoolkit="clr-namespace:MvvmScarletToolkit;assembly=MvvmScarletToolkit.Wpf"
-                 Style="{StaticResource BaseWindowStyle}">
+                 xmlns:mvvm="http://SoftThorn.MvvmScarletToolkit.com/winfx/xaml/shared"
+                 xmlns:observables="clr-namespace:MvvmScarletToolkit.Observables;assembly=MvvmScarletToolkit.Observables">
 
     <!--  DataContext ShellViewModel  -->
 
-    <metro:MetroWindow.Resources>
+    <local:IoCWindow.Resources>
         <ResourceDictionary>
-            <mvvmscarlettoolkit:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
+            <mvvm:BindingProxy x:Key="DataContextProxy" Data="{Binding}" />
         </ResourceDictionary>
-    </metro:MetroWindow.Resources>
+    </local:IoCWindow.Resources>
 
-    <metro:MetroWindow.TitleTemplate>
-        <DataTemplate>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{local:Translation ShellTitle}" />
-                <TextBlock Text="{Binding Data.MetaDataViewModel.Version, Source={StaticResource DataContextProxy}}" />
-            </StackPanel>
-        </DataTemplate>
-    </metro:MetroWindow.TitleTemplate>
+    <DockPanel Margin="8">
 
-    <metro:MetroWindow.RightWindowCommands>
-        <metro:WindowCommands ShowSeparators="False">
-            <Button Command="{Binding NavigationViewModel.OpenOptionsCommand}" ToolTip="{local:Translation OptionsCommand}">
-                <icons:PackIconMaterial Kind="Earth" />
-            </Button>
-            <Button Command="{Binding NavigationViewModel.OpenMediaPlayerCommand}" ToolTip="{local:Translation MediaPlayerCommand}">
-                <icons:PackIconMaterial Kind="Play" />
-            </Button>
-        </metro:WindowCommands>
-    </metro:MetroWindow.RightWindowCommands>
+        <ListBox DockPanel.Dock="Left"
+                 ItemsSource="{Binding NavigationViewModel.Items}"
+                 SelectedItem="{Binding NavigationViewModel.SelectedItem}">
+            <ListBox.Resources>
 
-    <metro:MetroWindow.LeftWindowCommands>
-        <metro:WindowCommands>
-            <Button Command="{Binding NavigationViewModel.OpenGithubPageCommand}" ToolTip="{local:Translation GithubPageCommand}">
-                <icons:PackIconMaterial Kind="Github" />
-            </Button>
-        </metro:WindowCommands>
-    </metro:MetroWindow.LeftWindowCommands>
-
-    <DockPanel>
-
-        <StatusBar DockPanel.Dock="Bottom">
-            <Viewbox Height="16">
-                <metro:ProgressRing />
-            </Viewbox>
-        </StatusBar>
-
-        <metro:HamburgerMenu Content="{Binding NavigationViewModel.SelectedItem}"
-                             ContentTransition="Left"
-                             DisplayMode="CompactOverlay"
-                             ItemsSource="{Binding NavigationViewModel.Items}"
-                             OptionsVisibility="Visible"
-                             SelectedItem="{Binding NavigationViewModel.SelectedItem}">
-            <metro:HamburgerMenu.HamburgerMenuHeaderTemplate>
-                <DataTemplate>
-                    <TextBlock HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               FontSize="16"
-                               Foreground="White"
-                               Text="Navigation" />
-                </DataTemplate>
-            </metro:HamburgerMenu.HamburgerMenuHeaderTemplate>
-
-            <metro:HamburgerMenu.ItemTemplate>
-                <DataTemplate DataType="{x:Type metro:HamburgerMenuIconItem}">
-                    <Grid Height="48">
+                <DataTemplate DataType="{x:Type observables:Scene}">
+                    <Grid Margin="8">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="48" />
-                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="8" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
                         <ContentControl Grid.Column="0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
                                         Content="{Binding Content}"
-                                        Focusable="False"
-                                        IsTabStop="False">
+                                        Focusable="False">
+
                             <ContentControl.Resources>
                                 <DataTemplate DataType="{x:Type local:Playlists}">
-                                    <icons:PackIconMaterial Kind="Github" />
+                                    <icons:PackIconMaterial Kind="PlaylistCheck" />
                                 </DataTemplate>
+
                                 <DataTemplate DataType="{x:Type local:MediaPlayers}">
-                                    <icons:PackIconMaterial Kind="Play" />
+                                    <icons:PackIconMaterial Kind="Devices" />
                                 </DataTemplate>
+
                                 <DataTemplate DataType="{x:Type local:OptionsViewModel}">
                                     <icons:PackIconMaterial Kind="Cogs" />
+                                </DataTemplate>
+
+                                <DataTemplate DataType="{x:Type local:PlaybackViewModel}">
+                                    <icons:PackIconMaterial Kind="Play" />
                                 </DataTemplate>
                             </ContentControl.Resources>
                         </ContentControl>
 
-                        <ContentControl Grid.Column="1"
-                                        VerticalAlignment="Center"
-                                        Content="{Binding Localization.Value}"
-                                        FontSize="16" />
+                        <ContentControl Grid.Column="2" Content="{Binding Localization.Value}" />
                     </Grid>
                 </DataTemplate>
-            </metro:HamburgerMenu.ItemTemplate>
-        </metro:HamburgerMenu>
+            </ListBox.Resources>
+        </ListBox>
+
+        <Border Margin="8,0,8,0"
+                BorderBrush="DimGray"
+                BorderThickness="1"
+                DockPanel.Dock="Top">
+            <TextBlock HorizontalAlignment="Center" Text="{Binding NavigationViewModel.SelectedItem.Localization.Value}" />
+        </Border>
+
+        <ContentControl Grid.Column="1"
+                        Margin="8,8,8,0"
+                        Content="{Binding NavigationViewModel.SelectedItem.Content}" />
     </DockPanel>
 </local:IoCWindow>

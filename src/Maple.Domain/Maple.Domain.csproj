@@ -9,8 +9,7 @@
     <Compile Include="..\Resources\SharedAssemblyInfo.cs" Link="Properties\SharedAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
-    <PackageReference Include="MvvmScarletToolkit.Commands" Version="2.0.201" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.6.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.4" />
+    <PackageReference Include="MvvmScarletToolkit.Commands" Version="2.1.31-g5265b03c10" />
   </ItemGroup>
 </Project>

@@ -12,7 +12,6 @@ namespace Maple
         public ILocalizationService LocalizationService { get; }
         public ISequenceService SequenceService { get; }
         public ILoggerFactory Log { get; }
-        public Func<IUnitOfWork> ContextFactory { get; }
 
         public MapleCommandBuilder(IScarletDispatcher dispatcher
             , IScarletCommandManager commandManager
@@ -22,14 +21,12 @@ namespace Maple
             , Func<Action<bool>, IBusyStack> busyStackFactory
             , ILoggerFactory log
             , ILocalizationService localizationService
-            , ISequenceService sequenceService
-            , Func<IUnitOfWork> contextFactory)
+            , ISequenceService sequenceService)
             : base(dispatcher, commandManager, messenger, exitService, weakEventManager, busyStackFactory)
         {
             Log = log ?? throw new ArgumentNullException(nameof(log));
             LocalizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
             SequenceService = sequenceService ?? throw new ArgumentNullException(nameof(sequenceService));
-            ContextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
         }
     }
 }

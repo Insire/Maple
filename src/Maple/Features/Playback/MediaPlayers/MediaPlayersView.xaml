@@ -1,0 +1,217 @@
+﻿<UserControl x:Class="Maple.MediaPlayersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:local="clr-namespace:Maple"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mvvm="http://SoftThorn.MvvmScarletToolkit.com/winfx/xaml/shared"
+             Name="MediaPlayersViewRoot"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             Loaded="MediaPlayersView_Loaded"
+             mc:Ignorable="d">
+
+    <!--  DataContext MediaPlayers  -->
+
+    <UserControl.Resources>
+
+        <mvvm:BindingProxy x:Key="ViewProxy" Data="{Binding ElementName=MediaPlayersViewRoot}" />
+
+        <DataTemplate DataType="{x:Type local:Playlist}">
+            <DockPanel>
+                <TextBlock HorizontalAlignment="Right"
+                           DockPanel.Dock="Bottom"
+                           Text="{Binding MediaItems.Count, StringFormat={}{0} Songs}" />
+
+                <ListBox ItemsSource="{Binding MediaItems.Items}" SelectedItem="{Binding MediaItems.SelectedItem}">
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Add">
+                                <MenuItem.Icon>
+                                    <icons:PackIconMaterial Kind="PlaylistPlus" />
+                                </MenuItem.Icon>
+                                <MenuItem Command="{Binding AddFromUrlCommand, ElementName=MediaPlayersViewRoot}" Header="From Url">
+                                    <MenuItem.Icon>
+                                        <icons:PackIconMaterial Kind="Download" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Command="{Binding AddFromFileCommand, ElementName=MediaPlayersViewRoot}" Header="From File">
+                                    <MenuItem.Icon>
+                                        <icons:PackIconMaterial Kind="File" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Command="{Binding AddFromFolderCommand, ElementName=MediaPlayersViewRoot}" Header="From Folder">
+                                    <MenuItem.Icon>
+                                        <icons:PackIconMaterial Kind="Folder" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </MenuItem>
+                            <MenuItem Command="{Binding RemoveRangeCommand}" Header="Remove">
+                                <MenuItem.Icon>
+                                    <icons:PackIconMaterial Kind="PlaylistMinus" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Command="{Binding ClearCommand}" Header="Clear">
+                                <MenuItem.Icon>
+                                    <icons:PackIconMaterial Kind="PlaylistRemove" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
+            </DockPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type local:MediaPlayer}">
+            <DockPanel Margin="0,8,0,8">
+                <icons:PackIconMaterial Margin="4,0,8,0"
+                                        VerticalAlignment="Stretch"
+                                        DockPanel.Dock="Left"
+                                        Kind="VolumeMute" />
+
+                <TextBlock DockPanel.Dock="Right" Text="{Binding Playlist.Count, Mode=OneWay, FallbackValue='No MediaItems found'}" />
+
+                <StackPanel Margin="0,0,8,0" Orientation="Vertical">
+                    <TextBlock FontSize="16" Text="{Binding Name, Mode=OneWay, TargetNullValue='Nameless Mediaplayer'}" />
+
+                    <TextBlock FontWeight="Light" Text="{Binding Playlist.Title, Mode=OneWay, FallbackValue='no playlist assigned', StringFormat={}Currently playing:{0}}" />
+                </StackPanel>
+            </DockPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="8" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="8" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <ListBox Grid.Row="0"
+                 Grid.Column="0"
+                 ItemsSource="{Binding Items}"
+                 SelectedItem="{Binding SelectedItem}">
+            <ListBox.ContextMenu>
+                <ContextMenu>
+
+                    <MenuItem Command="{Binding Data.CreateCommand, Source={StaticResource ViewProxy}}" Header="Add New">
+                        <MenuItem.Icon>
+                            <icons:PackIconMaterial Kind="PlusThick" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem Command="{Binding Data.UpdateCommand, Source={StaticResource ViewProxy}}" Header="Edit">
+                        <MenuItem.Icon>
+                            <icons:PackIconMaterial Kind="Pencil" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Command="{Binding RemoveRangeCommand}" Header="Remove">
+                        <MenuItem.Icon>
+                            <icons:PackIconMaterial Kind="Minus" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="{Binding ClearCommand}" Header="Clear">
+                        <MenuItem.Icon>
+                            <icons:PackIconMaterial Kind="CloseThick" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </ListBox.ContextMenu>
+        </ListBox>
+
+        <DockPanel Grid.Row="3" Grid.Column="0">
+            <Button Command="{Binding Data.CreateCommand, Source={StaticResource ViewProxy}}" DockPanel.Dock="Left">
+                <icons:PackIconMaterial Kind="PlusThick" />
+            </Button>
+
+            <Button Margin="8,0"
+                    Command="{Binding Data.UpdateCommand, Source={StaticResource ViewProxy}}"
+                    DockPanel.Dock="Left">
+                <icons:PackIconMaterial Kind="Pencil" />
+            </Button>
+
+            <Button Command="{Binding RemoveRangeCommand}" DockPanel.Dock="Left">
+                <icons:PackIconMaterial Kind="Minus" />
+            </Button>
+
+            <Button Margin="8,0"
+                    Command="{Binding ClearCommand}"
+                    DockPanel.Dock="Left">
+                <icons:PackIconMaterial Kind="CloseThick" />
+            </Button>
+
+            <TextBlock Grid.Row="2"
+                       Grid.Column="0"
+                       HorizontalAlignment="Right"
+                       Text="{Binding Count, FallbackValue='0 MediaPlayers', StringFormat={}{0} MediaPlayers}" />
+        </DockPanel>
+
+        <ContentControl Grid.Row="0"
+                        Grid.RowSpan="3"
+                        Grid.Column="2">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type local:MediaPlayer}">
+                    <DockPanel>
+                        <local:MediaPlayerPlaybackControl DockPanel.Dock="Top" />
+
+                        <DockPanel DockPanel.Dock="Bottom">
+                            <Button Command="{Binding Data.CreateCommand, Source={StaticResource ViewProxy}}" DockPanel.Dock="Left">
+                                <icons:PackIconMaterial Kind="PlusThick" />
+                            </Button>
+
+                            <Button Margin="8,0"
+                                    Command="{Binding Data.UpdateCommand, Source={StaticResource ViewProxy}}"
+                                    DockPanel.Dock="Left">
+                                <icons:PackIconMaterial Kind="Pencil" />
+                            </Button>
+
+                            <Button Command="{Binding Playlist.RemoveRangeCommand}" DockPanel.Dock="Left">
+                                <icons:PackIconMaterial Kind="Minus" />
+                            </Button>
+
+                            <Button Margin="8,0"
+                                    Command="{Binding Playlist.ClearCommand}"
+                                    DockPanel.Dock="Left">
+                                <icons:PackIconMaterial Kind="CloseThick" />
+                            </Button>
+
+                            <TextBlock Grid.Row="2"
+                                       Grid.Column="0"
+                                       HorizontalAlignment="Right"
+                                       Text="{Binding Playlist.Count, FallbackValue='0 MediaItems', StringFormat={}{0} MediaItems}" />
+                        </DockPanel>
+
+                        <DataGrid Margin="0,8" ItemsSource="{Binding Playlist.Items}" />
+                    </DockPanel>
+                </DataTemplate>
+            </ContentControl.Resources>
+
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Setter Property="Content" Value="{Binding SelectedItem}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Content}" Value="{x:Null}">
+                            <Setter Property="ContentControl.Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <DockPanel>
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">No media player selected</TextBlock>
+                                        </DockPanel>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+    </Grid>
+</UserControl>
