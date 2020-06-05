@@ -1,3 +1,4 @@
+using System;
 using MvvmScarletToolkit.Observables;
 
 namespace Maple
@@ -15,7 +16,7 @@ namespace Maple
 
         public PlaybackViewModel(MediaPlayers mediaPlayers)
         {
-            MediaPlayers = mediaPlayers ?? throw new System.ArgumentNullException(nameof(mediaPlayers));
+            MediaPlayers = mediaPlayers ?? throw new ArgumentNullException(nameof(mediaPlayers));
         }
     }
 }

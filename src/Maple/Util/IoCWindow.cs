@@ -2,17 +2,20 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using AdonisUI.Controls;
 using Maple.Domain;
 using MvvmScarletToolkit;
 using MvvmScarletToolkit.Abstractions;
 
 namespace Maple
 {
-    public abstract class IoCWindow : Window, IIocFrameworkElement
+    public class IoCWindow : AdonisWindow, IIocFrameworkElement
     {
         private readonly IScarletMessenger _messenger;
 
@@ -20,33 +23,47 @@ namespace Maple
         public IScarletEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> WeakEventManager { get; }
         public IScarletCommandBuilder CommandBuilder { get; }
 
-        protected IoCWindow()
+        public IoCWindow()
             : base()
         {
             if (Debugger.IsAttached)
                 Debug.Fail($"The constructor without parameters of {nameof(IoCWindow)} exists only for compatibility reasons.");
         }
 
-        protected IoCWindow(ILocalizationService localizationService, IScarletMessenger messenger, IScarletEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> weakEventManager, IScarletCommandBuilder commandBuilder)
+        protected IoCWindow(IScarletCommandBuilder commandBuilder, ILocalizationService localizationService)
             : base()
         {
             LocalizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
-            _messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
-            WeakEventManager = weakEventManager ?? throw new ArgumentNullException(nameof(weakEventManager));
             CommandBuilder = commandBuilder ?? throw new ArgumentNullException(nameof(commandBuilder));
+            WeakEventManager = CommandBuilder.WeakEventManager ?? throw new ArgumentNullException(nameof(IScarletCommandBuilder.WeakEventManager));
+
+            _messenger = CommandBuilder.Messenger ?? throw new ArgumentNullException(nameof(IScarletCommandBuilder.Messenger));
             _messenger.Subscribe<UiPrimaryColorChangedMessage>(PrimaryColorChanged);
+
+            UpdateImage(Colors.DarkOrange);
+        }
+
+        public Task Invoke(Action action, CancellationToken token)
+        {
+            return CommandBuilder.Dispatcher.Invoke(action, token);
         }
 
         private void PrimaryColorChanged(UiPrimaryColorChangedMessage e)
         {
+            UpdateImage(e.Content);
+        }
+
+        private void UpdateImage(Color color)
+        {
             if (MaplePackIcon.TryGet(PackIconKind.ApplicationIcon, out var data))
             {
                 var geo = Geometry.Parse(data);
-                SetCurrentValue(IconProperty, SetImage(geo, e.Content));
+                var image = GetImage(geo, color);
+                SetCurrentValue(IconProperty, image);
             }
         }
 
-        private BitmapSource SetImage(Geometry geo, Color color)
+        private BitmapSource GetImage(Geometry geo, Color color)
         {
             var canvas = new Canvas
             {
@@ -81,9 +98,12 @@ namespace Maple
 
                 var bitmapImage = new BitmapImage();
                 bitmapImage.BeginInit();
-                bitmapImage.StreamSource = memory;
                 bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.StreamSource = memory;
+                bitmapImage.UriSource = null;
                 bitmapImage.EndInit();
+
+                bitmapImage.Freeze();
 
                 return bitmapImage;
             }

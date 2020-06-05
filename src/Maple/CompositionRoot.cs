@@ -96,6 +96,8 @@ namespace Maple
                 c.Register<NavigationViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
                 c.Register<ShellViewModel>(Reuse.Singleton);
                 c.Register<PlaybackViewModel>(Reuse.Singleton);
+                c.Register<DashboardViewModel>(Reuse.Singleton);
+                c.Register<AboutViewModel>(Reuse.Singleton);
                 c.Register<DialogViewModel>(Reuse.Singleton);
                 c.Register<MetaDataViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
                 c.Register<FileSystemViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));

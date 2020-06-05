@@ -1,5 +1,3 @@
-using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using Maple.Properties;
@@ -11,36 +9,30 @@ namespace Maple
 {
     internal sealed class NavigationViewModel : Scenes
     {
-        private readonly LocalizationsViewModel _localizationsViewModel;
-
-        private bool _isExpanded;
-        public bool IsExpanded
-        {
-            get { return _isExpanded; }
-            set { SetValue(ref _isExpanded, value); }
-        }
-
-        public ICommand CloseExpanderCommand { get; }
         public ICommand OpenMediaPlayerCommand { get; }
-        public ICommand OpenGithubPageCommand { get; }
         public ICommand OpenOptionsCommand { get; }
 
-        public NavigationViewModel(IScarletCommandBuilder commandBuilder, PlaybackViewModel playback, LocalizationsViewModel localizationsViewModel, MediaPlayers mediaPlayers, Playlists playlists, OptionsViewModel options)
-            : base(commandBuilder, localizationsViewModel)
+        public NavigationViewModel(IScarletCommandBuilder commandBuilder,
+            PlaybackViewModel playback,
+            LocalizationsViewModel localizations,
+            MediaPlayers mediaPlayers,
+            Playlists playlists,
+            OptionsViewModel options,
+            DashboardViewModel dashboard,
+            AboutViewModel about)
+            : base(commandBuilder, localizations)
         {
-            _localizationsViewModel = localizationsViewModel ?? throw new ArgumentNullException(nameof(localizationsViewModel));
-
+            Add(nameof(Resources.Dashboard), dashboard);
             Add(nameof(Resources.Playback), playback);
+            Add(nameof(Resources.MediaLibrary), playlists);
             Add(nameof(Resources.MediaPlayers), mediaPlayers);
-            Add(nameof(Resources.Playlists), playlists);
             Add(nameof(Resources.Options), options);
+            Add(nameof(Resources.About), about);
 
             SelectedItem = this[0];
 
             OpenMediaPlayerCommand = new RelayCommand(CommandManager, OpenMediaPlayerView, CanOpenMediaPlayerView);
             OpenOptionsCommand = new RelayCommand(CommandManager, OpenOptionsView, CanOpenOptionsView);
-            OpenGithubPageCommand = new RelayCommand(CommandManager, OpenGithubPage);
-            CloseExpanderCommand = new RelayCommand(CommandManager, () => IsExpanded = false, () => IsExpanded != false);
         }
 
         private void OpenOptionsView()
@@ -61,13 +53,6 @@ namespace Maple
         private bool CanOpenMediaPlayerView()
         {
             return Items?.Any(p => p.Content is MediaPlayers) == true;
-        }
-
-        private void OpenGithubPage()
-        {
-            using (Process.Start(_localizationsViewModel.Translate(nameof(Resources.GithubProjectLink))))
-            {
-            }
         }
     }
 }

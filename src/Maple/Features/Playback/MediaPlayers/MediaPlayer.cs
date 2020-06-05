@@ -98,6 +98,20 @@ namespace Maple
             StopCommand = new RelayCommand(CommandManager, Stop, () => CanStop());
         }
 
+        public MediaPlayer(MediaPlayer mediaPlayer)
+            : this(mediaPlayer.CommandBuilder, mediaPlayer.Player)
+        {
+            Name = mediaPlayer.Name;
+            Sequence = mediaPlayer.Sequence;
+            IsPrimary = mediaPlayer.IsPrimary;
+            Playlist = mediaPlayer.Playlist;
+            Player = mediaPlayer.Player;
+            CreatedBy = mediaPlayer.CreatedBy;
+            CreatedOn = mediaPlayer.CreatedOn;
+            UpdatedBy = mediaPlayer.UpdatedBy;
+            UpdatedOn = mediaPlayer.UpdatedOn;
+        }
+
         public void Play(MediaItem mediaItem)
         {
             if (mediaItem == null)

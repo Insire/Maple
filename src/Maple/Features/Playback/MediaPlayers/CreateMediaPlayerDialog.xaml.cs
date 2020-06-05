@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using MvvmScarletToolkit;
+using MvvmScarletToolkit.Abstractions;
 
 namespace Maple
 {
-    public partial class CreateMediaPlayerDialog : Window
+    public partial class CreateMediaPlayerDialog : IoCWindow
     {
         public ICommand AcceptCommand
         {
@@ -23,7 +24,12 @@ namespace Maple
 
         private readonly IScarletCommandBuilder _commandBuilder;
 
-        public CreateMediaPlayerDialog(IScarletCommandBuilder commandBuilder, CreateMediaPlayerViewModel dataContext, Window owner, CancellationToken abort)
+        public CreateMediaPlayerDialog()
+        {
+        }
+
+        public CreateMediaPlayerDialog(IScarletCommandBuilder commandBuilder, ILocalizationService localizationService, CreateMediaPlayerViewModel dataContext, Window owner, CancellationToken abort)
+            : base(commandBuilder, localizationService)
         {
             _commandBuilder = commandBuilder ?? throw new ArgumentNullException(nameof(commandBuilder));
 
@@ -48,6 +54,11 @@ namespace Maple
             DataContext = dataContext;
 
             abort.Register(Close);
+        }
+
+        public CreateMediaPlayerDialog(CreateMediaPlayerViewModel dataContext, IoCWindow owner, CancellationToken abort)
+            : this(owner.CommandBuilder, owner.LocalizationService, dataContext, owner, abort)
+        {
         }
 
         private async Task Accept(CancellationToken token)

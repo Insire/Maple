@@ -1,11 +1,27 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:local="clr-namespace:Maple"
-                    xmlns:mvvm="http://SoftThorn.MvvmScarletToolkit.com/winfx/xaml/shared"
                     xmlns:observables="clr-namespace:MvvmScarletToolkit.Observables;assembly=MvvmScarletToolkit.Observables">
 
     <!--  Remember: the order of these styles matters, since they depend on each other. If one references for a style not yet declared, you get random RuntimeErrors  -->
+
+    <Style x:Key="BaseWindowStyle"
+           BasedOn="{StaticResource {x:Type Window}}"
+           TargetType="{x:Type local:IoCWindow}">
+        <Setter Property="FontFamily" Value="pack://application:,,,/Maple;component/Resources/Roboto/#Roboto" />
+        <Setter Property="Height" Value=" 540" />
+        <Setter Property="MinHeight" Value="540" />
+        <Setter Property="MinWidth" Value="1040" />
+
+        <Setter Property="Title" Value="{local:Translation Maple}" />
+        <Setter Property="ResizeMode" Value="CanResize" />
+
+        <Setter Property="TextElement.FontSize" Value="13" />
+        <Setter Property="TextElement.FontWeight" Value="Regular" />
+        <Setter Property="Width" Value="1040" />
+    </Style>
+
+    <Style BasedOn="{StaticResource BaseWindowStyle}" TargetType="{x:Type local:IoCWindow}" />
 
     <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -22,21 +38,6 @@
     <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="{x:Type ListBoxItem}">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
     </Style>
-
-    <Style x:Key="BaseWindowStyle" TargetType="{x:Type local:IoCWindow}">
-        <Setter Property="FontFamily" Value="pack://application:,,,/Maple;component/Resources/Roboto/#Roboto" />
-        <Setter Property="Height" Value=" 540" />
-        <Setter Property="MinHeight" Value="540" />
-        <Setter Property="MinWidth" Value="1040" />
-
-        <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
-
-        <Setter Property="TextElement.FontSize" Value="13" />
-        <Setter Property="TextElement.FontWeight" Value="Regular" />
-        <Setter Property="Width" Value="1040" />
-    </Style>
-
-    <Style BasedOn="{StaticResource BaseWindowStyle}" TargetType="{x:Type local:IoCWindow}" />
 
     <DataTemplate DataType="{x:Type local:BaseDevice}">
         <TextBlock Text="{Binding Name}" />
@@ -82,6 +83,11 @@
 
             <TreeView Name="OptionsTree">
                 <TreeViewItem DataContext="{Binding Cultures}" Header="{local:Translation Languages}" />
+                <TreeViewItem DataContext="{Binding AudioDevices}" Header="{local:Translation AudioDevices}" />
+                <TreeViewItem DataContext="{Binding AudioDevices}" Header="{local:Translation Themes}" />
+                <TreeViewItem DataContext="{Binding AudioDevices}" Header="{local:Translation Folders}" />
+                <TreeViewItem DataContext="{Binding AudioDevices}" Header="{local:Translation Updates}" />
+                <TreeViewItem DataContext="{Binding AudioDevices}" Header="{local:Translation Logs}" />
             </TreeView>
 
             <ContentControl Grid.Column="2" Content="{Binding SelectedItem.DataContext, ElementName=OptionsTree}" />

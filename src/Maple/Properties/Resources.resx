@@ -361,4 +361,13 @@
   <data name="OpenMediaPlayerConfigurationCommand" xml:space="preserve">
     <value>Mediaplayereinstellungen öffnen</value>
   </data>
+  <data name="MediaLibrary" xml:space="preserve">
+    <value>Mediathek</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Startseite</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Über</value>
+  </data>
 </root>

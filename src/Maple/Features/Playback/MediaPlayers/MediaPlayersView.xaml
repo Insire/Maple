@@ -90,7 +90,7 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="8" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
 
@@ -154,64 +154,122 @@
                        Text="{Binding Count, FallbackValue='0 MediaPlayers', StringFormat={}{0} MediaPlayers}" />
         </DockPanel>
 
-        <ContentControl Grid.Row="0"
-                        Grid.RowSpan="3"
-                        Grid.Column="2">
-            <ContentControl.Resources>
-                <DataTemplate DataType="{x:Type local:MediaPlayer}">
-                    <DockPanel>
-                        <local:MediaPlayerPlaybackControl DockPanel.Dock="Top" />
+        <GridSplitter Grid.Row="0"
+                      Grid.RowSpan="3"
+                      Grid.Column="1"
+                      Width="8"
+                      Margin="8,0"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Stretch" />
 
-                        <DockPanel DockPanel.Dock="Bottom">
-                            <Button Command="{Binding Data.CreateCommand, Source={StaticResource ViewProxy}}" DockPanel.Dock="Left">
-                                <icons:PackIconMaterial Kind="PlusThick" />
-                            </Button>
+        <GroupBox Grid.Row="0"
+                  Grid.RowSpan="3"
+                  Grid.Column="2">
+            <ContentControl>
+                <ContentControl.Resources>
+                    <DataTemplate DataType="{x:Type local:MediaPlayer}">
+                        <DockPanel>
+                            <local:MediaPlayerPlaybackControl DockPanel.Dock="Top" />
 
-                            <Button Margin="8,0"
-                                    Command="{Binding Data.UpdateCommand, Source={StaticResource ViewProxy}}"
-                                    DockPanel.Dock="Left">
-                                <icons:PackIconMaterial Kind="Pencil" />
-                            </Button>
+                            <DockPanel DockPanel.Dock="Bottom">
+                                <Button Command="{Binding Data.CreateCommand, Source={StaticResource ViewProxy}}" DockPanel.Dock="Left">
+                                    <icons:PackIconMaterial Kind="PlusThick" />
+                                </Button>
 
-                            <Button Command="{Binding Playlist.RemoveRangeCommand}" DockPanel.Dock="Left">
-                                <icons:PackIconMaterial Kind="Minus" />
-                            </Button>
+                                <Button Margin="8,0"
+                                        Command="{Binding Data.UpdateCommand, Source={StaticResource ViewProxy}}"
+                                        DockPanel.Dock="Left">
+                                    <icons:PackIconMaterial Kind="Pencil" />
+                                </Button>
 
-                            <Button Margin="8,0"
-                                    Command="{Binding Playlist.ClearCommand}"
-                                    DockPanel.Dock="Left">
-                                <icons:PackIconMaterial Kind="CloseThick" />
-                            </Button>
+                                <Button Command="{Binding Playlist.RemoveRangeCommand}" DockPanel.Dock="Left">
+                                    <icons:PackIconMaterial Kind="Minus" />
+                                </Button>
 
-                            <TextBlock Grid.Row="2"
-                                       Grid.Column="0"
-                                       HorizontalAlignment="Right"
-                                       Text="{Binding Playlist.Count, FallbackValue='0 MediaItems', StringFormat={}{0} MediaItems}" />
+                                <Button Margin="8,0"
+                                        Command="{Binding Playlist.ClearCommand}"
+                                        DockPanel.Dock="Left">
+                                    <icons:PackIconMaterial Kind="CloseThick" />
+                                </Button>
+
+                                <TextBlock Grid.Row="2"
+                                           Grid.Column="0"
+                                           HorizontalAlignment="Right"
+                                           Text="{Binding Playlist.Count, FallbackValue='0 MediaItems', StringFormat={}{0} MediaItems}" />
+                            </DockPanel>
+
+                            <DataGrid Margin="0,8"
+                                      AutoGenerateColumns="False"
+                                      ItemsSource="{Binding Playlist.Items}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding Sequence}"
+                                                        Header="#" />
+                                    <DataGridTextColumn Width="*"
+                                                        Binding="{Binding Title}"
+                                                        Header="Title" />
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding Duration}"
+                                                        Header="Duration" />
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding Location}"
+                                                        Header="Location" />
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding MediaItemType}"
+                                                        Header="MediaItemType" />
+                                    <DataGridTextColumn Width="Auto"
+                                                        Binding="{Binding PrivacyStatus}"
+                                                        Header="PrivacyStatus" />
+                                </DataGrid.Columns>
+                            </DataGrid>
                         </DockPanel>
+                    </DataTemplate>
+                </ContentControl.Resources>
 
-                        <DataGrid Margin="0,8" ItemsSource="{Binding Playlist.Items}" />
-                    </DockPanel>
-                </DataTemplate>
-            </ContentControl.Resources>
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Setter Property="Content" Value="{Binding SelectedItem}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Content}" Value="{x:Null}">
+                                <Setter Property="ContentControl.Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <DockPanel>
+                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">No media player selected</TextBlock>
+                                            </DockPanel>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Content.Player}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                                <Setter Property="ContentControl.Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <DockPanel>
+                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Selected media player does not have a playback device associated</TextBlock>
+                                            </DockPanel>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
 
-            <ContentControl.Style>
-                <Style TargetType="{x:Type ContentControl}">
-                    <Setter Property="Content" Value="{Binding SelectedItem}" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Content}" Value="{x:Null}">
-                            <Setter Property="ContentControl.Template">
-                                <Setter.Value>
-                                    <ControlTemplate>
-                                        <DockPanel>
-                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">No media player selected</TextBlock>
-                                        </DockPanel>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
-        </ContentControl>
+                            <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Content.Playlist}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                                <Setter Property="ContentControl.Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <DockPanel>
+                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Selected media player does not have a playlist associated</TextBlock>
+                                            </DockPanel>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+        </GroupBox>
     </Grid>
 </UserControl>

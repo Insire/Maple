@@ -19,7 +19,12 @@ namespace Maple
         {
             var playerViewModel = new MediaPlayer(CommandBuilder, new MaplePlayer(CommandBuilder));
 
-            return new CreateMediaPlayerViewModel(_audioDevices, _playlists, playerViewModel);
+            return Create(playerViewModel);
+        }
+
+        public CreateMediaPlayerViewModel Create(MediaPlayer mediaPlayer)
+        {
+            return new CreateMediaPlayerViewModel(_audioDevices, _playlists, mediaPlayer);
         }
     }
 }

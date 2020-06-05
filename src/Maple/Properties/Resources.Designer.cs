@@ -61,6 +61,15 @@ namespace Maple.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Über.
+        /// </summary>
+        public static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string Accept {
@@ -138,6 +147,15 @@ namespace Maple.Properties {
         public static string Count {
             get {
                 return ResourceManager.GetString("Count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Startseite.
+        /// </summary>
+        public static string Dashboard {
+            get {
+                return ResourceManager.GetString("Dashboard", resourceCulture);
             }
         }
         
@@ -426,6 +444,15 @@ namespace Maple.Properties {
         public static string MediaItems {
             get {
                 return ResourceManager.GetString("MediaItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mediathek.
+        /// </summary>
+        public static string MediaLibrary {
+            get {
+                return ResourceManager.GetString("MediaLibrary", resourceCulture);
             }
         }
         

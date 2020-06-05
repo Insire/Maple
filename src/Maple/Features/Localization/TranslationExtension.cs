@@ -34,14 +34,14 @@ namespace Maple
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
             if (TryGetIoCFrameWorkElement(serviceProvider, out var element))
-                return ProvideValue(serviceProvider, element.WeakEventManager, element.LocalizationService);
+                return ProvideBinding(serviceProvider, element.WeakEventManager, element.LocalizationService);
 
             if (TryGetServiceFromResources<IScarletEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>>(serviceProvider, out var manager) && TryGetServiceFromResources<ILocalizationService>(serviceProvider, out var service))
-                return ProvideValue(serviceProvider, manager, service);
+                return ProvideBinding(serviceProvider, manager, service);
 
-            Debug.WriteLine($"{nameof(TranslationExtension)} ProvideValue {Key} failed");
+            Debug.WriteLine($"{nameof(TranslationExtension)} ProvideValue for {Key} failed");
 
-            return Binding.DoNothing;
+            return $"!{Key}!";
         }
 
         private static bool TryGetIoCFrameWorkElement(IServiceProvider serviceProvider, out IIocFrameworkElement element)
@@ -68,7 +68,7 @@ namespace Maple
             return false;
         }
 
-        private object ProvideValue(IServiceProvider serviceProvider, IScarletEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> weakEventManager, ILocalizationService service)
+        private object ProvideBinding(IServiceProvider serviceProvider, IScarletEventManager<INotifyPropertyChanged, PropertyChangedEventArgs> weakEventManager, ILocalizationService service)
         {
             var binding = new Binding("Value")
             {

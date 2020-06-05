@@ -3,9 +3,9 @@
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                  xmlns:local="clr-namespace:Maple"
-                 Title="SplashScreen"
+                 Width="980"
+                 Height="540"
                  ResizeMode="NoResize"
-                 Style="{StaticResource BaseWindowStyle}"
                  WindowStartupLocation="CenterScreen">
 
     <i:Interaction.Triggers>
@@ -43,6 +43,6 @@
 
         <Image RenderOptions.BitmapScalingMode="HighQuality"
                SnapsToDevicePixels="True"
-               Source="Resources/logo_withoutbackground.png" />
+               Source="pack://application:,,,/Maple;component/Resources/logo_withoutbackground.png" />
     </DockPanel>
 </local:IoCWindow>

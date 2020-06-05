@@ -1,10 +1,12 @@
 ﻿<local:IoCWindow x:Class="Maple.Shell"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:adonisExtensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
                  xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  xmlns:local="clr-namespace:Maple"
                  xmlns:mvvm="http://SoftThorn.MvvmScarletToolkit.com/winfx/xaml/shared"
-                 xmlns:observables="clr-namespace:MvvmScarletToolkit.Observables;assembly=MvvmScarletToolkit.Observables">
+                 xmlns:observables="clr-namespace:MvvmScarletToolkit.Observables;assembly=MvvmScarletToolkit.Observables"
+                 Style="{StaticResource BaseWindowStyle}">
 
     <!--  DataContext ShellViewModel  -->
 
@@ -14,9 +16,38 @@
         </ResourceDictionary>
     </local:IoCWindow.Resources>
 
-    <DockPanel Margin="8">
+    <Grid>
 
-        <ListBox DockPanel.Dock="Left"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="8" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="8" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="8" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="8" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="8" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="1" Orientation="Horizontal">
+
+            <ToggleButton Width="44" Height="44">
+                <icons:PackIconMaterial Kind="Menu" />
+            </ToggleButton>
+
+            <TextBlock Grid.Column="1"
+                       Margin="8,0,0,0"
+                       Text="Maple" />
+        </StackPanel>
+
+
+        <ListBox Grid.Row="2"
+                 Grid.RowSpan="3"
+                 Grid.Column="1"
                  ItemsSource="{Binding NavigationViewModel.Items}"
                  SelectedItem="{Binding NavigationViewModel.SelectedItem}">
             <ListBox.Resources>
@@ -34,8 +65,12 @@
                                         Focusable="False">
 
                             <ContentControl.Resources>
+                                <DataTemplate DataType="{x:Type local:DashboardViewModel}">
+                                    <icons:PackIconMaterial Kind="Home" />
+                                </DataTemplate>
+
                                 <DataTemplate DataType="{x:Type local:Playlists}">
-                                    <icons:PackIconMaterial Kind="PlaylistCheck" />
+                                    <icons:PackIconMaterial Kind="ViewList" />
                                 </DataTemplate>
 
                                 <DataTemplate DataType="{x:Type local:MediaPlayers}">
@@ -49,6 +84,10 @@
                                 <DataTemplate DataType="{x:Type local:PlaybackViewModel}">
                                     <icons:PackIconMaterial Kind="Play" />
                                 </DataTemplate>
+
+                                <DataTemplate DataType="{x:Type local:AboutViewModel}">
+                                    <icons:PackIconMaterial Kind="InformationOutline" />
+                                </DataTemplate>
                             </ContentControl.Resources>
                         </ContentControl>
 
@@ -58,15 +97,41 @@
             </ListBox.Resources>
         </ListBox>
 
-        <Border Margin="8,0,8,0"
-                BorderBrush="DimGray"
-                BorderThickness="1"
-                DockPanel.Dock="Top">
-            <TextBlock HorizontalAlignment="Center" Text="{Binding NavigationViewModel.SelectedItem.Localization.Value}" />
-        </Border>
+        <Grid Grid.Row="0"
+              Grid.Column="3"
+              Height="44"
+              adonisExtensions:LayerExtension.IncreaseLayer="True"
+              adonisExtensions:LayerExtension.Layer="1">
 
-        <ContentControl Grid.Column="1"
-                        Margin="8,8,8,0"
-                        Content="{Binding NavigationViewModel.SelectedItem.Content}" />
-    </DockPanel>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="8" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="8" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox Grid.Column="2"
+                     Height="44"
+                     adonisExtensions:WatermarkExtension.Watermark="Search ..." />
+
+            <StackPanel Grid.Column="4"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+
+                <Button Width="44" Margin="8,0">
+                    <icons:PackIconMaterial Kind="PlaylistPlay" />
+                </Button>
+
+                <Button Width="44">
+                    <icons:PackIconMaterial Kind="Account" />
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <GroupBox Grid.Row="2" Grid.Column="3">
+            <ContentControl Content="{Binding NavigationViewModel.SelectedItem.Content}" />
+        </GroupBox>
+
+    </Grid>
 </local:IoCWindow>

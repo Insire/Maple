@@ -83,11 +83,16 @@ namespace Maple
                 .WithAsyncCancellation()
                 .WithSingleExecution()
                 .Build();
+
+            UpdateCommand = _shell.CommandBuilder.Create(Update, CanUpdate)
+                .WithAsyncCancellation()
+                .WithSingleExecution()
+                .Build();
         }
 
         private async Task Create(CancellationToken token)
         {
-            if (!(DataContext is Maple.MediaPlayers mediaPlayers))
+            if (!(DataContext is MediaPlayers mediaPlayers))
             {
                 return;
             }
@@ -99,7 +104,7 @@ namespace Maple
 
             var viewModel = mediaPlayers.Create();
 
-            var dlg = new CreateMediaPlayerDialog(_shell.CommandBuilder, viewModel, _shell, token);
+            var dlg = new CreateMediaPlayerDialog(viewModel, _shell, token);
 
             var result = dlg.ShowDialog();
             if (result.HasValue && result.Value)
@@ -110,7 +115,40 @@ namespace Maple
 
         private bool CanCreate()
         {
-            return _shell != null && DataContext is Maple.MediaPlayers;
+            return _shell != null && DataContext is MediaPlayers;
+        }
+
+        private async Task Update(CancellationToken token)
+        {
+            if (!(DataContext is MediaPlayers mediaPlayers))
+            {
+                return;
+            }
+
+            if (_shell is null)
+            {
+                return;
+            }
+
+            var oldInstance = mediaPlayers.SelectedItem;
+            var newInstance = new MediaPlayer(mediaPlayers.SelectedItem);
+
+            var dialogViewModel = mediaPlayers.Create(newInstance);
+            var dlg = new CreateMediaPlayerDialog(dialogViewModel, _shell, token);
+
+            var result = dlg.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                await mediaPlayers.Add(newInstance);
+                await mediaPlayers.Remove(oldInstance);
+
+                mediaPlayers.SelectedItem = newInstance;
+            }
+        }
+
+        private bool CanUpdate()
+        {
+            return _shell != null && DataContext is MediaPlayers mediaPlayers && mediaPlayers.SelectedItem != null;
         }
     }
 }

@@ -24,5 +24,10 @@ namespace Maple
         {
             return _mediaPlayerFactory.Create();
         }
+
+        internal CreateMediaPlayerViewModel Create(MediaPlayer mediaPlayer)
+        {
+            return _mediaPlayerFactory.Create(mediaPlayer);
+        }
     }
 }
