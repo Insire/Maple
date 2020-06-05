@@ -8,9 +8,9 @@ namespace Maple
         public MediaItemValidator(ILocalizationService translationService)
             : base(translationService)
         {
-            RuleFor(mediaItem => mediaItem.Title).NotEmpty(); // TODO finalize Validator configuration
-            RuleFor(mediaItem => mediaItem.Description).NotEmpty();
-            RuleFor(mediaItem => mediaItem.Location).NotEmpty();
+            RuleFor(mediaItem => mediaItem.Name).NotEmpty(); // TODO finalize Validator configuration
+            RuleFor(mediaItem => mediaItem.Thumbnail).NotEmpty().Length(0, 260); // max windows path length https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
+            RuleFor(mediaItem => mediaItem.Location).NotEmpty().Length(0, 260); // max windows path length https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
         }
     }
 }

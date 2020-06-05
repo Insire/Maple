@@ -114,7 +114,7 @@ namespace Maple
 
         public void Play(MediaItem mediaItem)
         {
-            if (mediaItem == null)
+            if (mediaItem is null)
                 throw new ArgumentNullException(nameof(mediaItem));
 
             OnPropertyChanged(nameof(IsPlaying));

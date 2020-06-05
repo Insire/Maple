@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using FluentValidation;
 using Maple.Domain;
+using MvvmScarletToolkit;
 using MvvmScarletToolkit.Observables;
 
 namespace Maple
@@ -23,12 +22,6 @@ namespace Maple
         }
 
         private PrivacyStatus _privacyStatus;
-        /// <summary>
-        /// Youtube Property
-        /// </summary>
-        /// <value>
-        /// The privacy status.
-        /// </value>
         public PrivacyStatus PrivacyStatus
         {
             get { return _privacyStatus; }
@@ -36,12 +29,6 @@ namespace Maple
         }
 
         private bool _isSelected;
-        /// <summary>
-        /// if this list is part of a ui bound collection and selected this should be true
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is selected; otherwise, <c>false</c>.
-        /// </value>
         public bool IsSelected
         {
             get { return _isSelected; }
@@ -49,12 +36,6 @@ namespace Maple
         }
 
         private bool _isShuffeling;
-        /// <summary>
-        /// indicates whether the next item is selected randomly from the list of items on a call of Next()
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is shuffeling; otherwise, <c>false</c>.
-        /// </value>
         public bool IsShuffeling
         {
             get { return _isShuffeling; }
@@ -68,11 +49,11 @@ namespace Maple
             set { SetValue(ref _title, value); }
         }
 
-        private string _description;
-        public string Description
+        private string _thumbnail;
+        public string Thumbnail
         {
-            get { return _description; }
-            set { SetValue(ref _description, value); }
+            get { return _thumbnail; }
+            set { SetValue(ref _thumbnail, value); }
         }
 
         private RepeatMode _repeatMode;
@@ -82,14 +63,29 @@ namespace Maple
             set { SetValue(ref _repeatMode, value); }
         }
 
-        [Bindable(true, BindingDirection.OneWay)]
-        public ReadOnlyObservableCollection<RepeatMode> RepeatModes { get; }
-
-        public Playlist(IMapleCommandBuilder commandBuilder, ReadOnlyObservableCollection<RepeatMode> repeatModes)
+        public Playlist(IScarletCommandBuilder commandBuilder)
             : base(commandBuilder)
         {
-            RepeatModes = repeatModes ?? throw new ArgumentNullException(nameof(repeatModes));
             _history = new Stack<int>();
+        }
+
+        public Playlist(Playlist playlist)
+            : this(playlist.CommandBuilder)
+        {
+            Sequence = playlist.Sequence;
+            PrivacyStatus = playlist.PrivacyStatus;
+            IsSelected = playlist.IsSelected;
+            Title = playlist.Title;
+            Thumbnail = playlist.Thumbnail;
+            RepeatMode = playlist.RepeatMode;
+
+            for (var i = 0; i < playlist.Count; i++)
+            {
+                var item = playlist[i];
+
+                AddUnchecked(item);
+                item.Playlist = this;
+            }
         }
 
         /// <summary>

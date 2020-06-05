@@ -112,7 +112,8 @@ namespace Maple
 
             void RegisterServices()
             {
-                c.Register<MediaPlayerFactory, MediaPlayerFactory>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
+                c.Register<MediaPlayerFactory, MediaPlayerFactory>(Reuse.Singleton);
+                c.Register<PlaylistFactory, PlaylistFactory>(Reuse.Singleton);
                 c.Register<ISequenceService, SequenceService>();
                 c.Register<IYoutubeService, YoutubeService>(Reuse.Singleton);
                 c.Register<IAudioDeviceProvider, AudioDeviceProvider>(Reuse.Singleton);

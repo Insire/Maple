@@ -6,7 +6,7 @@ using MvvmScarletToolkit;
 
 namespace Maple
 {
-    public partial class MediaPlayersView
+    public partial class PlaylistsView
     {
         public ICommand CreateCommand
         {
@@ -17,7 +17,7 @@ namespace Maple
         public static readonly DependencyProperty CreateCommandProperty = DependencyProperty.Register(
             nameof(CreateCommand),
             typeof(ICommand),
-            typeof(MediaPlayersView),
+            typeof(PlaylistsView),
             new PropertyMetadata(default(ICommand)));
 
         public ICommand UpdateCommand
@@ -29,53 +29,17 @@ namespace Maple
         public static readonly DependencyProperty UpdateCommandProperty = DependencyProperty.Register(
             nameof(UpdateCommand),
             typeof(ICommand),
-            typeof(MediaPlayersView),
-            new PropertyMetadata(default(ICommand)));
-
-        public ICommand AddFromFileCommand
-        {
-            get { return (ICommand)GetValue(AddFromFileCommandProperty); }
-            set { SetValue(AddFromFileCommandProperty, value); }
-        }
-
-        public static readonly DependencyProperty AddFromFileCommandProperty = DependencyProperty.Register(
-            nameof(AddFromFileCommand),
-            typeof(ICommand),
-            typeof(MediaPlayersView),
-            new PropertyMetadata(default(ICommand)));
-
-        public ICommand AddFromUrlCommand
-        {
-            get { return (ICommand)GetValue(AddFromUrlCommandProperty); }
-            set { SetValue(AddFromUrlCommandProperty, value); }
-        }
-
-        public static readonly DependencyProperty AddFromUrlCommandProperty = DependencyProperty.Register(
-            nameof(AddFromUrlCommand),
-            typeof(ICommand),
-            typeof(MediaPlayersView),
-            new PropertyMetadata(default(ICommand)));
-
-        public ICommand AddFromFolderCommand
-        {
-            get { return (ICommand)GetValue(AddFromFolderCommandProperty); }
-            set { SetValue(AddFromFolderCommandProperty, value); }
-        }
-
-        public static readonly DependencyProperty AddFromFolderCommandProperty = DependencyProperty.Register(
-            nameof(AddFromFolderCommand),
-            typeof(ICommand),
-            typeof(MediaPlayersView),
+            typeof(PlaylistsView),
             new PropertyMetadata(default(ICommand)));
 
         private Shell _shell;
 
-        public MediaPlayersView()
+        public PlaylistsView()
         {
             InitializeComponent();
         }
 
-        private void MediaPlayersView_Loaded(object sender, RoutedEventArgs e)
+        private void PlaylistsView_Loaded(object sender, RoutedEventArgs e)
         {
             _shell = this.FindParent<Shell>();
 
@@ -92,7 +56,7 @@ namespace Maple
 
         private async Task Create(CancellationToken token)
         {
-            if (!(DataContext is MediaPlayers itemsViewModel))
+            if (!(DataContext is Playlists mediaPlayers))
             {
                 return;
             }
@@ -102,25 +66,25 @@ namespace Maple
                 return;
             }
 
-            var viewModel = itemsViewModel.Create();
+            var viewModel = mediaPlayers.Create();
 
-            var dlg = new CreateMediaPlayerDialog(viewModel, _shell, token);
+            var dlg = new CreatePlaylistDialog(viewModel, _shell, token);
 
             var result = dlg.ShowDialog();
             if (result.HasValue && result.Value)
             {
-                await itemsViewModel.Add(viewModel.MediaPlayer);
+                await mediaPlayers.Add(viewModel.Playlist);
             }
         }
 
         private bool CanCreate()
         {
-            return _shell != null && DataContext is MediaPlayers;
+            return _shell != null && DataContext is Playlists;
         }
 
         private async Task Update(CancellationToken token)
         {
-            if (!(DataContext is MediaPlayers itemsViewModel))
+            if (!(DataContext is Playlists itemsViewModel))
             {
                 return;
             }
@@ -131,10 +95,10 @@ namespace Maple
             }
 
             var oldInstance = itemsViewModel.SelectedItem;
-            var newInstance = new MediaPlayer(itemsViewModel.SelectedItem);
+            var newInstance = new Playlist(itemsViewModel.SelectedItem);
 
             var dialogViewModel = itemsViewModel.Create(newInstance);
-            var dlg = new CreateMediaPlayerDialog(dialogViewModel, _shell, token);
+            var dlg = new CreatePlaylistDialog(dialogViewModel, _shell, token);
 
             var result = dlg.ShowDialog();
             if (result.HasValue && result.Value)
@@ -148,7 +112,7 @@ namespace Maple
 
         private bool CanUpdate()
         {
-            return _shell != null && DataContext is MediaPlayers itemsViewModel && itemsViewModel.SelectedItem != null;
+            return _shell != null && DataContext is Playlists itemsViewModel && itemsViewModel.SelectedItem != null;
         }
     }
 }

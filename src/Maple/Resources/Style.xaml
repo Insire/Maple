@@ -103,7 +103,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:Playlists}">
-        <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}" />
+        <local:PlaylistsView />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:AudioDevices}">

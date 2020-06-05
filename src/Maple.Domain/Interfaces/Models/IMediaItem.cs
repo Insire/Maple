@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 
 namespace Maple.Domain
 {
-    public interface IMediaItem : IIsSelected, ISequence, IIdentifier, IChangeState
+    public interface IMediaItem : IIsSelected, ISequence
     {
-        string Title { get; }
+        string Name { get; }
         string Location { get; }
         TimeSpan Duration { get; }
         PrivacyStatus PrivacyStatus { get; }

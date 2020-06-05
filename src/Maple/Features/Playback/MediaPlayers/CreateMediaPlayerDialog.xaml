@@ -1,15 +1,15 @@
-﻿<local:IoCWindow x:Class="Maple.CreateMediaPlayerDialog"
-                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                 xmlns:local="clr-namespace:Maple"
-                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                 x:Name="CreateMediaPlayerDialogRoot"
-                 Title="TODO"
-                 Width="800"
-                 Height="325"
-                 WindowStartupLocation="CenterOwner"
-                 mc:Ignorable="d">
+﻿<local:DialogWindow x:Class="Maple.CreateMediaPlayerDialog"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:local="clr-namespace:Maple"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    x:Name="CreateMediaPlayerDialogRoot"
+                    Title="TODO"
+                    Width="800"
+                    Height="325"
+                    WindowStartupLocation="CenterOwner"
+                    mc:Ignorable="d">
 
     <Grid Margin="8">
         <Grid.ColumnDefinitions>
@@ -131,4 +131,4 @@
             <Button Content="Cancel" IsCancel="True" />
         </StackPanel>
     </Grid>
-</local:IoCWindow>
+</local:DialogWindow>

@@ -11,12 +11,11 @@ namespace Maple
             RuleFor(playlist => playlist.Title).NotEmpty();
             RuleFor(playlist => playlist.Title).Length(1, 1024);
 
-            RuleFor(playlist => playlist.Description).NotEmpty();
-            RuleFor(playlist => playlist.Description).Length(0, 1024);
+            RuleFor(playlist => playlist.Thumbnail).NotEmpty();
+            RuleFor(playlist => playlist.Thumbnail).Length(0, 260); // max windows path length https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
 
             RuleFor(playlist => playlist.PrivacyStatus).NotNull();
 
-            RuleFor(playlist => playlist.RepeatModes).NotEmpty();
             RuleFor(playlist => playlist.RepeatMode).NotNull();
 
             RuleFor(playlist => playlist.Items).NotNull();
