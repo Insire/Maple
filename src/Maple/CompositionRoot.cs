@@ -6,6 +6,7 @@ using DryIoc;
 using FluentValidation;
 using Maple.Domain;
 using Maple.Youtube;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MvvmScarletToolkit;
 using MvvmScarletToolkit.Abstractions;
@@ -31,6 +32,7 @@ namespace Maple
             RegisterServices();
             RegisterValidation();
             RegisterControls();
+            RegisterDataAccess();
 
             void RegisterLogging()
             {
@@ -114,6 +116,7 @@ namespace Maple
             {
                 c.Register<MediaPlayerFactory, MediaPlayerFactory>(Reuse.Singleton);
                 c.Register<PlaylistFactory, PlaylistFactory>(Reuse.Singleton);
+                c.Register<AudioDeviceFactory, AudioDeviceFactory>(Reuse.Transient);
                 c.Register<ISequenceService, SequenceService>();
                 c.Register<IYoutubeService, YoutubeService>(Reuse.Singleton);
                 c.Register<IAudioDeviceProvider, AudioDeviceProvider>(Reuse.Singleton);
@@ -139,6 +142,16 @@ namespace Maple
                 c.Register<IValidator<MediaPlayer>, MediaPlayerValidator>(Reuse.Singleton);
                 c.Register<IValidator<MediaPlayers>, MediaPlayersValidator>(Reuse.Singleton);
                 c.Register<IValidator<MediaItem>, MediaItemValidator>(Reuse.Singleton);
+            }
+
+            void RegisterDataAccess()
+            {
+                var builder = new DbContextOptionsBuilder<ApplicationDbContext>()
+                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                    .UseSqlite("Data Source=../maple.db;");
+
+                c.UseInstance(builder.Options);
+                c.Register<ApplicationDbContext, ApplicationDbContext>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
             }
 
             return c;

@@ -2,7 +2,7 @@ using System;
 
 namespace Maple.Domain
 {
-    public interface IMediaItem : IIsSelected, ISequence
+    public interface IMediaItem : ISequence
     {
         string Name { get; }
         string Location { get; }

@@ -10,31 +10,16 @@ using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    [DebuggerDisplay("{Name}, {Sequence}")]
+    [DebuggerDisplay("MediaPlayer: {Sequence}, {Name}")]
     public sealed class MediaPlayer : ViewModelBase, ISequence
     {
         private bool _disposed;
 
-        public bool IsPlaying => Player.IsPlaying;
-
-        private IMediaPlayer _player;
-        public IMediaPlayer Player
+        private int _id;
+        public int Id
         {
-            get { return _player; }
-            private set { SetValue(ref _player, value); }
-        }
-
-        public ICommand PlayCommand { get; private set; }
-        public ICommand PauseCommand { get; private set; }
-        public ICommand NextCommand { get; private set; }
-        public ICommand PreviousCommand { get; private set; }
-        public ICommand StopCommand { get; private set; }
-
-        private Playlist _playlist;
-        public Playlist Playlist
-        {
-            get { return _playlist; }
-            set { SetValue(ref _playlist, value); }
+            get { return _id; }
+            private set { SetValue(ref _id, value); }
         }
 
         private int _sequence;
@@ -62,34 +47,56 @@ namespace Maple
         public string CreatedBy
         {
             get { return _createdBy; }
-            set { SetValue(ref _createdBy, value); }
+            private set { SetValue(ref _createdBy, value); }
         }
 
         private string _updatedBy;
         public string UpdatedBy
         {
             get { return _updatedBy; }
-            set { SetValue(ref _updatedBy, value); }
+            private set { SetValue(ref _updatedBy, value); }
         }
 
         private DateTime _updatedOn;
         public DateTime UpdatedOn
         {
             get { return _updatedOn; }
-            set { SetValue(ref _updatedOn, value); }
+            private set { SetValue(ref _updatedOn, value); }
         }
 
         private DateTime _createdOn;
         public DateTime CreatedOn
         {
             get { return _createdOn; }
-            set { SetValue(ref _createdOn, value); }
+            private set { SetValue(ref _createdOn, value); }
         }
 
-        public MediaPlayer(IScarletCommandBuilder commandBuilder, IMediaPlayer player)
+        private Playlist _playlist;
+        public Playlist Playlist
+        {
+            get { return _playlist; }
+            set { SetValue(ref _playlist, value); }
+        }
+
+        private IPlaybackService _playback;
+        public IPlaybackService Playback
+        {
+            get { return _playback; }
+            private set { SetValue(ref _playback, value); }
+        }
+
+        public ICommand PlayCommand { get; }
+        public ICommand PauseCommand { get; }
+        public ICommand NextCommand { get; }
+        public ICommand PreviousCommand { get; }
+        public ICommand StopCommand { get; }
+
+        public bool IsPlaying => Playback.IsPlaying;
+
+        public MediaPlayer(IScarletCommandBuilder commandBuilder, IPlaybackService playbackService)
             : base(commandBuilder)
         {
-            Player = player ?? throw new ArgumentNullException(nameof(player));
+            Playback = playbackService ?? throw new ArgumentNullException(nameof(playbackService));
 
             PlayCommand = new RelayCommand<MediaItem>(CommandManager, Play, CanPlay);
             PreviousCommand = new RelayCommand(CommandManager, Previous, () => Playlist?.CanPrevious() == true && CanPrevious());
@@ -99,13 +106,34 @@ namespace Maple
         }
 
         public MediaPlayer(MediaPlayer mediaPlayer)
-            : this(mediaPlayer.CommandBuilder, mediaPlayer.Player)
+            : this(mediaPlayer.CommandBuilder, mediaPlayer.Playback)
         {
+            Id = mediaPlayer.Id;
             Name = mediaPlayer.Name;
             Sequence = mediaPlayer.Sequence;
+
             IsPrimary = mediaPlayer.IsPrimary;
             Playlist = mediaPlayer.Playlist;
-            Player = mediaPlayer.Player;
+            Playback = mediaPlayer.Playback;
+
+            CreatedBy = mediaPlayer.CreatedBy;
+            CreatedOn = mediaPlayer.CreatedOn;
+            UpdatedBy = mediaPlayer.UpdatedBy;
+            UpdatedOn = mediaPlayer.UpdatedOn;
+        }
+
+        public MediaPlayer(IScarletCommandBuilder commandBuilder, MediaPlayerModel mediaPlayer, Playlist playlist, IPlaybackService playbackService)
+            : this(commandBuilder, playbackService)
+        {
+            Id = mediaPlayer.Id;
+            Name = mediaPlayer.Name;
+            Sequence = mediaPlayer.Sequence;
+
+            IsPrimary = mediaPlayer.IsPrimary;
+
+            Playlist = playlist;
+            Playback = playbackService;
+
             CreatedBy = mediaPlayer.CreatedBy;
             CreatedOn = mediaPlayer.CreatedOn;
             UpdatedBy = mediaPlayer.UpdatedBy;
@@ -116,6 +144,8 @@ namespace Maple
         {
             if (mediaItem is null)
                 throw new ArgumentNullException(nameof(mediaItem));
+
+            // TODO
 
             OnPropertyChanged(nameof(IsPlaying));
         }
@@ -129,7 +159,9 @@ namespace Maple
             using (BusyStack.GetToken())
             {
                 foreach (var item in mediaItems)
+                {
                     await Playlist.Add(item).ConfigureAwait(false);
+                }
             }
         }
 
@@ -140,7 +172,9 @@ namespace Maple
         public async Task Remove(MediaItem item)
         {
             using (BusyStack.GetToken())
+            {
                 await Playlist.Remove(item).ConfigureAwait(false);
+            }
         }
 
         /// <summary>
@@ -149,7 +183,9 @@ namespace Maple
         public void Pause()
         {
             using (BusyStack.GetToken())
-                Player.Pause();
+            {
+                Playback.Pause();
+            }
 
             OnPropertyChanged(nameof(IsPlaying));
         }
@@ -160,7 +196,9 @@ namespace Maple
         public void Stop()
         {
             using (BusyStack.GetToken())
-                Player.Stop();
+            {
+                Playback.Stop();
+            }
 
             OnPropertyChanged(nameof(IsPlaying));
         }
@@ -198,6 +236,7 @@ namespace Maple
         public bool CanNext()
         {
             var item = Playlist.Next();
+
             return CanPlay(item);
         }
 
@@ -210,6 +249,7 @@ namespace Maple
         public bool CanPrevious()
         {
             var item = Playlist.Previous();
+
             return CanPlay(item);
         }
 
@@ -221,7 +261,7 @@ namespace Maple
         /// </returns>
         public bool CanPause()
         {
-            return Player.CanPause();
+            return Playback.CanPause();
         }
 
         /// <summary>
@@ -232,7 +272,7 @@ namespace Maple
         /// </returns>
         public bool CanStop()
         {
-            return Player.CanStop();
+            return Playback.CanStop();
         }
 
         /// <summary>
@@ -244,7 +284,7 @@ namespace Maple
         /// </returns>
         private bool CanPlay(MediaItem item)
         {
-            return Player.CanPlay(item);
+            return Playback.CanPlay(item);
         }
 
         protected override void Dispose(bool disposing)
@@ -253,17 +293,20 @@ namespace Maple
             {
                 return;
             }
+
             _disposed = true;
 
             if (IsPlaying)
+            {
                 Stop();
+            }
 
             if (disposing)
             {
-                if (Player != null)
+                if (Playback != null)
                 {
-                    Player?.Dispose();
-                    Player = null;
+                    Playback?.Dispose();
+                    Playback = null;
                 }
             }
 

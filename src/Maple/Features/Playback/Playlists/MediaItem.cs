@@ -6,9 +6,16 @@ using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    [DebuggerDisplay("{Title}, {Sequence} {Location}")]
+    [DebuggerDisplay("MediaItem: {Sequence}, {Name}, {Location}")]
     public sealed class MediaItem : ViewModelBase, IMediaItem
     {
+        private int _id;
+        public int Id
+        {
+            get { return _id; }
+            private set { SetValue(ref _id, value); }
+        }
+
         private int _sequence;
         public int Sequence
         {
@@ -34,7 +41,7 @@ namespace Maple
         public string Location
         {
             get { return _location; }
-            private set { SetValue(ref _location, value); }
+            set { SetValue(ref _location, value); }
         }
 
         private Playlist _playlist;
@@ -48,14 +55,14 @@ namespace Maple
         public TimeSpan Duration
         {
             get { return _duration; }
-            private set { SetValue(ref _duration, value); }
+            set { SetValue(ref _duration, value); }
         }
 
         private PrivacyStatus _privacyStatus;
         public PrivacyStatus PrivacyStatus
         {
             get { return _privacyStatus; }
-            private set { SetValue(ref _privacyStatus, value); }
+            set { SetValue(ref _privacyStatus, value); }
         }
 
         private MediaItemType _mediaItemType;
@@ -76,7 +83,7 @@ namespace Maple
         public string CreatedBy
         {
             get { return _createdBy; }
-            private set { SetValue(ref _createdBy, value); }
+            set { SetValue(ref _createdBy, value); }
         }
 
         private string _updatedBy;
@@ -97,7 +104,7 @@ namespace Maple
         public DateTime CreatedOn
         {
             get { return _createdOn; }
-            private set { SetValue(ref _createdOn, value); }
+            set { SetValue(ref _createdOn, value); }
         }
 
         public MediaItem(IScarletCommandBuilder commandBuilder)
@@ -108,23 +115,43 @@ namespace Maple
         public MediaItem(MediaItem mediaItem)
             : this(mediaItem.CommandBuilder)
         {
+            Id = mediaItem.Id;
             Name = mediaItem.Name;
             Sequence = mediaItem.Sequence;
+
             Location = mediaItem.Location;
             Thumbnail = mediaItem.Thumbnail;
             Duration = mediaItem.Duration;
             MediaItemType = mediaItem.MediaItemType;
             PrivacyStatus = mediaItem.PrivacyStatus;
+
             Playlist = mediaItem.Playlist;
+
             CreatedBy = mediaItem.CreatedBy;
             CreatedOn = mediaItem.CreatedOn;
             UpdatedBy = mediaItem.UpdatedBy;
             UpdatedOn = mediaItem.UpdatedOn;
         }
 
-        public override string ToString()
+        public MediaItem(IScarletCommandBuilder commandBuilder, MediaItemModel mediaItem, Playlist playlist)
+            : this(commandBuilder)
         {
-            return Name?.Length == 0 ? Location : Name;
+            Id = mediaItem.Id;
+            Name = mediaItem.Name;
+            Sequence = mediaItem.Sequence;
+
+            Location = mediaItem.Location;
+            Thumbnail = mediaItem.Thumbnail;
+            Duration = mediaItem.Duration;
+            MediaItemType = mediaItem.MediaItemType;
+            PrivacyStatus = mediaItem.PrivacyStatus;
+
+            Playlist = playlist;
+
+            CreatedBy = mediaItem.CreatedBy;
+            CreatedOn = mediaItem.CreatedOn;
+            UpdatedBy = mediaItem.UpdatedBy;
+            UpdatedOn = mediaItem.UpdatedOn;
         }
     }
 }

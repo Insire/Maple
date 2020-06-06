@@ -15,7 +15,7 @@ namespace Maple
     /// Generic CollectionViewModelBase that provides common services required in Maple
     /// </summary>
     public abstract class MapleBusinessViewModelListBase<TModel, TViewModel> : MapleBusinessViewModelListBase<TViewModel>
-        where TModel : class, IBaseObject
+        where TModel : class, IEntity
         where TViewModel : MapleBusinessViewModelBase<TModel>, ISequence
     {
         private TModel _model;

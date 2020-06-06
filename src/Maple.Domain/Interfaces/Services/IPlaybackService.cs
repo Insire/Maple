@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
 namespace Maple.Domain
 {
-    public interface IMediaPlayer : IDisposable
+    public interface IPlaybackService : IDisposable
     {
         /// <summary>
         /// Gets a value indicating whether this instance is playing.
@@ -83,6 +83,6 @@ namespace Maple.Domain
         /// <value>
         /// The audio device.
         /// </value>
-        IAudioDevice AudioDevice { get; set; }
+        object AudioDevice { get; set; }
     }
 }

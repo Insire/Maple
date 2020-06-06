@@ -10,9 +10,16 @@ using MvvmScarletToolkit.Observables;
 namespace Maple
 {
     [DebuggerDisplay("{Title}, {Sequence}")]
-    public sealed class Playlist : ViewModelListBase<MediaItem>, IIsSelected, ISequence
+    public sealed class Playlist : ViewModelListBase<MediaItem>, IPlaylist
     {
         private readonly Stack<int> _history;
+
+        private int _id;
+        public int Id
+        {
+            get { return _id; }
+            private set { SetValue(ref _id, value); }
+        }
 
         private int _sequence;
         public int Sequence
@@ -21,11 +28,18 @@ namespace Maple
             set { SetValue(ref _sequence, value); }
         }
 
-        private PrivacyStatus _privacyStatus;
-        public PrivacyStatus PrivacyStatus
+        private string _name;
+        public string Name
         {
-            get { return _privacyStatus; }
-            private set { SetValue(ref _privacyStatus, value); }
+            get { return _name; }
+            set { SetValue(ref _name, value); }
+        }
+
+        private string _thumbnail;
+        public string Thumbnail
+        {
+            get { return _thumbnail; }
+            set { SetValue(ref _thumbnail, value); }
         }
 
         private bool _isSelected;
@@ -42,18 +56,11 @@ namespace Maple
             set { SetValue(ref _isShuffeling, value); }
         }
 
-        private string _title;
-        public string Title
+        private PrivacyStatus _privacyStatus;
+        public PrivacyStatus PrivacyStatus
         {
-            get { return _title; }
-            set { SetValue(ref _title, value); }
-        }
-
-        private string _thumbnail;
-        public string Thumbnail
-        {
-            get { return _thumbnail; }
-            set { SetValue(ref _thumbnail, value); }
+            get { return _privacyStatus; }
+            set { SetValue(ref _privacyStatus, value); }
         }
 
         private RepeatMode _repeatMode;
@@ -63,21 +70,63 @@ namespace Maple
             set { SetValue(ref _repeatMode, value); }
         }
 
+        private string _createdBy;
+        public string CreatedBy
+        {
+            get { return _createdBy; }
+            private set { SetValue(ref _createdBy, value); }
+        }
+
+        private string _updatedBy;
+        public string UpdatedBy
+        {
+            get { return _updatedBy; }
+            private set { SetValue(ref _updatedBy, value); }
+        }
+
+        private DateTime _updatedOn;
+        public DateTime UpdatedOn
+        {
+            get { return _updatedOn; }
+            private set { SetValue(ref _updatedOn, value); }
+        }
+
+        private DateTime _createdOn;
+        public DateTime CreatedOn
+        {
+            get { return _createdOn; }
+            private set { SetValue(ref _createdOn, value); }
+        }
+
+        /// <summary>
+        /// default
+        /// </summary>
         public Playlist(IScarletCommandBuilder commandBuilder)
             : base(commandBuilder)
         {
             _history = new Stack<int>();
         }
 
+        /// <summary>
+        /// copy constructor
+        /// </summary>
         public Playlist(Playlist playlist)
             : this(playlist.CommandBuilder)
         {
+            Id = playlist.Id;
+            Name = playlist.Name;
             Sequence = playlist.Sequence;
-            PrivacyStatus = playlist.PrivacyStatus;
-            IsSelected = playlist.IsSelected;
-            Title = playlist.Title;
+
             Thumbnail = playlist.Thumbnail;
+            PrivacyStatus = playlist.PrivacyStatus;
             RepeatMode = playlist.RepeatMode;
+            IsSelected = playlist.IsSelected;
+            IsShuffeling = playlist.IsShuffeling;
+
+            CreatedBy = playlist.CreatedBy;
+            CreatedOn = playlist.CreatedOn;
+            UpdatedBy = playlist.UpdatedBy;
+            UpdatedOn = playlist.UpdatedOn;
 
             for (var i = 0; i < playlist.Count; i++)
             {
@@ -85,6 +134,33 @@ namespace Maple
 
                 AddUnchecked(item);
                 item.Playlist = this;
+            }
+        }
+
+        /// <summary>
+        /// ctor for turning a model into a VM
+        /// </summary>
+        public Playlist(IScarletCommandBuilder commandBuilder, PlaylistModel playlist)
+            : this(commandBuilder)
+        {
+            Id = playlist.Id;
+            Name = playlist.Name;
+            Sequence = playlist.Sequence;
+
+            Thumbnail = playlist.Thumbnail;
+            PrivacyStatus = playlist.PrivacyStatus;
+            RepeatMode = playlist.RepeatMode;
+            IsShuffeling = playlist.IsShuffeling;
+
+            CreatedBy = playlist.CreatedBy;
+            CreatedOn = playlist.CreatedOn;
+            UpdatedBy = playlist.UpdatedBy;
+            UpdatedOn = playlist.UpdatedOn;
+
+            for (var i = 0; i < playlist.MediaItems.Count; i++)
+            {
+                var item = playlist.MediaItems[i];
+                AddUnchecked(new MediaItem(commandBuilder, item, this));
             }
         }
 
@@ -118,7 +194,9 @@ namespace Maple
         {
             var currentIndex = 0;
             if (SelectedItem?.Sequence != null)
+            {
                 currentIndex = SelectedItem?.Sequence ?? 0;
+            }
 
             if (Items.Count > 1)
             {
@@ -136,22 +214,30 @@ namespace Maple
                 // we dont repeat, so there is nothing to do here
             }
             else
+            {
                 return NextRepeatSingle();
+            }
         }
 
         private MediaItem NextRepeatSingle()
         {
             if (RepeatMode != RepeatMode.None)
+            {
                 return SelectedItem;
+            }
             else
+            {
                 return null;
+            }
         }
 
         private MediaItem NextRepeatAll()
         {
             var currentIndex = 0;
             if (SelectedItem?.Sequence != null)
+            {
                 currentIndex = SelectedItem?.Sequence ?? 0;
+            }
 
             if (Items.Count > 1)
             {
@@ -162,6 +248,7 @@ namespace Maple
                     Items.ToList().ForEach(p => p.IsSelected = false);
                     var foundItem = nextPossibleItems.Where(q => q.Sequence == nextPossibleItems.Select(p => p.Sequence).Min()).First();
                     foundItem.IsSelected = true;
+
                     return foundItem;
                 }
                 else // if there are none, use the first item in the list
@@ -169,11 +256,14 @@ namespace Maple
                     Items.ToList().ForEach(p => p.IsSelected = false);
                     var foundItem = Items.First();
                     foundItem.IsSelected = true;
+
                     return foundItem;
                 }
             }
             else
+            {
                 return NextRepeatSingle();
+            }
         }
 
         private MediaItem NextShuffle()
@@ -184,10 +274,13 @@ namespace Maple
                 Items.ToList().ForEach(p => p.IsSelected = false);
                 var foundItem = nextItems.Random();
                 foundItem.IsSelected = true;
+
                 return foundItem;
             }
             else
+            {
                 return NextRepeatSingle();
+            }
         }
 
         public MediaItem Previous()
@@ -218,6 +311,7 @@ namespace Maple
                         }
                     }
                 }
+
                 return null;
             }
         }

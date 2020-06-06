@@ -3,7 +3,7 @@
 namespace Maple.Domain
 {
     [DebuggerDisplay("{Key}, {Value}, {Type}")]
-    public class OptionModel : BaseObject<int>
+    public class OptionModel : Entity<int>
     {
         public string Value { get; set; }
         public int Type { get; set; }

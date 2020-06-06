@@ -1,7 +1,17 @@
+using System;
+
 namespace Maple.Domain
 {
-    public interface IEntity<out TKey> : IBaseObject
+    public interface IEntity : ISequence
     {
-        TKey Id { get; }
+        string CreatedBy { get; set; }
+        DateTime CreatedOn { get; set; }
+
+        string UpdatedBy { get; set; }
+        DateTime UpdatedOn { get; set; }
+
+        bool IsNew { get; }
+
+        bool IsDeleted { get; set; }
     }
 }

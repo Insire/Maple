@@ -38,6 +38,7 @@
     <PackageReference Include="Jot" Version="2.1.4" />
     <PackageReference Include="LiteDB" Version="5.0.8" />
     <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.4" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.4" />
     <PackageReference Include="MvvmScarletToolkit.Wpf" Version="2.1.33-gf1a509ce12" />
     <PackageReference Include="NAudio" Version="1.10.0" />

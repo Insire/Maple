@@ -1,12 +1,17 @@
-﻿using NAudio.Wave;
+using System;
+using NAudio.Wave;
 
 namespace Maple
 {
-    internal sealed class DirectSoundDevice : BaseDevice
+    internal sealed class DirectSoundDevice : AudioDevice
     {
-        public DirectSoundDevice(DirectSoundDeviceInfo directSoundDeviceInfo)
+        public DirectSoundDeviceInfo Device { get; }
+
+        public DirectSoundDevice(DirectSoundDeviceInfo device)
+            : base(device?.ModuleName)
         {
-            Name = directSoundDeviceInfo.ModuleName;
+            Device = device ?? throw new ArgumentNullException(nameof(device));
+            Name = device.ModuleName;
         }
     }
 }

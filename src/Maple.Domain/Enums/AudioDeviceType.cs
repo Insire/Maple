@@ -1,9 +1,9 @@
-﻿namespace Maple.Domain
+namespace Maple.Domain
 {
-    public enum AudioDeviceType
+    public enum DeviceType
     {
         None = 0,
-        Waveout = 1,
+        WaveOut = 1,
         DirectSound = 2,
         WASAPI = 3,
         ASIO = 4,

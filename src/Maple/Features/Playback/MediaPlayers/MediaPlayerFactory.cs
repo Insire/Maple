@@ -1,3 +1,5 @@
+using System.Linq;
+using Maple.Domain;
 using MvvmScarletToolkit;
 
 namespace Maple
@@ -15,9 +17,18 @@ namespace Maple
             _playlists = playlists ?? throw new System.ArgumentNullException(nameof(playlists));
         }
 
+        public MediaPlayer Create(MediaPlayerModel model)
+        {
+            var playlist = _playlists.Items.FirstOrDefault(p => p.Id == model.PlaylistId);
+
+            var result = new MediaPlayer(_commandBuilder, model, playlist, null);
+
+            return result;
+        }
+
         public CreateMediaPlayerViewModel Create()
         {
-            var playerViewModel = new MediaPlayer(_commandBuilder, new MaplePlayer(_commandBuilder));
+            var playerViewModel = new MediaPlayer(_commandBuilder, new MaplePlaybackService(_commandBuilder));
 
             return Create(playerViewModel);
         }

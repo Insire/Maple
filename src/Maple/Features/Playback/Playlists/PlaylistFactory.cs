@@ -1,4 +1,5 @@
 using System;
+using Maple.Domain;
 using MvvmScarletToolkit;
 
 namespace Maple
@@ -10,6 +11,11 @@ namespace Maple
         public PlaylistFactory(IScarletCommandBuilder commandBuilder)
         {
             _commandBuilder = commandBuilder ?? throw new ArgumentNullException(nameof(commandBuilder));
+        }
+
+        public Playlist Create(PlaylistModel model)
+        {
+            return new Playlist(_commandBuilder, model);
         }
 
         public CreatePlaylistViewModel Create()

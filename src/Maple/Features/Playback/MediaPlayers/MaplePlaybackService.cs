@@ -3,9 +3,9 @@ using MvvmScarletToolkit;
 
 namespace Maple
 {
-    public sealed class MaplePlayer : BasePlayer
+    public sealed class MaplePlaybackService : PlaybackServiceBase
     {
-        public MaplePlayer(IScarletCommandBuilder commandBuilder)
+        public MaplePlaybackService(IScarletCommandBuilder commandBuilder)
             : base(commandBuilder)
         {
         }

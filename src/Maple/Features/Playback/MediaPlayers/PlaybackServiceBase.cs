@@ -4,21 +4,21 @@ using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    public abstract class BasePlayer : ViewModelBase, IMediaPlayer
+    public abstract class PlaybackServiceBase : ViewModelBase, IPlaybackService
     {
-        private IAudioDevice _audioDevice;
-        public IAudioDevice AudioDevice
+        private object _audioDevice;
+        public object AudioDevice
         {
             get { return _audioDevice; }
             set
             {
                 SetValue(ref _audioDevice, value,
-                                onChanging: () => Messenger.Publish(new ViewModelListBaseSelectionChanging<IAudioDevice>(this, _audioDevice)),
-                                onChanged: () => Messenger.Publish(new ViewModelListBaseSelectionChanged<IAudioDevice>(this, value)));
+                                onChanging: () => Messenger.Publish(new ViewModelListBaseSelectionChanging<object>(this, _audioDevice)),
+                                onChanged: () => Messenger.Publish(new ViewModelListBaseSelectionChanged<object>(this, value)));
             }
         }
 
-        protected BasePlayer(IScarletCommandBuilder commandBuilder)
+        protected PlaybackServiceBase(IScarletCommandBuilder commandBuilder)
             : base(commandBuilder)
         {
         }

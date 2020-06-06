@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using MvvmScarletToolkit;
 using MvvmScarletToolkit.Observables;
 
@@ -8,47 +9,21 @@ namespace Maple
 {
     internal sealed class ShellViewModel : BusinessViewModelBase
     {
-        private MetaDataViewModel _metaDataViewModel;
-        public MetaDataViewModel MetaDataViewModel
-        {
-            get { return _metaDataViewModel; }
-            private set { SetValue(ref _metaDataViewModel, value); }
-        }
+        private readonly Func<ApplicationDbContext> _dbcontextFactory;
+        private readonly PlaylistFactory _playlistFactory;
+        private readonly MediaPlayerFactory _mediaPlayerFactory;
+        private readonly Func<AudioDeviceFactory> _audioDeviceFactory;
 
-        private NavigationViewModel _navigationViewModel;
-        public NavigationViewModel NavigationViewModel
-        {
-            get { return _navigationViewModel; }
-            private set { SetValue(ref _navigationViewModel, value); }
-        }
+        public MetaDataViewModel MetaDataViewModel { get; }
 
-        private LocalizationsViewModel _localizations;
-        public LocalizationsViewModel Localizations
-        {
-            get { return _localizations; }
-            private set { SetValue(ref _localizations, value); }
-        }
+        public NavigationViewModel NavigationViewModel { get; }
 
-        private Playlists _playlists;
-        public Playlists Playlists
-        {
-            get { return _playlists; }
-            private set { SetValue(ref _playlists, value); }
-        }
+        public LocalizationsViewModel Localizations { get; }
 
-        private MediaPlayers _mediaPlayers;
-        public MediaPlayers MediaPlayers
-        {
-            get { return _mediaPlayers; }
-            private set { SetValue(ref _mediaPlayers, value); }
-        }
-
-        private OptionsViewModel _optionsViewModel;
-        public OptionsViewModel OptionsViewModel
-        {
-            get { return _optionsViewModel; }
-            private set { SetValue(ref _optionsViewModel, value); }
-        }
+        public Playlists Playlists { get; }
+        public MediaPlayers MediaPlayers { get; }
+        public AudioDevices AudioDevices { get; }
+        public OptionsViewModel OptionsViewModel { get; }
 
         public ShellViewModel(IScarletCommandBuilder commandBuilder,
                                 LocalizationsViewModel localizationsViewModel,
@@ -56,7 +31,12 @@ namespace Maple
                                 MetaDataViewModel metaDataViewModel,
                                 Playlists playlists,
                                 MediaPlayers mediaPlayers,
-                                OptionsViewModel optionsViewModel)
+                                AudioDevices audioDevices,
+                                OptionsViewModel optionsViewModel,
+                                Func<ApplicationDbContext> dbcontextFactory,
+                                PlaylistFactory playlistFactory,
+                                MediaPlayerFactory mediaPlayerFactory,
+                                Func<AudioDeviceFactory> audioDeviceFactory)
             : base(commandBuilder)
         {
             Localizations = localizationsViewModel ?? throw new ArgumentNullException(nameof(localizationsViewModel));
@@ -64,7 +44,13 @@ namespace Maple
             MetaDataViewModel = metaDataViewModel ?? throw new ArgumentNullException(nameof(metaDataViewModel));
             Playlists = playlists ?? throw new ArgumentNullException(nameof(playlists));
             MediaPlayers = mediaPlayers ?? throw new ArgumentNullException(nameof(mediaPlayers));
+            AudioDevices = audioDevices ?? throw new ArgumentNullException(nameof(audioDevices));
             OptionsViewModel = optionsViewModel ?? throw new ArgumentNullException(nameof(optionsViewModel));
+
+            _dbcontextFactory = dbcontextFactory ?? throw new ArgumentNullException(nameof(dbcontextFactory));
+            _playlistFactory = playlistFactory ?? throw new ArgumentNullException(nameof(playlistFactory));
+            _mediaPlayerFactory = mediaPlayerFactory ?? throw new ArgumentNullException(nameof(mediaPlayerFactory));
+            _audioDeviceFactory = audioDeviceFactory ?? throw new ArgumentNullException(nameof(audioDeviceFactory));
         }
 
         protected override Task UnloadInternal(CancellationToken token)
@@ -74,17 +60,53 @@ namespace Maple
             return Task.CompletedTask;
         }
 
-        protected override Task RefreshInternal(CancellationToken token)
+        protected override async Task RefreshInternal(CancellationToken token)
         {
-            // all audio devices
-            // all playlists
-            // all playlist contents
+            using (var context = _dbcontextFactory())
+            {
+                // fetch all settings
+
+                // TODO
+
+                // fetch all playlists and their mediaitems
+                var playlists = await context.Playlists.ToListAsync(token);
+                await Playlists.Clear();
+
+                foreach (var playlist in playlists)
+                {
+                    var viewmodel = _playlistFactory.Create(playlist);
+
+                    await Playlists.Add(viewmodel);
+                }
+
+                // fetch all audio devices
+                var devices = await context.AudioDevices.ToListAsync(token);
+                await AudioDevices.Clear();
+
+                var audioDeviceFactory = _audioDeviceFactory();
+                foreach (var device in devices)
+                {
+                    var viewmodel = await audioDeviceFactory.Create(device, token);
+
+                    await AudioDevices.Add(viewmodel);
+                }
+
+                // fetch all media players
+                var players = await context.Mediaplayers.ToListAsync(token);
+                await MediaPlayers.Clear();
+
+                foreach (var player in players)
+                {
+                    var viewmodel = _mediaPlayerFactory.Create(player);
+
+                    await MediaPlayers.Add(viewmodel);
+                }
+            }
+
             // current/ last mediaplayer
             // current /last culture
 
             // deserialize all media players first, thgen deserialize playlists
-
-            return Task.CompletedTask;
         }
     }
 }

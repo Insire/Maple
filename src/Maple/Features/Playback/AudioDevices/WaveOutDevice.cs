@@ -1,16 +1,19 @@
-﻿using Maple.Domain;
+using Maple.Domain;
 using NAudio.Wave;
 
 namespace Maple
 {
-    internal sealed class WaveOutDevice : BaseDevice
+    internal sealed class WaveOutDevice : AudioDevice
     {
-        public WaveOutDevice(WaveOutCapabilities capabilities)
-        {
-            Channels = capabilities.Channels;
-            Name = capabilities.ProductName;
+        public WaveOutCapabilities Device { get; }
 
-            Type = AudioDeviceType.Waveout;
+        public WaveOutDevice(WaveOutCapabilities device)
+            : base(device.ProductName)
+        {
+            Name = device.ProductName;
+            Device = device;
+
+            DeviceType = DeviceType.WaveOut;
         }
     }
 }

@@ -2,17 +2,17 @@ using System.Diagnostics;
 
 namespace Maple.Domain
 {
-    [DebuggerDisplay("{Name}, {DeviceName}, {Sequence}")]
-    public class MediaPlayerModel : BaseObject<int>
+    [DebuggerDisplay("MediaPlayerModel: {Sequence}, {Name}")]
+    public class MediaPlayerModel : Entity<int>
     {
+        public bool IsPrimary { get; set; }
+
         public int? PlaylistId { get; set; }
 
         public virtual PlaylistModel Playlist { get; set; }
 
-        public string DeviceName { get; set; }
+        public int? AudioDeviceId { get; set; }
 
-        public bool IsPrimary { get; set; }
-
-        public string Name { get; set; }
+        public virtual AudioDeviceModel AudioDevice { get; set; }
     }
 }

@@ -8,8 +8,8 @@ namespace Maple
         public PlaylistValidator(ILocalizationService translationService, IValidator<MediaItem> mediaItemValidator)
             : base(translationService)
         {
-            RuleFor(playlist => playlist.Title).NotEmpty();
-            RuleFor(playlist => playlist.Title).Length(1, 1024);
+            RuleFor(playlist => playlist.Name).NotEmpty();
+            RuleFor(playlist => playlist.Name).Length(1, 64);
 
             RuleFor(playlist => playlist.Thumbnail).NotEmpty();
             RuleFor(playlist => playlist.Thumbnail).Length(0, 260); // max windows path length https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file

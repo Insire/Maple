@@ -39,7 +39,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
     </Style>
 
-    <DataTemplate DataType="{x:Type local:BaseDevice}">
+    <DataTemplate DataType="{x:Type local:AudioDevice}">
         <TextBlock Text="{Binding Name}" />
     </DataTemplate>
 
