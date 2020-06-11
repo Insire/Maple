@@ -26,6 +26,7 @@ namespace Maple
         private readonly IScarletCommandBuilder _commandBuilder;
 
         public DialogWindow()
+            : base()
         {
         }
 

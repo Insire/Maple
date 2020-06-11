@@ -206,8 +206,8 @@
                                                         Binding="{Binding Sequence}"
                                                         Header="#" />
                                     <DataGridTextColumn Width="*"
-                                                        Binding="{Binding Title}"
-                                                        Header="Title" />
+                                                        Binding="{Binding Name}"
+                                                        Header="Name" />
                                     <DataGridTextColumn Width="Auto"
                                                         Binding="{Binding Duration}"
                                                         Header="Duration" />

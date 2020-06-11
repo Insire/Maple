@@ -18,16 +18,16 @@ namespace Maple
             return new Playlist(_commandBuilder, model);
         }
 
-        public CreatePlaylistViewModel Create()
+        public CreatePlaylistViewModel Create(Playlists playlists)
         {
             var playerViewModel = new Playlist(new Playlist(_commandBuilder));
 
-            return Create(playerViewModel);
+            return Create(playlists, playerViewModel);
         }
 
-        public CreatePlaylistViewModel Create(Playlist playlist)
+        public CreatePlaylistViewModel Create(Playlists playlists, Playlist playlist)
         {
-            return new CreatePlaylistViewModel(playlist);
+            return new CreatePlaylistViewModel(playlists, playlist);
         }
     }
 }

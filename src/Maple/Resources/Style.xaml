@@ -95,11 +95,11 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:Playlist}">
-        <TextBlock Text="{Binding Title}" />
+        <TextBlock Text="{Binding Name}" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:MediaItem}">
-        <TextBlock Text="{Binding Title}" />
+        <TextBlock Text="{Binding Name}" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:Playlists}">
