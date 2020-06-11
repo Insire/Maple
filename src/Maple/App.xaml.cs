@@ -21,10 +21,10 @@ namespace Maple
 
         public App()
         {
-            _tracker = new Tracker(new JsonFileStore(Environment.SpecialFolder.ApplicationData));
+            _tracker = new Tracker(new JsonFileStore(perUser: true));
 
             _tracker.Configure<Shell>()
-                .Id(w => w.Name)
+                .Id(w => $"[Width={SystemParameters.VirtualScreenWidth},Height{SystemParameters.VirtualScreenHeight}]")
                 .Properties(w => new { w.Height, w.Width, w.Left, w.Top, w.WindowState })
                 .PersistOn(nameof(Window.Closing))
                 .StopTrackingOn(nameof(Window.Closing));

@@ -10,7 +10,7 @@
                     x:Name="CreatePlaylistDialogRoot"
                     Title="Create Playlist"
                     Width="800"
-                    Height="450"
+                    Height="425"
                     WindowStartupLocation="CenterOwner"
                     mc:Ignorable="d">
 
