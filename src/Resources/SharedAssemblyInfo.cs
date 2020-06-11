@@ -7,11 +7,11 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Maple")]
+[assembly: AssemblyProduct("SoftThorn")]
 [assembly: AssemblyVersion("0.0.1")]
 [assembly: AssemblyFileVersion("0.0.1")]
 [assembly: AssemblyInformationalVersion("0.0.0.1")]
-[assembly: AssemblyCopyright("© 2019 Insire")]
+[assembly: AssemblyCopyright("© 2020 Insire")]
 [assembly: AssemblyTrademark("")]
 [assembly: ComVisible(false)]
 

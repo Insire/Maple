@@ -1,9 +1,13 @@
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using DryIoc;
 using FluentValidation;
+using Jot;
+using Jot.Storage;
 using Maple.Domain;
 using Maple.Youtube;
 using Microsoft.EntityFrameworkCore;
@@ -23,23 +27,31 @@ namespace Maple
 {
     public static class CompositionRoot
     {
-        public static IContainer Get()
+        public static DryIoc.IContainer Get()
         {
-            var c = new Container();
+            var assemblyName = typeof(CompositionRoot).Assembly.GetName();
+            var version = assemblyName.Version;
+
+            var settingsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SoftThorn", "Maple");
+            var logDirectory = Path.Combine(settingsDirectory, "logs");
+
+            Directory.CreateDirectory(settingsDirectory);
+            Directory.CreateDirectory("logs");
+
+            var c = new DryIoc.Container();
 
             RegisterLogging();
             RegisterViewModels();
             RegisterServices();
             RegisterValidation();
-            RegisterControls();
+            RegisterGui();
             RegisterDataAccess();
 
             void RegisterLogging()
             {
-                Directory.CreateDirectory("logs");
                 var fileConfiguration = new LoggingFileConfiguration()
                 {
-                    PathFormat = "..\\logs\\{Date}.log",
+                    PathFormat = Path.Combine(logDirectory, $"{version}_maple.log"),
                     FileSizeLimitBytes = 1073741824,
                     RetainedFileCountLimit = 1,
                 };
@@ -60,7 +72,7 @@ namespace Maple
 
             Logger CreateLogger(LoggingFileConfiguration config)
             {
-                var formatter = new MessageTemplateTextFormatter("{Timestamp:o} {RequestId,13} [{Level:u3}] ({ThreadId}) ({SourceContext}) {Message} ({EventId:x8}){NewLine}{Exception}", null);
+                var formatter = new MessageTemplateTextFormatter("{Timestamp:o} {RequestId,13} [{Level:u3}] ({SourceContext}) ({ThreadId}) ({EventId:x8}) {Message}{NewLine}{Exception}", null);
                 var logConfiguration = new LoggerConfiguration()
                     .MinimumLevel.Is(LogEventLevel.Verbose)
                     .Enrich.FromLogContext()
@@ -79,10 +91,21 @@ namespace Maple
                 return logConfiguration.CreateLogger();
             }
 
-            void RegisterControls()
+            void RegisterGui()
             {
-                c.Register<Shell>();
+                var tracker = new Tracker(new JsonFileStore(perUser: true));
+                tracker.Configure<Shell>()
+                    .Id(w => $"[Width={SystemParameters.VirtualScreenWidth},Height{SystemParameters.VirtualScreenHeight}]")
+                    .Properties(w => new { w.Height, w.Width, w.Left, w.Top, w.WindowState })
+                    .PersistOn(nameof(Window.Closing))
+                    .StopTrackingOn(nameof(Window.Closing));
+
+                c.UseInstance(new Uri("/Maple;component/Resources/Style.xaml", UriKind.RelativeOrAbsolute));
+                c.UseInstance(tracker);
+
+                c.Register<Shell>(Reuse.Singleton);
                 c.Register<SplashScreen>();
+                c.Register<IoCResourceDictionary>(Reuse.Singleton, Made.Of(() => new IoCResourceDictionary(Arg.Of<ILocalizationService>(), Arg.Of<IScarletEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>>(), Arg.Of<Uri>())));
             }
 
             void RegisterViewModels()
@@ -146,9 +169,10 @@ namespace Maple
 
             void RegisterDataAccess()
             {
+                var path = Path.Combine(settingsDirectory, "maple.db");
                 var builder = new DbContextOptionsBuilder<ApplicationDbContext>()
                     .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-                    .UseSqlite("Data Source=../maple.db;");
+                    .UseSqlite($"Data Source={path};");
 
                 c.UseInstance(builder.Options);
                 c.Register<ApplicationDbContext, ApplicationDbContext>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));

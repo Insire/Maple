@@ -1,55 +1,46 @@
 using System;
-using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using DryIoc;
 using Jot;
-using Jot.Storage;
 using Microsoft.Extensions.Logging;
-using MvvmScarletToolkit.Abstractions;
 
 namespace Maple
 {
     public partial class App : Application
     {
-        private DryIoc.IContainer _container;
-        private ILogger _log;
-
         private readonly Tracker _tracker;
+
+        private readonly IContainer _container;
+        private readonly ILogger _log;
 
         public App()
         {
-            _tracker = new Tracker(new JsonFileStore(perUser: true));
+            _container = CompositionRoot.Get();
+            _tracker = _container.Resolve<Tracker>();
+            _log = _container.Resolve<ILoggerFactory>().CreateLogger<App>();
 
-            _tracker.Configure<Shell>()
-                .Id(w => $"[Width={SystemParameters.VirtualScreenWidth},Height{SystemParameters.VirtualScreenHeight}]")
-                .Properties(w => new { w.Height, w.Width, w.Left, w.Top, w.WindowState })
-                .PersistOn(nameof(Window.Closing))
-                .StopTrackingOn(nameof(Window.Closing));
+            _log.LogInformation(Maple.Properties.Resources.AppStart);
         }
 
         protected override async void OnStartup(StartupEventArgs e)
         {
+            _log.LogInformation(Maple.Properties.Resources.AppStartLoadUI);
             base.OnStartup(e);
 
             DispatcherUnhandledException += App_DispatcherUnhandledException;
 
-            _container = CompositionRoot.Get();
-            _container.UseInstance(_tracker);
+            var styles = _container.Resolve<IoCResourceDictionary>();
 
-            var localizationService = _container.Resolve<ILocalizationService>();
-            var loggerFactory = _container.Resolve<ILoggerFactory>();
-            var weakEventManager = _container.Resolve<IScarletEventManager<INotifyPropertyChanged, PropertyChangedEventArgs>>();
+            Resources.MergedDictionaries.Add(styles);
 
-            _log = loggerFactory.CreateLogger<App>();
-
-            Resources.MergedDictionaries.Add(new IoCResourceDictionary(localizationService, weakEventManager, new Uri("/Maple;component/Resources/Style.xaml", UriKind.RelativeOrAbsolute)));
-
-            var shell = await GetShell(_log);
+            _log.LogInformation(Maple.Properties.Resources.AppStartLoadData);
+            var shell = await GetShell();
 
             shell.Show();
+            _log.LogInformation(Maple.Properties.Resources.AppStartComplete);
         }
 
         private async void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
@@ -63,13 +54,14 @@ namespace Maple
 
         protected override void OnExit(ExitEventArgs e)
         {
+            _log.LogInformation(Maple.Properties.Resources.AppExit);
             ExitInternal(e);
         }
 
         /// <remarks>
         /// order matters alot here, so be careful when modifying this
         /// </remarks>
-        private async Task<Shell> GetShell(ILogger log)
+        private async Task<Shell> GetShell()
         {
             using (var vm = _container.Resolve<SplashScreenViewModel>())
             {
@@ -87,7 +79,6 @@ namespace Maple
 
                 screen.Show();
 
-                log.LogInformation(Maple.Properties.Resources.AppStart);
                 await Task.WhenAll(loading, Task.Delay(TimeSpan.FromSeconds(1)));
 
                 return shell;
@@ -98,10 +89,12 @@ namespace Maple
         {
             DispatcherUnhandledException -= App_DispatcherUnhandledException;
 
-            var tracker = _container.Resolve<Tracker>();
-            tracker.PersistAll();
+            _log.LogInformation(Maple.Properties.Resources.AppExitSaving);
+            _tracker.PersistAll();
 
+            _log.LogInformation(Maple.Properties.Resources.AppExitComplete);
             _container.Dispose();
+
             base.OnExit(e);
         }
     }

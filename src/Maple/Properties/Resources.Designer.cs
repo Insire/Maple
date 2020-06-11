@@ -88,11 +88,65 @@ namespace Maple.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Anwendung wird geschlossen.
+        /// </summary>
+        public static string AppExit {
+            get {
+                return ResourceManager.GetString("AppExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Anwendung geschlossen.
+        /// </summary>
+        public static string AppExitComplete {
+            get {
+                return ResourceManager.GetString("AppExitComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Daten werden gespeichert.
+        /// </summary>
+        public static string AppExitSaving {
+            get {
+                return ResourceManager.GetString("AppExitSaving", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anwendung wird gestartet.
         /// </summary>
         public static string AppStart {
             get {
                 return ResourceManager.GetString("AppStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Anwendung gestartet.
+        /// </summary>
+        public static string AppStartComplete {
+            get {
+                return ResourceManager.GetString("AppStartComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Daten werden geladen.
+        /// </summary>
+        public static string AppStartLoadData {
+            get {
+                return ResourceManager.GetString("AppStartLoadData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Oberfläche wird geladen.
+        /// </summary>
+        public static string AppStartLoadUI {
+            get {
+                return ResourceManager.GetString("AppStartLoadUI", resourceCulture);
             }
         }
         
@@ -358,7 +412,7 @@ namespace Maple.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://github.com/Insire/InsireBot-V2.
+        ///   Looks up a localized string similar to https://github.com/Insire/Maple.
         /// </summary>
         public static string GithubProjectLink {
             get {
@@ -471,24 +525,6 @@ namespace Maple.Properties {
         public static string MediaPlayers {
             get {
                 return ResourceManager.GetString("MediaPlayers", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Navigation wird geladen.
-        /// </summary>
-        public static string NavigationLoad {
-            get {
-                return ResourceManager.GetString("NavigationLoad", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Navigation geladen.
-        /// </summary>
-        public static string NavigationLoaded {
-            get {
-                return ResourceManager.GetString("NavigationLoaded", resourceCulture);
             }
         }
         
@@ -768,15 +804,6 @@ namespace Maple.Properties {
         public static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Video hinzufügen.
-        /// </summary>
-        public static string VideoAdd {
-            get {
-                return ResourceManager.GetString("VideoAdd", resourceCulture);
             }
         }
         

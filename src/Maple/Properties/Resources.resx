@@ -123,23 +123,14 @@
   <data name="Playlists" xml:space="preserve">
     <value>Wiedergabelisten</value>
   </data>
-  <data name="VideoAdd" xml:space="preserve">
-    <value>Video hinzufügen</value>
-  </data>
   <data name="PlaylistAdd" xml:space="preserve">
     <value>Wiedergabeliste hinzufügen</value>
   </data>
   <data name="Themes" xml:space="preserve">
     <value>Farbprofile</value>
   </data>
-  <data name="NavigationLoad" xml:space="preserve">
-    <value>Navigation wird geladen</value>
-  </data>
-  <data name="NavigationLoaded" xml:space="preserve">
-    <value>Navigation geladen</value>
-  </data>
   <data name="GithubProjectLink" xml:space="preserve">
-    <value>https://github.com/Insire/InsireBot-V2</value>
+    <value>https://github.com/Insire/Maple</value>
     <comment>@Invariant</comment>
   </data>
   <data name="Options" xml:space="preserve">
@@ -369,5 +360,23 @@
   </data>
   <data name="About" xml:space="preserve">
     <value>Über</value>
+  </data>
+  <data name="AppExit" xml:space="preserve">
+    <value>Anwendung wird geschlossen</value>
+  </data>
+  <data name="AppExitComplete" xml:space="preserve">
+    <value>Anwendung geschlossen</value>
+  </data>
+  <data name="AppExitSaving" xml:space="preserve">
+    <value>Daten werden gespeichert</value>
+  </data>
+  <data name="AppStartComplete" xml:space="preserve">
+    <value>Anwendung gestartet</value>
+  </data>
+  <data name="AppStartLoadData" xml:space="preserve">
+    <value>Daten werden geladen</value>
+  </data>
+  <data name="AppStartLoadUI" xml:space="preserve">
+    <value>Oberfläche wird geladen</value>
   </data>
 </root>
