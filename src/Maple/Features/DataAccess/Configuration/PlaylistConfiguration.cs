@@ -23,11 +23,6 @@ namespace Maple
             builder.Property(c => c.RepeatMode)
                     .HasConversion<int>()
                     .IsRequired();
-
-            builder.HasOne(t => t.MediaPlayer)
-                    .WithOne(t => t.Playlist)
-                    .HasForeignKey<PlaylistModel>(t => t.MediaPlayerId)
-                    .IsRequired(false);
         }
     }
 }

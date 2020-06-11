@@ -64,6 +64,8 @@ namespace Maple
         {
             using (var context = _dbcontextFactory())
             {
+                context.Database.EnsureCreated();
+
                 // fetch all settings
 
                 // TODO

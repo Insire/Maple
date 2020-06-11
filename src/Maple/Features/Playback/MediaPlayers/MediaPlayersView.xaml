@@ -75,7 +75,7 @@
                 <StackPanel Margin="0,0,8,0" Orientation="Vertical">
                     <TextBlock FontSize="16" Text="{Binding Name, Mode=OneWay, TargetNullValue='Nameless Mediaplayer'}" />
 
-                    <TextBlock FontWeight="Light" Text="{Binding Playlist.Title, Mode=OneWay, FallbackValue='no playlist assigned', StringFormat={}Currently playing:{0}}" />
+                    <TextBlock FontWeight="Light" Text="{Binding Playlist.Name, Mode=OneWay, FallbackValue='no playlist assigned', StringFormat={}Currently playing:{0}}" />
                 </StackPanel>
             </DockPanel>
         </DataTemplate>

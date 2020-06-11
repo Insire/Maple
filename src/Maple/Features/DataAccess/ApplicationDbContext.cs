@@ -17,5 +17,14 @@ namespace Maple
             : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new MediaPlayerConfiguration());
+            modelBuilder.ApplyConfiguration(new MediaItemConfiguration());
+            modelBuilder.ApplyConfiguration(new PlaylistConfiguration());
+        }
     }
 }

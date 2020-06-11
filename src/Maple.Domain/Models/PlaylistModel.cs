@@ -12,8 +12,7 @@ namespace Maple.Domain
         public PrivacyStatus PrivacyStatus { get; set; }
         public RepeatMode RepeatMode { get; set; }
 
-        public int? MediaPlayerId { get; set; }
-        public virtual MediaPlayerModel MediaPlayer { get; set; }
+        public virtual List<MediaPlayerModel> MediaPlayers { get; set; }
 
         public virtual List<MediaItemModel> MediaItems { get; set; }
 
