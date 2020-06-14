@@ -43,13 +43,10 @@ namespace Maple
             _log.LogInformation(Maple.Properties.Resources.AppStartComplete);
         }
 
-        private async void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             _log.LogInformation(Maple.Properties.Resources.ExceptionMessageUnhandled);
             _log.LogError(e.Exception, e.Exception.Message);
-
-            var dialog = _container.Resolve<DialogViewModel>();
-            await dialog.ShowExceptionDialog(e.Exception);
         }
 
         protected override void OnExit(ExitEventArgs e)

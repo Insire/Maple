@@ -123,7 +123,6 @@ namespace Maple
                 c.Register<PlaybackViewModel>(Reuse.Singleton);
                 c.Register<DashboardViewModel>(Reuse.Singleton);
                 c.Register<AboutViewModel>(Reuse.Singleton);
-                c.Register<DialogViewModel>(Reuse.Singleton);
                 c.Register<MetaDataViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
                 c.Register<FileSystemViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
                 c.Register<OptionsViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
@@ -147,9 +146,9 @@ namespace Maple
                 c.Register<IVersionService, VersionService>(Reuse.Singleton);
                 c.Register<ILocalizationProvider, ResxTranslationProvider>(Reuse.Singleton);
 
-                c.RegisterMany(new[] { typeof(IScarletCommandBuilder), typeof(IMapleCommandBuilder) }, typeof(MapleCommandBuilder), Reuse.Singleton);
                 c.Register<IBusyStack, BusyStack>();
 
+                c.UseInstance(ScarletCommandBuilder.Default);
                 c.UseInstance(ScarletDispatcher.Default);
                 c.UseInstance(ScarletMessenger.Default);
                 c.UseInstance(ScarletCommandManager.Default);
