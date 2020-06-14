@@ -46,31 +46,10 @@ namespace Maple
             RegisterValidation();
             RegisterGui();
             RegisterDataAccess();
+            RegisterFileSystemAccess();
+            RegisterStartup();
 
             void RegisterLogging()
-            {
-                var fileConfiguration = new LoggingFileConfiguration()
-                {
-                    PathFormat = Path.Combine(logDirectory, $"{version}_maple.log"),
-                    FileSizeLimitBytes = 1073741824,
-                    RetainedFileCountLimit = 1,
-                };
-
-                Log.Logger = CreateLogger(fileConfiguration);
-
-                var loggerFactory = new LoggerFactory();
-
-                loggerFactory
-                    .AddSerilog();
-
-                c.Register(serviceType: typeof(ILoggerProvider), implementationType: typeof(SerilogLoggerProvider), reuse: Reuse.Singleton);
-                c.Register(serviceType: typeof(ILogger<>), implementationType: typeof(Logger<>));
-
-                c.UseInstance<ILoggerFactory>(loggerFactory);
-                c.UseInstance(Log.Logger);
-            }
-
-            Logger CreateLogger(LoggingFileConfiguration config)
             {
                 var formatter = new MessageTemplateTextFormatter("{Timestamp:o} {RequestId,13} [{Level:u3}] ({SourceContext}) ({ThreadId}) ({EventId:x8}) {Message}{NewLine}{Exception}", null);
                 var logConfiguration = new LoggerConfiguration()
@@ -82,13 +61,24 @@ namespace Maple
                     .WriteTo.Console()
                     .WriteTo.Async(p => p.RollingFile(
                         formatter,
-                        Environment.ExpandEnvironmentVariables(config.PathFormat),
-                        fileSizeLimitBytes: config.FileSizeLimitBytes ?? LoggingFileConfiguration.DefaultFileSizeLimitBytes,
-                        retainedFileCountLimit: config.RetainedFileCountLimit ?? LoggingFileConfiguration.DefaultRetainedFileCountLimit,
+                        Environment.ExpandEnvironmentVariables(Path.Combine(logDirectory, $"{version}_maple.log")),
+                        fileSizeLimitBytes: 1073741824,
+                        retainedFileCountLimit: 1,
                         shared: true,
                         flushToDiskInterval: TimeSpan.FromSeconds(3)));
 
-                return logConfiguration.CreateLogger();
+                Log.Logger = logConfiguration.CreateLogger();
+
+                var loggerFactory = new LoggerFactory();
+
+                loggerFactory
+                    .AddSerilog();
+
+                c.Register(serviceType: typeof(ILoggerProvider), implementationType: typeof(SerilogLoggerProvider), reuse: Reuse.Singleton);
+                c.Register(serviceType: typeof(ILogger<>), implementationType: typeof(Logger<>));
+
+                c.UseInstance<ILoggerFactory>(loggerFactory);
+                c.UseInstance(Log.Logger);
             }
 
             void RegisterGui()
@@ -116,22 +106,12 @@ namespace Maple
                 c.RegisterMany(new[] { typeof(ILocalizationService), typeof(LocalizationsViewModel) }, typeof(LocalizationsViewModel), Reuse.Singleton);
 
                 c.Register<AudioDevices>(setup: Setup.With(allowDisposableTransient: true));
-                c.Register<FileSystemOptionsViewModel>(Reuse.Singleton);
 
-                c.Register<NavigationViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
-                c.Register<ShellViewModel>(Reuse.Singleton);
                 c.Register<PlaybackViewModel>(Reuse.Singleton);
-                c.Register<DashboardViewModel>(Reuse.Singleton);
-                c.Register<AboutViewModel>(Reuse.Singleton);
-                c.Register<MetaDataViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
-                c.Register<FileSystemViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
+
                 c.Register<OptionsViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
 
                 c.Register<YoutubeImportViewModel>(setup: Setup.With(allowDisposableTransient: true));
-
-                c.Register<SplashScreenViewModel>(Reuse.Singleton);
-
-                c.UseInstance(new ReadOnlyObservableCollection<RepeatMode>(new ObservableCollection<RepeatMode>(Enum.GetValues(typeof(RepeatMode)).Cast<RepeatMode>())));
             };
 
             void RegisterServices()
@@ -175,6 +155,22 @@ namespace Maple
 
                 c.UseInstance(builder.Options);
                 c.Register<ApplicationDbContext, ApplicationDbContext>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
+            }
+
+            void RegisterFileSystemAccess()
+            {
+                c.Register<FileSystemViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
+                c.Register<FileSystemOptionsViewModel, FileSystemOptionsViewModel>(Reuse.Singleton);
+            }
+
+            void RegisterStartup()
+            {
+                c.Register<SplashScreenViewModel>(Reuse.Singleton);
+                c.Register<ShellViewModel>(Reuse.Singleton);
+                c.Register<NavigationViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
+                c.Register<DashboardViewModel>(Reuse.Singleton);
+                c.Register<AboutViewModel>(Reuse.Singleton);
+                c.Register<MetaDataViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
             }
 
             return c;

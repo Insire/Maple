@@ -15,20 +15,23 @@
                     mc:Ignorable="d">
 
     <DockPanel Margin="8">
-        <StackPanel HorizontalAlignment="Right"
-                    DockPanel.Dock="Bottom"
-                    Orientation="Horizontal">
+        <DockPanel DockPanel.Dock="Bottom">
 
-            <Button Margin="0,0,8,0"
-                    Command="{Binding AcceptCommand, ElementName=CreatePlaylistDialogRoot}"
-                    IsDefault="True">
-                <icons:PackIconMaterial Margin="8,4" Kind="Check" />
-            </Button>
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
 
-            <Button IsCancel="True">
-                <icons:PackIconMaterial Margin="8,4" Kind="Cancel" />
-            </Button>
-        </StackPanel>
+                <Button Margin="0,0,8,0"
+                        Command="{Binding AcceptCommand, ElementName=CreatePlaylistDialogRoot}"
+                        IsDefault="True">
+                    <icons:PackIconMaterial Margin="8,4" Kind="Check" />
+                </Button>
+
+                <Button IsCancel="True">
+                    <icons:PackIconMaterial Margin="8,4" Kind="Cancel" />
+                </Button>
+            </StackPanel>
+
+            <TextBlock Foreground="{DynamicResource {x:Static adonisUi:Brushes.AlertBrush}}" Text="{Binding Error, TargetNullValue=''}" />
+        </DockPanel>
 
         <Grid DataContext="{Binding Playlist}">
             <Grid.ColumnDefinitions>
@@ -57,12 +60,16 @@
             <Button Grid.Row="0"
                     Grid.RowSpan="10"
                     Grid.Column="0"
-                    Width="200"
+                    Width="200" Command="{Binding SelectThumbnailCommand, ElementName=CreatePlaylistDialogRoot}"
                     Height="200"
-                    VerticalAlignment="Top">
+                    VerticalAlignment="Top"
+                    ToolTip="{Binding Thumbnail}">
                 <Grid>
-                    <icons:PackIconMaterial Kind="Plus" />
-                    <Image Source="{Binding Thumbnail}" />
+                    <Image Source="{Binding Thumbnail, Converter={local:ImageFilePathFallback}}" />
+                    <icons:PackIconMaterial HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Kind="Plus"
+                                            Visibility="{Binding Thumbnail, Converter={local:StringLengthToVisibility Visibility=Collapsed}}" />
                 </Grid>
             </Button>
 
@@ -96,7 +103,7 @@
             <TextBox Grid.Row="0"
                      Grid.Column="4"
                      adonisExtensions:WatermarkExtension.Watermark="Name"
-                     Text="{Binding Name, TargetNullValue='unavailable', FallbackValue='New'}" />
+                     Text="{Binding Name, FallbackValue='New', UpdateSourceTrigger=PropertyChanged, Delay=250}" />
 
             <Separator Grid.Row="1"
                        Grid.Column="2"

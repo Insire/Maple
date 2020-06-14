@@ -68,6 +68,7 @@ namespace Maple
             var newInstance = new Playlist(SelectedItem);
 
             var dialogViewModel = Create(newInstance);
+
             var result = UpdateCallback?.Invoke(dialogViewModel, token);
             if (result.HasValue && result.Value)
             {

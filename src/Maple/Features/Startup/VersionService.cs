@@ -1,10 +1,9 @@
 ﻿using System.Reflection;
-
 using Maple.Domain;
 
 namespace Maple
 {
-    public class VersionService : IVersionService
+    public sealed class VersionService : IVersionService
     {
         private readonly AssemblyName _assemblyName;
 

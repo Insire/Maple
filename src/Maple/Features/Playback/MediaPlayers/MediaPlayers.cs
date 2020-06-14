@@ -1,4 +1,5 @@
-using Maple.Domain;
+using System;
+using MvvmScarletToolkit;
 using MvvmScarletToolkit.Observables;
 
 namespace Maple
@@ -14,10 +15,10 @@ namespace Maple
             private set { SetValue(ref _main, value); }
         }
 
-        public MediaPlayers(IMapleCommandBuilder commandBuilder, MediaPlayerFactory mediaPlayerFactory)
+        public MediaPlayers(IScarletCommandBuilder commandBuilder, MediaPlayerFactory mediaPlayerFactory)
             : base(commandBuilder)
         {
-            _mediaPlayerFactory = mediaPlayerFactory ?? throw new System.ArgumentNullException(nameof(mediaPlayerFactory));
+            _mediaPlayerFactory = mediaPlayerFactory ?? throw new ArgumentNullException(nameof(mediaPlayerFactory));
         }
 
         internal CreateMediaPlayerViewModel Create()

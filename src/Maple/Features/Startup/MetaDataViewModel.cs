@@ -1,14 +1,16 @@
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Maple.Domain;
+using MvvmScarletToolkit;
 using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    public sealed class MetaDataViewModel : MapleBusinessViewModelBase
+    public sealed class MetaDataViewModel : ViewModelBase
     {
         private readonly IVersionService _versionService;
+
+        private IDisposable _token;
+        private bool _disposed;
 
         private string _version;
         /// <summary>
@@ -41,10 +43,13 @@ namespace Maple
         /// </summary>
         /// <param name="manager">The manager.</param>
         /// <param name="mediaPlayers">The media players.</param>
-        public MetaDataViewModel(IMapleCommandBuilder commandBuilder, IVersionService versionService)
+        public MetaDataViewModel(IScarletCommandBuilder commandBuilder, IVersionService versionService)
             : base(commandBuilder)
         {
             _versionService = versionService ?? throw new ArgumentNullException(nameof(versionService));
+
+            _token = Messenger.Subscribe<ViewModelListBaseSelectionChanged<Culture>>(UpdateLanguage);
+            Version = _versionService.Get();
         }
 
         private void UpdateLanguage(ViewModelListBaseSelectionChanged<Culture> message)
@@ -52,21 +57,25 @@ namespace Maple
             Language = $"({message.Content.Model.TwoLetterISOLanguageName})";
         }
 
-        protected override Task UnloadInternal(CancellationToken token)
+        protected override void Dispose(bool disposing)
         {
-            ClearSubscriptions();
-            Version = string.Empty;
+            if (_disposed)
+            {
+                return;
+            }
 
-            return Task.CompletedTask;
-        }
+            _disposed = true;
 
-        protected override Task RefreshInternal(CancellationToken token)
-        {
-            Version = _versionService.Get();
+            if (disposing)
+            {
+                if (_token != null)
+                {
+                    _token?.Dispose();
+                    _token = null;
+                }
+            }
 
-            Add(Messenger.Subscribe<ViewModelListBaseSelectionChanged<Culture>>(UpdateLanguage));
-
-            return Task.CompletedTask;
+            base.Dispose(disposing);
         }
 
         // TODO add message queue and notify user about important notifications
