@@ -6,8 +6,8 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SoftThorn")]
+[assembly: AssemblyCompany("SoftThorn")]
+[assembly: AssemblyProduct("Maple")]
 [assembly: AssemblyVersion("0.0.1")]
 [assembly: AssemblyFileVersion("0.0.1")]
 [assembly: AssemblyInformationalVersion("0.0.0.1")]

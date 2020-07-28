@@ -142,6 +142,15 @@ namespace Maple.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Daten laden fehlgeschlagen.
+        /// </summary>
+        public static string AppStartLoadDataFailed {
+            get {
+                return ResourceManager.GetString("AppStartLoadDataFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Oberfläche wird geladen.
         /// </summary>
         public static string AppStartLoadUI {

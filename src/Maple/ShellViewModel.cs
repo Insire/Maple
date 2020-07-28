@@ -1,7 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Maple.Properties;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MvvmScarletToolkit;
 using MvvmScarletToolkit.Observables;
 
@@ -9,6 +11,7 @@ namespace Maple
 {
     internal sealed class ShellViewModel : BusinessViewModelBase
     {
+        private readonly ILogger<ShellViewModel> _log;
         private readonly Func<ApplicationDbContext> _dbcontextFactory;
         private readonly PlaylistFactory _playlistFactory;
         private readonly MediaPlayerFactory _mediaPlayerFactory;
@@ -26,6 +29,7 @@ namespace Maple
         public OptionsViewModel OptionsViewModel { get; }
 
         public ShellViewModel(IScarletCommandBuilder commandBuilder,
+                                ILoggerFactory loggerFactory,
                                 LocalizationsViewModel localizationsViewModel,
                                 NavigationViewModel navigationViewModel,
                                 MetaDataViewModel metaDataViewModel,
@@ -39,6 +43,7 @@ namespace Maple
                                 Func<AudioDeviceFactory> audioDeviceFactory)
             : base(commandBuilder)
         {
+            _log = loggerFactory.CreateLogger<ShellViewModel>();
             Localizations = localizationsViewModel ?? throw new ArgumentNullException(nameof(localizationsViewModel));
             NavigationViewModel = navigationViewModel ?? throw new ArgumentNullException(nameof(navigationViewModel));
             MetaDataViewModel = metaDataViewModel ?? throw new ArgumentNullException(nameof(metaDataViewModel));
@@ -62,47 +67,55 @@ namespace Maple
 
         protected override async Task RefreshInternal(CancellationToken token)
         {
-            using (var context = _dbcontextFactory())
+            try
             {
-                context.Database.EnsureCreated();
-
-                // fetch all settings
-
-                // TODO
-
-                // fetch all playlists and their mediaitems
-                var playlists = await context.Playlists.ToListAsync(token);
-                await Playlists.Clear();
-
-                foreach (var playlist in playlists)
+                using (var context = _dbcontextFactory())
                 {
-                    var viewmodel = _playlistFactory.Create(playlist);
+                    context.Database.EnsureCreated();
 
-                    await Playlists.Add(viewmodel);
+                    // fetch all settings
+
+                    // TODO
+
+                    // fetch all playlists and their mediaitems
+                    var playlists = await context.Playlists.ToListAsync(token);
+                    await Playlists.Clear();
+
+                    foreach (var playlist in playlists)
+                    {
+                        var viewmodel = _playlistFactory.Create(playlist);
+
+                        await Playlists.Add(viewmodel);
+                    }
+
+                    // fetch all audio devices
+                    var devices = await context.AudioDevices.ToListAsync(token);
+                    await AudioDevices.Clear();
+
+                    var audioDeviceFactory = _audioDeviceFactory();
+                    foreach (var device in devices)
+                    {
+                        var viewmodel = await audioDeviceFactory.Create(device, token);
+
+                        await AudioDevices.Add(viewmodel);
+                    }
+
+                    // fetch all media players
+                    var players = await context.Mediaplayers.ToListAsync(token);
+                    await MediaPlayers.Clear();
+
+                    foreach (var player in players)
+                    {
+                        var viewmodel = _mediaPlayerFactory.Create(player);
+
+                        await MediaPlayers.Add(viewmodel);
+                    }
                 }
-
-                // fetch all audio devices
-                var devices = await context.AudioDevices.ToListAsync(token);
-                await AudioDevices.Clear();
-
-                var audioDeviceFactory = _audioDeviceFactory();
-                foreach (var device in devices)
-                {
-                    var viewmodel = await audioDeviceFactory.Create(device, token);
-
-                    await AudioDevices.Add(viewmodel);
-                }
-
-                // fetch all media players
-                var players = await context.Mediaplayers.ToListAsync(token);
-                await MediaPlayers.Clear();
-
-                foreach (var player in players)
-                {
-                    var viewmodel = _mediaPlayerFactory.Create(player);
-
-                    await MediaPlayers.Add(viewmodel);
-                }
+            }
+            catch (Exception ex)
+            {
+                _log.LogError(ex, Resources.AppStartLoadDataFailed);
+                throw;
             }
 
             // current/ last mediaplayer

@@ -9,6 +9,8 @@ namespace Maple
     {
         private readonly ResourceManager _resourceManager;
 
+        public IEnumerable<CultureInfo> Languages { get; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ResxTranslationProvider"/> class.
         /// </summary>
@@ -28,7 +30,5 @@ namespace Maple
         {
             return _resourceManager.GetString(key, culture);
         }
-
-        public IEnumerable<CultureInfo> Languages { get; }
     }
 }

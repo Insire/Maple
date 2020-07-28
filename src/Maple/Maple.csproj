@@ -1,73 +1,74 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
-    <UseWPF>true</UseWPF>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <PublishTrimmed>true</PublishTrimmed>
-    <PublishReadyToRun>true</PublishReadyToRun>
-    <PublishSingleFile>true</PublishSingleFile>
-    <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
-    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="..\Resources\SharedAssemblyInfo.cs" Link="Properties\SharedAssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="..\Resources\Roboto\LICENSE.txt" Link="Resources\Roboto\LICENSE.txt" />
-    <Resource Include="..\Resources\Roboto\Roboto-Black.ttf" Link="Resources\Roboto\Roboto-Black.ttf" />
-    <Resource Include="..\Resources\Roboto\Roboto-BlackItalic.ttf" Link="Resources\Roboto\Roboto-BlackItalic.ttf" />
-    <Resource Include="..\Resources\Roboto\Roboto-Bold.ttf" Link="Resources\Roboto\Roboto-Bold.ttf" />
-    <Resource Include="..\Resources\Roboto\Roboto-BoldItalic.ttf" Link="Resources\Roboto\Roboto-BoldItalic.ttf" />
-    <Resource Include="..\Resources\Roboto\Roboto-Italic.ttf" Link="Resources\Roboto\Roboto-Italic.ttf" />
-    <Resource Include="..\Resources\Roboto\Roboto-Light.ttf" Link="Resources\Roboto\Roboto-Light.ttf" />
-    <Resource Include="..\Resources\Roboto\Roboto-LightItalic.ttf" Link="Resources\Roboto\Roboto-LightItalic.ttf" />
-    <Resource Include="..\Resources\Roboto\Roboto-Medium.ttf" Link="Resources\Roboto\Roboto-Medium.ttf" />
-    <Resource Include="..\Resources\Roboto\Roboto-MediumItalic.ttf" Link="Resources\Roboto\Roboto-MediumItalic.ttf" />
-    <Resource Include="..\Resources\Roboto\Roboto-Regular.ttf" Link="Resources\Roboto\Roboto-Regular.ttf" />
-    <Resource Include="..\Resources\Roboto\Roboto-Thin.ttf" Link="Resources\Roboto\Roboto-Thin.ttf" />
-    <Resource Include="..\Resources\Roboto\Roboto-ThinItalic.ttf" Link="Resources\Roboto\Roboto-ThinItalic.ttf" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="..\Resources\Images\logo_withoutbackground.png" Link="Resources\logo_withoutbackground.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="ControlzEx" Version="4.3.0" />
-    <PackageReference Include="DryIoc.dll" Version="4.2.0" />
-    <PackageReference Include="FluentValidation" Version="8.6.2" />
-    <PackageReference Include="Jot" Version="2.1.4" />
-    <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.4" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.4" />
-    <PackageReference Include="MvvmScarletToolkit.Wpf" Version="2.1.33-gf1a509ce12" />
-    <PackageReference Include="NAudio" Version="1.10.0" />
-    <PackageReference Include="Serilog.Exceptions" Version="5.5.0" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
-    <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
-    <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\adonis-ui\src\AdonisUI.ClassicTheme\AdonisUI.ClassicTheme.csproj" />
-    <ProjectReference Include="..\..\..\adonis-ui\src\AdonisUI\AdonisUI.csproj" />
-    <ProjectReference Include="..\Maple.Domain\Maple.Domain.csproj" />
-    <ProjectReference Include="..\Maple.Youtube\Maple.Youtube.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\Roboto\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+        <UseWPF>true</UseWPF>
+        <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+        <PublishTrimmed>false</PublishTrimmed>
+        <PublishReadyToRun>false</PublishReadyToRun>
+        <PublishSingleFile>false</PublishSingleFile>
+        <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+        <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+        <ApplicationIcon>logo.ico</ApplicationIcon>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="..\Resources\SharedAssemblyInfo.cs" Link="Properties\SharedAssemblyInfo.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <Resource Include="..\Resources\Roboto\LICENSE.txt" Link="Resources\Roboto\LICENSE.txt" />
+        <Resource Include="..\Resources\Roboto\Roboto-Black.ttf" Link="Resources\Roboto\Roboto-Black.ttf" />
+        <Resource Include="..\Resources\Roboto\Roboto-BlackItalic.ttf" Link="Resources\Roboto\Roboto-BlackItalic.ttf" />
+        <Resource Include="..\Resources\Roboto\Roboto-Bold.ttf" Link="Resources\Roboto\Roboto-Bold.ttf" />
+        <Resource Include="..\Resources\Roboto\Roboto-BoldItalic.ttf" Link="Resources\Roboto\Roboto-BoldItalic.ttf" />
+        <Resource Include="..\Resources\Roboto\Roboto-Italic.ttf" Link="Resources\Roboto\Roboto-Italic.ttf" />
+        <Resource Include="..\Resources\Roboto\Roboto-Light.ttf" Link="Resources\Roboto\Roboto-Light.ttf" />
+        <Resource Include="..\Resources\Roboto\Roboto-LightItalic.ttf" Link="Resources\Roboto\Roboto-LightItalic.ttf" />
+        <Resource Include="..\Resources\Roboto\Roboto-Medium.ttf" Link="Resources\Roboto\Roboto-Medium.ttf" />
+        <Resource Include="..\Resources\Roboto\Roboto-MediumItalic.ttf" Link="Resources\Roboto\Roboto-MediumItalic.ttf" />
+        <Resource Include="..\Resources\Roboto\Roboto-Regular.ttf" Link="Resources\Roboto\Roboto-Regular.ttf" />
+        <Resource Include="..\Resources\Roboto\Roboto-Thin.ttf" Link="Resources\Roboto\Roboto-Thin.ttf" />
+        <Resource Include="..\Resources\Roboto\Roboto-ThinItalic.ttf" Link="Resources\Roboto\Roboto-ThinItalic.ttf" />
+    </ItemGroup>
+    <ItemGroup>
+        <Resource Include="..\Resources\Images\logo_withoutbackground.png" Link="Resources\logo_withoutbackground.png" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AdonisUI.ClassicTheme" Version="1.16.0" />
+        <PackageReference Include="ControlzEx" Version="4.3.0" />
+        <PackageReference Include="DryIoc.dll" Version="4.2.5" />
+        <PackageReference Include="FluentValidation" Version="8.6.2" />
+        <PackageReference Include="Jot" Version="2.1.4" />
+        <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.2.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.4" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.4" />
+        <PackageReference Include="NAudio" Version="1.10.0" />
+        <PackageReference Include="Serilog.Exceptions" Version="5.5.0" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
+        <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
+        <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+        <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\MvvmScarletToolkit\src\MvvmScarletToolkit.Commands\MvvmScarletToolkit.Commands.csproj" />
+        <ProjectReference Include="..\..\MvvmScarletToolkit\src\MvvmScarletToolkit.Wpf\MvvmScarletToolkit.Wpf.csproj" />
+        <ProjectReference Include="..\Maple.Domain\Maple.Domain.csproj" />
+        <ProjectReference Include="..\Maple.Youtube\Maple.Youtube.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Resources\Roboto\" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Update="Properties\Resources.Designer.cs">
+            <DependentUpon>Resources.resx</DependentUpon>
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+        </Compile>
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Update="Properties\Resources.resx">
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+            <Generator>PublicResXFileCodeGenerator</Generator>
+        </EmbeddedResource>
+    </ItemGroup>
 </Project>

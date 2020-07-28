@@ -1,9 +1,3 @@
-using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Windows;
 using DryIoc;
 using FluentValidation;
 using Jot;
@@ -15,13 +9,17 @@ using Microsoft.Extensions.Logging;
 using MvvmScarletToolkit;
 using MvvmScarletToolkit.Abstractions;
 using MvvmScarletToolkit.Observables;
+using MvvmScarletToolkit.Wpf.Features.FileSystemBrowser;
 using MvvmScarletToolkit.Wpf.FileSystemBrowser;
 using Serilog;
-using Serilog.Core;
 using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Extensions.Logging;
 using Serilog.Formatting.Display;
+using System;
+using System.ComponentModel;
+using System.IO;
+using System.Windows;
 
 namespace Maple
 {
@@ -36,7 +34,7 @@ namespace Maple
             var logDirectory = Path.Combine(settingsDirectory, "logs");
 
             Directory.CreateDirectory(settingsDirectory);
-            Directory.CreateDirectory("logs");
+            Directory.CreateDirectory(logDirectory);
 
             var c = new DryIoc.Container();
 
@@ -159,8 +157,9 @@ namespace Maple
 
             void RegisterFileSystemAccess()
             {
-                c.Register<FileSystemViewModel>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
-                c.Register<FileSystemOptionsViewModel, FileSystemOptionsViewModel>(Reuse.Singleton);
+                c.UseInstance(FileSystemOptionsViewModel.Default);
+                c.Register<FileSystemViewModel>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
+                c.Register<IFileSystemViewModelFactory, FileSystemViewModelFactory>();
             }
 
             void RegisterStartup()

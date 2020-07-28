@@ -379,4 +379,7 @@
   <data name="AppStartLoadUI" xml:space="preserve">
     <value>Oberfläche wird geladen</value>
   </data>
+  <data name="AppStartLoadDataFailed" xml:space="preserve">
+    <value>Daten laden fehlgeschlagen</value>
+  </data>
 </root>

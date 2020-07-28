@@ -1,6 +1,11 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:adonisExtensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
+                    xmlns:componentmodel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
                     xmlns:local="clr-namespace:Maple"
+                    xmlns:mvvm="http://SoftThorn.MvvmScarletToolkit.com/winfx/xaml/shared"
                     xmlns:observables="clr-namespace:MvvmScarletToolkit.Observables;assembly=MvvmScarletToolkit.Observables">
 
     <!--  Remember: the order of these styles matters, since they depend on each other. If one references for a style not yet declared, you get random RuntimeErrors  -->
@@ -38,6 +43,18 @@
     <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="{x:Type ListBoxItem}">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
     </Style>
+
+    <DataTemplate x:Key="FolderIconPath" DataType="{x:Type mvvm:ScarletDirectory}">
+        <icons:PackIconMaterial Kind="Folder" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="FileIconPath" DataType="{x:Type mvvm:ScarletFile}">
+        <icons:PackIconMaterial Kind="File" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="DriveIconPath" DataType="{x:Type mvvm:ScarletDrive}">
+        <icons:PackIconMaterial Kind="Harddisk" />
+    </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:AudioDevice}">
         <TextBlock Text="{Binding Name}" />
@@ -117,4 +134,361 @@
     <DataTemplate DataType="{x:Type local:PlaybackViewModel}">
         <local:PlaybackView />
     </DataTemplate>
+
+    <Style x:Key="{x:Type mvvm:FileSystemBrowser}" TargetType="{x:Type mvvm:FileSystemBrowser}">
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="FileSystemViewModel" Value="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type mvvm:FileSystemBrowser}">
+                    <Grid>
+                        <Grid.Resources>
+
+                            <Style x:Key="TreeViewItemPanelStyle"
+                                   BasedOn="{StaticResource {x:Type DockPanel}}"
+                                   TargetType="{x:Type DockPanel}">
+                                <Setter Property="IsEnabled" Value="{Binding IsBusy, Converter={mvvm:InvertBooleanConverter}}" />
+                                <Setter Property="ToolTip">
+                                    <Setter.Value>
+                                        <ToolTip DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={x:Static RelativeSource.Self}}">
+                                            <TextBlock>
+                                                <Run Text="{Binding FullName, Mode=OneWay, StringFormat='[FullName: {0}]'}" />
+                                                <LineBreak />
+                                                <Run Text="{Binding Count, Mode=OneWay, StringFormat='[Count: {0}]'}" />
+                                                <LineBreak />
+                                                <Run Text="{Binding IsLoaded, Mode=OneWay, StringFormat='[IsLoaded: {0}]'}" />
+                                                <LineBreak />
+                                                <Run Text="{Binding IsBusy, Mode=OneWay, StringFormat='[IsBusy: {0}]'}" />
+                                                <LineBreak />
+                                                <Run Text="{Binding IsContainer, Mode=OneWay, StringFormat='[IsContainer: {0}]'}" />
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+
+                            <mvvm:BindingProxy x:Key="FileSystemViewModelProxy" Data="{Binding}" />
+                            <mvvm:BindingProxy x:Key="FileSystemBrowserProxy" Data="{Binding RelativeSource={RelativeSource AncestorType={x:Type mvvm:FileSystemBrowser}}}" />
+
+                            <CollectionViewSource x:Key="DetailItems"
+                                                  mvvm:Filter.ViewBy="{Binding Data.FilterAction, Source={StaticResource FileSystemBrowserProxy}}"
+                                                  Source="{Binding Data.SelectedItem.Items, Source={StaticResource FileSystemBrowserProxy}}">
+                                <CollectionViewSource.SortDescriptions>
+                                    <componentmodel:SortDescription Direction="Ascending" PropertyName="IsContainer" />
+                                </CollectionViewSource.SortDescriptions>
+                            </CollectionViewSource>
+                        </Grid.Resources>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.3*" MinWidth="100" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" MinWidth="150" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="8" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Loaded">
+                                <i:InvokeCommandAction Command="{Binding LoadCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
+                        <!--  Tree  -->
+                        <TreeView x:Name="PART_TreeView"
+                                  Grid.Row="0"
+                                  Grid.RowSpan="3"
+                                  Grid.Column="0"
+                                  ItemsSource="{Binding Data.Items, Source={StaticResource FileSystemViewModelProxy}}"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  VirtualizingStackPanel.IsVirtualizing="True">
+
+                            <TreeView.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Command="{Binding Data.RefreshCommand, Source={StaticResource FileSystemViewModelProxy}}" Header="Refresh" />
+                                </ContextMenu>
+                            </TreeView.ContextMenu>
+
+                            <i:Interaction.Behaviors>
+                                <mvvm:SelectedTreeViewItemBehavior SelectedItem="{Binding Data.SelectedItem, Source={StaticResource FileSystemBrowserProxy}}" />
+                            </i:Interaction.Behaviors>
+
+                            <TreeView.Resources>
+
+                                <HierarchicalDataTemplate DataType="{x:Type mvvm:ScarletDirectory}" ItemsSource="{Binding Items}">
+                                    <!--<HierarchicalDataTemplate.ItemsSource>
+                                        <Binding>
+                                            <Binding.Source>
+                                                <CollectionViewSource mvvm:Filter.ViewBy="{Binding Data.NoFilesFilter, Source={StaticResource FileSystemBrowserProxy}}" Source="{Binding DataContext.Items, RelativeSource={RelativeSource Self}}">
+                                                    <CollectionViewSource.SortDescriptions>
+                                                        <componentmodel:SortDescription Direction="Ascending" PropertyName="IsContainer" />
+                                                    </CollectionViewSource.SortDescriptions>
+                                                </CollectionViewSource>
+                                            </Binding.Source>
+                                        </Binding>
+                                    </HierarchicalDataTemplate.ItemsSource>-->
+
+                                    <DockPanel Style="{StaticResource TreeViewItemPanelStyle}">
+
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Expanded" SourceObject="{Binding RelativeSource={RelativeSource AncestorLevel=2, AncestorType={x:Type TreeViewItem}}}" PresentationTraceSources.TraceLevel="High">
+                                                <i:InvokeCommandAction Command="{Binding LoadCommand}" />
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="Selected" SourceObject="{Binding RelativeSource={RelativeSource AncestorLevel=2, AncestorType={x:Type TreeViewItem}}}">
+                                                <i:InvokeCommandAction Command="{Binding LoadCommand}" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+
+                                        <ContentControl Width="16"
+                                                        Height="16"
+                                                        ContentTemplate="{StaticResource FolderIconPath}"
+                                                        DockPanel.Dock="Left" />
+
+                                        <TextBlock Margin="8,0,0,0"
+                                                   Text="{Binding Name}"
+                                                   TextTrimming="CharacterEllipsis" />
+                                    </DockPanel>
+                                </HierarchicalDataTemplate>
+
+                                <HierarchicalDataTemplate DataType="{x:Type mvvm:ScarletDrive}" ItemsSource="{Binding Items}">
+                                    <DockPanel Style="{StaticResource TreeViewItemPanelStyle}">
+
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Loaded">
+                                                <i:InvokeCommandAction Command="{Binding LoadCommand}" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+
+                                        <ContentControl Width="16"
+                                                        Height="16"
+                                                        ContentTemplate="{StaticResource DriveIconPath}"
+                                                        DockPanel.Dock="Left" />
+
+                                        <TextBlock Margin="8,0,0,0"
+                                                   Text="{Binding Name}"
+                                                   TextTrimming="CharacterEllipsis" />
+                                    </DockPanel>
+                                </HierarchicalDataTemplate>
+                            </TreeView.Resources>
+                        </TreeView>
+
+                        <!--  Splitter  -->
+                        <GridSplitter x:Name="PART_GridSplitter"
+                                      Grid.RowSpan="3"
+                                      Grid.Column="1"
+                                      Width="8"
+                                      Margin="8,0"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Stretch" />
+
+                        <!--  Filter  -->
+
+                        <DockPanel Grid.Column="2">
+
+                            <Button DockPanel.Dock="Right">
+                                <icons:PackIconMaterial Kind="Table" />
+                            </Button>
+
+                            <Button Margin="8,0" DockPanel.Dock="Right">
+                                <icons:PackIconMaterial Kind="FileImage" />
+                            </Button>
+
+                            <TextBox VerticalAlignment="Center"
+                                     adonisExtensions:WatermarkExtension.Watermark="Filter"
+                                     Text="{TemplateBinding Filter}"
+                                     ToolTip="Filter" />
+                        </DockPanel>
+
+                        <!--  DetailView  -->
+                        <ContentControl Grid.Row="2" Grid.Column="2">
+                            <ContentControl.Style>
+                                <Style TargetType="{x:Type ContentControl}">
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <TextBlock HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       Text="nothing selected..." />
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Data.SelectedItem.IsBusy, Source={StaticResource FileSystemBrowserProxy}}" Value="True">
+                                            <Setter Property="Content">
+                                                <Setter.Value>
+                                                    <TextBlock HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"
+                                                               Text="Loading..." />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Data.DisplayListView, Source={StaticResource FileSystemBrowserProxy}}" Value="True" />
+                                                <Condition Binding="{Binding Data.SelectedItem.IsBusy, Source={StaticResource FileSystemBrowserProxy}}" Value="False" />
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type ContentControl}">
+                                                        <ContentPresenter Content="{Binding Data.SelectedItem, Source={StaticResource FileSystemBrowserProxy}}">
+                                                            <ContentPresenter.Resources>
+                                                                <mvvm:TypeDataTemplateSelector x:Key="TypeDataTemplateSelector">
+                                                                    <mvvm:TypeDataTemplateSelector.Templates>
+                                                                        <StaticResource ResourceKey="FolderIconPath" />
+                                                                        <StaticResource ResourceKey="DriveIconPath" />
+                                                                        <StaticResource ResourceKey="FileIconPath" />
+                                                                    </mvvm:TypeDataTemplateSelector.Templates>
+                                                                </mvvm:TypeDataTemplateSelector>
+
+                                                                <DataTemplate DataType="{x:Type mvvm:ScarletDirectory}">
+                                                                    <ListView mvvm:ListViewLayoutManager.Enabled="True" ItemsSource="{Binding Items}">
+                                                                        <ListView.View>
+                                                                            <GridView>
+                                                                                <GridView.Columns>
+                                                                                    <GridViewColumn CellTemplateSelector="{StaticResource TypeDataTemplateSelector}" />
+                                                                                    <GridViewColumn mvvm:ProportionalColumn.Width="1"
+                                                                                                    DisplayMemberBinding="{Binding Name}"
+                                                                                                    Header="Name" />
+                                                                                    <GridViewColumn DisplayMemberBinding="{Binding CreationTimeUtc}" Header="CreationTimeUtc" />
+                                                                                    <GridViewColumn DisplayMemberBinding="{Binding LastAccessTimeUtc}" Header="LastAccessTimeUtc" />
+                                                                                    <GridViewColumn DisplayMemberBinding="{Binding LastWriteTimeUtc}" Header="LastWriteTimeUtc" />
+                                                                                </GridView.Columns>
+                                                                            </GridView>
+                                                                        </ListView.View>
+                                                                    </ListView>
+                                                                </DataTemplate>
+
+                                                                <DataTemplate DataType="{x:Type mvvm:ScarletDrive}">
+                                                                    <ListBox ItemsSource="{Binding Items}" SelectionMode="Extended">
+                                                                        <ListBox.Resources>
+                                                                            <DataTemplate DataType="{x:Type mvvm:ScarletDirectory}">
+                                                                                <Grid>
+                                                                                    <Grid.ColumnDefinitions>
+                                                                                        <ColumnDefinition Width="Auto" />
+                                                                                        <ColumnDefinition Width="8" />
+                                                                                        <ColumnDefinition Width="*" />
+                                                                                    </Grid.ColumnDefinitions>
+
+                                                                                    <Path Width="16"
+                                                                                          Height="16"
+                                                                                          Data="{StaticResource FolderPath}"
+                                                                                          Stretch="Uniform"
+                                                                                          StrokeThickness="1" />
+
+                                                                                    <TextBlock Grid.Column="2" Text="{Binding Name}" />
+                                                                                </Grid>
+                                                                            </DataTemplate>
+                                                                        </ListBox.Resources>
+                                                                    </ListBox>
+                                                                </DataTemplate>
+                                                            </ContentPresenter.Resources>
+                                                        </ContentPresenter>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </MultiDataTrigger>
+
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Data.DisplayListView, Source={StaticResource FileSystemBrowserProxy}}" Value="False" />
+                                                <Condition Binding="{Binding Data.SelectedItem.IsBusy, Source={StaticResource FileSystemBrowserProxy}}" Value="False" />
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type ContentControl}">
+                                                        <ContentPresenter Content="{Binding Data.SelectedItem, Source={StaticResource FileSystemBrowserProxy}}">
+                                                            <ContentPresenter.Resources>
+
+                                                                <DataTemplate DataType="{x:Type mvvm:ScarletFile}">
+                                                                    <DockPanel Width="100">
+                                                                        <TextBlock HorizontalAlignment="Center"
+                                                                                   DockPanel.Dock="Bottom"
+                                                                                   Text="{Binding Name}"
+                                                                                   TextTrimming="CharacterEllipsis" />
+
+                                                                        <icons:PackIconMaterial Width="66"
+                                                                                                Height="66"
+                                                                                                HorizontalAlignment="Center"
+                                                                                                VerticalAlignment="Center"
+                                                                                                Kind="File" />
+                                                                    </DockPanel>
+                                                                </DataTemplate>
+
+                                                                <DataTemplate DataType="{x:Type mvvm:ScarletDirectory}">
+                                                                    <ListBox ItemsSource="{Binding Items}"
+                                                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                                             SelectionMode="Extended">
+                                                                        <ListBox.ItemsPanel>
+                                                                            <ItemsPanelTemplate>
+                                                                                <mvvm:VirtualizingWrapPanel IsItemsHost="True" Orientation="Horizontal" />
+                                                                            </ItemsPanelTemplate>
+                                                                        </ListBox.ItemsPanel>
+
+                                                                        <ListBox.Resources>
+                                                                            <DataTemplate DataType="{x:Type mvvm:ScarletDirectory}">
+                                                                                <DockPanel Width="100">
+
+                                                                                    <TextBlock HorizontalAlignment="Center"
+                                                                                               DockPanel.Dock="Bottom"
+                                                                                               Text="{Binding Name}"
+                                                                                               TextTrimming="CharacterEllipsis" />
+
+                                                                                    <icons:PackIconMaterial Width="66"
+                                                                                                            Height="66"
+                                                                                                            HorizontalAlignment="Center"
+                                                                                                            VerticalAlignment="Center"
+                                                                                                            Kind="Folder" />
+                                                                                </DockPanel>
+                                                                            </DataTemplate>
+                                                                        </ListBox.Resources>
+                                                                    </ListBox>
+                                                                </DataTemplate>
+
+                                                                <DataTemplate DataType="{x:Type mvvm:ScarletDrive}">
+                                                                    <ListBox ItemsSource="{Binding Items}"
+                                                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                                             SelectionMode="Extended">
+                                                                        <ListBox.ItemsPanel>
+                                                                            <ItemsPanelTemplate>
+                                                                                <mvvm:VirtualizingWrapPanel IsItemsHost="True" Orientation="Horizontal" />
+                                                                            </ItemsPanelTemplate>
+                                                                        </ListBox.ItemsPanel>
+
+                                                                        <ListBox.Resources>
+                                                                            <DataTemplate DataType="{x:Type mvvm:ScarletDirectory}">
+                                                                                <DockPanel Width="100">
+                                                                                    <TextBlock HorizontalAlignment="Center"
+                                                                                               DockPanel.Dock="Bottom"
+                                                                                               Text="{Binding Name}"
+                                                                                               TextTrimming="CharacterEllipsis" />
+
+                                                                                    <icons:PackIconMaterial Width="66"
+                                                                                                            Height="66"
+                                                                                                            HorizontalAlignment="Center"
+                                                                                                            VerticalAlignment="Center"
+                                                                                                            Kind="Folder" />
+                                                                                </DockPanel>
+                                                                            </DataTemplate>
+                                                                        </ListBox.Resources>
+                                                                    </ListBox>
+                                                                </DataTemplate>
+                                                            </ContentPresenter.Resources>
+                                                        </ContentPresenter>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ContentControl.Style>
+                        </ContentControl>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

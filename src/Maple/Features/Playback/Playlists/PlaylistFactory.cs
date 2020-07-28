@@ -10,13 +10,13 @@ namespace Maple
     {
         private readonly IScarletCommandBuilder _commandBuilder;
         private readonly IValidator<Playlist> _validator;
-        private readonly FileSystemViewModel _fileSystemViewModel;
+        private readonly Func<FileSystemViewModel> _fileSystemViewModelFactory;
 
-        public PlaylistFactory(IScarletCommandBuilder commandBuilder, IValidator<Playlist> validator, FileSystemViewModel fileSystemViewModel)
+        public PlaylistFactory(IScarletCommandBuilder commandBuilder, IValidator<Playlist> validator, Func<FileSystemViewModel> fileSystemViewModelFactory)
         {
             _commandBuilder = commandBuilder ?? throw new ArgumentNullException(nameof(commandBuilder));
-            _validator = validator;
-            _fileSystemViewModel = fileSystemViewModel;
+            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+            _fileSystemViewModelFactory = fileSystemViewModelFactory ?? throw new ArgumentNullException(nameof(fileSystemViewModelFactory));
         }
 
         public Playlist Create(PlaylistModel model)
@@ -33,7 +33,7 @@ namespace Maple
 
         public CreatePlaylistViewModel Create(Playlists playlists, Playlist playlist)
         {
-            return new CreatePlaylistViewModel(playlists, playlist, _validator, _fileSystemViewModel);
+            return new CreatePlaylistViewModel(playlists, playlist, _validator, _fileSystemViewModelFactory);
         }
     }
 }

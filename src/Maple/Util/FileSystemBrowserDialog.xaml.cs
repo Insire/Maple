@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Windows;
 using MvvmScarletToolkit;
@@ -39,7 +39,7 @@ namespace Maple
 
         protected override bool CanAccept()
         {
-            return _fileSystemViewModel.SelectedItem is ScarletFile;
+            return _fileSystemViewModel.SelectedItem is IFileSystemFile;
         }
     }
 }
