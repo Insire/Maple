@@ -34,15 +34,20 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="AdonisUI.ClassicTheme" Version="1.16.0" />
-        <PackageReference Include="ControlzEx" Version="4.3.0" />
-        <PackageReference Include="DryIoc.dll" Version="4.2.5" />
+        <PackageReference Include="ControlzEx" Version="4.3.2" />
+        <PackageReference Include="DryIoc.dll" Version="4.5.1" />
         <PackageReference Include="FluentValidation" Version="8.6.2" />
-        <PackageReference Include="Jot" Version="2.1.4" />
+        <PackageReference Include="Jot" Version="2.1.7" />
         <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.2.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.4" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.9">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.9" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.9" />
+        <PackageReference Include="MvvmScarletToolkit.Wpf" Version="2.1.72-g86b43d5e9c" />
         <PackageReference Include="NAudio" Version="1.10.0" />
-        <PackageReference Include="Serilog.Exceptions" Version="5.5.0" />
+        <PackageReference Include="Serilog.Exceptions" Version="5.6.0" />
         <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
         <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
         <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
@@ -50,8 +55,6 @@
         <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\MvvmScarletToolkit\src\MvvmScarletToolkit.Commands\MvvmScarletToolkit.Commands.csproj" />
-        <ProjectReference Include="..\..\MvvmScarletToolkit\src\MvvmScarletToolkit.Wpf\MvvmScarletToolkit.Wpf.csproj" />
         <ProjectReference Include="..\Maple.Domain\Maple.Domain.csproj" />
         <ProjectReference Include="..\Maple.Youtube\Maple.Youtube.csproj" />
     </ItemGroup>

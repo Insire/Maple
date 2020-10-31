@@ -71,7 +71,7 @@ namespace Maple
             {
                 using (var context = _dbcontextFactory())
                 {
-                    context.Database.EnsureCreated();
+                    context.Database.Migrate();
 
                     // fetch all settings
 

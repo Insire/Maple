@@ -1,4 +1,0 @@
-[submodule "MvvmScarletToolkit"]
-	path = MvvmScarletToolkit
-	url = https://github.com/Insire/MvvmScarletToolkit.git
-    branch = dev
