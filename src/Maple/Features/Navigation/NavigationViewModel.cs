@@ -7,7 +7,7 @@ using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    internal sealed class NavigationViewModel : Scenes
+    public sealed class NavigationViewModel : Scenes
     {
         public ICommand OpenMediaPlayerCommand { get; }
         public ICommand OpenOptionsCommand { get; }

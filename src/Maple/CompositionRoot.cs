@@ -16,9 +16,11 @@ using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Extensions.Logging;
 using Serilog.Formatting.Display;
+using SoftThorn.MonstercatNet;
 using System;
 using System.ComponentModel;
 using System.IO;
+using System.Net.Http;
 using System.Windows;
 
 namespace Maple
@@ -45,6 +47,7 @@ namespace Maple
             RegisterGui();
             RegisterDataAccess();
             RegisterFileSystemAccess();
+            RegisterMonstercat();
             RegisterStartup();
 
             void RegisterLogging()
@@ -160,6 +163,13 @@ namespace Maple
                 c.UseInstance(FileSystemOptionsViewModel.Default);
                 c.Register<FileSystemViewModel>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
                 c.Register<IFileSystemViewModelFactory, FileSystemViewModelFactory>();
+            }
+
+            void RegisterMonstercat()
+            {
+                c.Register<IMonstercatApi>(Reuse.Singleton, Made.Of(() => MonstercatApi.Create(Arg.Of<HttpClient>())));
+                c.Register<MonstercatImportViewModel>(Reuse.Singleton);
+                c.Register<HttpClient>(Reuse.Singleton, Made.Of(() => new HttpClient()));
             }
 
             void RegisterStartup()

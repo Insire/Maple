@@ -24,6 +24,18 @@ namespace Maple
             typeof(CreatePlaylistDialog),
             new PropertyMetadata(default(ICommand)));
 
+        public ICommand MonstercatImportCommand
+        {
+            get { return (ICommand)GetValue(MonstercatImportCommandProperty); }
+            set { SetValue(MonstercatImportCommandProperty, value); }
+        }
+
+        public static readonly DependencyProperty MonstercatImportCommandProperty = DependencyProperty.Register(
+            nameof(MonstercatImportCommand),
+            typeof(ICommand),
+            typeof(CreatePlaylistDialog),
+            new PropertyMetadata(default(ICommand)));
+
         public CreatePlaylistDialog()
         {
             InitializeComponent();
@@ -38,7 +50,14 @@ namespace Maple
 
             DataContext = viewModel;
 
-            SelectThumbnailCommand = commandBuilder.Create(SelectThumbnail, CanSelectThumbnail)
+            SelectThumbnailCommand = commandBuilder
+                .Create(SelectThumbnail, CanSelectThumbnail)
+                .WithAsyncCancellation()
+                .WithSingleExecution()
+                .Build();
+
+            MonstercatImportCommand = commandBuilder
+                .Create(MonstercatImport, CanMonstercatImport)
                 .WithAsyncCancellation()
                 .WithSingleExecution()
                 .Build();
@@ -63,6 +82,19 @@ namespace Maple
         }
 
         private bool CanSelectThumbnail()
+        {
+            return true; // TODO ?
+        }
+
+        private Task MonstercatImport(CancellationToken token)
+        {
+            var dlg = new MonstercatImportDialog(this, token, _viewModel.Monstercat);
+            dlg.ShowDialog();
+
+            return Task.CompletedTask;
+        }
+
+        private bool CanMonstercatImport() // TODO ?
         {
             return true;
         }

@@ -1,9 +1,11 @@
-﻿<local:IoCWindow x:Class="Maple.Shell"
+<local:IoCWindow x:Class="Maple.Shell"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:adonisExtensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  xmlns:local="clr-namespace:Maple"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:mvvm="http://SoftThorn.MvvmScarletToolkit.com/winfx/xaml/shared"
                  xmlns:observables="clr-namespace:MvvmScarletToolkit.Observables;assembly=MvvmScarletToolkit.Observables"
                  Style="{StaticResource BaseWindowStyle}">
@@ -43,7 +45,6 @@
                        Margin="8,0,0,0"
                        Text="Maple" />
         </StackPanel>
-
 
         <ListBox Grid.Row="2"
                  Grid.RowSpan="3"
@@ -132,6 +133,5 @@
         <GroupBox Grid.Row="2" Grid.Column="3">
             <ContentControl Content="{Binding NavigationViewModel.SelectedItem.Content}" />
         </GroupBox>
-
     </Grid>
 </local:IoCWindow>

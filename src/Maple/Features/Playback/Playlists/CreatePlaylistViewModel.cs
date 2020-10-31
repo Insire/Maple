@@ -16,6 +16,7 @@ namespace Maple
 
         public IValidator<Playlist> PlaylistValidator { get; }
         public FileSystemViewModel FileSystemViewModel { get; }
+        public MonstercatImportViewModel Monstercat { get; }
         public ReadOnlyObservableCollection<ValidationFailure> Errors { get; }
 
         private ValidationFailure _error;
@@ -25,12 +26,12 @@ namespace Maple
             set { SetValue(ref _error, value); }
         }
 
-        public CreatePlaylistViewModel(Playlists playlists, Playlist playlist, IValidator<Playlist> playlistValidator, Func<FileSystemViewModel> fileSystemViewModelFactory)
+        public CreatePlaylistViewModel(Playlists playlists, Playlist playlist, IValidator<Playlist> playlistValidator, Func<FileSystemViewModel> fileSystemViewModelFactory, MonstercatImportViewModel monstercat)
         {
             Playlists = playlists ?? throw new ArgumentNullException(nameof(playlists));
             Playlist = playlist ?? throw new ArgumentNullException(nameof(playlist));
             PlaylistValidator = playlistValidator ?? throw new ArgumentNullException(nameof(playlistValidator));
-
+            Monstercat = monstercat ?? throw new ArgumentNullException(nameof(monstercat));
             FileSystemViewModel = fileSystemViewModelFactory();
 
             _errors = new ObservableCollection<ValidationFailure>();

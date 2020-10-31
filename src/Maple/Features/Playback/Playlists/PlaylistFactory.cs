@@ -1,8 +1,8 @@
-using System;
 using FluentValidation;
 using Maple.Domain;
 using MvvmScarletToolkit;
 using MvvmScarletToolkit.Wpf.FileSystemBrowser;
+using System;
 
 namespace Maple
 {
@@ -11,12 +11,14 @@ namespace Maple
         private readonly IScarletCommandBuilder _commandBuilder;
         private readonly IValidator<Playlist> _validator;
         private readonly Func<FileSystemViewModel> _fileSystemViewModelFactory;
+        private readonly MonstercatImportViewModel _monstercatImport;
 
-        public PlaylistFactory(IScarletCommandBuilder commandBuilder, IValidator<Playlist> validator, Func<FileSystemViewModel> fileSystemViewModelFactory)
+        public PlaylistFactory(IScarletCommandBuilder commandBuilder, IValidator<Playlist> validator, Func<FileSystemViewModel> fileSystemViewModelFactory, MonstercatImportViewModel monstercatImport)
         {
             _commandBuilder = commandBuilder ?? throw new ArgumentNullException(nameof(commandBuilder));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _fileSystemViewModelFactory = fileSystemViewModelFactory ?? throw new ArgumentNullException(nameof(fileSystemViewModelFactory));
+            _monstercatImport = monstercatImport ?? throw new ArgumentNullException(nameof(monstercatImport));
         }
 
         public Playlist Create(PlaylistModel model)
@@ -33,7 +35,7 @@ namespace Maple
 
         public CreatePlaylistViewModel Create(Playlists playlists, Playlist playlist)
         {
-            return new CreatePlaylistViewModel(playlists, playlist, _validator, _fileSystemViewModelFactory);
+            return new CreatePlaylistViewModel(playlists, playlist, _validator, _fileSystemViewModelFactory, _monstercatImport);
         }
     }
 }

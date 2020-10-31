@@ -3,7 +3,7 @@ using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    internal sealed class OptionsViewModel : ObservableObject
+    public sealed class OptionsViewModel : ObservableObject
     {
         public Cultures Cultures { get; }
         public AudioDevices AudioDevices { get; }

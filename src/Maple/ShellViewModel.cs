@@ -9,7 +9,7 @@ using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    internal sealed class ShellViewModel : BusinessViewModelBase
+    public sealed class ShellViewModel : BusinessViewModelBase
     {
         private readonly ILogger<ShellViewModel> _log;
         private readonly Func<ApplicationDbContext> _dbcontextFactory;

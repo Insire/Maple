@@ -45,6 +45,7 @@
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.9" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.9" />
+        <PackageReference Include="MonstercatNet" Version="2.0.26" />
         <PackageReference Include="MvvmScarletToolkit.Wpf" Version="2.1.72-g86b43d5e9c" />
         <PackageReference Include="NAudio" Version="1.10.0" />
         <PackageReference Include="Serilog.Exceptions" Version="5.6.0" />

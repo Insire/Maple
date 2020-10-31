@@ -1,4 +1,4 @@
-﻿<local:DialogWindow x:Class="Maple.CreatePlaylistDialog"
+<local:DialogWindow x:Class="Maple.CreatePlaylistDialog"
                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:adonisExtensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
@@ -7,10 +7,13 @@
                     xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
                     xmlns:local="clr-namespace:Maple"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:mvvm="http://SoftThorn.MvvmScarletToolkit.com/winfx/xaml/shared"
                     x:Name="CreatePlaylistDialogRoot"
                     Title="Create Playlist"
                     Width="800"
                     Height="425"
+                    d:DataContext="{d:DesignInstance Type=local:CreatePlaylistViewModel,
+                                                     IsDesignTimeCreatable=false}"
                     WindowStartupLocation="CenterOwner"
                     mc:Ignorable="d">
 
@@ -60,9 +63,10 @@
             <Button Grid.Row="0"
                     Grid.RowSpan="10"
                     Grid.Column="0"
-                    Width="200" Command="{Binding SelectThumbnailCommand, ElementName=CreatePlaylistDialogRoot}"
+                    Width="200"
                     Height="200"
                     VerticalAlignment="Top"
+                    Command="{Binding SelectThumbnailCommand, ElementName=CreatePlaylistDialogRoot}"
                     ToolTip="{Binding Thumbnail}">
                 <Grid>
                     <Image Source="{Binding Thumbnail, Converter={local:ImageFilePathFallback}}" />
@@ -185,6 +189,12 @@
                     <StackPanel Orientation="Horizontal">
                         <icons:PackIconMaterial Margin="0,0,8,0" Kind="Youtube" />
                         <TextBlock Text="Import items from youtube" />
+                    </StackPanel>
+                </Button>
+
+                <Button Command="{Binding MonstercatImportCommand, ElementName=CreatePlaylistDialogRoot}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Import items from monstercat" />
                     </StackPanel>
                 </Button>
 
