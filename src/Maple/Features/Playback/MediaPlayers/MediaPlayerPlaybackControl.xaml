@@ -18,7 +18,7 @@
                     <DataTrigger Binding="{Binding DataContext, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
                         <Setter Property="IsEnabled" Value="False" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Player}" Value="{x:Null}">
+                    <DataTrigger Binding="{Binding Playback}" Value="{x:Null}">
                         <Setter Property="IsEnabled" Value="False" />
                     </DataTrigger>
 
@@ -58,7 +58,7 @@
                     TickFrequency="1"
                     TickPlacement="None"
                     ToolTip="{local:Translation Volume}"
-                    Value="{Binding Player.Volume}" />
+                    Value="{Binding Playback.Volume}" />
 
             <icons:PackIconMaterial Grid.Column="2"
                                     Width="24"

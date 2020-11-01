@@ -4,7 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:maple="clr-namespace:Maple"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             d:DataContext="{d:DesignInstance Type=local:ShellViewModel,
+             d:DataContext="{d:DesignInstance Type=local:PlaybackViewModel,
                                               IsDesignTimeCreatable=false}"
              d:DesignHeight="450"
              d:DesignWidth="800"
@@ -12,7 +12,10 @@
 
     <DockPanel>
 
-        <maple:MediaPlayerPlaybackControl Margin="0,8,0,0" DockPanel.Dock="Bottom" />
+        <maple:MediaPlayerPlaybackControl Margin="0,8,0,0"
+                                          DataContext="{Binding SelectedMediaPlayer}"
+                                          DockPanel.Dock="Bottom" />
+
         <DataGrid AlternationCount="2"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"

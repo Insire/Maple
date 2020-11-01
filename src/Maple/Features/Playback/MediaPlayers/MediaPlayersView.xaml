@@ -241,7 +241,7 @@
                                     </Setter.Value>
                                 </Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Content.Player}" Value="{x:Null}">
+                            <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Content.AudioDevice}" Value="{x:Null}">
                                 <Setter Property="IsEnabled" Value="False" />
                                 <Setter Property="ContentControl.Template">
                                     <Setter.Value>

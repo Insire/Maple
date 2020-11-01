@@ -76,7 +76,7 @@
         <ComboBox Grid.Row="4"
                   Grid.Column="4"
                   ItemsSource="{Binding AudioDevices.Items}"
-                  SelectedItem="{Binding MediaPlayer.Player.AudioDevice}"
+                  SelectedItem="{Binding MediaPlayer.AudioDevice}"
                   TabIndex="2" />
 
         <TextBlock Grid.Row="6"

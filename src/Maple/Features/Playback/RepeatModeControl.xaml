@@ -7,7 +7,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              d:DataContext="{d:DesignInstance Type=domain:RepeatMode,
                                               IsDesignTimeCreatable=True}"
-             d:DesignHeight="450"
+             d:DesignHeight="450" Name="RepeatModeControlRoot"
              d:DesignWidth="800"
              Loaded="RepeatModeControl_Loaded"
              mc:Ignorable="d">
@@ -16,6 +16,7 @@
         <Button.Style>
             <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
                 <Setter Property="IsEnabled" Value="False" />
+                <Setter Property="Command" Value="{Binding ToggleCommand, ElementName=RepeatModeControlRoot}" />
                 <Setter Property="Content">
                     <Setter.Value>
                         <icons:PackIconMaterial Width="24"
@@ -24,7 +25,7 @@
                     </Setter.Value>
                 </Setter>
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding DataContext}" Value="{x:Static domain:RepeatMode.None}">
+                    <DataTrigger Binding="{Binding}" Value="{x:Static domain:RepeatMode.None}">
                         <Setter Property="IsEnabled" Value="True" />
                         <Setter Property="Content">
                             <Setter.Value>
@@ -35,7 +36,7 @@
                         </Setter>
                     </DataTrigger>
 
-                    <DataTrigger Binding="{Binding DataContext}" Value="{x:Static domain:RepeatMode.Single}">
+                    <DataTrigger Binding="{Binding}" Value="{x:Static domain:RepeatMode.Single}">
                         <Setter Property="IsEnabled" Value="True" />
                         <Setter Property="Foreground" Value="DarkOrange" />
                         <Setter Property="Content">
@@ -47,7 +48,7 @@
                         </Setter>
                     </DataTrigger>
 
-                    <DataTrigger Binding="{Binding DataContext}" Value="{x:Static domain:RepeatMode.All}">
+                    <DataTrigger Binding="{Binding}" Value="{x:Static domain:RepeatMode.All}">
                         <Setter Property="IsEnabled" Value="True" />
                         <Setter Property="Foreground" Value="DarkOrange" />
                         <Setter Property="Content">

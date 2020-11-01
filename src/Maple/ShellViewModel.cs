@@ -1,15 +1,13 @@
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using Maple.Domain;
 using Maple.Properties;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MvvmScarletToolkit;
 using MvvmScarletToolkit.Observables;
-using Maple.Domain;
-using System.Runtime.CompilerServices;
-using Microsoft.EntityFrameworkCore.Diagnostics;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Maple
 {

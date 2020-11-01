@@ -7,6 +7,7 @@ namespace Maple
     public partial class PlaylistsView
     {
         private Shell _shell;
+        private Playlists _playlists;
 
         public PlaylistsView()
         {
@@ -27,25 +28,27 @@ namespace Maple
                 return;
             }
 
-            playlists.CanCreateCallback += CanCreate;
-            playlists.CreateCallback += Create;
+            _playlists = playlists;
 
-            playlists.CanUpdateCallback += CanUpdate;
-            playlists.UpdateCallback += Update;
+            _playlists.CanCreateCallback += CanCreate;
+            _playlists.CreateCallback += Create;
+
+            _playlists.CanUpdateCallback += CanUpdate;
+            _playlists.UpdateCallback += Update;
         }
 
         private void PlaylistsView_Unloaded(object sender, RoutedEventArgs e)
         {
-            if (!(DataContext is Playlists playlists))
+            if (_playlists is null)
             {
                 return;
             }
 
-            playlists.CreateCallback -= Create;
-            playlists.CanCreateCallback -= CanCreate;
+            _playlists.CreateCallback -= Create;
+            _playlists.CanCreateCallback -= CanCreate;
 
-            playlists.UpdateCallback -= Update;
-            playlists.CanUpdateCallback -= CanUpdate;
+            _playlists.UpdateCallback -= Update;
+            _playlists.CanUpdateCallback -= CanUpdate;
         }
 
         private bool? Create(CreatePlaylistViewModel viewModel, CancellationToken token)
