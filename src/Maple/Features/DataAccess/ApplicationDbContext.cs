@@ -7,7 +7,7 @@ namespace Maple
     {
         public DbSet<PlaylistModel> Playlists { get; set; }
         public DbSet<MediaItemModel> MediaItems { get; set; }
-        public DbSet<MediaPlayerModel> Mediaplayers { get; set; }
+        public DbSet<MediaPlayerModel> MediaPlayers { get; set; }
 
         public DbSet<AudioDeviceModel> AudioDevices { get; set; }
         public DbSet<AudioDeviceTypeModel> AudioDeviceTypes { get; set; }

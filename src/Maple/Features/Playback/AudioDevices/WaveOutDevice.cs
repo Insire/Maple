@@ -15,7 +15,7 @@ namespace Maple
             Name = device.ProductName;
             Device = device;
 
-            AudioDeviceTypeId = (int)DeviceType.WaveOut;
+            AudioDeviceTypeId = (int)Domain.DeviceType.WaveOut;
         }
 
         private string GetDebuggerDisplay()

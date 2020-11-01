@@ -48,6 +48,13 @@ namespace Maple
             protected set { SetValue(ref _audioDeviceTypeId, value); }
         }
 
+        private AudioDeviceType _audioDeviceType;
+        public AudioDeviceType AudioDeviceType
+        {
+            get { return _audioDeviceType; }
+            private set { SetValue(ref _audioDeviceType, value); }
+        }
+
         private string _createdBy;
         public string CreatedBy
         {
@@ -100,11 +107,13 @@ namespace Maple
             UpdatedOn = now;
         }
 
-        public void UpdateFromModel(AudioDeviceModel audioDeviceModel)
+        public void UpdateFromModel(AudioDeviceModel audioDeviceModel, AudioDeviceType audioDeviceType)
         {
             Id = audioDeviceModel.Id;
             Name = audioDeviceModel.Name;
             Sequence = audioDeviceModel.Sequence;
+
+            AudioDeviceType = audioDeviceType;
 
             CreatedBy = audioDeviceModel.CreatedBy;
             CreatedOn = audioDeviceModel.CreatedOn;

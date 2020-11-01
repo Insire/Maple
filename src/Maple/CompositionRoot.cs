@@ -107,6 +107,7 @@ namespace Maple
                 c.RegisterMany(new[] { typeof(ILocalizationService), typeof(LocalizationsViewModel) }, typeof(LocalizationsViewModel), Reuse.Singleton);
 
                 c.Register<AudioDevices>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
+                c.Register<AudioDeviceTypes>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
 
                 c.Register<PlaybackViewModel>(Reuse.Singleton);
 
@@ -119,7 +120,6 @@ namespace Maple
             {
                 c.Register<MediaPlayerFactory, MediaPlayerFactory>(Reuse.Singleton);
                 c.Register<PlaylistFactory, PlaylistFactory>(Reuse.Singleton);
-                c.Register<AudioDeviceFactory, AudioDeviceFactory>(Reuse.Transient);
                 c.Register<ISequenceService, SequenceService>();
                 c.Register<IYoutubeService, YoutubeService>(Reuse.Singleton);
                 c.Register<IAudioDeviceProvider, AudioDeviceProvider>(Reuse.Singleton);

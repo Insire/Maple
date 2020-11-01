@@ -12,8 +12,8 @@ namespace Maple
     {
         private readonly IAudioDeviceProvider _deviceProvider;
 
-        private DeviceType _deviceType;
-        public DeviceType DeviceType
+        private Domain.DeviceType _deviceType;
+        public Domain.DeviceType DeviceType
         {
             get { return _deviceType; }
             set { SetValue(ref _deviceType, value); }
@@ -39,10 +39,10 @@ namespace Maple
 
         private async Task Load(CancellationToken token)
         {
-            var asio = _deviceProvider.Get(DeviceType.ASIO, token);
-            var directSound = _deviceProvider.Get(DeviceType.DirectSound, token);
-            var wasapi = _deviceProvider.Get(DeviceType.WASAPI, token);
-            var waveout = _deviceProvider.Get(DeviceType.WaveOut, token);
+            var asio = _deviceProvider.Get(Domain.DeviceType.ASIO, token);
+            var directSound = _deviceProvider.Get(Domain.DeviceType.DirectSound, token);
+            var wasapi = _deviceProvider.Get(Domain.DeviceType.WASAPI, token);
+            var waveout = _deviceProvider.Get(Domain.DeviceType.WaveOut, token);
 
             await Task.WhenAll(asio, directSound, wasapi, waveout);
 

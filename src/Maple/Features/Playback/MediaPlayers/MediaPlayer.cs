@@ -11,7 +11,7 @@ using MvvmScarletToolkit.Observables;
 namespace Maple
 {
     [DebuggerDisplay("MediaPlayer: {Sequence}, {Name}")]
-    public sealed class MediaPlayer : ViewModelBase, IEntity<int>
+    public sealed class MediaPlayer : ViewModelBase, IMediaPlayer
     {
         private bool _disposed;
 
@@ -75,7 +75,40 @@ namespace Maple
         public Playlist Playlist
         {
             get { return _playlist; }
-            set { SetValue(ref _playlist, value); }
+            set
+            {
+                if (SetValue(ref _playlist, value))
+                {
+                    PlaylistId = _playlist?.Id;
+                }
+            }
+        }
+
+        private int? _playlistId;
+        public int? PlaylistId
+        {
+            get { return _playlistId; }
+            set { SetValue(ref _playlistId, value); }
+        }
+
+        private AudioDevice _audioDevice;
+        public AudioDevice AudioDevice
+        {
+            get { return _audioDevice; }
+            set
+            {
+                if (SetValue(ref _audioDevice, value))
+                {
+                    AudioDeviceId = _audioDevice?.Id;
+                }
+            }
+        }
+
+        private int? _audioDeviceId;
+        public int? AudioDeviceId
+        {
+            get { return _audioDeviceId; }
+            set { SetValue(ref _audioDeviceId, value); }
         }
 
         private IPlaybackService _playback;

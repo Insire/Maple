@@ -15,34 +15,34 @@ namespace Maple
 
             builder.HasData(new AudioDeviceTypeModel
             {
-                Id = (int)DeviceType.WaveOut,
-                Sequence = (int)DeviceType.WaveOut,
-                DeviceType = DeviceType.WaveOut,
-                Name = nameof(DeviceType.WaveOut),
+                Id = (int)Domain.DeviceType.WaveOut,
+                Sequence = (int)Domain.DeviceType.WaveOut,
+                DeviceType = Domain.DeviceType.WaveOut,
+                Name = nameof(Domain.DeviceType.WaveOut),
             });
 
             builder.HasData(new AudioDeviceTypeModel
             {
-                Id = (int)DeviceType.DirectSound,
-                Sequence = (int)DeviceType.DirectSound,
-                DeviceType = DeviceType.DirectSound,
-                Name = nameof(DeviceType.DirectSound),
+                Id = (int)Domain.DeviceType.DirectSound,
+                Sequence = (int)Domain.DeviceType.DirectSound,
+                DeviceType = Domain.DeviceType.DirectSound,
+                Name = nameof(Domain.DeviceType.DirectSound),
             });
 
             builder.HasData(new AudioDeviceTypeModel
             {
-                Id = (int)DeviceType.WASAPI,
-                Sequence = (int)DeviceType.WASAPI,
-                DeviceType = DeviceType.WASAPI,
-                Name = nameof(DeviceType.WASAPI),
+                Id = (int)Domain.DeviceType.WASAPI,
+                Sequence = (int)Domain.DeviceType.WASAPI,
+                DeviceType = Domain.DeviceType.WASAPI,
+                Name = nameof(Domain.DeviceType.WASAPI),
             });
 
             builder.HasData(new AudioDeviceTypeModel
             {
-                Id = (int)DeviceType.ASIO,
-                Sequence = (int)DeviceType.ASIO,
-                DeviceType = DeviceType.ASIO,
-                Name = nameof(DeviceType.ASIO),
+                Id = (int)Domain.DeviceType.ASIO,
+                Sequence = (int)Domain.DeviceType.ASIO,
+                DeviceType = Domain.DeviceType.ASIO,
+                Name = nameof(Domain.DeviceType.ASIO),
             });
         }
     }

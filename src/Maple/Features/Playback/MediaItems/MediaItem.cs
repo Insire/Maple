@@ -107,6 +107,13 @@ namespace Maple
             set { SetValue(ref _createdOn, value); }
         }
 
+        private bool _isDeleted;
+        public bool IsDeleted
+        {
+            get { return _isDeleted; }
+            private set { SetValue(ref _isDeleted, value); }
+        }
+
         public MediaItem(IScarletCommandBuilder commandBuilder)
             : base(commandBuilder)
         {

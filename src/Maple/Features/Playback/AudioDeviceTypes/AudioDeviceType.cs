@@ -4,7 +4,7 @@ using System;
 
 namespace Maple
 {
-    public sealed class AudioDeviceType : ObservableObject, IEntity<int>
+    public sealed class AudioDeviceType : ObservableObject, IAudioDeviceTypeModel
     {
         private int _id;
         public int Id
@@ -60,6 +60,27 @@ namespace Maple
         {
             get { return _isDeleted; }
             private set { SetValue(ref _isDeleted, value); }
+        }
+
+        private DeviceType _deviceType;
+        public DeviceType DeviceType
+        {
+            get { return _deviceType; }
+            private set { SetValue(ref _deviceType, value); }
+        }
+
+        public AudioDeviceType(AudioDeviceTypeModel model)
+        {
+            Id = model.Id;
+            Name = model.Name;
+            Sequence = model.Sequence;
+
+            DeviceType = model.DeviceType;
+
+            CreatedBy = model.CreatedBy;
+            CreatedOn = model.CreatedOn;
+            UpdatedBy = model.UpdatedBy;
+            UpdatedOn = model.UpdatedOn;
         }
     }
 }

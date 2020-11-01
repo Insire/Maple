@@ -4,10 +4,6 @@ namespace Maple.Domain
     {
         TKey Id { get; }
 
-        public static bool IsNew<T>(IEntity<TKey> entity)
-            where T : TKey
-        {
-            return entity.Id.Equals(default(TKey));
-        }
+        public bool IsNew => Id.Equals(default(TKey));
     }
 }

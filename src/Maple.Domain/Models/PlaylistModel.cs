@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace Maple.Domain
 {
     [DebuggerDisplay("PlaylistModel: {Sequence}, {Name}")]
-    public class PlaylistModel : Entity<int>
+    public class PlaylistModel : Entity<int>, IPlaylist
     {
         public string Thumbnail { get; set; }
 

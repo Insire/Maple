@@ -1,7 +1,7 @@
-﻿using System.Collections.ObjectModel;
+using Maple.Domain;
+using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
-using Maple.Domain;
 
 namespace Maple
 {

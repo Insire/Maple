@@ -6,18 +6,6 @@ namespace Maple
 {
     public abstract class PlaybackServiceBase : ViewModelBase, IPlaybackService
     {
-        private AudioDeviceModel _audioDevice;
-        public AudioDeviceModel AudioDevice
-        {
-            get { return _audioDevice; }
-            set
-            {
-                SetValue(ref _audioDevice, value,
-                                onChanging: () => Messenger.Publish(new ViewModelListBaseSelectionChanging<AudioDeviceModel>(this, _audioDevice)),
-                                onChanged: () => Messenger.Publish(new ViewModelListBaseSelectionChanged<AudioDeviceModel>(this, value)));
-            }
-        }
-
         protected PlaybackServiceBase(IScarletCommandBuilder commandBuilder)
             : base(commandBuilder)
         {

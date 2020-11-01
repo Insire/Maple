@@ -16,7 +16,7 @@ namespace Maple
             Device = device ?? throw new ArgumentNullException(nameof(device));
             Name = device.FriendlyName;
 
-            AudioDeviceTypeId = (int)DeviceType.WASAPI;
+            AudioDeviceTypeId = (int)Domain.DeviceType.WASAPI;
         }
 
         private string GetDebuggerDisplay()

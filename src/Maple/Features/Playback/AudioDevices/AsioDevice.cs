@@ -16,7 +16,7 @@ namespace Maple
             Device = device ?? throw new ArgumentNullException(nameof(device));
             Name = device.DriverName;
 
-            AudioDeviceTypeId = (int)DeviceType.ASIO;
+            AudioDeviceTypeId = (int)Domain.DeviceType.ASIO;
         }
 
         private string GetDebuggerDisplay()

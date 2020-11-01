@@ -76,13 +76,5 @@ namespace Maple.Domain
         /// The volume minimum.
         /// </value>
         int VolumeMin { get; }
-
-        /// <summary>
-        /// Gets or sets the audio device.
-        /// </summary>
-        /// <value>
-        /// The audio device.
-        /// </value>
-        AudioDeviceModel AudioDevice { get; set; }
     }
 }

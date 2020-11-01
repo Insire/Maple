@@ -3,7 +3,7 @@ using System.Diagnostics;
 namespace Maple.Domain
 {
     [DebuggerDisplay("MediaPlayerModel: {Sequence}, {Name}")]
-    public class MediaPlayerModel : Entity<int>
+    public class MediaPlayerModel : Entity<int>, IMediaPlayer
     {
         public bool IsPrimary { get; set; }
 

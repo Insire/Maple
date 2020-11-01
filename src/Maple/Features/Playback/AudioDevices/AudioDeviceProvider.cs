@@ -20,17 +20,17 @@ namespace Maple
             _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
         }
 
-        public Task<ReadOnlyCollection<AudioDevice>> Get(DeviceType type, CancellationToken token)
+        public Task<ReadOnlyCollection<AudioDevice>> Get(Domain.DeviceType type, CancellationToken token)
         {
-            return Task.Run(() => type switch
+            return Task.Run(() => (type switch
             {
-                DeviceType.WaveOut => new ReadOnlyCollection<AudioDevice>(GetWave(token).ToList()),
-                DeviceType.DirectSound => new ReadOnlyCollection<AudioDevice>(GetDirectSound(token).ToList()),
-                DeviceType.WASAPI => new ReadOnlyCollection<AudioDevice>(GetWasapi(token).ToList()),
-                DeviceType.ASIO => new ReadOnlyCollection<AudioDevice>(GetAsio(token).ToList()),
-                DeviceType.None => new ReadOnlyCollection<AudioDevice>(Enumerable.Empty<AudioDevice>().ToList()),
+                Domain.DeviceType.WaveOut => new ReadOnlyCollection<AudioDevice>(GetWave(token).ToList()),
+                Domain.DeviceType.DirectSound => new ReadOnlyCollection<AudioDevice>(GetDirectSound(token).ToList()),
+                Domain.DeviceType.WASAPI => new ReadOnlyCollection<AudioDevice>(GetWasapi(token).ToList()),
+                Domain.DeviceType.ASIO => new ReadOnlyCollection<AudioDevice>(GetAsio(token).ToList()),
+                Domain.DeviceType.None => new ReadOnlyCollection<AudioDevice>(Enumerable.Empty<AudioDevice>().ToList()),
                 _ => throw new NotImplementedException(),
-            }, token);
+            }), token);
         }
 
         private IEnumerable<AudioDevice> GetWave(CancellationToken token)

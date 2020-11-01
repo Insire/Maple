@@ -2,9 +2,9 @@ using System;
 
 namespace Maple.Domain
 {
-    public interface IMediaItem : ISequence
+    public interface IMediaItem : IEntity<int>
     {
-        string Name { get; }
+        string Thumbnail { get; }
         string Location { get; }
         TimeSpan Duration { get; }
         PrivacyStatus PrivacyStatus { get; }

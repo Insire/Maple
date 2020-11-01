@@ -10,7 +10,7 @@ using MvvmScarletToolkit.Observables;
 namespace Maple
 {
     [DebuggerDisplay("{Name}, {Sequence}")]
-    public sealed class Playlist : ViewModelListBase<MediaItem>, IEntity<int>
+    public sealed class Playlist : ViewModelListBase<MediaItem>, IPlaylist
     {
         private readonly Stack<int> _history;
 
@@ -127,8 +127,9 @@ namespace Maple
             Thumbnail = playlist.Thumbnail;
             PrivacyStatus = playlist.PrivacyStatus;
             RepeatMode = playlist.RepeatMode;
-            IsSelected = playlist.IsSelected;
             IsShuffeling = playlist.IsShuffeling;
+
+            IsSelected = playlist.IsSelected;
 
             CreatedBy = playlist.CreatedBy;
             CreatedOn = playlist.CreatedOn;
@@ -147,26 +148,26 @@ namespace Maple
         /// <summary>
         /// ctor for turning a model into a VM
         /// </summary>
-        public Playlist(IScarletCommandBuilder commandBuilder, PlaylistModel playlist)
+        public Playlist(IScarletCommandBuilder commandBuilder, PlaylistModel model)
             : this(commandBuilder)
         {
-            Id = playlist.Id;
-            Name = playlist.Name;
-            Sequence = playlist.Sequence;
+            Id = model.Id;
+            Name = model.Name;
+            Sequence = model.Sequence;
 
-            Thumbnail = playlist.Thumbnail;
-            PrivacyStatus = playlist.PrivacyStatus;
-            RepeatMode = playlist.RepeatMode;
-            IsShuffeling = playlist.IsShuffeling;
+            Thumbnail = model.Thumbnail;
+            PrivacyStatus = model.PrivacyStatus;
+            RepeatMode = model.RepeatMode;
+            IsShuffeling = model.IsShuffeling;
 
-            CreatedBy = playlist.CreatedBy;
-            CreatedOn = playlist.CreatedOn;
-            UpdatedBy = playlist.UpdatedBy;
-            UpdatedOn = playlist.UpdatedOn;
+            CreatedBy = model.CreatedBy;
+            CreatedOn = model.CreatedOn;
+            UpdatedBy = model.UpdatedBy;
+            UpdatedOn = model.UpdatedOn;
 
-            for (var i = 0; i < playlist.MediaItems.Count; i++)
+            for (var i = 0; i < model.MediaItems.Count; i++)
             {
-                var item = playlist.MediaItems[i];
+                var item = model.MediaItems[i];
                 AddUnchecked(new MediaItem(commandBuilder, item, this));
             }
         }

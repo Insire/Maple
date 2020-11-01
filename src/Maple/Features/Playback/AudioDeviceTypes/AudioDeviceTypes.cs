@@ -3,14 +3,14 @@ using MvvmScarletToolkit.Observables;
 
 namespace Maple
 {
-    public sealed class AudioDevices : ViewModelListBase<AudioDevice>
+    public sealed class AudioDeviceTypes : ViewModelListBase<AudioDeviceType>
     {
-        public AudioDevices(IScarletCommandBuilder commandBuilder)
+        public AudioDeviceTypes(in IScarletCommandBuilder commandBuilder)
             : base(commandBuilder)
         {
         }
 
-        public AudioDevice GetById(int? id)
+        public AudioDeviceType GetById(int id)
         {
             for (var i = 0; i < Count; i++)
             {

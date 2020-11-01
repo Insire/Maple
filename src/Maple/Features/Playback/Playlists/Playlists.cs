@@ -83,5 +83,18 @@ namespace Maple
         {
             return !IsBusy && SelectedItem != null && CanUpdateCallback?.Invoke() == true;
         }
+
+        public Playlist GetById(int? id)
+        {
+            for (var i = 0; i < Count; i++)
+            {
+                if (this[i].Id == id)
+                {
+                    return this[i];
+                }
+            }
+
+            return null;
+        }
     }
 }
