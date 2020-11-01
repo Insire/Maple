@@ -10,7 +10,7 @@ using MvvmScarletToolkit.Observables;
 namespace Maple
 {
     [DebuggerDisplay("{Name}, {Sequence}")]
-    public sealed class Playlist : ViewModelListBase<MediaItem>, IPlaylist
+    public sealed class Playlist : ViewModelListBase<MediaItem>, IEntity<int>
     {
         private readonly Stack<int> _history;
 
@@ -84,18 +84,25 @@ namespace Maple
             private set { SetValue(ref _updatedBy, value); }
         }
 
-        private DateTime? _updatedOn;
-        public DateTime? UpdatedOn
+        private DateTime _updatedOn;
+        public DateTime UpdatedOn
         {
             get { return _updatedOn; }
             private set { SetValue(ref _updatedOn, value); }
         }
 
-        private DateTime? _createdOn;
-        public DateTime? CreatedOn
+        private DateTime _createdOn;
+        public DateTime CreatedOn
         {
             get { return _createdOn; }
             private set { SetValue(ref _createdOn, value); }
+        }
+
+        private bool _isDeleted;
+        public bool IsDeleted
+        {
+            get { return _isDeleted; }
+            private set { SetValue(ref _isDeleted, value); }
         }
 
         /// <summary>

@@ -4,14 +4,14 @@ namespace Maple.Domain
 {
     public interface IEntity : ISequence
     {
-        string CreatedBy { get; set; }
-        DateTime CreatedOn { get; set; }
+        string Name { get; }
 
-        string UpdatedBy { get; set; }
-        DateTime UpdatedOn { get; set; }
+        string CreatedBy { get; }
+        DateTime CreatedOn { get; }
 
-        bool IsNew { get; }
+        string UpdatedBy { get; }
+        DateTime UpdatedOn { get; }
 
-        bool IsDeleted { get; set; }
+        bool IsDeleted { get; }
     }
 }

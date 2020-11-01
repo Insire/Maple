@@ -1,6 +1,8 @@
+using FluentValidation.Results;
 using MvvmScarletToolkit;
 using MvvmScarletToolkit.Observables;
 using SoftThorn.MonstercatNet;
+using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -9,6 +11,7 @@ namespace Maple
 {
     public sealed class MonstercatImportViewModel : ViewModelListBase<MonstercatRessourceViewModel>
     {
+        private readonly ObservableCollection<ValidationFailure> _errors;
         private readonly IMonstercatApi _monstercatApi;
 
         private string _source;
@@ -16,6 +19,15 @@ namespace Maple
         {
             get { return _source; }
             set { SetValue(ref _source, value); }
+        }
+
+        public ReadOnlyObservableCollection<ValidationFailure> Errors { get; }
+
+        private ValidationFailure _error;
+        public ValidationFailure Error
+        {
+            get { return _error; }
+            set { SetValue(ref _error, value); }
         }
 
         public ICommand ParseCommand { get; }

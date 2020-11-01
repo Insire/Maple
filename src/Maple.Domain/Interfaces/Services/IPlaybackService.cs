@@ -83,6 +83,6 @@ namespace Maple.Domain
         /// <value>
         /// The audio device.
         /// </value>
-        object AudioDevice { get; set; }
+        AudioDeviceModel AudioDevice { get; set; }
     }
 }

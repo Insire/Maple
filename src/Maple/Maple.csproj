@@ -10,6 +10,7 @@
         <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
         <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
         <ApplicationIcon>logo.ico</ApplicationIcon>
+        <LangVersion>8.0</LangVersion>
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="..\Resources\SharedAssemblyInfo.cs" Link="Properties\SharedAssemblyInfo.cs" />
@@ -40,8 +41,8 @@
         <PackageReference Include="Jot" Version="2.1.7" />
         <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.2.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.9">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.9" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.9" />

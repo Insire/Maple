@@ -17,7 +17,7 @@ namespace Maple
             builder.HasOne(t => t.Playlist)
                    .WithMany(t => t.MediaItems)
                    .IsRequired()
-                   .OnDelete(DeleteBehavior.Cascade);
+                   .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

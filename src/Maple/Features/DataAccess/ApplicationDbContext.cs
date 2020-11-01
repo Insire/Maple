@@ -10,7 +10,6 @@ namespace Maple
         public DbSet<MediaPlayerModel> Mediaplayers { get; set; }
 
         public DbSet<AudioDeviceModel> AudioDevices { get; set; }
-
         public DbSet<AudioDeviceTypeModel> AudioDeviceTypes { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -25,6 +24,8 @@ namespace Maple
             modelBuilder.ApplyConfiguration(new MediaPlayerConfiguration());
             modelBuilder.ApplyConfiguration(new MediaItemConfiguration());
             modelBuilder.ApplyConfiguration(new PlaylistConfiguration());
+            modelBuilder.ApplyConfiguration(new AudioDeviceTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new AudioDeviceConfiguration());
         }
     }
 }

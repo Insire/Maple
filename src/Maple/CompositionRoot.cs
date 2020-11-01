@@ -106,7 +106,7 @@ namespace Maple
                 c.RegisterMany(new[] { typeof(Cultures) }, typeof(Cultures), Reuse.Singleton);
                 c.RegisterMany(new[] { typeof(ILocalizationService), typeof(LocalizationsViewModel) }, typeof(LocalizationsViewModel), Reuse.Singleton);
 
-                c.Register<AudioDevices>(setup: Setup.With(allowDisposableTransient: true));
+                c.Register<AudioDevices>(Reuse.Singleton, setup: Setup.With(allowDisposableTransient: true));
 
                 c.Register<PlaybackViewModel>(Reuse.Singleton);
 

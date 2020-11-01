@@ -8,39 +8,18 @@ namespace Maple.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AudioDevices",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Sequence = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    UpdatedOn = table.Column<DateTime>(nullable: false),
-                    UpdatedBy = table.Column<string>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    OsId = table.Column<string>(nullable: true),
-                    AudioDeviceTypeId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AudioDevices", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AudioDeviceTypes",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Sequence = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    UpdatedOn = table.Column<DateTime>(nullable: false),
-                    UpdatedBy = table.Column<string>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
+                    Sequence = table.Column<int>(nullable: false, defaultValue: 0)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    CreatedBy = table.Column<string>(nullable: true, defaultValue: "SYSTEM"),
+                    UpdatedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    UpdatedBy = table.Column<string>(nullable: true, defaultValue: "SYSTEM"),
                     DeviceType = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -61,7 +40,6 @@ namespace Maple.Migrations
                     CreatedBy = table.Column<string>(nullable: true, defaultValue: "SYSTEM"),
                     UpdatedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     UpdatedBy = table.Column<string>(nullable: true, defaultValue: "SYSTEM"),
-                    IsDeleted = table.Column<bool>(nullable: false),
                     Thumbnail = table.Column<string>(maxLength: 260, nullable: false),
                     IsShuffeling = table.Column<bool>(nullable: false),
                     PrivacyStatus = table.Column<int>(nullable: false),
@@ -70,6 +48,33 @@ namespace Maple.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Playlists", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AudioDevices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Sequence = table.Column<int>(nullable: false, defaultValue: 0)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    CreatedBy = table.Column<string>(nullable: true, defaultValue: "SYSTEM"),
+                    UpdatedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    UpdatedBy = table.Column<string>(nullable: true, defaultValue: "SYSTEM"),
+                    OsId = table.Column<string>(nullable: false),
+                    AudioDeviceTypeId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AudioDevices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AudioDevices_AudioDeviceTypes_AudioDeviceTypeId",
+                        column: x => x.AudioDeviceTypeId,
+                        principalTable: "AudioDeviceTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,7 +90,6 @@ namespace Maple.Migrations
                     CreatedBy = table.Column<string>(nullable: true, defaultValue: "SYSTEM"),
                     UpdatedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     UpdatedBy = table.Column<string>(nullable: true, defaultValue: "SYSTEM"),
-                    IsDeleted = table.Column<bool>(nullable: false),
                     Location = table.Column<string>(maxLength: 2048, nullable: false),
                     Thumbnail = table.Column<string>(nullable: true),
                     Duration = table.Column<TimeSpan>(nullable: false),
@@ -101,7 +105,7 @@ namespace Maple.Migrations
                         column: x => x.PlaylistId,
                         principalTable: "Playlists",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -117,7 +121,6 @@ namespace Maple.Migrations
                     CreatedBy = table.Column<string>(nullable: true, defaultValue: "SYSTEM"),
                     UpdatedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     UpdatedBy = table.Column<string>(nullable: true, defaultValue: "SYSTEM"),
-                    IsDeleted = table.Column<bool>(nullable: false),
                     IsPrimary = table.Column<bool>(nullable: false),
                     PlaylistId = table.Column<int>(nullable: true),
                     AudioDeviceId = table.Column<int>(nullable: true)
@@ -139,6 +142,31 @@ namespace Maple.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.InsertData(
+                table: "AudioDeviceTypes",
+                columns: new[] { "Id", "DeviceType", "Name", "Sequence" },
+                values: new object[] { 1, 1, "WaveOut", 1 });
+
+            migrationBuilder.InsertData(
+                table: "AudioDeviceTypes",
+                columns: new[] { "Id", "DeviceType", "Name", "Sequence" },
+                values: new object[] { 2, 2, "DirectSound", 2 });
+
+            migrationBuilder.InsertData(
+                table: "AudioDeviceTypes",
+                columns: new[] { "Id", "DeviceType", "Name", "Sequence" },
+                values: new object[] { 3, 3, "WASAPI", 3 });
+
+            migrationBuilder.InsertData(
+                table: "AudioDeviceTypes",
+                columns: new[] { "Id", "DeviceType", "Name", "Sequence" },
+                values: new object[] { 4, 4, "ASIO", 4 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AudioDevices_AudioDeviceTypeId",
+                table: "AudioDevices",
+                column: "AudioDeviceTypeId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_MediaItems_PlaylistId",
                 table: "MediaItems",
@@ -158,9 +186,6 @@ namespace Maple.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AudioDeviceTypes");
-
-            migrationBuilder.DropTable(
                 name: "MediaItems");
 
             migrationBuilder.DropTable(
@@ -171,6 +196,9 @@ namespace Maple.Migrations
 
             migrationBuilder.DropTable(
                 name: "Playlists");
+
+            migrationBuilder.DropTable(
+                name: "AudioDeviceTypes");
         }
     }
 }

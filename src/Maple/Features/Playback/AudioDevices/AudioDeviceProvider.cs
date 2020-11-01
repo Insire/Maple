@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Maple.Domain;
+using MvvmScarletToolkit;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 
@@ -12,6 +13,13 @@ namespace Maple
 {
     internal sealed class AudioDeviceProvider : IAudioDeviceProvider
     {
+        private readonly IScarletDispatcher _dispatcher;
+
+        public AudioDeviceProvider(IScarletDispatcher dispatcher)
+        {
+            _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
+        }
+
         public Task<ReadOnlyCollection<AudioDevice>> Get(DeviceType type, CancellationToken token)
         {
             return Task.Run(() => type switch
@@ -25,7 +33,7 @@ namespace Maple
             }, token);
         }
 
-        private static IEnumerable<AudioDevice> GetWave(CancellationToken token)
+        private IEnumerable<AudioDevice> GetWave(CancellationToken token)
         {
             if (token.IsCancellationRequested)
             {
@@ -44,7 +52,7 @@ namespace Maple
             }
         }
 
-        private static IEnumerable<AudioDevice> GetDirectSound(CancellationToken token)
+        private IEnumerable<AudioDevice> GetDirectSound(CancellationToken token)
         {
             if (token.IsCancellationRequested)
             {
@@ -62,7 +70,7 @@ namespace Maple
             }
         }
 
-        private static IEnumerable<AudioDevice> GetWasapi(CancellationToken token)
+        private IEnumerable<AudioDevice> GetWasapi(CancellationToken token)
         {
             if (token.IsCancellationRequested)
             {
@@ -81,7 +89,7 @@ namespace Maple
             }
         }
 
-        private static IEnumerable<AudioDevice> GetAsio(CancellationToken token)
+        private IEnumerable<AudioDevice> GetAsio(CancellationToken token)
         {
             if (token.IsCancellationRequested)
             {
@@ -95,7 +103,16 @@ namespace Maple
                     yield break;
                 }
 
-                yield return new AsioDevice(new AsioOut(asio));
+                var device = default(AsioDevice);
+
+                _dispatcher.Invoke(() => device = new AsioDevice(new AsioOut(asio)));
+
+                if (device is null)
+                {
+                    continue;
+                }
+
+                yield return device;
             }
         }
     }

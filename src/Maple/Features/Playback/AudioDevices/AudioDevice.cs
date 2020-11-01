@@ -1,10 +1,10 @@
-using System;
 using Maple.Domain;
 using MvvmScarletToolkit.Observables;
+using System;
 
 namespace Maple
 {
-    public class AudioDevice : ObservableObject
+    public abstract class AudioDevice : ObservableObject, IAudioDevice
     {
         private string _osId;
         public string OsId
@@ -41,11 +41,11 @@ namespace Maple
             set { SetValue(ref _isSelected, value); }
         }
 
-        private DeviceType _deviceType;
-        public DeviceType DeviceType
+        private int _audioDeviceTypeId;
+        public int AudioDeviceTypeId
         {
-            get { return _deviceType; }
-            protected set { SetValue(ref _deviceType, value); }
+            get { return _audioDeviceTypeId; }
+            protected set { SetValue(ref _audioDeviceTypeId, value); }
         }
 
         private string _createdBy;
@@ -76,6 +76,13 @@ namespace Maple
             private set { SetValue(ref _createdOn, value); }
         }
 
+        private bool _isDeleted;
+        public bool IsDeleted
+        {
+            get { return _isDeleted; }
+            private set { SetValue(ref _isDeleted, value); }
+        }
+
         protected AudioDevice(string osIdentifier)
         {
             if (string.IsNullOrWhiteSpace(osIdentifier))
@@ -84,23 +91,16 @@ namespace Maple
             }
 
             OsId = osIdentifier;
+
+            var now = DateTime.Now;
+
+            CreatedBy = Environment.UserName;
+            CreatedOn = now;
+            UpdatedBy = Environment.UserName;
+            UpdatedOn = now;
         }
 
-        public AudioDevice(AudioDevice audioDevice)
-        {
-            Id = audioDevice.Id;
-            Name = audioDevice.Name;
-            Sequence = audioDevice.Sequence;
-
-            DeviceType = audioDevice.DeviceType;
-
-            CreatedBy = audioDevice.CreatedBy;
-            CreatedOn = audioDevice.CreatedOn;
-            UpdatedBy = audioDevice.UpdatedBy;
-            UpdatedOn = audioDevice.UpdatedOn;
-        }
-
-        public void AssignModel(AudioDeviceModel audioDeviceModel)
+        public void UpdateFromModel(AudioDeviceModel audioDeviceModel)
         {
             Id = audioDeviceModel.Id;
             Name = audioDeviceModel.Name;

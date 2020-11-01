@@ -16,7 +16,5 @@ namespace Maple.Domain
         public string UpdatedBy { get; set; }
 
         public bool IsDeleted { get; set; }
-
-        public bool IsNew => Id.Equals(default(TKey));
     }
 }

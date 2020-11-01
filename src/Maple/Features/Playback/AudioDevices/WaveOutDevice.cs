@@ -1,8 +1,10 @@
 using Maple.Domain;
 using NAudio.Wave;
+using System.Diagnostics;
 
 namespace Maple
 {
+    [DebuggerDisplay("{" + nameof(GetDebuggerDisplay) + "(),nq}")]
     internal sealed class WaveOutDevice : AudioDevice
     {
         public WaveOutCapabilities Device { get; }
@@ -13,7 +15,12 @@ namespace Maple
             Name = device.ProductName;
             Device = device;
 
-            DeviceType = DeviceType.WaveOut;
+            AudioDeviceTypeId = (int)DeviceType.WaveOut;
+        }
+
+        private string GetDebuggerDisplay()
+        {
+            return $"{this.GetKey()} {Name} {nameof(WaveOutDevice)}";
         }
     }
 }

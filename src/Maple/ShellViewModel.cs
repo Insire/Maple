@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Maple.Properties;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MvvmScarletToolkit;
 using MvvmScarletToolkit.Observables;
+using Maple.Domain;
 
 namespace Maple
 {
@@ -58,11 +60,15 @@ namespace Maple
             _audioDeviceFactory = audioDeviceFactory ?? throw new ArgumentNullException(nameof(audioDeviceFactory));
         }
 
-        protected override Task UnloadInternal(CancellationToken token)
+        protected override async Task UnloadInternal(CancellationToken token)
         {
-            // serialize all media players first, thgen serialize playlists
+            // serialize all media players first, then serialize playlists
 
-            return Task.CompletedTask;
+            using (var context = _dbcontextFactory())
+            {
+                await context.Update(MediaPlayers, token);
+                await context.Save(Playlists, token);
+            }
         }
 
         protected override async Task RefreshInternal(CancellationToken token)
@@ -74,42 +80,33 @@ namespace Maple
                     context.Database.Migrate();
 
                     // fetch all settings
-
                     // TODO
 
-                    // fetch all playlists and their mediaitems
-                    var playlists = await context.Playlists.ToListAsync(token);
-                    await Playlists.Clear();
-
-                    foreach (var playlist in playlists)
-                    {
-                        var viewmodel = _playlistFactory.Create(playlist);
-
-                        await Playlists.Add(viewmodel);
-                    }
-
                     // fetch all audio devices
-                    var devices = await context.AudioDevices.ToListAsync(token);
-                    await AudioDevices.Clear();
+                    await GetDevices(context, token);
+                    // fetch all playlists and their mediaitems
+                    //var playlists = await context.Playlists.ToListAsync(token);
+                    //await Playlists.Clear();
 
-                    var audioDeviceFactory = _audioDeviceFactory();
-                    foreach (var device in devices)
-                    {
-                        var viewmodel = await audioDeviceFactory.Create(device, token);
+                    //foreach (var playlist in playlists)
+                    //{
+                    //    var viewmodel = _playlistFactory.Create(playlist);
 
-                        await AudioDevices.Add(viewmodel);
-                    }
+                    //    await Playlists.Add(viewmodel);
+                    //}
 
-                    // fetch all media players
-                    var players = await context.Mediaplayers.ToListAsync(token);
-                    await MediaPlayers.Clear();
+                    //// fetch all media players
+                    //var players = await context.Mediaplayers.ToListAsync(token);
+                    //await MediaPlayers.Clear();
 
-                    foreach (var player in players)
-                    {
-                        var viewmodel = _mediaPlayerFactory.Create(player);
+                    //foreach (var player in players)
+                    //{
+                    //    var viewmodel = _mediaPlayerFactory.Create(player);
 
-                        await MediaPlayers.Add(viewmodel);
-                    }
+                    //    await MediaPlayers.Add(viewmodel);
+                    //}
+
+                    await context.SaveChangesAsync(token);
                 }
             }
             catch (Exception ex)
@@ -122,6 +119,59 @@ namespace Maple
             // current /last culture
 
             // deserialize all media players first, thgen deserialize playlists
+        }
+
+        private async Task GetDevices(ApplicationDbContext context, CancellationToken token)
+        {
+            var audioDeviceFactory = _audioDeviceFactory();
+            await AudioDevices.Clear();
+
+            var models = await context.AudioDevices.OrderBy(p => p.Sequence).ThenBy(p => p.AudioDeviceTypeId).ThenBy(p => p.Name).ToListAsync(token);
+            var devices = await audioDeviceFactory.Get(token);
+            var deviceLookup = devices.ToDictionary(p => p.GetKey());
+            var modelLookup = models.ToDictionary(p => p.OsId.GetHashCode() ^ p.AudioDeviceTypeId);
+
+            // add entries that are in the db, but not present in the system anymore
+            foreach (var model in models)
+            {
+                var key = model.GetKey();
+                if (deviceLookup.ContainsKey(key))
+                {
+                    // update the device
+                    var device = deviceLookup[key];
+                    device.UpdateFromModel(model);
+
+                    await AudioDevices.Add(device);
+                }
+                else
+                {
+                    // delete the device
+                    context.AudioDevices.Remove(model);
+                }
+            }
+
+            // create missing models
+            foreach (var device in devices)
+            {
+                var key = device.GetKey();
+                if (modelLookup.ContainsKey(key))
+                {
+                    // update the device
+                    var model = modelLookup[key];
+                    device.UpdateFromModel(model);
+
+                    await AudioDevices.Add(device);
+                }
+                else
+                {
+                    var model = device.GetModel();
+                    await AudioDevices.Add(device);
+
+                    // insert the new device
+                    context.AudioDevices.Add(model);
+                    device.UpdateFromModel(model);
+                }
+            }
         }
     }
 }

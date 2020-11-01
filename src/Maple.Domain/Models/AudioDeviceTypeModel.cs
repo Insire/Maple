@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Maple.Domain
@@ -6,5 +7,12 @@ namespace Maple.Domain
     public class AudioDeviceTypeModel : Entity<int>
     {
         public DeviceType DeviceType { get; set; }
+
+        public virtual List<AudioDeviceModel> AudioDevices { get; set; }
+
+        public AudioDeviceTypeModel()
+        {
+            AudioDevices = new List<AudioDeviceModel>();
+        }
     }
 }

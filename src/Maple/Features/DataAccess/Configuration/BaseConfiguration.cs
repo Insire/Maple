@@ -36,6 +36,8 @@ namespace Maple
             builder.Property(t => t.UpdatedOn)
                 .ValueGeneratedOnAddOrUpdate()
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            builder.Ignore(c => c.IsDeleted);
         }
     }
 }

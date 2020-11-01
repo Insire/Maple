@@ -1,9 +1,11 @@
 using System;
+using System.Diagnostics;
 using Maple.Domain;
 using NAudio.Wave;
 
 namespace Maple
 {
+    [DebuggerDisplay("{" + nameof(GetDebuggerDisplay) + "(),nq}")]
     internal sealed class AsioDevice : AudioDevice
     {
         public AsioOut Device { get; }
@@ -14,7 +16,12 @@ namespace Maple
             Device = device ?? throw new ArgumentNullException(nameof(device));
             Name = device.DriverName;
 
-            DeviceType = DeviceType.ASIO;
+            AudioDeviceTypeId = (int)DeviceType.ASIO;
+        }
+
+        private string GetDebuggerDisplay()
+        {
+            return $"{this.GetKey()} {Name} {nameof(AsioDevice)}";
         }
     }
 }

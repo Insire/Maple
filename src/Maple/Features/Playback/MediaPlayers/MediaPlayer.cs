@@ -11,7 +11,7 @@ using MvvmScarletToolkit.Observables;
 namespace Maple
 {
     [DebuggerDisplay("MediaPlayer: {Sequence}, {Name}")]
-    public sealed class MediaPlayer : ViewModelBase, ISequence
+    public sealed class MediaPlayer : ViewModelBase, IEntity<int>
     {
         private bool _disposed;
 
@@ -83,6 +83,13 @@ namespace Maple
         {
             get { return _playback; }
             private set { SetValue(ref _playback, value); }
+        }
+
+        private bool _isDeleted;
+        public bool IsDeleted
+        {
+            get { return _isDeleted; }
+            private set { SetValue(ref _isDeleted, value); }
         }
 
         public ICommand PlayCommand { get; }
