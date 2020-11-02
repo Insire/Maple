@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D65C950A-327A-496D-A49C-B45E8F97C610}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		.vsconfig = .vsconfig
 		.XamlStyler = .XamlStyler
 		src\Resources\Art_Of_Escapism_-_Universe_Words.mp3 = src\Resources\Art_Of_Escapism_-_Universe_Words.mp3
 		src\Resources\client_secret.json = src\Resources\client_secret.json
