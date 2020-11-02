@@ -2,6 +2,7 @@ using DryIoc;
 using FluentValidation;
 using Jot;
 using Jot.Storage;
+using LiteDB;
 using Maple.Domain;
 using Maple.Youtube;
 using Microsoft.EntityFrameworkCore;
@@ -149,13 +150,20 @@ namespace Maple
 
             void RegisterDataAccess()
             {
-                var path = Path.Combine(settingsDirectory, "maple.db");
+                var dbPath = Path.Combine(settingsDirectory, "maple.db");
                 var builder = new DbContextOptionsBuilder<ApplicationDbContext>()
                     .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-                    .UseSqlite($"Data Source={path};");
+                    .UseSqlite($"Data Source={dbPath};");
 
                 c.UseInstance(builder.Options);
-                c.Register<ApplicationDbContext, ApplicationDbContext>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
+                c.Register<ApplicationDbContext>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
+
+                var fileDbPath = Path.Combine(settingsDirectory, "file.db");
+                c.UseInstance(new LiteDatabaseOptions(fileDbPath));
+                c.Register<LiteDatabase>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true), made: Made.Of(() => LiteDatabaseFactory.Create(Arg.Of<LiteDatabaseOptions>())));
+
+                c.Register<IThumbnailCache, LiteThumbnailCache>(Reuse.Singleton);
+                c.Register<IMediaItemCache, LiteMediaItemCache>(Reuse.Singleton);
             }
 
             void RegisterFileSystemAccess()

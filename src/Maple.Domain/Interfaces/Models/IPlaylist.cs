@@ -5,6 +5,5 @@ namespace Maple.Domain
         bool IsShuffeling { get; }
         PrivacyStatus PrivacyStatus { get; }
         RepeatMode RepeatMode { get; }
-        string Thumbnail { get; }
     }
 }
