@@ -122,43 +122,33 @@ namespace Maple
         public MediaItem(MediaItem mediaItem)
             : this(mediaItem.CommandBuilder)
         {
-            Id = mediaItem.Id;
-            Name = mediaItem.Name;
-            Sequence = mediaItem.Sequence;
-
-            Location = mediaItem.Location;
-            Thumbnail = mediaItem.Thumbnail;
-            Duration = mediaItem.Duration;
-            MediaItemType = mediaItem.MediaItemType;
-            PrivacyStatus = mediaItem.PrivacyStatus;
+            Update(mediaItem);
 
             Playlist = mediaItem.Playlist;
-
-            CreatedBy = mediaItem.CreatedBy;
-            CreatedOn = mediaItem.CreatedOn;
-            UpdatedBy = mediaItem.UpdatedBy;
-            UpdatedOn = mediaItem.UpdatedOn;
         }
 
-        public MediaItem(IScarletCommandBuilder commandBuilder, MediaItemModel mediaItem, Playlist playlist)
+        public MediaItem(IScarletCommandBuilder commandBuilder, MediaItemModel model, Playlist playlist)
             : this(commandBuilder)
         {
-            Id = mediaItem.Id;
-            Name = mediaItem.Name;
-            Sequence = mediaItem.Sequence;
-
-            Location = mediaItem.Location;
-            Thumbnail = mediaItem.Thumbnail;
-            Duration = mediaItem.Duration;
-            MediaItemType = mediaItem.MediaItemType;
-            PrivacyStatus = mediaItem.PrivacyStatus;
+            Update(model);
 
             Playlist = playlist;
+        }
 
-            CreatedBy = mediaItem.CreatedBy;
-            CreatedOn = mediaItem.CreatedOn;
-            UpdatedBy = mediaItem.UpdatedBy;
-            UpdatedOn = mediaItem.UpdatedOn;
+        public void Update(IMediaItem model)
+        {
+            Id = model.Id;
+            Name = model.Name;
+            Sequence = model.Sequence;
+
+            Duration = model.Duration;
+            MediaItemType = model.MediaItemType;
+            PrivacyStatus = model.PrivacyStatus;
+
+            CreatedBy = model.CreatedBy;
+            CreatedOn = model.CreatedOn;
+            UpdatedBy = model.UpdatedBy;
+            UpdatedOn = model.UpdatedOn;
         }
     }
 }

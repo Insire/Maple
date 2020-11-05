@@ -177,11 +177,11 @@ namespace Maple
                     var model = device.GetModel();
                     await AudioDevices.Add(device);
 
-                    // insert the new device
-                    context.AudioDevices.Add(model);
                     device.UpdateFromModel(model, AudioDeviceTypes.GetById(device.Id));
                 }
             }
+
+            AudioDevices.SelectedItem = AudioDevices.Items.FirstOrDefault();
         }
 
         protected override async Task UnloadInternal(CancellationToken token)
@@ -192,20 +192,13 @@ namespace Maple
                 await SaveAudioDevices(context, token);
                 await SavePlaylists(context, token);
                 await SaveMediaPlayers(context, token);
-
-                await context.SaveChangesAsync(token);
             }
         }
 
         private async Task SaveAudioDeviceTypes(ApplicationDbContext context, CancellationToken token)
         {
-            // no insert required - only updates and deletes here
             var viewModels = AudioDeviceTypes.Items;
             var query = context.AudioDeviceTypes.AsTracking().AsQueryable();
-            foreach (var viewModel in viewModels)
-            {
-                query = query.Where(p => viewModel.Id == p.Id);
-            }
 
             var models = await query.ToArrayAsync(token);
             var lookup = models.ToDictionary(p => p.Id);
@@ -213,31 +206,47 @@ namespace Maple
 
             foreach (var viewModel in viewModels)
             {
-                var model = lookup[viewModel.Id];
-                if (viewModel.IsDeleted)
+                if (viewModel.IsNew())
                 {
-                    context.AudioDeviceTypes.Remove(model);
+                    var model = viewModel.GetModel();
+                    context.AudioDeviceTypes.Add(model);
+
+                    await context.SaveChangesAsync(token);
+                    viewModel.Update(model);
+
                     continue;
                 }
+                else
+                {
+                    var model = lookup[viewModel.Id];
+                    if (viewModel.IsDeleted)
+                    {
+                        context.AudioDeviceTypes.Remove(model);
+                        continue;
+                    }
 
-                model.Name = viewModel.Name;
-                model.Sequence = viewModel.Sequence;
+                    model.Name = viewModel.Name;
+                    model.Sequence = viewModel.Sequence;
 
-                model.DeviceType = viewModel.DeviceType;
+                    model.DeviceType = viewModel.DeviceType;
 
-                model.UpdatedOn = now;
-                model.UpdatedBy = Environment.UserName;
+                    model.UpdatedOn = now;
+                    model.UpdatedBy = Environment.UserName;
+
+                    await context.SaveChangesAsync(token);
+                    viewModel.Update(model);
+                }
             }
+
+            await context.SaveChangesAsync(token);
+
+            AudioDeviceTypes.SelectedItem = AudioDeviceTypes.Items.FirstOrDefault();
         }
 
         private async Task SaveAudioDevices(ApplicationDbContext context, CancellationToken token)
         {
             var viewModels = AudioDevices.Items;
-            var query = context.AudioDevices.AsTracking().AsQueryable();
-            foreach (var viewModel in viewModels)
-            {
-                query = query.Where(p => viewModel.Id == p.Id);
-            }
+            var query = context.AudioDevices.AsTracking();
 
             var models = await query.ToArrayAsync(token);
             var lookup = models.ToDictionary(p => p.Id);
@@ -250,6 +259,9 @@ namespace Maple
                     var model = viewModel.GetModel();
 
                     context.AudioDevices.Add(model);
+                    await context.SaveChangesAsync(token);
+                    viewModel.Update(model);
+
                     continue;
                 }
                 else
@@ -268,18 +280,21 @@ namespace Maple
 
                     model.UpdatedOn = now;
                     model.UpdatedBy = Environment.UserName;
+
+                    await context.SaveChangesAsync(token);
+                    viewModel.Update(model);
                 }
             }
+
+            await context.SaveChangesAsync(token);
+
+            AudioDevices.SelectedItem = AudioDevices.Items.FirstOrDefault();
         }
 
         private async Task SavePlaylists(ApplicationDbContext context, CancellationToken token)
         {
             var viewModels = Playlists.Items;
-            var query = context.Playlists.AsTracking().AsQueryable();
-            foreach (var viewModel in viewModels)
-            {
-                query = query.Where(p => viewModel.Id == p.Id);
-            }
+            var query = context.Playlists.AsTracking();
 
             var models = await query.ToArrayAsync(token);
             var lookup = models.ToDictionary(p => p.Id);
@@ -293,6 +308,9 @@ namespace Maple
 
                     context.Playlists.Add(model);
                     await SaveMediaItems(viewModel);
+
+                    await context.SaveChangesAsync(token);
+                    viewModel.Update(model);
                     continue;
                 }
                 else
@@ -307,7 +325,6 @@ namespace Maple
                     model.Name = viewModel.Name;
                     model.Sequence = viewModel.Sequence;
 
-                    model.Thumbnail = viewModel.Thumbnail;
                     model.IsShuffeling = viewModel.IsShuffeling;
                     model.PrivacyStatus = viewModel.PrivacyStatus;
                     model.RepeatMode = viewModel.RepeatMode;
@@ -316,16 +333,19 @@ namespace Maple
                     model.UpdatedBy = Environment.UserName;
 
                     await SaveMediaItems(viewModel);
+
+                    await context.SaveChangesAsync(token);
+                    viewModel.Update(model);
                 }
             }
+
+            await context.SaveChangesAsync(token);
+
+            Playlists.SelectedItem = Playlists.Items.FirstOrDefault();
 
             async Task SaveMediaItems(Playlist playlist)
             {
                 var query = context.MediaItems.AsTracking().AsQueryable();
-                foreach (var viewModel in playlist.Items)
-                {
-                    query = query.Where(p => viewModel.Id == p.Id);
-                }
 
                 var models = await query.ToArrayAsync(token);
                 var lookup = models.ToDictionary(p => p.Id);
@@ -337,6 +357,9 @@ namespace Maple
                         var model = viewModel.GetModel();
 
                         context.MediaItems.Add(model);
+
+                        await context.SaveChangesAsync(token);
+                        viewModel.Update(model);
                         continue;
                     }
                     else
@@ -351,15 +374,21 @@ namespace Maple
                         model.Name = viewModel.Name;
                         model.Sequence = viewModel.Sequence;
 
-                        model.Location = viewModel.Location;
                         model.Duration = viewModel.Duration;
                         model.PrivacyStatus = viewModel.PrivacyStatus;
                         model.MediaItemType = viewModel.MediaItemType;
 
                         model.UpdatedOn = now;
                         model.UpdatedBy = Environment.UserName;
+
+                        await context.SaveChangesAsync(token);
+                        viewModel.Update(model);
                     }
                 }
+
+                await context.SaveChangesAsync(token);
+
+                playlist.SelectedItem = playlist.Items.FirstOrDefault();
             }
         }
 
@@ -367,10 +396,6 @@ namespace Maple
         {
             var viewModels = MediaPlayers.Items;
             var query = context.MediaPlayers.AsTracking().AsQueryable();
-            foreach (var viewModel in viewModels)
-            {
-                query = query.Where(p => viewModel.Id == p.Id);
-            }
 
             var models = await query.ToArrayAsync(token);
             var lookup = models.ToDictionary(p => p.Id);
@@ -380,9 +405,15 @@ namespace Maple
             {
                 if (viewModel.IsNew())
                 {
+                    viewModel.AudioDeviceId = viewModel.AudioDevice?.Id;
+                    viewModel.PlaylistId = viewModel.Playlist?.Id;
+
                     var model = viewModel.GetModel();
 
                     context.MediaPlayers.Add(model);
+
+                    await context.SaveChangesAsync(token);
+                    viewModel.Update(model);
                     continue;
                 }
                 else
@@ -403,8 +434,15 @@ namespace Maple
 
                     model.UpdatedOn = now;
                     model.UpdatedBy = Environment.UserName;
+
+                    await context.SaveChangesAsync(token);
+                    viewModel.Update(model);
                 }
             }
+
+            await context.SaveChangesAsync(token);
+
+            MediaPlayers.SelectedItem = MediaPlayers.Items.FirstOrDefault();
         }
     }
 }

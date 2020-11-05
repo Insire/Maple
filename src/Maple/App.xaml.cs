@@ -6,6 +6,7 @@ using System.Windows.Threading;
 using DryIoc;
 using Jot;
 using Microsoft.Extensions.Logging;
+using MvvmScarletToolkit;
 
 namespace Maple
 {
@@ -82,17 +83,19 @@ namespace Maple
             }
         }
 
-        private void ExitInternal(ExitEventArgs e)
+        private async void ExitInternal(ExitEventArgs e)
         {
             DispatcherUnhandledException -= App_DispatcherUnhandledException;
 
             _log.LogInformation(Maple.Properties.Resources.AppExitSaving);
             _tracker.PersistAll();
 
+            base.OnExit(e);
+
+            await ScarletExitService.Default.ShutDown();
+
             _log.LogInformation(Maple.Properties.Resources.AppExitComplete);
             _container.Dispose();
-
-            base.OnExit(e);
         }
     }
 }

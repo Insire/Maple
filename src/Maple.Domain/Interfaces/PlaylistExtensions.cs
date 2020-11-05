@@ -1,4 +1,4 @@
-﻿namespace Maple.Domain
+namespace Maple.Domain
 {
     public static class PlaylistExtensions
     {
@@ -10,7 +10,6 @@
                 Name = instance.Name,
                 Sequence = instance.Sequence,
 
-                Thumbnail = instance.Thumbnail,
                 IsShuffeling = instance.IsShuffeling,
                 PrivacyStatus = instance.PrivacyStatus,
                 RepeatMode = instance.RepeatMode,

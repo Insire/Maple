@@ -107,18 +107,25 @@ namespace Maple
             UpdatedOn = now;
         }
 
-        public void UpdateFromModel(AudioDeviceModel audioDeviceModel, AudioDeviceType audioDeviceType)
+        public void UpdateFromModel(AudioDeviceModel model, AudioDeviceType audioDeviceType)
         {
-            Id = audioDeviceModel.Id;
-            Name = audioDeviceModel.Name;
-            Sequence = audioDeviceModel.Sequence;
+            Update(model);
 
             AudioDeviceType = audioDeviceType;
+        }
 
-            CreatedBy = audioDeviceModel.CreatedBy;
-            CreatedOn = audioDeviceModel.CreatedOn;
-            UpdatedBy = audioDeviceModel.UpdatedBy;
-            UpdatedOn = audioDeviceModel.UpdatedOn;
+        public void Update(IAudioDevice model)
+        {
+            Id = model.Id;
+            Name = model.Name;
+            Sequence = model.Sequence;
+
+            AudioDeviceTypeId = model.AudioDeviceTypeId;
+
+            CreatedBy = model.CreatedBy;
+            CreatedOn = model.CreatedOn;
+            UpdatedBy = model.UpdatedBy;
+            UpdatedOn = model.UpdatedOn;
         }
     }
 }

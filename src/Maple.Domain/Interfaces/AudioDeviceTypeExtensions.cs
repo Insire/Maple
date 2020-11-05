@@ -1,18 +1,16 @@
-namespace Maple.Domain
+﻿namespace Maple.Domain
 {
-    public static class MediaItemExtensions
+    public static class AudioDeviceTypeExtensions
     {
-        public static MediaItemModel GetModel(this IMediaItem instance)
+        public static AudioDeviceTypeModel GetModel(this IAudioDeviceTypeModel instance)
         {
-            return new MediaItemModel()
+            return new AudioDeviceTypeModel()
             {
                 Id = instance.Id,
                 Name = instance.Name,
                 Sequence = instance.Sequence,
 
-                Duration = instance.Duration,
-                PrivacyStatus = instance.PrivacyStatus,
-                MediaItemType = instance.MediaItemType,
+                DeviceType = instance.DeviceType,
 
                 CreatedBy = instance.CreatedBy,
                 CreatedOn = instance.CreatedOn,

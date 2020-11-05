@@ -61,7 +61,7 @@ namespace Maple
                     .Enrich.With<ThreadIdEnricher>()
                     .Enrich.WithExceptionDetails()
                     .WriteTo.Console()
-                    .WriteTo.Async(p => p.RollingFile(
+                    .WriteTo.Async(p => p.File(
                         formatter,
                         Environment.ExpandEnvironmentVariables(Path.Combine(logDirectory, $"{version}_maple.log")),
                         fileSizeLimitBytes: 1073741824,
@@ -124,7 +124,7 @@ namespace Maple
                 c.Register<ISequenceService, SequenceService>();
                 c.Register<IYoutubeService, YoutubeService>(Reuse.Singleton);
                 c.Register<IAudioDeviceProvider, AudioDeviceProvider>(Reuse.Singleton);
-
+                c.Register<IPlaybackService, DefaultPlaybackService>(Reuse.Transient, setup: Setup.With(allowDisposableTransient: true));
                 c.Register<IVersionService, VersionService>(Reuse.Singleton);
                 c.Register<ILocalizationProvider, ResxTranslationProvider>(Reuse.Singleton);
 

@@ -148,36 +148,37 @@ namespace Maple
         public MediaPlayer(MediaPlayer mediaPlayer)
             : this(mediaPlayer.CommandBuilder, mediaPlayer.Playback)
         {
-            Id = mediaPlayer.Id;
-            Name = mediaPlayer.Name;
-            Sequence = mediaPlayer.Sequence;
+            Update(mediaPlayer);
 
-            IsPrimary = mediaPlayer.IsPrimary;
             Playlist = mediaPlayer.Playlist;
             Playback = mediaPlayer.Playback;
-
-            CreatedBy = mediaPlayer.CreatedBy;
-            CreatedOn = mediaPlayer.CreatedOn;
-            UpdatedBy = mediaPlayer.UpdatedBy;
-            UpdatedOn = mediaPlayer.UpdatedOn;
+            AudioDevice = mediaPlayer.AudioDevice;
         }
 
-        public MediaPlayer(IScarletCommandBuilder commandBuilder, MediaPlayerModel mediaPlayer, Playlist playlist, IPlaybackService playbackService)
+        public MediaPlayer(IScarletCommandBuilder commandBuilder, MediaPlayerModel model, Playlist playlist, AudioDevice audioDevice, IPlaybackService playbackService)
             : this(commandBuilder, playbackService)
         {
-            Id = mediaPlayer.Id;
-            Name = mediaPlayer.Name;
-            Sequence = mediaPlayer.Sequence;
-
-            IsPrimary = mediaPlayer.IsPrimary;
+            Update(model);
 
             Playlist = playlist;
             Playback = playbackService;
+            AudioDevice = audioDevice;
+        }
 
-            CreatedBy = mediaPlayer.CreatedBy;
-            CreatedOn = mediaPlayer.CreatedOn;
-            UpdatedBy = mediaPlayer.UpdatedBy;
-            UpdatedOn = mediaPlayer.UpdatedOn;
+        public void Update(IMediaPlayer model)
+        {
+            Id = model.Id;
+            Name = model.Name;
+            Sequence = model.Sequence;
+
+            IsPrimary = model.IsPrimary;
+            AudioDeviceId = model.AudioDeviceId;
+            PlaylistId = model.PlaylistId;
+
+            CreatedBy = model.CreatedBy;
+            CreatedOn = model.CreatedOn;
+            UpdatedBy = model.UpdatedBy;
+            UpdatedOn = model.UpdatedOn;
         }
 
         public void Play(MediaItem mediaItem)

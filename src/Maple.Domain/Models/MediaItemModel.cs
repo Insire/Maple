@@ -6,10 +6,6 @@ namespace Maple.Domain
     [DebuggerDisplay("MediaItemModel: {Sequence}, {Name}")]
     public class MediaItemModel : Entity<int>, IMediaItem
     {
-        public string Location { get; set; }
-
-        public string Thumbnail { get; set; }
-
         public TimeSpan Duration { get; set; }
 
         public PrivacyStatus PrivacyStatus { get; set; }

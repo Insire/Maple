@@ -11,8 +11,6 @@ namespace Maple
             RuleFor(playlist => playlist.Name).NotEmpty();
             RuleFor(playlist => playlist.Name).Length(1, 64);
 
-            RuleFor(playlist => playlist.Thumbnail).Length(0, 260); // max windows path length https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
-
             RuleFor(playlist => playlist.PrivacyStatus).NotNull();
 
             RuleFor(playlist => playlist.RepeatMode).NotNull();

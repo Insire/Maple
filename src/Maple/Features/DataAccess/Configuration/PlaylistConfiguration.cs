@@ -9,10 +9,6 @@ namespace Maple
         {
             base.Configure(builder);
 
-            builder.Property(t => t.Thumbnail)
-                    .HasMaxLength(260)
-                    .IsRequired();
-
             builder.Property(t => t.IsShuffeling)
                     .IsRequired();
 

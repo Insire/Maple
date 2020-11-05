@@ -10,10 +10,6 @@ namespace Maple
         {
             base.Configure(builder);
 
-            builder.Property(t => t.Location)
-                   .IsRequired()
-                   .HasMaxLength(2048);
-
             builder.HasOne(t => t.Playlist)
                    .WithMany(t => t.MediaItems)
                    .IsRequired()

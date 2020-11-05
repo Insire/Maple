@@ -71,6 +71,11 @@ namespace Maple
 
         public AudioDeviceType(AudioDeviceTypeModel model)
         {
+            Update(model);
+        }
+
+        public void Update(AudioDeviceTypeModel model)
+        {
             Id = model.Id;
             Name = model.Name;
             Sequence = model.Sequence;

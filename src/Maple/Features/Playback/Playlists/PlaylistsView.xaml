@@ -37,9 +37,9 @@
                          SelectedItem="{Binding SelectedItem}"
                          SelectionMode="Extended">
 
-                    <i:Interaction.Behaviors>
+                    <!--<i:Interaction.Behaviors>
                         <mvvm:MultiSelectionBehavior SelectedItems="{Binding SelectedItems}" />
-                    </i:Interaction.Behaviors>
+                    </i:Interaction.Behaviors>-->
 
                     <ListBox.ContextMenu>
                         <ContextMenu>

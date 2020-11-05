@@ -34,8 +34,9 @@
         <Resource Include="..\Resources\Images\logo_withoutbackground.png" Link="Resources\logo_withoutbackground.png" />
     </ItemGroup>
     <ItemGroup>
+        <PackageReference Include="MvvmScarletToolkit.Wpf" Version="2.1.72-g86b43d5e9c" />
         <PackageReference Include="AdonisUI.ClassicTheme" Version="1.16.0" />
-        <PackageReference Include="ControlzEx" Version="4.3.2" />
+        <PackageReference Include="ControlzEx" Version="4.4.0" />
         <PackageReference Include="DryIoc.dll" Version="4.5.1" />
         <PackageReference Include="FluentValidation" Version="8.6.2" />
         <PackageReference Include="Jot" Version="2.1.7" />
@@ -48,14 +49,14 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.9" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.9" />
         <PackageReference Include="MonstercatNet" Version="2.0.26" />
-        <PackageReference Include="MvvmScarletToolkit.Wpf" Version="2.1.72-g86b43d5e9c" />
         <PackageReference Include="NAudio" Version="1.10.0" />
-        <PackageReference Include="Serilog.Exceptions" Version="5.6.0" />
+        <PackageReference Include="Ookii.Dialogs.Wpf" Version="1.2.0" />
+        <PackageReference Include="Serilog.Exceptions" Version="5.7.0" />
         <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
         <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
         <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
         <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-        <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
+        <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Maple.Domain\Maple.Domain.csproj" />

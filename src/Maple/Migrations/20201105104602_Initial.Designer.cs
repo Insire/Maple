@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Maple.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201101121826_Initial")]
+    [Migration("20201105104602_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -174,11 +174,6 @@ namespace Maple.Migrations
                     b.Property<TimeSpan>("Duration")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(2048);
-
                     b.Property<int>("MediaItemType")
                         .HasColumnType("INTEGER");
 
@@ -198,9 +193,6 @@ namespace Maple.Migrations
                         .HasColumnName("Sequence")
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(0);
-
-                    b.Property<string>("Thumbnail")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("UpdatedBy")
                         .ValueGeneratedOnAdd()
@@ -272,7 +264,7 @@ namespace Maple.Migrations
 
                     b.HasIndex("PlaylistId");
 
-                    b.ToTable("Mediaplayers");
+                    b.ToTable("MediaPlayers");
                 });
 
             modelBuilder.Entity("Maple.Domain.PlaylistModel", b =>
@@ -311,11 +303,6 @@ namespace Maple.Migrations
                         .HasColumnName("Sequence")
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(0);
-
-                    b.Property<string>("Thumbnail")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(260);
 
                     b.Property<string>("UpdatedBy")
                         .ValueGeneratedOnAdd()

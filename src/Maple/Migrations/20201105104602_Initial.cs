@@ -40,7 +40,6 @@ namespace Maple.Migrations
                     CreatedBy = table.Column<string>(nullable: true, defaultValue: "SYSTEM"),
                     UpdatedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     UpdatedBy = table.Column<string>(nullable: true, defaultValue: "SYSTEM"),
-                    Thumbnail = table.Column<string>(maxLength: 260, nullable: false),
                     IsShuffeling = table.Column<bool>(nullable: false),
                     PrivacyStatus = table.Column<int>(nullable: false),
                     RepeatMode = table.Column<int>(nullable: false)
@@ -90,8 +89,6 @@ namespace Maple.Migrations
                     CreatedBy = table.Column<string>(nullable: true, defaultValue: "SYSTEM"),
                     UpdatedOn = table.Column<DateTime>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     UpdatedBy = table.Column<string>(nullable: true, defaultValue: "SYSTEM"),
-                    Location = table.Column<string>(maxLength: 2048, nullable: false),
-                    Thumbnail = table.Column<string>(nullable: true),
                     Duration = table.Column<TimeSpan>(nullable: false),
                     PrivacyStatus = table.Column<int>(nullable: false),
                     MediaItemType = table.Column<int>(nullable: false),
@@ -109,7 +106,7 @@ namespace Maple.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Mediaplayers",
+                name: "MediaPlayers",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -127,15 +124,15 @@ namespace Maple.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Mediaplayers", x => x.Id);
+                    table.PrimaryKey("PK_MediaPlayers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Mediaplayers_AudioDevices_AudioDeviceId",
+                        name: "FK_MediaPlayers_AudioDevices_AudioDeviceId",
                         column: x => x.AudioDeviceId,
                         principalTable: "AudioDevices",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Mediaplayers_Playlists_PlaylistId",
+                        name: "FK_MediaPlayers_Playlists_PlaylistId",
                         column: x => x.PlaylistId,
                         principalTable: "Playlists",
                         principalColumn: "Id",
@@ -173,13 +170,13 @@ namespace Maple.Migrations
                 column: "PlaylistId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Mediaplayers_AudioDeviceId",
-                table: "Mediaplayers",
+                name: "IX_MediaPlayers_AudioDeviceId",
+                table: "MediaPlayers",
                 column: "AudioDeviceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Mediaplayers_PlaylistId",
-                table: "Mediaplayers",
+                name: "IX_MediaPlayers_PlaylistId",
+                table: "MediaPlayers",
                 column: "PlaylistId");
         }
 
@@ -189,7 +186,7 @@ namespace Maple.Migrations
                 name: "MediaItems");
 
             migrationBuilder.DropTable(
-                name: "Mediaplayers");
+                name: "MediaPlayers");
 
             migrationBuilder.DropTable(
                 name: "AudioDevices");

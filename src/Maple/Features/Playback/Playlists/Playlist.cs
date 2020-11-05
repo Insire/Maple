@@ -35,13 +35,6 @@ namespace Maple
             set { SetValue(ref _name, value); }
         }
 
-        private string _thumbnail;
-        public string Thumbnail
-        {
-            get { return _thumbnail; }
-            set { SetValue(ref _thumbnail, value); }
-        }
-
         private bool _isSelected;
         public bool IsSelected
         {
@@ -120,21 +113,7 @@ namespace Maple
         public Playlist(Playlist playlist)
             : this(playlist.CommandBuilder)
         {
-            Id = playlist.Id;
-            Name = playlist.Name;
-            Sequence = playlist.Sequence;
-
-            Thumbnail = playlist.Thumbnail;
-            PrivacyStatus = playlist.PrivacyStatus;
-            RepeatMode = playlist.RepeatMode;
-            IsShuffeling = playlist.IsShuffeling;
-
-            IsSelected = playlist.IsSelected;
-
-            CreatedBy = playlist.CreatedBy;
-            CreatedOn = playlist.CreatedOn;
-            UpdatedBy = playlist.UpdatedBy;
-            UpdatedOn = playlist.UpdatedOn;
+            Update(playlist);
 
             for (var i = 0; i < playlist.Count; i++)
             {
@@ -151,11 +130,21 @@ namespace Maple
         public Playlist(IScarletCommandBuilder commandBuilder, PlaylistModel model)
             : this(commandBuilder)
         {
+            Update(model);
+
+            for (var i = 0; i < model.MediaItems.Count; i++)
+            {
+                var item = model.MediaItems[i];
+                AddUnchecked(new MediaItem(commandBuilder, item, this));
+            }
+        }
+
+        public void Update(IPlaylist model)
+        {
             Id = model.Id;
             Name = model.Name;
             Sequence = model.Sequence;
 
-            Thumbnail = model.Thumbnail;
             PrivacyStatus = model.PrivacyStatus;
             RepeatMode = model.RepeatMode;
             IsShuffeling = model.IsShuffeling;
@@ -164,12 +153,6 @@ namespace Maple
             CreatedOn = model.CreatedOn;
             UpdatedBy = model.UpdatedBy;
             UpdatedOn = model.UpdatedOn;
-
-            for (var i = 0; i < model.MediaItems.Count; i++)
-            {
-                var item = model.MediaItems[i];
-                AddUnchecked(new MediaItem(commandBuilder, item, this));
-            }
         }
 
         /// <summary>
