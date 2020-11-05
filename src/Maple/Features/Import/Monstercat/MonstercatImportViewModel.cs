@@ -1,7 +1,7 @@
 using FluentValidation.Results;
 using MvvmScarletToolkit;
 using MvvmScarletToolkit.Observables;
-using SoftThorn.MonstercatNet;
+using System;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,10 +9,13 @@ using System.Windows.Input;
 
 namespace Maple
 {
-    public sealed class MonstercatImportViewModel : ViewModelListBase<MonstercatRessourceViewModel>
+    public sealed class MonstercatImportViewModel : ViewModelListBase<IMonstercatViewModel>
     {
         private readonly ObservableCollection<ValidationFailure> _errors;
-        private readonly IMonstercatApi _monstercatApi;
+        private readonly ObservableCollection<MonstercatReleaseViewModel> _releases;
+        private readonly ObservableCollection<MonstercatPlaylistViewModel> _playlists;
+
+        private readonly IMonstercatViewModelFactory _monstercatApi;
 
         private string _source;
         public string Source
@@ -20,8 +23,6 @@ namespace Maple
             get { return _source; }
             set { SetValue(ref _source, value); }
         }
-
-        public ReadOnlyObservableCollection<ValidationFailure> Errors { get; }
 
         private ValidationFailure _error;
         public ValidationFailure Error
@@ -32,10 +33,26 @@ namespace Maple
 
         public ICommand ParseCommand { get; }
 
-        public MonstercatImportViewModel(in IScarletCommandBuilder commandBuilder, IMonstercatApi monstercatApi)
+        public ICommand AddToResultsCommand { get; }
+
+        public ICommand RemoveFromResultsCommand { get; }
+
+        public ReadOnlyObservableCollection<ValidationFailure> Errors { get; }
+        public ReadOnlyObservableCollection<MonstercatReleaseViewModel> Releases { get; }
+        public ReadOnlyObservableCollection<MonstercatPlaylistViewModel> Playlists { get; }
+
+        public MonstercatImportViewModel(in IScarletCommandBuilder commandBuilder, IMonstercatViewModelFactory monstercatApi)
             : base(commandBuilder)
         {
-            _monstercatApi = monstercatApi ?? throw new System.ArgumentNullException(nameof(monstercatApi));
+            _monstercatApi = monstercatApi ?? throw new ArgumentNullException(nameof(monstercatApi));
+
+            _errors = new ObservableCollection<ValidationFailure>();
+            _releases = new ObservableCollection<MonstercatReleaseViewModel>();
+            _playlists = new ObservableCollection<MonstercatPlaylistViewModel>();
+
+            Errors = new ReadOnlyObservableCollection<ValidationFailure>(_errors);
+            Releases = new ReadOnlyObservableCollection<MonstercatReleaseViewModel>(_releases);
+            Playlists = new ReadOnlyObservableCollection<MonstercatPlaylistViewModel>(_playlists);
 
             ParseCommand = commandBuilder
                 .Create(Parse, CanParse)
@@ -47,8 +64,7 @@ namespace Maple
         {
             using (BusyStack.GetToken())
             {
-                var result = await _monstercatApi
-                    .Parse(Source, token);
+                var result = await _monstercatApi.Create(Source, token);
 
                 if (result is null)
                 {

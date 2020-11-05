@@ -108,6 +108,8 @@ namespace Maple
 
                 await MediaPlayers.Add(viewmodel);
             }
+
+            MediaPlayers.SelectedItem = MediaPlayers.Items.FirstOrDefault();
         }
 
         private async Task GetPlaylists(ApplicationDbContext context, CancellationToken token)
@@ -119,9 +121,11 @@ namespace Maple
             foreach (var playlist in playlists)
             {
                 var viewmodel = _playlistFactory.Create(playlist);
-
                 await Playlists.Add(viewmodel);
+                viewmodel.SelectedItem = viewmodel.Items.FirstOrDefault();
             }
+
+            Playlists.SelectedItem = Playlists.Items.FirstOrDefault();
         }
 
         private async Task GetAudioDeviceTypes(ApplicationDbContext context, CancellationToken token)
@@ -129,6 +133,8 @@ namespace Maple
             var models = await context.AudioDeviceTypes.OrderBy(p => p.Sequence).ThenBy(p => p.Name).ToListAsync(token);
 
             await AudioDeviceTypes.AddRange(models.Select(p => new AudioDeviceType(p)));
+
+            AudioDeviceTypes.SelectedItem = AudioDeviceTypes.Items.FirstOrDefault();
         }
 
         private async Task GetAudioDevices(ApplicationDbContext context, CancellationToken token)
@@ -239,8 +245,6 @@ namespace Maple
             }
 
             await context.SaveChangesAsync(token);
-
-            AudioDeviceTypes.SelectedItem = AudioDeviceTypes.Items.FirstOrDefault();
         }
 
         private async Task SaveAudioDevices(ApplicationDbContext context, CancellationToken token)
@@ -287,8 +291,6 @@ namespace Maple
             }
 
             await context.SaveChangesAsync(token);
-
-            AudioDevices.SelectedItem = AudioDevices.Items.FirstOrDefault();
         }
 
         private async Task SavePlaylists(ApplicationDbContext context, CancellationToken token)
@@ -341,8 +343,6 @@ namespace Maple
 
             await context.SaveChangesAsync(token);
 
-            Playlists.SelectedItem = Playlists.Items.FirstOrDefault();
-
             async Task SaveMediaItems(Playlist playlist)
             {
                 var query = context.MediaItems.AsTracking().AsQueryable();
@@ -387,8 +387,6 @@ namespace Maple
                 }
 
                 await context.SaveChangesAsync(token);
-
-                playlist.SelectedItem = playlist.Items.FirstOrDefault();
             }
         }
 
@@ -441,8 +439,6 @@ namespace Maple
             }
 
             await context.SaveChangesAsync(token);
-
-            MediaPlayers.SelectedItem = MediaPlayers.Items.FirstOrDefault();
         }
     }
 }

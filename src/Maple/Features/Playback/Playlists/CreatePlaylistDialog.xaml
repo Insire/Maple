@@ -9,7 +9,7 @@
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:mvvm="http://SoftThorn.MvvmScarletToolkit.com/winfx/xaml/shared"
                     x:Name="CreatePlaylistDialogRoot"
-                    Title="Create Playlist"
+                    Title="Edit Playlist"
                     Width="800"
                     Height="425"
                     d:DataContext="{d:DesignInstance Type=local:CreatePlaylistViewModel,
@@ -194,7 +194,7 @@
 
                 <Button Command="{Binding MonstercatImportCommand, ElementName=CreatePlaylistDialogRoot}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Import items from monstercat" />
+                        <TextBlock Text="Import from monstercat" />
                     </StackPanel>
                 </Button>
 

@@ -10,8 +10,25 @@
                     Title="Import from Monstercat"
                     Width="800"
                     Height="425"
+                    d:DataContext="{d:DesignInstance Type=local:MonstercatImportViewModel,
+                                                     IsDesignTimeCreatable=false}"
                     WindowStartupLocation="CenterOwner"
                     mc:Ignorable="d">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type local:MonstercatReleaseViewModel}">
+            <TextBlock>
+                <Run Text="{Binding Title, Mode=OneWay}" />
+                <LineBreak />
+                <Run Text="{Binding ArtistsTitle, Mode=OneWay}" />
+                <LineBreak />
+                <Run Text="{Binding GenrePrimary, Mode=OneWay}" />
+                <Run Text="," />
+                <Run Text="{Binding GenreSecondary, Mode=OneWay}" />
+            </TextBlock>
+        </DataTemplate>
+    </Window.Resources>
+
     <DockPanel Margin="8">
         <DockPanel DockPanel.Dock="Bottom">
 
@@ -33,10 +50,12 @@
 
         <DockPanel DockPanel.Dock="Top">
             <DockPanel>
-                <Button DockPanel.Dock="Right">
+                <Button Command="{Binding ParseCommand}" DockPanel.Dock="Right">
                     <icons:PackIconMaterial Kind="Magnify" />
                 </Button>
-                <TextBox Margin="0,0,8,0" adonisExtensions:WatermarkExtension.Watermark="Search monstercat.com" />
+                <TextBox Margin="0,0,8,0"
+                         adonisExtensions:WatermarkExtension.Watermark="Search monstercat.com"
+                         Text="{Binding Source, UpdateSourceTrigger=PropertyChanged, Delay=125}" />
             </DockPanel>
         </DockPanel>
 
@@ -68,7 +87,7 @@
                       Grid.Column="0"
                       Header="Results found">
 
-                <ListBox />
+                <ListBox ItemsSource="{Binding Items}" />
             </GroupBox>
 
             <Button Grid.Row="2" Grid.Column="2">

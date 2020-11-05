@@ -177,7 +177,8 @@ namespace Maple
             {
                 c.Register<IMonstercatApi>(Reuse.Singleton, Made.Of(() => MonstercatApi.Create(Arg.Of<HttpClient>())));
                 c.Register<MonstercatImportViewModel>(Reuse.Singleton);
-                c.Register<HttpClient>(Reuse.Singleton, Made.Of(() => new HttpClient()));
+                c.Register<IMonstercatViewModelFactory, MonstercatViewModelFactory>(Reuse.Singleton);
+                c.UseInstance(new HttpClient().UseMonstercatApiV2());
             }
 
             void RegisterStartup()

@@ -5,7 +5,7 @@
                     xmlns:local="clr-namespace:Maple"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     x:Name="CreateMediaPlayerDialogRoot"
-                    Title="TODO"
+                    Title="Edit Mediaplayer"
                     Width="800"
                     Height="325"
                     d:DataContext="{d:DesignInstance Type=local:CreateMediaPlayerViewModel,
