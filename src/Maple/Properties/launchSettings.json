@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Maple": {
+      "commandName": "Project",
+      "commandLineArgs": "Debug"
+    }
+  }
+}

@@ -1,0 +1,66 @@
+<UserControl x:Class="Maple.RepeatModeControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:domain="clr-namespace:Maple.Domain;assembly=Maple.Domain"
+             xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DataContext="{d:DesignInstance Type=domain:RepeatMode,
+                                              IsDesignTimeCreatable=True}"
+             d:DesignHeight="450" Name="RepeatModeControlRoot"
+             d:DesignWidth="800"
+             Loaded="RepeatModeControl_Loaded"
+             mc:Ignorable="d">
+
+    <Button>
+        <Button.Style>
+            <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
+                <Setter Property="IsEnabled" Value="False" />
+                <Setter Property="Command" Value="{Binding ToggleCommand, ElementName=RepeatModeControlRoot}" />
+                <Setter Property="Content">
+                    <Setter.Value>
+                        <icons:PackIconMaterial Width="24"
+                                                Height="24"
+                                                Kind="RepeatOff" />
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding}" Value="{x:Static domain:RepeatMode.None}">
+                        <Setter Property="IsEnabled" Value="True" />
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <icons:PackIconMaterial Width="24"
+                                                        Height="24"
+                                                        Kind="RepeatOff" />
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+
+                    <DataTrigger Binding="{Binding}" Value="{x:Static domain:RepeatMode.Single}">
+                        <Setter Property="IsEnabled" Value="True" />
+                        <Setter Property="Foreground" Value="DarkOrange" />
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <icons:PackIconMaterial Width="24"
+                                                        Height="24"
+                                                        Kind="RepeatOnce" />
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+
+                    <DataTrigger Binding="{Binding}" Value="{x:Static domain:RepeatMode.All}">
+                        <Setter Property="IsEnabled" Value="True" />
+                        <Setter Property="Foreground" Value="DarkOrange" />
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <icons:PackIconMaterial Width="24"
+                                                        Height="24"
+                                                        Kind="Repeat" />
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Button.Style>
+    </Button>
+</UserControl>

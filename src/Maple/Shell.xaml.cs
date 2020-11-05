@@ -1,24 +1,17 @@
-﻿using System;
-using System.Windows.Input;
-using Maple.Core;
+using Jot;
+using MvvmScarletToolkit;
+using MvvmScarletToolkit.Abstractions;
 
 namespace Maple
 {
     public partial class Shell : IoCWindow
     {
-        private readonly ShellViewModel _datacontext;
-
-        public Shell(ILocalizationService manager, IMessenger messenger, ShellViewModel datacontext) : base(manager, messenger)
+        public Shell(ILocalizationService localizationService, IScarletCommandBuilder commandBuilder, Tracker tracker)
+            : base(commandBuilder, localizationService)
         {
-            DataContext = datacontext ?? throw new ArgumentNullException(nameof(datacontext), $"{nameof(datacontext)} {Localization.Properties.Resources.IsRequired}");
-            _datacontext = datacontext;
-
             InitializeComponent();
-        }
 
-        private void UIElement_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            _datacontext.Scenes.IsExpanded = false;
+            tracker.Track(this);
         }
     }
 }

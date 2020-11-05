@@ -1,0 +1,211 @@
+<UserControl x:Class="Maple.PlaylistsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:local="clr-namespace:Maple"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mvvm="http://SoftThorn.MvvmScarletToolkit.com/winfx/xaml/shared"
+             x:Name="PlaylistsViewRoot"
+             d:DataContext="{d:DesignInstance Type=local:Playlists,
+                                              IsDesignTimeCreatable=false}"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             Loaded="PlaylistsView_Loaded"
+             Unloaded="PlaylistsView_Unloaded"
+             mc:Ignorable="d">
+
+    <TabControl>
+        <TabItem Header="Wiedergabelisten">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="8" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+
+                <ListBox Grid.Row="0"
+                         Grid.Column="0"
+                         ItemsSource="{Binding Items}"
+                         SelectedItem="{Binding SelectedItem}"
+                         SelectionMode="Extended">
+
+                    <!--<i:Interaction.Behaviors>
+                        <mvvm:MultiSelectionBehavior SelectedItems="{Binding SelectedItems}" />
+                    </i:Interaction.Behaviors>-->
+
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+
+                            <MenuItem Command="{Binding CreateCommand}" Header="Add New">
+                                <MenuItem.Icon>
+                                    <icons:PackIconMaterial Kind="PlusThick" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+
+                            <MenuItem Command="{Binding UpdateCommand}" Header="Edit">
+                                <MenuItem.Icon>
+                                    <icons:PackIconMaterial Kind="Pencil" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <Separator />
+                            <MenuItem Command="{Binding RemoveRangeCommand}" Header="Remove">
+                                <MenuItem.Icon>
+                                    <icons:PackIconMaterial Kind="Minus" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Command="{Binding ClearCommand}" Header="Clear">
+                                <MenuItem.Icon>
+                                    <icons:PackIconMaterial Kind="CloseThick" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
+
+                <DockPanel Grid.Row="3" Grid.Column="0">
+                    <Button Command="{Binding CreateCommand}" DockPanel.Dock="Left">
+                        <icons:PackIconMaterial Kind="PlusThick" />
+                    </Button>
+
+                    <Button Margin="8,0"
+                            Command="{Binding UpdateCommand}"
+                            DockPanel.Dock="Left">
+                        <icons:PackIconMaterial Kind="Pencil" />
+                    </Button>
+
+                    <Button Command="{Binding RemoveRangeCommand}" DockPanel.Dock="Left">
+                        <icons:PackIconMaterial Kind="Minus" />
+                    </Button>
+
+                    <Button Margin="8,0"
+                            Command="{Binding ClearCommand}"
+                            DockPanel.Dock="Left">
+                        <icons:PackIconMaterial Kind="CloseThick" />
+                    </Button>
+
+                    <TextBlock Grid.Row="2"
+                               Grid.Column="0"
+                               HorizontalAlignment="Right"
+                               Text="{Binding Count, FallbackValue='0 Playlists', StringFormat={}{0} Playlists}" />
+                </DockPanel>
+
+                <GridSplitter Grid.Row="0"
+                              Grid.RowSpan="3"
+                              Grid.Column="1"
+                              Width="8"
+                              Margin="8,0"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Stretch" />
+
+                <GroupBox Grid.Row="0"
+                          Grid.RowSpan="3"
+                          Grid.Column="2">
+                    <ContentControl>
+                        <ContentControl.Resources>
+                            <DataTemplate DataType="{x:Type local:Playlist}">
+                                <DockPanel>
+
+                                    <DockPanel DockPanel.Dock="Bottom">
+                                        <Button Command="{Binding Data.CreateCommand, Source={StaticResource ViewProxy}}" DockPanel.Dock="Left">
+                                            <icons:PackIconMaterial Kind="PlusThick" />
+                                        </Button>
+
+                                        <Button Margin="8,0"
+                                                Command="{Binding Data.UpdateCommand, Source={StaticResource ViewProxy}}"
+                                                DockPanel.Dock="Left">
+                                            <icons:PackIconMaterial Kind="Pencil" />
+                                        </Button>
+
+                                        <Button Command="{Binding RemoveRangeCommand}" DockPanel.Dock="Left">
+                                            <icons:PackIconMaterial Kind="Minus" />
+                                        </Button>
+
+                                        <Button Margin="8,0"
+                                                Command="{Binding ClearCommand}"
+                                                DockPanel.Dock="Left">
+                                            <icons:PackIconMaterial Kind="CloseThick" />
+                                        </Button>
+
+                                        <TextBlock Grid.Row="2"
+                                                   Grid.Column="0"
+                                                   HorizontalAlignment="Right"
+                                                   Text="{Binding Count, FallbackValue='0 MediaItems', StringFormat={}{0} MediaItems}" />
+                                    </DockPanel>
+
+                                    <DataGrid Margin="0,8"
+                                              AutoGenerateColumns="False"
+                                              ItemsSource="{Binding Items}">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Width="Auto"
+                                                                Binding="{Binding Sequence}"
+                                                                Header="#" />
+                                            <DataGridTextColumn Width="*"
+                                                                Binding="{Binding Name}"
+                                                                Header="Name" />
+                                            <DataGridTextColumn Width="Auto"
+                                                                Binding="{Binding Duration}"
+                                                                Header="Duration" />
+                                            <DataGridTextColumn Width="Auto"
+                                                                Binding="{Binding Location}"
+                                                                Header="Location" />
+                                            <DataGridTextColumn Width="Auto"
+                                                                Binding="{Binding MediaItemType}"
+                                                                Header="MediaItemType" />
+                                            <DataGridTextColumn Width="Auto"
+                                                                Binding="{Binding PrivacyStatus}"
+                                                                Header="PrivacyStatus" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </DockPanel>
+                            </DataTemplate>
+                        </ContentControl.Resources>
+
+                        <ContentControl.Style>
+                            <Style TargetType="{x:Type ContentControl}">
+                                <Setter Property="Content" Value="{Binding SelectedItem}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Content}" Value="{x:Null}">
+                                        <Setter Property="ContentControl.Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <DockPanel>
+                                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">No playlist selected</TextBlock>
+                                                    </DockPanel>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Content.Count}" Value="0">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter Property="ContentControl.Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <DockPanel>
+                                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Selected playist does not contain any entries</TextBlock>
+                                                    </DockPanel>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
+                </GroupBox>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Interpreten" />
+        <TabItem Header="Alben" />
+        <TabItem Header="Songs" />
+
+        <TabItem Header="Genres" />
+    </TabControl>
+</UserControl>

@@ -1,81 +1,16 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9D7D05A6-8271-4836-A7BB-5B2ABECCBD81}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Maple.Domain</RootNamespace>
-    <AssemblyName>Maple.Domain</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\Resources\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Enums\AudioFormats.cs" />
-    <Compile Include="Enums\MediaItemType.cs" />
-    <Compile Include="Enums\MediaPlayerType.cs" />
-    <Compile Include="Enums\OptionType.cs" />
-    <Compile Include="Enums\PackIconKind.cs" />
-    <Compile Include="Enums\PlaybackState.cs" />
-    <Compile Include="Enums\PrivacyStatus.cs" />
-    <Compile Include="Enums\RepeatMode.cs" />
-    <Compile Include="Interfaces\IAudioDevice.cs" />
-    <Compile Include="Interfaces\IBaseObject.cs" />
-    <Compile Include="Interfaces\IChangeState.cs" />
-    <Compile Include="Interfaces\IIdentifier.cs" />
-    <Compile Include="Interfaces\IIsSelected.cs" />
-    <Compile Include="Interfaces\ILoggingNotifcationService.cs" />
-    <Compile Include="Interfaces\ILoggingService.cs" />
-    <Compile Include="Interfaces\IMapleRepository.cs" />
-    <Compile Include="Interfaces\IMediaItem.cs" />
-    <Compile Include="Interfaces\IMediaPlayer.cs" />
-    <Compile Include="Interfaces\IRangeObservableCollection.cs" />
-    <Compile Include="Interfaces\IRefreshable.cs" />
-    <Compile Include="Interfaces\ISequence.cs" />
-    <Compile Include="Interfaces\ISequenceService.cs" />
-    <Compile Include="Interfaces\ITranslationProvider.cs" />
-    <Compile Include="Interfaces\IVersionService.cs" />
-    <Compile Include="Models\Base\BaseObject.cs" />
-    <Compile Include="Models\MediaItemModel.cs" />
-    <Compile Include="Models\MediaPlayerModel.cs" />
-    <Compile Include="Models\OptionModel.cs" />
-    <Compile Include="Models\PlaylistModel.cs" />
-    <Compile Include="Models\RawModel.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.1</TargetFrameworks>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <OutputType>Library</OutputType>
+        <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+        <LangVersion>8.0</LangVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="..\Resources\SharedAssemblyInfo.cs" Link="Properties\SharedAssemblyInfo.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.9" />
+        <PackageReference Include="MvvmScarletToolkit.Commands" Version="2.1.72-g86b43d5e9c" />
+    </ItemGroup>
 </Project>
